@@ -301,8 +301,6 @@ class CustomerController extends Controller
         }
         return new JsonResponse($item);
 
-
-
     }
 
     public function searchLocationNameAction($location)

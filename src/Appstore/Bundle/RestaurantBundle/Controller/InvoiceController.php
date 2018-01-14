@@ -70,6 +70,7 @@ class InvoiceController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
         $entity->setCreatedBy($this->getUser());
+        $entity->setSalesBy($this->getUser());
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('restaurant_invoice_edit', array('id' => $entity->getId())));
@@ -90,20 +91,23 @@ class InvoiceController extends Controller
         if ($entity->getProcess() == "Done") {
             return $this->redirect($this->generateUrl('restaurant_invoice_show', array('id' => $entity->getId())));
         }
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($entity,array('product','stockable'));
-        $services        = $em->getRepository('RestaurantBundle:Particular')->getServices($config,array('product','stockable'));
-        $salesOverview = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($this->getUser());
-        $created = date('y-m-d');
-        $sales = $em->getRepository('RestaurantBundle:Invoice')->invoiceLists( $this->getUser() , array('created' => $created));
-        $salesLists = $this->paginate($sales);
 
-        return $this->render('RestaurantBundle:Invoice:cafe.html.twig', array(
-            'entity' => $entity,
-            'salesOverview' => $salesOverview,
-            'pagination' => $pagination,
-            'salesLists' => $salesLists,
+        $pagination         = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($entity,array('product','stockable'));
+        $services           = $em->getRepository('RestaurantBundle:Particular')->getServices($config,array('product','stockable'));
+        $salesOverview      = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($this->getUser());
+        $created            = date('y-m-d');
+        $sales              = $em->getRepository('RestaurantBundle:Invoice')->invoiceLists( $this->getUser() , array('created' => $created));
+        $salesLists         = $this->paginate($sales);
+
+        return $this->render('RestaurantBundle:Invoice:restaurant.html.twig', array(
+
+            'entity'            => $entity,
+            'salesOverview'     => $salesOverview,
+            'pagination'        => $pagination,
+            'salesLists'        => $salesLists,
             'particularService' => $services,
-            'form' => $editForm->createView(),
+            'form'              => $editForm->createView(),
+
         ));
     }
 
@@ -119,7 +123,7 @@ class InvoiceController extends Controller
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
         $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
-        $due = $entity->getDue() > 0 ? $entity->getDue() : 0;
+        $due = !empty($entity->getDue()) ? $entity->getDue() : 0;
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
         $totalDiscount = $entity->getTotalDiscount() > 0 ? $entity->getTotalDiscount() : 0;
 
@@ -183,26 +187,27 @@ class InvoiceController extends Controller
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        $customerInfo = $request->request->all()['appstore_bundle_restaurant_invoice']['customer'];
+        $newCustomerMobile = $request->request->all()['new_customer_mobile'];
+        $newCustomerName = $request->request->all()['new_customer_name'];
         $customerMobile = $request->request->all()['customerMobile'];
         $restaurantInvoice = $request->request->all()['appstore_bundle_restaurant_invoice'];
-
         if(!empty($customerMobile)){
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customerMobile);
             $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
             $em->getRepository('RestaurantBundle:Invoice')->insertNewCustomerWithDiscount($entity,$customer);
         }
 
-        if(!empty($customerInfo['mobile'])){
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customerInfo['mobile']);
-            $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingRestaurantCustomer($globalOption,$mobile,$customerInfo);
+        if(!empty($newCustomerMobile)){
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($newCustomerMobile);
+            $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingRestaurantCustomer($globalOption,$mobile,$newCustomerName);
             $em->getRepository('RestaurantBundle:Invoice')->insertNewCustomerWithDiscount($entity,$customer);
         }
+
         if($restaurantInvoice['discount']){
             $em->getRepository('RestaurantBundle:Invoice')->insertDiscount($entity,$restaurantInvoice['discount']);
         }
 
-        if($editForm->isValid() and !empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','Pending','Kitchen'))) {
+        if(!empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','Pending','Kitchen'))) {
 
             if ($entity->getTotal() > 0) {
                 $entity->setProcess('Kitchen');
@@ -216,6 +221,8 @@ class InvoiceController extends Controller
                 }
                 $entity->setCustomer($customer);
             }
+            $due = $entity->getTotal()- $entity->getPayment();
+            $entity->setDue($due);
             $em->flush();
             if ($entity->getTotal() > 0) {
                 $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateInvoiceTotalPrice($entity);
@@ -355,6 +362,7 @@ class InvoiceController extends Controller
             $this->approvedOrder($entity,$data);
         }
         $currentPayment = !empty($data['payment']) ? $data['payment'] :0;
+
         $address1       = $option->getContactPage()->getAddress1();
         $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
         $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
@@ -404,6 +412,15 @@ class InvoiceController extends Controller
         }
 
         $printer -> feed();
+        $slipNo ='xxx';
+        $tableNo ='00';
+        if($entity->getTokenNo()){
+            $tableNo = $entity->getTokenNo()->getName();
+        }
+        if($entity->getSlipNo()){
+            $slipNo = $entity->getSlipNo();
+        }
+        $table = $slipNo.'/'.$tableNo;
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
         $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
@@ -420,7 +437,7 @@ class InvoiceController extends Controller
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("Table No. ".$entity->getSlipNo().'/'.$entity->getTokenNo()->getName().".\n\n");
+        $printer -> text("Table No. ".$table.".\n\n");
         $printer -> setEmphasis(false);
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
@@ -463,7 +480,7 @@ class InvoiceController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        if($return > 0){
+        if($return){
             $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer->text($return);
             $printer -> setEmphasis(false);
@@ -594,6 +611,15 @@ class InvoiceController extends Controller
         }
         */
         $printer -> feed();
+        $slipNo ='xxx';
+        $tableNo ='00';
+        if($entity->getTokenNo()){
+            $tableNo = $entity->getTokenNo()->getName();
+        }
+        if($entity->getSlipNo()){
+            $slipNo = $entity->getSlipNo();
+        }
+        $table = $slipNo.'/'.$tableNo;
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
         $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
@@ -609,7 +635,7 @@ class InvoiceController extends Controller
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("Table No. ".$entity->getSlipNo().'/'.$entity->getTokenNo()->getName().".\n\n");
+        $printer -> text("Table No. ".$table.".\n\n");
         $printer -> setEmphasis(false);
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);

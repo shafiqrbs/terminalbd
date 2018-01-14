@@ -251,14 +251,15 @@ $(document).on("change", "#invoiceForm", function() {
             $('#netTotal').val(obj['netTotal']);
             $('.paymentAmount').html(obj['payment']);
             $('.vat').html(obj['vat']);
-            $('.due').html(obj['due'] - payment);
+            $('.due').html(obj['due']);
             $('#due').val(obj['due']);
             $('.totalDiscount').html(obj['totalDiscount']);
             $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#invoiceTransaction').html(obj['invoiceTransaction']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
+            if(obj['netTotal'] > obj['payment'] ){
+                $("#receiveBtn").attr("disabled", true);
+            }
         }
     })
 
@@ -268,18 +269,14 @@ $(document).on("change", "#invoiceForm", function() {
 $(document).on('change', '#appstore_bundle_restaurant_invoice_payment', function() {
 
     var payment  = parseInt($('#appstore_bundle_restaurant_invoice_payment').val()  != '' ? $('#appstore_bundle_restaurant_invoice_payment').val() : 0 );
-    var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
-    var dueAmount = (due - payment);
-    if(dueAmount > 0){
+    var netTotal  = parseInt($('#netTotal').val()  != '' ? $('#netTotal').val() : 0 );
+    if(netTotal > payment ){
         $('#balance').html('Due Tk.');
-        $('.due').html(dueAmount);
-        $('#dueable').html(dueAmount);
     }else{
-        var balance =  payment - due ;
         $('#balance').html('Return Tk.');
-        $('.due').html(balance);
-        $('#dueable').html(balance);
+        $("#receiveBtn").attr("disabled", false);
     }
+
 });
 
 $('#product').DataTable( {
@@ -297,7 +294,7 @@ $('#product').DataTable( {
     ]
 });
 
-$('#invoiceParticular').DataTable( {
+/*$('#invoiceParticular').DataTable( {
     scrollY:        '25vh',
     scrollCollapse: true,
     paging:         false,
@@ -305,15 +302,19 @@ $('#invoiceParticular').DataTable( {
     sScrollX: '100%',
     bSort: false,
     bFilter: false,
-});
+});*/
 
 $('#salesList').DataTable( {
     scrollY:        '50vh',
     scrollCollapse: true,
     paging:         false,
     bInfo : false,
-    bSort: false,
+    bSort: false
 });
+
+
+
+/*
 
 $(window).scroll(function ()
 {
@@ -323,7 +324,6 @@ $(window).scroll(function ()
     }
 });
 
-/*
 $(window).scroll(function (){
    if($(document).height() <= $(window).scrollTop() + $(window).height()){loadmore();}
 });
@@ -347,6 +347,7 @@ function loadmore()
 */
 
 
+/*
 $(document).on('change', '#appstore_bundle_restaurant_invoice_tokenNo', function(e) {
 
     var invoice = $('#invoiceId').val();
@@ -373,7 +374,7 @@ $(document).on('change', '#appstore_bundle_restaurant_invoice_tokenNo', function
             }
         });
 
-});
+});*/
 
 $("input:text:visible:first").focus();
 $('input[name=particular]').focus();

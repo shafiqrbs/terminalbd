@@ -72,19 +72,12 @@ class CustomerRepository extends EntityRepository
         }
     }
 
-    public function newExistingRestaurantCustomer($globalOption,$mobile,$data)
+    public function newExistingRestaurantCustomer($globalOption,$mobile,$name)
     {
         $em = $this->_em;
-        $name = $data['name'];
-        $location = $data['location'];
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
         if($entity){
-
             $entity->setName($name);
-            if($location) {
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
             $em->flush($entity);
             return $entity;
 
@@ -93,10 +86,6 @@ class CustomerRepository extends EntityRepository
             $entity = new Customer();
             $entity->setMobile($mobile);
             $entity->setName($name);
-            if($location) {
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
             $entity->setGlobalOption($globalOption);
             $em->persist($entity);
             $em->flush($entity);
@@ -355,6 +344,7 @@ class CustomerRepository extends EntityRepository
         $query->andWhere("e.globalOption = :globalOption");
         $query->setParameter('globalOption', $globalOption->getId());
         $query->orderBy('e.name', 'ASC');
+        $query->groupBy('e.mobile');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
 
