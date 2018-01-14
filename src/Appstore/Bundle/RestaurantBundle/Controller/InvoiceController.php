@@ -376,7 +376,7 @@ class InvoiceController extends Controller
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();
         $transaction        = $entity->getTransactionMethod()->getName();
-        $salesBy            = $entity->getCreatedBy();
+        $salesBy            = $entity->getSalesBy();
 
 
         /** ===================Invoice Sales Item Information========================= */
@@ -508,9 +508,14 @@ class InvoiceController extends Controller
         if($entity->getPayment() >= $entity->getTotal()){
             $entity->setPayment($entity->getTotal());
             $entity->setPaymentStatus('Paid');
+            $entity->setDue(null);
         }else{
             $entity->setPayment($payment);
-            $entity->setDue($entity->getTotal() - $payment);
+            if($entity->getTotal() > $payment) {
+                $entity->setDue($entity->getTotal() - $payment);
+            }else{
+                $entity->setDue(null);
+            }
             $entity->setPaymentStatus('Due');
         }
         $entity->setApprovedBy($this->getUser());
