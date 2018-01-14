@@ -40,6 +40,10 @@ restaurant_invoice_discount_delete:
     path:     /{id}/discount-delete
     defaults: { _controller: "RestaurantBundle:Invoice:discountDelete" }
 
+restaurant_invoice_reverse:
+    path:     /{invoice}/sales-reverse
+    defaults: { _controller: "RestaurantBundle:Invoice:reverse" }
+
 restaurant_invoice_particular_delete:
     path:     /{invoice}/{id}/particular-delete
     defaults: { _controller: "RestaurantBundle:Invoice:invoiceParticularDelete" }

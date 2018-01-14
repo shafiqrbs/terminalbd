@@ -346,6 +346,31 @@ class InvoiceController extends Controller
         exit;
     }
 
+    public function reverseAction($invoice){
+
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig' => $config, 'invoice' => $invoice));
+        $em->getRepository('RestaurantBundle:Invoice')->salesTransactionReverse($entity);
+        $em->getRepository('RestaurantBundle:InvoiceParticular')->reverseInvoiceParticularUpdate($entity);
+        $em = $this->getDoctrine()->getManager();
+        $entity->setRevised(true);
+        $entity->setProcess('Revised');
+        $entity->setRevised(true);
+        $entity->setTotal($entity->getSubTotal());
+        $entity->setPaymentStatus('Due');
+        $entity->setDiscount(null);
+        $entity->setDue($entity->getSubTotal());
+        $entity->setPaymentInWord(null);
+        $em->flush();
+        $template = $this->get('twig')->render('RestaurantBundle:Invoice:reverse.html.twig',array(
+            'entity' => $entity,
+        ));
+        $em->getRepository('RestaurantBundle:Reverse')->insertInvoice($entity,$template);
+        return $this->redirect($this->generateUrl('restaurant_invoice_edit',array('id'=>$entity->getId())));
+
+    }
+
     public function PosPrintAction(Request $request,$invoice)
     {
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();

@@ -1,8 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
+use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -550,6 +552,28 @@ class InvoiceRepository extends EntityRepository
 
     }
 
+    public function salesTransactionReverse(Invoice $entity){
 
+        $em = $this->_em;
+
+        $sales = $this->_em->getRepository('AccountingBundle:AccountSales')->findOneBy(array('restaurantInvoice'=>$entity));
+
+        if(!empty($sales)){
+
+            /* @var $sales AccountSales  */
+                $globalOption = $sales->getGlobalOption()->getId();
+                $accountRefNo = $sales->getAccountRefNo();
+                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $transaction->execute();
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $accountCash->execute();
+        }
+
+        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.hmsInvoices = '.$entity->getId());
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+
+    }
 
 }

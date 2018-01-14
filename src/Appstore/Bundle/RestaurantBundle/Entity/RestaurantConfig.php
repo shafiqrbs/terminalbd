@@ -34,10 +34,15 @@ class RestaurantConfig
      **/
     private $particulars;
 
-/**
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="restaurantConfig")
      **/
     private $invoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Reverse", mappedBy="restaurantConfig")
+     **/
+    private $reverse;
 
 
     /**
@@ -963,6 +968,14 @@ class RestaurantConfig
     public function setDiscountPercentage($discountPercentage)
     {
         $this->discountPercentage = $discountPercentage;
+    }
+
+    /**
+     * @return Reverse
+     */
+    public function getReverse()
+    {
+        return $this->reverse;
     }
 
 

@@ -49,6 +49,12 @@ class Invoice
      **/
     private  $invoiceParticulars;
 
+ /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Reverse", mappedBy="invoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private  $reverse;
+
 
    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="restaurantInvoice" )
@@ -1302,6 +1308,14 @@ class Invoice
     public function setTotalDiscount($totalDiscount)
     {
         $this->totalDiscount = $totalDiscount;
+    }
+
+    /**
+     * @return Reverse
+     */
+    public function getReverse()
+    {
+        return $this->reverse;
     }
 
 

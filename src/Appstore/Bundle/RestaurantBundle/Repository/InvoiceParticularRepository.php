@@ -128,14 +128,7 @@ class InvoiceParticularRepository extends EntityRepository
         $em->flush();
     }
 
-    public function reverseInvoiceParticularMasterUpdate(AdmissionPatientParticular $patientParticular)
-    {
-
-
-    }
-
-
-    public function getSalesItems(Invoice $sales)
+     public function getSalesItems(Invoice $sales)
     {
         $entities = $sales->getInvoiceParticulars();
         $data = '';
@@ -288,4 +281,23 @@ class InvoiceParticularRepository extends EntityRepository
         }
 
     }
+
+    public function reverseInvoiceParticularUpdate(Invoice $invoice)
+    {
+        $em = $this->_em;
+
+        /** @var InvoiceParticular $item */
+        foreach($invoice->getInvoiceParticulars() as $item ){
+            /** @var Particular  $particular */
+            $particular = $item->getParticular();
+            if( $particular->getService()->getSlug() == 'stockable' ){
+                $qnt = ($particular->getSalesQuantity() - $item->getQuantity());
+                $particular->setSalesQuantity($qnt);
+                $em->persist($particular);
+                $em->flush();
+            }
+        }
+    }
+
+
 }
