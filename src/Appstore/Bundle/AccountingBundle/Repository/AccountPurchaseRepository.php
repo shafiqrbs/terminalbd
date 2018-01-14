@@ -186,6 +186,35 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
+    public function insertRestaurantAccountPurchase(\Appstore\Bundle\RestaurantBundle\Entity\Purchase $entity)
+    {
+
+        $data = array('hmsVendor' => $entity->getVendor()->getCompanyName());
+        $result = $this->accountPurchaseOverview($entity->getRestaurantConfig()->getGlobalOption(),$data);
+        $balance = ( $result['purchaseAmount'] - $result['payment']);
+
+        $em = $this->_em;
+        $accountPurchase = new AccountPurchase();
+        $accountPurchase->setGlobalOption($entity->getRestaurantConfig()->getGlobalOption());
+        $accountPurchase->setRestaurantPurchase($entity);
+        $accountPurchase->setRestaurantVendor($entity->getVendor());
+        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
+        $accountPurchase->setPurchaseAmount($entity->getNetTotal());
+        $accountPurchase->setPayment($entity->getPayment());
+        $accountPurchase->setProcessHead('Purchase');
+        $accountPurchase->setReceiveDate($entity->getReceiveDate());
+        $accountPurchase->setBalance(($balance + $entity->getNetTotal()) - $accountPurchase->getPayment() );
+        $accountPurchase->setProcess('approved');
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $em->persist($accountPurchase);
+        $em->flush();
+        if($accountPurchase->getPayment() > 0 ){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        }
+        return $accountPurchase;
+
+    }
+
 
     public function removeApprovedAccountPurchase(Purchase $purchase)
     {

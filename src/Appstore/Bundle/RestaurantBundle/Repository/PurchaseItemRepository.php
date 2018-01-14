@@ -1,9 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
-use Appstore\Bundle\RestaurantBundle\Entity\HmsPurchase;
+use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
-use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
 
@@ -49,7 +48,7 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
-    public function getPurchaseItems(HmsPurchase $sales)
+    public function getPurchaseItems(Purchase $sales)
     {
         $entities = $sales->getPurchaseItems();
         $data = '';

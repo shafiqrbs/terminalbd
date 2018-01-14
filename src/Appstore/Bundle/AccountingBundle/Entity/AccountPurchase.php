@@ -55,6 +55,18 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          **/
         private  $hmsVendor;
 
+
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", inversedBy="accountPurchase" )
+         * @ORM\JoinColumn(name="restaurant_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+         **/
+        private  $restaurantPurchase;
+
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Vendor", inversedBy="accountPurchase" )
+         **/
+        private  $restaurantVendor;
+
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountPurchases" )
          **/
@@ -629,6 +641,38 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setHmsVendor($hmsVendor)
         {
             $this->hmsVendor = $hmsVendor;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getRestaurantPurchase()
+        {
+            return $this->restaurantPurchase;
+        }
+
+        /**
+         * @param mixed $restaurantPurchase
+         */
+        public function setRestaurantPurchase($restaurantPurchase)
+        {
+            $this->restaurantPurchase = $restaurantPurchase;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getRestaurantVendor()
+        {
+            return $this->restaurantVendor;
+        }
+
+        /**
+         * @param mixed $restaurantVendor
+         */
+        public function setRestaurantVendor($restaurantVendor)
+        {
+            $this->restaurantVendor = $restaurantVendor;
         }
 
     }

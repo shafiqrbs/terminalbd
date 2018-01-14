@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * HmsPurchaseItem
  *
  * @ORM\Table(name ="restaurant_purchase_item")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\RestaurantBundle\Repository\HmsPurchaseItemRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\RestaurantBundle\Repository\PurchaseItemRepository")
  */
 class PurchaseItem
 {

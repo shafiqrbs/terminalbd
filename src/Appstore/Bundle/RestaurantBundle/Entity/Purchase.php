@@ -39,7 +39,7 @@ class Purchase
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="hmsPurchase" , cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="restaurantPurchase" , cascade={"remove"})
      **/
     private  $accountPurchase;
 
@@ -63,7 +63,7 @@ class Purchase
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem", mappedBy="purchase" , cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem", mappedBy="purchase" , cascade={"remove"})
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $purchaseItems;

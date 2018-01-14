@@ -73,29 +73,18 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function findWithSearch($config,$service, $data){
+    public function findWithSearch($config,$service, $data = array()){
 
         $name = isset($data['name'])? $data['name'] :'';
         $category = isset($data['category'])? $data['category'] :'';
-        $department = isset($data['department'])? $data['department'] :'';
 
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.service','s');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.service = :service')->setParameter('service', $service) ;
-        if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
-        }
-        if(!empty($category)){
-            $qb->andWhere("e.category = :category");
-            $qb->setParameter('category', $category);
-        }
-        if(!empty($department)){
-            $qb->andWhere("e.department = :department");
-            $qb->setParameter('department', $department);
-        }
+        $qb->andWhere('s.slug IN (:slugs)')->setParameter('slugs',array($service)) ;
         $qb->orderBy('e.name','ASC');
-        $qb->getQuery();
-        return  $qb;
+        $result = $qb->getQuery()->getResult();
+        return  $result;
     }
 
     public function getFindWithParticular($hospital,$services){
@@ -186,8 +175,8 @@ class ParticularRepository extends EntityRepository
             ->addSelect('e.purchasePrice')
             ->addSelect('e.purchaseQuantity')
             ->where('e.restaurantConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:process)')
-            ->setParameter('process',array_values(array(4)))
+            ->andWhere('s.slug IN(:slugs)')
+            ->setParameter('slugs',array_values(array('stockable','consumable')))
             ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;

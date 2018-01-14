@@ -39,8 +39,8 @@ class ProductController extends Controller
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($config,array('product'));
-        //$pagination = $this->paginate($pagination);
+        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('product'));
+        $pagination = $this->paginate($pagination);
         $editForm = $this->createCreateForm($entity);
         return $this->render('RestaurantBundle:Product:index.html.twig', array(
             'pagination' => $pagination,
@@ -116,7 +116,7 @@ class ProductController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($config,array('product'));
+        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('product'));
         //$pagination = $this->paginate($pagination);
         $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
 
@@ -160,7 +160,7 @@ class ProductController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($config,array('product'));
+        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('product'));
         //$pagination = $this->paginate($pagination);
         $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
 
@@ -241,5 +241,17 @@ class ProductController extends Controller
             'success',"Status has been changed successfully"
         );
         return $this->redirect($this->generateUrl('restaurant_product'));
+    }
+
+    public function costAction(Particular $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $editForm = $this->createEditForm($entity);
+
+        return $this->render('RestaurantBundle:Product:cost.html.twig', array(
+            'entity'      => $entity,
+            'form'   => $editForm->createView(),
+        ));
     }
 }

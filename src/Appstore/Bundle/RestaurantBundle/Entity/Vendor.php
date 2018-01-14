@@ -4,6 +4,8 @@ namespace Appstore\Bundle\RestaurantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\LocationBundle\Entity\Location;
+
 /**
  * HmsVendor
  *
@@ -24,7 +26,7 @@ class Vendor
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", inversedBy="vendors")
      */
-    protected $hospitalConfig;
+    protected $restaurantConfig;
 
 
     /**
@@ -36,6 +38,11 @@ class Vendor
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="vendor")
      */
     protected $accountPurchases;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="vendors")
+     */
+    protected $location;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="vendors")
@@ -360,6 +367,38 @@ class Vendor
     public function setMode($mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @return RestaurantConfig
+     */
+    public function getRestaurantConfig()
+    {
+        return $this->restaurantConfig;
+    }
+
+    /**
+     * @param RestaurantConfig $restaurantConfig
+     */
+    public function setRestaurantConfig($restaurantConfig)
+    {
+        $this->restaurantConfig = $restaurantConfig;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
     }
 
 

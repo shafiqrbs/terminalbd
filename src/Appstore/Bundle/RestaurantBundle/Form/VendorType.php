@@ -27,18 +27,7 @@ class VendorType extends AbstractType
             ))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter vendor address')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address')))
-            ->add('country', 'entity', array(
-                'required'      => true,
-                'expanded'      =>false,
-                'placeholder' => 'Choose a country',
-                'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('m')
-                        ->orderBy('m.name','ASC');
-                },
-            ));
+            ;
     }
     
     /**

@@ -40,7 +40,7 @@
                                     {{ form_row(form._token) }}
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
-                                        <div class="span12 payment-info">
+                                        <div class="span12 payment-info" id="sidebar">
                                             <table id="invoiceParticular" class="table table-bordered table-striped table-condensed">
 
                                                 <thead class="flip-content ">
@@ -385,6 +385,13 @@
             padding: 2px 10px;
         }
 
+        .fixedElement {
+            background-color: #c0c0c0;
+            position:fixed;
+            top:0;
+            width:100%;
+            z-index:100;
+        }
 
     </style>
     <script>
