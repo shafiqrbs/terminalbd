@@ -60,7 +60,7 @@ class ProductController extends Controller
         $entity = new Particular();
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($config,array('product'));
+        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('product'));
         //$pagination = $this->paginate($pagination);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);

@@ -474,10 +474,9 @@ class InvoiceController extends Controller
         $printer->text($transaction);
         $printer->selectPrintMode();
         /* Barcode Print */
-        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
         $printer->text ( "\n" );
         $printer->selectPrintMode ();
-        $printer->setBarcodeHeight (60);
+        $printer->setBarcodeHeight (30);
         $hri = array (Printer::BARCODE_TEXT_BELOW => "");
         $printer -> feed();
         foreach ( $hri as $position => $caption){
@@ -488,7 +487,7 @@ class InvoiceController extends Controller
         }
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("Sales By: ".$salesBy."\n");
+        $printer -> text("Served By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
         if($website){
             $printer -> text("Please visit www.".$website."\n");
@@ -567,7 +566,7 @@ class InvoiceController extends Controller
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();
         $transaction        = $entity->getTransactionMethod()->getName();
-        $salesBy            = $entity->getCreatedBy();
+        $salesBy            = $entity->getSalesBy();
 
 
         /** ===================Invoice Sales Item Information========================= */
@@ -659,10 +658,9 @@ class InvoiceController extends Controller
         $printer->text($transaction);
         $printer->selectPrintMode();
         /* Barcode Print */
-        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
         $printer->text ( "\n" );
         $printer->selectPrintMode ();
-        $printer->setBarcodeHeight (60);
+        $printer->setBarcodeHeight (30);
         $hri = array (Printer::BARCODE_TEXT_BELOW => "");
         $printer -> feed();
         foreach ( $hri as $position => $caption){
@@ -673,7 +671,7 @@ class InvoiceController extends Controller
         }
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("Sales By: ".$salesBy."\n");
+        $printer -> text("Served By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
         if($website){
             $printer -> text("Please visit www.".$website."\n");
