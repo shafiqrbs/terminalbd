@@ -320,7 +320,7 @@ class InvoiceController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findBy(array('hospitalConfig' => $config, 'process' => 'Created','invoiceMode'=>'diagnostic'));
+        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findBy(array('restaurantConfig' => $config, 'process' => 'Created','paymentStatus'=>'Pending'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);
