@@ -1311,7 +1311,7 @@ class Invoice
     }
 
     /**
-     * @return Reverse
+     * @return mixed
      */
     public function getReverse()
     {

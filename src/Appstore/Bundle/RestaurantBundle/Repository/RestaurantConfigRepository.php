@@ -27,4 +27,14 @@ class RestaurantConfigRepository extends EntityRepository
         $hmsPurchase->execute();
 
     }
+
+
+    public function invoiceDelete($config)
+    {
+        $em = $this->_em;
+        $cid = $config->getId();
+        $Invoice = $em->createQuery("DELETE RestaurantBundle:Invoice e WHERE e.paymentStatus = 'Pending' AND e.process = 'Created' and e.restaurantConfig = ".$cid);
+        $Invoice->execute();
+
+    }
 }

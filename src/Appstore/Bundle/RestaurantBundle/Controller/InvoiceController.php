@@ -327,12 +327,7 @@ class InvoiceController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findBy(array('restaurantConfig' => $config, 'process' => 'Created','paymentStatus'=>'Pending'));
-        $em = $this->getDoctrine()->getManager();
-        foreach ($entities as $entity) {
-            $em->remove($entity);
-            $em->flush();
-        }
+        $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->invoiceDelete($config);
         return $this->redirect($this->generateUrl('restaurant_invoice'));
     }
 
@@ -816,6 +811,19 @@ class InvoiceController extends Controller
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response);
+    }
+
+    public function saveAction($invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig'=>$config,'invoice'=>$invoice));
+        if(!empty($entity)){
+            $entity->setProcess('Kitchen');
+            $em->flush();
+        }
+        exit;
+
     }
 
     public function cashPayment(Invoice $entity){

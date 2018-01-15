@@ -146,7 +146,7 @@
                                             <div class="btn-group">
                                                 {% set processIntArr = ['Created','Pending','Kitchen','Revised'] %}
                                                 {% if  entity.process in processIntArr %}
-                                                    <a href="{{ path('restaurant_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-th-large"></i> Manage </a>
+                                                    <a href="{{ path('restaurant_invoice_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-th-large"></i> Manage </a>
                                                 {% endif %}
                                                 {% if entity.process == 'Kitchen' %}
                                                 <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" class="btn blue mini paymentReceive" ><i class="icon-money"></i> Payment Receive </a>

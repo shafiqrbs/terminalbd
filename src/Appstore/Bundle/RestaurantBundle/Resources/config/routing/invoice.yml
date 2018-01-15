@@ -66,6 +66,11 @@ restaurant_invoice_pos:
     options:
             expose: true
 
+restaurant_invoice_save:
+    path:     /{invoice}/invoice-save
+    defaults: { _controller: "RestaurantBundle:Invoice:save" }
+
+
 restaurant_invoice_kitchen:
     path:     /{invoice}/invoice-kitchen-print
     defaults: { _controller: "RestaurantBundle:Invoice:KitchenPrint" }

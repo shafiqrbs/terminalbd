@@ -302,7 +302,8 @@
                                                             <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
                                                             <div class="controls">
                                                                 <div class="pull-center">
-                                                                    <button type="button" class="btn blue span12 " {% if entity.total is empty and entity.total >= entity.payment %} disabled="disabled" {% endif %} id="receiveBtn" data-url="{{ path('restaurant_invoice_pos',{'invoice':entity.invoice}) }}"><i class="icon-print"></i> RECEIVE & PRINT</button>
+                                                                    <button type="button" class="btn yellow span6"  data-url="{{ path('restaurant_invoice_save',{'invoice':entity.invoice}) }}"  {% if entity.total is empty %} disabled="disabled" {% endif %} id="saveBtn"><i class="icon-save"></i> SAVE</button>
+                                                                    <button type="button" class="btn blue span6" {% if entity.total is empty and entity.total >= entity.payment %} disabled="disabled" {% endif %} id="receiveBtn" data-url="{{ path('restaurant_invoice_pos',{'invoice':entity.invoice}) }}"><i class="icon-print"></i> RECEIVE</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -358,7 +359,7 @@
                                                     <a href="{{ path('restaurant_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-th-large"></i> Manage </a>
                                                 {% endif %}
                                                 {% if entity.process == 'Kitchen' %}
-                                                    <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" class="btn blue mini paymentReceive" ><i class="icon-money"></i> Payment Receive </a>
+                                                    <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" class="btn red mini paymentReceive" ><i class="icon-money"></i> Payment Receive </a>
                                                 {% endif %}
                                             </div>
                                         </td>
@@ -429,7 +430,7 @@
             margin-bottom: 0!important;
         }
 
-        #receiveBtn{
+        #receiveBtn , #saveBtn{
             font-size: 20px;
             font-weight: bold;
             height: 60px;

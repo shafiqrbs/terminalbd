@@ -178,6 +178,7 @@ $(document).on('click', '.addCart', function() {
             $('#quantity').val('1');
             $('#addParticular').attr("disabled", true);
             $('#addPatientParticular').attr("disabled", true);
+            $("#saveBtn").attr("disabled", false);
 
         }
     })
