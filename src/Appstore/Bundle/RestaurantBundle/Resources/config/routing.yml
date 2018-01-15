@@ -6,6 +6,10 @@ restaurant_purchase:
     resource: "@RestaurantBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
 
+restaurant_production:
+    resource: "@RestaurantBundle/Resources/config/routing/production.yml"
+    prefix:   /production
+
 restaurant_vendor:
     resource: "@RestaurantBundle/Resources/config/routing/vendor.yml"
     prefix:   /vendor

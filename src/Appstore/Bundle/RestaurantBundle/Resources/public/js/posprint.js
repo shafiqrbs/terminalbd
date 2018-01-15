@@ -49,13 +49,14 @@ $(document).on("click", "#kitchenBtn", function() {
 
 $(document).on("click", ".paymentReceive", function() {
     var url = $(this).attr('data-url');
+    var id = $(this).attr('data-id');
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
+            $('#paymentDone-'+id).remove();
             $.get(url, function( response ) {
-                jsPostPrint(response);
-                location.reload();
+               // jsPostPrint(response);
             });
         }
     });

@@ -43,6 +43,12 @@ class Particular
      **/
     private $category;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", inversedBy="particulars" )
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $productionElements;
+
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularOperator" )
      **/
@@ -112,21 +118,33 @@ class Particular
      */
     private $purchasePrice;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="overHead", type="float", nullable=true)
+     */
+    private $overHead;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="room", type="string", length=10, nullable=true)
+     * @ORM\Column(name="packaging", type="float", nullable=true)
      */
-    private $room;
-
+    private $packaging;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="sepcimen", type="string", length=255, nullable=true)
+     * @ORM\Column(name="utility", type="float", nullable=true)
      */
-    private $sepcimen;
+    private $utility;
+
+ /**
+     * @var float
+     *
+     * @ORM\Column(name="marketing", type="float", nullable=true)
+     */
+    private $marketing;
 
 
     /**
@@ -136,20 +154,6 @@ class Particular
      */
     private $content;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="instruction", type="text", nullable=true)
-     */
-    private $instruction;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="overHeadCost", type="decimal", nullable=true)
-     */
-    private $overHeadCost;
 
     /**
      * @var string
@@ -696,21 +700,6 @@ class Particular
         $this->educationalDegree = $educationalDegree;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrentJob()
-    {
-        return $this->currentJob;
-    }
-
-    /**
-     * @param string $currentJob
-     */
-    public function setCurrentJob($currentJob)
-    {
-        $this->currentJob = $currentJob;
-    }
 
     /**
      * @return string
@@ -869,39 +858,6 @@ class Particular
     }
 
     /**
-     * @return Invoice
-     */
-    public function getHmsInvoice()
-    {
-        return $this->hmsInvoice;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInstruction()
-    {
-        return $this->instruction;
-    }
-
-    /**
-     * @param string $instruction
-     */
-    public function setInstruction($instruction)
-    {
-        $this->instruction = $instruction;
-    }
-
-    /**
-     * @return Invoice
-     */
-    public function getHmsInvoiceCabin()
-    {
-        return $this->hmsInvoiceCabin;
-    }
-
-
-    /**
      * @return int
      */
     public function getPurchaseQuantity()
@@ -936,22 +892,13 @@ class Particular
 
 
     /**
-     * @return HmsPurchaseItem
+     * @return PurchaseItem
      */
     public function getPurchaseItems()
     {
         return $this->purchaseItems;
     }
 
-
-
-    /**
-     * @return string
-     */
-    public function getSepcimen()
-    {
-        return $this->sepcimen;
-    }
 
     /**
      * @param string $sepcimen
@@ -977,61 +924,7 @@ class Particular
         $this->designation = $designation;
     }
 
-    /**
-     * @return string
-     */
-    public function getOverHeadCost()
-    {
-        return $this->overHeadCost;
-    }
 
-    /**
-     * @param string $overHeadCost
-     */
-    public function setOverHeadCost($overHeadCost)
-    {
-        $this->overHeadCost = $overHeadCost;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getTestDuration()
-    {
-        return $this->testDuration;
-    }
-
-    /**
-     * @param bool $testDuration
-     */
-    public function setTestDuration($testDuration)
-    {
-        $this->testDuration = $testDuration;
-    }
-
-    /**
-     * @return AdmissionPatientParticular
-     */
-    public function getAdmissionPatientParticular()
-    {
-        return $this->admissionPatientParticular;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getServiceGroup()
-    {
-        return $this->serviceGroup;
-    }
-
-    /**
-     * @param mixed $serviceGroup
-     */
-    public function setServiceGroup($serviceGroup)
-    {
-        $this->serviceGroup = $serviceGroup;
-    }
 
     /**
      * @return string
@@ -1114,22 +1007,6 @@ class Particular
     }
 
     /**
-     * @return bool
-     */
-    public function getReportFormat()
-    {
-        return $this->reportFormat;
-    }
-
-    /**
-     * @param bool $reportFormat
-     */
-    public function setReportFormat($reportFormat)
-    {
-        $this->reportFormat = $reportFormat;
-    }
-
-    /**
      * @return string
      */
     public function getPurchasePrice()
@@ -1175,6 +1052,79 @@ class Particular
     public function setDiscountPrice($discountPrice)
     {
         $this->discountPrice = $discountPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOverHead()
+    {
+        return $this->overHead;
+    }
+
+    /**
+     * @param float $overHead
+     */
+    public function setOverHead($overHead)
+    {
+        $this->overHead = $overHead;
+    }
+
+
+    /**
+     * @return float
+     */
+    public function getUtility()
+    {
+        return $this->utility;
+    }
+
+    /**
+     * @param float $utility
+     */
+    public function setUtility($utility)
+    {
+        $this->utility = $utility;
+    }
+
+    /**
+     * @return ProductionElement
+     */
+    public function getProductionElements()
+    {
+        return $this->productionElements;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPackaging()
+    {
+        return $this->packaging;
+    }
+
+    /**
+     * @param float $packaging
+     */
+    public function setPackaging($packaging)
+    {
+        $this->packaging = $packaging;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMarketing()
+    {
+        return $this->marketing;
+    }
+
+    /**
+     * @param float $marketing
+     */
+    public function setMarketing($marketing)
+    {
+        $this->marketing = $marketing;
     }
 
 

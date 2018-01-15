@@ -4,10 +4,12 @@ namespace Appstore\Bundle\RestaurantBundle\Controller;
 
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Form\ParticularType;
+use Appstore\Bundle\RestaurantBundle\Form\ProductionType;
 use Appstore\Bundle\RestaurantBundle\Form\ProductType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -253,11 +255,11 @@ class ProductController extends Controller
     private function createProductionCostingForm(Particular $entity)
     {
 
-        $form = $this->createForm(new ProductionCostingType(), $entity, array(
-            'action' => $this->generateUrl('restaurant_product_costing', array('id' => $entity->getId())),
+        $form = $this->createForm(new ProductionType(), $entity, array(
+            'action' => $this->generateUrl('restaurant_production_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -265,16 +267,96 @@ class ProductController extends Controller
     }
 
 
-    public function costAction(Particular $entity)
+    public function productionAction(Particular $entity)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createProductionCostingForm($entity);
         $particulars = $em->getRepository('RestaurantBundle:Particular')->getMedicineParticular($config);
-        return $this->render('RestaurantBundle:Product:cost.html.twig', array(
+        return $this->render('RestaurantBundle:Product:production.html.twig', array(
             'entity'      => $entity,
             'particulars' => $particulars,
             'form'   => $editForm->createView(),
         ));
+    }
+
+    public function productionUpdateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('product'));
+        //$pagination = $this->paginate($pagination);
+        $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Particular entity.');
+        }
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            if($entity->upload() && !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
+            return $this->redirect($this->generateUrl('restaurant_product'));
+        }
+
+        return $this->render('RestaurantBundle:Product:index.html.twig', array(
+            'entity'      => $entity,
+            'pagination'      => $pagination,
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+
+    public function particularSearchAction(Particular $particular)
+    {
+        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'purchasePrice'=> $particular->getPurchasePrice(), 'quantity'=> 1 , 'minimumPrice'=> '', 'instruction'=>'')));
+    }
+
+    public function addParticularAction(Request $request, Particular $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $particularId = $request->request->get('particularId');
+        $quantity = $request->request->get('quantity');
+        $price = $request->request->get('price');
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
+        $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Purchase')->updatePurchaseTotalPrice($invoice);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->getPurchaseItems($invoice);
+        $msg = 'Particular added successfully';
+
+        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
+        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
+        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
+        exit;
+    }
+
+    public function productionElementDeleteAction(Purchase $invoice, PurchaseItem $particular){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$particular) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+
+        $em->remove($particular);
+        $em->flush();
+        $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Purchase')->updatePurchaseTotalPrice($invoice);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->getPurchaseItems($invoice);
+
+        $msg = 'Particular deleted successfully';
+        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
+        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
+        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
+        exit;
+
+
     }
 }

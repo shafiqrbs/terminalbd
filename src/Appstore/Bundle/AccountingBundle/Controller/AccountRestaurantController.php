@@ -45,7 +45,7 @@ class AccountRestaurantController extends Controller
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(20,29));
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
-        return $this->render('AccountingBundle:AccountHospital:sales.html.twig', array(
+        return $this->render('AccountingBundle:AccountRestaurant:sales.html.twig', array(
             'entities' => $pagination,
             'accountHead' => $accountHead,
             'transactionMethods' => $transactionMethods,

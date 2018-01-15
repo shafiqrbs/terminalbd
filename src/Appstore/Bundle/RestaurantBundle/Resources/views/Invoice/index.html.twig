@@ -142,14 +142,14 @@
                                         <td class="numeric" >{{ entity.paymentStatus }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" > {{ entity.salesBy }}</td>
-                                        <td class="numeric" >
-                                            <div class="btn-group">
+                                        <td class="numeric"  >
+                                            <div class="btn-group" id="paymentDone-{{ entity.id }}" >
                                                 {% set processIntArr = ['Created','Pending','Kitchen','Revised'] %}
                                                 {% if  entity.process in processIntArr %}
                                                     <a href="{{ path('restaurant_invoice_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-th-large"></i> Manage </a>
                                                 {% endif %}
                                                 {% if entity.process == 'Kitchen' %}
-                                                <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" class="btn blue mini paymentReceive" ><i class="icon-money"></i> Payment Receive </a>
+                                                    <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" data-id="{{ entity.id }}" class="btn blue mini paymentReceive" ><i class="icon-money"></i> Payment Receive </a>
                                                 {% endif %}
                                                 <a href="{{ path('restaurant_invoice_show',{'id':entity.id}) }}"  class="btn green mini" ><i class="icon-eye"></i> View </a>
                                                 {% if entity.process == 'Done' and app.user.granted("ROLE_DOMAIN") %}

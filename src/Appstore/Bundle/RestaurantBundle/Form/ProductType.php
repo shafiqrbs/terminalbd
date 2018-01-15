@@ -23,9 +23,9 @@ class ProductType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter service name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter product name'),
                     'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter service name'))
+                        new NotBlank(array('message'=>'Please enter product name'))
                     ))
             )
             ->add('category', 'entity', array(
@@ -43,13 +43,17 @@ class ProductType extends AbstractType
                         ->orderBy("e.sorting","ASC");
                 }
             ))
-            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>8,'placeholder'=>'Enter content')))
-            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room rent'),
+            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>8,'placeholder'=>'Enter product details')))
+            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter product price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('discountPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter minimum Price')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter production/purchase price'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                )
+            ))
             ->add('file')
         ;
     }
