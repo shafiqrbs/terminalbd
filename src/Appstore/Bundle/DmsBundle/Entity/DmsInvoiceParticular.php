@@ -28,7 +28,7 @@ class DmsInvoiceParticular
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", inversedBy="invoiceParticulars")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private $hmsInvoice;
+    private $dmsInvoice;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="invoiceParticular")
@@ -36,118 +36,25 @@ class DmsInvoiceParticular
     private $particular;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="invoiceParticularDoctor")
-     **/
-    private $assignDoctor;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularDelivered" )
-     **/
-    private  $particularDeliveredBy;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularPrepared" )
-     **/
-    private  $particularPreparedBy;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularCollected" )
-     **/
-    private  $sampleCollectedBy;
-
-    /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="quantity", type="smallint")
+     * @ORM\Column(name="metaKey", type="string", length=225, nullable=true)
      */
-    private $quantity = 1;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="code", type="integer",  nullable=true)
-     */
-    private $code;
+    private $metaKey;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="reportCode", type="string",  nullable=true)
+     * @ORM\Column(name="metaValue", type="text", nullable=true)
      */
-    private $reportCode;
+    private $metaValue;
 
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="salesPrice", type="float")
-     */
-    private $salesPrice;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="commission", type="float", nullable=true)
-     */
-    private $commission;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="estimatePrice", type="decimal", nullable=true)
-     */
-    private $estimatePrice;
-
-
-    /**
+ /**
      * @var boolean
      *
-     * @ORM\Column(name="customPrice", type="boolean")
+     * @ORM\Column(name="metaStatus", type="boolean", nullable=true)
      */
-    private $customPrice = false;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="subTotal", type="float")
-     */
-    private $subTotal;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="process", type="string", length=30, nullable=true)
-     */
-    private $process ='In-progress';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
-    private $comment;
-
-
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="collectionDate", type="datetime", nullable=true)
-     */
-    private $collectionDate;
-
-     /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime")
-     */
-    private $created;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime")
-     */
-    private $updated;
+    private $metaStatus;
 
 
     /**
@@ -160,7 +67,7 @@ class DmsInvoiceParticular
         return $this->id;
     }
     /**
-     * @return Particular
+     * @return DmsParticular
      */
     public function getParticular()
     {
@@ -168,7 +75,7 @@ class DmsInvoiceParticular
     }
 
     /**
-     * @param Particular $particular
+     * @param DmsParticular $particular
      */
     public function setParticular($particular)
     {
@@ -176,303 +83,68 @@ class DmsInvoiceParticular
     }
 
     /**
-     * @return int
+     * @return DmsInvoice
      */
-    public function getQuantity()
+    public function getDmsInvoice()
     {
-        return $this->quantity;
+        return $this->dmsInvoice;
     }
 
     /**
-     * @param int $quantity
+     * @param DmsInvoice $dmsInvoice
      */
-    public function setQuantity($quantity)
+    public function setDmsInvoice($dmsInvoice)
     {
-        $this->quantity = $quantity;
-    }
-
-    /**
-     * @return float
-     */
-    public function getSalesPrice()
-    {
-        return $this->salesPrice;
-    }
-
-    /**
-     * @param float $salesPrice
-     */
-    public function setSalesPrice($salesPrice)
-    {
-        $this->salesPrice = $salesPrice;
+        $this->dmsInvoice = $dmsInvoice;
     }
 
     /**
      * @return string
      */
-    public function getEstimatePrice()
+    public function getMetaKey()
     {
-        return $this->estimatePrice;
+        return $this->metaKey;
     }
 
     /**
-     * @param string $estimatePrice
+     * @param string $metaKey
      */
-    public function setEstimatePrice($estimatePrice)
+    public function setMetaKey($metaKey)
     {
-        $this->estimatePrice = $estimatePrice;
+        $this->metaKey = $metaKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaValue()
+    {
+        return $this->metaValue;
+    }
+
+    /**
+     * @param string $metaValue
+     */
+    public function setMetaValue($metaValue)
+    {
+        $this->metaValue = $metaValue;
     }
 
     /**
      * @return bool
      */
-    public function isCustomPrice()
+    public function getMetaStatus()
     {
-        return $this->customPrice;
+        return $this->metaStatus;
     }
 
     /**
-     * @param bool $customPrice
+     * @param bool $metaStatus
      */
-    public function setCustomPrice($customPrice)
+    public function setMetaStatus($metaStatus)
     {
-        $this->customPrice = $customPrice;
+        $this->metaStatus = $metaStatus;
     }
-
-    /**
-     * @return float
-     */
-    public function getSubTotal()
-    {
-        return $this->subTotal;
-    }
-
-    /**
-     * @param float $subTotal
-     */
-    public function setSubTotal($subTotal)
-    {
-        $this->subTotal = $subTotal;
-    }
-
-    /**
-     * @return User
-     */
-    public function getParticularPreparedBy()
-    {
-        return $this->particularPreparedBy;
-    }
-
-    /**
-     * @param User $particularPreparedBy
-     */
-    public function setParticularPreparedBy($particularPreparedBy)
-    {
-        $this->particularPreparedBy = $particularPreparedBy;
-    }
-
-    /**
-     * @return User
-     */
-    public function getParticularDeliveredBy()
-    {
-        return $this->particularDeliveredBy;
-    }
-
-    /**
-     * @param User $particularDeliveredBy
-     */
-    public function setParticularDeliveredBy($particularDeliveredBy)
-    {
-        $this->particularDeliveredBy = $particularDeliveredBy;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * @param \DateTime $created
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * @param \DateTime $updated
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-    }
-
-    /**
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
-     * @param string $comment
-     */
-    public function setComment($comment)
-    {
-        $this->comment = $comment;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProcess()
-    {
-        return $this->process;
-    }
-
-    /**
-     * @param string $process
-     */
-    public function setProcess($process)
-    {
-        $this->process = $process;
-    }
-
-    /**
-     * @return Invoice
-     */
-    public function getHmsInvoice()
-    {
-        return $this->hmsInvoice;
-    }
-
-    /**
-     * @param Invoice $hmsInvoice
-     */
-    public function setHmsInvoice($hmsInvoice)
-    {
-        $this->hmsInvoice = $hmsInvoice;
-    }
-
-
-    /**
-     * @return Particular
-     */
-    public function getAssignDoctor()
-    {
-        return $this->assignDoctor;
-    }
-
-    /**
-     * @param Particular $assignDoctor
-     */
-    public function setAssignDoctor($assignDoctor)
-    {
-        $this->assignDoctor = $assignDoctor;
-    }
-
-    /**
-     * @return InvoicePathologicalReport
-     */
-    public function getInvoicePathologicalReports()
-    {
-        return $this->invoicePathologicalReports;
-    }
-
-    /**
-     * @return User
-     */
-    public function getSampleCollectedBy()
-    {
-        return $this->sampleCollectedBy;
-    }
-
-    /**
-     * @param User $sampleCollectedBy
-     */
-    public function setSampleCollectedBy($sampleCollectedBy)
-    {
-        $this->sampleCollectedBy = $sampleCollectedBy;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCollectionDate()
-    {
-        return $this->collectionDate;
-    }
-
-    /**
-     * @param \DateTime $collectionDate
-     */
-    public function setCollectionDate($collectionDate)
-    {
-        $this->collectionDate = $collectionDate;
-    }
-
-    /**
-     * @return float
-     */
-    public function getCommission()
-    {
-        return $this->commission;
-    }
-
-    /**
-     * @param float $commission
-     */
-    public function setCommission($commission)
-    {
-        $this->commission = $commission;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param int $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-    }
-
-    /**
-     * @return string
-     */
-    public function getReportCode()
-    {
-        return $this->reportCode;
-    }
-
-    /**
-     * @param string $reportCode
-     */
-    public function setReportCode($reportCode)
-    {
-        $this->reportCode = $reportCode;
-    }
-
-
 
 
 }

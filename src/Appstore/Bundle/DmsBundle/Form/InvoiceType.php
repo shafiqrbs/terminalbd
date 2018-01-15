@@ -49,6 +49,10 @@ class InvoiceType extends AbstractType
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount input2','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('chiefComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('presentingComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('diagnosis','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
                 'expanded'      =>false,

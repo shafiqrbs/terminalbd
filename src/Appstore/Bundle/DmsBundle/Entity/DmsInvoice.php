@@ -285,12 +285,35 @@ class DmsInvoice
      */
     private $comment;
 
+
     /**
      * @var string
      *
-     * @ORM\Column(name="disease", type="text", nullable=true)
+     * @ORM\Column(name="chiefComplains", type="text", nullable=true)
      */
-    private $disease;
+    private $chiefComplains;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="presentingComplains", type="text", nullable=true)
+     */
+    private $presentingComplains;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="drugHistory", type="text", nullable=true)
+     */
+    private $drugHistory;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="diagnosis", type="text", nullable=true)
+     */
+    private $diagnosis;
+
 
     /**
      * @var string
@@ -1270,6 +1293,70 @@ class DmsInvoice
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChiefComplains()
+    {
+        return $this->chiefComplains;
+    }
+
+    /**
+     * @param string $chiefComplains
+     */
+    public function setChiefComplains($chiefComplains)
+    {
+        $this->chiefComplains = $chiefComplains;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPresentingComplains()
+    {
+        return $this->presentingComplains;
+    }
+
+    /**
+     * @param string $presentingComplains
+     */
+    public function setPresentingComplains($presentingComplains)
+    {
+        $this->presentingComplains = $presentingComplains;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDrugHistory()
+    {
+        return $this->drugHistory;
+    }
+
+    /**
+     * @param string $drugHistory
+     */
+    public function setDrugHistory($drugHistory)
+    {
+        $this->drugHistory = $drugHistory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiagnosis()
+    {
+        return $this->diagnosis;
+    }
+
+    /**
+     * @param string $diagnosis
+     */
+    public function setDiagnosis($diagnosis)
+    {
+        $this->diagnosis = $diagnosis;
     }
 
 
