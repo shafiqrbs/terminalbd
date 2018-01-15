@@ -21,7 +21,7 @@ restaurant_product_delete:
     defaults: { _controller: "RestaurantBundle:Product:delete" }
 
 restaurant_product_cost:
-    path:     /{id}/delete
+    path:     /{id}/cost-management
     defaults: { _controller: "RestaurantBundle:Product:cost" }
 
 restaurant_product_status:

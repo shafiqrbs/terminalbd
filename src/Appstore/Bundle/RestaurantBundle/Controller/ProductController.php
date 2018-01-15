@@ -243,14 +243,37 @@ class ProductController extends Controller
         return $this->redirect($this->generateUrl('restaurant_product'));
     }
 
+    /**
+     * Creates a form to edit a Particular entity.
+     *
+     * @param Particular $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createProductionCostingForm(Particular $entity)
+    {
+
+        $form = $this->createForm(new ProductionCostingType(), $entity, array(
+            'action' => $this->generateUrl('restaurant_product_costing', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
     public function costAction(Particular $entity)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $editForm = $this->createEditForm($entity);
-
+        $particulars = $em->getRepository('RestaurantBundle:Particular')->getMedicineParticular($config);
         return $this->render('RestaurantBundle:Product:cost.html.twig', array(
             'entity'      => $entity,
+            'particulars' => $particulars,
             'form'   => $editForm->createView(),
         ));
     }

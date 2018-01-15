@@ -4,8 +4,6 @@ namespace Appstore\Bundle\RestaurantBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
-use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
-use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -144,7 +142,7 @@ class InvoiceRepository extends EntityRepository
 
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('sum(e.subTotal) as subTotal ,sum(e.total) as total ,sum(e.discount) as discount , sum(e.vat) as vat, sum(e.payment) as payment, sum(e.due) as due');
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.total) as total ,sum(e.totalDiscount) as discount , sum(e.vat) as vat, sum(e.payment) as payment, sum(e.due) as due');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
         if ($previous == 'true'){
 
@@ -183,7 +181,7 @@ class InvoiceRepository extends EntityRepository
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','e');
-        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.totalDiscount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
@@ -210,7 +208,7 @@ class InvoiceRepository extends EntityRepository
     {
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue');
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.totalDiscount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
         $this->handleDateRangeFind($qb,$data);
         $qb->andWhere("e.process IN (:process)");
@@ -391,7 +389,7 @@ class InvoiceRepository extends EntityRepository
         $em = $this->_em;
         $res = $em->createQueryBuilder()
             ->from('RestaurantBundle:InvoiceTransaction','si')
-            ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
+            ->select('sum(si.payment) as payment , sum(si.totalDiscount) as discount, sum(si.vat) as vat')
             ->where('si.invoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->andWhere('si.process = :process')

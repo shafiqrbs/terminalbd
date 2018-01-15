@@ -86,26 +86,13 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         if ($entity->getProcess() == "Done") {
             return $this->redirect($this->generateUrl('restaurant_invoice_show', array('id' => $entity->getId())));
         }
-
-        $pagination         = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($entity,array('product','stockable'));
-        $services           = $em->getRepository('RestaurantBundle:Particular')->getServices($config,array('product','stockable'));
-        $salesOverview      = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($this->getUser());
-        $created            = date('y-m-d');
-        $sales              = $em->getRepository('RestaurantBundle:Invoice')->invoiceLists( $this->getUser() , array('created' => $created));
-        $salesLists         = $this->paginate($sales);
-
         return $this->render('RestaurantBundle:Invoice:restaurant.html.twig', array(
 
             'entity'            => $entity,
-            'salesOverview'     => $salesOverview,
-            'pagination'        => $pagination,
-            'salesLists'        => $salesLists,
-            'particularService' => $services,
             'form'              => $editForm->createView(),
 
         ));
@@ -843,6 +830,31 @@ class InvoiceController extends Controller
         }
 
     }
+
+    public function productsAction(Invoice $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $pagination         = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($invoice ,array('product','stockable'));
+        return new Response($pagination);
+
+    }
+
+    public function todaySalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $salesOverview      = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($this->getUser());
+        $created            = date('y-m-d');
+        $sales              = $em->getRepository('RestaurantBundle:Invoice')->invoiceLists( $this->getUser() , array('created' => $created));
+        $salesLists         = $this->paginate($sales);
+        $template = $this->get('twig')->render('RestaurantBundle:Invoice:product.html.twig',array(
+            'salesLists' => $salesLists,
+        ));
+        $data = array('overview'=> $salesOverview ,'products' =>$template );
+        return new Response($template);
+
+    }
+
 
 
 

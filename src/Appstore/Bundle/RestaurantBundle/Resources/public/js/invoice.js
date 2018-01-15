@@ -10,7 +10,6 @@ $( ".dateCalendar" ).datepicker({
 });
 
 
-
 $( "#name" ).autocomplete({
 
     source: function( request, response ) {

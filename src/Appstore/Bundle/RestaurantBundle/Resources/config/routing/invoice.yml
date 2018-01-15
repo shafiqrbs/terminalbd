@@ -71,6 +71,20 @@ restaurant_invoice_save:
     defaults: { _controller: "RestaurantBundle:Invoice:save" }
 
 
+restaurant_today_sales:
+    path:     /today-sales
+    defaults: { _controller: "RestaurantBundle:Invoice:todaySales" }
+    options:
+           expose: true
+
+
+restaurant_load_product:
+    path:     /{invoice}/loading-sales-product
+    defaults: { _controller: "RestaurantBundle:Invoice:products" }
+    options:
+            expose: true
+
+
 restaurant_invoice_kitchen:
     path:     /{invoice}/invoice-kitchen-print
     defaults: { _controller: "RestaurantBundle:Invoice:KitchenPrint" }
