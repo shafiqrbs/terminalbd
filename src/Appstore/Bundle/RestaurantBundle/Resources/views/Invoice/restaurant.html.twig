@@ -301,7 +301,7 @@
                                                             <div class="controls">
                                                                 <div class="pull-center">
                                                                     <button type="button" class="btn yellow span6"  data-url="{{ path('restaurant_invoice_save',{'invoice':entity.invoice}) }}"  {% if entity.total is empty %} disabled="disabled" {% endif %} id="saveBtn"><i class="icon-save"></i> SAVE</button>
-                                                                    <button type="button" class="btn blue span6" {% if entity.total is empty and entity.total >= entity.payment %} disabled="disabled" {% endif %} id="receiveBtn" data-url="{{ path('restaurant_invoice_pos',{'invoice':entity.invoice}) }}"><i class="icon-print"></i> RECEIVE</button>
+                                                                    <button type="button" class="btn blue span6" {% if entity.total is empty and entity.total >= entity.payment %} disabled="disabled" {% endif %} id="receiveBtn" data-url="{{ path('restaurant_invoice_pos',{'invoice':entity.invoice}) }}"><i class="icon-print"></i> PRINT</button>
                                                                 </div>
                                                             </div>
                                                         </div>

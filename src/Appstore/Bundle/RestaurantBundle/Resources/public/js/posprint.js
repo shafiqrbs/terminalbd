@@ -56,7 +56,7 @@ $(document).on("click", ".paymentReceive", function() {
         onOkBut: function(event, el) {
             $('#paymentDone-'+id).remove();
             $.get(url, function( response ) {
-               // jsPostPrint(response);
+               jsPostPrint(response);
             });
         }
     });
