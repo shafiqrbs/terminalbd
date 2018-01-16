@@ -125,7 +125,7 @@ $(document).on('click', '#addParticular', function() {
 $(document).on('click', '.addCart', function() {
 
     var id = $(this).attr('data-text');
-    var price = parseInt($(this).attr('data-tile'));
+    var price = parseInt($(this).attr('data-title'));
     var particularId = $(this).attr('data-id');
     var quantity = parseInt($('#quantity-'+id).val());
     var subTotal = (price * quantity);

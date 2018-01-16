@@ -129,10 +129,10 @@ class InvoiceParticularRepository extends EntityRepository
             $data .='<input type="text" readonly="readonly" style="text-align:center; width:80px; height: 34px !important;" name="quantity" id="quantity-'.$entity->getId().'" class="form-control m-wrap  span4 input-number" value="'.$entity->getQuantity().'" min="1" max="100" >';
             $data .='<span class="input-group-btn">';
             $data .='<button type="button" class="btn green btn-number" data-type="plus" data-field="quantity" data-id="'.$entity->getId().'" data-text="'.$entity->getId().'"   data-title=""><i class="icon-plus"></i></button>';
-            $data .='<button type="button" class="btn blue addCart" id=""  data-id="'.$entity->getParticular()->getId().'"  data-url="/restaurant/invoice/'.$sales->getId().'/particular-add" ><i class="icon-shopping-cart"></i> Add</button>';
+            $data .='<button type="button" class="btn blue addCart" data-title="'.$entity->getSalesPrice().'"  data-text="'.$entity->getId().'"  id=""  data-id="'.$entity->getParticular()->getId().'"  data-url="/restaurant/invoice/'.$sales->getId().'/particular-add" ><i class="icon-shopping-cart"></i> Add</button>';
             $data .='<div>';
             $data .='</td>';
-            $data .= '<td class="span2" id="subTotal-'.$entity->getId().'" >' . $entity->getSubTotal() . '</td>';
+            $data .= '<td class="span2" id="subTotal-'.$entity->getId().'" >= '.$entity->getSubTotal().'</td>';
             $data .= '<td class="span1" >
             <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red particularDelete" ><i class="icon-trash"></i></a>
             </td>';
