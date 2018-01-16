@@ -92,16 +92,15 @@ class InvoiceController extends Controller
         if ($entity->getProcess() == "Done") {
             return $this->redirect($this->generateUrl('restaurant_invoice_show', array('id' => $entity->getId())));
         }
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($entity,array('product','stockable'));
+        /*$pagination = $em->getRepository('RestaurantBundle:Particular')->getServiceLists($entity,array('product','stockable'));
         $salesOverview = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($this->getUser());
+        */
         $created = date('y-m-d');
         $sales = $em->getRepository('RestaurantBundle:Invoice')->invoiceLists( $this->getUser() , array('created' => $created));
         $salesLists = $this->paginate($sales);
 
         return $this->render('RestaurantBundle:Invoice:restaurant.html.twig', array(
             'entity'                => $entity,
-            'salesOverview'         => $salesOverview,
-            'pagination'            => $pagination,
             'salesLists'            => $salesLists,
             'form'                  => $editForm->createView(),
             'particularForm'           => $invoiceParticularForm->createView(),
