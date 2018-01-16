@@ -1127,6 +1127,12 @@ class Particular
         $this->marketing = $marketing;
     }
 
+    public function getCodeName()
+    {
+       $codeName = $this->getParticularCode().' - '.$this->getName();
+       return $codeName;
+    }
+
 
 }
 

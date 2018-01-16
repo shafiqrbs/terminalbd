@@ -92,7 +92,7 @@ class Category
 
 
     /**
-     * @return mixed
+     * @return Category
      */
     public function getName()
     {
@@ -100,7 +100,7 @@ class Category
     }
 
     /**
-     * @param mixed $name
+     * @param Category $name
      */
     public function setName($name)
     {

@@ -60,43 +60,27 @@ class InvoiceParticularRepository extends EntityRepository
 
     public function insertInvoiceItems($invoice, $data)
     {
-        $particular = $this->_em->getRepository('RestaurantBundle:Particular')->find($data['particularId']);
+        $particularId = (int)$data['particularId'];
+        $particular = $this->_em->getRepository('RestaurantBundle:Particular')->find($particularId);
         $em = $this->_em;
         $entity = new InvoiceParticular();
-        $invoiceParticular = $this->_em->getRepository('RestaurantBundle:InvoiceParticular')->findOneBy(array('invoice'=>$invoice ,'particular' => $particular));
-        if(!empty($invoiceParticular)) {
+        $invoiceParticular = $this->findOneBy(array('invoice' => $invoice ,'particular' => $particular));
+        if(!empty($invoiceParticular) and $data['process'] == 'create') {
             $entity = $invoiceParticular;
-            if ($particular->getService()->getHasQuantity() == 1){
-                $entity->setQuantity($invoiceParticular->getQuantity() + $data['quantity']);
-            }else{
-                $entity->setQuantity(1);
-            }
-            $entity->setSubTotal($data['price'] * $entity->getQuantity());
-
+            $entity->setQuantity($invoiceParticular->getQuantity() + (int)$data['quantity']);
+            $entity->setSubTotal($particular->getPrice() * $entity->getQuantity());
+        }elseif(!empty($invoiceParticular) and $data['process'] == 'update') {
+            $entity = $invoiceParticular;
+            $entity->setQuantity((int)$data['quantity']);
+            $entity->setSubTotal($particular->getPrice() * $entity->getQuantity());
         }else{
-
-            if ($particular->getService()->getHasQuantity() == 1){
-                $entity->setQuantity($data['quantity']);
-            }else{
-                $entity->setQuantity(1);
-            }
-            $entity->setSalesPrice($data['price']);
-            $entity->setSubTotal($data['price'] * $data['quantity']);
+            $entity->setQuantity($data['quantity']);
+            $entity->setSalesPrice($particular->getPrice());
+            $entity->setSubTotal($particular->getPrice() * (int)$data['quantity']);
         }
         $entity->setInvoice($invoice);
-        if($particular->getService()->getCode() == '01'){
-            $datetime = new \DateTime("now");
-            $entity->setCode($invoice);
-            $lastCode = $this->getLastCode($invoice,$datetime);
-            $entity->setCode($lastCode+1);
-            $reportCode = sprintf("%s%s", $datetime->format('dmy'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT));
-            $entity->setReportCode($reportCode);
-        }
         $entity->setParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
-        if($particular->getCommission()){
-            $entity->setCommission($particular->getCommission() * $entity->getQuantity());
-        }
         $em->persist($entity);
         $em->flush();
 
@@ -128,19 +112,29 @@ class InvoiceParticularRepository extends EntityRepository
         $em->flush();
     }
 
-     public function getSalesItems(Invoice $sales)
+    public function getSalesItems(Invoice $sales)
     {
         $entities = $sales->getInvoiceParticulars();
         $data = '';
         $i = 1;
         foreach ($entities as $entity) {
             $data .= '<tr id="remove-'. $entity->getId().'">';
-            $data .= '<td class="span4" >'.$i.'. '. $entity->getParticular()->getParticularCode() . '</td>';
+            $data .= '<td class="span4" >'.$i.'. '. $entity->getParticular()->getParticularCode() .' - ' .$entity->getParticular()->getName(). '</td>';
             $data .= '<td class="span1" >' . $entity->getSalesPrice().'</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity().'</td>';
-            $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
+            $data .= '<td class="span1" >';
+            $data .='<div class="input-group input-append">';
+            $data .='<span class="input-group-btn">';
+            $data .='<button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity" data-id="'.$entity->getId().'"  data-text="'.$entity->getId().'" data-title=""><i class="icon-minus"></i></button>';
+            $data .='</span>';
+            $data .='<input type="text" readonly="readonly" style="text-align:center; width:80px; height: 34px !important;" name="quantity" id="quantity-'.$entity->getId().'" class="form-control m-wrap  span4 input-number" value="'.$entity->getQuantity().'" min="1" max="100" >';
+            $data .='<span class="input-group-btn">';
+            $data .='<button type="button" class="btn green btn-number" data-type="plus" data-field="quantity" data-id="'.$entity->getId().'" data-text="'.$entity->getId().'"   data-title=""><i class="icon-plus"></i></button>';
+            $data .='<button type="button" class="btn blue addCart" id=""  data-id="'.$entity->getParticular()->getId().'"  data-url="/restaurant/invoice/'.$sales->getId().'/particular-add" ><i class="icon-shopping-cart"></i> Add</button>';
+            $data .='<div>';
+            $data .='</td>';
+            $data .= '<td class="span2" id="subTotal-'.$entity->getId().'" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red particularDelete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;

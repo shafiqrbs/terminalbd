@@ -455,17 +455,53 @@ $(".select2Location").select2({
     minimumInputLength: 1
 });
 
+$(document).on( "click", ".btn-qnt-particular", function(e){
+
+    e.preventDefault();
+    var productId   = $(this).attr('data-text');
+    var price       = $(this).attr('data-title');
+    fieldId         = $(this).attr('data-id');
+    fieldName       = $(this).attr('data-field');
+    type            = $(this).attr('data-type');
+    var input       = $('#quantity');
+    var currentVal  = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+            if(currentVal > input.attr('min')) {
+                var existVal = (currentVal - 1);
+                input.val(existVal).change();
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                var existVal = (currentVal + 1);
+                input.val(existVal).change();
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+
+        }
+    } else {
+        input.val(1);
+    }
+
+});
+
 $(document).on( "click", ".btn-number", function(e){
 
     e.preventDefault();
-
     url = $(this).attr('data-url');
     var productId = $(this).attr('data-text');
     var price = $(this).attr('data-title');
     fieldId = $(this).attr('data-id');
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
-    var input = $('#quantity-'+$(this).attr('data-id'));
+    var input = $('#quantity-'+fieldId);
     var currentVal = parseInt(input.val());
     if (!isNaN(currentVal)) {
         if(type == 'minus') {
@@ -489,6 +525,6 @@ $(document).on( "click", ".btn-number", function(e){
 
         }
     } else {
-        input.val(0);
+        input.val(1);
     }
 });

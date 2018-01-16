@@ -9,6 +9,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
 use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
+use Appstore\Bundle\RestaurantBundle\Repository\ParticularRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -20,17 +21,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class InvoiceType extends AbstractType
 {
 
-    /** @var  LocationRepository */
-    private $location;
+    /** @var  ParticularRepository */
+    private $particular;
+
 
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption ,  LocationRepository $location)
+    function __construct(GlobalOption $globalOption ,  ParticularRepository $particular)
     {
-        $this->location         = $location;
-        $this->globalOption     = $globalOption;
+        $this->particular           = $particular;
+        $this->globalOption         = $globalOption;
     }
 
 
@@ -46,8 +48,6 @@ class InvoiceType extends AbstractType
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('slipNo','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','data-trigger' => 'hover','placeholder'=>'Add slip no','data-original-title'=>'Add slip no','autocomplete'=>'off')))
-            ->add('payment','text', array('attr'=>array('class'=>'tooltips payment span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
-            ))
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
             ->add('tokenNo', 'entity', array(
@@ -133,7 +133,7 @@ class InvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ));
-            /*$builder->add('customer', new RestaurantCustomerType($this->location));*/
+            //$builder->add('customer', new RestaurantCustomerType($this->location));
     }
     
     /**

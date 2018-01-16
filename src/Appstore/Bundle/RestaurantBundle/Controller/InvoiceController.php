@@ -6,6 +6,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Form\InvoiceType;
+use Appstore\Bundle\RestaurantBundle\Form\RestaurantParticularType;
 use Appstore\Bundle\RestaurantBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -87,6 +88,7 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
+        $invoiceParticularForm = $this->createInvoiceParticularForm(New InvoiceParticular(),$entity);
         if ($entity->getProcess() == "Done") {
             return $this->redirect($this->generateUrl('restaurant_invoice_show', array('id' => $entity->getId())));
         }
@@ -102,6 +104,7 @@ class InvoiceController extends Controller
             'pagination'            => $pagination,
             'salesLists'            => $salesLists,
             'form'                  => $editForm->createView(),
+            'particularForm'           => $invoiceParticularForm->createView(),
         ));
 
     }
@@ -145,8 +148,8 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $particularId = $request->request->get('particularId');
         $quantity = $request->request->get('quantity');
-        $price = $request->request->get('price');
-        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
+        $process = $request->request->get('process');
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'process'=>$process);
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateInvoiceTotalPrice($invoice);
         $msg = 'Particular added successfully';
@@ -182,9 +185,9 @@ class InvoiceController extends Controller
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        $newCustomerMobile = $request->request->all()['new_customer_mobile'];
-        $newCustomerName = $request->request->all()['new_customer_name'];
-        $customerMobile = $request->request->all()['customerMobile'];
+        $newCustomerMobile = isset($request->request->all()['new_customer_mobile'])?$request->request->all()['new_customer_mobile']:'';
+        $newCustomerName = isset($request->request->all()['new_customer_name'])?$request->request->all()['new_customer_name']:'';
+        $customerMobile = isset($request->request->all()['customerMobile'])?$request->request->all()['customerMobile']:'';
         $restaurantInvoice = $request->request->all()['appstore_bundle_restaurant_invoice'];
         if(!empty($customerMobile)){
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customerMobile);
@@ -197,8 +200,7 @@ class InvoiceController extends Controller
             $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingRestaurantCustomer($globalOption,$mobile,$newCustomerName);
             $em->getRepository('RestaurantBundle:Invoice')->insertNewCustomerWithDiscount($entity,$customer);
         }
-
-        if($restaurantInvoice['discount']){
+        if(!empty($restaurantInvoice['discount'])){
             $em->getRepository('RestaurantBundle:Invoice')->insertDiscount($entity,$restaurantInvoice['discount']);
         }
 
@@ -293,8 +295,8 @@ class InvoiceController extends Controller
     private function createEditForm(Invoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new InvoiceType($globalOption,$location), $entity, array(
+        $particular = $this->getDoctrine()->getRepository('RestaurantBundle:Particular');
+        $form = $this->createForm(new InvoiceType($globalOption,$particular), $entity, array(
             'action' => $this->generateUrl('restaurant_invoice_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -305,6 +307,22 @@ class InvoiceController extends Controller
         ));
         return $form;
     }
+
+    private function createInvoiceParticularForm(InvoiceParticular $entity , Invoice $invoice)
+    {
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $particular = $this->getDoctrine()->getRepository('RestaurantBundle:Particular');
+        $form = $this->createForm(new RestaurantParticularType($config,$particular), $entity, array(
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'particularForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
 
     public function deleteAction(Invoice $entity)
     {
@@ -374,7 +392,7 @@ class InvoiceController extends Controller
         $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig'=>$config,'invoice'=>$invoice));
         $data = $request->request->all()['appstore_bundle_restaurant_invoice'];
         if(!empty($entity)){
-            $this->approvedOrder($entity,$data);
+            $this->cashPayment($entity);
         }
         $currentPayment = !empty($data['payment']) ? $data['payment'] :0;
 
@@ -495,12 +513,6 @@ class InvoiceController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        if($return){
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->text($return);
-            $printer -> setEmphasis(false);
-            $printer -> text ( "\n" );
-        }
         $printer->text("\n");
         $printer -> feed();
         $printer->text($transaction);

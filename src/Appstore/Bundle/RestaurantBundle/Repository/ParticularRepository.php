@@ -294,6 +294,26 @@ class ParticularRepository extends EntityRepository
     }
 
 
+    public function getParticularOptionGroup(RestaurantConfig $config)
+    {
+
+        $qb = $this->createQueryBuilder('p');
+        $qb->select('p, c');
+        $qb->leftJoin('p.service', 's');
+        $qb->leftJoin('p.category', 'c');
+        $qb->orderBy('c.name', 'ASC')->addOrderBy('p.name', 'ASC');
+        $qb->andWhere('s.slug IN(:slugs)')->setParameter('slugs',array_values(array('product','stockable')));
+        $products = $qb->getQuery()->execute();
+
+        $choices = [];
+        foreach ($products as $product) {
+            $choices[$product->getCategory()->getName()][$product->getId()] =  $product->getName();
+        }
+        return $choices;
+
+    }
+
+
 
 
 

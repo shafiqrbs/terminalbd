@@ -90,37 +90,19 @@ $(document).on( "click", ".receivePayment", function(e){
     $("span", this).toggleClass("fa-minus fa-money");
 });
 
-$(document).on('change', '#particular', function() {
-
-    var url = $(this).val();
-    if(url == ''){
-        alert('You have to add particulars from drop down and this not service item');
-        return false;
-    }
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#particularId').val(obj['particularId']);
-            $('#quantity').val(obj['quantity']).focus();
-            $('#price').val(obj['price']);
-            $('#instruction').html(obj['instruction']);
-            $('#addParticular').attr("disabled", false);
-        }
-    })
-});
-
 $(document).on('click', '#addParticular', function() {
 
-    var particularId = $('#particularId').val();
+    var particularId = $('#appstore_bundle_restaurant_invoice_particular_particular').val();
+    if(particularId == ''){
+        alert('You have to add product from drop down');
+        return false;
+    }
     var quantity = parseInt($('#quantity').val());
-    var price = parseInt($('#price').val());
     var url = $('#addParticular').attr('data-url');
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
+        data: 'particularId='+particularId+'&quantity='+quantity+'&process=create',
         success: function (response) {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
@@ -134,29 +116,25 @@ $(document).on('click', '#addParticular', function() {
             $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#invoiceTransaction').html(obj['invoiceTransaction']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
-            $("#particular").select2().select2("val","");
-            $('#price').val('');
             $('#quantity').val('1');
-            $('#addParticular').attr("disabled", true);
-            $('#addPatientParticular').attr("disabled", true);
-
+            $("#appstore_bundle_restaurant_invoice_particular_particular").select2().select2("val","");
         }
     })
 });
 
 $(document).on('click', '.addCart', function() {
 
-    var id = $(this).attr('data-id');
+    var id = $(this).attr('data-text');
+    var price = parseInt($(this).attr('data-tile'));
     var particularId = $(this).attr('data-id');
     var quantity = parseInt($('#quantity-'+id).val());
-    var price = parseInt($('#price-'+id).val());
+    var subTotal = (price * quantity);
+    $('#subTotal-'+id).html('= '+subTotal);
     var url = $(this).attr('data-url');
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
+        data: 'particularId='+particularId+'&quantity='+quantity+'&process=update',
         success: function (response) {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
@@ -168,16 +146,7 @@ $(document).on('click', '.addCart', function() {
             $('#due').val(obj['due']);
             $('.discountAmount').html(obj['discount']);
             $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#invoiceTransaction').html(obj['invoiceTransaction']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
-            $("#particular").select2().select2("val","");
-            $('#price').val('');
-            $('#quantity').val('1');
-            $('#addParticular').attr("disabled", true);
-            $('#addPatientParticular').attr("disabled", true);
-            $("#saveBtn").attr("disabled", false);
+
 
         }
     })
@@ -201,10 +170,6 @@ $(document).on("click", ".removeDiscount", function() {
             $('#due').val(obj['due']);
             $('.discountAmount').html(obj['discount']);
             $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#invoiceTransaction').html(obj['invoiceTransaction']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
         }
     })
 });
@@ -235,12 +200,10 @@ $(document).on("click", ".particularDelete", function() {
 $(document).on("change", "#invoiceForm", function() {
 
     var url = $(this).attr("action");
-    var payment  = parseInt($('#appstore_bundle_restaurant_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
-
     $.ajax({
         url: url,
         type: 'POST',
-        data: new FormData($('form')[0]),
+        data: new FormData($('#invoiceForm')[0]),
         processData: false,
         contentType: false,
         success: function (response) {
@@ -257,9 +220,7 @@ $(document).on("change", "#invoiceForm", function() {
             $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
-            if(obj['netTotal'] > obj['payment'] ){
-                $("#receiveBtn").attr("disabled", true);
-            }
+
         }
     })
 
