@@ -42,7 +42,6 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('product'));
-        $pagination = $this->paginate($pagination);
         $editForm = $this->createCreateForm($entity);
         return $this->render('RestaurantBundle:Product:index.html.twig', array(
             'pagination' => $pagination,

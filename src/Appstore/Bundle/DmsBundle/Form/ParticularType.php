@@ -41,7 +41,7 @@ class ParticularType extends AbstractType
                     return $er->createQueryBuilder('e')
                     ->where("e.status = 1")
                     ->andWhere('e.slug IN (:slugs)')
-                    ->setParameter('slugs',array('general-examination','past-medical-history','treatment-plan','physical-examination'))
+                    ->setParameter('slugs',array('general','investigation','medical-history','physical'))
                     ->orderBy("e.sorting","ASC");
     }
             ))

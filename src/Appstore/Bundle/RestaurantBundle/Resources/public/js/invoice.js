@@ -240,20 +240,7 @@ $(document).on('change', '#appstore_bundle_restaurant_invoice_payment', function
 
 });
 
-$('#product').DataTable( {
-    scrollY:        '110vh',
-    scrollCollapse: true,
-    paging:         false,
-    bInfo : false,
-    orderable: false,
-    bSort: false,
-    aoColumnDefs: [
-        {
-            bSortable: false,
-            aTargets: [ -1 ]
-        }
-    ]
-});
+
 
 /*$('#invoiceParticular').DataTable( {
     scrollY:        '25vh',

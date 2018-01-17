@@ -99,6 +99,7 @@ class InvoiceController extends Controller
         $sales = $em->getRepository('RestaurantBundle:Invoice')->invoiceLists( $this->getUser() , array('created' => $created));
         $salesLists = $this->paginate($sales);
 
+
         return $this->render('RestaurantBundle:Invoice:restaurant.html.twig', array(
             'entity'                => $entity,
             'salesLists'            => $salesLists,

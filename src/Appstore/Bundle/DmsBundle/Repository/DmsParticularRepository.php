@@ -27,7 +27,7 @@ class DmsParticularRepository extends EntityRepository
         $qb->where('e.dmsConfig = :config');
         $qb->setParameter('config',$config);
         $qb->andWhere('service.slug IN (:services)');
-        $qb->setParameter('services',array('general-examination','past-medical-history','treatment-plan','physical-examination'));
+        $qb->setParameter('services',array('general','medical-history','investigation','physical'));
         $qb->orderBy('service.name , e.name','ASC');
         $result = $qb->getQuery()->getResult();
         return $result;
