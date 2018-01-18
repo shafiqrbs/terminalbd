@@ -33,6 +33,11 @@ class DmsConfig
      **/
     private $dmsInvoices;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsReverse", mappedBy="dmsConfig")
+     **/
+    private $dmsReverses;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="dmsConfig")

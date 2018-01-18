@@ -24,12 +24,12 @@ class Attendance
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="dailyAttendance")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="attendance")
      **/
     protected $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="employeeAttendance")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="attendance")
      **/
     private  $employee;
 

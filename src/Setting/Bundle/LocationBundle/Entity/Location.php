@@ -113,6 +113,11 @@ class Location
      */
     protected $particulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="location")
+     */
+    protected $dmsParticulars;
+
 
     /**
      * @var string

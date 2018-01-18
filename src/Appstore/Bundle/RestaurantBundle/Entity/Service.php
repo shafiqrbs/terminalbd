@@ -49,6 +49,11 @@ class Service
      **/
     private $particulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="service")
+     **/
+    private $restaurantInvoice;
+
 
     /**
      * @var int

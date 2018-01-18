@@ -46,7 +46,7 @@ class DmsPurchase
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsVendor", inversedBy="dmsPurchases" , cascade={"detach","merge"} )
      **/
-    private  $vendor;
+    private  $dmsVendor;
 
 
     /**
@@ -681,6 +681,22 @@ class DmsPurchase
     public function setDmsConfig($dmsConfig)
     {
         $this->dmsConfig = $dmsConfig;
+    }
+
+    /**
+     * @return DmsVendor
+     */
+    public function getDmsVendor()
+    {
+        return $this->dmsVendor;
+    }
+
+    /**
+     * @param DmsVendor $dmsVendor
+     */
+    public function setDmsVendor($dmsVendor)
+    {
+        $this->dmsVendor = $dmsVendor;
     }
 
 

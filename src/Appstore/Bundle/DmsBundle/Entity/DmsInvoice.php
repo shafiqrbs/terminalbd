@@ -5,6 +5,7 @@ namespace Appstore\Bundle\DmsBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\DmsParticular\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,31 +35,31 @@ class DmsInvoice
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsInvoices")
      **/
-    private $config;
+    private $dmsConfig;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceTransaction", mappedBy="dmsInvoice" , cascade={"remove"})
-     * @ORM\OrderBy({"updated" = "DESC"})
-     **/
-    private $invoiceTransactions;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="dmsInvoice" , cascade={"remove"})
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
-    private $doctorInvoices;
+    private $dmsDoctorInvoices;
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="dmsInvoices")
      **/
     private $service;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular", mappedBy="dmsInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $invoiceParticulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="dmsInvoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private  $dmsTreatmentPlans;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsReverse", mappedBy="dmsInvoice" , cascade={"remove"} )
@@ -98,12 +99,6 @@ class DmsInvoice
      **/
     private  $approvedBy;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="dmsInvoiceDeliveredBy" )
-     **/
-    private  $deliveredBy;
-
     /**
      * @var string
      *
@@ -113,7 +108,7 @@ class DmsInvoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="dmsInvoices" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="dmsInvoice" )
      **/
     private  $transactionMethod;
 
@@ -1357,6 +1352,38 @@ class DmsInvoice
     public function setDiagnosis($diagnosis)
     {
         $this->diagnosis = $diagnosis;
+    }
+
+    /**
+     * @return DmsConfig
+     */
+    public function getDmsConfig()
+    {
+        return $this->dmsConfig;
+    }
+
+    /**
+     * @param DmsConfig $dmsConfig
+     */
+    public function setDmsConfig($dmsConfig)
+    {
+        $this->dmsConfig = $dmsConfig;
+    }
+
+    /**
+     * @return DmsDoctorInvoice
+     */
+    public function getDmsDoctorInvoices()
+    {
+        return $this->dmsDoctorInvoices;
+    }
+
+    /**
+     * @return DmsTreatmentPlan
+     */
+    public function getDmsTreatmentPlans()
+    {
+        return $this->dmsTreatmentPlans;
     }
 
 

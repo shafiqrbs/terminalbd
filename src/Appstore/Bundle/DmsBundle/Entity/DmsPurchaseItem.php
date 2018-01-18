@@ -27,7 +27,7 @@ class DmsPurchaseItem
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsPurchaseItems" )
      **/
-    private  $particular;
+    private  $dmsParticular;
 
 
     /**
@@ -249,6 +249,22 @@ class DmsPurchaseItem
     public function setDmsPurchase($dmsPurchase)
     {
         $this->dmsPurchase = $dmsPurchase;
+    }
+
+    /**
+     * @return DmsParticular
+     */
+    public function getDmsParticular()
+    {
+        return $this->dmsParticular;
+    }
+
+    /**
+     * @param DmsParticular $dmsParticular
+     */
+    public function setDmsParticular($dmsParticular)
+    {
+        $this->dmsParticular = $dmsParticular;
     }
 
 

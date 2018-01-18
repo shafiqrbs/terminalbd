@@ -40,6 +40,16 @@ class PaymentCard
     protected $hmsInvoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="paymentCard")
+     */
+    protected $dmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="paymentCard")
+     */
+    protected $restaurantInvoices;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

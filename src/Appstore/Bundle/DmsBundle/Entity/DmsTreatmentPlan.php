@@ -1,10 +1,9 @@
 <?php
 
-namespace Appstore\Bundle\DmsParticular\Entity;
+namespace Appstore\Bundle\DmsBundle\Entity;
 
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
-use Appstore\Bundle\DmsParticular\Entity\Particular;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,9 +26,14 @@ class DmsTreatmentPlan
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsTreatmentPlan" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsTreatmentPlans" )
      **/
-    private  $particular;
+    private  $dmsParticular;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", inversedBy="dmsTreatmentPlans" )
+     **/
+    private  $dmsInvoice;
 
     /**
      * @var float
@@ -120,6 +124,38 @@ class DmsTreatmentPlan
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return DmsInvoice
+     */
+    public function getDmsInvoice()
+    {
+        return $this->dmsInvoice;
+    }
+
+    /**
+     * @param DmsInvoice $dmsInvoice
+     */
+    public function setDmsInvoice($dmsInvoice)
+    {
+        $this->dmsInvoice = $dmsInvoice;
+    }
+
+    /**
+     * @return DmsParticular
+     */
+    public function getDmsParticular()
+    {
+        return $this->dmsParticular;
+    }
+
+    /**
+     * @param DmsParticular $dmsParticular
+     */
+    public function setDmsParticular($dmsParticular)
+    {
+        $this->dmsParticular = $dmsParticular;
     }
 
 

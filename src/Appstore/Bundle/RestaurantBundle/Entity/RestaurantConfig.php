@@ -40,10 +40,24 @@ class RestaurantConfig
     private $invoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Vendor", mappedBy="restaurantConfig")
+     **/
+    private $vendors;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="restaurantConfig")
+     **/
+    private $purchases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Category", mappedBy="restaurantConfig")
+     **/
+    private $categories;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Reverse", mappedBy="restaurantConfig")
      **/
-    private $reverse;
-
+    private $reverses;
 
     /**
      * @var string
@@ -973,9 +987,17 @@ class RestaurantConfig
     /**
      * @return Reverse
      */
-    public function getReverse()
+    public function getReverses()
     {
-        return $this->reverse;
+        return $this->reverses;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 
 

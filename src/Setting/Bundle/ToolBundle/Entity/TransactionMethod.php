@@ -8,6 +8,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
@@ -134,6 +135,31 @@ class TransactionMethod
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", mappedBy="transactionMethod" )
      */
     protected $invoiceTransactions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="transactionMethod" )
+     */
+    protected $dmsInvoice;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="transactionMethod" )
+     */
+    protected $dmsPurchase;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="transactionMethod" )
+     */
+    protected $dmsDoctorInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="transactionMethod" )
+     */
+    protected $restaurantInvoice;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="transactionMethod" )
+     */
+    protected $restaurantPurchase;
 
     /**
      * @var string
@@ -388,6 +414,14 @@ class TransactionMethod
     public function getOrderPayments()
     {
         return $this->orderPayments;
+    }
+
+    /**
+     * @return DmsInvoice
+     */
+    public function getDmsInvoice()
+    {
+        return $this->dmsInvoice;
     }
 }
 

@@ -840,6 +840,7 @@ class InvoiceController extends Controller
         $entity->setPaymentStatus('Paid');
         $entity->setApprovedBy($this->getUser());
         $entity->setProcess('Done');
+        $entity->setDue(0);
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
         $entity->setPaymentInWord($amountInWords);
         $em->flush();

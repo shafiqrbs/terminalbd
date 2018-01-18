@@ -125,6 +125,26 @@ class AccountMobileBank
      */
     protected $restaurantInvoices;
 
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="accountMobileBank" )
+     */
+    protected $restaurantPurchase;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="accountMobileBank" )
+     */
+    protected $dmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="accountMobileBank" )
+     */
+    protected $dmsDoctorInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="accountMobileBank" )
+     */
+    protected $dmsPurchases;
+
     /**
      * @var string
      *

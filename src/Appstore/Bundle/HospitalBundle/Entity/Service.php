@@ -52,7 +52,7 @@ class Service
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", mappedBy="service")
      **/
-    private $serviceGroups;
+    private $hmsServiceGroup;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="service")
@@ -210,6 +210,14 @@ class Service
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return HmsServiceGroup
+     */
+    public function getHmsServiceGroup()
+    {
+        return $this->hmsServiceGroup;
     }
 
 

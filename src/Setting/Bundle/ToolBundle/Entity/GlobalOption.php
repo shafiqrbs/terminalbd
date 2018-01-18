@@ -15,6 +15,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
+use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -143,10 +144,18 @@ class GlobalOption
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
     protected $homeSliders;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\DomainUser", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $domainUser;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $dailyAttendance;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
@@ -277,6 +286,22 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $mallConnects;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $employeeLeave;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\LeaveSetup", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $leaveSetup;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Attendance", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $attendance;
+
 
     /**
      * @var integer
@@ -1593,6 +1618,14 @@ class GlobalOption
     public function getRestaurantConfig()
     {
         return $this->restaurantConfig;
+    }
+
+    /**
+     * @return DailyAttendance
+     */
+    public function getDailyAttendance()
+    {
+        return $this->dailyAttendance;
     }
 
 

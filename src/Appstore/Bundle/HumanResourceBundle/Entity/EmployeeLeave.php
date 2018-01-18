@@ -24,7 +24,7 @@ class EmployeeLeave
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="leaveSetup")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="employeeLeave")
      **/
     protected $globalOption;
 
@@ -32,6 +32,11 @@ class EmployeeLeave
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\LeaveSetup", inversedBy="employeeLeave")
      **/
     protected $leaveSetup;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance", mappedBy="employeeLeave")
+     **/
+    protected $dailyAttendance;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="employeeLeave")
@@ -254,6 +259,14 @@ class EmployeeLeave
     public function setYear($year)
     {
         $this->year = $year;
+    }
+
+    /**
+     * @return DailyAttendance
+     */
+    public function getDailyAttendance()
+    {
+        return $this->dailyAttendance;
     }
 
 }

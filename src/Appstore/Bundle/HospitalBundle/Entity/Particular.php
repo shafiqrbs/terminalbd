@@ -55,7 +55,7 @@ class Particular
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", inversedBy="particulars" )
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
-    private $serviceGroup;
+    private $hmsServiceGroup;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="particular")
@@ -1263,6 +1263,22 @@ class Particular
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return HmsServiceGroup
+     */
+    public function getHmsServiceGroup()
+    {
+        return $this->hmsServiceGroup;
+    }
+
+    /**
+     * @param HmsServiceGroup $hmsServiceGroup
+     */
+    public function setHmsServiceGroup($hmsServiceGroup)
+    {
+        $this->hmsServiceGroup = $hmsServiceGroup;
     }
 
 

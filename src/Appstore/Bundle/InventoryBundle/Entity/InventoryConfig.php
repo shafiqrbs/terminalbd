@@ -93,6 +93,11 @@ class InventoryConfig
     protected $sales;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $purchases;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Delivery", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
     protected $deliveries;
@@ -469,7 +474,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return Purchase
      */
     public function getPurchases()
     {

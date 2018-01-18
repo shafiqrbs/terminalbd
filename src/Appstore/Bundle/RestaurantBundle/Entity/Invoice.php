@@ -38,7 +38,7 @@ class Invoice
 
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Service", inversedBy="invoices")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Service", inversedBy="restaurantInvoice")
      **/
     private $service;
 
@@ -63,13 +63,13 @@ class Invoice
     private  $accountSales;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="invoices" ,cascade={"persist","remove"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="restaurantInvoice" ,cascade={"persist","remove"} )
      **/
     private  $customer;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceCabin", cascade={"persist","remove"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceTokenNo", cascade={"persist","remove"}  )
      **/
     private  $tokenNo;
 
@@ -86,7 +86,7 @@ class Invoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="invoiceDeliveredBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="invoiceSalesBy" )
      **/
     private  $salesBy;
 
@@ -99,12 +99,12 @@ class Invoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="invoices" , cascade={"persist","remove"} )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="restaurantInvoice" , cascade={"persist","remove"} )
      **/
     private  $transactionMethod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="invoices" , cascade={"persist","remove"}  )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="restaurantInvoices" , cascade={"persist","remove"}  )
      **/
     private  $bank;
 
@@ -121,7 +121,7 @@ class Invoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="invoices" , cascade={"persist","remove","remove"}  )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="restaurantInvoices" , cascade={"persist","remove","remove"}  )
      **/
     private  $paymentCard;
 

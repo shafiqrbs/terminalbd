@@ -37,6 +37,16 @@ class DmsParticular
     private $dmsInvoice;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="assignDoctor")
+     **/
+    private $dmsDoctorInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="assignDoctor")
+     **/
+    private $assignDoctorInvoices;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="dmsParticulars" )
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
@@ -47,18 +57,32 @@ class DmsParticular
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular", mappedBy="dmsParticular" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
-    private  $invoiceParticular;
+    private $invoiceParticular;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem", mappedBy="dmsParticular" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private $dmsPurchaseItems;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="dmsParticular" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private $dmsTreatmentPlans;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="dmsParticularOperator" )
      **/
-    private  $assignOperator;
+    private $assignOperator;
 
     /**
      * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="dmsParticularDoctor" )
      **/
-    private  $assignDoctor;
+    private $assignDoctor;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="dmsParticulars")
@@ -232,7 +256,7 @@ class DmsParticular
      *
      * @ORM\Column(name="status", type="boolean" )
      */
-    private $status= true;
+    private $status = true;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -258,7 +282,6 @@ class DmsParticular
      * @ORM\Column(name="updated", type="datetime")
      */
     private $updated;
-
 
 
     /**
@@ -295,13 +318,15 @@ class DmsParticular
         return $this->name;
     }
 
-    public function getReferred(){
+    public function getReferred()
+    {
 
-        return $this->dmsParticularCode.' - '.$this->name .' ('. $this->mobile .')/'.$this->getService()->getName();
+        return $this->dmsParticularCode . ' - ' . $this->name . ' (' . $this->mobile . ')/' . $this->getService()->getName();
     }
 
-    public function getDoctor(){
-        return $this->dmsParticularCode.' - '.$this->name;
+    public function getDoctor()
+    {
+        return $this->dmsParticularCode . ' - ' . $this->name;
     }
 
     /**
@@ -351,7 +376,6 @@ class DmsParticular
     {
         return $this->price;
     }
-
 
 
     /**
@@ -611,7 +635,6 @@ class DmsParticular
     }
 
 
-
     /**
      * @return Location
      */
@@ -684,24 +707,24 @@ class DmsParticular
     {
         return null === $this->path
             ? null
-            : $this->getUploadRootDir().'/'.$this->path;
+            : $this->getUploadRootDir() . '/' . $this->path;
     }
 
     public function getWebPath()
     {
         return null === $this->path
             ? null
-            : $this->getUploadDir().'/'.$this->path;
+            : $this->getUploadDir() . '/' . $this->path;
     }
 
     protected function getUploadRootDir()
     {
-        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+        return __DIR__ . '/../../../../../web/' . $this->getUploadDir();
     }
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getHospitalConfig()->getGlobalOption()->getId().'/hms/';
+        return 'uploads/domain/' . $this->getHospitalConfig()->getGlobalOption()->getId() . '/hms/';
     }
 
     public function upload()
@@ -727,7 +750,6 @@ class DmsParticular
         // clean up the file property as you won't need it anymore
         $this->file = null;
     }
-
 
 
     /**
@@ -854,7 +876,6 @@ class DmsParticular
     }
 
 
-
     /**
      * @return bool
      */
@@ -870,7 +891,6 @@ class DmsParticular
     {
         $this->reportFormat = $reportFormat;
     }
-
 
 
     /**
@@ -921,6 +941,28 @@ class DmsParticular
         $this->particularCode = $particularCode;
     }
 
+    /**
+     * @return DmsInvoice
+     */
+    public function getAssignDoctorInvoices()
+    {
+        return $this->assignDoctorInvoices;
+    }
+
+    /**
+     * @return DmsPurchaseItem
+     */
+    public function getDmsPurchaseItems()
+    {
+        return $this->dmsPurchaseItems;
+    }
+
+    /**
+     * @return DmsTreatmentPlan
+     */
+    public function getDmsTreatmentPlans()
+    {
+        return $this->dmsTreatmentPlans;
+    }
 
 }
-

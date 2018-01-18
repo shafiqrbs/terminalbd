@@ -133,11 +133,11 @@ class DmsInvoiceRepository extends EntityRepository
     public function findWithOverview(User $user , $data , $mode='')
     {
 
-        $hospital = $user->getGlobalOption()->getDmsConfig()->getId();
+        $config = $user->getGlobalOption()->getDmsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(it.total) as netTotal , sum(it.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -161,11 +161,11 @@ class DmsInvoiceRepository extends EntityRepository
 
     public function findWithSalesOverview(User $user , $data , $mode='')
     {
-        $hospital = $user->getGlobalOption()->getDmsConfig()->getId();
+        $config = $user->getGlobalOption()->getDmsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -187,7 +187,7 @@ class DmsInvoiceRepository extends EntityRepository
 
     public function findWithServiceOverview(User $user, $data)
     {
-        $hospital = $user->getGlobalOption()->getDmsConfig()->getId();
+        $config = $user->getGlobalOption()->getDmsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->leftJoin('e.invoiceParticulars','ip');
@@ -195,7 +195,7 @@ class DmsInvoiceRepository extends EntityRepository
         $qb->leftJoin('p.service','s');
         $qb->select('sum(ip.subTotal) as subTotal');
         $qb->addSelect('s.name as serviceName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -209,13 +209,13 @@ class DmsInvoiceRepository extends EntityRepository
 
     public function findWithTransactionOverview(User $user, $data)
     {
-        $hospital = $user->getGlobalOption()->getDmsConfig()->getId();
+        $config = $user->getGlobalOption()->getDmsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->leftJoin('ip.transactionMethod','p');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('p.name as transName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -239,13 +239,13 @@ class DmsInvoiceRepository extends EntityRepository
         }
 
 
-        $hospital = $user->getGlobalOption()->getDmsConfig()->getId();
+        $config = $user->getGlobalOption()->getDmsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.doctorInvoices','ip');
         $qb->leftJoin('ip.assignDoctor','d');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('d.name as referredName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
         $qb->andWhere('ip.process = :mode')->setParameter('mode', 'Paid');
         if (!empty($data['startDate']) ) {
             $qb->andWhere("ip.updated >= :startDate");
@@ -268,7 +268,7 @@ class DmsInvoiceRepository extends EntityRepository
         $config = $user->getGlobalOption()->getDmsConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.config = :config')->setParameter('config', $config) ;
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
@@ -278,9 +278,9 @@ class DmsInvoiceRepository extends EntityRepository
 
     public function invoicePathologicalReportLists(User $user , $mode , $data)
     {
-        $hospital = $user->getGlobalOption()->getDmsConfig()->getId();
+        $config = $user->getGlobalOption()->getDmsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
@@ -292,10 +292,10 @@ class DmsInvoiceRepository extends EntityRepository
 
     public function doctorInvoiceLists(User $user,$data)
     {
-        $hospital = $user->getGlobalOption()->getDmsConfig()->getId();
+        $config = $user->getGlobalOption()->getDmsConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
@@ -429,7 +429,7 @@ class DmsInvoiceRepository extends EntityRepository
     public function patientAdmissionUpdate($data,DmsInvoice $entity)
     {
         $em = $this->_em;
-        $invoiceInfo = $data['appstore_bundle_hospitalbundle_invoice'];
+        $invoiceInfo = $data['appstore_bundle_configbundle_invoice'];
         if($invoiceInfo['cabin']){
             $cabin = $em->getRepository('DmsBundle:Particular')->find($invoiceInfo['cabin']);
             $entity->setCabin($cabin);
@@ -459,7 +459,7 @@ class DmsInvoiceRepository extends EntityRepository
         $cabin = $this->_em->getRepository('DmsBundle:Particular')->find($cabin);
         $qb = $this->createQueryBuilder('e');
         $qb->select('COUNT(e.cabin) AS cabinCount');
-        $qb->where('e.hospitalConfig = :config')->setParameter('config', $invoice ->getDmsConfig()->getId());
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $invoice ->getDmsConfig()->getId());
         $qb->andWhere('e.cabin = :cabin')->setParameter('cabin', $cabin ->getId());
         $qb->andWhere('e.process = :process')->setParameter('process', 'Admitted');
         $res = $qb->getQuery()->getOneOrNullResult();

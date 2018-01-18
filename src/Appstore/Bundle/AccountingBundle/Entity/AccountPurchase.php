@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
+use Appstore\Bundle\DmsBundle\Entity\DmsVendor;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
@@ -45,7 +47,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $purchase;
 
         /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchase", inversedBy="accountPurchase" )
+         * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchase", inversedBy="accountPurchase" )
          * @ORM\JoinColumn(name="hmsPurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $hmsPurchase;
@@ -57,7 +59,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 
         /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", inversedBy="accountPurchase" )
+         * @ORM\OneToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", inversedBy="accountPurchase" )
          * @ORM\JoinColumn(name="restaurant_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $restaurantPurchase;
@@ -66,6 +68,18 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Vendor", inversedBy="accountPurchase" )
          **/
         private  $restaurantVendor;
+
+        /**
+         * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", inversedBy="accountPurchase" )
+         * @ORM\JoinColumn(name="dmsPurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+         **/
+        private  $dmsPurchase;
+
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsVendor", inversedBy="accountPurchases" )
+         **/
+        private  $dmsVendor;
+
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountPurchases" )
@@ -673,6 +687,38 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setRestaurantVendor($restaurantVendor)
         {
             $this->restaurantVendor = $restaurantVendor;
+        }
+
+        /**
+         * @return DmsPurchase
+         */
+        public function getDmsPurchase()
+        {
+            return $this->dmsPurchase;
+        }
+
+        /**
+         * @param DmsPurchase $dmsPurchase
+         */
+        public function setDmsPurchase($dmsPurchase)
+        {
+            $this->dmsPurchase = $dmsPurchase;
+        }
+
+        /**
+         * @return DmsVendor
+         */
+        public function getDmsVendor()
+        {
+            return $this->dmsVendor;
+        }
+
+        /**
+         * @param DmsVendor $dmsVendor
+         */
+        public function setDmsVendor($dmsVendor)
+        {
+            $this->dmsVendor = $dmsVendor;
         }
 
     }

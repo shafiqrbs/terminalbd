@@ -1,3 +1,7 @@
+medicine_medicine:
+    resource: "@MedicineBundle/Resources/config/routing/medicinecompany.yml"
+    prefix:   /medicine
+
 medicine_homepage:
     path:     /hello/{name}
     defaults: { _controller: MedicineBundle:Default:index }

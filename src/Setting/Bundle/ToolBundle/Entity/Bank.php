@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\Mapping as ORM;
@@ -63,6 +64,16 @@ class Bank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", mappedBy="bank" )
      */
     protected $invoiceTransactions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="bank" )
+     */
+    protected $dmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="bank" )
+     */
+    protected $restaurantInvoices;
 
 
 
@@ -149,6 +160,14 @@ class Bank
     public function getInvoiceTransactions()
     {
         return $this->invoiceTransactions;
+    }
+
+    /**
+     * @return DmsInvoice
+     */
+    public function getDmsInvoices()
+    {
+        return $this->dmsInvoices;
     }
 }
 

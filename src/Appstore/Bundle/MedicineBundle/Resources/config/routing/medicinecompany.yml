@@ -1,0 +1,30 @@
+medicine:
+    path:     /
+    defaults: { _controller: "MedicineBundle:MedicineCompany:index" }
+
+medicine_show:
+    path:     /{id}/show
+    defaults: { _controller: "MedicineBundle:MedicineCompany:show" }
+
+medicine_new:
+    path:     /new
+    defaults: { _controller: "MedicineBundle:MedicineCompany:new" }
+
+medicine_create:
+    path:     /create
+    defaults: { _controller: "MedicineBundle:MedicineCompany:create" }
+    methods:  POST
+
+medicine_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "MedicineBundle:MedicineCompany:edit" }
+
+medicine_update:
+    path:     /{id}/update
+    defaults: { _controller: "MedicineBundle:MedicineCompany:update" }
+    methods:  [POST, PUT]
+
+medicine_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "MedicineBundle:MedicineCompany:delete" }
+    methods:  [POST, DELETE]

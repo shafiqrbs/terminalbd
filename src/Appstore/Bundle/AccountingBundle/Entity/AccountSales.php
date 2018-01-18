@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -89,6 +90,12 @@ class AccountSales
      * @ORM\JoinColumn(name="hmsInvoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $hmsInvoices;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="dmsInvoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $dmsInvoices;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", inversedBy="accountSales" )
@@ -565,6 +572,22 @@ class AccountSales
     public function setRestaurantInvoice($restaurantInvoice)
     {
         $this->restaurantInvoice = $restaurantInvoice;
+    }
+
+    /**
+     * @return DmsInvoice
+     */
+    public function getDmsInvoices()
+    {
+        return $this->dmsInvoices;
+    }
+
+    /**
+     * @param DmsInvoice $dmsInvoices
+     */
+    public function setDmsInvoices($dmsInvoices)
+    {
+        $this->dmsInvoices = $dmsInvoices;
     }
 }
 

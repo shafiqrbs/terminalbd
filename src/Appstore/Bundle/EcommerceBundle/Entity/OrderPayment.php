@@ -34,7 +34,7 @@ class OrderPayment
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orderPayment" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orderPayments" )
      **/
     private  $createdBy;
 

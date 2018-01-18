@@ -105,7 +105,7 @@ class Module
     private $siteSettings;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", mappedBy="module")
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", mappedBy="module")
      **/
 
     private $moduleCategory;

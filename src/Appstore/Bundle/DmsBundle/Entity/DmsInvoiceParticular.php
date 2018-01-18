@@ -33,7 +33,7 @@ class DmsInvoiceParticular
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="invoiceParticular")
      **/
-    private $particular;
+    private $dmsParticular;
 
     /**
      * @var string
@@ -65,21 +65,6 @@ class DmsInvoiceParticular
     public function getId()
     {
         return $this->id;
-    }
-    /**
-     * @return DmsParticular
-     */
-    public function getParticular()
-    {
-        return $this->particular;
-    }
-
-    /**
-     * @param DmsParticular $particular
-     */
-    public function setParticular($particular)
-    {
-        $this->particular = $particular;
     }
 
     /**
@@ -144,6 +129,22 @@ class DmsInvoiceParticular
     public function setMetaStatus($metaStatus)
     {
         $this->metaStatus = $metaStatus;
+    }
+
+    /**
+     * @return DmsParticular
+     */
+    public function getDmsParticular()
+    {
+        return $this->dmsParticular;
+    }
+
+    /**
+     * @param DmsParticular $dmsParticular
+     */
+    public function setDmsParticular($dmsParticular)
+    {
+        $this->dmsParticular = $dmsParticular;
     }
 
 

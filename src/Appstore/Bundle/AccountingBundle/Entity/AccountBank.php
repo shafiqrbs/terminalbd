@@ -127,9 +127,30 @@ class AccountBank
     protected $invoiceTransactions;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="accountBank" )
+     */
+    protected $dmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="accountBank" )
+     */
+    protected $dmsPurchases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="accountBank" )
+     */
+    protected $dmsDoctorInvoices;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="accountBank" )
      */
     protected $restaurantInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="accountBank" )
+     */
+    protected $restaurantPurchase;
+
 
 
     /**

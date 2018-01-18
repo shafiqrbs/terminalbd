@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
@@ -48,6 +49,18 @@ class Customer
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $hmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="customer")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $dmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="customer")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $restaurantInvoice;
 
 
     /**
@@ -886,6 +899,14 @@ class Customer
     public function setDob($dob)
     {
         $this->dob = $dob;
+    }
+
+    /**
+     * @return DmsInvoice
+     */
+    public function getDmsInvoices()
+    {
+        return $this->dmsInvoices;
     }
 
 }

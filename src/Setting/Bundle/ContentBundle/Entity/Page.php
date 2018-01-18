@@ -306,7 +306,7 @@ class Page
     protected $homeSliders;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", inversedBy="pages")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", inversedBy="pages")
      **/
     protected $moduleCategory;
 

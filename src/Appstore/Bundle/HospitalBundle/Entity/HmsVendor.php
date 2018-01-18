@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 /**
@@ -33,9 +34,9 @@ class HmsVendor
     protected $purchases;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="vendor")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="hmsVendor")
      */
-    protected $accountPurchases;
+    protected $accountPurchase;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="vendors")
@@ -360,6 +361,14 @@ class HmsVendor
     public function setMode($mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @return AccountPurchase
+     */
+    public function getAccountPurchase()
+    {
+        return $this->accountPurchase;
     }
 
 

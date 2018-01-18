@@ -34,6 +34,11 @@ class LeaveSetup
     protected $leavePolicy;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave", mappedBy="leaveSetup")
+     **/
+    protected $employeeLeave;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)

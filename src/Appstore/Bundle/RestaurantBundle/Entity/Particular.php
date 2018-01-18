@@ -44,10 +44,27 @@ class Particular
     private $category;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", inversedBy="particulars" )
-     * @ORM\OrderBy({"sorting" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", mappedBy="particular" )
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $productionElements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular", mappedBy="particular" )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private $invoiceParticulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem", mappedBy="particular" )
+     **/
+    private $purchaseItems;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="tokenNo" )
+     **/
+    private $invoiceTokenNo;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularOperator" )
@@ -1131,6 +1148,22 @@ class Particular
     {
        $codeName = $this->getParticularCode().' - '.$this->getName();
        return $codeName;
+    }
+
+    /**
+     * @return InvoiceParticular
+     */
+    public function getInvoiceParticulars()
+    {
+        return $this->invoiceParticulars;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceTokenNo()
+    {
+        return $this->invoiceTokenNo;
     }
 
 

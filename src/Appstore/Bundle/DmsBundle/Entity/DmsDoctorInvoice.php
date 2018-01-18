@@ -74,11 +74,6 @@ class DmsDoctorInvoice
     private  $transactionMethod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="dmsDoctorInvoices" )
-     **/
-    private  $bank;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="dmsDoctorInvoices" )
      **/
     private  $accountBank;

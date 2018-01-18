@@ -31,7 +31,7 @@ class InvoiceParticular
     private $invoice;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceParticular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceParticulars")
      **/
     private $particular;
 

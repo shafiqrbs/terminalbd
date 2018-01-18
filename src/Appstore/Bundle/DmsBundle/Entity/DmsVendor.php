@@ -37,10 +37,6 @@ class DmsVendor
      */
     protected $accountPurchases;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="dmsVendors")
-     */
-    protected $country;
 
     /**
      * @var string

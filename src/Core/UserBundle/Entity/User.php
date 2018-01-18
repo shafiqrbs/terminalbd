@@ -6,7 +6,9 @@ use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
@@ -480,6 +482,21 @@ class User extends BaseUser
     protected $invoiceModuleReceivedBy;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave", mappedBy="employee" , cascade={"persist", "remove"} )
+     */
+    protected $employeeLeave;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Attendance", mappedBy="employee" , cascade={"persist", "remove"} )
+     */
+    protected $attendance;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+     */
+    protected $employeeLeaveApprove;
+
+    /**
     =========================================== E-commerce============================================
      */
 
@@ -488,6 +505,12 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="createdBy"  )
      **/
     private  $orders;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", mappedBy="createdBy"  )
+     **/
+    private  $orderPayments;
 
 
     /**
@@ -505,6 +528,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="createdBy"  )
      **/
     private  $preOrders;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="createdBy"  )
+     **/
+    private  $preOrderPayments;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="processBy"  )
@@ -547,6 +575,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="createdBy" , cascade={"persist", "remove"})
      */
     protected $hmsInvoiceCreatedBy;
+
+/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoiceApprovedBy;
 
 
      /**
@@ -594,6 +627,74 @@ class User extends BaseUser
      */
     protected $userAttendance;
 
+    /*========================= DMS USER =======================================================*/
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $dmsInvoiceCreatedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $dmsInvoiceApprovedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="assignOperator" , cascade={"persist", "remove"})
+     */
+    protected $dmsParticularOperator;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="assignDoctor" , cascade={"persist", "remove"})
+     */
+    protected $dmsParticularDoctor;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $dmsPurchase;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $dmsPurchasesApprovedBy;
+
+/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $dmsDoctorInvoiceCreatedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $dmsDoctorInvoiceApprovedBy;
+
+    /*=========================== Restaurant Bundle =========================================*/
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $invoiceCreatedBy;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="salesBy" , cascade={"persist", "remove"})
+     */
+    protected $invoiceSalesBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $invoiceApprovedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $restaurantPurchasesCreatedBy;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $restaurantPurchasesApprovedBy;
 
 
 
@@ -1295,7 +1396,21 @@ class User extends BaseUser
         return count($presentDays);
     }
 
+    /**
+     * @return OrderPayment
+     */
+    public function getOrderPayments()
+    {
+        return $this->orderPayments;
+    }
 
+    /**
+     * @return PreOrderPayment
+     */
+    public function getPreOrderPayments()
+    {
+        return $this->preOrderPayments;
+    }
 
 
 }

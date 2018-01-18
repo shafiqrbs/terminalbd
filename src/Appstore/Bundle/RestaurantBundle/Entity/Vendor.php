@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\LocationBundle\Entity\Location;
@@ -35,9 +36,9 @@ class Vendor
     protected $purchases;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="vendor")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="restaurantVendor")
      */
-    protected $accountPurchases;
+    protected $accountPurchase;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="vendors")
@@ -399,6 +400,14 @@ class Vendor
     public function setLocation($location)
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return AccountPurchase
+     */
+    public function getAccountPurchase()
+    {
+        return $this->accountPurchase;
     }
 
 
