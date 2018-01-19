@@ -1,16 +1,20 @@
-hms_report_sales_summary:
+dms_report_sales_summary:
     path:     /sales-summary
     defaults: { _controller: "HospitalBundle:Report:salesSummary" }
 
-hms_report_sales_details:
+dms_report_sales_details:
     path:     /sales-details
     defaults: { _controller: "HospitalBundle:Report:salesDetails" }
 
-hms_report_sales_service:
+dms_report_sales_service:
     path:     /service-wise-sales
     defaults: { _controller: "HospitalBundle:Report:serviceBaseSummary" }
 
-hms_report_purchase_summary:
+dms_report_purchase_summary:
+    path:     /purchase-summary
+    defaults: { _controller: "HospitalBundle:Report:purchaseSummary" }
+
+dms_report_purchase:
     path:     /purchase-summary
     defaults: { _controller: "HospitalBundle:Report:purchaseSummary" }
 

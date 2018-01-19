@@ -18,21 +18,14 @@ dms_doctor_invoice:
     resource: "@DmsBundle/Resources/config/routing/doctorinvoice.yml"
     prefix:   /doctor-invoice
 
-dms_invoice_admission:
-    resource: "@DmsBundle/Resources/config/routing/invoiceadmission.yml"
-    prefix:   /invoice-admission
-
-dms_invoice_particular:
-    resource: "@DmsBundle/Resources/config/routing/invoiceparticular.yml"
-    prefix:   /invoice-particular
 
 dms_particular:
     resource: "@DmsBundle/Resources/config/routing/particular.yml"
     prefix:   /particular
 
-dms_pathology:
-    resource: "@DmsBundle/Resources/config/routing/pathology.yml"
-    prefix:   /pathology
+dms_treatment:
+    resource: "@DmsBundle/Resources/config/routing/treatment.yml"
+    prefix:   /treatment-plan
 
 
 dms_doctor:

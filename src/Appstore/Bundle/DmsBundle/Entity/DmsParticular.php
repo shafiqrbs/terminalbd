@@ -59,6 +59,12 @@ class DmsParticular
      **/
     private $invoiceParticular;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="investigations" )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private $dmsInvoiceInvestigation;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem", mappedBy="dmsParticular" )
@@ -108,9 +114,9 @@ class DmsParticular
     /**
      * @var string
      *
-     * @ORM\Column(name="sepcimen", type="string", length=255, nullable=true)
+     * @ORM\Column(name="room", type="string", length=100, nullable=true)
      */
-    private $sepcimen;
+    private $room;
 
 
     /**
@@ -129,11 +135,18 @@ class DmsParticular
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="price", type="decimal", nullable=true)
+     * @ORM\Column(name="price", type="float", nullable=true)
      */
     private $price;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="minimumPrice", type="float", nullable=true)
+     */
+    private $minimumPrice;
 
 
     /**
@@ -356,7 +369,7 @@ class DmsParticular
     /**
      * Set price
      *
-     * @param string $price
+     * @param float $price
      *
      * @return DmsParticular
      */
@@ -370,7 +383,7 @@ class DmsParticular
     /**
      * Get price
      *
-     * @return string
+     * @return float
      */
     public function getPrice()
     {
@@ -474,21 +487,7 @@ class DmsParticular
         $this->service = $service;
     }
 
-    /**
-     * @return string
-     */
-    public function getRoom()
-    {
-        return $this->room;
-    }
 
-    /**
-     * @param string $room
-     */
-    public function setRoom($room)
-    {
-        $this->room = $room;
-    }
 
     /**
      * @return string
@@ -963,6 +962,38 @@ class DmsParticular
     public function getDmsTreatmentPlans()
     {
         return $this->dmsTreatmentPlans;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMinimumPrice()
+    {
+        return $this->minimumPrice;
+    }
+
+    /**
+     * @param float $minimumPrice
+     */
+    public function setMinimumPrice($minimumPrice)
+    {
+        $this->minimumPrice = $minimumPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoom()
+    {
+        return $this->room;
+    }
+
+    /**
+     * @param string $room
+     */
+    public function setRoom($room)
+    {
+        $this->room = $room;
     }
 
 }

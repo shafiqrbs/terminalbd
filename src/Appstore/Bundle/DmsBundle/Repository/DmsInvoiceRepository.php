@@ -263,13 +263,12 @@ class DmsInvoiceRepository extends EntityRepository
     }
 
 
-    public function invoiceLists(User $user , $mode , $data)
+    public function invoiceLists(User $user, $data)
     {
         $config = $user->getGlobalOption()->getDmsConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.dmsConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
@@ -303,19 +302,17 @@ class DmsInvoiceRepository extends EntityRepository
         return  $qb;
     }
 
-    public function updateInvoiceTotalPrice(Invoice $invoice)
+    public function updateInvoiceTotalPrice(DmsInvoice $invoice)
     {
         $em = $this->_em;
         $total = $em->createQueryBuilder()
-            ->from('DmsBundle:InvoiceParticular','si')
+            ->from('DmsBundle:DmsTreatmentPlan','si')
             ->select('sum(si.subTotal) as subTotal')
-            ->addSelect('sum(si.commission) as subCommission')
             ->where('si.dmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
 
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
-        $subCommission = !empty($total['subCommission']) ? $total['subCommission'] :0;
         if($subTotal > 0){
 
             if ($invoice->getDmsConfig()->getVatEnable() == 1 && $invoice->getDmsConfig()->getVatPercentage() > 0) {
@@ -326,7 +323,6 @@ class DmsInvoiceRepository extends EntityRepository
 
             $invoice->setSubTotal($subTotal);
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-            $invoice->setEstimateCommission($subCommission);
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
         }else{
@@ -350,8 +346,8 @@ class DmsInvoiceRepository extends EntityRepository
     {
         $em = $this->_em;
         $res = $em->createQueryBuilder()
-            ->from('DmsBundle:InvoiceTransaction','si')
-            ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
+            ->from('DmsBundle:DmsTreatmentPlan','si')
+            ->select('sum(si.payment) as payment ,sum(si.vat) as vat')
             ->where('si.dmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->andWhere('si.process = :process')

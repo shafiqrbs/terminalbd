@@ -33,6 +33,11 @@ class MedicineBrand
     private $medicineCompany;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine", mappedBy="medicine")
+     **/
+    private $invoiceMedicine;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=150)

@@ -43,7 +43,7 @@ class ParticularType extends AbstractType
                     ->andWhere('e.slug IN (:slugs)')
                     ->setParameter('slugs',array('general','investigation','medical-history','physical'))
                     ->orderBy("e.sorting","ASC");
-    }
+                }
             ))
 
         ;

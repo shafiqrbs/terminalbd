@@ -5,8 +5,9 @@ namespace Appstore\Bundle\DmsBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\DmsParticular\Entity\DmsTreatmentPlan;
+use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -54,6 +55,17 @@ class DmsInvoice
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $invoiceParticulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine", mappedBy="dmsInvoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private  $invoiceMedicines;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsInvoiceInvestigation" , cascade={"remove"} )
+     **/
+    private  $investigations;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="dmsInvoice" , cascade={"remove"} )
@@ -380,12 +392,7 @@ class DmsInvoice
      */
     private $printFor ='pathological';
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="invoiceMode", type="string", length=50, nullable=true)
-     */
-    private $invoiceMode = 'pathological';
+
 
     /**
      * Get id
@@ -1384,6 +1391,30 @@ class DmsInvoice
     public function getDmsTreatmentPlans()
     {
         return $this->dmsTreatmentPlans;
+    }
+
+    /**
+     * @return DmsParticular
+     */
+    public function getInvestigations()
+    {
+        return $this->investigations;
+    }
+
+    /**
+     * @param  $investigations DmsParticular
+     */
+    public function setInvestigations($investigations)
+    {
+        $this->investigations = $investigations;
+    }
+
+    /**
+     * @return DmsInvoiceMedicine
+     */
+    public function getInvoiceMedicines()
+    {
+        return $this->invoiceMedicines;
     }
 
 

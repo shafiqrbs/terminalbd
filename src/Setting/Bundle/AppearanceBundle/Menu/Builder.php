@@ -854,27 +854,14 @@ class Builder extends ContainerAware
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_OPERATOR')) {
             if (!empty($config) and in_array('admission', $config)) {
             $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Patient', array('route' => 'dms_invoice'))
-                ->setAttribute('icon', 'fa fa-ambulance');
+                ->setAttribute('icon', 'fa fa-stethoscope');
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
             if (!empty($config) and in_array('doctor', $config)) {
-                $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Commission', array('route' => 'hms_doctor_commission_invoice'))
+                $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Commission', array('route' => 'dms_doctor_commission_invoice'))
                     ->setAttribute('icon', 'fa fa-user-md');
             }
-        }
-        if ($securityContext->isGranted('ROLE_DOMAIN_DMS_OPERATOR')) {
-            if (!empty($config)) {
-                $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'))
-                    ->setAttribute('icon', 'fa fa-user');
-            }
-        }
-        if ($securityContext->isGranted('ROLE_DOMAIN_DMS_LAB') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_DOCTOR')) {
-            $menu['Dental & Diagnosis']->addChild('Diagnostic Report')
-                ->setAttribute('icon', 'fa fa-stethoscope')
-                ->setAttribute('dropdown', true);
-            $menu['Dental & Diagnosis']['Diagnostic Report']->addChild('Collection & Process', array('route' => 'hms_invoice_particular'))
-                ->setAttribute('icon', 'fa fa-stethoscope');
         }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
@@ -882,44 +869,38 @@ class Builder extends ContainerAware
             $menu['Dental & Diagnosis']->addChild('Master Data')
                 ->setAttribute('icon', 'icon icon-cog')
                 ->setAttribute('dropdown', true);
-            $menu['Dental & Diagnosis']['Master Data']->addChild('Diagnostic Test', array('route' => 'hms_pathology'))
+            $menu['Dental & Diagnosis']['Master Data']->addChild('Treatment Plan', array('route' => 'dms_treatment'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Master Data']->addChild('Particular', array('route' => 'dms_particular'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Master Data']->addChild('Cabin/Ward', array('route' => 'hms_cabin'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Master Data']->addChild('Surgery', array('route' => 'hms_surgery'))
+            $menu['Dental & Diagnosis']['Master Data']->addChild('Doctor', array('route' => 'dms_doctor'))
                 ->setAttribute('icon', 'icon-th-list');
             if ($securityContext->isGranted('ROLE_DOMAIN_DMS_CONFIG')) {
-                $menu['Dental & Diagnosis']['Master Data']->addChild('Configuration', array('route' => 'hms_config_manage'))
+                $menu['Dental & Diagnosis']['Master Data']->addChild('Configuration', array('route' => 'dms_config_manage'))
                     ->setAttribute('icon', 'icon-cog');
             }
             $menu['Dental & Diagnosis']->addChild('Manage Stock')
                 ->setAttribute('icon', 'icon icon-truck')
                 ->setAttribute('dropdown', true);
-            $menu['Dental & Diagnosis']['Manage Stock']->addChild('Medicine', array('route' => 'hms_medicine'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Manage Stock']->addChild('Accessories', array('route' => 'hms_accessories'))
+            $menu['Dental & Diagnosis']['Manage Stock']->addChild('Medicine & Accessories', array('route' => 'dms_medicine'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']->addChild('Purchase')
                 ->setAttribute('icon', 'icon icon-truck')
                 ->setAttribute('dropdown', true);
-            $menu['Dental & Diagnosis']['Purchase']->addChild('Medicine Receive', array('route' => 'hms_purchase'))
+            $menu['Dental & Diagnosis']['Purchase']->addChild('Receive', array('route' => 'dms_purchase'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Purchase']->addChild('Accessories Receive', array('route' => 'hms_accessories_purchase'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Purchase']->addChild('Vendor', array('route' => 'hms_vendor'))->setAttribute('icon', 'icon-tag');
+            $menu['Dental & Diagnosis']['Purchase']->addChild('Vendor', array('route' => 'dms_vendor'))->setAttribute('icon', 'icon-tag');
 
             $menu['Dental & Diagnosis']->addChild('Reports')
                 ->setAttribute('icon', 'icon icon-cog')
                 ->setAttribute('dropdown', true);
-            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Summary', array('route' => 'hms_report_sales_summary'))
+            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Summary', array('route' => 'dms_report_sales_summary'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Details', array('route' => 'hms_report_sales_details'))
+            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Details', array('route' => 'dms_report_sales_details'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Service Wise Sales', array('route' => 'hms_report_sales_service'))
+            $menu['Dental & Diagnosis']['Reports']->addChild('Service Wise Sales', array('route' => 'dms_report_sales_service'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Purchase', array('route' => 'hms_pathology'))
+            $menu['Dental & Diagnosis']['Reports']->addChild('Purchase', array('route' => 'dms_report_purchase'))
                 ->setAttribute('icon', 'icon-th-list');
         }
         return $menu;

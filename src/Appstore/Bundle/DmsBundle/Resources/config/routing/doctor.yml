@@ -1,33 +1,33 @@
-hms_doctor:
+dms_doctor:
     path:     /
-    defaults: { _controller: "HospitalBundle:Doctor:index" }
+    defaults: { _controller: "DmsBundle:Doctor:index" }
 
-hms_doctor_show:
+dms_doctor_show:
     path:     /{id}/show
-    defaults: { _controller: "HospitalBundle:Doctor:show" }
+    defaults: { _controller: "DmsBundle:Doctor:show" }
 
-hms_doctor_new:
+dms_doctor_new:
     path:     /new
-    defaults: { _controller: "HospitalBundle:Doctor:new" }
+    defaults: { _controller: "DmsBundle:Doctor:new" }
 
-hms_doctor_create:
+dms_doctor_create:
     path:     /create
-    defaults: { _controller: "HospitalBundle:Doctor:create" }
+    defaults: { _controller: "DmsBundle:Doctor:create" }
     methods:  POST
 
-hms_doctor_edit:
+dms_doctor_edit:
     path:     /{id}/edit
-    defaults: { _controller: "HospitalBundle:Doctor:edit" }
+    defaults: { _controller: "DmsBundle:Doctor:edit" }
 
-hms_doctor_update:
+dms_doctor_update:
     path:     /{id}/update
-    defaults: { _controller: "HospitalBundle:Doctor:update" }
+    defaults: { _controller: "DmsBundle:Doctor:update" }
     methods:  [POST, PUT]
 
-hms_doctor_delete:
+dms_doctor_delete:
     path:     /{id}/delete
-    defaults: { _controller: "HospitalBundle:Doctor:delete" }
+    defaults: { _controller: "DmsBundle:Doctor:delete" }
 
-hms_doctor_status:
+dms_doctor_status:
     path:     /{id}/status
-    defaults: { _controller: "HospitalBundle:Doctor:status" }
+    defaults: { _controller: "DmsBundle:Doctor:status" }

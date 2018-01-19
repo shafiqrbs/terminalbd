@@ -30,6 +30,13 @@ dms_invoice_particular_add:
     options:
             expose: true
 
+dms_invoice_medicine_add:
+    path:     /{invoice}/medicine-add
+    defaults: { _controller: "DmsBundle:Invoice:addMedicine" }
+    methods:  POST
+    options:
+            expose: true
+
 dms_invoice_discount_update:
     path:     /invoice/invoice-dicount-update
     defaults: { _controller: "DmsBundle:Invoice:invoiceDiscountUpdate" }

@@ -52,7 +52,7 @@ class ModuleCategory
     protected $module;
 
      /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="moduleCategory" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="moduleCategory" )
      **/
     protected $pages;
 

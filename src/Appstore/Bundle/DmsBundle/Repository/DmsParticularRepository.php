@@ -58,29 +58,23 @@ class DmsParticularRepository extends EntityRepository
         return  $qb;
     }
 
-    public function getFindWithParticular($hospital,$services){
+    public function getFindWithParticular($config,$services){
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
-            ->select('e.id')
-            ->addSelect('e.name AS particularName')
-            ->addSelect('e.particularCode')
-            ->addSelect('s.name as serviceName')
-            ->addSelect('s.code as serviceCode')
-            ->addSelect('s.slug as serviceSlug')
-            ->where('e.dmsConfig = :config')->setParameter('config', $hospital)
+            ->where('e.dmsConfig = :config')->setParameter('config', $config)
             ->andWhere('s.slug IN(:service)')
             ->setParameter('service',array_values($services))
             ->orderBy('e.service','ASC')
             ->orderBy('e.name','ASC')
-            ->getQuery()->getArrayResult();
+            ->getQuery()->getResult();
         return  $qb;
     }
 
-    public function getServices($hospital,$services){
+    public function getServices($config,$services){
 
 
-        $particulars = $this->getServiceWithParticular($hospital,$services);
+        $particulars = $this->getServiceWithParticular($config,$services);
 
         $data = '';
         $service = '';
@@ -89,12 +83,12 @@ class DmsParticularRepository extends EntityRepository
                 if ($service != '') {
                     $data .= '</optgroup>';
                 }
-                $data .= '<optgroup label="' . $particular['serviceCode'] . '-' . ucfirst($particular['serviceName']) . '">';
+                $data .= '<optgroup label="' .ucfirst($particular['serviceName']) . '">';
             }
             if ($particular['serviceCode'] != '04'){
-                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'] .'</option>';
+                $data .= '<option value="/dms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
             }else{
-                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'].'</option>';
+                $data .= '<option value="/dms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
             }
             $service = $particular['serviceName'];
         }
@@ -106,7 +100,7 @@ class DmsParticularRepository extends EntityRepository
     }
 
 
-    public function getServiceWithParticular($hospital,$services){
+    public function getServiceWithParticular($config,$services){
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
@@ -114,12 +108,13 @@ class DmsParticularRepository extends EntityRepository
             ->addSelect('e.name')
             ->addSelect('e.particularCode')
             ->addSelect('e.price')
+            ->addSelect('e.minimumPrice')
             ->addSelect('e.quantity')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
-            ->where('e.dmsConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:service)')
-            ->setParameter('service',array_values($services))
+            ->where('e.dmsConfig = :config')->setParameter('config', $config)
+            ->andWhere('s.slug IN(:slugs)')
+            ->setParameter('slugs',array_values($services))
             ->orderBy('e.service','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;

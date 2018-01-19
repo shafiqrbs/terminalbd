@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Form;
+namespace Appstore\Bundle\DmsBundle\Form;
 
 
 use Doctrine\ORM\EntityRepository;
@@ -26,7 +26,7 @@ class ConfigType extends AbstractType
             ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span5 ','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5','max'=> 100)))
             ->add('vatEnable')
-            ->add('invoiceProcess',
+            /*->add('invoiceProcess',
                 'choice', array(
                     'attr'=>array('class'=>'check-list  span12'),
                     'choices' => array(
@@ -38,8 +38,7 @@ class ConfigType extends AbstractType
                     'multiple'    => true,
                     'expanded'  => true,
                     'empty_data'  => null,
-            ))
-            ->add('isBranch')
+            ))*/
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')
             ->add('isPrintHeader')
@@ -48,9 +47,6 @@ class ConfigType extends AbstractType
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
-            ->add('printMarginReportLeft','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
-            ->add('reportHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
-            ->add('printMarginReportTop','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
 
         ;
     }
@@ -61,7 +57,7 @@ class ConfigType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\HospitalBundle\Entity\HospitalConfig'
+            'data_class' => 'Appstore\Bundle\DmsBundle\Entity\DmsConfig'
         ));
     }
 
@@ -73,21 +69,6 @@ class ConfigType extends AbstractType
         return 'appstore_bundle_hospitalbundle_particular';
     }
 
-    /**
-     * @return mixed
-     */
-    protected function PathologyChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
 
-    }
-    /**
-     * @return mixed
-     */
-    protected function DepartmentChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
-
-    }
 
 }

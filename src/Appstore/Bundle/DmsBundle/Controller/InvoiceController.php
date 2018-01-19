@@ -38,21 +38,12 @@ class InvoiceController extends Controller
     public function indexAction()
     {
 
-        set_time_limit(0);
-        ignore_user_abort(true);
-
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->updateMedicine();
-exit;
         $user = $this->getUser();
         $dmsConfig = $user->getGlobalOption()->getDmsConfig();
-        $entities = $em->getRepository('DmsBundle:DmsInvoice')->invoiceLists( $user , $mode = 'diagnostic' , $data);
+        $entities = $em->getRepository('DmsBundle:DmsInvoice')->invoiceLists( $user,$data);
         $pagination = $this->paginate($entities);
-      //  $salesTransactionOverview = $em->getRepository('DmsBundle:DmsInvoiceTransaction')->todaySalesOverview($user,$data,'true','diagnostic');
-       // $previousSalesTransactionOverview = $em->getRepository('DmsBundle:DmsInvoiceTransaction')->todaySalesOverview($user,$data,'false','diagnostic');
-
         $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('doctor'));
 
         return $this->render('DmsBundle:Invoice:index.html.twig', array(
@@ -104,7 +95,7 @@ exit;
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
             return $this->redirect($this->generateUrl('dms_invoice_show', array('id' => $entity->getId())));
         }
-        $services        = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array(1,2,3));
+        $services        = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
         $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical','investigation'));
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
@@ -114,16 +105,14 @@ exit;
         ));
     }
 
-    public function particularSearchAction(Particular $particular)
+    public function particularSearchAction(DmsParticular $particular)
     {
         return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
     }
 
-    public function returnResultData(Invoice $entity,$msg=''){
+    public function returnResultData(DmsInvoice $entity,$msg=''){
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->getSalesItems($entity);
-        $invoiceTransaction = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceTransaction')->getInvoiceTransactionItems($entity);
-
+        $invoiceParticulars = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->getSalesItems($entity);
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
@@ -139,7 +128,6 @@ exit;
            'due' => $due,
            'vat' => $vat,
            'discount' => $discount,
-           'invoiceTransaction' => $invoiceTransaction,
            'invoiceParticulars' => $invoiceParticulars ,
            'msg' => $msg ,
            'success' => 'success'
@@ -157,12 +145,31 @@ exit;
         $quantity = $request->request->get('quantity');
         $price = $request->request->get('price');
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
+        $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->insertInvoiceItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($invoice);
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updatePaymentReceive($invoice);
+      //  $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updatePaymentReceive($invoice);
 
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
+        return new Response(json_encode($result));
+        exit;
+
+    }
+
+    public function addMedicineAction(Request $request, DmsInvoice $invoice)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $medicine = $request->request->get('medicine');
+        $generic = $request->request->get('generic');
+        $medicineQuantity = $request->request->get('medicineQuantity');
+        $medicineDose = $request->request->get('medicineDose');
+        $medicineDoseTime = $request->request->get('medicineDoseTime');
+        $medicineDuration = $request->request->get('medicineDuration');
+        $medicineDurationType = $request->request->get('medicineDurationType');
+        $invoiceItems = array('medicine' => $medicine , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType);
+        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->insertInvoiceMedicine($invoice, $invoiceItems);
+        $result = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->getInvoiceMedicines($invoice);
         return new Response(json_encode($result));
         exit;
 

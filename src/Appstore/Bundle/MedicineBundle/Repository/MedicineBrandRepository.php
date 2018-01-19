@@ -30,4 +30,34 @@ class MedicineBrandRepository extends EntityRepository
         }
 
     }
+
+    public function searchMedicineAutoComplete($q)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineGeneric','g');
+        $query->join('e.medicineCompany','c');
+        $query->select('e.id as id');
+        $query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', e.strength, \' \', g.name, \' \', c.name) AS text');
+        $query->where($query->expr()->like("e.name", "'$q%'"  ));
+        $query->groupBy('e.id');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '50' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchGenericAutoComplete($q)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineGeneric','g');
+        $query->join('e.medicineCompany','c');
+        $query->select('e.id as id');
+        $query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', e.strength, \' \', g.name, \' \', c.name) AS text');
+        $query->where($query->expr()->like("g.name", "'$q%'"  ));
+        $query->groupBy('e.id');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '50' );
+        return $query->getQuery()->getResult();
+
+    }
 }

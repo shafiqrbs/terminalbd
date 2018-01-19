@@ -38,9 +38,30 @@ class DmsTreatmentPlan
     /**
      * @var float
      *
-     * @ORM\Column(name="amount", type="float", nullable=true)
+     * @ORM\Column(name="estimatePrice", type="float", nullable=true)
      */
-    private $amount;
+    private $estimatePrice;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="price", type="float", nullable=true)
+     */
+    private $price;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantity", type="smallint", nullable=true)
+     */
+    private $quantity;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float", nullable=true)
+     */
+    private $subTotal;
 
     /**
      * @var float
@@ -64,6 +85,19 @@ class DmsTreatmentPlan
      */
     private $status=true;
 
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
+     */
+    private $created;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated", type="datetime")
+     */
+    private $updated;
 
 
     /**
@@ -74,24 +108,6 @@ class DmsTreatmentPlan
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * @return integer
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param integer $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
     }
 
     /**
@@ -156,6 +172,135 @@ class DmsTreatmentPlan
     public function setDmsParticular($dmsParticular)
     {
         $this->dmsParticular = $dmsParticular;
+    }
+
+
+    /**
+     * @return float
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param float $payment
+     */
+    public function setPayment($payment)
+    {
+        $this->payment = $payment;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return float
+     */
+    public function getEstimatePrice()
+    {
+        return $this->estimatePrice;
+    }
+
+    /**
+     * @param float $estimatePrice
+     */
+    public function setEstimatePrice($estimatePrice)
+    {
+        $this->estimatePrice = $estimatePrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @param float $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
     }
 
 

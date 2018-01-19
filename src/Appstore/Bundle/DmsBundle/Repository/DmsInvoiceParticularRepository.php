@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DmsBundle\Repository;
 use Appstore\Bundle\DmsBundle\Controller\InvoiceController;
 use Appstore\Bundle\DmsBundle\Entity\AdmissionPatientDmsParticular;
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular;
 use Appstore\Bundle\DmsBundle\Entity\Invoice;
 use Appstore\Bundle\DmsBundle\Entity\InvoiceDmsParticular;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
@@ -84,7 +85,7 @@ class DmsInvoiceParticularRepository extends EntityRepository
             $entity->setSalesPrice($data['price']);
             $entity->setSubTotal($data['price'] * $data['quantity']);
         }
-        $entity->setHmsInvoice($invoice);
+        $entity->setDmsInvoice($invoice);
         if($particular->getService()->getCode() == '01'){
             $datetime = new \DateTime("now");
             $entity->setCode($invoice);

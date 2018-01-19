@@ -48,7 +48,7 @@ class InvoiceType extends AbstractType
             ))
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount input2','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
-            ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add patient advise','autocomplete'=>'off')))
             ->add('chiefComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('presentingComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
@@ -62,6 +62,24 @@ class InvoiceType extends AbstractType
                     'visit' => 'Visit',
                 ),
             ))
+
+            ->add('investigations', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\DmsBundle\Entity\DmsParticular',
+                'property' => 'name',
+                'multiple'    => true,
+                'expanded' => true,
+                'attr'=>array('class'=>'span3 m-wrap checkbox'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.service",'s')
+                        ->where("e.status = 1")
+                        ->andWhere('s.slug IN (:slugs)')
+                        ->setParameter('slugs',array('investigation'))
+                        ->orderBy("e.name","ASC");
+                }
+            ))
+
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',

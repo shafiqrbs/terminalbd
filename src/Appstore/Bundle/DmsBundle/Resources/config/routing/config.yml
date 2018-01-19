@@ -1,9 +1,9 @@
-hms_config_manage:
+dms_config_manage:
     path:     /manage
-    defaults: { _controller: "HospitalBundle:HospitalConfig:manage" }
+    defaults: { _controller: "DmsBundle:DmsConfig:manage" }
 
-hms_config_update:
+dms_config_update:
     path:     /update
-    defaults: { _controller: "HospitalBundle:HospitalConfig:update" }
+    defaults: { _controller: "DmsBundle:DmsConfig:update" }
     methods:  [POST, PUT]
 
