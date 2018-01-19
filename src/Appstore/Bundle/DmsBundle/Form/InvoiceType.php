@@ -41,25 +41,21 @@ class InvoiceType extends AbstractType
     {
         $builder
 
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
-            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('payment','text', array('attr'=>array('class'=>'tooltips payment input2','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
-            ))
-            ->add('discount','text', array('attr'=>array('class'=>'tooltips discount input2','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
-            ))
             ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add patient advise','autocomplete'=>'off')))
             ->add('chiefComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('presentingComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('diagnosis','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('printFor', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom'),
+            ->add('process', 'choice', array(
+                'attr'=>array('class'=>'span6 select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
+                'empty_value' => '---Choose process---',
                 'choices' => array(
-                    'diagnostic' => 'Diagnostic',
-                    'visit' => 'Visit',
+                    'Created' => 'Created',
+                    'Appointment' => 'Appointment',
+                    'Visit' => 'Visit',
+                    'Done' => 'Done',
                 ),
             ))
 
@@ -69,7 +65,7 @@ class InvoiceType extends AbstractType
                 'property' => 'name',
                 'multiple'    => true,
                 'expanded' => true,
-                'attr'=>array('class'=>'span3 m-wrap checkbox'),
+                'attr'=>array('class'=>'m-wrap check-list'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.service",'s')
@@ -78,60 +74,7 @@ class InvoiceType extends AbstractType
                         ->setParameter('slugs',array('investigation'))
                         ->orderBy("e.name","ASC");
                 }
-            ))
-
-            ->add('transactionMethod', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->orderBy("e.id","ASC");
-                }
-            ))
-            ->add('paymentCard', 'entity', array(
-                'required'    => false,
-                'property' => 'name',
-                'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Choose payment card---',
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->orderBy("e.id","ASC");
-                }
-            ))
-
-            ->add('accountBank', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'empty_value' => '---Choose receive bank account---',
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.globalOption =".$this->globalOption->getId())
-                        ->orderBy("b.name", "ASC");
-                }
-            ))
-
-            ->add('accountMobileBank', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'empty_value' => '---Choose receive mobile bank account---',
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.globalOption =".$this->globalOption->getId())
-                        ->orderBy("b.name", "ASC");
-                }
-            ))
-        ;
+            ));
            $builder->add('customer', new CustomerForHospitalType( $this->location ));
     }
     

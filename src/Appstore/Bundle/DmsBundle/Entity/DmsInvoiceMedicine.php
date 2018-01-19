@@ -36,7 +36,7 @@ class DmsInvoiceMedicine
      **/
     private $medicine;
 
-    /**
+     /**
      * @var string
      *
      * @ORM\Column(name="medicineQuantity", type="string", length=100, nullable=true)
@@ -209,6 +209,22 @@ class DmsInvoiceMedicine
     public function setMedicineDurationType($medicineDurationType)
     {
         $this->medicineDurationType = $medicineDurationType;
+    }
+
+    /**
+     * @return DmsPrescriptionAttribute
+     */
+    public function getPrescriptionAttribute()
+    {
+        return $this->prescriptionAttribute;
+    }
+
+    /**
+     * @param DmsPrescriptionAttribute $prescriptionAttribute
+     */
+    public function setPrescriptionAttribute($prescriptionAttribute)
+    {
+        $this->prescriptionAttribute = $prescriptionAttribute;
     }
 
 

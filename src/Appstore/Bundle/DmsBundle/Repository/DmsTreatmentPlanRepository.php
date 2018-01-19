@@ -48,6 +48,9 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $entity->setPrice($data['price']);
             $entity->setSubTotal($data['price'] * $data['quantity']);
         }
+
+        $datetime = empty($data['appointmentDate']) ? $data['appointmentDate'] : '' ;
+        $entity->setAppointmentDate($datetime);
         $entity->setDmsInvoice($invoice);
         $entity->setDmsParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
@@ -80,4 +83,15 @@ class DmsTreatmentPlanRepository extends EntityRepository
         }
         return $data;
     }
+
+    public function insertPaymentTransaction($data)
+    {
+        $em = $this->_em;
+        $invoiceDmsParticular = $this->_em->getRepository('DmsBundle:DmsTreatmentPlan')->find($data['invoiceParticular']);
+        $invoiceDmsParticular->setPayment($data['payment']);
+        $invoiceDmsParticular->setDiscount($data['discount']);
+        $em->persist($invoiceDmsParticular);
+        $em->flush();
+    }
+
 }

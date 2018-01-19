@@ -50,6 +50,13 @@ class DmsTreatmentPlan
     private $price;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="discount", type="float", nullable=true)
+     */
+    private $discount;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="quantity", type="smallint", nullable=true)
@@ -77,6 +84,13 @@ class DmsTreatmentPlan
      */
     private $balance;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appointmentDate", type="string", nullable=true)
+     */
+    private $appointmentDate;
+
 
     /**
      * @var boolean
@@ -84,6 +98,7 @@ class DmsTreatmentPlan
      * @ORM\Column(name="status", type="boolean" )
      */
     private $status=true;
+
 
     /**
      * @var \DateTime
@@ -301,6 +316,38 @@ class DmsTreatmentPlan
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param float $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppointmentDate()
+    {
+        return $this->appointmentDate;
+    }
+
+    /**
+     * @param string $appointmentDate
+     */
+    public function setAppointmentDate($appointmentDate)
+    {
+        $this->appointmentDate = $appointmentDate;
     }
 
 

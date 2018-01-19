@@ -347,28 +347,19 @@ class DmsInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $res = $em->createQueryBuilder()
             ->from('DmsBundle:DmsTreatmentPlan','si')
-            ->select('sum(si.payment) as payment ,sum(si.vat) as vat')
+            ->select('sum(si.payment) as payment ,sum(si.subTotal) as receivable,sum(si.discount) as discount')
             ->where('si.dmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
-            ->andWhere('si.process = :process')
-            ->setParameter('process', 'Done')
+            ->andWhere('si.status = :status')
+            ->setParameter('status', 1)
             ->getQuery()->getOneOrNullResult();
+        $receivable = !empty($res['receivable']) ? $res['receivable'] :0;
         $payment = !empty($res['payment']) ? $res['payment'] :0;
         $discount = !empty($res['discount']) ? $res['discount'] :0;
-        $vat = !empty($res['vat']) ? $res['vat'] :0;
         $invoice->setPayment($payment);
         $invoice->setDiscount($discount);
-        $invoice->setVat($vat);
-        $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+        $invoice->setTotal($receivable - $discount);
         $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
-        if($invoice->getPayment() >= $invoice->getTotal()){
-            $invoice->setPaymentStatus('Paid');
-        }else{
-            $invoice->setPaymentStatus('Due');
-        }
-        if($invoice->getPrintFor() == "visit" and $invoice->getPaymentStatus() == "Paid") {
-            $invoice->setProcess('Done');
-        }
         $em->flush();
 
     }

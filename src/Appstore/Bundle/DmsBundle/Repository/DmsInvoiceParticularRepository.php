@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DmsBundle\Repository;
 use Appstore\Bundle\DmsBundle\Controller\InvoiceController;
 use Appstore\Bundle\DmsBundle\Entity\AdmissionPatientDmsParticular;
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular;
 use Appstore\Bundle\DmsBundle\Entity\Invoice;
 use Appstore\Bundle\DmsBundle\Entity\InvoiceDmsParticular;
@@ -60,47 +61,26 @@ class DmsInvoiceParticularRepository extends EntityRepository
 
 
 
-    public function insertInvoiceItems($invoice, $data)
+    public function insertInvoiceItems(DmsInvoice $invoice, $data)
     {
-        $particular = $this->_em->getRepository('DmsBundle:DmsParticular')->find($data['particularId']);
         $em = $this->_em;
-        $entity = new DmsInvoiceParticular();
-        $invoiceDmsParticular = $this->_em->getRepository('DmsBundle:InvoiceDmsParticular')->findOneBy(array('dmsInvoice'=>$invoice ,'particular' => $particular));
-        if(!empty($invoiceDmsParticular)) {
-            $entity = $invoiceDmsParticular;
-            if ($particular->getService()->getHasQuantity() == 1){
-                $entity->setQuantity($invoiceDmsParticular->getQuantity() + $data['quantity']);
-            }else{
-                $entity->setQuantity(1);
+        if(!empty($data['metaKey'])) {
+            foreach ($data['metaKey'] as $key => $val) {
+                $particular = $this->_em->getRepository('DmsBundle:DmsParticular')->find($val);
+                $entity = new DmsInvoiceParticular();
+                $invoiceDmsParticular = $this->_em->getRepository('DmsBundle:DmsInvoiceParticular')->findOneBy(array('dmsInvoice' => $invoice, 'dmsParticular' => $particular));
+                if (!empty($invoiceDmsParticular)) {
+                    $entity->setMetaValue($data['metaValue'][$key]);
+                } else {
+                    $entity->setDmsParticular($particular);
+                    $entity->setMetaValue($data['metaValue'][$key]);
+                }
+                $entity->setDmsParticular($particular);
+                $entity->setDmsInvoice($invoice);
+                $em->persist($entity);
+                $em->flush();
             }
-            $entity->setSubTotal($data['price'] * $entity->getQuantity());
-
-        }else{
-
-            if ($particular->getService()->getHasQuantity() == 1){
-                $entity->setQuantity($data['quantity']);
-            }else{
-                $entity->setQuantity(1);
-            }
-            $entity->setSalesPrice($data['price']);
-            $entity->setSubTotal($data['price'] * $data['quantity']);
         }
-        $entity->setDmsInvoice($invoice);
-        if($particular->getService()->getCode() == '01'){
-            $datetime = new \DateTime("now");
-            $entity->setCode($invoice);
-            $lastCode = $this->getLastCode($invoice,$datetime);
-            $entity->setCode($lastCode+1);
-            $reportCode = sprintf("%s%s", $datetime->format('dmy'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT));
-            $entity->setReportCode($reportCode);
-        }
-        $entity->setDmsParticular($particular);
-        $entity->setEstimatePrice($particular->getPrice());
-        if($particular->getCommission()){
-            $entity->setCommission($particular->getCommission() * $entity->getQuantity());
-        }
-        $em->persist($entity);
-        $em->flush();
 
     }
 

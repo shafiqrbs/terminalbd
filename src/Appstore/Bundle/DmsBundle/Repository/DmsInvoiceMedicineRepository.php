@@ -31,18 +31,11 @@ class DmsInvoiceMedicineRepository extends EntityRepository
         }
         $em = $this->_em;
         $entity = new DmsInvoiceMedicine();
-        $invoiceDmsParticular = $this->_em->getRepository('DmsBundle:DmsInvoiceMedicine')->findOneBy(array('dmsInvoice'=>$invoice ,'medicine' => $medicine));
-        if(!empty($invoiceDmsParticular)) {
-            $entity = $invoiceDmsParticular;
-            $entity->setMedicineQuantity($invoiceDmsParticular->getMedicineQuantity() + $data['medicineQuantity']);
-        }else{
-            $entity->setMedicineQuantity($data['medicineQuantity']);
-        }
-
-        $entity->setMedicineDose($data['medicineDose']);
-        $entity->setMedicineDoseTime($data['medicineDoseTime']);
+        $entity->setMedicineQuantity($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineQuantity'])->getNameBn());
+        $entity->setMedicineDose($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDose'])->getNameBn());
+        $entity->setMedicineDoseTime($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDoseTime'])->getNameBn());
         $entity->setMedicineDuration($data['medicineDuration']);
-        $entity->setMedicineDurationType($data['medicineDurationType']);
+        $entity->setMedicineDurationType($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDurationType'])->getNameBn());
         $entity->setDmsInvoice($invoice);
         $entity->setMedicine($medicine);
         $em->persist($entity);
@@ -57,14 +50,14 @@ class DmsInvoiceMedicineRepository extends EntityRepository
         $i = 1;
         /** @var $entity DmsInvoiceMedicine */
         foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() . '">';
+            $data .= '<tr id="medicine-'.$entity->getId().'">';
             $data .= '<td class="numeric" >' . $i . '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicine()->getName() . '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineQuantity(). '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineDose() .'-'. $entity->getMedicineDoseTime() . '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineDuration(). $entity->getMedicineDurationType() . '</td>';
             $data .= '<td class="numeric" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/medicine-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/'. $entity->getId(). '/medicine-delete" href="javascript:" class="btn red mini deleteMedicine" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;

@@ -63,7 +63,7 @@ class DmsInvoice
     private  $invoiceMedicines;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsInvoiceInvestigation" , cascade={"remove"} )
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsInvoiceInvestigation" , cascade={"remove"} )
      **/
     private  $investigations;
 

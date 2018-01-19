@@ -60,7 +60,7 @@ class DmsParticular
     private $invoiceParticular;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="investigations" )
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="investigations" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $dmsInvoiceInvestigation;

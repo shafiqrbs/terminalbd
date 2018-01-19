@@ -30,12 +30,32 @@ dms_invoice_particular_add:
     options:
             expose: true
 
+dms_invoice_payment:
+    path:     /{invoice}/invoice-payment
+    defaults: { _controller: "DmsBundle:Invoice:addPayment" }
+    methods:  POST
+    options:
+            expose: true
+
 dms_invoice_medicine_add:
     path:     /{invoice}/medicine-add
     defaults: { _controller: "DmsBundle:Invoice:addMedicine" }
     methods:  POST
     options:
             expose: true
+
+dms_invoice_medicine_delete:
+    path:     /{id}/medicine-delete
+    defaults: { _controller: "DmsBundle:Invoice:deleteMedicine" }
+
+dms_invoice_treatment_approved:
+    path:     /{id}/treatment-approved
+    defaults: { _controller: "DmsBundle:Invoice:treatmentApproved" }
+
+dms_invoice_treatment_delete:
+    path:     /{invoice}/{id}/treatment-delete
+    defaults: { _controller: "DmsBundle:Invoice:treatmentDelete" }
+
 
 dms_invoice_discount_update:
     path:     /invoice/invoice-dicount-update
@@ -115,3 +135,6 @@ dms_invoice_add_patient:
     options:
             expose: true
 
+dms_treatment_inline_update:
+    path:     /inline-update
+    defaults: { _controller: "DmsBundle:Invoice:inlineUpdate" }
