@@ -43,13 +43,6 @@ class DmsPrescriptionAttribute
      */
     private $parent;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine", mappedBy="prescriptionAttribute")
-     **/
-    private $invoiceMedicine;
-
-
     /**
      * @var boolean
      *
@@ -152,13 +145,7 @@ class DmsPrescriptionAttribute
         $this->parent = $parent;
     }
 
-    /**
-     * @return DmsInvoiceMedicine
-     */
-    public function getInvoiceMedicine()
-    {
-        return $this->invoiceMedicine;
-    }
+
 
 }
 

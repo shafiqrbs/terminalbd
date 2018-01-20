@@ -36,8 +36,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Patient Invoice  Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i> </a>
-                                <a class="btn red" href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
+                                <a class="btn" href="{{ path('dms_invoice') }}"><i class="icon-th-list"></i> Invoice</a>
+                                <a class="btn red" href="{{ path('dms_invoice_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
                             </div>
                         </div>
                     </div>
@@ -439,7 +439,7 @@
                                                     {% if treatment.status ==1 %}
                                                         {{ treatment.appointmentDate }}
                                                     {% else %}
-                                                        <a  class="editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change appointment date">{{ treatment.appointmentDate }}</a>
+                                                            <a  class="editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-value="{{ treatment.appointmentDate }}" data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY" data-template="D / MMM / YYYY" data-type="combodate" data-pk="{{ treatment.id }}" data-original-title="Change appointment date">{{ treatment.appointmentDate }}</a>
                                                     {% endif %}
                                                 </td>
                                                 <th class="numeric">{{ treatment.price }}</th>
@@ -484,8 +484,8 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
-                                <div class="pull-left span8"></div>
-                                <div class="pull-right span4">
+                                <div class="pull-left span4"></div>
+                                <div class="pull-right span8">
                                     <input type="hidden" id="patient" name="patient" value="{% if entity.customer is not empty %}{{ entity.customer.id }}{% endif %}">
                                     <input type="hidden" id="invoice" name="invoice" data-action="{{ path('hms_invoice_print_for',{'id': entity.id}) }}" value="{{ entity.id }}">
                                     <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
@@ -493,6 +493,8 @@
                                     <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
                                     <div class="controls">
                                         <div class="input-append span12">
+                                            {{ form_widget(form.assignDoctor) }}
+                                            {{ form_errors(form.assignDoctor) }}
                                             {{ form_widget(form.process) }}
                                             {{ form_errors(form.process) }}
                                             <div class="btn-group">

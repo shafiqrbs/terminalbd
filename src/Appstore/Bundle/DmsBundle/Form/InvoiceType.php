@@ -47,7 +47,7 @@ class InvoiceType extends AbstractType
             ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('diagnosis','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('process', 'choice', array(
-                'attr'=>array('class'=>'span6 select-custom'),
+                'attr'=>array('class'=>'span4 select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'empty_value' => '---Choose process---',
@@ -72,6 +72,22 @@ class InvoiceType extends AbstractType
                         ->where("e.status = 1")
                         ->andWhere('s.slug IN (:slugs)')
                         ->setParameter('slugs',array('investigation'))
+                        ->orderBy("e.name","ASC");
+                }
+            ))
+            ->add('assignDoctor', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\DmsBundle\Entity\DmsParticular',
+                'property' => 'name',
+                'multiple'    => false,
+                'expanded' => false,
+                'attr'=>array('class'=>'m-wrap span6'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.service",'s')
+                        ->where("e.status = 1")
+                        ->andWhere('s.slug IN (:slugs)')
+                        ->setParameter('slugs',array('doctor'))
                         ->orderBy("e.name","ASC");
                 }
             ));

@@ -23,7 +23,7 @@ class DmsInvoiceListener
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            if(empty($entity->getConfig()->getInvoicePrefix())){
+            if(empty($entity->getDmsConfig()->getInvoicePrefix())){
                 $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
             }else{
                 $entity->setInvoice(sprintf("%s%s%s", $entity->getHospitalConfig()->getInvoicePrefix(), $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
@@ -49,8 +49,8 @@ class DmsInvoiceListener
 
         $qb
             ->select('MAX(s.code)')
-            ->where('s.config = :dms')
-            ->setParameter('dms', $entity->getConfig())
+            ->where('s.dmsConfig = :dms')
+            ->setParameter('dms', $entity->getDmsConfig())
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
             ->setParameter('today_startdatetime', $today_startdatetime)

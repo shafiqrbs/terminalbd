@@ -1282,22 +1282,6 @@ class DmsInvoice
     }
 
     /**
-     * @return DmsConfig
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * @param DmsConfig $config
-     */
-    public function setConfig($config)
-    {
-        $this->config = $config;
-    }
-
-    /**
      * @return string
      */
     public function getChiefComplains()

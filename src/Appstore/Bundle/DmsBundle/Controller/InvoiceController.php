@@ -69,11 +69,16 @@ class InvoiceController extends Controller
             $entity->setCustomer($customer);
             $entity->setMobile($customer->getMobile());
         }
+
         $dmsConfig = $option->getDmsConfig();
         $entity->setDmsConfig($dmsConfig);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
+        $entity->setCreatedBy($this->getUser());
+        if(!empty($this->getUser()->getDmsParticularDoctor())){
+            $entity->setAssignDoctor($this->getUser()->getDmsParticularDoctor());
+        }
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
         $em->flush();

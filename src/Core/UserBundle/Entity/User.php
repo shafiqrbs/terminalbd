@@ -2,6 +2,7 @@
 
 namespace Core\UserBundle\Entity;
 
+use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
@@ -1410,6 +1411,14 @@ class User extends BaseUser
     public function getPreOrderPayments()
     {
         return $this->preOrderPayments;
+    }
+
+    /**
+     * @return DmsParticular
+     */
+    public function getDmsParticularDoctor()
+    {
+        return $this->dmsParticularDoctor;
     }
 
 
