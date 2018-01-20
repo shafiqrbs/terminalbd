@@ -13,7 +13,7 @@ class DefaultController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getRestaurantConfig();
-        return $this->render('RestaurantBundle:Default:index.html.twig', array(
+        return $this->render('DmsBundle:Default:index.html.twig', array(
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
             'assignDoctors' => '',
