@@ -19,7 +19,7 @@
 </div>
 <div class="clearfix"></div>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
         {% if page.photoGallery is not empty %}
             <div class="carousel-container">
                 <div id="carousel" class="carousel slide carousel-fade" style="width: 100%" >
@@ -52,6 +52,21 @@
             <img class="img-responsive"  src="{{ image(page.webPath).forceResize(640,359) }}" alt="{{ page.name }}" />
         {% endif %}
     </div>
+    <div class="col-md-4">
+        <h4><strong>Description</strong></h4>
+        <hr>
+        {% if  page.pageMetas is defined and page.pageMetas is not empty %}
+            {% for meta in page.pageMetas %}
+                {% if meta.metaKey is not empty and meta.metaValue is empty %}
+                    <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
+                {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
+                    <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
+                {% else %}
+                    <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ meta.metaValue  }}</div></div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
 </div>
 <div class="clearfix"></div>
 <div class="" >
@@ -59,11 +74,6 @@
         <li><a class="social-facebook" target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}&picture={{ app.request.getSchemeAndHttpHost() }}/{{ page.webPath }}&title={{ page.name }}&description={{ page.content|striptags|truncate(250)|raw }}">
                 <i class="fa fa-facebook"></i>
                 <div class="tooltip"><span>facebook</span></div>
-            </a>
-        </li>
-        <li><a class="social-linkedin" target="_blank" href="//www.linkedin.com/shareArticle?mini=true&url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
-                <i class="fa  fa-linkedin"></i>
-                <div class="tooltip"><span>LinkedIn</span></div>
             </a>
         </li>
         <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
@@ -89,22 +99,44 @@
         <div>{{ page.content|raw }}</div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        {% if  page.pageMetas is defined and page.pageMetas is not empty %}
-            {% for meta in page.pageMetas %}
-                {% if meta.metaKey is not empty and meta.metaValue is empty %}
-                    <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
-                {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
-                    <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
-                {% else %}
-                    <div class="row meta-key-value"><div class="col-xs-3 col-md-3">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-9 col-md-9 ">{{ meta.metaValue  }}</div></div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+<div class="clearfix"></div>
+<div class="page-title-bar">
+    <div class="btn-group pull-left">
+        <div class="page-title"><i class="fa fa-tags"></i>&nbsp;{{ page.moduleCategory[0].name }}</div>
     </div>
 </div>
+<div class="clearfix"><br/></div>
+<div class="row">
+    <div id="categories-list" class="list-group">
+    {% for entity in page.moduleCategory[0].pages|slice(0,4) %}
+        <div  class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
+            <div class="thumbnail">
+                <img class="group list-group-image" style="max-height: 250px; min-height: 250px"  src="{{ image(entity.webPath).forceResize(400,250) }}" alt="" />
+                <div class="caption">
+                    <h4 class="group inner list-group-item-heading">{{ entity.name }}</h4>
+                    <p class="group inner list-group-item-text">{{ entity.content|striptags|raw|truncate(150) }}</p>
+                    <p class="group inner list-group-item-text"> {% if entity.moduleCategory is not empty %}
+                            {% for cat in entity.moduleCategory  %}
+                                <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
+                                {% if not loop.last %},{% endif %}
+                            {% endfor %}
+                        {% endif %}</p>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <a class="btn btn-success" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
 <div class="clearfix"></div>
+
 <div class="bhoechie-tab-content">
     <div class="clearfix"></div>
     {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': commentID } %}

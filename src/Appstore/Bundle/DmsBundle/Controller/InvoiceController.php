@@ -93,10 +93,6 @@ class InvoiceController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
-            return $this->redirect($this->generateUrl('dms_invoice_show', array('id' => $entity->getId())));
-        }
-
         /** @var  $invoiceParticularArr */
         $invoiceParticularArr = array();
 
@@ -279,7 +275,7 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find particular entity.');
         }
         $setField = 'set'.$data['name'];
-        $entity->$setField(abs($data['value']));
+        $entity->$setField($data['value']);
         $em->flush();
         exit;
 
@@ -322,17 +318,13 @@ class InvoiceController extends Controller
                 $entity->setCustomer($customer);
                 $entity->setMobile($mobile);
             }
-
-            if($entity->getTotal() > 0){
-                $entity->setProcess('In-progress');
-            }
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+           /* if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.dms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
-            }
+            }*/
 
             return $this->redirect($this->generateUrl('dms_invoice_edit', array('id' => $entity->getId())));
         }elseif (in_array($entity->getProcess(),array('In-progress','Done','Cancel'))){
@@ -635,45 +627,28 @@ class InvoiceController extends Controller
         $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
 
-        $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+        /** @var  $invoiceParticularArr */
+        $invoiceParticularArr = array();
 
-        foreach ($entity->getInvoiceParticulars() as $item) {
-            /** @var InvoiceParticular $item */
-            $serviceName = $item->getParticular()->getService()->getName();
-            $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
+        /** @var DmsInvoiceParticular $row */
 
-            if(!isset($invoiceDetails[$serviceName])) {
-                $invoiceDetails[$serviceName]['items'] = [];
-                $invoiceDetails[$serviceName]['total'] = 0;
-                $invoiceDetails[$serviceName]['hasQuantity'] = ( $hasQuantity == 1);
-            }
-
-            $invoiceDetails[$serviceName]['items'][] = $item;
-            $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
+        if (!empty($entity->getInvoiceParticulars())){
+            foreach ($entity->getInvoiceParticulars() as $row):
+                if(!empty($row->getDmsParticular())){
+                    $invoiceParticularArr[$row->getDmsParticular()->getId()] = $row;
+                }
+            endforeach;
         }
-
-        if(count($invoiceDetails['Pathology']['items']) == 0) {
-            unset($invoiceDetails['Pathology']);
-        }
-        $lastTransaction = 0 ;
-        $inWordTransaction='';
-        if(!empty($entity->getInvoiceTransactions()) and count($entity->getInvoiceTransactions()) > 0){
-            $transaction = $entity->getInvoiceTransactions();
-            if(!empty($transaction[0]->getPayment())){
-                $lastTransaction = $transaction[0]->getPayment();
-                $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($lastTransaction);
-            }
-
-        }
-
-        return $this->render('DmsBundle:Print:'.$entity->getPrintFor().'.html.twig', array(
+        $services        = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
+        $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical','investigation'));
+        $attributes        = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
+        return $this->render('DmsBundle:Print:arman.html.twig', array(
             'entity'                => $entity,
-            'invoiceDetails'        => $invoiceDetails,
-            'invoiceBarcode'        => $barcode,
-            'patientBarcode'        => $patientId,
+            'particularService' => $services,
+            'invoiceParticularArr' => $invoiceParticularArr,
+            'particulars' => $particulars,
+            'attributes' => $attributes,
             'inWords'               => $inWords,
-            'lastTransaction'       => $lastTransaction,
-            'inWordTransaction'     => $inWordTransaction,
         ));
     }
 }

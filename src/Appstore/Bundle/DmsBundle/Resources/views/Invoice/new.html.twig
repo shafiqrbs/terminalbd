@@ -435,21 +435,27 @@
                                             <tr id="remove-{{ treatment.id }}">
                                                 <td  class="numeric">{{ loop.index }}</td>
                                                 <td  class="numeric">{{ treatment.dmsParticular.particularCode }} - {{ treatment.dmsParticular.name }}</td>
-                                                <td  class="numeric">{{ treatment.appointmentDate }}</td>
+                                                <td  class="numeric">
+                                                    {% if treatment.status ==1 %}
+                                                        {{ treatment.appointmentDate }}
+                                                    {% else %}
+                                                        <a  class="editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change appointment date">{{ treatment.appointmentDate }}</a>
+                                                    {% endif %}
+                                                </td>
                                                 <th class="numeric">{{ treatment.price }}</th>
                                                 <th class="numeric">{{ treatment.subTotal }}</th>
                                                 <th class="numeric">
-                                                    {% if treatment.status !=1 %}
-                                                    <a  class="editable" data-name="discount" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change discount amount">{{ treatment.discount }}</a>
-                                                    {% else %}
+                                                    {% if treatment.status ==1 %}
                                                         {{ treatment.discount }}
+                                                     {% else %}
+                                                         <a  class="editable" data-name="Discount" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change discount amount">{{ treatment.discount }}</a>
                                                     {% endif %}
                                                 </th>
                                                 <th class="numeric">
-                                                    {% if treatment.status !=1 %}
-                                                        <a  class="editable" data-name="payment" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change payment amount">{{ treatment.payment }}</a>
-                                                    {% else %}
+                                                    {% if treatment.status ==1 %}
                                                         {{ treatment.payment }}
+                                                     {% else %}
+                                                         <a  class="editable" data-name="Payment" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change payment amount">{{ treatment.payment }}</a>
                                                     {% endif %}
                                                 </th>
                                                 <td class="numeric">
@@ -490,7 +496,8 @@
                                             {{ form_widget(form.process) }}
                                             {{ form_errors(form.process) }}
                                             <div class="btn-group">
-                                                <button type="button"  class="btn blue span12" id="receiveBtn"><i class="icon-save"></i> Save</button>
+                                                <button type="button"  class="btn blue span6" id="receiveBtn"><i class="icon-save"></i> Save</button>
+                                                <a target="_blank" href="{{ path('dms_invoice_print_invoice',{'id':entity.id}) }}" class="btn purple span6"><i class="icon-print"></i> Print</a>
                                             </div>
 
                                         </div>
@@ -529,7 +536,7 @@
 
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@HospitalBundle/Resources/public/css/invoice.css'
+    '@DmsBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}

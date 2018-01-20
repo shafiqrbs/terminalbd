@@ -97,7 +97,7 @@ class DmsTreatmentPlan
      *
      * @ORM\Column(name="status", type="boolean" )
      */
-    private $status=true;
+    private $status=false;
 
 
     /**

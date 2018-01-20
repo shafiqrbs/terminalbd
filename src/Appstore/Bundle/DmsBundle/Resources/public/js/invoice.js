@@ -104,13 +104,18 @@ $(document).on('change', '#particular', function() {
 
 $(document).on('click', '#addPrescriptionParticular', function() {
 
+
     var medicine = $('#medicine').val();
     var generic = $('#generic').val();
+    if(medicine == '' || generic == ''){
+        alert('You have to search medicine or generic from drop down');
+        return false;
+    }
     var medicineQuantity = parseInt($('#medicineQuantity').val());
-    var medicineDose = parseInt($('#medicineDose').val());
-    var medicineDoseTime = parseInt($('#medicineDoseTime').val());
-    var medicineDuration = parseInt($('#medicineDuration').val());
-    var medicineDurationType = parseInt($('#medicineDurationType').val());
+    var medicineDose = $('#medicineDose').val();
+    var medicineDoseTime = $('#medicineDoseTime').val();
+    var medicineDuration = $('#medicineDuration').val();
+    var medicineDurationType = $('#medicineDurationType').val();
     var url = $('#addPrescriptionParticular').attr('data-url');
     $.ajax({
         url: url,
@@ -156,8 +161,8 @@ $(document).on('click', '#addParticular', function() {
 
     var particularId = $('#particularId').val();
     var quantity = parseInt($('#quantity').val());
-    var price = parseInt($('#price').val());
-    var appointmentDate = parseInt($('#appointmentDate').val());
+    var price = $('#price').val();
+    var appointmentDate = $('#appointmentDate').val();
     var url = $('#addParticular').attr('data-url');
     $.ajax({
         url: url,
@@ -180,6 +185,7 @@ $(document).on('click', '#addParticular', function() {
             $('#quantity').val('1');
             $('#addParticular').attr("disabled", true);
             $('#addPatientParticular').attr("disabled", true);
+            $(".editable").editable();
 
         }
     })

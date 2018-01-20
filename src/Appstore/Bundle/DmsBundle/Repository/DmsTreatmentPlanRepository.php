@@ -49,10 +49,11 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $entity->setSubTotal($data['price'] * $data['quantity']);
         }
 
-        $datetime = empty($data['appointmentDate']) ? $data['appointmentDate'] : '' ;
+        $datetime = !empty($data['appointmentDate']) ? $data['appointmentDate'] : '' ;
         $entity->setAppointmentDate($datetime);
         $entity->setDmsInvoice($invoice);
         $entity->setDmsParticular($particular);
+        $entity->setStatus(false);
         $entity->setEstimatePrice($particular->getPrice());
         $em->persist($entity);
         $em->flush();
@@ -67,16 +68,36 @@ class DmsTreatmentPlanRepository extends EntityRepository
         /* @var $entity DmsTreatmentPlan */
 
         foreach ($entities as $entity) {
+
+            if ($entity->getStatus() == 1)  {
+               $discount = $entity->getDiscount();
+            }else{
+                $discount ='<a  class="editable" data-name="Discount" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change discount amount">'.$entity->getDiscount().'</a>';
+            }
+
+            if ($entity->getStatus() == 1)  {
+               $payment = $entity->getPayment();
+            }else{
+               $payment ='<a  class="editable" data-name="Payment" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change discount amount">'.$entity->getPayment().'</a>';
+            }
+
+            if ($entity->getStatus() == 1)  {
+                $appointmentDate = $entity->getAppointmentDate();
+            }else{
+                $appointmentDate ='<a  class="editable" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change discount amount">'.$entity->getAppointmentDate().'</a>';
+            }
+
             $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class="span1" >' . $i . '</td>';
-            $data .= '<td class="span1" >' . $entity->getDmsParticular()->getDmsParticularCode().' - '. $entity->getDmsParticular()->getName(). '</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getPrice() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
-            $data .= '<td class="span2" ><a>' . $entity->getPayment() . '</a></td>';
-            $data .= '<td class="span2" >' . $entity->getBalance() . '</td>';
-            $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+            $data .= '<td class="numeric" >' . $i . '</td>';
+            $data .= '<td class="numeric" >' . $entity->getDmsParticular()->getParticularCode().' - '. $entity->getDmsParticular()->getName(). '</td>';
+            $data .= '<td class="numeric" >' . $appointmentDate . '</td>';
+            $data .= '<td class="numeric" >' . $entity->getPrice() . '</td>';
+            $data .= '<td class="numeric" >' . $entity->getSubTotal() . '</td>';
+            $data .= '<td class="numeric" >' . $discount . '</td>';
+            $data .= '<td class="numeric" >' . $payment . '</td>';
+            $data .= '<td class="numeric" >
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to approve ?" data-url="/dms/invoice/' . $entity->getId() . '/treatment-approved" href="javascript:" class="btn blue mini approve" >Approve</a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/treatment-delete" href="javascript:" class="btn red mini treatmentDelete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;
