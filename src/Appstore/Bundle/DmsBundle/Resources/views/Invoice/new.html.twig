@@ -316,7 +316,7 @@
                                                 {% endfor %}
                                             </select>
                                             <div class="btn-group">
-                                                <button type="button" class="btn blue" id="addPrescriptionParticular" data-url="{{ path('dms_invoice_medicine_add',{'invoice':entity.id}) }}" ><i class="icon-plus"></i> Add</button>
+                                                <button type="button" class="btn blue"  id="addPrescriptionParticular" data-url="{{ path('dms_invoice_medicine_add',{'invoice':entity.id}) }}" ><i class="icon-plus"></i> Add</button>
                                             </div>
                                         </div>
                                     </div>
@@ -439,7 +439,7 @@
                                                     {% if treatment.status ==1 %}
                                                         {{ treatment.appointmentDate }}
                                                     {% else %}
-                                                            <a  class="editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-value="{{ treatment.appointmentDate }}" data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY" data-template="D / MMM / YYYY" data-type="combodate" data-pk="{{ treatment.id }}" data-original-title="Change appointment date">{{ treatment.appointmentDate }}</a>
+                                                            <a  class="editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-value="{{ treatment.appointmentDate }}" data-format="YYYY-MM-DD" data-viewformat="DD-MM-YYYY" data-template="DD-MM-YYYY" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change appointment date">{{ treatment.appointmentDate }}</a>
                                                     {% endif %}
                                                 </td>
                                                 <th class="numeric">{{ treatment.price }}</th>

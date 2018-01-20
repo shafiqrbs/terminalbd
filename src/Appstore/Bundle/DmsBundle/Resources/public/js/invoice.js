@@ -107,10 +107,6 @@ $(document).on('click', '#addPrescriptionParticular', function() {
 
     var medicine = $('#medicine').val();
     var generic = $('#generic').val();
-    if(medicine == '' || generic == ''){
-        alert('You have to search medicine or generic from drop down');
-        return false;
-    }
     var medicineQuantity = parseInt($('#medicineQuantity').val());
     var medicineDose = $('#medicineDose').val();
     var medicineDoseTime = $('#medicineDoseTime').val();

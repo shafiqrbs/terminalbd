@@ -11,12 +11,14 @@ $( ".dateCalendar" ).datepicker({
 
 
 
+/*
 $(document).on("click", ".editable-submit", function() {
     setTimeout(pageReload, 3000);
 });
 function pageReload() {
     location.reload();
 }
+*/
 
 $(document).on( "click", "#show", function(e){
     $('#hide').slideToggle(2000);
@@ -205,13 +207,7 @@ $(".select2Medicine").select2({
         return item.text
     }, // omitted for brevity, see the source of this page
     initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('medicine_name', { product : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-    },
+     },
     allowClear: true,
     minimumInputLength: 1
 });
@@ -247,12 +243,6 @@ $(".select2Generic").select2({
         return item.text
     }, // omitted for brevity, see the source of this page
     initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('medicine_name', { product : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
     },
     allowClear: true,
     minimumInputLength: 1

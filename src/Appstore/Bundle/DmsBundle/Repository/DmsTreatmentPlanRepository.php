@@ -87,6 +87,13 @@ class DmsTreatmentPlanRepository extends EntityRepository
                 $appointmentDate ='<a  class="editable" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change discount amount">'.$entity->getAppointmentDate().'</a>';
             }
 
+            if ($entity->getStatus() == 1)  {
+                $action ='Done';
+            }else{
+                $action ='<a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to approve ?" data-url="/dms/invoice/' . $entity->getId() . '/treatment-approved" href="javascript:" class="btn blue mini approve" >Approve</a>
+                        <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/treatment-delete" href="javascript:" class="btn red mini treatmentDelete" ><i class="icon-trash"></i></a>';
+            }
+
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="numeric" >' . $i . '</td>';
             $data .= '<td class="numeric" >' . $entity->getDmsParticular()->getParticularCode().' - '. $entity->getDmsParticular()->getName(). '</td>';
@@ -95,10 +102,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $data .= '<td class="numeric" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="numeric" >' . $discount . '</td>';
             $data .= '<td class="numeric" >' . $payment . '</td>';
-            $data .= '<td class="numeric" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to approve ?" data-url="/dms/invoice/' . $entity->getId() . '/treatment-approved" href="javascript:" class="btn blue mini approve" >Approve</a>
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/treatment-delete" href="javascript:" class="btn red mini treatmentDelete" ><i class="icon-trash"></i></a>
-            </td>';
+            $data .= '<td class="numeric" >'.$action.'</td>';
             $data .= '</tr>';
             $i++;
         }

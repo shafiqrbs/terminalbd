@@ -206,10 +206,12 @@ class InvoiceController extends Controller
         $medicineDoseTime = $request->request->get('medicineDoseTime');
         $medicineDuration = $request->request->get('medicineDuration');
         $medicineDurationType = $request->request->get('medicineDurationType');
-        $invoiceItems = array('medicine' => $medicine , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType);
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->insertInvoiceMedicine($invoice, $invoiceItems);
-        $result = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->getInvoiceMedicines($invoice);
-        return new Response($result);
+        if($medicine > 0 OR $generic > 0){
+            $invoiceItems = array('medicine' => $medicine , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType);
+            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->insertInvoiceMedicine($invoice, $invoiceItems);
+            $result = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->getInvoiceMedicines($invoice);
+            return new Response($result);
+        }
         exit;
 
     }
@@ -242,6 +244,7 @@ class InvoiceController extends Controller
             $em->flush();
             $transactionData = array('process'=> 'In-progress','invoiceParticular' => $invoiceParticular,'payment' => $payment, 'discount' => $discount);
             $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->insertPaymentTransaction($transactionData);
+            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($entity);
             return new Response('success');
 
         } elseif(!empty($entity) and $process == 'Done' and $entity->getTotal() <= $entity->getPayment()  ) {
@@ -265,9 +268,11 @@ class InvoiceController extends Controller
         if (!$treatmentPlan) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
+        if($treatmentPlan->getPayment() > 0){
         $treatmentPlan->setStatus(true);
         $em->flush();
         $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updatePaymentReceive($treatmentPlan->getDmsInvoice());
+        }
         exit;
     }
 

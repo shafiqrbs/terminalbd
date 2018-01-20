@@ -42,10 +42,10 @@ class InvoiceType extends AbstractType
         $builder
 
             ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add patient advise','autocomplete'=>'off')))
-            ->add('chiefComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('presentingComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('diagnosis','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('chiefComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter chief complains','autocomplete'=>'off')))
+            ->add('presentingComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter presenting complains','autocomplete'=>'off')))
+            ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter patient drug history','autocomplete'=>'off')))
+            ->add('diagnosis','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter diagnosis details','autocomplete'=>'off')))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'span4 select-custom'),
                 'expanded'      =>false,

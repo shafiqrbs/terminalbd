@@ -356,6 +356,7 @@ class DmsInvoiceRepository extends EntityRepository
         $receivable = !empty($res['receivable']) ? $res['receivable'] :0;
         $payment = !empty($res['payment']) ? $res['payment'] :0;
         $discount = !empty($res['discount']) ? $res['discount'] :0;
+        $invoice->setSubTotal($receivable);
         $invoice->setPayment($payment);
         $invoice->setDiscount($discount);
         $invoice->setTotal($receivable - $discount);
@@ -363,7 +364,6 @@ class DmsInvoiceRepository extends EntityRepository
         $em->flush();
 
     }
-
 
     public function updateCommissionPayment(DmsInvoice $invoice)
     {
