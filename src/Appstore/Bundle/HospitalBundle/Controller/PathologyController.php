@@ -265,4 +265,9 @@ class PathologyController extends Controller
         );
         return $this->redirect($this->generateUrl('hms_pathology'));
     }
+
+    public function pathologyTestWithReport()
+    {
+
+    }
 }
