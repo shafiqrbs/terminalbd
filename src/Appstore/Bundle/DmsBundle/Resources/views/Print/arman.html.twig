@@ -31,10 +31,10 @@
     {% endif %}
     <table class="table table-border" style="height:80px" >
         <tr>
-            <td class="" style="margin-left:80px;width: 400px!important;display:inline-block;">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-            <td class="" style="margin-left:35px;width: 80px!important;display:inline-block;margin-top: 3px">{% if entity.customer is not empty %}{{ entity.customer.age }} {{ entity.customer.ageType }}{% endif %}</td>
-            <td class="" style="margin-left:25px;width: 80px!important;display:inline-block;margin-top: 3px">{% if entity.customer is not empty %}{{ entity.customer.gender }}{% endif %}</td>
-            <td class="" style="margin-left:15px;width: 95px!important;display:inline-block;margin-top: 3px">{% if entity.customer is not empty %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
+            <td class="" style="margin-left:80px;width: 400px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+            <td class="" style="margin-left:35px;width: 80px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.customer.age }} {{ entity.customer.ageType }}{% endif %}</td>
+            <td class="" style="margin-left:25px;width: 80px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.customer.gender }}{% endif %}</td>
+            <td class="" style="margin-left:15px;width: 95px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
         </tr>
     </table>
     <table class="table table-bordered table-striped">
