@@ -102,16 +102,66 @@
                             </ul>
                     </td>
                     </tr>
-                    <tr><td style="height: 240px">
-                          {% for particular in particulars %}
-                              {% if particular.service.slug == 'physical' %}
-                                  <ul class="styled">
-                                      {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %} <li>{{ particular.name }}: {{ invoiceParticularArr[particular.id].metaValue }}</li>{% endif %}
-                                  </ul>
-                              {% endif %}
-                          {% endfor %}
+                    <tr>
+                        <td style="height: 280px;">
+                            <ul class="check-styled">
+                                {% for invoiceParticular in entity.invoiceParticulars %}
+                                    {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='presenting' %}
+                                        <li>
+                                            <table>
+                                                <tr id="remove-{{ invoiceParticular.id }}">
+                                                    <td  {% if invoiceParticular.teethPosition is not empty %} colspan="2" {% endif %} ><i class="fa fa-check" aria-hidden="true"></i> {{ invoiceParticular.metaValue }}</td>
+                                                    {% if invoiceParticular.teethPosition is not empty %}
+                                                        <td style="width:90px">
+                                                            <table class="dms-table">
+                                                                {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
+                                                                {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
+                                                                <tr>
+                                                                    <td class="dms-td dms-td-border-none dms-td-border-bottom">
+                                                                        {% if invoiceParticular.teethPosition == 'upper-left' %}
+                                                                            {% for teethNo in invoiceParticular.teethNo %}
+                                                                                {{ teethNo }}
+                                                                                {% if not loop.last %},{% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    </td>
+                                                                    <td class="dms-td dms-td-border-bottom ">
+                                                                        {% if invoiceParticular.teethPosition == 'upper-right' %}
+                                                                            {% for teethNo in invoiceParticular.teethNo %}
+                                                                                {{ teethNo }}
+                                                                                {% if not loop.last %},{% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr><td class="dms-td dms-td-border-none">
+                                                                        {% if invoiceParticular.teethPosition == 'lower-left' %}
+                                                                            {% for teethNo in invoiceParticular.teethNo %}
+                                                                                {{ teethNo }}
+                                                                                {% if not loop.last %},{% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    </td>
+                                                                    <td class="dms-td">
+                                                                        {% if invoiceParticular.teethPosition == 'lower-right' %}
+                                                                            {% for teethNo in invoiceParticular.teethNo %}
+                                                                                {{ teethNo }}
+                                                                                {% if not loop.last %},{% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    {% endif %}
+                                                </tr>
+                                            </table></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
 
-                      </td></tr>
                     <tr><td style="height: 160px">
                             <ul class="styled">
                                 {% for investigations in entity.investigations %}

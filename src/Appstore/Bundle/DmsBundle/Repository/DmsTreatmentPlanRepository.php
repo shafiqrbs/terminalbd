@@ -80,7 +80,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
             if ($entity->getStatus() == 1)  {
                $payment = $entity->getPayment();
             }else{
-               $payment ='<a  class="editable" data-name="Payment" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change discount amount">'.$entity->getPayment().'</a>';
+               $payment ='<a  class="editable" data-name="Payment" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change payment amount">'.$entity->getPayment().'</a>';
             }
 
             if ($entity->getStatus() == 1)  {

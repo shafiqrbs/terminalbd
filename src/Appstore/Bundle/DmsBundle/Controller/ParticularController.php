@@ -115,7 +115,7 @@ class ParticularController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
         $pagination = $em->getRepository('DmsBundle:DmsParticular')->getServiceLists($config);
         //$pagination = $this->paginate($pagination);
         $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
