@@ -31,7 +31,7 @@
     {% endif %}
     <table class="table table-border" style="height:80px" >
         <tr>
-            <td class="span5" style="margin-left: 40px; display:inline-block">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+            <td class="span4" style="margin-left: 40px;width: 350px!important;display:inline-block">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
             <td class="span2" style="margin-left: 10px;">{% if entity.customer is not empty %}{{ entity.customer.age }} {{ entity.customer.ageType }}{% endif %}</td>
             <td class="span1" style="margin-left: 10px;">{% if entity.customer is not empty %}{{ entity.customer.gender }}{% endif %}</td>
             <td class="span2" style="margin-left: 10px;">{% if entity.customer is not empty %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
@@ -44,7 +44,7 @@
                 <table class="table">
 
                     <tr>
-                        <td style="height: 280px; margin-top: 80px">
+                        <td style="height: 280px; margin-top:1000px">
                             <ul class="check-styled">
                             {% for invoiceParticular in entity.invoiceParticulars %}
                             {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='chief-complaints' %}
@@ -171,7 +171,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="height: 190px">
+                        <td style="">
                             <ul class="check-styled">
                                 {% for invoiceParticular in entity.invoiceParticulars %}
                                     {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='advise' %}
@@ -237,7 +237,7 @@
                     <tr><td><br/><br/><br/></td></tr>
                     <tr>
                         <td  class="numeric">
-                            <ul class="unstyled" style="min-height: 250px">
+                            <ul class="unstyled" style="margin-bottom: 50px !important; display: inline-block; margin-top: 40px!important;">
                                 {% for medicine in entity.invoiceMedicines %}
                                     <li> {{ loop.index }}. {{ medicine.medicine.medicineForm }} {{ medicine.medicine.name }} {{ medicine.medicine.strength }} <br/>
                                         {{ medicine.medicineQuantity }}  {{ medicine.medicineDose }} - {{ medicine.medicineDoseTime }} - {{ medicine.medicineDuration }} {{ medicine.medicineDurationType }}
@@ -256,11 +256,13 @@
                             </ul>
                         </td>
                     </tr>
+
                 </table>
+
             </td>
         </tr>
         </tbody>
-        <tfoot>
+        {#<tfoot>
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
@@ -279,34 +281,10 @@
                 </div>
 
             </td>
-
         </tr>
-        </tfoot>
+        </tfoot>#}
     </table>
-    <table class="table table-border">
 
-        {#<tr>
-            <td class="span4">
-                <ul class="unstyled">
-                    <li>Prepared By</li>
-                    <li>{{ entity.createdBy.profile.name }}</li>
-                </ul>
-            </td>
-            <td class="span4 text-center">
-                <ul class="unstyled">
-                    <li>Checked By</li>
-                    <li>Printed: {{ "now"|date("d-m-Y h:m A") }}</li>
-                </ul>
-            </td>
-            <td class="span4 pull-right">
-                <ul class="unstyled">
-                    <li>Printed By</li>
-                    <li>{{ app.user }}</li>
-                </ul>
-            </td>
-        </tr>#}
-        <tr><td colspan="3">&nbsp;</td></tr>
-    </table>
 </div>
 <style>
     ul{
