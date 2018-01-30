@@ -31,10 +31,10 @@
     {% endif %}
     <table class="table table-border" style="height:80px" >
         <tr>
-            <td class="span4" style="margin-left: 40px;width: 350px!important;display:inline-block">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-            <td class="span2" style="margin-left: 10px;">{% if entity.customer is not empty %}{{ entity.customer.age }} {{ entity.customer.ageType }}{% endif %}</td>
-            <td class="span1" style="margin-left: 10px;">{% if entity.customer is not empty %}{{ entity.customer.gender }}{% endif %}</td>
-            <td class="span2" style="margin-left: 10px;">{% if entity.customer is not empty %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
+            <td class="" style="margin-left:40px;width: 380px!important;display:inline-block">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+            <td class="" style="margin-left: 10px;width: 110px!important;display:inline-block">{% if entity.customer is not empty %}{{ entity.customer.age }} {{ entity.customer.ageType }}{% endif %}</td>
+            <td class="" style="margin-left: 10px;width: 80px!important;display:inline-block">{% if entity.customer is not empty %}{{ entity.customer.gender }}{% endif %}</td>
+            <td class="" style="margin-left: 10px;width: 120px!important;display:inline-block">{% if entity.customer is not empty %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
         </tr>
     </table>
     <table class="table table-bordered table-striped">
@@ -44,7 +44,7 @@
                 <table class="table">
 
                     <tr>
-                        <td style="height: 280px; margin-top:1000px">
+                        <td style="height: 280px; margin-top:60px;display: inline-block;">
                             <ul class="check-styled">
                             {% for invoiceParticular in entity.invoiceParticulars %}
                             {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='chief-complaints' %}
