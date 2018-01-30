@@ -8,10 +8,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * Service
  *
- * @ORM\Table( name ="dms_service")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Repository\DmsServiceRepository")
+ * @ORM\Table( name ="dms_dental_service")
+ * @ORM\Entity(repositoryClass="")
  */
-class DmsService
+class DentalService
 {
     /**
      * @var integer
@@ -22,24 +22,18 @@ class DmsService
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsServices")
-     **/
-    private $dmsConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DentalService", inversedBy="dmsService")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", mappedBy="dentalService")
      **/
-    private $dentalService;
-
+    private $dmsService;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=200, nullable=true)
+     * @ORM\Column(name="name", type="string", length=50, nullable=true)
      */
     private $name;
-
 
     /**
      * @var string
@@ -67,11 +61,6 @@ class DmsService
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="service")
      **/
     private $dmsInvoices;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular", mappedBy="service")
-     **/
-    private $invoiceParticular;
 
 
     /**
@@ -236,21 +225,20 @@ class DmsService
         $this->dmsConfig = $dmsConfig;
     }
 
-
-    /**
-     * @return DentalService
-     */
-    public function getDentalService()
-    {
-        return $this->dentalService;
-    }
-
     /**
      * @return mixed
      */
-    public function getInvoiceParticular()
+    public function getDmsService()
     {
-        return $this->invoiceParticular;
+        return $this->dmsService;
+    }
+
+    /**
+     * @param mixed $dmsService
+     */
+    public function setDmsService($dmsService)
+    {
+        $this->dmsService = $dmsService;
     }
 
 

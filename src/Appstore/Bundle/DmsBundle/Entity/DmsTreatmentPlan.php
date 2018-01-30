@@ -91,6 +91,13 @@ class DmsTreatmentPlan
      */
     private $appointmentDate;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appointmentTime", type="string", nullable=true)
+     */
+    private $appointmentTime;
+
 
     /**
      * @var boolean
@@ -348,6 +355,22 @@ class DmsTreatmentPlan
     public function setAppointmentDate($appointmentDate)
     {
         $this->appointmentDate = $appointmentDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppointmentTime()
+    {
+        return $this->appointmentTime;
+    }
+
+    /**
+     * @param string $appointmentTime
+     */
+    public function setAppointmentTime($appointmentTime)
+    {
+        $this->appointmentTime = $appointmentTime;
     }
 
 

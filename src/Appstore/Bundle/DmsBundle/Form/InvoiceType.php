@@ -41,11 +41,8 @@ class InvoiceType extends AbstractType
     {
         $builder
 
-            ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add patient advise','autocomplete'=>'off')))
-            ->add('chiefComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter chief complains','autocomplete'=>'off')))
-            ->add('presentingComplains','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter presenting complains','autocomplete'=>'off')))
-            ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter patient drug history','autocomplete'=>'off')))
-            ->add('diagnosis','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter diagnosis details','autocomplete'=>'off')))
+            ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 8,'placeholder'=>'Enter patient drug history','autocomplete'=>'off')))
+            ->add('diagnosis','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 8,'placeholder'=>'Enter diagnosis details','autocomplete'=>'off')))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'span4 select-custom'),
                 'expanded'      =>false,
@@ -56,22 +53,36 @@ class InvoiceType extends AbstractType
                     'Appointment' => 'Appointment',
                     'Visit' => 'Visit',
                     'Done' => 'Done',
+                    'Canceled' => 'Canceled',
                 ),
             ))
+
 
             ->add('investigations', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\DmsBundle\Entity\DmsParticular',
                 'property' => 'name',
                 'multiple'    => true,
-                'expanded' => true,
-                'attr'=>array('class'=>'m-wrap check-list'),
+                'attr'=>array('class'=>'m-wrap span12 multiselect'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.service",'s')
                         ->where("e.status = 1")
                         ->andWhere('s.slug IN (:slugs)')
                         ->setParameter('slugs',array('investigation'))
+                        ->orderBy("e.name","ASC");
+                }
+            ))
+            ->add('specialAdvises', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\DmsBundle\Entity\DmsSpecialAdvise',
+                'property' => 'name',
+                'multiple'    => true,
+                'expanded' => true,
+                'attr'=>array('class'=>'m-wrap check-list'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }
             ))

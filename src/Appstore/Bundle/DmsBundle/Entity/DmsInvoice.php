@@ -14,6 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\PaymentCard;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Invoice
@@ -66,6 +67,13 @@ class DmsInvoice
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsInvoiceInvestigation" , cascade={"remove"} )
      **/
     private  $investigations;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsSpecialAdvise", inversedBy="dmsInvoice" )
+     * @ORM\JoinColumn(name="dmsParticular_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $specialAdvises;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="dmsInvoice" , cascade={"remove"} )
@@ -1399,6 +1407,22 @@ class DmsInvoice
     public function getInvoiceMedicines()
     {
         return $this->invoiceMedicines;
+    }
+
+    /**
+     * @return DmsSpecialAdvise
+     */
+    public function getSpecialAdvises()
+    {
+        return $this->specialAdvises;
+    }
+
+    /**
+     * @param DmsSpecialAdvise $specialAdvises
+     */
+    public function setSpecialAdvises($specialAdvises)
+    {
+        $this->specialAdvises = $specialAdvises;
     }
 
 

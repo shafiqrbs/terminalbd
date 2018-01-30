@@ -2,69 +2,72 @@
 
 namespace Appstore\Bundle\DmsBundle\Controller;
 
-use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
-use Appstore\Bundle\DmsBundle\Form\TreatmentType;
+use Appstore\Bundle\DmsBundle\Entity\DmsService;
+use Appstore\Bundle\DmsBundle\Entity\Particular;
+use Appstore\Bundle\DmsBundle\Form\DoctorType;
+use Appstore\Bundle\DmsBundle\Form\CabinType;
+use Appstore\Bundle\DmsBundle\Form\OtherServiceType;
+use Appstore\Bundle\DmsBundle\Form\ParticularType;
+use Appstore\Bundle\DmsBundle\Form\PathologyType;
+use Appstore\Bundle\DmsBundle\Form\ServiceType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 /**
- * TreatmentController controller.
+ * ParticularController controller.
  *
  */
-class TreatmentController extends Controller
+class ServiceController extends Controller
 {
 
 
     /**
-     * Lists all DmsParticular entities.
+     * Lists all Particular entities.
      *
      */
     public function indexAction()
     {
-
-        $entity = new DmsParticular();
+        $entity = new DmsService();
+        $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('treatment-plan'));
-        $form = $this->createCreateForm($entity);
-        return $this->render('DmsBundle:Treatment:index.html.twig', array(
+        $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceLists($config);
+        $editForm = $this->createCreateForm($entity);
+        return $this->render('DmsBundle:Service:index.html.twig', array(
             'pagination' => $pagination,
-            'entity' => $entity,
-            'form'   => $form->createView(),
+            'searchForm' => $data,
+            'form'   => $editForm->createView(),
         ));
 
     }
 
     /**
-     * Creates a new DmsParticular entity.
+     * Creates a new Particular entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new DmsParticular();
+        $entity = new DmsService();
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('treatment-plan'));
-
+        $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceLists($config);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setDmsConfig($config);
-            $service = $this->getDoctrine()->getRepository('DmsBundle:DmsService')->findOneBy(array('slug'=>'treatment-plan'));
-            $entity->setService($service);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('dms_treatment', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('dms_particular'));
         }
 
-        return $this->render('DmsBundle:Treatment:index.html.twig', array(
+        return $this->render('DmsBundle:Service:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,
             'form'   => $form->createView(),
@@ -72,17 +75,16 @@ class TreatmentController extends Controller
     }
 
     /**
-     * Creates a form to create a DmsParticular entity.
+     * Creates a form to create a Particular entity.
      *
-     * @param DmsParticular $entity The entity
+     * @param DmsService $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(DmsParticular $entity)
+    private function createCreateForm(DmsService $entity)
     {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new TreatmentType($globalOption), $entity, array(
-            'action' => $this->generateUrl('dms_treatment_create', array('id' => $entity->getId())),
+        $form = $this->createForm(new ServiceType(), $entity, array(
+            'action' => $this->generateUrl('dms_particular_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -93,22 +95,25 @@ class TreatmentController extends Controller
     }
 
 
+
     /**
-     * Displays a form to edit an existing DmsParticular entity.
+     * Displays a form to edit an existing Particular entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->findBy(array('dmsConfig' => $config,'service'=> 2),array('name'=>'ASC'));
-        $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceLists($config);
+        //$pagination = $this->paginate($pagination);
+        $entity = $em->getRepository('DmsBundle:DmsService')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
+            throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render('DmsBundle:Treatment:index.html.twig', array(
+
+        return $this->render('DmsBundle:Service:index.html.twig', array(
             'entity'      => $entity,
             'pagination'      => $pagination,
             'form'   => $editForm->createView(),
@@ -116,17 +121,17 @@ class TreatmentController extends Controller
     }
 
     /**
-     * Creates a form to edit a DmsParticular entity.
+     * Creates a form to edit a Particular entity.
      *
-     * @param DmsParticular $entity The entity
+     * @param Particular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(DmsParticular $entity)
+    private function createEditForm(DmsService $entity)
     {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new TreatmentType($globalOption), $entity, array(
-            'action' => $this->generateUrl('dms_treatment_update', array('id' => $entity->getId())),
+
+        $form = $this->createForm(new ParticularType(), $entity, array(
+            'action' => $this->generateUrl('dms_particular_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -136,18 +141,19 @@ class TreatmentController extends Controller
         return $form;
     }
     /**
-     * Edits an existing DmsParticular entity.
+     * Edits an existing Particular entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->findBy(array('dmsConfig' => $config,'service'=> 2),array('name'=>'ASC'));
-        $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
+        $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceLists($config);
+        //$pagination = $this->paginate($pagination);
+        $entity = $em->getRepository('DmsBundle:DmsService')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
+            throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
@@ -157,24 +163,24 @@ class TreatmentController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('dms_treatment'));
+            return $this->redirect($this->generateUrl('dms_particular'));
         }
 
-        return $this->render('DmsBundle:Treatment:index.html.twig', array(
+        return $this->render('DmsBundle:Service:index.html.twig', array(
             'entity'      => $entity,
             'pagination'      => $pagination,
             'form'   => $editForm->createView(),
         ));
     }
     /**
-     * Deletes a DmsParticular entity.
+     * Deletes a Particular entity.
      *
      */
-    public function deleteAction(DmsParticular $entity)
+    public function deleteAction(DmsService $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
+            throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         try {
 
@@ -193,7 +199,7 @@ class TreatmentController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('dms_treatment'));
+        return $this->redirect($this->generateUrl('dms_particular'));
     }
 
    
@@ -201,7 +207,7 @@ class TreatmentController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(DmsParticular $entity)
+    public function statusAction(DmsService $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -219,6 +225,6 @@ class TreatmentController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('dms_treatment'));
+        return $this->redirect($this->generateUrl('dms_particular'));
     }
 }

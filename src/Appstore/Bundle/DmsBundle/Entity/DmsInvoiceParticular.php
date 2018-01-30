@@ -36,6 +36,11 @@ class DmsInvoiceParticular
     private $dmsParticular;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="invoiceParticular")
+     **/
+    private $dmsService;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="metaKey", type="string", length=225, nullable=true)
@@ -49,7 +54,22 @@ class DmsInvoiceParticular
      */
     private $metaValue;
 
- /**
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="teethPosition", type="string", length=25, nullable=true)
+     */
+    private $teethPosition;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="teethNo", type="array", nullable=true)
+     */
+    private $teethNo;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="metaStatus", type="boolean", nullable=true)
@@ -145,6 +165,54 @@ class DmsInvoiceParticular
     public function setDmsParticular($dmsParticular)
     {
         $this->dmsParticular = $dmsParticular;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTeethPosition()
+    {
+        return $this->teethPosition;
+    }
+
+    /**
+     * @param string $teethPosition
+     */
+    public function setTeethPosition($teethPosition)
+    {
+        $this->teethPosition = $teethPosition;
+    }
+
+    /**
+     * @return DmsService
+     */
+    public function getDmsService()
+    {
+        return $this->dmsService;
+    }
+
+    /**
+     * @param DmsService $dmsService
+     */
+    public function setDmsService($dmsService)
+    {
+        $this->dmsService = $dmsService;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTeethNo()
+    {
+        return $this->teethNo;
+    }
+
+    /**
+     * @param array $teethNo
+     */
+    public function setTeethNo($teethNo)
+    {
+        $this->teethNo = $teethNo;
     }
 
 

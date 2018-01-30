@@ -8,10 +8,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * Service
  *
- * @ORM\Table( name ="dms_service")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Repository\DmsServiceRepository")
+ * @ORM\Table( name ="dms_special_advise")
+ * @ORM\Entity(repositoryClass="")
  */
-class DmsService
+class DmsSpecialAdvise
 {
     /**
      * @var integer
@@ -27,10 +27,13 @@ class DmsService
      **/
     private $dmsConfig;
 
+
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DentalService", inversedBy="dmsService")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="specialAdvises" )
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
-    private $dentalService;
+    private $dmsInvoice;
+
 
 
     /**
@@ -238,19 +241,19 @@ class DmsService
 
 
     /**
-     * @return DentalService
-     */
-    public function getDentalService()
-    {
-        return $this->dentalService;
-    }
-
-    /**
      * @return mixed
      */
     public function getInvoiceParticular()
     {
         return $this->invoiceParticular;
+    }
+
+    /**
+     * @return DmsInvoice
+     */
+    public function getDmsInvoice()
+    {
+        return $this->dmsInvoice;
     }
 
 

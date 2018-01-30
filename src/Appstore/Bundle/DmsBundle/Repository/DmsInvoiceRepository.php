@@ -347,19 +347,17 @@ class DmsInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $res = $em->createQueryBuilder()
             ->from('DmsBundle:DmsTreatmentPlan','si')
-            ->select('sum(si.payment) as payment ,sum(si.subTotal) as receivable,sum(si.discount) as discount')
+            ->select('sum(si.payment) as payment ,sum(si.discount) as discount')
             ->where('si.dmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->andWhere('si.status = :status')
             ->setParameter('status', 1)
             ->getQuery()->getOneOrNullResult();
-        $receivable = !empty($res['receivable']) ? $res['receivable'] :0;
         $payment = !empty($res['payment']) ? $res['payment'] :0;
         $discount = !empty($res['discount']) ? $res['discount'] :0;
-        $invoice->setSubTotal($receivable);
         $invoice->setPayment($payment);
         $invoice->setDiscount($discount);
-        $invoice->setTotal($receivable - $discount);
+        $invoice->setTotal($invoice->getSubTotal() - $discount);
         $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
         $em->flush();
 

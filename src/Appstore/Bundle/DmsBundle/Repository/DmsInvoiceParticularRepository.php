@@ -59,6 +59,23 @@ class DmsInvoiceParticularRepository extends EntityRepository
         return  $qb;
     }
 
+    public function insertInvoiceParticularSingle(DmsInvoice $invoice, $data)
+    {
+        $em = $this->_em;
+        $service = $this->_em->getRepository('DmsBundle:DmsService')->findOneBy(array('slug'=>$data['service']));
+        $position = !empty($data['position']) ? $data['position'] : '' ;
+        $teethNo = !empty($data['teethNo']) ? $data['teethNo'] : '' ;
+        $explode = explode(',',$teethNo);
+        $entity = new DmsInvoiceParticular();
+        $entity->setDmsService($service);
+        $entity->setMetaValue($data['procedure']);
+        $entity->setTeethPosition($position);
+        $entity->setTeethNo($explode);
+        $entity->setDmsInvoice($invoice);
+        $em->persist($entity);
+        $em->flush();
+
+    }
 
 
     public function insertInvoiceItems(DmsInvoice $invoice, $data)

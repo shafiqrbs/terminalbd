@@ -873,6 +873,8 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Master Data']->addChild('Particular', array('route' => 'dms_particular'))
                 ->setAttribute('icon', 'icon-th-list');
+             $menu['Dental & Diagnosis']['Master Data']->addChild('Service', array('route' => 'dms_service'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Master Data']->addChild('Doctor', array('route' => 'dms_doctor'))
                 ->setAttribute('icon', 'icon-th-list');
             if ($securityContext->isGranted('ROLE_DOMAIN_DMS_CONFIG')) {

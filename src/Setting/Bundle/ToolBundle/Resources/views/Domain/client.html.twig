@@ -59,6 +59,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Domain/Sub-domain</th>
                                     <th class="numeric" >Status</th>
+                                    <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -74,6 +75,9 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.currentStatus }}</td>
+                                        <td class="numeric" >
+                                            <a href="{{ path('globaloption_edit',{id: entity.id}) }}" data-url="" class="btn blue mini" ><i class="icon-pencil"></i>&nbsp;Edit Global Option</a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
 

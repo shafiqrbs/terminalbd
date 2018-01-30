@@ -81,6 +81,32 @@ $(document).on( "change", "#invoiceParticular", function(e){
     $('#appstore_bundle_dmsbundle_invoice_payment').val(price);
 });
 
+
+$(document).on('change', '#appointmentTime', function() {
+
+
+    var appointmentDate = $('#appointmentDate').val();
+    var appointmentTime = $('#appointmentTime').val();
+    if(appointmentTime == ''){
+        return false;
+    }
+    $.post( Routing.generate('dms_invoice_appointment_datetime_check') ,{appointmentDate:appointmentDate, appointmentTime:appointmentTime } )
+        .done(function( data ) {
+            if(data == 'invalid'){
+                $("#appointmentTime option:first").val();
+                $('#cabinInvalid').notifyModal({
+                    duration : 5000,
+                    placement : 'center',
+                    overlay : true,
+                    type : 'notify',
+                    icon : false,
+                });
+            }
+        });
+
+});
+
+
 $(document).on('change', '#particular', function() {
 
     var url = $(this).val();
@@ -100,6 +126,30 @@ $(document).on('change', '#particular', function() {
             $('#addParticular').attr("disabled", false);
         }
     })
+});
+
+$(document).on('click', '.addProcedure', function() {
+
+    var dataTab    = $(this).attr('data-tab');
+    var procedure =  $('#'+dataTab).find('#procedure').val();
+    if(procedure == ''){
+        alert('You have to add procedure');
+        $('#procedure').focus();
+        return false;
+    }
+    var teethPosition = $('#'+dataTab).find('#teethPosition').val();
+    var teethNo = $('#'+dataTab).find('#teethNo').val();
+    var url     = $(this).attr('data-url');
+    var showDiv    = $(this).attr('data-id');
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: 'procedure='+procedure+'&position='+teethPosition+'&teethNo='+teethNo,
+        success: function (response) {
+            $('#procedure-'+showDiv).html(response);
+            $('#'+dataTab).find('#procedure').val();
+        }
+    });
 });
 
 $(document).on('click', '#addPrescriptionParticular', function() {
@@ -159,11 +209,12 @@ $(document).on('click', '#addParticular', function() {
     var quantity = parseInt($('#quantity').val());
     var price = $('#price').val();
     var appointmentDate = $('#appointmentDate').val();
+    var appointmentTime = $('#appointmentTime').val();
     var url = $('#addParticular').attr('data-url');
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price+'&appointmentDate='+appointmentDate,
+        data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price+'&appointmentDate='+appointmentDate+'&appointmentTime='+appointmentTime,
         success: function (response) {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
@@ -226,11 +277,58 @@ $(document).on("click", "#receiveBtn", function() {
 
         }else{
 
+            var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
+            var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
             $('#confirm-content').confirmModal({
                 topOffset: 0,
                 top: '25%',
                 onOkBut: function(event, el) {
-                    $('#invoiceForm').submit();
+                    $.ajax(url,{
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        data: formData
+                    });
+
+                }
+            });
+        }
+
+    });
+});
+
+$(document).on("click", "#finalActionButton", function() {
+
+    $('#appstore_bundle_dmsbundle_invoice_customer_mobile, #appstore_bundle_dmsbundle_invoice_customer_name, #appstore_bundle_dmsbundle_invoice_customer_age').each(function() {
+
+        if ($(this).val() == '') {
+
+            $('#appstore_bundle_dmsbundle_invoice_customer_mobile').addClass('input-error');
+            $('#appstore_bundle_dmsbundle_invoice_customer_mobile').focus();
+            $('#appstore_bundle_dmsbundle_invoice_customer_name').addClass('input-error');
+            $('#appstore_bundle_dmsbundle_invoice_customer_name').focus;
+            $('#appstore_bundle_dmsbundle_invoice_customer_age').addClass('input-error');
+            $('#appstore_bundle_dmsbundle_invoice_customer_age').focus;
+            $('#updatePatient').show();
+            return false;
+
+        }else{
+
+            var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
+            var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
+            $('#confirm-content').confirmModal({
+                topOffset: 0,
+                top: '25%',
+                onOkBut: function(event, el) {
+                    $.ajax(url,{
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        data: formData,
+                        success: function (response) {
+                            location.reload();
+                        }
+                    });
                 }
             });
         }

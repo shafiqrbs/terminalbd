@@ -34,6 +34,11 @@ class DmsConfig
     private $dmsInvoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", mappedBy="dmsConfig")
+     **/
+    private $dmsServices;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsReverse", mappedBy="dmsConfig")
      **/
     private $dmsReverses;
@@ -960,6 +965,22 @@ class DmsConfig
     public function getDmsParticulars()
     {
         return $this->dmsParticulars;
+    }
+
+    /**
+     * @return DmsService
+     */
+    public function getDmsServices()
+    {
+        return $this->dmsServices;
+    }
+
+    /**
+     * @return DmsOwnerService
+     */
+    public function getDmsOwnerService()
+    {
+        return $this->dmsOwnerService;
     }
 
 

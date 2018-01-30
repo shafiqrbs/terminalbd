@@ -23,6 +23,10 @@ dms_particular:
     resource: "@DmsBundle/Resources/config/routing/particular.yml"
     prefix:   /particular
 
+dms_service:
+    resource: "@DmsBundle/Resources/config/routing/service.yml"
+    prefix:   /service
+
 dms_treatment:
     resource: "@DmsBundle/Resources/config/routing/treatment.yml"
     prefix:   /treatment-plan

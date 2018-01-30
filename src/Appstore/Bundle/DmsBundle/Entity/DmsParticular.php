@@ -61,14 +61,13 @@ class DmsParticular
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="investigations" )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $dmsInvoiceInvestigation;
 
-
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem", mappedBy="dmsParticular" )
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem", mappedBy="dmsParticular" )
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $dmsPurchaseItems;
 

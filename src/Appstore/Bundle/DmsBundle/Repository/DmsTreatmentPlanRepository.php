@@ -50,7 +50,9 @@ class DmsTreatmentPlanRepository extends EntityRepository
         }
 
         $datetime = !empty($data['appointmentDate']) ? $data['appointmentDate'] : '' ;
+        $appointmentTime = !empty($data['appointmentTime']) ? $data['appointmentTime'] : '' ;
         $entity->setAppointmentDate($datetime);
+        $entity->setAppointmentTime($appointmentTime);
         $entity->setDmsInvoice($invoice);
         $entity->setDmsParticular($particular);
         $entity->setStatus(false);
@@ -83,8 +85,10 @@ class DmsTreatmentPlanRepository extends EntityRepository
 
             if ($entity->getStatus() == 1)  {
                 $appointmentDate = $entity->getAppointmentDate();
+                $appointmentTime = $entity->getAppointmentTime();
             }else{
-                $appointmentDate ='<a  class="editable" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change discount amount">'.$entity->getAppointmentDate().'</a>';
+                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Date">'.$entity->getAppointmentDate().'</a>';
+                $appointmentTime ='<a  class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-value="'.$entity->getAppointmentTime().'" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Time">'.$entity->getAppointmentTime().'</a>';
             }
 
             if ($entity->getStatus() == 1)  {
@@ -97,7 +101,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="numeric" >' . $i . '</td>';
             $data .= '<td class="numeric" >' . $entity->getDmsParticular()->getParticularCode().' - '. $entity->getDmsParticular()->getName(). '</td>';
-            $data .= '<td class="numeric" >' . $appointmentDate . '</td>';
+            $data .= '<td class="numeric" >' . $appointmentDate .'/'.$appointmentTime. '</td>';
             $data .= '<td class="numeric" >' . $entity->getPrice() . '</td>';
             $data .= '<td class="numeric" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="numeric" >' . $discount . '</td>';

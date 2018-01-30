@@ -15,9 +15,9 @@ security:
         ROLE_DOMAIN_USER:                               [ROLE_DOAMIN]
         ROLE_WEBSITE:                                   [ROLE_WEBSITE]
         ROLE_APPEARANCE:                                [ROLE_APPEARANCE]
-        ROLE_HMS:                                       [ROLE_HMS,ROLE_WEBSITE]
-        ROLE_DMS:                                       [ROLE_DMS,ROLE_WEBSITE]
-        ROLE_RESTAURANT:                                [ROLE_RESTAURANT,ROLE_WEBSITE]
+        ROLE_HMS:                                       [ROLE_HMS]
+        ROLE_DMS:                                       [ROLE_DMS]
+        ROLE_RESTAURANT:                                [ROLE_RESTAURANT]
 
         # THIS IS PART OF WEBSITE MANAGE
 
