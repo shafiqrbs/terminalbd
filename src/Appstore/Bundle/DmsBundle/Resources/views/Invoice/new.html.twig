@@ -492,47 +492,47 @@
                                                     {% for invoiceParticular in entity.invoiceParticulars %}
                                                     {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='chief-complaints' %}
                                                     <tr id="remove-{{ invoiceParticular.id }}">
-                                                        <td  class="numeric">{{ invoiceParticular.metaValue }}</td>
+                                                        <td  class="numeric" {% if invoiceParticular.teethPosition is empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
+                                                        {% if invoiceParticular.teethPosition is not empty %}
+                                                            <td class="numeric">
+                                                                <table class="dms-table">
+                                                                    {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
+                                                                    {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
+                                                                    <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
+                                                                            <ul class="leftTeeth">
+                                                                                {% for left in leftTeeths %}
+                                                                                    <li {% if left in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'upper-left' %} class="active" {% endif %} >{{ left }}</li>
+                                                                                {% endfor %}
+                                                                            </ul>
+                                                                        </td>
+                                                                        <td class="dms-td dms-td-border-bottom">
+                                                                            <ul class="rightTeeth">
+                                                                                {% for right in rightTeeths %}
+                                                                                    <li {% if right in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'upper-right' %} class="active" {% endif %} >{{ right }}</li>
+                                                                                {% endfor %}
+                                                                            </ul>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr><td class="dms-td dms-td-border-none">
+                                                                            <ul class="leftTeeth">
+                                                                                {% for left in leftTeeths %}
+                                                                                    <li {% if left in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'lower-left' %} class="active" {% endif %}>{{ left }}</li>
+                                                                                {% endfor %}
+                                                                            </ul>
+                                                                        </td>
+                                                                        <td class="dms-td">
+                                                                            <ul class="rightTeeth">
+                                                                                {% for right in rightTeeths %}
+                                                                                    <li {% if right in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'lower-right' %} class="active" {% endif %} >{{ right }}</li>
+                                                                                {% endfor %}
+                                                                            </ul>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        {% endif %}
                                                         <td class="numeric">
-                                                            {% if invoiceParticular.teethPosition is not empty %}
-                                                            <table class="dms-table">
-                                                                {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                                {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
-                                                                <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                        <ul class="leftTeeth">
-                                                                            {% for left in leftTeeths %}
-                                                                                <li {% if left in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'upper-left' %} class="active" {% endif %} >{{ left }}</li>
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td class="dms-td dms-td-border-bottom">
-                                                                        <ul class="rightTeeth">
-                                                                            {% for right in rightTeeths %}
-                                                                                <li {% if right in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'upper-right' %} class="active" {% endif %} >{{ right }}</li>
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr><td class="dms-td dms-td-border-none">
-                                                                        <ul class="leftTeeth">
-                                                                            {% for left in leftTeeths %}
-                                                                                <li {% if left in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'lower-left' %} class="active" {% endif %}>{{ left }}</li>
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td class="dms-td">
-                                                                        <ul class="rightTeeth">
-                                                                            {% for right in rightTeeths %}
-                                                                                <li {% if right in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'lower-right' %} class="active" {% endif %} >{{ right }}</li>
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                            {% endif %}
-                                                        </td>
-                                                        <td class="numeric">
-                                                            <a href="javascript:" class="btn red mini particularDetete" data-id="{{ invoiceParticular.id }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
+                                                            <a href="javascript:" class="btn red mini particularDelete" data-tab="chief-complaints" data-id="{{ invoiceParticular.id }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
                                                         </td>
                                                     </tr>
                                                     {% endif %}
@@ -593,10 +593,10 @@
                                                     {% for invoiceParticular in entity.invoiceParticulars %}
                                                         {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='presenting' %}
                                                             <tr id="remove-{{ invoiceParticular.id }}">
-                                                                <td  class="numeric">{{ invoiceParticular.metaValue }}</td>
+                                                                <td  class="numeric" {% if invoiceParticular.teethPosition is empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
+                                                                {% if invoiceParticular.teethPosition is not empty %}
                                                                 <td class="numeric">
-                                                                    {% if invoiceParticular.teethPosition is not empty %}
-                                                                        <table class="dms-table">
+                                                                    <table class="dms-table">
                                                                             {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
                                                                             {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
                                                                             <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
@@ -630,10 +630,10 @@
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
-                                                                    {% endif %}
                                                                 </td>
+                                                                {% endif %}
                                                                 <td class="numeric">
-                                                                    <a href="javascript:" class="btn red mini particularDetete" data-id="{{ invoiceParticular.id }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
+                                                                    <a href="javascript:" class="btn red mini particularDelete" data-id="{{ invoiceParticular.id }}" data-tab="presenting" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
                                                                 </td>
                                                             </tr>
                                                         {% endif %}
@@ -831,7 +831,7 @@
                                                                 <option value="7">7</option>
                                                                 <option value="8">8</option>
                                                             </select>
-                                                            <button type="button"  class="btn blue addProcedure" id="" data-id="advise" data-tab="tab_patient_advise"   data-url="{{ path('dms_invoice_particular_procedure',{'invoice':entity.id,'service':'advise'}) }}" ><i class="icon-save"></i> Save</button>
+                                                            <button type="button"  class="btn blue addProcedure" id="" data-id="advice" data-tab="tab_patient_advise"   data-url="{{ path('dms_invoice_particular_procedure',{'invoice':entity.id,'service':'advise'}) }}" ><i class="icon-save"></i> Save</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -844,13 +844,13 @@
                                                         <th class="numeric">Action</th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody id="procedure-chief-complaints">
+                                                    <tbody id="procedure-advice">
                                                     {% for invoiceParticular in entity.invoiceParticulars %}
                                                         {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='advise' %}
                                                             <tr id="remove-{{ invoiceParticular.id }}">
-                                                                <td  class="numeric">{{ invoiceParticular.metaValue }}</td>
-                                                                <td class="numeric">
-                                                                    {% if invoiceParticular.teethPosition is not empty %}
+                                                                <td  class="numeric" {% if invoiceParticular.teethPosition is empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
+                                                                {% if invoiceParticular.teethPosition is not empty %}
+                                                                    <td class="numeric">
                                                                         <table class="dms-table">
                                                                             {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
                                                                             {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
@@ -885,10 +885,10 @@
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
-                                                                    {% endif %}
-                                                                </td>
+                                                                    </td>
+                                                                {% endif %}
                                                                 <td class="numeric">
-                                                                    <a href="javascript:" class="btn red mini particularDetete" data-id="{{ invoiceParticular.id }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
+                                                                    <a href="javascript:" class="btn red mini particularDelete" data-id="{{ invoiceParticular.id }}" data-tab="advice" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
                                                                 </td>
                                                             </tr>
                                                         {% endif %}
@@ -1174,7 +1174,9 @@
         </div>
     </div>
  <style>
-
+     .check-list label{
+         width: 97%;
+     }
      .feeds .col1 .cont .cont-col2 .desc{
          margin-left: 10px;
      }

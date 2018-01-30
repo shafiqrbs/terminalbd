@@ -166,10 +166,8 @@ class InvoiceController extends Controller
         $teethNo = $request->request->get('teethNo');
         $invoiceItems = array('service'=> $service, 'procedure' => $procedure , 'position' => $position,'teethNo' => $teethNo);
         $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceParticularSingle($invoice, $invoiceItems);
-        echo 'success';
-        exit;
-        $result = $this->returnResultData($invoice,$msg);
-        return new Response(json_encode($result));
+        $data = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceParticularReturn($invoice, $invoiceItems);
+        return new Response($data);
         exit;
 
     }

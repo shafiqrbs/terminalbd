@@ -106,7 +106,6 @@ $(document).on('change', '#appointmentTime', function() {
 
 });
 
-
 $(document).on('change', '#particular', function() {
 
     var url = $(this).val();
@@ -146,8 +145,23 @@ $(document).on('click', '.addProcedure', function() {
         type: 'POST',
         data: 'procedure='+procedure+'&position='+teethPosition+'&teethNo='+teethNo,
         success: function (response) {
-            $('#procedure-'+showDiv).html(response);
-            $('#'+dataTab).find('#procedure').val();
+            $('#'+dataTab).find('#procedure-'+showDiv).html(response);
+            $('#'+dataTab).find('#procedure').val('');
+        }
+    });
+});
+
+$(document).on("click", ".particularDelete", function() {
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    var dataTab    = $(this).attr('data-tab');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                $('#'+dataTab).find('tr#remove-'+id).remove();
+            });
         }
     });
 });

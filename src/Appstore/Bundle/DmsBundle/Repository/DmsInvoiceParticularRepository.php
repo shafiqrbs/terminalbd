@@ -77,6 +77,70 @@ class DmsInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function insertInvoiceParticularReturn(DmsInvoice $invoice, $data)
+    {
+        $em = $this->_em;
+        $service = $this->_em->getRepository('DmsBundle:DmsService')->findOneBy(array('slug'=>$data['service']));
+        $invoiceParticulars = $this->findBy(array('dmsInvoice'=>$invoice,'dmsService'=>$service ));
+        $data ='';
+        foreach ($invoiceParticulars as $invoiceParticular ):
+        $colSpan = empty($invoiceParticular->getTeethPosition()) ? 'colspan="2"':'';
+        $data .='<tr id="remove-'.$invoiceParticular->getId().'">';
+        $data .='<td  class="numeric"'.$colSpan.'>'.$invoiceParticular->getMetaValue().'</td>';
+        if (!empty($invoiceParticular->getMetaValue())) {
+            $data .= '<td class="numeric">';
+            $data .='<table class="dms-table">';
+            $leftTeeths = [8,7,6,5,4,3,2,1];
+            $rightTeeths = [1,2,3,4,5,6,7,8];
+            $data .='<tr>';
+            $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
+            $data .='<ul class="leftTeeth">';
+                       foreach ($leftTeeths as $left) :
+                            $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo()) and  $invoiceParticular->getTeethPosition() == 'upper-left') ? 'class="active"' : '';
+                            $data .='<li '.$selected.'>'.$left.'</li>';
+                       endforeach;
+                    $data .='</ul>';
+                $data .='</td>';
+            $data .='<td class="dms-td dms-td-border-bottom">';
+            $data .='<ul class="rightTeeth">';
+            foreach ($rightTeeths as $right) :
+                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($right,$invoiceParticular->getTeethNo()) and  $invoiceParticular->getTeethPosition() == 'upper-right') ? 'class="active"' : '';
+                $data .='<li '.$selected.'>'.$right.'</li>';
+            endforeach;
+            $data .='</ul>';
+            $data .='</td>';
+            $data .= '</tr>';
+            $data .='<tr>';
+            $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
+            $data .='<ul class="leftTeeth">';
+            foreach ($leftTeeths as $left) :
+                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo()) and  $invoiceParticular->getTeethPosition() == 'lower-left') ? 'class="active"' : '';
+                $data .='<li '.$selected.'>'.$left.'</li>';
+            endforeach;
+            $data .='</ul>';
+            $data .='</td>';
+            $data .='<td class="dms-td dms-td-border-bottom">';
+            $data .='<ul class="rightTeeth">';
+            foreach ($rightTeeths as $right) :
+                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($right,$invoiceParticular->getTeethNo()) and  $invoiceParticular->getTeethPosition() == 'lower-right') ? 'class="active"' : '';
+                $data .='<li '.$selected.'>'.$right.'</li>';
+            endforeach;
+            $data .='</ul>';
+            $data .='</td>';
+            $data .= '</tr>';
+            $data .= '</table>';
+            $data .= '</td>';
+        }
+        $data .='<td class="numeric">';
+        $data .='<a href="javascript:" class="btn red mini particularDelete" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/dms/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
+        $data .='</td>';
+        $data .='</tr>';
+
+        endforeach;
+
+        return $data;
+    }
+
 
     public function insertInvoiceItems(DmsInvoice $invoice, $data)
     {

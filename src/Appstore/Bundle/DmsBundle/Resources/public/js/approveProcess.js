@@ -62,19 +62,7 @@ $(document).on("click", ".confirm", function() {
 
 
 
-$(document).on("click", ".particularDetete", function() {
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                $('#remove-'+id);
-            });
-        }
-    });
-});
+
 
 
 $(document).on("click", ".delete", function() {
