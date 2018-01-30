@@ -32,8 +32,8 @@
     <table class="table table-border" style="height:80px" >
         <tr>
             <td class="" style="margin-left:80px;width: 400px!important;display:inline-block;">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-            <td class="" style="margin-left:30px;width: 80px!important;display:inline-block;margin-top: 3px">{% if entity.customer is not empty %}{{ entity.customer.age }} {{ entity.customer.ageType }}{% endif %}</td>
-            <td class="" style="margin-left:10px;width: 80px!important;display:inline-block;margin-top: 3px">{% if entity.customer is not empty %}{{ entity.customer.gender }}{% endif %}</td>
+            <td class="" style="margin-left:35px;width: 80px!important;display:inline-block;margin-top: 3px">{% if entity.customer is not empty %}{{ entity.customer.age }} {{ entity.customer.ageType }}{% endif %}</td>
+            <td class="" style="margin-left:15px;width: 80px!important;display:inline-block;margin-top: 3px">{% if entity.customer is not empty %}{{ entity.customer.gender }}{% endif %}</td>
             <td class="" style="margin-left:10px;width: 110px!important;display:inline-block;margin-top: 3px">{% if entity.customer is not empty %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
         </tr>
     </table>
@@ -44,7 +44,7 @@
                 <table class="table">
 
                     <tr>
-                        <td style="height: 280px; margin-top:60px;display: inline-block;">
+                        <td style="height: 260px; margin-top:60px;display: inline-block;">
                             <ul class="check-styled">
                             {% for invoiceParticular in entity.invoiceParticulars %}
                             {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='chief-complaints' %}
