@@ -112,11 +112,13 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done', 'Canceled'))) {
             return $this->redirect($this->generateUrl('dms_invoice_show', array('id' => $entity->getId())));
         }
+        $teethPlans           = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array(),array('sorting'=>'ASC'));
         $services           = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
         $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical','investigation'));
         $attributes         = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
+            'teethPlans' => $teethPlans,
             'particularService' => $services,
             'invoiceParticularArr' => $invoiceParticularArr,
             'particulars' => $particulars,
