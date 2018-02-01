@@ -164,7 +164,7 @@ $(document).on("click", ".particularDelete", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                $('#procedure-'+dataTab).find('tr#remove-'+id).remove();
+                d$('#procedure-'+dataTab).find('tr#remove-'+id).remove();
             });
         }
     });

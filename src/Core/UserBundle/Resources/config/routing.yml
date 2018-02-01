@@ -1,3 +1,7 @@
+homepage:
+    path:     /home
+    defaults: { _controller: "UserBundle:Default:landing" }
+
 admin:
     pattern: /admin
     defaults: { _controller: UserBundle:Default:admin }
