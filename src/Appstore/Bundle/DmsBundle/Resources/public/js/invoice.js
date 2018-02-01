@@ -159,7 +159,6 @@ $(document).on("click", ".particularDelete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
     var dataTab    = $(this).attr('data-tab');
-    alert(dataTab);
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
