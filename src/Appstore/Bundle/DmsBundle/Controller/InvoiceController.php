@@ -164,9 +164,8 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $procedure = $request->request->get('procedure');
-        $position = $request->request->get('position');
         $teethNo = $request->request->get('teethNo');
-        $invoiceItems = array('service'=> $service, 'procedure' => $procedure , 'position' => $position,'teethNo' => $teethNo);
+        $invoiceItems = array('service'=> $service, 'procedure' => $procedure ,'teethNo' => $teethNo);
         $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceParticularSingle($invoice, $invoiceItems);
         $data = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceParticularReturn($invoice, $invoiceItems);
         return new Response($data);

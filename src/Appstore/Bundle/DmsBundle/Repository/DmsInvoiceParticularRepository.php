@@ -63,13 +63,11 @@ class DmsInvoiceParticularRepository extends EntityRepository
     {
         $em = $this->_em;
         $service = $this->_em->getRepository('DmsBundle:DmsService')->findOneBy(array('slug'=>$data['service']));
-        $position = !empty($data['position']) ? $data['position'] : '' ;
         $teethNo = !empty($data['teethNo']) ? $data['teethNo'] : '' ;
         $explode = explode(',',$teethNo);
         $entity = new DmsInvoiceParticular();
         $entity->setDmsService($service);
         $entity->setMetaValue($data['procedure']);
-        $entity->setTeethPosition($position);
         $entity->setTeethNo($explode);
         $entity->setDmsInvoice($invoice);
         $em->persist($entity);
@@ -80,49 +78,51 @@ class DmsInvoiceParticularRepository extends EntityRepository
     public function insertInvoiceParticularReturn(DmsInvoice $invoice, $data)
     {
         $em = $this->_em;
-        $service = $this->_em->getRepository('DmsBundle:DmsService')->findOneBy(array('slug'=>$data['service']));
+        $service = $this->_em->getRepository('DmsBundle:DmsService')->findOneBy(array('slug' => $data['service']));
         $invoiceParticulars = $this->findBy(array('dmsInvoice'=>$invoice,'dmsService'=>$service ));
         $data ='';
         foreach ($invoiceParticulars as $invoiceParticular ):
-        $colSpan = empty($invoiceParticular->getTeethPosition()) ? 'colspan="2"':'';
+        $colSpan = empty($invoiceParticular->getTeethNo()[0]) ? 'colspan="2"':'';
         $data .='<tr id="remove-'.$invoiceParticular->getId().'">';
         $data .='<td  class="numeric"'.$colSpan.'>'.$invoiceParticular->getMetaValue().'</td>';
-        if (!empty($invoiceParticular->getMetaValue())) {
+        if (!empty($invoiceParticular->getMetaValue()) and !empty($invoiceParticular->getTeethNo()[0])) {
             $data .= '<td class="numeric">';
             $data .='<table class="dms-table">';
             $leftTeeths = [8,7,6,5,4,3,2,1];
-            $rightTeeths = [1,2,3,4,5,6,7,8];
+            $upperRightTeeths = array(9 =>1,10 =>2,11=>3,12=>4,13=>5,14=>6,15=>7,16=>8);
+            $lowerLeftTeeths = array(24=>8,23=>7,12=>6,21=>5,20=>4,19=>3,18=>2,17=>1);
+            $lowerRightTeeths = array(25 =>1,26 =>2,27=>3,28=>4,29=>5,30=>6,31=>7,32=>8);
             $data .='<tr>';
             $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
             $data .='<ul class="leftTeeth">';
                        foreach ($leftTeeths as $left) :
-                            $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo()) and  $invoiceParticular->getTeethPosition() == 'upper-left') ? 'class="active"' : '';
+                            $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
                             $data .='<li '.$selected.'>'.$left.'</li>';
                        endforeach;
                     $data .='</ul>';
                 $data .='</td>';
             $data .='<td class="dms-td dms-td-border-bottom">';
             $data .='<ul class="rightTeeth">';
-            foreach ($rightTeeths as $right) :
-                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($right,$invoiceParticular->getTeethNo()) and  $invoiceParticular->getTeethPosition() == 'upper-right') ? 'class="active"' : '';
+            foreach ($upperRightTeeths as $key=>$right) :
+                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
                 $data .='<li '.$selected.'>'.$right.'</li>';
             endforeach;
             $data .='</ul>';
             $data .='</td>';
             $data .= '</tr>';
             $data .='<tr>';
-            $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
+            $data .='<td class="dms-td dms-td-border-none">';
             $data .='<ul class="leftTeeth">';
-            foreach ($leftTeeths as $left) :
-                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo()) and  $invoiceParticular->getTeethPosition() == 'lower-left') ? 'class="active"' : '';
+            foreach ($lowerLeftTeeths as $key=>$left) :
+                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
                 $data .='<li '.$selected.'>'.$left.'</li>';
             endforeach;
             $data .='</ul>';
             $data .='</td>';
-            $data .='<td class="dms-td dms-td-border-bottom">';
+            $data .='<td class="dms-td">';
             $data .='<ul class="rightTeeth">';
-            foreach ($rightTeeths as $right) :
-                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($right,$invoiceParticular->getTeethNo()) and  $invoiceParticular->getTeethPosition() == 'lower-right') ? 'class="active"' : '';
+            foreach ($lowerRightTeeths as $key=>$right) :
+                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
                 $data .='<li '.$selected.'>'.$right.'</li>';
             endforeach;
             $data .='</ul>';
@@ -132,7 +132,7 @@ class DmsInvoiceParticularRepository extends EntityRepository
             $data .= '</td>';
         }
         $data .='<td class="numeric">';
-        $data .='<a href="javascript:" class="btn red mini particularDelete" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/dms/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
+        $data .='<a href="javascript:" class="btn red mini particularDelete" data-tab="'.$service->getSlug().'" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/dms/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
         $data .='</td>';
         $data .='</tr>';
 

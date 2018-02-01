@@ -50,46 +50,46 @@
                             {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='chief-complaints' %}
                                 <li>
                                     <table>
-                                        <tr id="remove-{{ invoiceParticular.id }}">
-                                            <td  {% if invoiceParticular.teethPosition is not empty %} colspan="2" {% endif %} ><i class="fa fa-check" aria-hidden="true"></i> {{ invoiceParticular.metaValue }}</td>
-                                            {% if invoiceParticular.teethPosition is not empty %}
+                                        <tr>
+                                            <td class="td-label" {% if invoiceParticular.teethNo[0] is empty %} colspan="2" {% endif %} ><i class="fa fa-check" aria-hidden="true"></i> {{ invoiceParticular.metaValue }}</td>
+                                            {% if invoiceParticular.teethNo is not empty and  invoiceParticular.teethNo[0] is not empty %}
                                                 <td style="width:90px">
+
                                                     <table class="dms-table">
-                                                        {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                        {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
+                                                        {% set upperLeftTeeths = {1:8,2:7,3:6,4:5,3:4,2:2,1:1} %}
+                                                        {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}
+                                                        {% set lowerLeftTeeths = {24:8,23:7,22:6,21:5,20:4,19:3,18:2,17:1} %}
+                                                        {% set lowerRightTeeths = {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8} %}
                                                         <tr>
                                                             <td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                {% if invoiceParticular.teethPosition == 'upper-left' %}
-                                                                    {% for teethNo in invoiceParticular.teethNo %}
-                                                                        {{ teethNo }}
-                                                                        {% if not loop.last %},{% endif %}
-                                                                    {% endfor %}
-                                                                {% endif %}
+                                                                {% for key,value in upperLeftTeeths %}
+                                                                    {% if key in invoiceParticular.teethNo  %}
+                                                                        <span>{{ value }}</span>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </td>
-                                                            <td class="dms-td dms-td-border-bottom ">
-                                                                {% if invoiceParticular.teethPosition == 'upper-right' %}
-                                                                    {% for teethNo in invoiceParticular.teethNo %}
-                                                                        {{ teethNo }}
-                                                                        {% if not loop.last %},{% endif %}
-                                                                    {% endfor %}
-                                                                {% endif %}
+                                                            <td class="dms-td dms-td-border-bottom dms-td-right">
+                                                                {% for key,value in upperRightTeeths %}
+                                                                    {% if key in invoiceParticular.teethNo  %}
+                                                                        <span>{{ value }}</span>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </td>
                                                         </tr>
-                                                        <tr><td class="dms-td dms-td-border-none">
-                                                                {% if invoiceParticular.teethPosition == 'lower-left' %}
-                                                                    {% for teethNo in invoiceParticular.teethNo %}
-                                                                        {{ teethNo }}
-                                                                        {% if not loop.last %},{% endif %}
-                                                                    {% endfor %}
-                                                                {% endif %}
+                                                        <tr>
+                                                            <td class="dms-td dms-td-border-none">
+                                                                {% for key,value in lowerLeftTeeths %}
+                                                                    {% if key in invoiceParticular.teethNo  %}
+                                                                        <span>{{ value }}</span>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </td>
-                                                            <td class="dms-td">
-                                                                {% if invoiceParticular.teethPosition == 'lower-right' %}
-                                                                    {% for teethNo in invoiceParticular.teethNo %}
-                                                                        {{ teethNo }}
-                                                                        {% if not loop.last %},{% endif %}
-                                                                    {% endfor %}
-                                                                {% endif %}
+                                                            <td class="dms-td dms-td-right">
+                                                                {% for key,value in lowerRightTeeths %}
+                                                                    {% if key in invoiceParticular.teethNo %}
+                                                                        <span>{{ value }}</span>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -107,55 +107,56 @@
                             <ul class="check-styled">
                                 {% for invoiceParticular in entity.invoiceParticulars %}
                                     {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='presenting' %}
-                                        <li>
+                                       <li>
                                             <table>
-                                                <tr id="remove-{{ invoiceParticular.id }}">
-                                                    <td  {% if invoiceParticular.teethPosition is not empty %} colspan="2" {% endif %} ><i class="fa fa-check" aria-hidden="true"></i> {{ invoiceParticular.metaValue }}</td>
-                                                    {% if invoiceParticular.teethPosition is not empty %}
-                                                        <td style="width:90px">
-                                                            <table class="dms-table">
-                                                                {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                                {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
-                                                                <tr>
-                                                                    <td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                        {% if invoiceParticular.teethPosition == 'upper-left' %}
-                                                                            {% for teethNo in invoiceParticular.teethNo %}
-                                                                                {{ teethNo }}
-                                                                                {% if not loop.last %},{% endif %}
-                                                                            {% endfor %}
+                                                <tr>
+                                                    <td class="td-label"  {% if invoiceParticular.teethNo[0] is empty %} colspan="2" {% endif %} ><i class="fa fa-check" aria-hidden="true"></i> {{ invoiceParticular.metaValue }}</td>
+                                                    {% if invoiceParticular.teethNo is not empty and  invoiceParticular.teethNo[0] is not empty %}
+                                                    <td style="width:90px">
+                                                        <table class="dms-table">
+                                                            {% set upperLeftTeeths = [8,7,6,5,4,3,2,1] %}
+                                                            {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}
+                                                            {% set lowerLeftTeeths = {24:8,23:7,22:6,21:5,20:4,19:3,18:2,17:1} %}
+                                                            {% set lowerRightTeeths = {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8} %}
+
+                                                            <tr>
+                                                                <td class="dms-td dms-td-border-none dms-td-border-bottom">
+                                                                    {% for key,value in upperLeftTeeths %}
+                                                                        {% if key in invoiceParticular.teethNo  %}
+                                                                            <span>{{ value }}</span>
                                                                         {% endif %}
-                                                                    </td>
-                                                                    <td class="dms-td dms-td-border-bottom ">
-                                                                        {% if invoiceParticular.teethPosition == 'upper-right' %}
-                                                                            {% for teethNo in invoiceParticular.teethNo %}
-                                                                                {{ teethNo }}
-                                                                                {% if not loop.last %},{% endif %}
-                                                                            {% endfor %}
+                                                                    {% endfor %}
+                                                                </td>
+                                                                <td class="dms-td dms-td-border-bottom dms-td-right">
+                                                                    {% for key,value in upperRightTeeths %}
+                                                                        {% if key in invoiceParticular.teethNo  %}
+                                                                            <span>{{ value }}</span>
                                                                         {% endif %}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr><td class="dms-td dms-td-border-none">
-                                                                        {% if invoiceParticular.teethPosition == 'lower-left' %}
-                                                                            {% for teethNo in invoiceParticular.teethNo %}
-                                                                                {{ teethNo }}
-                                                                                {% if not loop.last %},{% endif %}
-                                                                            {% endfor %}
+                                                                    {% endfor %}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="dms-td dms-td-border-none">
+                                                                    {% for key,value in lowerLeftTeeths %}
+                                                                        {% if key in invoiceParticular.teethNo  %}
+                                                                            <span>{{ value }}</span>
                                                                         {% endif %}
-                                                                    </td>
-                                                                    <td class="dms-td">
-                                                                        {% if invoiceParticular.teethPosition == 'lower-right' %}
-                                                                            {% for teethNo in invoiceParticular.teethNo %}
-                                                                                {{ teethNo }}
-                                                                                {% if not loop.last %},{% endif %}
-                                                                            {% endfor %}
+                                                                    {% endfor %}
+                                                                </td>
+                                                                <td class="dms-td dms-td-right">
+                                                                    {% for key,value in lowerRightTeeths %}
+                                                                        {% if key in invoiceParticular.teethNo %}
+                                                                            <span>{{ value }}</span>
                                                                         {% endif %}
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
+                                                                    {% endfor %}
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
                                                     {% endif %}
                                                 </tr>
-                                            </table></li>
+                                            </table>
+                                        </li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
@@ -177,46 +178,46 @@
                                     {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='advise' %}
                                         <li>
                                             <table>
-                                                <tr id="remove-{{ invoiceParticular.id }}">
-                                                    <td  {% if invoiceParticular.teethPosition is not empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
-                                                    {% if invoiceParticular.teethPosition is not empty %}
+                                                <tr>
+                                                    <td class="td-label" {% if invoiceParticular.teethNo[0] is empty %} colspan="2" {% endif %} ><i class="fa fa-check" aria-hidden="true"></i> {{ invoiceParticular.metaValue }}</td>
+                                                    {% if invoiceParticular.teethNo is not empty and  invoiceParticular.teethNo[0] is not empty %}
                                                         <td style="width:90px">
                                                             <table class="dms-table">
-                                                                {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                                {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
+                                                                {% set upperLeftTeeths = [8,7,6,5,4,3,2,1] %}
+                                                                {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}
+                                                                {% set lowerLeftTeeths = {24:8,23:7,22:6,21:5,20:4,19:3,18:2,17:1} %}
+                                                                {% set lowerRightTeeths = {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8} %}
+
                                                                 <tr>
                                                                     <td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                        {% if invoiceParticular.teethPosition == 'upper-left' %}
-                                                                            {% for teethNo in invoiceParticular.teethNo %}
-                                                                                {{ teethNo }}
-                                                                                {% if not loop.last %},{% endif %}
-                                                                            {% endfor %}
-                                                                        {% endif %}
+                                                                        {% for key,value in upperLeftTeeths %}
+                                                                            {% if key in invoiceParticular.teethNo  %}
+                                                                                <span>{{ value }}</span>
+                                                                            {% endif %}
+                                                                        {% endfor %}
                                                                     </td>
-                                                                    <td class="dms-td dms-td-border-bottom ">
-                                                                        {% if invoiceParticular.teethPosition == 'upper-right' %}
-                                                                            {% for teethNo in invoiceParticular.teethNo %}
-                                                                                {{ teethNo }}
-                                                                                {% if not loop.last %},{% endif %}
-                                                                            {% endfor %}
-                                                                        {% endif %}
+                                                                    <td class="dms-td dms-td-border-bottom dms-td-right">
+                                                                        {% for key,value in upperRightTeeths %}
+                                                                            {% if key in invoiceParticular.teethNo  %}
+                                                                                <span>{{ value }}</span>
+                                                                            {% endif %}
+                                                                        {% endfor %}
                                                                     </td>
                                                                 </tr>
-                                                                <tr><td class="dms-td dms-td-border-none">
-                                                                        {% if invoiceParticular.teethPosition == 'lower-left' %}
-                                                                            {% for teethNo in invoiceParticular.teethNo %}
-                                                                                {{ teethNo }}
-                                                                                {% if not loop.last %},{% endif %}
-                                                                            {% endfor %}
-                                                                        {% endif %}
+                                                                <tr>
+                                                                    <td class="dms-td dms-td-border-none">
+                                                                        {% for key,value in lowerLeftTeeths %}
+                                                                            {% if key in invoiceParticular.teethNo  %}
+                                                                                <span>{{ value }}</span>
+                                                                            {% endif %}
+                                                                        {% endfor %}
                                                                     </td>
-                                                                    <td class="dms-td">
-                                                                        {% if invoiceParticular.teethPosition == 'lower-right' %}
-                                                                            {% for teethNo in invoiceParticular.teethNo %}
-                                                                                {{ teethNo }}
-                                                                                {% if not loop.last %},{% endif %}
-                                                                            {% endfor %}
-                                                                        {% endif %}
+                                                                    <td class="dms-td dms-td-right">
+                                                                        {% for key,value in lowerRightTeeths %}
+                                                                            {% if key in invoiceParticular.teethNo %}
+                                                                                <span>{{ value }}</span>
+                                                                            {% endif %}
+                                                                        {% endfor %}
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -309,8 +310,8 @@
 
     .check-styled li{
         padding-bottom:0!important;
-        line-height: 27px;
-        height: 27px;
+        line-height:35px;
+        height: 35px;
     }
     .unstyled li{
         padding-bottom: 5px!important;
@@ -429,26 +430,47 @@
         line-height: 10px!important;
     }
     .dms-table .dms-td{
-        height: 10px!important;
+        height: 14px!important;
         line-height: 6px;
         padding: 0!important;
         width:40px;
-        font-size: 10px;
+        font-size: 12px;
 
     }
     .dms-table .dms-td-border-none{
         border: none!important;
         text-align:right!important;
         border-right:1px solid #000!important;
+        padding-right: 2px!important;
     }
     .dms-table .dms-td-border-bottom{
         border-bottom:1px solid #000!important;
     }
 
+    .dms-td-right{
+        margin-top: -1px;
+        display: inline-block;
+    }
+
+    .table td.td-label{
+        vertical-align: middle;
+        height: 32px;
+        display: inline-block;
+        line-height: 32px;
+        width:140px;
+    }
+
+
     .dms-table .dms-td ul.rightTeeth , .dms-table .dms-td ul.leftTeeth{
         list-style: none;
         padding: 0;
         margin: 0;
+    }
+
+    span{
+        display: inline-block;
+        border: 1px solid #000;
+        padding: 2px;
     }
 
     .dms-table .dms-td ul.rightTeeth{

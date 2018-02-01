@@ -132,18 +132,22 @@ $(document).on('click', '.addProcedure', function() {
     var dataTab    = $(this).attr('data-tab');
     var procedure =  $('#'+dataTab).find('#procedure').val();
     if(procedure == ''){
-        alert('You have to add procedure');
-        $('#procedure').focus();
+        alert('You have to add procedure text');
+        $('#'+dataTab).find('#procedure').focus();
         return false;
     }
-    var teethPosition = $('#'+dataTab).find('#teethPosition').val();
-    var teethNo = $('#'+dataTab).find('#teethNo').val();
+    var checked = []
+    $('#'+dataTab).find("input[name='teethNo[]']:checked").each(function ()
+    {
+       checked.push(parseInt($(this).val()));
+    });
+
     var url     = $(this).attr('data-url');
     var showDiv    = $(this).attr('data-id');
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'procedure='+procedure+'&position='+teethPosition+'&teethNo='+teethNo,
+        data: 'procedure='+procedure+'&teethNo='+checked,
         success: function (response) {
             $('#'+dataTab).find('#procedure-'+showDiv).html(response);
             $('#'+dataTab).find('#procedure').val('');
@@ -155,12 +159,13 @@ $(document).on("click", ".particularDelete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
     var dataTab    = $(this).attr('data-tab');
+    alert(dataTab);
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                $('#'+dataTab).find('tr#remove-'+id).remove();
+                $('#procedure-'+dataTab).find('tr#remove-'+id).remove();
             });
         }
     });
