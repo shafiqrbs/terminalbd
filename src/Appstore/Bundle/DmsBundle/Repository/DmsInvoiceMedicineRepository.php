@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DmsBundle\Repository;
 use Appstore\Bundle\DmsBundle\Controller\InvoiceController;
 use Appstore\Bundle\DmsBundle\Entity\AdmissionPatientDmsParticular;
+use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine;
 use Appstore\Bundle\DmsBundle\Entity\Invoice;
@@ -21,6 +22,30 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class DmsInvoiceMedicineRepository extends EntityRepository
 {
+
+
+    public function defaultSetBeforeMedicine(DmsInvoice $invoice,DmsInvoice $lastObject)
+    {
+         $em = $this->_em;
+         if(!empty($lastObject->getInvoiceMedicines())){
+
+            /** @var DmsInvoiceMedicine $item */
+            foreach($lastObject->getInvoiceMedicines() as $item ){
+                $entity = new DmsInvoiceMedicine();
+                $entity->setMedicineQuantity($item->getMedicineQuantity());
+                $entity->setMedicineDose($item->getMedicineDose());
+                $entity->setMedicineDoseTime($item->getMedicineDoseTime());
+                $entity->setMedicineDuration($item->getMedicineDuration());
+                $entity->setMedicineDurationType($item->getMedicineDurationType());
+                $entity->setDmsInvoice($invoice);
+                $entity->setMedicine($item->getMedicine());
+                $em->persist($entity);
+                $em->flush();
+            }
+        }
+
+    }
+
     public function insertInvoiceMedicine(DmsInvoice $invoice, $data)
     {
 
@@ -43,6 +68,7 @@ class DmsInvoiceMedicineRepository extends EntityRepository
 
     }
 
+
     public function getInvoiceMedicines(DmsInvoice $sales)
     {
         $entities = $sales->getInvoiceMedicines();
@@ -50,9 +76,10 @@ class DmsInvoiceMedicineRepository extends EntityRepository
         $i = 1;
         /** @var $entity DmsInvoiceMedicine */
         foreach ($entities as $entity) {
+            $medicine = $entity->getMedicine()->getMedicineForm().'. '.$entity->getMedicine()->getName() .' '.$entity->getMedicine()->getStrength();
             $data .= '<tr id="medicine-'.$entity->getId().'">';
             $data .= '<td class="numeric" >' . $i . '</td>';
-            $data .= '<td class="numeric" >' . $entity->getMedicine()->getName() . '</td>';
+            $data .= '<td class="numeric" >' . $medicine . '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineQuantity(). '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineDose() .'-'. $entity->getMedicineDoseTime() . '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineDuration(). $entity->getMedicineDurationType() . '</td>';

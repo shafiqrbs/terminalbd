@@ -9,7 +9,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * Service
  *
  * @ORM\Table( name ="dms_prescription_attribute")
- * @ORM\Entity(repositoryClass="")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Repository\DmsPrescriptionAttributeRepository")
  */
 class DmsPrescriptionAttribute
 {

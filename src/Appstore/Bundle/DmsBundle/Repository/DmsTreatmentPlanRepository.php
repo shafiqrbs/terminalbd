@@ -1,14 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\DmsBundle\Repository;
+use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
-use Appstore\Bundle\HospitalBundle\Controller\InvoiceController;
-use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
-use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -21,6 +16,34 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class DmsTreatmentPlanRepository extends EntityRepository
 {
+
+    public function findTodaySchedule(DmsConfig $config,$data= array())
+    {
+
+        $curDate =  New \DateTime("now");
+        $curDate = $curDate->format('d-m-Y');
+        $created = isset($data['created'])? $data['created'] : (string)$curDate ;
+        $qb = $this->createQueryBuilder('appointment');
+        $qb->join('appointment.dmsInvoice','invoice');
+        $qb->join('appointment.dmsParticular','particular');
+        $qb->join('invoice.customer','customer');
+        $qb->select('customer.name as customerName');
+        $qb->addSelect('invoice.invoice as patientId');
+        $qb->addSelect('invoice.process as process');
+        $qb->addSelect('particular.code as particularCode');
+        $qb->addSelect('particular.name as particularName');
+        $qb->addSelect('appointment.appointmentTime as appointmentTime');
+        $qb->addSelect('appointment.status as appointmentStatus');
+        $qb->where('invoice.dmsConfig ='.$config->getId());
+        $qb->andWhere('invoice.process IN (:process)');
+        $qb->setParameter('process', array('Appointment','Visit','Done'));
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+        //$qb->andWhere("e.created = :created");
+        //$qb->setParameter('created', '31-01-2018');
+
+
+    }
 
     public function insertInvoiceItems($invoice, $data)
     {

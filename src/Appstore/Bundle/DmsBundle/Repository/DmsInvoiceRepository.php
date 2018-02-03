@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DmsBundle\Repository;
 use Appstore\Bundle\DmsBundle\DmsBundle;
+use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
@@ -17,6 +18,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class DmsInvoiceRepository extends EntityRepository
 {
+
+    public function getLastInvoice(DmsConfig $config)
+    {
+        $entity = $this->findOneBy(
+            array('dmsConfig' => $config),
+            array('id' => 'DESC')
+        );
+        return $entity;
+    }
 
     /**
      * @param $qb

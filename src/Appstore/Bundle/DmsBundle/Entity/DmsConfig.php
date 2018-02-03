@@ -111,6 +111,13 @@ class DmsConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isDefaultMedicine", type="boolean",  nullable=true)
+     */
+    private $isDefaultMedicine = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="barcodePrint", type="boolean",  nullable=true)
      */
     private $barcodePrint = false;
@@ -225,6 +232,28 @@ class DmsConfig
      * @ORM\Column(name="customerPrefix", type="string", length=10,nullable = true)
      */
     private $customerPrefix;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bodyFontSize", type="string", length=10,nullable = true)
+     */
+    private $bodyFontSize;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sidebarFontSize", type="string", length=10,nullable = true)
+     */
+    private $sidebarFontSize;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceFontSize", type="string", length=10,nullable = true)
+     */
+    private $invoiceFontSize;
 
     /**
      * @var smallint
@@ -976,11 +1005,67 @@ class DmsConfig
     }
 
     /**
-     * @return DmsOwnerService
+     * @return bool
      */
-    public function getDmsOwnerService()
+    public function getIsDefaultMedicine()
     {
-        return $this->dmsOwnerService;
+        return $this->isDefaultMedicine;
+    }
+
+    /**
+     * @param bool $isDefaultMedicine
+     */
+    public function setIsDefaultMedicine($isDefaultMedicine)
+    {
+        $this->isDefaultMedicine = $isDefaultMedicine;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBodyFontSize()
+    {
+        return $this->bodyFontSize;
+    }
+
+    /**
+     * @param string $bodyFontSize
+     */
+    public function setBodyFontSize($bodyFontSize)
+    {
+        $this->bodyFontSize = $bodyFontSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSidebarFontSize()
+    {
+        return $this->sidebarFontSize;
+    }
+
+    /**
+     * @param string $sidebarFontSize
+     */
+    public function setSidebarFontSize($sidebarFontSize)
+    {
+        $this->sidebarFontSize = $sidebarFontSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceFontSize()
+    {
+        return $this->invoiceFontSize;
+    }
+
+    /**
+     * @param string $invoiceFontSize
+     */
+    public function setInvoiceFontSize($invoiceFontSize)
+    {
+        $this->invoiceFontSize = $invoiceFontSize;
     }
 
 

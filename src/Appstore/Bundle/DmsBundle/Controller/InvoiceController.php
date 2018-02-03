@@ -62,14 +62,15 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new DmsInvoice();
         $option = $this->getUser()->getGlobalOption();
+        $dmsConfig = $option->getDmsConfig();
         $patient = isset($_REQUEST['patient']) ? $_REQUEST['patient']:'';
+        $lastObject = $em->getRepository('DmsBundle:DmsInvoice')->getLastInvoice($dmsConfig);
+
         if(!empty($patient)){
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option,'id' => $patient));
             $entity->setCustomer($customer);
             $entity->setMobile($customer->getMobile());
         }
-
-        $dmsConfig = $option->getDmsConfig();
         $entity->setDmsConfig($dmsConfig);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
@@ -81,6 +82,9 @@ class InvoiceController extends Controller
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
         $em->flush();
+        if($dmsConfig->getIsDefaultMedicine() == 1 ){
+            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->defaultSetBeforeMedicine($entity,$lastObject);
+        }
         return $this->redirect($this->generateUrl('dms_invoice_edit', array('id' => $entity->getId())));
 
     }
@@ -112,10 +116,11 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done', 'Canceled'))) {
             return $this->redirect($this->generateUrl('dms_invoice_show', array('id' => $entity->getId())));
         }
-        $teethPlans           = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array(),array('sorting'=>'ASC'));
+        $teethPlans         = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array(),array('sorting'=>'ASC'));
         $services           = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
         $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical','investigation'));
         $attributes         = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
+        $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'teethPlans' => $teethPlans,
@@ -123,6 +128,7 @@ class InvoiceController extends Controller
             'invoiceParticularArr' => $invoiceParticularArr,
             'particulars' => $particulars,
             'attributes' => $attributes,
+            'treatmentSchedule' => $treatmentSchedule,
             'form' => $editForm->createView(),
         ));
     }
@@ -521,17 +527,17 @@ class InvoiceController extends Controller
     public function invoiceReverseAction(DmsInvoice $invoice)
     {
         $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entity = $this->getDoctrine()->getRepository('DmsBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $dmsConfig, 'hmsInvoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository('DmsBundle:HmsReverse')->findOneBy(array('dmsConfig' => $dmsConfig, 'hmsInvoice' => $invoice));
         return $this->render('DmsBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
 
     }
 
-    public function invoiceReverseShowAction(Invoice $invoice)
+    public function invoiceReverseShowAction(DmsInvoice $invoice)
     {
         $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entity = $this->getDoctrine()->getRepository('DmsBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $dmsConfig, 'hmsInvoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository('DmsBundle:HmsReverse')->findOneBy(array('dmsConfig' => $dmsConfig, 'hmsInvoice' => $invoice));
         return $this->render('DmsBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
@@ -541,7 +547,7 @@ class InvoiceController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->findBy(array('hospitalConfig' => $dmsConfig, 'process' => 'Created','invoiceMode'=>'diagnostic'));
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->findBy(array('dmsConfig' => $dmsConfig, 'process' => 'Created'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);

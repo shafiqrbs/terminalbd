@@ -297,18 +297,11 @@ $(document).on("click", "#receiveBtn", function() {
 
             var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
             var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
-            $('#confirm-content').confirmModal({
-                topOffset: 0,
-                top: '25%',
-                onOkBut: function(event, el) {
-                    $.ajax(url,{
-                        processData: false,
-                        contentType: false,
-                        type: 'POST',
-                        data: formData
-                    });
-
-                }
+            $.ajax(url,{
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                data: formData
             });
         }
 

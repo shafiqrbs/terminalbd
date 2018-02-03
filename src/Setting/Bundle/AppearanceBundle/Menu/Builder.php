@@ -845,21 +845,21 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'fa fa-hospital-o')
             ->setAttribute('dropdown', true);
 
-        $menu['Dental & Diagnosis']->addChild('Manage Invoice')
+        $menu['Dental & Diagnosis']->addChild('Manage Patient')
             ->setAttribute('icon', 'icon icon-medkit')
             ->setAttribute('dropdown', true);
 
-        $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Patient', array('route' => 'dms_invoice'))
+        $menu['Dental & Diagnosis']['Manage Patient']->addChild('Patient', array('route' => 'dms_invoice'))
             ->setAttribute('icon', 'fa fa-ambulance');
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_OPERATOR')) {
             if (!empty($config) and in_array('admission', $config)) {
-            $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Patient', array('route' => 'dms_invoice'))
+            $menu['Dental & Diagnosis']['Manage Patient']->addChild('Patient', array('route' => 'dms_invoice'))
                 ->setAttribute('icon', 'fa fa-stethoscope');
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
             if (!empty($config) and in_array('doctor', $config)) {
-                $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Commission', array('route' => 'dms_doctor_commission_invoice'))
+                $menu['Dental & Diagnosis']['Manage Patient']->addChild('Commission', array('route' => 'dms_doctor_commission_invoice'))
                     ->setAttribute('icon', 'fa fa-user-md');
             }
         }

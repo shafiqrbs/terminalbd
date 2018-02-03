@@ -3,6 +3,13 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <script type="text/javascript">
+        window.print();
+        setTimeout(function () {
+            window.open('', '_self', '');
+            window.close();
+        }, 2000);
+    </script>
 </head>
 <div style="margin-top:{{ entity.dmsConfig.printTopMargin }}px;margin-left:{{ entity.dmsConfig.printLeftMargin }}px; width: 880px;">
     {%  if entity.dmsConfig.isPrintHeader == 1 %}
@@ -31,7 +38,7 @@
     {% endif %}
     <table class="table table-border" style="height:80px" >
         <tr>
-            <td class="" style="margin-left:80px;width: 400px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+            <td class="" style="margin-left:80px;width: 400px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %} , Patient ID. {{ entity.invoice }}</td>
             <td class="" style="margin-left:35px;width: 80px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.customer.age }} {{ entity.customer.ageType }}{% endif %}</td>
             <td class="" style="margin-left:30px;width: 80px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.customer.gender }}{% endif %}</td>
             <td class="" style="margin-left:15px;width: 90px!important;display:inline-block;margin-top:2px;font-weight: bold">{% if entity.customer is not empty %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
@@ -316,6 +323,11 @@
     .unstyled li{
         padding-bottom: 5px!important;
         font-weight: bold;
+        {% if entity.dmsConfig.bodyFontSize is not empty %}
+            font-size: {{ entity.dmsConfig.bodyFontSize }}!important;
+        {% else %}
+            font-size: 18px;
+        {% endif %}
     }
     .print-header .title-center{
         float: none!important;
@@ -364,11 +376,20 @@
     }
 
     .table thead tr th{
-        font-size:15px;
+        {% if entity.dmsConfig.invoiceFontSize is not empty %}
+            font-size: {{ entity.dmsConfig.invoiceFontSize }}!important;
+        {% else %}
+            font-size: 15px;
+        {% endif %}
     }
 
     .table td{
-        font-size: 15px;
+        {% if entity.dmsConfig.invoiceFontSize is not empty %}
+        font-size: {{ entity.dmsConfig.invoiceFontSize }}!important;
+        {% else %}
+            font-size: 15px;
+        {% endif %}
+
     }
     .service-group{
         background-color: #ddddff!important;
@@ -458,6 +479,11 @@
         display: inline-block;
         line-height: 32px;
         width:140px;
+        {% if entity.dmsConfig.sidebarFontSize is not empty %}
+            font-size: {{ entity.dmsConfig.sidebarFontSize }}!important;
+        {% else %}
+            font-size: 14px;
+        {% endif %}
     }
 
 
