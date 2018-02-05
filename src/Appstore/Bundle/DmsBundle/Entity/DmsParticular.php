@@ -61,12 +61,11 @@ class DmsParticular
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="investigations" )
-     * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $dmsInvoiceInvestigation;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem", mappedBy="dmsParticular" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem", mappedBy="dmsParticular" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $dmsPurchaseItems;

@@ -845,21 +845,19 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'fa fa-hospital-o')
             ->setAttribute('dropdown', true);
 
-        $menu['Dental & Diagnosis']->addChild('Manage Patient')
-            ->setAttribute('icon', 'icon icon-medkit')
-            ->setAttribute('dropdown', true);
-
-        $menu['Dental & Diagnosis']['Manage Patient']->addChild('Patient', array('route' => 'dms_invoice'))
-            ->setAttribute('icon', 'fa fa-ambulance');
+        $menu['Dental & Diagnosis']->addChild('Patient', array('route' => 'dms_invoice'))
+            ->setAttribute('icon', 'fa fa-medkit');
+        $menu['Dental & Diagnosis']->addChild('Treatment Schedule', array('route' => 'dms_treatment_plan'))
+            ->setAttribute('icon', 'fa fa-calendar');
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_OPERATOR')) {
             if (!empty($config) and in_array('admission', $config)) {
-            $menu['Dental & Diagnosis']['Manage Patient']->addChild('Patient', array('route' => 'dms_invoice'))
+            $menu['Dental & Diagnosis']->addChild('Patient', array('route' => 'dms_invoice'))
                 ->setAttribute('icon', 'fa fa-stethoscope');
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
             if (!empty($config) and in_array('doctor', $config)) {
-                $menu['Dental & Diagnosis']['Manage Patient']->addChild('Commission', array('route' => 'dms_doctor_commission_invoice'))
+                $menu['Dental & Diagnosis']->addChild('Commission', array('route' => 'dms_doctor_commission_invoice'))
                     ->setAttribute('icon', 'fa fa-user-md');
             }
         }
@@ -897,6 +895,12 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon icon-cog')
                 ->setAttribute('dropdown', true);
             $menu['Dental & Diagnosis']['Reports']->addChild('Sales Summary', array('route' => 'dms_report_sales_summary'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Daily', array('route' => 'dms_report_sales_daily'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Monthly', array('route' => 'dms_report_sales_monthly'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Yearly', array('route' => 'dms_report_sales_yearly'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Reports']->addChild('Sales Details', array('route' => 'dms_report_sales_details'))
                 ->setAttribute('icon', 'icon-th-list');

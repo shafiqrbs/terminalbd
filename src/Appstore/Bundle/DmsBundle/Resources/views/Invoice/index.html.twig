@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('dms_invoice') }}"> Patient Patient Invoice</a>
+                        <a href="{{ path('dms_invoice') }}"> Patient Invoice</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -52,7 +52,7 @@
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-user"></i>
-                                                <input class="m-wrap span12 search-input" name="name" id="name" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Patient ID{% endif %}">
+                                                <input class="m-wrap span12 search-input" name="name" id="name" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Patient name{% endif %}">
                                             </div>
                                         </div>
                                         <div class="span3">
@@ -65,14 +65,14 @@
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.created is defined %}{{ searchForm.created }}{% else %}Created Date{% endif %}" >
+                                                <input class="m-wrap span12 search-input date-picker" name="createdStart" id="createdStart" value="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% else %}Created start date{% endif %}" >
                                             </div>
                                         </div>
 
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="deliveryDate" id="deliveryDate" value="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% else %}Delivery Date{% endif %}">
+                                                <input class="m-wrap span12 search-input date-picker" name="createdEnd" id="createdEnd" value="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% else %}Created end date{% endif %}">
                                             </div>
                                         </div>
                                     </div>
@@ -87,17 +87,18 @@
                                             </select>
                                         </div>
                                        <div class="span3">
-                                            <select name="process" id="process" class="m-wrap span12">
-                                                <option value="" >--Process--</option>
-                                                <option value="In-progress" {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} >In-progress</option>
-                                                <option value="Done"  {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} >Done</option>
-                                                <option value="Cancel"  {% if searchForm.process is defined and searchForm.process == 'Cancel' %} selected="selected" {% endif %} >Cancel</option>
-                                            </select>
+                                           <select name="process" id="process" class="m-wrap span12">
+                                               <option value="" >--Process--</option>
+                                               {% set processes =['Created','Appointment','Visit','Done'] %}
+                                               {% for pro in processes %}
+                                                   <option value="{{ pro }}" {% if searchForm.process is defined and searchForm.process == pro %} selected="selected" {% endif %} >{{ pro }}</option>
+                                               {% endfor %}
+                                           </select>
                                         </div>
                                         <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span12">
-                                                    <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient invoice no{% endif %} ">
+                                                    <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient ID{% endif %} ">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>

@@ -9,6 +9,8 @@
 namespace Setting\Bundle\ToolBundle\Repository;
 
 
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
+use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\EntityRepository;
@@ -222,19 +224,45 @@ class SmsSenderRepository extends EntityRepository {
         }
     }
 
-    public function insertCustomerSenderSms()
+    public function insertDmsInvoiceSenderSms(DmsInvoice $invoice,$status)
     {
+        $globalOption = $invoice->getDmsConfig()->getGlobalOption();
+
+        $remark = 'Invoice no '.$invoice->getInvoice().', Amount BDT. '.$invoice->getTotal().', Process- '.$invoice->getProcess();
         $entity = new SmsSender();
-        $entity->setMobile($mobile);
+        $entity->setMobile($invoice->getCustomer()->getMobile());
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
-        $entity->setProcess('Bulk Sms');
+        $entity->setProcess('Dental Sales');
         $entity->setReceiver('Customer');
+        $entity->setRemark($remark);
         $this->_em->persist($entity);
         $this->_em->flush();
         if($status == 'success'){
             $this->totalSendSms($globalOption);
         }
+    }
+
+    public function insertDmsInvoiceTreatmentNotificationSenderSms(DmsTreatmentPlan $treatmentPlan, $msg ,$status)
+    {
+        $globalOption = $treatmentPlan->getDmsInvoice()->getDmsConfig()->getGlobalOption();
+        $entity = new SmsSender();
+        $entity->setMobile($treatmentPlan->getDmsInvoice()->getCustomer()->getMobile());
+        $entity->setGlobalOption($globalOption);
+        $entity->setStatus($status);
+        $entity->setProcess('Notification');
+        $entity->setReceiver('Customer');
+        $entity->setRemark($msg);
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        if($status == 'success'){
+            $this->totalSendSms($globalOption);
+        }
+    }
+
+    public function insertCustomerSenderSms()
+    {
+
     }
 
 

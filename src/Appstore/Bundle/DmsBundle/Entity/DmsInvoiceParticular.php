@@ -27,16 +27,18 @@ class DmsInvoiceParticular
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", inversedBy="invoiceParticulars")
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $dmsInvoice;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="invoiceParticular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="invoiceParticular", cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $dmsParticular;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="invoiceParticular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="invoiceParticular", cascade={"persist"} )
      **/
     private $dmsService;
 
@@ -184,22 +186,6 @@ class DmsInvoiceParticular
     }
 
     /**
-     * @return DmsService
-     */
-    public function getDmsService()
-    {
-        return $this->dmsService;
-    }
-
-    /**
-     * @param DmsService $dmsService
-     */
-    public function setDmsService($dmsService)
-    {
-        $this->dmsService = $dmsService;
-    }
-
-    /**
      * @return array
      */
     public function getTeethNo()
@@ -213,6 +199,22 @@ class DmsInvoiceParticular
     public function setTeethNo($teethNo)
     {
         $this->teethNo = $teethNo;
+    }
+
+    /**
+     * @return DmsService
+     */
+    public function getDmsService()
+    {
+        return $this->dmsService;
+    }
+
+    /**
+     * @param DmsService $dmsService
+     */
+    public function setDmsService($dmsService)
+    {
+        $this->dmsService = $dmsService;
     }
 
 

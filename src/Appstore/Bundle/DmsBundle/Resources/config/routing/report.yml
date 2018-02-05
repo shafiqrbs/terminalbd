@@ -1,20 +1,32 @@
 dms_report_sales_summary:
     path:     /sales-summary
-    defaults: { _controller: "HospitalBundle:Report:salesSummary" }
+    defaults: { _controller: "DmsBundle:Report:salesSummary" }
+
+dms_report_sales_daily:
+    path:     /daily-sales-summary
+    defaults: { _controller: "DmsBundle:Report:dailySales" }
+
+dms_report_sales_monthly:
+    path:     /monthly-sales-summary
+    defaults: { _controller: "DmsBundle:Report:monthlySales" }
+
+dms_report_sales_yearly:
+    path:     /yearly-sales-summary
+    defaults: { _controller: "DmsBundle:Report:salesSummary" }
 
 dms_report_sales_details:
     path:     /sales-details
-    defaults: { _controller: "HospitalBundle:Report:salesDetails" }
+    defaults: { _controller: "DmsBundle:Report:salesDetails" }
 
 dms_report_sales_service:
     path:     /service-wise-sales
-    defaults: { _controller: "HospitalBundle:Report:serviceBaseSummary" }
+    defaults: { _controller: "DmsBundle:Report:serviceBaseSummary" }
 
 dms_report_purchase_summary:
     path:     /purchase-summary
-    defaults: { _controller: "HospitalBundle:Report:purchaseSummary" }
+    defaults: { _controller: "DmsBundle:Report:purchaseSummary" }
 
 dms_report_purchase:
     path:     /purchase-summary
-    defaults: { _controller: "HospitalBundle:Report:purchaseSummary" }
+    defaults: { _controller: "DmsBundle:Report:purchaseSummary" }
 

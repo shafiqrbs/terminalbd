@@ -9,7 +9,32 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
+var bindDatePicker = function(element) {
+    $(element).datetimepicker({
+        showOn: "button",
+        buttonImage: "/img/calendar_icon.png",
+        buttonImageOnly: true,
+        dateFormat: 'mm/dd/yy',
+        timeFormat: 'hh:mm tt',
+        stepMinute: 1,
+        onClose: datePickerClose
+    });
+};
 
+$("[id^=startPicker]").each(function() {
+    bindDatePicker(this);
+});
+
+$(document).on("click", ".sms-confirm", function() {
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url);
+        }
+    });
+});
 
 $( "#name" ).autocomplete({
 
@@ -75,6 +100,7 @@ $(document).on( "click", ".receivePayment", function(e){
     $("#showPayment").slideToggle(1000);
     $("span", this).toggleClass("fa-minus fa-money");
 });
+
 $(document).on( "change", "#invoiceParticular", function(e){
 
     var price = $(this).val();
@@ -104,27 +130,6 @@ $(document).on('change', '#appointmentTime', function() {
             }
         });
 
-});
-
-$(document).on('change', '#particular', function() {
-
-    var url = $(this).val();
-    if(url == ''){
-        alert('You have to add particulars from drop down and this not service item');
-        return false;
-    }
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#particularId').val(obj['particularId']);
-            $('#quantity').val(obj['quantity']).focus();
-            $('#price').val(obj['price']);
-            $('#instruction').html(obj['instruction']);
-            $('#addParticular').attr("disabled", false);
-        }
-    })
 });
 
 $(document).on('click', '.addProcedure', function() {
@@ -221,13 +226,50 @@ $(document).on("click", ".approve", function() {
     });
 });
 
+$(document).on('change', '#particular', function() {
+
+    var url = $(this).val();
+    if(url == ''){
+        alert('You have to add particulars from drop down and this not service item');
+        return false;
+    }
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#particularId').val(obj['particularId']);
+            $('#quantity').val(obj['quantity']).focus();
+            $('#price').val(obj['price']);
+            $('#instruction').html(obj['instruction']);
+            $('#addParticular').attr("disabled", false);
+        }
+    })
+});
+
 $(document).on('click', '#addParticular', function() {
 
     var particularId = $('#particularId').val();
+    if (particularId == '') {
+
+        $('#particularId').addClass('input-error');
+        $('#particularId').focus();
+        alert('Please select treatment particular');
+        return false;
+    }
+
     var quantity = parseInt($('#quantity').val());
     var price = $('#price').val();
     var appointmentDate = $('#appointmentDate').val();
     var appointmentTime = $('#appointmentTime').val();
+    if (appointmentTime == '') {
+
+        $('#appointmentTime').addClass('input-error');
+        $('#appointmentTime').focus();
+        alert('Please select appointment date & time');
+        return false;
+    }
+
     var url = $('#addParticular').attr('data-url');
     $.ajax({
         url: url,
@@ -256,6 +298,48 @@ $(document).on('click', '#addParticular', function() {
     })
 });
 
+$(document).on('click', '.appointmentSchedule', function() {
+
+    var url = $(this).attr('data-url');
+    var dataTitle = $(this).attr('data-title');
+    $('.dialogModal_header').html(dataTitle);
+    $('.dialog_content').dialogModal({
+        topOffset: 0,
+        top: 0,
+        type: '',
+        onOkBut: function(event, el, current) {},
+        onCancelBut: function(event, el, current) {},
+        onLoad: function(el, current) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (response) {
+                    el.find('#appointmentSchedule').html(response);
+                }
+            });
+        },
+        onClose: function(el, current) {},
+        onChange: function(el, current) {}
+    });
+
+});
+
+$(document).on('click', '#searchAppointment', function() {
+
+    var url = $(this).attr('data-url');
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: $('#appointmentForm').serialize(),
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            $('#appointmentSchedule').html(response);
+        }
+    })
+
+});
+
 $(document).on("click", ".treatmentDelete", function() {
 
     var id = $(this).attr("data-id");
@@ -278,7 +362,26 @@ $(document).on("click", ".treatmentDelete", function() {
     });
 });
 
-$(document).on("click", "#receiveBtn", function() {
+/*
+$(document).on("change", "#invoiceFormxx", function() {
+
+    var url = $(this).attr("action");
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: new FormData($('#invoiceForm')[0]),
+        processData: false,
+        contentType: false,
+        success: function (response) {
+
+        }
+    })
+
+});
+
+*/
+
+$(document).on("click", ".saveButton", function() {
 
     $('#appstore_bundle_dmsbundle_invoice_customer_mobile, #appstore_bundle_dmsbundle_invoice_customer_name, #appstore_bundle_dmsbundle_invoice_customer_age').each(function() {
 
@@ -297,12 +400,20 @@ $(document).on("click", "#receiveBtn", function() {
 
             var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
             var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
-            $.ajax(url,{
+            $.ajax({
+                url:url ,
+                type: 'POST',
                 processData: false,
                 contentType: false,
-                type: 'POST',
-                data: formData
+                data:formData,
+                beforeSend: function () {
+                    $('.loader-double').fadeIn(3000).addClass('is-active');
+                },
+                success: function(response){
+                    $('.loader-double').fadeOut(2000).removeClass('is-active');
+                }
             });
+
         }
 
     });
@@ -382,6 +493,7 @@ $('.particular-info').on('keypress', 'input', function (e) {
     }
 });
 
+/*
 $('form.horizontal-form').on('keypress', 'input', function (e) {
 
     if (e.which == 13) {
@@ -398,3 +510,4 @@ $('form.horizontal-form').on('keypress', 'input', function (e) {
         }
     }
 });
+*/

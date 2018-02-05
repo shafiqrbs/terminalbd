@@ -97,6 +97,8 @@ class InvoiceType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->join("e.service",'s')
                         ->where("e.status = 1")
+                        ->andWhere('s.dmsConfig =:dmsConfig')
+                        ->setParameter('dmsConfig', $this->globalOption->getDmsConfig()->getId())
                         ->andWhere('s.slug IN (:slugs)')
                         ->setParameter('slugs',array('doctor'))
                         ->orderBy("e.name","ASC");

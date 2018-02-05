@@ -31,6 +31,11 @@ class Particular
     private $hospitalConfig;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsMasterDiagnosticReport", inversedBy="hmsParticulars")
+     **/
+    private $hmsMasterDiagnosticReport;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="referredDoctor")
      **/
     private $hmsInvoice;
@@ -1279,6 +1284,22 @@ class Particular
     public function setHmsServiceGroup($hmsServiceGroup)
     {
         $this->hmsServiceGroup = $hmsServiceGroup;
+    }
+
+    /**
+     * @return HmsMasterDiagnosticReport
+     */
+    public function getHmsMasterDiagnosticReport()
+    {
+        return $this->hmsMasterDiagnosticReport;
+    }
+
+    /**
+     * @param HmsMasterDiagnosticReport $hmsMasterDiagnosticReport
+     */
+    public function setHmsMasterDiagnosticReport($hmsMasterDiagnosticReport)
+    {
+        $this->hmsMasterDiagnosticReport = $hmsMasterDiagnosticReport;
     }
 
 

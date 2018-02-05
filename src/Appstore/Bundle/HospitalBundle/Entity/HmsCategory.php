@@ -31,6 +31,16 @@ class HmsCategory
     private  $particulars;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsMasterDiagnosticReport", mappedBy="category" )
+     **/
+    private  $hmsMasterDiagnosticReportCategories;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsMasterDiagnosticReport", mappedBy="department" )
+     **/
+    private  $hmsMasterDiagnosticReportDepartments;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="department" )
      **/
     private  $particularDepartments;
@@ -398,6 +408,22 @@ class HmsCategory
     public function getHmsInvoices()
     {
         return $this->hmsInvoices;
+    }
+
+    /**
+     * @return HmsMasterDiagnosticReport
+     */
+    public function getHmsMasterDiagnosticReportCategories()
+    {
+        return $this->hmsMasterDiagnosticReportCategories;
+    }
+
+    /**
+     * @return HmsMasterDiagnosticReport
+     */
+    public function getHmsMasterDiagnosticReportDepartments()
+    {
+        return $this->hmsMasterDiagnosticReportDepartments;
     }
 
 }

@@ -115,7 +115,7 @@ class InvoiceSmsEmailController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $sePricing = $this->getDoctrine()->getRepository('SettingToolBundle:SmsEmailPricing')->findBy(array('status'=>1),array('name'=>'asc'));
+        $sePricing = $this->getDoctrine()->getRepository('SettingToolBundle:SmsEmailPricing')->findBy(array('status'=>1),array('quantity'=>'asc'));
 
         $itemIds = array();
         foreach ($entity->getInvoiceSmsEmailItems() as $row ){

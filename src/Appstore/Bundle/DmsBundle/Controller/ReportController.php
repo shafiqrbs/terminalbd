@@ -1,13 +1,9 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Controller;
 
-use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
-use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Frontend\FrontentBundle\Service\MobileDetect;
+namespace Appstore\Bundle\DmsBundle\Controller;
+
+
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,7 +38,7 @@ class ReportController extends Controller
 
         $user = $this->getUser();
 
-        $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data);
+        $salesTotalTransactionOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->todaySalesOverview($user,$data);
         $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true');
         $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false');
 
@@ -91,7 +87,20 @@ class ReportController extends Controller
 
     }
 
-    
+    public function monthlySalesAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->monthlySales($dmsConfig,$data);
+        return $this->render('DmsBundle:Report:monthlySales.html.twig', array(
+            'entities' => $dailyReceive,
+        ));
+
+    }
+
+
+
 
 
 

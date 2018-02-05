@@ -32,6 +32,7 @@ class DmsTreatmentPlan
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", inversedBy="dmsTreatmentPlans" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $dmsInvoice;
 
@@ -105,6 +106,15 @@ class DmsTreatmentPlan
      * @ORM\Column(name="status", type="boolean" )
      */
     private $status=false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sendSms", type="boolean" )
+     */
+    private $sendSms = false;
+
+
 
 
     /**
@@ -371,6 +381,22 @@ class DmsTreatmentPlan
     public function setAppointmentTime($appointmentTime)
     {
         $this->appointmentTime = $appointmentTime;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendSms()
+    {
+        return $this->sendSms;
+    }
+
+    /**
+     * @param bool $sendSms
+     */
+    public function setSendSms($sendSms)
+    {
+        $this->sendSms = $sendSms;
     }
 
 

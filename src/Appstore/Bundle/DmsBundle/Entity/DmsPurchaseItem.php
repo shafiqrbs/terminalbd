@@ -26,6 +26,7 @@ class DmsPurchaseItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsPurchaseItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $dmsParticular;
 

@@ -12,6 +12,7 @@ use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -359,17 +360,18 @@ class InvoiceController extends Controller
             }
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
-            $em->flush();
-            if (in_array($entity->getProcess(), array('Appointment', 'Done', 'Visit'))) {
-                if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal()) and $entity->getProcess() !== 'Canceled') {
-                     $dispatcher = $this->container->get('event_dispatcher');
-                     $dispatcher->dispatch('setting_tool.post.dms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
+            if (!in_array($entity->getProcess(), array('Canceled', 'Created')) and $entity->isSendSms() != 1) {
+                /* @var $option GlobalOption */
+                $option = $this->getUser()->getGlobalOption();
+                if(!empty($option->getNotificationConfig()) and  !empty($option->getSmsSenderTotal()->getRemaining() > 0) and $option->getNotificationConfig()->getSmsActive() == 1 ) {
+                    $dispatcher = $this->container->get('event_dispatcher');
+                    $dispatcher->dispatch('setting_tool.post.dms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\DmsInvoiceSmsEvent($entity));
+                    $entity->setSendSms(1);
                 }
             }
+            $em->flush();
         }
         exit;
-
-
     }
 
     public function discountDeleteAction(DmsInvoice $entity)
@@ -506,7 +508,7 @@ class InvoiceController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     * @Secure(roles="ROLE_DMS")
      */
 
     public function deleteAction(DmsInvoice $entity)
@@ -543,6 +545,10 @@ class InvoiceController extends Controller
         ));
 
     }
+
+    /**
+     * @Secure(roles="ROLE_DMS")
+     */
 
     public function deleteEmptyInvoiceAction()
     {

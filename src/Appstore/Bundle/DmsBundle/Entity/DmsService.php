@@ -32,6 +32,23 @@ class DmsService
      **/
     private $dentalService;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular", mappedBy="dmsService")
+     **/
+    private $invoiceParticular;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="service")
+     **/
+    private $dmsParticulars;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="service")
+     **/
+    private $dmsInvoices;
+
+
 
     /**
      * @var string
@@ -54,24 +71,6 @@ class DmsService
      * @ORM\Column(name="code", type="string", length=10, nullable=true)
      */
     private $code;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="service")
-     **/
-    private $dmsParticulars;
-
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="service")
-     **/
-    private $dmsInvoices;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular", mappedBy="service")
-     **/
-    private $invoiceParticular;
 
 
     /**

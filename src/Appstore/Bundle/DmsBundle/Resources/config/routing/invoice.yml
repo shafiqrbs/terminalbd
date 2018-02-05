@@ -156,3 +156,19 @@ dms_invoice_add_patient:
 dms_treatment_inline_update:
     path:     /inline-update
     defaults: { _controller: "DmsBundle:Invoice:inlineUpdate" }
+
+
+dms_treatment_plan:
+    path:     /treatment-plan
+    defaults: { _controller: "DmsBundle:TreatmentPlan:index" }
+
+dms_treatment_appointment_schedule:
+    path:     /treatment-appointment-date
+    defaults: { _controller: "DmsBundle:TreatmentPlan:appointmentDateSchedule" }
+    methods:  POST
+    options:
+           expose: true
+
+dms_treatment_plan_sms:
+    path:     /{patient}/{id}/send-sms
+    defaults: { _controller: "DmsBundle:TreatmentPlan:sendSmsPlan" }

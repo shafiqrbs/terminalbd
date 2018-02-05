@@ -46,7 +46,6 @@ class DmsInvoiceListener
 
         $entityManager = $args->getEntityManager();
         $qb = $entityManager->getRepository('DmsBundle:DmsInvoice')->createQueryBuilder('s');
-
         $qb
             ->select('MAX(s.code)')
             ->where('s.dmsConfig = :dms')

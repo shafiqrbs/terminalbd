@@ -29,8 +29,7 @@ class DmsSpecialAdvise
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="specialAdvises" )
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="specialAdvises" )
      **/
     private $dmsInvoice;
 
@@ -64,18 +63,10 @@ class DmsSpecialAdvise
      **/
     private $dmsParticulars;
 
-
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="service")
      **/
     private $dmsInvoices;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular", mappedBy="service")
-     **/
-    private $invoiceParticular;
-
 
     /**
      * @var int

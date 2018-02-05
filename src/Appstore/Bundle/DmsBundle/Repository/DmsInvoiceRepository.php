@@ -37,57 +37,42 @@ class DmsInvoiceRepository extends EntityRepository
     {
 
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
-        $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
-        $referred = isset($data['referred'])? $data['referred'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
-        $created = isset($data['created'])? $data['created'] :'';
-        $deliveryDate = isset($data['deliveryDate'])? $data['deliveryDate'] :'';
-        $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
-        $service = isset($data['service'])? $data['service'] :'';
-        $cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
-        $cabin = isset($data['cabinNo'])? $data['cabinNo'] :'';
+        $createdStart = isset($data['createdStart'])? $data['createdStart'] :'';
+        $createdEnd = isset($data['createdEnd'])? $data['createdEnd'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
         if (!empty($customerName)) {
             $qb->join('e.customer','c');
-            $qb->andWhere($qb->expr()->like("c.customerId", "'%$customerName%'"  ));
+            $qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
         }
 
         if (!empty($customerMobile)) {
             $qb->join('e.customer','m');
             $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
         }
-        if (!empty($created)) {
-            $compareTo = new \DateTime($created);
+        if (!empty($createdStart)) {
+            $compareTo = new \DateTime($createdStart);
             $created =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.created LIKE :created");
-            $qb->setParameter('created', $created.'%');
+            $qb->andWhere("e.created => :created");
+            $qb->setParameter('created', $created);
         }
 
-        if (!empty($deliveryDate)) {
-            $compareTo = new \DateTime($deliveryDate);
-            $created =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.deliveryDateTime LIKE :deliveryDate");
-            $qb->setParameter('deliveryDate', $created.'%');
+        if (!empty($createdEnd)) {
+            $compareTo = new \DateTime($createdEnd);
+            $createdEnd =  $compareTo->format('Y-m-d');
+            $qb->andWhere("e.deliveryDateTime <= :createdEnd");
+            $qb->setParameter('createdEnd', $createdEnd);
         }
 
-        if(!empty($commission)){
-            $qb->andWhere("e.hmsCommission = :commission");
-            $qb->setParameter('commission', $commission);
-        }
         if(!empty($assignDoctor)){
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
-        }
-
-        if(!empty($referred)){
-            $qb->andWhere("e.referredDoctor = :referredDoctor");
-            $qb->setParameter('referredDoctor', $referred);
         }
 
         if(!empty($process)){
@@ -95,26 +80,7 @@ class DmsInvoiceRepository extends EntityRepository
             $qb->setParameter('process', $process);
         }
 
-        if(!empty($transactionMethod)){
-            $qb->andWhere("e.transactionMethod = :transactionMethod");
-            $qb->setParameter('transactionMethod', $transactionMethod);
-        }
 
-        if(!empty($service)){
-            $qb->andWhere("e.service = :service");
-            $qb->setParameter('service', $service);
-        }
-
-        if(!empty($cabin)){
-            $qb->andWhere("e.cabin = :cabin");
-            $qb->setParameter('cabin', $cabin);
-        }
-        if(!empty($cabinGroup)){
-            $qb->leftJoin('e.cabin','cabin');
-            $qb->leftJoin('cabin.serviceGroup','sg');
-            $qb->andWhere("sg.id = :cabinGroup");
-            $qb->setParameter('cabinGroup', $cabinGroup);
-        }
     }
 
     public function handleDateRangeFind($qb,$data)

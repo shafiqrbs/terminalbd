@@ -53,7 +53,6 @@ class DmsInvoice
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular", mappedBy="dmsInvoice" , cascade={"remove"} )
-     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $invoiceParticulars;
 
@@ -343,6 +342,13 @@ class DmsInvoice
      * @ORM\Column(name="revised", type="boolean" )
      */
     private $revised = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sendSms", type="boolean" )
+     */
+    private $sendSms = false;
 
 
     /**
@@ -1423,6 +1429,22 @@ class DmsInvoice
     public function setSpecialAdvises($specialAdvises)
     {
         $this->specialAdvises = $specialAdvises;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendSms()
+    {
+        return $this->sendSms;
+    }
+
+    /**
+     * @param bool $sendSms
+     */
+    public function setSendSms($sendSms)
+    {
+        $this->sendSms = $sendSms;
     }
 
 
