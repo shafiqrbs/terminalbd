@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Medicine
+                   Manage Accessories
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_medicine') }}">Manage Medicine</a>
+                        <a href="{{ path('dms_medicine') }}">Manage Accessories</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -33,9 +33,9 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Medicine</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Accessories</div>
                         <div class="actions">
-                            <a href="javascript:" id="show"  data-trigger="hover" data-original-title="Add medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Medicine</a>
+                            <a href="javascript:" id="show"  data-trigger="hover" data-original-title="Add medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Accessories</a>
                         </div>
                     </div>
 
@@ -127,20 +127,20 @@
                                     {% set stockQnt = ((entity.purchaseQuantity + entity.openingQuantity) - entity.salesQuantity) %}
                                     <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
-                                        <td class="numeric" ><a href="{{ path('hms_medicine_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" ><a href="{{ path('dms_medicine_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
+                                            <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('dms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="price" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
+                                            <a  class="editable" data-name="price" href="#"  data-url="{{ path('dms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
+                                            <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('dms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
@@ -148,19 +148,19 @@
                                         <td class="numeric" >{{ stockQnt }}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
+                                            <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('dms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">{% if  entity.unit is defined and  entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
-                                                <a class="btn mini blue btn-action" href="{{ path('hms_medicine_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
+                                                <a class="btn mini blue btn-action" href="{{ path('dms_medicine_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
                                             {% else %}
-                                                <a class="btn mini red btn-action" href="{{ path('hms_medicine_status', { 'id': entity.id}) }}">x</a>
+                                                <a class="btn mini red btn-action" href="{{ path('dms_medicine_status', { 'id': entity.id}) }}">x</a>
                                             {% endif %}
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a href="{{ path('hms_medicine_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a title="Are you sure went to delete ?" href="{{ path('hms_medicine_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a href="{{ path('dms_medicine_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                            <a title="Are you sure went to delete ?" href="{{ path('dms_medicine_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>

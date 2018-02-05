@@ -258,27 +258,20 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $day = isset($data['day'])? $data['day'] :'';
         $month = isset($data['month'])? $data['month'] :'';
         $year = isset($data['year'])? $data['year'] :'';
+        $compare = new \DateTime($year.' '.$month);
+        $month =  $compare->format('m');
+        $year =  $compare->format('Y');
+        $qb->andWhere('YEAR(appointment.updated) = :year');
+        $qb->andWhere('MONTH(appointment.updated) = :month');
+        $qb->setParameter('month', $month);
+        $qb->setParameter('year', $year);
 
-        if($month and $year){
-            $compare = new \DateTime($year.' '.$month);
-            $start =  $compare->format('Y-m-d 00:00:01');
-            $end =  $compare->format('Y-t-d 23:59:59');
-        }else{
-            $compare = new \DateTime();
-            $start =  $compare->format('Y-m-01 00:00:01');
-            $end =  $compare->format('Y-t-d 23:59:59');
-        }
-
-        $qb->andWhere("appointment.updated >= :start");
-        $qb->setParameter('start', $start);
-        $qb->andWhere("appointment.updated <= :end");
-        $qb->setParameter('end', $end);
     }
 
     public function monthlySales(DmsConfig $config , $data =array())
     {
         $emConfig = $this->getEntityManager()->getConfiguration();
-        $emConfig->addCustomDatetimeFunction('YEAR', '\DoctrineExtensions\Query\Mysql\Year');
+        $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
         $emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
         $emConfig->addCustomDatetimeFunction('DAY', 'DoctrineExtensions\Query\Mysql\Day');
 
@@ -288,15 +281,18 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $qb->join('appointment.dmsParticular','particular');
         $qb->join('invoice.customer','customer');
         $qb->select('DAY(appointment.updated) as date');
+        $qb->addSelect('MONTH(appointment.updated) as month');
+        $qb->addSelect('YEAR(appointment.updated) as year');
         $qb->addSelect('SUM(appointment.subTotal) as subTotal');
         $qb->addSelect('SUM(appointment.discount) as discount');
         $qb->addSelect('SUM(appointment.payment) as receive');
         $qb->where('invoice.dmsConfig ='.$config->getId());
         $qb->andWhere('appointment.status =1');
-       // $this->monthlySummaryDate($qb,$data);
-        $qb->groupBy('appointment.date');
+        $this->monthlySummaryDate($qb,$data);
+        $qb->groupBy('date');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
+
 
     }
 

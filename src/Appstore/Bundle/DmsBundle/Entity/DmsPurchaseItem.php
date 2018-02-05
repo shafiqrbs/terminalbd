@@ -202,23 +202,6 @@ class DmsPurchaseItem
         $this->code = $code;
     }
 
-    /**
-     * @return Particular
-     */
-    public function getParticular()
-    {
-        return $this->particular;
-    }
-
-    /**
-     * @param Particular $particular
-     */
-    public function setParticular($particular)
-    {
-        $this->particular = $particular;
-    }
-
-
 
     /**
      * @return float

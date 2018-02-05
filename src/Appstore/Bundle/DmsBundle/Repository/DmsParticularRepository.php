@@ -122,7 +122,7 @@ class DmsParticularRepository extends EntityRepository
             return  $qb;
     }
 
-    public function getMedicineParticular($hospital){
+    public function getMedicineParticular($config){
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
@@ -142,9 +142,9 @@ class DmsParticularRepository extends EntityRepository
             ->addSelect('s.code as serviceCode')
             ->addSelect('e.purchasePrice')
             ->addSelect('e.purchaseQuantity')
-            ->where('e.dmsConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:process)')
-            ->setParameter('process',array_values(array(4)))
+            ->where('e.dmsConfig = :config')->setParameter('config', $config)
+            ->andWhere('s.slug IN(:process)')
+            ->setParameter('process',array_values(array('accessories')))
             ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;
@@ -179,38 +179,6 @@ class DmsParticularRepository extends EntityRepository
 
     public function findDmsExistingCustomer($hospital, $mobile,$data)
     {
-        $em = $this->_em;
-
-        $name = $data['referredDoctor']['name'];
-        $department = $data['referredDoctor']['department'];
-        $location = $data['referredDoctor']['location'];
-        $address = $data['referredDoctor']['address'];
-        $entity = $em->getRepository('DmsBundle:Particular')->findOneBy(array('dmsConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
-        if($entity){
-
-            return $entity;
-
-        }else{
-
-            $entity = new Particular();
-            if(!empty($location)){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
-            if(!empty($department)){
-                $department = $em->getRepository('DmsBundle:DmsCategory')->find($department);
-                $entity->setDepartment($department);
-            }
-            $entity->setService($em->getRepository('DmsBundle:Service')->find(6));
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setAddress($address);
-            $entity->setDmsConfig($hospital);
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
-
     }
 
     public function getPurchaseUpdateQnt(DmsPurchase $purchase){
@@ -221,9 +189,9 @@ class DmsParticularRepository extends EntityRepository
 
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
-            /** @var Particular  $particular */
+            /** @var DmsParticular  $particular */
 
-            $particular = $purchaseItem->getParticular();
+            $particular = $purchaseItem->getDmsParticular();
             
             $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
             $particular->setPurchaseQuantity($qnt);
@@ -233,16 +201,18 @@ class DmsParticularRepository extends EntityRepository
         }
     }
 
-    public function insertAccessories(Invoice $invoice){
+    public function insertAccessories(DmsInvoice $invoice){
 
         $em = $this->_em;
 
         $em = $this->_em;
-        /** @var InvoiceParticular $item */
+
+        /** @var DmsInvoiceParticular $item */
+
         if(!empty($invoice->getInvoiceParticulars())){
             foreach($invoice->getInvoiceParticulars() as $item ){
-                /** @var Particular  $particular */
-                $particular = $item->getParticular();
+                /** @var DmsParticular  $particular */
+                $particular = $item->getDmsParticular();
                 if( $particular->getService()->getId() == 4 ){
                     $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
                     $particular->setSalesQuantity($qnt);
@@ -253,7 +223,7 @@ class DmsParticularRepository extends EntityRepository
         }
     }
 
-    public function getSalesUpdateQnt(Invoice $invoice){
+    public function getSalesUpdateQnt(DmsInvoice $invoice){
 
         $em = $this->_em;
 

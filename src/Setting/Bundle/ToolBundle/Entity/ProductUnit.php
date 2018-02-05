@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
@@ -51,6 +52,11 @@ class ProductUnit
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $particulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $dmsParticulars;
 
 
     /**
@@ -181,6 +187,14 @@ class ProductUnit
     public function getParticulars()
     {
         return $this->particulars;
+    }
+
+    /**
+     * @return DmsParticular
+     */
+    public function getDmsParticulars()
+    {
+        return $this->dmsParticulars;
     }
 
 

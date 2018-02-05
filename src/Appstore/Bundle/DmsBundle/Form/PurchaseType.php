@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Form;
+namespace Appstore\Bundle\DmsBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Doctrine\ORM\EntityRepository;
@@ -29,9 +29,9 @@ class PurchaseType extends AbstractType
     {
         $builder
 
-            ->add('vendor', 'entity', array(
+            ->add('dmsVendor', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsVendor',
+                'class' => 'Appstore\Bundle\DmsBundle\Entity\DmsVendor',
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
                 'attr'=>array('class'=>'span12'),
@@ -40,7 +40,7 @@ class PurchaseType extends AbstractType
                     return $er->createQueryBuilder('wt')
                         ->where("wt.status = 1")
                         ->andWhere("wt.mode = 'medicine'")
-                        ->andWhere("wt.hospitalConfig =".$this->option->getHospitalConfig()->getId());
+                        ->andWhere("wt.dmsConfig =".$this->option->getDmsConfig()->getId());
                 },
             ))
             ->add('transactionMethod', 'entity', array(
@@ -98,7 +98,7 @@ class PurchaseType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsPurchase'
+            'data_class' => 'Appstore\Bundle\DmsBundle\Entity\DmsPurchase'
         ));
     }
 
@@ -107,6 +107,6 @@ class PurchaseType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_hmspurchase';
+        return 'appstore_bundle_dmspurchase';
     }
 }

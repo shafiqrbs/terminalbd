@@ -20,7 +20,7 @@ class DmsPurchaseRepository extends EntityRepository
         $total = $em->createQueryBuilder()
             ->from('DmsBundle:DmsPurchaseItem','si')
             ->select('sum(si.purchaseSubTotal) as total')
-            ->where('si.purchase = :entity')
+            ->where('si.dmsPurchase = :entity')
             ->setParameter('entity', $entity ->getId())
             ->getQuery()->getSingleResult();
 

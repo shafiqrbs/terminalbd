@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_purchase') }}">Medicine</a>
+                    <a href="{{ path('dms_purchase') }}">Medicine</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Manage Medicine</a></li>
@@ -36,8 +36,8 @@
             <div class="caption"><i class="icon-reorder"></i>Medicine Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn red" href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i> Medicine Receive</a>
-                    <a class="btn" href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i> Medicine</a>
+                    <a class="btn red" href="{{ path('dms_purchase_new') }}"><i class="icon-plus-sign"></i> Medicine Receive</a>
+                    <a class="btn" href="{{ path('dms_purchase') }}"><i class="icon-th-list"></i> Medicine</a>
                 </div>
             </div>
         </div>
@@ -67,13 +67,13 @@
                             {% for item in entity.purchaseItems %}
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}</td>
-                                    <td  class="span1">{{ item.particular.particularCode }}</td>
-                                    <td class="span4">{{ item.particular.name }}</td>
+                                    <td  class="span1">{{ item.dmsParticular.particularCode }}</td>
+                                    <td class="span4">{{ item.dmsParticular.name }}</td>
                                     <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.purchasePrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
-                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('dms_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -121,9 +121,9 @@
                             <div class="row-fluid particular-info" >
                                 <div class="span4">
                                     <select id="particular" name="particular" class="span12 select2">
-                                        <option value="">--- Select medicine name ---</option>
+                                        <option value="">--- Select accessories name ---</option>
                                        {% for particular in particulars %}
-                                           <option value="{{ path('hms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
+                                           <option value="{{ path('dms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
                                        {% endfor %}
                                      </select>
                                 </div>
@@ -146,7 +146,7 @@
                                 </div>
                                 <div class="span1">
                                     <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_purchase_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('dms_purchase_particular_add',{'invoice':entity.id}) }}" >Add</button>
                                 </div>
                             </div>
                         </div>
@@ -203,8 +203,8 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                {{ form_widget(form.vendor) }}
-                                {{ form_errors(form.vendor) }}
+                                {{ form_widget(form.dmsVendor) }}
+                                {{ form_errors(form.dmsVendor) }}
                             </div>
                         </div>
                     </div>
@@ -292,7 +292,7 @@
 
 {% block cssBlock %}
 {% stylesheets filter='cssrewrite'
-    '@HospitalBundle/Resources/public/css/invoice.css'
+    '@DmsBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -300,9 +300,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/purchase.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
-    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+    '@DmsBundle/Resources/public/js/purchase.js'
+    '@DmsBundle/Resources/public/js/approveProcess.js'
+    '@DmsBundle/Resources/public/js/datetimepicker_css.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

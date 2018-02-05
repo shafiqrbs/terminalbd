@@ -882,7 +882,7 @@ class Builder extends ContainerAware
             $menu['Dental & Diagnosis']->addChild('Manage Stock')
                 ->setAttribute('icon', 'icon icon-truck')
                 ->setAttribute('dropdown', true);
-            $menu['Dental & Diagnosis']['Manage Stock']->addChild('Medicine & Accessories', array('route' => 'dms_medicine'))
+            $menu['Dental & Diagnosis']['Manage Stock']->addChild('Accessories', array('route' => 'dms_medicine'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']->addChild('Purchase')
                 ->setAttribute('icon', 'icon icon-truck')

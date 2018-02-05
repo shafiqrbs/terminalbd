@@ -94,6 +94,13 @@ class DmsParticular
     protected $location;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="dmsParticulars" )
+     **/
+    private  $unit;
+
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
@@ -145,6 +152,51 @@ class DmsParticular
      * @ORM\Column(name="minimumPrice", type="float", nullable=true)
      */
     private $minimumPrice;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="openingQuantity", type="integer", nullable=true)
+     */
+    private $openingQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="minQuantity", type="integer", nullable=true)
+     */
+    private $minQuantity;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseQuantity", type="integer", nullable=true)
+     */
+    private $purchaseQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesQuantity", type="integer", nullable=true)
+     */
+    private $salesQuantity;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="purchaseAverage", type="decimal", nullable=true)
+     */
+    private $purchaseAverage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="purchasePrice", type="decimal", nullable=true)
+     */
+    private $purchasePrice;
+
+
 
 
     /**
@@ -992,6 +1044,86 @@ class DmsParticular
     public function setRoom($room)
     {
         $this->room = $room;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOpeningQuantity()
+    {
+        return $this->openingQuantity;
+    }
+
+    /**
+     * @param int $openingQuantity
+     */
+    public function setOpeningQuantity($openingQuantity)
+    {
+        $this->openingQuantity = $openingQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinQuantity()
+    {
+        return $this->minQuantity;
+    }
+
+    /**
+     * @param int $minQuantity
+     */
+    public function setMinQuantity($minQuantity)
+    {
+        $this->minQuantity = $minQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseQuantity()
+    {
+        return $this->purchaseQuantity;
+    }
+
+    /**
+     * @param int $purchaseQuantity
+     */
+    public function setPurchaseQuantity($purchaseQuantity)
+    {
+        $this->purchaseQuantity = $purchaseQuantity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPurchaseAverage()
+    {
+        return $this->purchaseAverage;
+    }
+
+    /**
+     * @param string $purchaseAverage
+     */
+    public function setPurchaseAverage($purchaseAverage)
+    {
+        $this->purchaseAverage = $purchaseAverage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param string $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
     }
 
 }

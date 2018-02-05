@@ -2,8 +2,8 @@
 
 namespace Appstore\Bundle\DmsBundle\Controller;
 
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Appstore\Bundle\HospitalBundle\Form\MedicineType;
+use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
+use Appstore\Bundle\DmsBundle\Form\MedicineType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,18 +29,18 @@ class MedicineController extends Controller
     }
 
     /**
-     * Lists all Particular entities.
+     * Lists all DmsParticular entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getMedicineParticular($hospital);
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
         $pagination = $this->paginate($entities);
-        $entity = new Particular();
+        $entity = new DmsParticular();
         $form = $this->createCreateForm($entity);
-        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+        return $this->render('DmsBundle:Medicine:index.html.twig', array(
             'pagination' => $pagination,
             'entity' => $entity,
             'formShow'            => 'hide',
@@ -50,32 +50,32 @@ class MedicineController extends Controller
     }
 
     /**
-     * Creates a new Particular entity.
+     * Creates a new DmsParticular entity.
      *
      */
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
         $pagination = $this->paginate($entities);
-        $entity = new Particular();
+        $entity = new DmsParticular();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setHospitalConfig($config);
-            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(4);
+            $entity->setDmsConfig($config);
+            $service = $this->getDoctrine()->getRepository('DmsBundle:DmsService')->findOneBy(array('slug'=>'accessories'));
             $entity->setService($service);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('hms_medicine'));
+            return $this->redirect($this->generateUrl('dms_medicine'));
         }
-        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+        return $this->render('DmsBundle:Medicine:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,
             'form'   => $form->createView(),
@@ -83,17 +83,17 @@ class MedicineController extends Controller
     }
 
     /**
-     * Creates a form to create a Particular entity.
+     * Creates a form to create a DmsParticular entity.
      *
-     * @param Particular $entity The entity
+     * @param DmsParticular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Particular $entity)
+    private function createCreateForm(DmsParticular $entity)
     {
 
         $form = $this->createForm(new MedicineType(), $entity, array(
-            'action' => $this->generateUrl('hms_medicine_create', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('dms_medicine_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -105,21 +105,21 @@ class MedicineController extends Controller
 
 
     /**
-     * Displays a form to edit an existing Particular entity.
+     * Displays a form to edit an existing DmsParticular entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
-        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
         $pagination = $this->paginate($entities);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+        return $this->render('DmsBundle:Medicine:index.html.twig', array(
             'pagination'        => $pagination,
             'entity'            => $entity,
             'formShow'            => 'show',
@@ -128,16 +128,16 @@ class MedicineController extends Controller
     }
 
     /**
-     * Creates a form to edit a Particular entity.
+     * Creates a form to edit a DmsParticular entity.
      *
-     * @param Particular $entity The entity
+     * @param DmsParticular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Particular $entity)
+    private function createEditForm(DmsParticular $entity)
     {
         $form = $this->createForm(new MedicineType(), $entity, array(
-            'action' => $this->generateUrl('hms_medicine_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('dms_medicine_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -147,20 +147,20 @@ class MedicineController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Particular entity.
+     * Edits an existing DmsParticular entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
         $pagination = $this->paginate($entities);
-        $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
+        $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -172,9 +172,9 @@ class MedicineController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hms_medicine'));
+            return $this->redirect($this->generateUrl('dms_medicine'));
         }
-        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+        return $this->render('DmsBundle:Medicine:index.html.twig', array(
             'pagination'      => $pagination,
             'entity'      => $entity,
             'formShow'            => 'show',
@@ -182,14 +182,14 @@ class MedicineController extends Controller
         ));
     }
     /**
-     * Deletes a Particular entity.
+     * Deletes a DmsParticular entity.
      *
      */
-    public function deleteAction(Particular $entity)
+    public function deleteAction(DmsParticular $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
         }
         try {
 
@@ -208,7 +208,7 @@ class MedicineController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('hms_medicine'));
+        return $this->redirect($this->generateUrl('dms_medicine'));
     }
 
    
@@ -216,7 +216,7 @@ class MedicineController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(Particular $entity)
+    public function statusAction(DmsParticular $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -234,14 +234,14 @@ class MedicineController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('hms_medicine'));
+        return $this->redirect($this->generateUrl('dms_medicine'));
     }
 
     public function inlineUpdateAction(Request $request)
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('HospitalBundle:Particular')->find($data['pk']);
+        $entity = $em->getRepository('DmsBundle:DmsParticular')->find($data['pk']);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find particular entity.');
         }

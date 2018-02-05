@@ -1,9 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\DmsBundle\Repository;
-use Appstore\Bundle\DmsBundle\Entity\HmsPurchase;
+use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem;
-use Appstore\Bundle\DmsBundle\Entity\Invoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Doctrine\ORM\EntityRepository;
 
@@ -23,7 +22,7 @@ class DmsPurchaseItemRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->from('DmsBundle:DmsPurchaseItem','e');
         $qb->select('AVG(e.purchasePrice) AS avgPurchasePrice');
-        $qb->where('e.particular = :particular')->setParameter('particular', $particular) ;
+        $qb->where('e.dmsParticular = :particular')->setParameter('particular', $particular) ;
         $res = $qb->getQuery()->getOneOrNullResult();
         if(!empty($res)){
             $particular->setPurchaseAverage($res['avgPurchasePrice']);
@@ -37,7 +36,7 @@ class DmsPurchaseItemRepository extends EntityRepository
         $particular = $this->_em->getRepository('DmsBundle:DmsParticular')->find($data['particularId']);
         $em = $this->_em;
         $entity = new DmsPurchaseItem();
-        $entity->setPurchase($invoice);
+        $entity->setDmsPurchase($invoice);
         $entity->setDmsParticular($particular);
         $entity->setSalesPrice($particular->getPrice());
         $entity->setPurchasePrice($particular->getPurchasePrice());
@@ -49,7 +48,7 @@ class DmsPurchaseItemRepository extends EntityRepository
 
     }
 
-    public function getPurchaseItems(HmsPurchase $sales)
+    public function getPurchaseItems(DmsPurchase $sales)
     {
         $entities = $sales->getPurchaseItems();
         $data = '';
@@ -64,7 +63,7 @@ class DmsPurchaseItemRepository extends EntityRepository
             $data .= '<td class="span1" >' . $entity->getPurchasePrice() . '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
-                     <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/hms/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                     <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/dms/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';
             $data .= '</tr>';
             $i++;

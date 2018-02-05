@@ -95,6 +95,7 @@ class ReportController extends Controller
         $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->monthlySales($dmsConfig,$data);
         return $this->render('DmsBundle:Report:monthlySales.html.twig', array(
             'entities' => $dailyReceive,
+            'searchForm' => $data,
         ));
 
     }

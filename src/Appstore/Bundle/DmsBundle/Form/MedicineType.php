@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Form;
+namespace Appstore\Bundle\DmsBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
@@ -61,7 +61,7 @@ class MedicineType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular'
+            'data_class' => 'Appstore\Bundle\DmsBundle\Entity\DmsParticular'
         ));
     }
 
@@ -70,7 +70,7 @@ class MedicineType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_particular';
+        return 'appstore_bundle_dms_particular';
     }
 
 

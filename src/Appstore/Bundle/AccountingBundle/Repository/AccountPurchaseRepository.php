@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
@@ -153,6 +154,35 @@ class AccountPurchaseRepository extends EntityRepository
         $em->persist($accountPurchase);
         $em->flush();
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        return $accountPurchase;
+
+    }
+
+    public function insertDmsAccountPurchase(DmsPurchase $entity)
+    {
+
+        $data = array('dmsVendor' => $entity->getDmsVendor()->getCompanyName());
+        $result = $this->accountPurchaseOverview($entity->getHospitalConfig()->getGlobalOption(),$data);
+        $balance = ( $result['purchaseAmount'] - $result['payment']);
+
+        $em = $this->_em;
+        $accountPurchase = new AccountPurchase();
+        $accountPurchase->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
+        $accountPurchase->setDmsPurchase($entity);
+        $accountPurchase->setDmsVendor($entity->getDmsVendor());
+        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
+        $accountPurchase->setPurchaseAmount($entity->getNetTotal());
+        $accountPurchase->setPayment($entity->getPayment());
+        $accountPurchase->setProcessHead('Purchase');
+        $accountPurchase->setReceiveDate($entity->getReceiveDate());
+        $accountPurchase->setBalance(($balance + $entity->getNetTotal()) - $accountPurchase->getPayment() );
+        $accountPurchase->setProcess('approved');
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $em->persist($accountPurchase);
+        $em->flush();
+        if($accountPurchase->getPayment() > 0 ){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        }
         return $accountPurchase;
 
     }
