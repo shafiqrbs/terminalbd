@@ -12,9 +12,10 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $config = $user->getGlobalOption()->getRestaurantConfig();
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $salesTotalTransactionOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->transactionOverview($config,$data);
         return $this->render('DmsBundle:Default:index.html.twig', array(
-            'salesTransactionOverview' => '',
+            'salesOverview' => $salesTotalTransactionOverview,
             'previousSalesTransactionOverview' => '',
             'assignDoctors' => '',
             'searchForm' => $data,

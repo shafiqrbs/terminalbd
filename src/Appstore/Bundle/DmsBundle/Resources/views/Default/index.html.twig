@@ -3,10 +3,47 @@
     <div class="container-fluid">
         <!-- END PAGE HEADER-->
         <div id="dashboard">
-            {#<div class="portlet box green">
+            <div class="portlet box green">
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-food"></i> Sales Overview</div>
+                    <div class="caption"><i class="fa fa-medkit"></i> Sales Overview</div>
                 </div>
+                <div class="clearfix"></div>
+                <div class="portal-body">
+                    <div class="row-fluid pull-center" >
+                        <div class="clearfix"></div>
+                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                        <tbody class="">
+                        <tr>
+                            <th class="numeric span11">Sub-total</th>
+                            <th class="numeric">{{ (salesOverview.subTotal)|number_format }}</th>
+                        </tr>
+                        <tr>
+                            <th class="numeric span11">Discount</th>
+                            <th class="numeric">{{ (salesOverview.discount)|number_format }}</th>
+                        </tr>
+                        <tr>
+                            <th class="numeric span11">Net Total</th>
+                            <th class="numeric">{{ (salesOverview.subTotal - salesOverview.discount)|number_format }}</th>
+
+                        </tr>
+                        <tr>
+                            <th class="numeric span11">Received</th>
+                            <th class="numeric">{{ (salesOverview.payment)|number_format }}</th>
+
+                        </tr>
+                        <tr>
+                            <th class="numeric span11">Due</th>
+                            <th class="numeric">{{ (salesOverview.subTotal - salesOverview.discount - salesOverview.payment)|number_format }}</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+                {#
                 <div class="portlet-body">
                     <div class="clearfix">&nbsp;</div>
                     <table class="table table-bordered table-striped table-condensed flip-content ">

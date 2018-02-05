@@ -301,18 +301,17 @@ class DmsTreatmentPlanRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('appointment');
         $qb->join('appointment.dmsInvoice','invoice');
-        $qb->join('invoice.assignDoctor','doctor');
-        $qb->join('appointment.dmsParticular','particular');
-        $qb->join('invoice.customer','customer');
-        $qb->select('appointment.updated as updated');
-        $qb->addSelect('SUM(appointment.subTotal) as subTotal');
+  //      $qb->join('invoice.assignDoctor','doctor');
+      //  $qb->join('appointment.dmsParticular','particular');
+//        $qb->join('invoice.customer','customer');
+        $qb->select('SUM(appointment.subTotal) as subTotal');
         $qb->addSelect('SUM(appointment.discount) as discount');
         $qb->addSelect('SUM(appointment.payment) as payment');
         $qb->where('invoice.dmsConfig ='.$config->getId());
         $qb->andWhere('appointment.status =1');
-        $this->handleSearchBetween($qb,$data);
-        $qb->groupBy('appointment.updated');
-        $result = $qb->getQuery()->getArrayResult();
+       // $this->handleSearchBetween($qb,$data);
+      //  $qb->groupBy('appointment.updated');
+        $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
 
     }
