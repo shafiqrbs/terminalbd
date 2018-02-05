@@ -311,6 +311,22 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $qb->andWhere('appointment.status =1');
        // $this->handleSearchBetween($qb,$data);
       //  $qb->groupBy('appointment.updated');
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        } elseif (!empty($data['startDate']) and !empty($data['endDate'])) {
+            $data['startDate'] = date('Y-m-d', strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d', strtotime($data['endDate']));
+        }
+        if (!empty($data['startDate'])) {
+            $qb->andWhere("appointment.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("appointment.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
+        }
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
 

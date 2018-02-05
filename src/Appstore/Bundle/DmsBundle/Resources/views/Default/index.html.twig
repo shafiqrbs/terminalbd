@@ -2,47 +2,9 @@
 {% block body %}
     <div class="container-fluid">
         <!-- END PAGE HEADER-->
-        <div id="dashboard">
-            <div class="portlet box green">
-                <div class="portlet-title">
-                    <div class="caption"><i class="fa fa-medkit"></i> Sales Overview</div>
-                </div>
-                <div class="clearfix"></div>
-                <div class="portal-body">
-                    <div class="row-fluid pull-center" >
-                        <div class="clearfix"></div>
-                    <table class="table table-bordered table-striped table-condensed flip-content ">
-                        <tbody class="">
-                        <tr>
-                            <th class="numeric span11">Sub-total</th>
-                            <th class="numeric">{{ (salesOverview.subTotal)|number_format }}</th>
-                        </tr>
-                        <tr>
-                            <th class="numeric span11">Discount</th>
-                            <th class="numeric">{{ (salesOverview.discount)|number_format }}</th>
-                        </tr>
-                        <tr>
-                            <th class="numeric span11">Net Total</th>
-                            <th class="numeric">{{ (salesOverview.subTotal - salesOverview.discount)|number_format }}</th>
 
-                        </tr>
-                        <tr>
-                            <th class="numeric span11">Received</th>
-                            <th class="numeric">{{ (salesOverview.payment)|number_format }}</th>
 
-                        </tr>
-                        <tr>
-                            <th class="numeric span11">Due</th>
-                            <th class="numeric">{{ (salesOverview.subTotal - salesOverview.discount - salesOverview.payment)|number_format }}</th>
-                        </tr>
-                        </tbody>
-                    </table>
-                    </div>
 
-                </div>
-
-            </div>
-        </div>
                 {#
                 <div class="portlet-body">
                     <div class="clearfix">&nbsp;</div>
@@ -147,59 +109,46 @@
                     </div>
                 </div>
             </div>
-           {# {% if is_granted('ROLE_DOMAIN_RESTAURANT_MANAGER') %}
-                <div class="portlet box purple">
-                    <div class="portlet-title">
-                        <div class="caption"><i class="fa fa-database"></i>Inventory</div>
-                    </div>
-                    <div class="portlet-body">
-                        <div class="row-fluid pull-center" >
-                            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat blue">
-                                    <a class="visual" href="{{ path('restaurant_stock') }}">
-                                        <i class="fa fa-database"></i>
-                                    </a>
-                                    <a class="more" href="{{ path('restaurant_stock') }}">
-                                        Stock <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat green">
-                                    <a class="visual" href="{{ path('restaurant_purchase') }}">
-                                        <i class="icon-archive"></i>
-                                    </a>
-                                    <a class="more" href="{{ path('restaurant_purchase') }}">
-                                        Purchase <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat purple">
-                                    <a class="visual" href="{{ path('restaurant_product') }}">
-                                        <i class="fa fa-truck"></i>
-                                    </a>
-                                    <a class="more" href="{{ path('restaurant_product') }}">
-                                        Purchase <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat yellow">
-                                    <a class="visual" href="{{ path('restaurant_report_purchase_summary') }}">
-                                        <i class="fa fa-line-chart"></i>
-                                    </a>
-                                    <a class="more" href="{{ path('restaurant_report_purchase_summary') }}">
-                                        Reports <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
+        <div class="form-actions portlet box green">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-money"></i>Sales Overview</div>
+                <div class="actions">
+                    <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
                 </div>
-            {% endif %}#}
+            </div>
+
+            <div class="portlet-body">
+                <div class="clearfix">&nbsp;</div>
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <tbody class="">
+                    <tr>
+                        <th class="numeric span11">Sub-total</th>
+                        <th class="numeric">{{ (salesOverview.subTotal)|number_format }}</th>
+                    </tr>
+                    <tr>
+                        <th class="numeric span11">Discount</th>
+                        <th class="numeric">{{ (salesOverview.discount)|number_format }}</th>
+                    </tr>
+                    <tr>
+                        <th class="numeric span11">Net Total</th>
+                        <th class="numeric">{{ (salesOverview.subTotal - salesOverview.discount)|number_format }}</th>
+
+                    </tr>
+                    <tr>
+                        <th class="numeric span11">Received</th>
+                        <th class="numeric">{{ (salesOverview.payment)|number_format }}</th>
+
+                    </tr>
+                    <tr>
+                        <th class="numeric span11">Due</th>
+                        <th class="numeric">{{ (salesOverview.subTotal - salesOverview.discount - salesOverview.payment)|number_format }}</th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+    </div>
     </div>
     <style>
         .dashboard-stat .visual{
