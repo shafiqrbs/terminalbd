@@ -64,7 +64,7 @@ class DmsParticularRepository extends EntityRepository
             ->leftJoin('e.service','s')
             ->where('e.dmsConfig = :config')->setParameter('config', $config)
             ->andWhere('s.slug IN(:service)')
-            ->setParameter('service',array($services))
+            ->setParameter('service',$services)
             ->orderBy('e.service','ASC')
             ->orderBy('e.name','ASC')
             ->getQuery()->getResult();

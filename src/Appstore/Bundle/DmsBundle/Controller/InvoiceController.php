@@ -119,7 +119,7 @@ class InvoiceController extends Controller
         }
         $teethPlans         = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array(),array('sorting'=>'ASC'));
         $services           = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
-        $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical','investigation'));
+        $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical'));
         $attributes         = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
         $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
