@@ -62,14 +62,12 @@ class DmsParticularRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
-            ->select('e.name As name')
-            ->addSelect('e.id As id')
             ->where('e.dmsConfig = :config')->setParameter('config', $config)
             ->andWhere('s.slug IN(:service)')
             ->setParameter('service',array_values(array('doctor')))
             ->orderBy('e.service','ASC')
             ->orderBy('e.name','ASC')
-            ->getQuery()->getArrayResult();
+            ->getQuery()->getResult();
             return  $qb;
     }
 
