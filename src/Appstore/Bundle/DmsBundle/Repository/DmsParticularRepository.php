@@ -26,12 +26,13 @@ class DmsParticularRepository extends EntityRepository
         $qb->join('e.service','service');
         $qb->where('e.dmsConfig = :config');
         $qb->setParameter('config',$config);
-        $qb->andWhere('service.slug IN (:services)');
-        $qb->setParameter('services',array('general','medical-history','investigation','physical'));
+        $qb->andWhere('service.dentalService is null');
         $qb->orderBy('service.name , e.name','ASC');
         $result = $qb->getQuery()->getResult();
         return $result;
     }
+
+
 
     public function findWithSearch($config,$service, $data){
 
@@ -63,9 +64,9 @@ class DmsParticularRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
             ->where('e.dmsConfig = :config')->setParameter('config', $config)
-            ->andWhere('s.slug IN(:service)')
-            ->setParameter('service',$services)
-            ->orderBy('e.service','ASC')
+            ->andWhere('e.status = :status')->setParameter('status', 1)
+            ->andWhere('s.serviceFormat is null')
+            ->orderBy('s.sorting','ASC')
             ->orderBy('e.name','ASC')
             ->getQuery()->getResult();
             return  $qb;

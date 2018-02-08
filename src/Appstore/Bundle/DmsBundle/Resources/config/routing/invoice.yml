@@ -158,6 +158,18 @@ dms_treatment_inline_update:
     defaults: { _controller: "DmsBundle:Invoice:inlineUpdate" }
 
 
+dms_invoice_procedure_search:
+    path:     /procedure-search
+    defaults: { _controller: "DmsBundle:Invoice:procedureSearch" }
+    options:
+            expose: true
+
+dms_invoice_auto_particular_search:
+    path:     /auto-particular-search
+    defaults: { _controller: "DmsBundle:Invoice:autoParticularSearch" }
+    options:
+            expose: true
+
 dms_treatment_plan:
     path:     /treatment-plan
     defaults: { _controller: "DmsBundle:TreatmentPlan:index" }
@@ -169,6 +181,14 @@ dms_treatment_appointment_schedule:
     options:
            expose: true
 
+dms_treatment_date_wise_schedule:
+    path:     /treatment-appointment-date-wise-schedule
+    defaults: { _controller: "DmsBundle:TreatmentPlan:dateWiseSchedule" }
+    methods:  POST
+    options:
+           expose: true
+
 dms_treatment_plan_sms:
     path:     /{patient}/{id}/send-sms
     defaults: { _controller: "DmsBundle:TreatmentPlan:sendSmsPlan" }
+

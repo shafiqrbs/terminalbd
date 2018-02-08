@@ -27,7 +27,25 @@ class ServiceType extends AbstractType
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please enter particular name'))
                     ))
-            );
+            )
+            ->add('serviceFormat', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap select-custom'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'empty_value' => '---Choose service format---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select service format'))
+                ),
+                'choices' => array(
+                    'teeth-format' => 'Teeth Format',
+                    'text-field' => 'Text Field',
+                    'checkbox-text-field' => 'Checkbox with Text Field',
+                    'checkbox' => 'Checkbox',
+                    'textarea' => 'Text-area'
+                ),
+            ))
+            ->add('status')
+        ;
     }
 
     /**

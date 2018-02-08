@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DmsBundle\Form;
 
+use Appstore\Bundle\DomainUserBundle\Form\CustomerForDmsType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
 use Appstore\Bundle\HospitalBundle\Entity\Category;
@@ -41,9 +42,10 @@ class InvoiceType extends AbstractType
     {
         $builder
 
-            ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 8,'placeholder'=>'Enter patient drug history','autocomplete'=>'off')))
+          /*  ->add('drugHistory','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 8,'placeholder'=>'Enter patient drug history','autocomplete'=>'off')))
             ->add('diagnosis','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 8,'placeholder'=>'Enter diagnosis details','autocomplete'=>'off')))
-            ->add('process', 'choice', array(
+          */
+          ->add('process', 'choice', array(
                 'attr'=>array('class'=>'span4 select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
@@ -57,7 +59,7 @@ class InvoiceType extends AbstractType
                 ),
             ))
 
-
+/*
             ->add('investigations', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\DmsBundle\Entity\DmsParticular',
@@ -72,8 +74,9 @@ class InvoiceType extends AbstractType
                         ->setParameter('slugs',array('investigation'))
                         ->orderBy("e.name","ASC");
                 }
-            ))
-            ->add('specialAdvises', 'entity', array(
+            ))*/
+
+            /*->add('specialAdvises', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\DmsBundle\Entity\DmsSpecialAdvise',
                 'property' => 'name',
@@ -85,7 +88,7 @@ class InvoiceType extends AbstractType
                         ->where("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }
-            ))
+            ))*/
             ->add('assignDoctor', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\DmsBundle\Entity\DmsParticular',
@@ -104,7 +107,7 @@ class InvoiceType extends AbstractType
                         ->orderBy("e.name","ASC");
                 }
             ));
-           $builder->add('customer', new CustomerForHospitalType( $this->location ));
+           $builder->add('customer', new CustomerForDmsType( $this->location ));
     }
     
     /**

@@ -48,11 +48,8 @@ class DmsInvoiceSmsListener extends BaseSmsAwareListener
         $invoice = $event->getDmsInvoice();
         $patientMobile = "+88".$invoice->getCustomer()->getMobile();
         //$patientMobile = "+8801915109006"; //.$invoice->getCustomer()->getMobile();
-        if($invoice->getCustomer()->getGender() == 'Male'){
-            $msg = 'Dear Sir, We Are Always Committed To Provide Quality Service. Thank You For Being With '.$invoice->getDmsConfig()->getGlobalOption()->getName().'.';
-        }else{
-            $msg = 'Dear Madam, We Are Always Committed To Provide Quality Service. Thank You For Being With '.$invoice->getDmsConfig()->getGlobalOption()->getName().'.';
-        }
+        $orgName = $invoice->getDmsConfig()->getGlobalOption()->getName();
+        $msg = $orgName .'\nDear '.$invoice->getCustomer()->getName().', We are always committed to provide quality service. Thank you for being with us.';
         if (!empty($patientMobile)) {
             $status = $this->gateway->send($msg,$patientMobile);
             $this->em->getRepository('SettingToolBundle:SmsSender')->insertDmsInvoiceSenderSms($invoice, $status);
@@ -69,13 +66,12 @@ class DmsInvoiceSmsListener extends BaseSmsAwareListener
         $schedule = $event->getDmsTreatmentPlan();
         $invoice = $event->getDmsTreatmentPlan()->getDmsInvoice();
         $patientMobile = "+88".$invoice->getCustomer()->getMobile();
-        if($invoice->getCustomer()->getGender() == 'Male'){
-            $msg = 'Dear Sir Your Next Appointment Date and Time- ' . $schedule->getAppointmentDate() . $schedule->getAppointmentTime().'. Thank You For Being With '.$invoice->getDmsConfig()->getGlobalOption()->getName();
-        }else{
-            $msg = 'Dear Madam Your Next Appointment Date and Time- ' . $schedule->getAppointmentDate() . $schedule->getAppointmentTime().'. Thank You For Being With '.$invoice->getDmsConfig()->getGlobalOption()->getName();
-        }
+        $orgName = $invoice->getDmsConfig()->getGlobalOption()->getName();
+        $orgMobile = $invoice->getDmsConfig()->getGlobalOption()->getMobile();
+        $msg = $orgName.'\nDear '.$invoice->getCustomer()->getName().', You have an appointment at ' . $schedule->getAppointmentTime() .' on '. $schedule->getAppointmentDate().'. Pls confirm you will be here in time. Hotline-'.$orgMobile;
+
         if (!empty($patientMobile)) {
-            $status = $this->gateway->send($msg,$patientMobile);
+            echo $status = $this->gateway->send($msg,$patientMobile);
             $this->em->getRepository('SettingToolBundle:SmsSender')->insertDmsInvoiceTreatmentNotificationSenderSms($schedule,$msg, $status);
         }
 

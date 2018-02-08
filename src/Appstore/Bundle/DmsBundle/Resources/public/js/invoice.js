@@ -54,6 +54,41 @@ $( "#name" ).autocomplete({
 
 });
 
+$( ".autoProcedure" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax( {
+            url: Routing.generate('dms_invoice_procedure_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        } );
+    },
+    minLength: 1,
+    select: function( event, ui ) {
+    }
+});
+
+$( ".autoMetaValue" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax( {
+            url: Routing.generate('dms_invoice_auto_particular_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        } );
+    },
+    minLength: 1,
+    select: function( event, ui ) {
+    }
+});
+
+
 $( "#mobile" ).autocomplete({
 
     source: function( request, response ) {
@@ -169,7 +204,7 @@ $(document).on("click", ".particularDelete", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                d$('#procedure-'+dataTab).find('tr#remove-'+id).remove();
+                $('#procedure-'+dataTab).find('tr#remove-'+id).remove();
             });
         }
     });
@@ -303,7 +338,7 @@ $(document).on('click', '.appointmentSchedule', function() {
     var url = $(this).attr('data-url');
     var dataTitle = $(this).attr('data-title');
     $('.dialogModal_header').html(dataTitle);
-    $('.dialog_content').dialogModal({
+    $('#dialog_content').dialogModal({
         topOffset: 0,
         top: 0,
         type: '',
@@ -314,7 +349,7 @@ $(document).on('click', '.appointmentSchedule', function() {
                 url: url,
                 type: 'POST',
                 success: function (response) {
-                    el.find('#appointmentSchedule').html(response);
+                    el.find('.dialogModal_content').html(response);
                 }
             });
         },
@@ -335,6 +370,7 @@ $(document).on('click', '#searchAppointment', function() {
         contentType: false,
         success: function (response) {
             $('#appointmentSchedule').html(response);
+            EditableInit();
         }
     })
 
@@ -381,81 +417,114 @@ $(document).on("change", "#invoiceFormxx", function() {
 
 */
 
+
+
+var form = $("#invoiceForm").validate({
+
+    rules: {
+
+        "appstore_bundle_dmsbundle_invoice[customer][name]": {required: true},
+        "appstore_bundle_dmsbundle_invoice[customer][mobile]": {required: true},
+        "appstore_bundle_dmsbundle_invoice[customer][age]": {required: true},
+        "appstore_bundle_dmsbundle_invoice[customer][address]": {required: false},
+    },
+
+    messages: {
+
+        "appstore_bundle_dmsbundle_invoice[customer][name]":"Enter patient name",
+        "appstore_bundle_dmsbundle_invoice[customer][mobile]":"Enter patient mobile no",
+        "appstore_bundle_dmsbundle_invoice[customer][age]": "Enter patient age",
+    },
+    tooltip_options: {
+        "appstore_bundle_dmsbundle_invoice[customer][name]": {placement:'top',html:true},
+        "appstore_bundle_dmsbundle_invoice[customer][mobile]": {placement:'top',html:true},
+        "appstore_bundle_dmsbundle_invoice[customer][age]": {placement:'top',html:true},
+    },
+
+    submitHandler: function(form) {
+
+        $.ajax({
+
+            url         : $('form#invoiceForm').attr( 'action' ),
+            type        : $('form#invoiceForm').attr( 'method' ),
+            data        : new FormData($('form#invoiceForm')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                location.reload();
+            }
+        });
+    }
+});
+
+$('#appstore_bundle_dmsbundle_invoice_customer_name').on('click', function(){
+    form.element($(this));
+});
+$('#appstore_bundle_dmsbundle_invoice_customer_mobile').on('click', function(){
+    form.element($(this));
+});
+$('#appstore_bundle_dmsbundle_invoice_customer_age').on('click', function(){
+    form.element($(this));
+});
+
+$(document).on("click", "#savePatientButtonxxx", function() {
+
+
+        var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
+        var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
+        $.ajax({
+            url:url ,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data:formData,
+            beforeSend: function () {
+                $('.loader-double').fadeIn(1000).addClass('is-active');
+            },
+            success: function(response){
+                location.reload();
+            }
+        });
+
+});
+
 $(document).on("click", ".saveButton", function() {
 
-    $('#appstore_bundle_dmsbundle_invoice_customer_mobile, #appstore_bundle_dmsbundle_invoice_customer_name, #appstore_bundle_dmsbundle_invoice_customer_age').each(function() {
-
-        if ($(this).val() == '') {
-
-            $('#appstore_bundle_dmsbundle_invoice_customer_mobile').addClass('input-error');
-            $('#appstore_bundle_dmsbundle_invoice_customer_mobile').focus();
-            $('#appstore_bundle_dmsbundle_invoice_customer_name').addClass('input-error');
-            $('#appstore_bundle_dmsbundle_invoice_customer_name').focus;
-            $('#appstore_bundle_dmsbundle_invoice_customer_age').addClass('input-error');
-            $('#appstore_bundle_dmsbundle_invoice_customer_age').focus;
-            $('#updatePatient').show();
-            return false;
-
-        }else{
-
-            var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
-            var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
-            $.ajax({
-                url:url ,
-                type: 'POST',
-                processData: false,
-                contentType: false,
-                data:formData,
-                beforeSend: function () {
-                    $('.loader-double').fadeIn(3000).addClass('is-active');
-                },
-                success: function(response){
-                    $('.loader-double').fadeOut(2000).removeClass('is-active');
-                }
-            });
+    var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
+    var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
+    $.ajax({
+        url:url ,
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data:formData,
+        success: function(response){
 
         }
-
     });
+
 });
 
 $(document).on("click", "#finalActionButton", function() {
 
-    $('#appstore_bundle_dmsbundle_invoice_customer_mobile, #appstore_bundle_dmsbundle_invoice_customer_name, #appstore_bundle_dmsbundle_invoice_customer_age').each(function() {
-
-        if ($(this).val() == '') {
-
-            $('#appstore_bundle_dmsbundle_invoice_customer_mobile').addClass('input-error');
-            $('#appstore_bundle_dmsbundle_invoice_customer_mobile').focus();
-            $('#appstore_bundle_dmsbundle_invoice_customer_name').addClass('input-error');
-            $('#appstore_bundle_dmsbundle_invoice_customer_name').focus;
-            $('#appstore_bundle_dmsbundle_invoice_customer_age').addClass('input-error');
-            $('#appstore_bundle_dmsbundle_invoice_customer_age').focus;
-            $('#updatePatient').show();
-            return false;
-
-        }else{
-
-            var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
-            var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
-            $('#confirm-content').confirmModal({
-                topOffset: 0,
-                top: '25%',
-                onOkBut: function(event, el) {
-                    $.ajax(url,{
-                        processData: false,
-                        contentType: false,
-                        type: 'POST',
-                        data: formData,
-                        success: function (response) {
-                            location.reload();
-                        }
-                    });
+    var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
+    var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.ajax(url,{
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    location.reload();
                 }
             });
         }
-
     });
+
 });
 
 

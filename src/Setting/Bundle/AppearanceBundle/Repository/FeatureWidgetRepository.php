@@ -19,7 +19,6 @@ class FeatureWidgetRepository extends EntityRepository
         $qb = $em->createQueryBuilder();
 
         foreach ($data as $key => $value){
-
             $qb->update('SettingAppearanceBundle:FeatureWidget', 'mg')
                 ->set('mg.sorting', $i)
                 ->where('mg.id = :id')
@@ -27,7 +26,6 @@ class FeatureWidgetRepository extends EntityRepository
                 ->getQuery()
                 ->execute();
             $i++;
-
         }
 
 

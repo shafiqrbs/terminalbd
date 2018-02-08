@@ -191,7 +191,13 @@ class UserRepository extends EntityRepository
             );
         }
 
+        $array['SMS'] = array(
+            'ROLE_SMS'                                  => 'Sms/E-mail',
+            'ROLE_SMS_MANAGER'                          => 'Sms/E-mail Manager',
+            'ROLE_SMS_CONFIG'                           => 'SMS/E-mail Setup',
+            'ROLE_SMS_BULK'                             => 'SMS Bulk',
 
+        );
 
         return $array;
     }

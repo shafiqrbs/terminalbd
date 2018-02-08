@@ -49,13 +49,20 @@ class DmsService
     private $dmsInvoices;
 
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=200, nullable=true)
      */
     private $name;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="serviceFormat", type="string", length=50, nullable=true)
+     */
+    private $serviceFormat;
 
 
     /**
@@ -250,6 +257,28 @@ class DmsService
     public function getInvoiceParticular()
     {
         return $this->invoiceParticular;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceFormat()
+    {
+        return $this->serviceFormat;
+    }
+
+    /**
+     * @param string $serviceFormat
+     * Teeth Format
+     * Checkbox with Text Field
+     * Text Field
+     * Checkbox
+     * Text-area
+     */
+
+    public function setServiceFormat($serviceFormat)
+    {
+        $this->serviceFormat = $serviceFormat;
     }
 
 

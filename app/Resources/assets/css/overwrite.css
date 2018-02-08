@@ -512,6 +512,28 @@ label.error {
     z-index: 99;
 }
 
+.ui-widget.ui-widget-content li{
+    margin: 0;
+    cursor: pointer;
+    width:100%!important;
+    display: inline-block;
+}
+
+.ui-widget.ui-widget-content a{
+    position: relative;
+    height: 30px!important;
+    line-height: 30px!important;
+    text-decoration: none!important;
+    padding-left:1%!important;
+    display: inline-block;
+    width:99%!important;
+}
+.ui-widget.ui-widget-content a:hover{
+    background:#4b8df8!important;
+    color: #ffffff!important;
+}
+
+
 
 /*
 .ui-autocomplete-loading {

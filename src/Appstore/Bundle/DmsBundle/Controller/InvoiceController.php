@@ -90,6 +90,31 @@ class InvoiceController extends Controller
 
     }
 
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param DmsInvoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(DmsInvoice $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new InvoiceType($globalOption,$location), $entity, array(
+            'action' => $this->generateUrl('dms_invoice_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoiceForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
+
 
     public function editAction($id)
     {
@@ -117,16 +142,22 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done', 'Canceled'))) {
             return $this->redirect($this->generateUrl('dms_invoice_show', array('id' => $entity->getId())));
         }
-        $teethPlans         = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array(),array('sorting'=>'ASC'));
-        $services           = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
+        $teethPlans ='';
+        if($entity->getCustomer()){
+            $ageGroup = $entity->getCustomer()->getAgeGroup();
+            $teethPlans         = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array('ageGroup' => $ageGroup),array('sorting'=>'ASC'));
+        }
+        $services    = $em->getRepository('DmsBundle:DmsService')->getServiceLists($dmsConfig);
+        $treatmentPlans     = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
         $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical'));
         $attributes         = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
         $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'teethPlans' => $teethPlans,
-            'particularService' => $services,
+            'particularService' => $treatmentPlans,
             'invoiceParticularArr' => $invoiceParticularArr,
+            'services' => $services,
             'particulars' => $particulars,
             'attributes' => $attributes,
             'treatmentSchedule' => $treatmentSchedule,
@@ -148,9 +179,7 @@ class InvoiceController extends Controller
         $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
         $due = $entity->getDue() > 0 ? $entity->getDue() : 0;
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
-
-
-       $data = array(
+        $data = array(
            'subTotal' => $subTotal,
            'netTotal' => $netTotal,
            'payment' => $payment ,
@@ -429,8 +458,26 @@ class InvoiceController extends Controller
     {
         $inventory = $this->getUser()->getGlobalOption()->getDmsConfig()->getId();
         if ($inventory == $entity->getDmsConfig()->getId()) {
-            return $this->render('DmsBundle:DmsInvoice:show.html.twig', array(
+
+
+          //  $invoiceDetails = [['items' => [],'serviceFormat' => [] ]];
+
+            foreach ($entity->getInvoiceParticulars() as $item) {
+
+                /** @var DmsInvoiceParticular $item */
+                if(!empty($item->getDmsParticular())) {
+                    $serviceName = $item->getDmsParticular()->getService()->getName();
+                    $serviceFormat = $item->getDmsParticular()->getService()->getServiceFormat();
+                    $invoiceDetails[$serviceName][]= $serviceName;
+                    $invoiceDetails[$serviceName]['items'][]= $item;
+                    $invoiceDetails[$serviceName]['serviceFormat'][]= $serviceFormat;
+
+                }
+
+            }
+            return $this->render('DmsBundle:Invoice:show.html.twig', array(
                 'entity' => $entity,
+                'invoiceDetails' => $invoiceDetails,
             ));
         } else {
             return $this->redirect($this->generateUrl('dms_invoice'));
@@ -449,29 +496,6 @@ class InvoiceController extends Controller
             return $this->redirect($this->generateUrl('dms_invoice'));
         }
 
-    }
-
-    /**
-     * Creates a form to edit a Invoice entity.wq
-     *
-     * @param Invoice $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createEditForm(DmsInvoice $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new InvoiceType($globalOption,$location), $entity, array(
-            'action' => $this->generateUrl('dms_invoice_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-            'attr' => array(
-                'class' => 'form-horizontal',
-                'id' => 'invoiceForm',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
     }
 
 
@@ -609,8 +633,6 @@ class InvoiceController extends Controller
         return $data;
     }
 
-
-
     public function invoicePrintAction(DmsInvoice $entity)
     {
 
@@ -703,13 +725,14 @@ class InvoiceController extends Controller
 
     public function appointmentTimeAction()
     {
-        $array = ['8.00 AM','8.15 AM','8.30 AM','8.45 AM',
-            '9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
-            '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM','12.00 PM','12.15 PM',
+        $array = ['12.00 PM','12.15 PM',
             '12.30 PM','12.45 PM','1.00 PM','1.15 PM','1.30 PM','1.45 PM','2.00 PM','2.15 PM',
             '2.30 PM','2.45 PM','3.00 PM','4.15 PM','4.30 PM','4.45 PM','5.00 PM','5.15 PM',
             '5.30 PM','5.45 PM','6.00 PM','6.15 PM','6.30 PM','6.45 PM','7.00 PM','7.15 PM',
-            '7.30 PM','7.45 PM','8.00 PM','8.15 PM','8.30 PM','8.45 PM','9.00 PM','9.15 PM','9.30 PM','9.45 PM','10.00 PM'];
+            '7.30 PM','7.45 PM','8.00 PM','8.15 PM','8.30 PM','8.45 PM','9.00 PM','9.15 PM','9.30 PM','9.45 PM','10.00 PM','10.15 PM','10.30 PM','10.45 PM','11.00 PM',
+            '8.00 AM','8.15 AM','8.30 AM','8.45 AM','9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
+            '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM',
+            ];
 
         $items  = array();
         foreach ($array as $value):
@@ -717,6 +740,51 @@ class InvoiceController extends Controller
         endforeach;
         return new JsonResponse($items);
     }
+
+    public function typeaheadAction()
+    {
+        $array = ['12.00 PM','12.15 PM',
+            '12.30 PM','12.45 PM','1.00 PM','1.15 PM','1.30 PM','1.45 PM','2.00 PM','2.15 PM',
+            '2.30 PM','2.45 PM','3.00 PM','4.15 PM','4.30 PM','4.45 PM','5.00 PM','5.15 PM',
+            '5.30 PM','5.45 PM','6.00 PM','6.15 PM','6.30 PM','6.45 PM','7.00 PM','7.15 PM',
+            '7.30 PM','7.45 PM','8.00 PM','8.15 PM','8.30 PM','8.45 PM','9.00 PM','9.15 PM','9.30 PM','9.45 PM','10.00 PM','10.15 PM','10.30 PM','10.45 PM','11.00 PM',
+            '8.00 AM','8.15 AM','8.30 AM','8.45 AM','9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
+            '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM',
+        ];
+
+        $items  = array();
+        foreach ($array as $value):
+            $items[]= array('value' => $value ,'text'=> $value);
+        endforeach;
+        return new JsonResponse($array);
+    }
+
+    public function procedureSearchAction()
+    {
+        $q = $_REQUEST['term'];
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->searchAutoComplete($config,$q);
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity['id']);
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
+    public function autoParticularSearchAction()
+    {
+        $q = $_REQUEST['term'];
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->searchAutoComplete($config,$q);
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity['id']);
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
 
 }
 

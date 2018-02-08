@@ -79,39 +79,26 @@
                                     <i class="icon icon-medkit"></i>
                                 </a>
                                 <a class="more" href="{{ path('dms_invoice_new') }}">
-                                    New Invoice <i class="m-icon-swapright m-icon-white"></i>
+                                    New Patient <i class="m-icon-swapright m-icon-white"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                             <div class="dashboard-stat purple">
                                 <a class="visual" href="{{ path('dms_invoice') }}">
-                                    <i class="fa fa-shopping-cart"></i>
+                                    <i class="fa fa-users"></i>
                                 </a>
                                 <a class="more" href="{{ path('dms_invoice') }}">
-                                    Invoice <i class="m-icon-swapright m-icon-white"></i>
+                                    Patients <i class="m-icon-swapright m-icon-white"></i>
                                 </a>
                             </div>
                         </div>
-                       {# {% if is_granted('ROLE_DOMAIN_RESTAURANT_MANAGER') %}
-                            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat yellow">
-                                    <a class="visual" href="{{ path('restaurant_report_sales_summary') }}">
-                                        <i class="fa fa-bar-chart"></i>
-                                    </a>
-                                    <a class="more" href="{{ path('restaurant_report_sales_summary') }}">
-                                        Reports <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        {% endif %}#}
-
                     </div>
                 </div>
             </div>
         <div class="form-actions portlet box green">
             <div class="portlet-title">
-                <div class="caption"><i class="icon-money"></i>Sales Overview</div>
+                <div class="caption"><i class="icon-money"></i>Patient Payment Overview</div>
                 <div class="actions">
                     <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
                 </div>

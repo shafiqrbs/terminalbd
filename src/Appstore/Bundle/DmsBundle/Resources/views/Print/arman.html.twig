@@ -61,7 +61,6 @@
                                             <td class="td-label" {% if invoiceParticular.teethNo[0] is empty %} colspan="2" {% endif %} ><i class="fa fa-check" aria-hidden="true"></i> {{ invoiceParticular.metaValue }}</td>
                                             {% if invoiceParticular.teethNo is not empty and  invoiceParticular.teethNo[0] is not empty %}
                                                 <td style="width:90px">
-
                                                     <table class="dms-table">
                                                         {% set upperLeftTeeths = {1:8,2:7,3:6,4:5,3:4,2:2,1:1} %}
                                                         {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}

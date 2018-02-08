@@ -116,6 +116,7 @@
 {% block documentready %}
     {{ parent() }}
     $('#product').DataTable( {
+    iDisplayLength: 25,
     scrollY:        '110vh',
     scrollCollapse: true,
     paging:         true,

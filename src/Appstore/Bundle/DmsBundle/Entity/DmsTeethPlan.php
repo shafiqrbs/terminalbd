@@ -25,9 +25,16 @@ class DmsTeethPlan
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="smallint", length=2, nullable=true)
+     * @ORM\Column(name="name", type="string", length=50, nullable=true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="toothNo", type="string", length=5, nullable=true)
+     */
+    private $toothNo;
 
     /**
      * @var string
@@ -35,6 +42,13 @@ class DmsTeethPlan
      * @ORM\Column(name="teethPosition", type="string", length=50, nullable=true)
      */
      private $teethPosition;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ageGroup", type="string", length=20, nullable=true)
+     */
+     private $ageGroup;
 
     /**
      * @var int
@@ -101,6 +115,40 @@ class DmsTeethPlan
     public function setSorting($sorting)
     {
         $this->sorting = $sorting;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToothNo()
+    {
+        return $this->toothNo;
+    }
+
+    /**
+     * @param string $toothNo
+     */
+    public function setToothNo($toothNo)
+    {
+        $this->toothNo = $toothNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAgeGroup()
+    {
+        return $this->ageGroup;
+    }
+
+    /**
+     * @param string $ageGroup
+     * Adult
+     * Child
+     */
+    public function setAgeGroup($ageGroup)
+    {
+        $this->ageGroup = $ageGroup;
     }
 
 

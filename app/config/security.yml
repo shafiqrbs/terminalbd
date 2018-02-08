@@ -122,10 +122,17 @@ security:
         ROLE_APP_SETTING:                               [ROLE_APP_SETTING]
 
 
+        ROLE_SMS:                                       [ROLE_SMS]
+        ROLE_SMS_MANAGER:                               [ROLE_SMS,ROLE_SMS_MANAGER]
+        ROLE_SMS_CONFIG:                                [ROLE_SMS,ROLE_SMS_CONFIG]
+        ROLE_SMS_BULK:                                  [ROLE_SMS,ROLE_SMS_BULK]
+        ROLE_SMS_ADMIN:                                 [ROLE_SMS,ROLE_SMS_BULK,ROLE_SMS_CONFIG,ROLE_SMS_MANAGER]
+
+
         # THIS IS PART OF MAIN DOMAIN MANAGE
 
         ROLE_DOMAIN_MANAGER:                            []
-        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_AGENT,ROLE_RESTAURANT,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING,ROLE_APPEARANCE,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN_DMS_ADMIN,ROLE_DOMAIN_ADMIN,ROLE_DOMAIN_RESTAURANT_ADMIN]
+        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_AGENT,ROLE_RESTAURANT,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING,ROLE_APPEARANCE,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN_DMS_ADMIN,ROLE_DOMAIN_ADMIN,ROLE_DOMAIN_RESTAURANT_ADMIN,ROLE_SMS,ROLE_SMS_ADMIN]
 
         ROLE_ADMIN_OPERATION_USER:                      [ROLE_ADMIN_OPERATION_USER,ROLE_DOMAIN]
         ROLE_ADMIN_OPERATION_MANAGER:                   [ROLE_ADMIN_OPERATION_MANAGER,ROLE_ADMIN_OPERATION_USER]
@@ -174,6 +181,7 @@ security:
         - { path: ^/web-builder/build,  role: ROLE_DOMAIN }
         - { path: ^/customer,           role: ROLE_CUSTOMER }
         - { path: ^/agent,              role: ROLE_AGENT }
+        - { path: ^/sms,                role: ROLE_SMS }
         - { path: ^/user,               role: ROLE_USER }
         - { path: ^/general,            role: ROLE_USER }
         - { path: ^/e-commerce,         role: ROLE_ECOMMERCE }

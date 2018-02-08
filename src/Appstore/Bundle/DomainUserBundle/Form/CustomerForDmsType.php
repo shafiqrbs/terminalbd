@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CustomerForHospitalType extends AbstractType
+class CustomerForDmsType extends AbstractType
 {
 
     /** @var  LocationRepository */
@@ -55,7 +55,13 @@ class CustomerForHospitalType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),
             ))
-            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize inputs address','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter patient address')
+            ->add('ageGroup', 'choice', array(
+                'attr'=>array('class'=>'span12 select-custom inputs'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array('Adult' => 'Adult','Child' => 'Child'),
+            ))
+            ->add('address','textarea', array('attr'=>array('required'=>false ,'class'=>'m-wrap span12 resize inputs address','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter patient address')
             ))
             ->add('location', 'entity', array(
                 'required'    => false,

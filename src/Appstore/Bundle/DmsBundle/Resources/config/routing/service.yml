@@ -23,3 +23,8 @@ dms_service_delete:
 dms_service_status:
     path:     /{id}/status
     defaults: { _controller: "DmsBundle:Service:status" }
+
+dms_service_sorted:
+    path:     /service-sorted
+    defaults: { _controller: "DmsBundle:Service:sorted" }
+

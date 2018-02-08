@@ -126,9 +126,9 @@ class Builder extends ContainerAware
                 }
             }
 
-            if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_DOMAIN_MANAGER')) {
+            if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_SMS')) {
                 $menu = $this->manageDomainInvoiceMenu($menu);
-                $menu = $this->manageCustomerOrderMenu($menu);
+                //$menu = $this->manageCustomerOrderMenu($menu);
             }
 
             if ($securityContext->isGranted('ROLE_CUSTOMER')) {
@@ -1059,6 +1059,31 @@ class Builder extends ContainerAware
 
     }
 
+
+    public function manageDomainInvoiceMenu($menu)
+    {
+        $securityContext = $this->container->get('security.context');
+        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
+        $menu
+            ->addChild('Invoice Sms & Email')
+            ->setAttribute('icon', 'fa fa-files-o')
+            ->setAttribute('dropdown', true);
+        if ($securityContext->isGranted('ROLE_SMS_MANAGER')) {
+            $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('icon', 'icon-mobile')->setAttribute('dropdown', true);
+            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs', array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
+            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
+            $menu['Invoice Sms & Email']->addChild('Invoice Application', array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'fa fa-files-o');
+        }
+        if ($securityContext->isGranted('ROLE_SMS_BULK')) {
+            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Bulk Sms', array('route' => 'smsbulk'))->setAttribute('icon', 'icon-envelope');
+        }
+        if ($securityContext->isGranted('ROLE_SMS_CONFIG')) {
+            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Notification Setup', array('route' => 'domain_notificationconfig'))->setAttribute('icon', 'fa fa-bell ');
+        }
+        return $menu;
+    }
+
+
     public function manageSystemAccountMenu($menu)
     {
         $menu
@@ -1088,23 +1113,6 @@ class Builder extends ContainerAware
         return $menu;
     }
 
-    public function manageDomainInvoiceMenu($menu)
-    {
-        $securityContext = $this->container->get('security.context');
-        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
-        $menu
-            ->addChild('Invoice Sms & Email')
-            ->setAttribute('icon', 'fa fa-files-o')
-            ->setAttribute('dropdown', true);
-        $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('icon', 'icon-mobile')->setAttribute('dropdown', true);
-        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs', array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
-        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Bulk Sms', array('route' => 'smsbulk'))->setAttribute('icon', 'icon-envelope');
-        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
-        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Notification Setup', array('route' => 'domain_notificationconfig'))->setAttribute('icon', 'fa fa-bell ');
-        $menu['Invoice Sms & Email']->addChild('Invoice Application', array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'fa fa-files-o');
-
-        return $menu;
-    }
 
     public function manageFrontendMenu($menu)
     {

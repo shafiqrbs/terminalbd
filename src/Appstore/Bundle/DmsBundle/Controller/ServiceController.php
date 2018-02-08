@@ -84,7 +84,7 @@ class ServiceController extends Controller
     private function createCreateForm(DmsService $entity)
     {
         $form = $this->createForm(new ServiceType(), $entity, array(
-            'action' => $this->generateUrl('dms_particular_create', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('dms_service_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -103,7 +103,7 @@ class ServiceController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
         $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceLists($config);
         //$pagination = $this->paginate($pagination);
         $entity = $em->getRepository('DmsBundle:DmsService')->find($id);
@@ -123,15 +123,15 @@ class ServiceController extends Controller
     /**
      * Creates a form to edit a Particular entity.
      *
-     * @param Particular $entity The entity
+     * @param DmsService $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
     private function createEditForm(DmsService $entity)
     {
 
-        $form = $this->createForm(new ParticularType(), $entity, array(
-            'action' => $this->generateUrl('dms_particular_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new ServiceType(), $entity, array(
+            'action' => $this->generateUrl('dms_service_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -163,7 +163,7 @@ class ServiceController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('dms_particular'));
+            return $this->redirect($this->generateUrl('dms_service'));
         }
 
         return $this->render('DmsBundle:Service:index.html.twig', array(
@@ -227,4 +227,16 @@ class ServiceController extends Controller
         );
         return $this->redirect($this->generateUrl('dms_particular'));
     }
+
+    /**
+     * Lists all FeatureWidget entities.
+     *
+     */
+    public function sortedAction(Request $request)
+    {
+        $data = $request ->request->get('item');
+        $this->getDoctrine()->getRepository('DmsBundle:DmsService')->setListOrdering($data);
+        exit;
+    }
+
 }

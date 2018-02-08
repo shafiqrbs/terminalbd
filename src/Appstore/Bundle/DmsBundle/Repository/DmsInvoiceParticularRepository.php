@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DmsBundle\Repository;
 use Appstore\Bundle\DmsBundle\Controller\InvoiceController;
 use Appstore\Bundle\DmsBundle\Entity\AdmissionPatientDmsParticular;
+use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular;
 use Appstore\Bundle\DmsBundle\Entity\Invoice;
@@ -87,48 +88,94 @@ class DmsInvoiceParticularRepository extends EntityRepository
         $data .='<td  class="numeric"'.$colSpan.'>'.$invoiceParticular->getMetaValue().'</td>';
         if (!empty($invoiceParticular->getMetaValue()) and !empty($invoiceParticular->getTeethNo()[0])) {
             $data .= '<td class="numeric">';
-            $data .='<table class="dms-table">';
-            $leftTeeths = [8,7,6,5,4,3,2,1];
-            $upperRightTeeths = array(9 =>1,10 =>2,11=>3,12=>4,13=>5,14=>6,15=>7,16=>8);
-            $lowerLeftTeeths = array(24=>8,23=>7,12=>6,21=>5,20=>4,19=>3,18=>2,17=>1);
-            $lowerRightTeeths = array(25 =>1,26 =>2,27=>3,28=>4,29=>5,30=>6,31=>7,32=>8);
-            $data .='<tr>';
-            $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
-            $data .='<ul class="leftTeeth">';
-                       foreach ($leftTeeths as $left) :
-                            $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                            $data .='<li '.$selected.'>'.$left.'</li>';
-                       endforeach;
-                    $data .='</ul>';
+            if($invoice->getCustomer()->getAgeGroup() == 'Adult'){
+                $data .='<table class="dms-table">';
+                $leftTeeths = [8,7,6,5,4,3,2,1];
+                $upperRightTeeths = array(9 =>1,10 =>2,11=>3,12=>4,13=>5,14=>6,15=>7,16=>8);
+                $lowerLeftTeeths = array(24=>8,23=>7,12=>6,21=>5,20=>4,19=>3,18=>2,17=>1);
+                $lowerRightTeeths = array(25 =>1,26 =>2,27=>3,28=>4,29=>5,30=>6,31=>7,32=>8);
+                $data .='<tr>';
+                $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
+                $data .='<ul class="leftTeeth">';
+                foreach ($leftTeeths as $left) :
+                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
+                    $data .='<li '.$selected.'>'.$left.'</li>';
+                endforeach;
+                $data .='</ul>';
                 $data .='</td>';
-            $data .='<td class="dms-td dms-td-border-bottom">';
-            $data .='<ul class="rightTeeth">';
-            foreach ($upperRightTeeths as $key=>$right) :
-                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                $data .='<li '.$selected.'>'.$right.'</li>';
-            endforeach;
-            $data .='</ul>';
-            $data .='</td>';
-            $data .= '</tr>';
-            $data .='<tr>';
-            $data .='<td class="dms-td dms-td-border-none">';
-            $data .='<ul class="leftTeeth">';
-            foreach ($lowerLeftTeeths as $key=>$left) :
-                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                $data .='<li '.$selected.'>'.$left.'</li>';
-            endforeach;
-            $data .='</ul>';
-            $data .='</td>';
-            $data .='<td class="dms-td">';
-            $data .='<ul class="rightTeeth">';
-            foreach ($lowerRightTeeths as $key=>$right) :
-                $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                $data .='<li '.$selected.'>'.$right.'</li>';
-            endforeach;
-            $data .='</ul>';
-            $data .='</td>';
-            $data .= '</tr>';
-            $data .= '</table>';
+                $data .='<td class="dms-td dms-td-border-bottom">';
+                $data .='<ul class="rightTeeth">';
+                foreach ($upperRightTeeths as $key=>$right) :
+                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
+                    $data .='<li '.$selected.'>'.$right.'</li>';
+                endforeach;
+                $data .='</ul>';
+                $data .='</td>';
+                $data .= '</tr>';
+                $data .='<tr>';
+                $data .='<td class="dms-td dms-td-border-none">';
+                $data .='<ul class="leftTeeth">';
+                foreach ($lowerLeftTeeths as $key=>$left) :
+                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
+                    $data .='<li '.$selected.'>'.$left.'</li>';
+                endforeach;
+                $data .='</ul>';
+                $data .='</td>';
+                $data .='<td class="dms-td">';
+                $data .='<ul class="rightTeeth">';
+                foreach ($lowerRightTeeths as $key=>$right) :
+                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
+                    $data .='<li '.$selected.'>'.$right.'</li>';
+                endforeach;
+                $data .='</ul>';
+                $data .='</td>';
+                $data .= '</tr>';
+                $data .= '</table>';
+            }else{
+                $data .='<table class="dms-table">';
+                $leftTeeths = array(37=>'E',36=>'D',35=>'C',34=>'B',33=>'A');
+                $upperRightTeeths = array(38=>'A',39=>'B',40=>'C',41=>'D',42=>'E');
+                $lowerLeftTeeths = array(47=>'E',46=>'D',45=>'C',44=>'B',43=>'A');
+                $lowerRightTeeths = array(38=>'A',49=>'B',50=>'C',51=>'D',52=>'E');
+                $data .='<tr>';
+                $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
+                $data .='<ul class="leftTeeth">';
+                foreach ($upperRightTeeths as $key=>$right) :
+                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
+                    $data .='<li '.$selected.'>'.$right.'</li>';
+                endforeach;
+                $data .='</ul>';
+                $data .='</td>';
+                $data .='<td class="dms-td dms-td-border-bottom">';
+                $data .='<ul class="rightTeeth">';
+                foreach ($upperRightTeeths as $key=>$right) :
+                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
+                    $data .='<li '.$selected.'>'.$right.'</li>';
+                endforeach;
+                $data .='</ul>';
+                $data .='</td>';
+                $data .= '</tr>';
+                $data .='<tr>';
+                $data .='<td class="dms-td dms-td-border-none">';
+                $data .='<ul class="leftTeeth">';
+                foreach ($lowerLeftTeeths as $key=>$left) :
+                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
+                    $data .='<li '.$selected.'>'.$left.'</li>';
+                endforeach;
+                $data .='</ul>';
+                $data .='</td>';
+                $data .='<td class="dms-td">';
+                $data .='<ul class="rightTeeth">';
+                foreach ($lowerRightTeeths as $key=>$right) :
+                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
+                    $data .='<li '.$selected.'>'.$right.'</li>';
+                endforeach;
+                $data .='</ul>';
+                $data .='</td>';
+                $data .= '</tr>';
+                $data .= '</table>';
+            }
+
             $data .= '</td>';
         }
         $data .='<td class="numeric">';
@@ -146,23 +193,52 @@ class DmsInvoiceParticularRepository extends EntityRepository
     {
         $em = $this->_em;
         if(!empty($data['metaKey'])) {
+            $this->removeInvoiceParticularPreviousCheck($invoice);
             foreach ($data['metaKey'] as $key => $val) {
                 $particular = $this->_em->getRepository('DmsBundle:DmsParticular')->find($val);
                 $entity = new DmsInvoiceParticular();
                 $invoiceDmsParticular = $this->_em->getRepository('DmsBundle:DmsInvoiceParticular')->findOneBy(array('dmsInvoice' => $invoice, 'dmsParticular' => $particular));
                 if (!empty($invoiceDmsParticular)) {
-                    $entity->setMetaValue($data['metaValue'][$key]);
+                    $entity = $invoiceDmsParticular ;
+                    $entity->setMetaValue(trim($data['metaValue'][$key]));
                 } else {
                     $entity->setDmsParticular($particular);
-                    $entity->setMetaValue($data['metaValue'][$key]);
+                    $entity->setMetaValue(trim($data['metaValue'][$key]));
                 }
-                $entity->setDmsParticular($particular);
                 $entity->setDmsInvoice($invoice);
                 $em->persist($entity);
                 $em->flush();
             }
+            $this->updateMetaCheckValue($invoice,$data);
+        }
+    }
+
+    public function updateMetaCheckValue($invoice,$data)
+    {
+        $em = $this->_em;
+        foreach ($data['metaKey'] as $key => $val) {
+            if(isset($data['metaCheck'][$key]) and $data['metaCheck'][$key] > 0) {
+                $particular = $data['metaCheck'][$key];
+                $invoiceDmsParticular = $this->_em->getRepository('DmsBundle:DmsInvoiceParticular')->findOneBy(array('dmsInvoice' => $invoice, 'dmsParticular' => $particular));
+                $invoiceDmsParticular->setMetaCheck($data['metaCheck'][$key]);
+                $em->flush();
+            }
         }
 
+    }
+
+    public function removeInvoiceParticularPreviousCheck(DmsInvoice $invoice)
+    {
+        $em = $this->_em;
+        $update = $em->createQuery("UPDATE DmsBundle:DmsInvoiceParticular e SET e.metaCheck = 0 WHERE e.dmsService IS NULL and  e.dmsInvoice = ".$invoice->getId());
+        $update->execute();
+    }
+
+    public function removeInvoiceParticularCheckItem(DmsInvoice $invoice)
+    {
+        $em = $this->_em;
+        $remove = $em->createQuery("DELETE DmsBundle:DmsInvoiceParticular e WHERE e.dmsService IS NULL and  e.dmsInvoice = ".$invoice->getId());
+        $remove->execute();
     }
 
     public function getSalesItems(DmsInvoice $sales)
@@ -299,5 +375,20 @@ class DmsInvoiceParticularRepository extends EntityRepository
             return false;
         }
 
+    }
+
+
+    public function searchAutoComplete(DmsConfig $config,$q)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.dmsInvoice', 'i');
+        $query->select('e.metaValue as id');
+        $query->where($query->expr()->like("e.metaValue", "'$q%'"  ));
+        $query->andWhere("i.dmsConfig = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.metaValue');
+        $query->orderBy('e.metaValue', 'ASC');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
     }
 }

@@ -20,11 +20,31 @@ use Doctrine\ORM\EntityRepository;
 class DmsServiceRepository extends EntityRepository
 {
 
+    public function setListOrdering($data)
+    {
+
+        $i = 1;
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+
+        foreach ($data as $key => $value){
+            $qb->update('DmsBundle:DmsService', 'mg')
+                ->set('mg.sorting', $i)
+                ->where('mg.id = :id')
+                ->setParameter('id', $value)
+                ->getQuery()
+                ->execute();
+            $i++;
+        }
+    }
+
     public function getServiceLists(DmsConfig $config)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.dmsConfig = :config');
+        $qb->where('e.dentalService is null');
+        $qb->andWhere('e.dmsConfig = :config');
         $qb->setParameter('config',$config);
+        $qb->orderBy('e.sorting','ASC');
         $result = $qb->getQuery()->getResult();
         return $result;
     }

@@ -105,7 +105,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $curDate =  New \DateTime("now");
         $curDate = $curDate->format('d-m-Y');
         $appointmentDate = !empty($appointmentDate)? $appointmentDate :(string)$curDate;
-        $data = array('appointmentDate' => $appointmentDate);
+        $data = array('appointmentDate' => '04-02-2018');
         $results = $this->findTodaySchedule($config,$data);
         $data = '';
         $i = 1;
@@ -114,15 +114,27 @@ class DmsTreatmentPlanRepository extends EntityRepository
         foreach ($results as $entity) {
 
             $action ='<a class="btn blue sms-confirm mini" href="javascript:" data-url="/dms/invoice/'.$entity['patientId'].'/'.$entity['id'].'/send-sms"><i class="icon-phone"></i> Send SMS</a>';
+            if ($entity['appointmentStatus'] == 1)  {
+                $appointmentDate = $entity['appointmentDate'];
+                $appointmentTime = $entity['appointmentTime'];
+            }else{
+                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Date">'.$entity['appointmentDate'].'</a>';
+                $appointmentTime ='<a data-type="select" class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update"  data-value="'.$entity['appointmentTime'].'" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Time">'.$entity['appointmentTime'].'</a>';
+            }
             $status = ($entity['appointmentStatus'] = 1)?'Yes':'No';
+            $sendSms = ($entity['sendSms'] = 1)?'Yes':'No';
+
             $data .= '<tr>';
             $data .= '<td class="numeric" >' . $i . '</td>';
             $data .= '<td class="numeric" >' . $entity['patientId']. '</td>';
             $data .= '<td class="numeric" >' . $entity['customerName']. '</td>';
+            $data .= '<td class="numeric" >' . $entity['doctorName']. '</td>';
             $data .= '<td class="numeric" >' . $entity['particularCode'].' - '. $entity['particularName']. '</td>';
-            $data .= '<td class="numeric" >' . $entity['appointmentTime']. '</td>';
+            $data .= '<td class="numeric" >' . $appointmentDate. '</td>';
+            $data .= '<td class="numeric" >' . $appointmentTime. '</td>';
             $data .= '<td class="numeric" >' . $entity['process'] . '</td>';
             $data .= '<td class="numeric" >' . $status . '</td>';
+            $data .= '<td class="numeric" >' . $sendSms . '</td>';
             $data .= '<td class="numeric" >'.$action.'</td>';
             $data .= '</tr>';
             $i++;
@@ -198,7 +210,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
                 $appointmentTime = $entity->getAppointmentTime();
             }else{
                 $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Date">'.$entity->getAppointmentDate().'</a>';
-                $appointmentTime ='<a  class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-value="'.$entity->getAppointmentTime().'" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Time">'.$entity->getAppointmentTime().'</a>';
+                $appointmentTime ='<a data-type="select"  class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update" data-value="'.$entity->getAppointmentTime().'" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Time">'.$entity->getAppointmentTime().'</a>';
             }
 
             if ($entity->getStatus() == 1)  {

@@ -40,8 +40,7 @@ class ParticularType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                     ->where("e.status = 1")
-                    ->andWhere('e.slug IN (:slugs)')
-                    ->setParameter('slugs',array('general','investigation','medical-history','physical'))
+                    ->andWhere('e.dentalService is null')
                     ->orderBy("e.sorting","ASC");
                 }
             ))

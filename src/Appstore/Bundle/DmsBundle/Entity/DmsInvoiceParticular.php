@@ -17,7 +17,7 @@ class DmsInvoiceParticular
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -69,6 +69,14 @@ class DmsInvoiceParticular
      * @ORM\Column(name="teethNo", type="array", nullable=true)
      */
     private $teethNo;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="metaCheck", type="integer", nullable=true)
+     */
+    private $metaCheck;
 
 
     /**
@@ -215,6 +223,22 @@ class DmsInvoiceParticular
     public function setDmsService($dmsService)
     {
         $this->dmsService = $dmsService;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMetaCheck()
+    {
+        return $this->metaCheck;
+    }
+
+    /**
+     * @param int $metaCheck
+     */
+    public function setMetaCheck($metaCheck)
+    {
+        $this->metaCheck = $metaCheck;
     }
 
 

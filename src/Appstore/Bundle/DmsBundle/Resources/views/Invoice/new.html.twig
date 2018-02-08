@@ -1,5 +1,4 @@
 {% extends '::base.html.twig' %}
-
 {% block body %}
     <div class="container-fluid">
         <!-- BEGIN category HEADER-->
@@ -54,21 +53,16 @@
                                     <div class="tabbable tabbable-custom tabs-left">
                                         <!-- Only required for left/right tabs -->
                                         <ul class="nav nav-tabs tabs-left">
-                                            <li class=""><a href="#tab_patient_overview" data-toggle="tab">Patient Overview</a></li>
-                                            <li class="active"><a href="#tab_patient_info" data-toggle="tab">Patient Information</a></li>
-                                            <li class=""><a href="#tab_patient_chief" data-toggle="tab">Chief Complaints</a></li>
-                                            <li class=""><a href="#tab_patient_presenting" data-toggle="tab">Presenting Complaints</a></li>
-                                            <li class=""><a href="#tab_patient_past" data-toggle="tab">Past Medical History</a></li>
-                                            <li class=""><a href="#tab_patient_drug" data-toggle="tab">Drug History</a></li>
-                                            <li class=""><a href="#tab_patient_general" data-toggle="tab">General Examination</a></li>
-                                            <li class=""><a href="#tab_patient_local" data-toggle="tab">Local Examination</a></li>
-                                            <li class=""><a href="#tab_patient_investigation" data-toggle="tab">Investigation</a></li>
-                                            <li class=""><a href="#tab_patient_diagnosis" data-toggle="tab">Diagnosis</a></li>
-                                            <li class=""><a href="#tab_patient_advise" data-toggle="tab">Advice</a></li>
-                                            <li class=""><a href="#tab_patient_special_advise" data-toggle="tab">Special Advice</a></li>
+                                            <li class="active"><a href="#tab_patient_overview" data-toggle="tab">Patient Overview</a></li>
+                                            <li ><a href="#tab_patient_info" data-toggle="tab">Patient Information</a></li>
+                                            {% if entity.customer is not empty %}
+                                                {% for service in services %}
+                                                    <li class=""><a href="#tab-{{ service.slug }}" data-toggle="tab" class="saveButton">{{ service.name }}</a></li>
+                                                {% endfor %}
+                                            {% endif %}
                                         </ul>
                                         <div class="tab-content">
-                                            <div class="tab-pane tab-height" id="tab_patient_overview" >
+                                            <div class="tab-pane tab-height active" id="tab_patient_overview" >
                                                 <div class="form-actions portlet box blue">
                                                     <div class="portlet-title">
                                                         <div class="caption"><i class="icon-reorder"></i>PATIENT PROFILE</div>
@@ -90,17 +84,24 @@
                                                             <div class="span4">
                                                                 <div class="portlet sale-summary">
                                                                     <div class="portlet-title">
-                                                                        <div class="caption">Profile</div>
+                                                                        <div class="caption"><i class="icon-user"></i> Profile</div>
                                                                     </div>
                                                                     <div class="portlet-body">
                                                                         <ul class="unstyled">
                                                                             <li>
-                                                                                <span class="sale-info">Gender <i class="icon-img-up"></i></span>
+                                                                                <span class="sale-info">Gender: </span>
                                                                                 <span class="sale-num"> {% if entity.customer is not empty %} {{ entity.customer.gender }}{% endif %}</span>
                                                                             </li>
                                                                             <li>
-                                                                                <span class="sale-info">Age <i class="icon-img-down"></i></span>
+                                                                                <span class="sale-info">Age:</span>
                                                                                 <span class="sale-num">{% if entity.customer is not empty %} {{ entity.customer.age }} {{ entity.customer.ageType }} {% endif %}</span>
+                                                                            </li>
+                                                                            <li>
+                                                                                <span class="sale-info"><i class="icon-home"></i> Address:</span>
+                                                                                <span class="sale-num">
+                                                                                    {% if entity.customer is not empty %} {{ entity.customer.address }} {% endif %}
+                                                                                    {% if entity.customer is not empty and entity.customer.location is not empty %} {{ entity.customer.location.name }},{{ entity.customer.location.parent.name }} {% endif %}
+                                                                                </span>
                                                                             </li>
 
                                                                         </ul>
@@ -112,235 +113,163 @@
                                                         <!--end row-fluid-->
                                                         <div class="clearfix">&nbsp;</div>
                                                         <div class="tabbable tabbable-custom tabbable-custom-profile">
-                                                            <ul class="nav nav-tabs">
-                                                                <li class="active"><a href="#tab_1_11" data-toggle="tab">Chief & Presenting</a></li>
-                                                                <li><a href="#tab_1_22" data-toggle="tab">Medical & Drug</a></li>
-                                                                <li><a href="#tab_1_33" data-toggle="tab">Examination</a></li>
-                                                                <li><a href="#tab_1_44" data-toggle="tab">Investigation & Diagnosis</a></li>
-                                                                <li><a href="#tab_1_55" data-toggle="tab">Advise</a></li>
-                                                            </ul>
-                                                            <div class="tab-content">
-                                                                <div class="tab-pane active" id="tab_1_11">
-                                                                    <div class="portlet-body" style="display: block;">
+
+                                                            {% if entity.customer is not empty %}
+                                                                {% for service in services %}
+                                                                    <div class="tab-pane" >
                                                                         <div class="form-actions portlet box blue">
                                                                             <div class="portlet-title">
-                                                                                <div class="caption"><i class="icon-reorder"></i>CHIEF COMPLAINTS</div>
+                                                                                <div class="caption"><i class="icon-user"></i>{{ service.name|upper }}</div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="clearfix">&nbsp;</div>
-                                                                        <table class="table table-striped table-bordered table-advance table-hover">
-                                                                            <thead class="flip-content ">
-                                                                            <tr class="head-green">
-                                                                                <th class="numeric">Procedure</th>
-                                                                                <th class="numeric">Teeth Position</th>
-                                                                                <th class="numeric">Action</th>
-                                                                            </tr>
-                                                                            </thead>
-                                                                            <tbody id="procedure-chief-complaints">
-                                                                            {% for invoiceParticular in entity.invoiceParticulars %}
-                                                                                {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='chief-complaints' %}
-                                                                                    <tr id="remove-{{ invoiceParticular.id }}">
-                                                                                        <td  class="numeric">{{ invoiceParticular.metaValue }}</td>
-                                                                                        <td class="numeric">
-                                                                                            {% if invoiceParticular.teethPosition is not empty %}
-                                                                                                <table class="dms-table">
-                                                                                                    {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                                                                    {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
-                                                                                                    <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                                                            <ul class="leftTeeth">
-                                                                                                                {% for left in leftTeeths %}
-                                                                                                                    <li {% if left in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'upper-left' %} class="active" {% endif %} >{{ left }}</li>
-                                                                                                                {% endfor %}
-                                                                                                            </ul>
-                                                                                                        </td>
-                                                                                                        <td class="dms-td dms-td-border-bottom">
-                                                                                                            <ul class="rightTeeth">
-                                                                                                                {% for right in rightTeeths %}
-                                                                                                                    <li {% if right in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'upper-right' %} class="active" {% endif %} >{{ right }}</li>
-                                                                                                                {% endfor %}
-                                                                                                            </ul>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                    <tr><td class="dms-td dms-td-border-none">
-                                                                                                            <ul class="leftTeeth">
-                                                                                                                {% for left in leftTeeths %}
-                                                                                                                    <li {% if left in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'lower-left' %} class="active" {% endif %}>{{ left }}</li>
-                                                                                                                {% endfor %}
-                                                                                                            </ul>
-                                                                                                        </td>
-                                                                                                        <td class="dms-td">
-                                                                                                            <ul class="rightTeeth">
-                                                                                                                {% for right in rightTeeths %}
-                                                                                                                    <li {% if right in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'lower-right' %} class="active" {% endif %} >{{ right }}</li>
-                                                                                                                {% endfor %}
-                                                                                                            </ul>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                </table>
-                                                                                            {% endif %}
-                                                                                        </td>
-                                                                                        <td class="numeric">
-                                                                                            <a href="javascript:" class="btn red mini particularDetete" data-id="{{ invoiceParticular.id }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                {% endif %}
-                                                                            {% endfor %}
-                                                                            </tbody>
-                                                                        </table>
-                                                                        <div class="form-actions portlet box green">
-                                                                            <div class="portlet-title">
-                                                                                <div class="caption"><i class="icon-reorder"></i>HISTORY OF THE PRESENTING COMPLAINTS</div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="clearfix">&nbsp;</div>
-                                                                        <table class="table table-striped table-bordered table-advance table-hover">
-                                                                            <thead class="flip-content ">
-                                                                            <tr class="head-green">
-                                                                                <th class="numeric">Procedure</th>
-                                                                                <th class="numeric">Teeth Position</th>
-                                                                                <th class="numeric">Action</th>
-                                                                            </tr>
-                                                                            </thead>
-                                                                            <tbody id="procedure-chief-complaints">
-                                                                            {% for invoiceParticular in entity.invoiceParticulars %}
-                                                                                {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='presenting' %}
-                                                                                    <tr id="remove-{{ invoiceParticular.id }}">
-                                                                                        <td  class="numeric">{{ invoiceParticular.metaValue }}</td>
-                                                                                        <td class="numeric">
-                                                                                            {% if invoiceParticular.teethPosition is not empty %}
-                                                                                                <table class="dms-table">
-                                                                                                    {% set leftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                                                                    {% set rightTeeths = [1,2,3,4,5,6,7,8] %}
-                                                                                                    <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                                                            <ul class="leftTeeth">
-                                                                                                                {% for left in leftTeeths %}
-                                                                                                                    <li {% if left in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'upper-left' %} class="active" {% endif %} >{{ left }}</li>
-                                                                                                                {% endfor %}
-                                                                                                            </ul>
-                                                                                                        </td>
-                                                                                                        <td class="dms-td dms-td-border-bottom">
-                                                                                                            <ul class="rightTeeth">
-                                                                                                                {% for right in rightTeeths %}
-                                                                                                                    <li {% if right in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'upper-right' %} class="active" {% endif %} >{{ right }}</li>
-                                                                                                                {% endfor %}
-                                                                                                            </ul>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                    <tr><td class="dms-td dms-td-border-none">
-                                                                                                            <ul class="leftTeeth">
-                                                                                                                {% for left in leftTeeths %}
-                                                                                                                    <li {% if left in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'lower-left' %} class="active" {% endif %}>{{ left }}</li>
-                                                                                                                {% endfor %}
-                                                                                                            </ul>
-                                                                                                        </td>
-                                                                                                        <td class="dms-td">
-                                                                                                            <ul class="rightTeeth">
-                                                                                                                {% for right in rightTeeths %}
-                                                                                                                    <li {% if right in invoiceParticular.teethNo and invoiceParticular.teethPosition == 'lower-right' %} class="active" {% endif %} >{{ right }}</li>
-                                                                                                                {% endfor %}
-                                                                                                            </ul>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                </table>
-                                                                                            {% endif %}
-                                                                                        </td>
-                                                                                        <td class="numeric">
-                                                                                            <a href="javascript:" class="btn red mini particularDetete" data-id="{{ invoiceParticular.id }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                {% endif %}
-                                                                            {% endfor %}
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                    </div>
-                                                                </div>
-                                                                <!--tab-pane-->
-                                                                <div class="tab-pane" id="tab_1_22">
-                                                                    <div class="form-actions portlet box green">
-                                                                        <div class="portlet-title">
-                                                                            <div class="caption"><i class="icon-reorder"></i>Past Medical History</div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="clearfix">&nbsp;</div>
-                                                                    <ul class="feeds">
-                                                                        {% for particular in particulars %}
-                                                                            {% if particular.service.slug == 'medical-history' %}
-                                                                                <li> <div class="col1">
-                                                                                        <div class="cont">
-                                                                                            <div class="cont-col2">
-                                                                                                <div class="desc">{{ particular.name }}: {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}</div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                    <div class="clearfix">&nbsp;</div>
-                                                                    <div class="form-actions portlet box green">
-                                                                        <div class="portlet-title">
-                                                                            <div class="caption"><i class="icon-reorder"></i>Drug History</div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="clearfix">&nbsp;</div>
-                                                                    <div class="row-fluid">
-                                                                        <div class="span12">{{ entity.drugHistory|raw }}</div>
-                                                                    </div>
-                                                                    <div class="clearfix">&nbsp;</div>
-                                                                </div>
-                                                                <div class="tab-pane" id="tab_1_33">
-                                                                    <div class="form-actions portlet box green">
-                                                                        <div class="portlet-title">
-                                                                            <div class="caption"><i class="icon-reorder"></i>General Examination</div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="clearfix">&nbsp;</div>
-                                                                    <ul class="feeds">
-                                                                        {% for particular in particulars %}
-                                                                            {% if particular.service.slug == 'general' %}
-                                                                                <li> <div class="col1">
-                                                                                        <div class="cont">
-                                                                                            <div class="cont-col2">
-                                                                                                <div class="desc">{{ particular.name }}: {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}</div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                    <div class="clearfix">&nbsp;</div>
-                                                                    <div class="form-actions portlet box green">
-                                                                        <div class="portlet-title">
-                                                                            <div class="caption"><i class="icon-reorder"></i>Local Examination</div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="clearfix">&nbsp;</div>
-                                                                    {% for particular in particulars %}
-                                                                        {% if particular.service.slug == 'physical' %}
-                                                                            <div class="row-fluid">
-                                                                                <div class="span12"><label>{{ particular.name }}</label></div>
-                                                                            </div>
-                                                                            <div class="row-fluid">
-                                                                                <div class="span12">
-                                                                                    {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue|raw }}{% endif %}
-                                                                                </div>
-                                                                            </div>
+                                                                        {% if service.serviceFormat == 'teeth-format' %}
                                                                             <div class="clearfix">&nbsp;</div>
-                                                                        {% endif %}
-                                                                    {% endfor %}
-                                                                    <div class="clearfix">&nbsp;</div>
-                                                                </div>
-                                                                <!--tab-pane-->
-                                                            </div>
+                                                                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                                                                <thead class="flip-content ">
+                                                                                <tr class="head-green">
+                                                                                    <th class="numeric">Procedure</th>
+                                                                                    <th class="numeric">Teeth Position</th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                {% for invoiceParticular in entity.invoiceParticulars %}
+                                                                                    {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim == service.slug %}
+                                                                                        <tr>
+                                                                                            <td  class="numeric" {% if invoiceParticular.teethNo[0] is empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
+                                                                                            {% if invoiceParticular.teethNo is not empty and invoiceParticular.teethNo[0] is not empty %}
+                                                                                                <td class="numeric">
+                                                                                                    {% if entity.customer.ageGroup == 'Adult' %}
+                                                                                                        <table class="dms-table">
+                                                                                                            {% set upperLeftTeeths = {8:8,7:7,6:6,5:5,4:4,3:3,2:2,1:1} %}
+                                                                                                            {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}
+                                                                                                            {% set lowerLeftTeeths = {24:8,23:7,22:6,21:5,20:4,19:3,18:2,17:1} %}
+                                                                                                            {% set lowerRightTeeths = {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8} %}
+                                                                                                            <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
+                                                                                                                    <ul class="leftTeeth">
+                                                                                                                        {% for key,value in upperLeftTeeths %}
+                                                                                                                            <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                                        {% endfor %}
+                                                                                                                    </ul>
+                                                                                                                </td>
+                                                                                                                <td class="dms-td dms-td-border-bottom">
+                                                                                                                    <ul class="rightTeeth">
+                                                                                                                        {% for key,value in upperRightTeeths %}
+                                                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                                        {% endfor %}
+                                                                                                                    </ul>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                            <tr><td class="dms-td dms-td-border-none">
+                                                                                                                    <ul class="leftTeeth">
+                                                                                                                        {% for key,value in lowerLeftTeeths %}
+                                                                                                                            <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %}>{{ value }}</li>
+                                                                                                                        {% endfor %}
+                                                                                                                    </ul>
+                                                                                                                </td>
+                                                                                                                <td class="dms-td">
+                                                                                                                    <ul class="rightTeeth">
+                                                                                                                        {% for key,value in lowerRightTeeths %}
+                                                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                                        {% endfor %}
+                                                                                                                    </ul>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        </table>
+                                                                                                    {% else %}
+                                                                                                        <table class="dms-table">
+                                                                                                            {% set upperLeftTeeths = {37:'E',36:'D',35:'C',34:'B',33:'A'} %}
+                                                                                                            {% set upperRightTeeths = {38:'A',39:'B',40:'C',41:'D',42:'E'} %}
+                                                                                                            {% set lowerLeftTeeths = {47:'E',46:'D',45:'C',44:'B',43:'A'} %}
+                                                                                                            {% set lowerRightTeeths = {48:'A',49:'B',50:'C',51:'D',52:'E'} %}
+                                                                                                            <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
+                                                                                                                    <ul class="leftTeeth">
+                                                                                                                        {% for key,value  in upperLeftTeeths %}
+                                                                                                                            <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                                        {% endfor %}
+                                                                                                                    </ul>
+                                                                                                                </td>
+                                                                                                                <td class="dms-td dms-td-border-bottom">
+                                                                                                                    <ul class="rightTeeth">
+                                                                                                                        {% for key,value in upperRightTeeths %}
+                                                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                                        {% endfor %}
+                                                                                                                    </ul>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                            <tr><td class="dms-td dms-td-border-none">
+                                                                                                                    <ul class="leftTeeth">
+                                                                                                                        {% for key,value in lowerLeftTeeths %}
+                                                                                                                            <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %}>{{ value }}</li>
+                                                                                                                        {% endfor %}
+                                                                                                                    </ul>
+                                                                                                                </td>
+                                                                                                                <td class="dms-td">
+                                                                                                                    <ul class="rightTeeth">
+                                                                                                                        {% for key,value in lowerRightTeeths %}
+                                                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                                        {% endfor %}
+                                                                                                                    </ul>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        </table>
+                                                                                                    {% endif %}
+                                                                                                </td>
+                                                                                            {% endif %}
+                                                                                        </tr>
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                                </tbody>
+                                                                            </table>
+                                                                        {% elseif service.serviceFormat == 'text-field'  %}
+                                                                            {% if service.dmsParticulars is not empty %}
+                                                                                {% for particular in service.dmsParticulars  %}
+                                                                                    {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}
+                                                                                        <div class="row-fluid">
+                                                                                            <div class="span3"><label>{{ particular.name }}</label></div>
+                                                                                            <div class="span9">{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}</div>
+                                                                                        </div>
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                        {% elseif service.serviceFormat == 'checkbox-text-field'  %}
+                                                                            {% if service.dmsParticulars is not empty %}
+                                                                                {% for particular in service.dmsParticulars  %}
+                                                                                    <div class="row-fluid">
+                                                                                        <div class="span3"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == 1 %} checked="checked" {% endif %} type="checkbox" value="1" name="" disabled="disabled"> &nbsp;{{ particular.name }}</label></div>
+                                                                                        <div class="span9">{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}</div>
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                        {% elseif service.serviceFormat == 'checkbox'  %}
+                                                                            {% if service.dmsParticulars is not empty %}
+                                                                                {% for particular in service.dmsParticulars  %}
+                                                                                    <div class="row-fluid">
+                                                                                          <div class="span12"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == 1 %} checked="checked" {% endif %} type="checkbox" value="1" name="" disabled="disabled"> &nbsp;{{ particular.name }}</label></div>
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                        {% elseif service.serviceFormat == 'textarea'  %}
+                                                                            {% if service.dmsParticulars is not empty %}
+                                                                                {% for particular in service.dmsParticulars  %}
+                                                                                    <div class="row-fluid"><div class="span12"><label>{{ particular.name }}</label></div></div>
+                                                                                    <div class="row-fluid">
+                                                                                        <div class="span12">{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}</div>
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                        {% endif  %}
+                                                                        <div class="clearfix">&nbsp;</div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                     <!--end span9-->
                                                 </div>
                                                 <div class="clearfix">&nbsp;</div>
                                             </div>
-                                            <div class="tab-pane active tab-height" id="tab_patient_info">
+                                            <div class="tab-pane tab-height" id="tab_patient_info">
                                                 <div class="form-actions portlet box green">
                                                     <div class="portlet-title">
                                                         <div class="caption"><i class="icon-user"></i>PATIENT INFORMATION</div>
@@ -373,9 +302,20 @@
                                                                 <div class="row-fluid">
                                                                     <div class="span12">
                                                                         <div class="control-group">
-                                                                            <label class="control-label red" for="firstName"><span>Gender & Age</span><span class="required">*</span></label>
-                                                                            <div class="controls span4">
+                                                                            <label class="control-label red" for="firstName"><span>Gender & Age</span></label>
+                                                                            <div class="controls span12">
                                                                                 {{ form_widget(form.customer.gender) }}
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row-fluid">
+                                                                    <div class="span12">
+                                                                        <div class="control-group">
+                                                                            <label class="control-label red" for="firstName"><span>Age</span><span class="required">*</span></label>
+                                                                            <div class="controls span4">
+                                                                                {{ form_widget(form.customer.ageGroup) }}
                                                                             </div>
                                                                             <div class="controls span4">
                                                                                 {{ form_widget(form.customer.age) }}
@@ -383,10 +323,6 @@
                                                                             <div class="controls span4">
                                                                                 {{ form_widget(form.customer.ageType) }}
                                                                                 {{ form_errors(form.customer.ageType) }}
-                                                                            </div>
-                                                                            <div class="clearfix"></div>
-                                                                            <div class="controls">
-                                                                                {{ form_errors(form.customer.gender) }}
                                                                             </div>
                                                                             <div class="clearfix"></div>
                                                                             <div class="controls">
@@ -422,551 +358,232 @@
                                                     </div>
                                                 </div>
                                                 <div class="clearfix">&nbsp;</div>
+
                                                 <div class="form-actions portlet box grey">
                                                     <div class="pull-right">
-                                                        <button type="button"  class="btn blue span12 saveButton" id="receiveBtn"><i class="icon-save"></i> Save</button>
+                                                        <button type="submit"  class="btn blue span12" id="savePatientButton"><i class="icon-save"></i> Save & Continue</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_chief" >
-                                                <div class="form-actions portlet box blue">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-user"></i>CHIEF COMPLAINTS</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="row-fluid" id="">
-                                                    <div class="span4"><input type="text" name="procedure" id="procedure" class="span12 m-wrap" placeholder="Enter patient chief complaints particular"  ></div>
-                                                    <div class="span7">
-                                                        <table class="dms-teeth-plan">
-                                                            <tr><td class="dms-plan-td dms-plan-td-border-none dms-plan-td-border-bottom">
-                                                                    <ul class="leftFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'upper-left' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}"><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom" ></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                                <td class="dms-plan-td dms-plan-td-border-bottom">
-                                                                    <ul class="rightFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'upper-right' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
+                                            {% if entity.customer is not empty %}
+                                                {% for service in services %}
+                                                     <div class="tab-pane tab-height" id="tab-{{ service.slug }}" >
+                                                        <div class="form-actions portlet box blue">
+                                                            <div class="portlet-title">
+                                                                <div class="caption"><i class="icon-user"></i>{{ service.name|upper }}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix">&nbsp;</div>
+                                                        {% if service.serviceFormat == 'teeth-format' %}
+                                                            <div class="clearfix">&nbsp;</div>
+                                                            <div class="row-fluid" id="">
+                                                                <div class="span4"><input type="text" name="procedure" id="procedure" class="span12 m-wrap autoProcedure" placeholder="Enter patient chief complaints particular"  ></div>
+                                                                <div class="span7">
+                                                                    <table class="dms-teeth-plan">
+                                                                        <tr><td class="dms-plan-td dms-plan-td-border-none dms-plan-td-border-bottom">
+                                                                                <ul class="leftFormatTeeth">
+                                                                                    {% for teeth in teethPlans %}
+                                                                                        {% if teeth.teethPosition == 'upper-left' %}
+                                                                                            <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.toothNo }}-{{ teeth.name }}"><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom" ></li>
+                                                                                        {% endif %}
+                                                                                    {% endfor %}
+                                                                                </ul>
+                                                                            </td>
+                                                                            <td class="dms-plan-td dms-plan-td-border-bottom">
+                                                                                <ul class="rightFormatTeeth">
+                                                                                    {% for teeth in teethPlans %}
+                                                                                        {% if teeth.teethPosition == 'upper-right' %}
+                                                                                            <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.toothNo }}-{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
+                                                                                        {% endif %}
+                                                                                    {% endfor %}
+                                                                                </ul>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="dms-plan-teeth-td dms-plan-td-teeth-border-none">
+                                                                                <ul class="leftFormatTeeth">
+                                                                                    {% for teeth in teethPlans %}
+                                                                                        {% if teeth.teethPosition == 'lower-left' %}
+                                                                                            <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.toothNo }}-{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
+                                                                                        {% endif %}
+                                                                                    {% endfor %}
+                                                                                </ul>
+                                                                            </td>
+                                                                            <td class="dms-teeth-plan-td">
+                                                                                <ul class="rightFormatTeeth">
+                                                                                    {% for teeth in teethPlans %}
+                                                                                        {% if teeth.teethPosition == 'lower-right' %}
+                                                                                            <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.toothNo }}-{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
+                                                                                        {% endif %}
+                                                                                    {% endfor %}
+                                                                                </ul>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                                <div class="span1" style="margin-top: -10px">
+                                                                    <button type="button"  class="btn blue addProcedure" id="" data-id="{{ service.slug }}" data-tab="tab-{{ service.slug }}"  data-url="{{ path('dms_invoice_particular_procedure',{'invoice':entity.id,'service':service.slug}) }}" ><i class="icon-save"></i> Save</button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="clearfix">&nbsp;</div>
+                                                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                                            <thead class="flip-content ">
+                                                            <tr class="head-green">
+                                                                <th class="numeric">Procedure</th>
+                                                                <th class="numeric">Teeth Position</th>
+                                                                <th class="numeric">Action</th>
                                                             </tr>
-                                                            <tr><td class="dms-plan-teeth-td dms-plan-td-teeth-border-none">
-                                                                    <ul class="leftFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'lower-left' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                                <td class="dms-teeth-plan-td">
-                                                                    <ul class="rightFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'lower-right' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                    <div class="span1" style="margin-top: -10px">
-                                                        <button type="button"  class="btn blue addProcedure" id="" data-id="chief-complaints" data-tab="tab_patient_chief"  data-url="{{ path('dms_invoice_particular_procedure',{'invoice':entity.id,'service':'chief-complaints'}) }}" ><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <table class="table table-bordered table-striped table-condensed flip-content ">
-                                                    <thead class="flip-content ">
-                                                    <tr class="head-green">
-                                                        <th class="numeric">Procedure</th>
-                                                        <th class="numeric">Teeth Position</th>
-                                                        <th class="numeric">Action</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody id="procedure-chief-complaints">
-                                                    {% for invoiceParticular in entity.invoiceParticulars %}
-                                                        {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='chief-complaints' %}
-                                                            <tr id="remove-{{ invoiceParticular.id }}">
-                                                                <td  class="numeric" {% if invoiceParticular.teethNo[0] is empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
-                                                                {% if invoiceParticular.teethNo is not empty and invoiceParticular.teethNo[0] is not empty %}
-                                                                    <td class="numeric">
-                                                                        <table class="dms-table">
-                                                                            {% set upperLeftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                                            {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}
-                                                                            {% set lowerLeftTeeths = {24:8,23:7,22:6,21:5,20:4,19:3,18:2,17:1} %}
-                                                                            {% set lowerRightTeeths = {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8} %}
-                                                                            <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                                    <ul class="leftTeeth">
-                                                                                        {% for left in upperLeftTeeths %}
-                                                                                            <li {% if left in invoiceParticular.teethNo  %} class="active" {% endif %} >{{ left }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                                <td class="dms-td dms-td-border-bottom">
-                                                                                    <ul class="rightTeeth">
-                                                                                        {% for key,value in upperRightTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr><td class="dms-td dms-td-border-none">
-                                                                                    <ul class="leftTeeth">
-                                                                                        {% for key,value in lowerLeftTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %}>{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                                <td class="dms-td">
-                                                                                    <ul class="rightTeeth">
-                                                                                        {% for key,value in lowerRightTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
+                                                            </thead>
+                                                            <tbody id="procedure-{{ service.slug }}">
+                                                            {% for invoiceParticular in entity.invoiceParticulars %}
+                                                                {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim == service.slug %}
+                                                                    <tr id="remove-{{ invoiceParticular.id }}">
+                                                                        <td  class="numeric" {% if invoiceParticular.teethNo[0] is empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
+                                                                        {% if invoiceParticular.teethNo is not empty and invoiceParticular.teethNo[0] is not empty %}
+                                                                            <td class="numeric">
+                                                                                {% if entity.customer.ageGroup == 'Adult' %}
+                                                                                <table class="dms-table">
+                                                                                    {% set upperLeftTeeths = {8:8,7:7,6:6,5:5,4:4,3:3,2:2,1:1} %}
+                                                                                    {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}
+                                                                                    {% set lowerLeftTeeths = {24:8,23:7,22:6,21:5,20:4,19:3,18:2,17:1} %}
+                                                                                    {% set lowerRightTeeths = {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8} %}
+                                                                                    <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
+                                                                                            <ul class="leftTeeth">
+                                                                                                {% for key,value in upperLeftTeeths %}
+                                                                                                    <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </td>
+                                                                                        <td class="dms-td dms-td-border-bottom">
+                                                                                            <ul class="rightTeeth">
+                                                                                                {% for key,value in upperRightTeeths %}
+                                                                                                    <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr><td class="dms-td dms-td-border-none">
+                                                                                            <ul class="leftTeeth">
+                                                                                                {% for key,value in lowerLeftTeeths %}
+                                                                                                    <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %}>{{ value }}</li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </td>
+                                                                                        <td class="dms-td">
+                                                                                            <ul class="rightTeeth">
+                                                                                                {% for key,value in lowerRightTeeths %}
+                                                                                                    <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                                {% else %}
+                                                                                <table class="dms-table">
+                                                                                    {% set upperLeftTeeths = {37:'E',36:'D',35:'C',34:'B',33:'A'} %}
+                                                                                    {% set upperRightTeeths = {38:'A',39:'B',40:'C',41:'D',42:'E'} %}
+                                                                                    {% set lowerLeftTeeths = {47:'E',46:'D',45:'C',44:'B',43:'A'} %}
+                                                                                    {% set lowerRightTeeths = {48:'A',49:'B',50:'C',51:'D',52:'E'} %}
+                                                                                    <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
+                                                                                            <ul class="leftTeeth">
+                                                                                                {% for key,value  in upperLeftTeeths %}
+                                                                                                    <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </td>
+                                                                                        <td class="dms-td dms-td-border-bottom">
+                                                                                            <ul class="rightTeeth">
+                                                                                                {% for key,value in upperRightTeeths %}
+                                                                                                    <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr><td class="dms-td dms-td-border-none">
+                                                                                            <ul class="leftTeeth">
+                                                                                                {% for key,value in lowerLeftTeeths %}
+                                                                                                    <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %}>{{ value }}</li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </td>
+                                                                                        <td class="dms-td">
+                                                                                            <ul class="rightTeeth">
+                                                                                                {% for key,value in lowerRightTeeths %}
+                                                                                                    <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                                {% endif %}
+                                                                            </td>
+                                                                        {% endif %}
+                                                                        <td class="numeric">
+                                                                            <a href="javascript:" class="btn red mini particularDelete" data-id="{{ invoiceParticular.id }}" data-tab="{{ service.slug }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
+                                                                        </td>
+                                                                    </tr>
                                                                 {% endif %}
-                                                                <td class="numeric">
-                                                                    <a href="javascript:" class="btn red mini particularDelete" data-id="{{ invoiceParticular.id }}" data-tab="chief-complaints" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                                <div class="clearfix">&nbsp;</div>
-
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_presenting">
-                                                <div class="form-actions portlet box blue">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-user"></i>HISTORY OF THE PRESENTING COMPLAINTS</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="clearfix">&nbsp;</div>
-
-                                                <div class="row-fluid" id="">
-                                                    <div class="span4"><input type="text" name="procedure" id="procedure" class="span12 m-wrap" placeholder="Enter advice particular"  ></div>
-                                                    <div class="span7">
-                                                        <table class="dms-teeth-plan">
-                                                            <tr><td class="dms-plan-td dms-plan-td-border-none dms-plan-td-border-bottom">
-                                                                    <ul class="leftFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'upper-left' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}"><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom" ></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                                <td class="dms-plan-td dms-plan-td-border-bottom">
-                                                                    <ul class="rightFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'upper-right' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr><td class="dms-plan-teeth-td dms-plan-td-teeth-border-none">
-                                                                    <ul class="leftFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'lower-left' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                                <td class="dms-teeth-plan-td">
-                                                                    <ul class="rightFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'lower-right' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
+                                                            {% endfor %}
+                                                            </tbody>
                                                         </table>
-                                                    </div>
-                                                    <div class="span1" style="margin-top: -10px">
-                                                        <button type="button"  class="btn blue addProcedure" id="" data-id="presenting" data-tab="tab_patient_presenting"  data-url="{{ path('dms_invoice_particular_procedure',{'invoice':entity.id,'service':'presenting'}) }}" ><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <table class="table table-bordered table-striped table-condensed flip-content ">
-                                                    <thead class="flip-content ">
-                                                    <tr class="head-green">
-                                                        <th class="numeric">Procedure</th>
-                                                        <th class="numeric">Teeth Position</th>
-                                                        <th class="numeric">Action</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody id="procedure-presenting">
-                                                    {% for invoiceParticular in entity.invoiceParticulars %}
-                                                        {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='presenting' %}
-                                                            <tr id="remove-{{ invoiceParticular.id }}">
-                                                                <td  class="numeric" {% if invoiceParticular.teethNo[0] is not empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
-                                                                {% if invoiceParticular.teethNo is not empty %}
-                                                                    <td class="numeric">
-                                                                        <table class="dms-table">
-                                                                            {% set upperLeftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                                            {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}
-                                                                            {% set lowerLeftTeeths = {24:8,23:7,22:6,21:5,20:4,19:3,18:2,17:1} %}
-                                                                            {% set lowerRightTeeths = {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8} %}
-                                                                            <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                                    <ul class="leftTeeth">
-                                                                                        {% for left in upperLeftTeeths %}
-                                                                                            <li {% if left in invoiceParticular.teethNo  %} class="active" {% endif %} >{{ left }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                                <td class="dms-td dms-td-border-bottom">
-                                                                                    <ul class="rightTeeth">
-                                                                                        {% for key,value in upperRightTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr><td class="dms-td dms-td-border-none">
-                                                                                    <ul class="leftTeeth">
-                                                                                        {% for key,value in lowerLeftTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %}>{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                                <td class="dms-td">
-                                                                                    <ul class="rightTeeth">
-                                                                                        {% for key,value in lowerRightTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                {% endif %}
-                                                                <td class="numeric">
-                                                                    <a href="javascript:" class="btn red mini particularDelete" data-id="{{ invoiceParticular.id }}" data-tab="presenting" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                                <div class="clearfix">&nbsp;</div>
-
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_past">
-                                                <div class="form-actions portlet box green">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-reorder"></i>PAST MEDICAL HISTORY</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                {% for particular in particulars %}
-                                                    {% if particular.service.slug == 'medical-history' %}
-                                                        <div class="row-fluid">
-                                                            <div class="span2"><label>{{ particular.name }}</label></div>
-                                                            <div class="span4">
-                                                                <div class="form-control">
-                                                                    <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
-                                                                    <input type="text" class="m-wrap span12 " name="metaValue[]" value="{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix">&nbsp;</div>
-                                                    {% endif %}
-                                                {% endfor %}
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="form-actions portlet box grey">
-                                                    <div class="pull-right">
-                                                        <button type="button"  class="btn blue span12 saveButton" id="receiveBtn"><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_drug">
-                                                <div class="form-actions portlet box green">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-reorder"></i>DRUG HISTORY</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        {{ form_widget(form.drugHistory) }}
-                                                        {{ form_errors(form.drugHistory) }}
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="form-actions portlet box grey">
-                                                    <div class="pull-right">
-                                                        <button type="button"  class="btn blue span12 saveButton" id="receiveBtn"><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_general" >
-                                                <div class="form-actions portlet box green">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-reorder"></i>GENERAL EXAMINATION</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                {% for particular in particulars %}
-                                                    {% if particular.service.slug == 'general' %}
-                                                        <div class="row-fluid">
-                                                            <div class="span2"><label>{{ particular.name }}</label></div>
-                                                            <div class="span4">
-                                                                <div class="form-control">
-                                                                    <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
-                                                                    <input type="text" class="m-wrap span12 " name="metaValue[]" value="{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix">&nbsp;</div>
-                                                    {% endif %}
-                                                {% endfor %}
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="form-actions portlet box grey">
-                                                    <div class="pull-right">
-                                                        <button type="button"  class="btn blue span12 saveButton" id="receiveBtn"><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_local">
-                                                <div class="form-actions portlet box green">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-reorder"></i>LOCAL EXAMINATION</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                {% for particular in particulars %}
-                                                    {% if particular.service.slug == 'physical' %}
-                                                        <div class="row-fluid">
-                                                            <div class="span12"><label>{{ particular.name }}</label></div>
-                                                        </div>
-                                                        <div class="row-fluid">
-                                                            <div class="span12">
-                                                                <div class="form-control">
-                                                                    <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
-                                                                    <textarea class="m-wrap span12 " name="metaValue[]">{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}</textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix">&nbsp;</div>
-                                                    {% endif %}
-                                                {% endfor %}
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="form-actions portlet box grey">
-                                                    <div class="pull-right">
-                                                        <button type="button"  class="btn blue span12 saveButton" id="receiveBtn"><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_investigation" >
-                                                <div class="form-actions portlet box green">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-reorder"></i>INVESTIGATION</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="form-group">
-                                                            <div class="col-md-6">
-                                                                <div class="input-icon right">
-                                                                    <div class="controls">
-                                                                        {{ form_widget(form.investigations, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
+                                                        {% elseif service.serviceFormat == 'text-field'  %}
+                                                            {% if service.dmsParticulars is not empty %}
+                                                                {% for particular in service.dmsParticulars  %}
+                                                                    <div class="row-fluid">
+                                                                        <div class="span3"><label>{{ particular.name }}</label></div>
+                                                                        <div class="span9">
+                                                                            <div class="form-control">
+                                                                                <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
+                                                                                <input type="text" class="m-wrap span12 wrap-custom autoMetaValue" name="metaValue[]" value="{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}">
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% elseif service.serviceFormat == 'checkbox-text-field'  %}
+                                                            {% if service.dmsParticulars is not empty %}
+                                                                {% for particular in service.dmsParticulars  %}
+                                                                    <div class="row-fluid">
+                                                                        <div class="span3"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == 1 %} checked="checked" {% endif %} type="checkbox" value="{{ particular.id }}" name="metaCheck[]"> &nbsp;{{ particular.name }}</label></div>
+                                                                        <div class="span9">
+                                                                            <div class="form-control">
+                                                                                <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
+                                                                                <input type="text" class="m-wrap span12 wrap-custom autoMetaValue" name="metaValue[]" value="{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% elseif service.serviceFormat == 'checkbox'  %}
+                                                            {% if service.dmsParticulars is not empty %}
+                                                                {% for particular in service.dmsParticulars  %}
+                                                                    <div class="row-fluid">
+                                                                        <input type="hidden" value="" name="metaValue[]">
+                                                                        <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
+                                                                        <div class="span12"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == 1 %} checked="checked" {% endif %} type="checkbox" value="{{ particular.id }}" name="metaCheck[]"> &nbsp;{{ particular.name }}</label></div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                         {% elseif service.serviceFormat == 'textarea'  %}
+                                                            {% if service.dmsParticulars is not empty %}
+                                                                {% for particular in service.dmsParticulars  %}
+                                                                    <div class="row-fluid"><div class="span12"><label>{{ particular.name }}</label></div></div>
+                                                                    <div class="row-fluid">
+                                                                        <div class="span12">
+                                                                            <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
+                                                                            <textarea  class="m-wrap span12 autoMetaValue" rows="6" name="metaValue[]">{% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty %}{{ invoiceParticularArr[particular.id].metaValue }}{% endif %}</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                         {% endif  %}
+                                                        <div class="clearfix">&nbsp;</div>
                                                     </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="form-actions portlet box grey">
-                                                    <div class="pull-right">
-                                                        <button type="button"  class="btn blue span12 saveButton" id="receiveBtn"><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_diagnosis">
-
-                                                <div class="form-actions portlet box green">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-reorder"></i>DIAGNOSIS</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">{{ form_widget(form.diagnosis) }}
-                                                        {{ form_errors(form.diagnosis) }}</div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="form-actions portlet box grey">
-                                                    <div class="pull-right">
-                                                        <button type="button"  class="btn blue span12 saveButton" id="receiveBtn"><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_advise">
-                                                <div class="form-actions portlet box green">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-reorder"></i>ADVICE</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="row-fluid" id="">
-                                                    <div class="span4"><input type="text" name="procedure" id="procedure" class="span12 m-wrap" placeholder="Enter advice particular"  ></div>
-                                                    <div class="span7">
-                                                        <table class="dms-teeth-plan">
-                                                            <tr><td class="dms-plan-td dms-plan-td-border-none dms-plan-td-border-bottom">
-                                                                    <ul class="leftFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'upper-left' %}
-                                                                            <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}"><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom" ></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                                <td class="dms-plan-td dms-plan-td-border-bottom">
-                                                                    <ul class="rightFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'upper-right' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr><td class="dms-plan-teeth-td dms-plan-td-teeth-border-none">
-                                                                    <ul class="leftFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'lower-left' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                                <td class="dms-teeth-plan-td">
-                                                                    <ul class="rightFormatTeeth">
-                                                                        {% for teeth in teethPlans %}
-                                                                            {% if teeth.teethPosition == 'lower-right' %}
-                                                                                <li class="tooltips" data-trigger = "hover" data-original-title="{{ teeth.name }}" ><input type="checkbox" name="teethNo[]" value="{{ teeth.id }}" class="checkboxes checkradios-checkbox checkradios checkbox-custom"></li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                    <div class="span1" style="margin-top: -10px">
-                                                        <button type="button"  class="btn blue addProcedure" id="" data-id="advise" data-tab="tab_patient_advise"  data-url="{{ path('dms_invoice_particular_procedure',{'invoice':entity.id,'service':'advise'}) }}" ><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <table class="table table-bordered table-striped table-condensed flip-content ">
-                                                    <thead class="flip-content ">
-                                                    <tr class="head-green">
-                                                        <th class="numeric">Procedure</th>
-                                                        <th class="numeric">Teeth Position</th>
-                                                        <th class="numeric">Action</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody id="procedure-advise">
-                                                    {% for invoiceParticular in entity.invoiceParticulars %}
-                                                        {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim =='advise' %}
-                                                            <tr id="remove-{{ invoiceParticular.id }}">
-                                                                <td  class="numeric" {% if invoiceParticular.teethNo[0] is not empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
-                                                                {% if invoiceParticular.teethNo is not empty %}
-                                                                    <td class="numeric">
-                                                                        <table class="dms-table">
-                                                                            {% set upperLeftTeeths = [8,7,6,5,4,3,2,1] %}
-                                                                            {% set upperRightTeeths = {9:1,10:2,11:3,12:4,13:5,14:6,15:7,16:8} %}
-                                                                            {% set lowerLeftTeeths = {24:8,23:7,22:6,21:5,20:4,19:3,18:2,17:1} %}
-                                                                            {% set lowerRightTeeths = {25:1,26:2,27:3,28:4,29:5,30:6,31:7,32:8} %}
-                                                                            <tr><td class="dms-td dms-td-border-none dms-td-border-bottom">
-                                                                                    <ul class="leftTeeth">
-                                                                                        {% for left in upperLeftTeeths %}
-                                                                                            <li {% if left in invoiceParticular.teethNo  %} class="active" {% endif %} >{{ left }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                                <td class="dms-td dms-td-border-bottom">
-                                                                                    <ul class="rightTeeth">
-                                                                                        {% for key,value in upperRightTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr><td class="dms-td dms-td-border-none">
-                                                                                    <ul class="leftTeeth">
-                                                                                        {% for key,value in lowerLeftTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo  %} class="active" {% endif %}>{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                                <td class="dms-td">
-                                                                                    <ul class="rightTeeth">
-                                                                                        {% for key,value in lowerRightTeeths %}
-                                                                                            <li {% if key in invoiceParticular.teethNo %} class="active" {% endif %} >{{ value }}</li>
-                                                                                        {% endfor %}
-                                                                                    </ul>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                {% endif %}
-                                                                <td class="numeric">
-                                                                    <a href="javascript:" class="btn red mini particularDelete" data-id="{{ invoiceParticular.id }}" data-tab="advise" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="clearfix">&nbsp;</div>
-                                            </div>
-                                            <div class="tab-pane tab-height" id="tab_patient_special_advise">
-                                                <div class="form-actions portlet box green">
-                                                    <div class="portlet-title">
-                                                        <div class="caption"><i class="icon-reorder"></i>Special Advices</div>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">{{ form_widget(form.specialAdvises) }}
-                                                        {{ form_errors(form.specialAdvises) }}</div>
-                                                </div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="form-actions portlet box grey">
-                                                    <div class="pull-right">
-                                                        <button type="button"  class="btn blue span12 saveButton" id="receiveBtn"><i class="icon-save"></i> Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                {% endfor %}
+                                            {% endif %}
                                         </div>
                                     </div>
+                                    {% if entity.customer is not empty %}
                                     <div class="clearfix">&nbsp;</div>
                                     <div class="form-actions portlet box blue">
                                         <div class="portlet-title">
@@ -1062,7 +679,7 @@
                                                         <div class="btn-group">
                                                             <a class="btn purple appointmentSchedule"
                                                                data-title="Patient Appointment Schedule"
-                                                               data-dialogmodal-bind=".dialog_content" data-topoffset="0" data-top="10%"
+                                                                data-topoffset="0" data-top="10%"
                                                                href="javascript:" data-url="{{ path('dms_treatment_appointment_schedule') }}" ><span
                                                                         class="fa fa-calendar"></span> Appointment Schedule</a>
                                                         </div>
@@ -1081,13 +698,13 @@
                                                         </div>
                                                         <div class="span3">
                                                             <input type="text" class="m-wrap span5 form-control datePicker" id="appointmentDate" name="appointmentDate" value="{{ "now"|date('d-m-Y') }}" >
-                                                            {% set times = ['8.00 AM','8.15 AM','8.30 AM','8.45 AM',
-                                                            '9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
-                                                            '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM','12.00 PM','12.15 PM',
+                                                            {% set times = ['12.00 PM','12.15 PM',
                                                             '12.30 PM','12.45 PM','1.00 PM','1.15 PM','1.30 PM','1.45 PM','2.00 PM','2.15 PM',
                                                             '2.30 PM','2.45 PM','3.00 PM','4.15 PM','4.30 PM','4.45 PM','5.00 PM','5.15 PM',
                                                             '5.30 PM','5.45 PM','6.00 PM','6.15 PM','6.30 PM','6.45 PM','7.00 PM','7.15 PM',
-                                                            '7.30 PM','7.45 PM','8.00 PM','8.15 PM','8.30 PM','8.45 PM','9.00 PM','9.15 PM','9.30 PM','9.45 PM','10.00 PM']
+                                                            '7.30 PM','7.45 PM','8.00 PM','8.15 PM','8.30 PM','8.45 PM','9.00 PM','9.15 PM','9.30 PM','9.45 PM','10.00 PM','10.15 PM','10.30 PM','10.45 PM','11.00 PM','8.00 AM','8.15 AM','8.30 AM','8.45 AM',
+                                                            '9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
+                                                            '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM']
                                                             %}
                                                             <select class="span7 m-wrap" id="appointmentTime" name="appointmentTime">
                                                                 <option value="">-Appointment Time- </option>
@@ -1194,6 +811,7 @@
                                             <div class="clearfix">&nbsp;</div>
                                         </div>
                                     </div>
+                                    {% endif %}
                                     <div class="clearfix">&nbsp;</div>
                                     <div class="form-actions portlet box grey">
                                         <div class="pull-left span4">
@@ -1236,47 +854,23 @@
     <div id="dialog_content" class="dialog_content" style="display:none">
         <div class="dialogModal_header"></div>
         <div class="dialogModal_content">
-            {#<div class="row-fluid">
-                <form id="appointmentForm" name="appointmentForm" method="post">
-                   <div class="span12">
-                       <div class="input-append span12" >
-                           <input type="date" class="m-wrap span10 form-control datePicker"  id="dateSchedule" name="dateSchedule" value="" >
-                           <div class="btn-group">
-                               <button type="button" data-url="{{ path('dms_treatment_appointment_schedule') }}"  class="btn blue" id="searchAppointment"><i class="icon-search"></i> Go</button>
-                           </div>
-                       </div>
-                   </div>
-                </form>
-            </div>#}
-            <div class="row-fluid">
-                <table class="table table-bordered table-striped table-condensed flip-content ">
-                    <thead class="flip-content ">
-                    <tr class="head-green">
-                        <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                        <th class="numeric">Patient ID</th>
-                        <th class="numeric">Patient Name</th>
-                        <th class="numeric">Treatment Particular</th>
-                        <th class="numeric">Time</th>
-                        <th class="numeric">Process</th>
-                        <th class="numeric">Status</th>
-                        <th class="numeric">SMS</th>
-                    </tr>
-                    </thead>
-                    <tbody id="appointmentSchedule"></tbody>
-                </table>
-            </div>
-        </div>
     </div>
  <style>
 
+     .tooltip-inner{
+         background-color: #d12610;
+     }
+     .tooltip.top .tooltip-arrow{
+         color: #d12610 !important;
+     }
      .close{
          background-image: none!important;
      }
      .dialogModal .dialogModal_top .dialogModal_header{
-         width: 850px!important;
+         width: 100%!important;
      }
      .dialogModal .dialogModal_body{
-         width: 850px;
+         width: 100%!important;
      }
      .dialogModal .dialogModal_content{
 
@@ -1296,6 +890,15 @@
      }
      .tab-height{
          min-height: 525px;
+     }
+
+     .row-fluid label{
+       line-height: 30px!important;
+     }
+
+     input[class*="span"].wrap-custom{
+         height: 30px!important;
+
      }
 
      li.active > a {
@@ -1397,8 +1000,6 @@
      .dms-teeth-plan ul.leftFormatTeeth ,.dms-teeth-plan ul.rightFormatTeeth{
          list-style:none;
      }
-
-
      .dms-teeth-plan .leftFormatTeeth li, .dms-teeth-plan .rightFormatTeeth li {
          float: left;
          padding: 3px;
@@ -1406,8 +1007,6 @@
      .dms-teeth-plan .dms-td ul.rightFormatTeeth{
          float:right;
      }
-
-
      .checkbox-custom{
          color:red;
          border:1px solid #FFF;
@@ -1418,8 +1017,8 @@
      .checkbox-custom.focus{
          border:red 1px solid ;
      }
-
  </style>
+
 {% endblock %}
 
 {% block cssBlock %}
@@ -1444,7 +1043,6 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
-    UIModals.init();
     $('#addParticular').attr("disabled", true);
     $("select.multi-select2").multiSelect();
     $('.leftFormatTeeth li div , .rightFormatTeeth li div').removeClass('checker');

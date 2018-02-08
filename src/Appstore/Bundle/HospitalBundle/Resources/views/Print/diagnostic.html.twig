@@ -73,7 +73,7 @@
                     {% if key != 'Pathology' %}
                         <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
                     {% endif %}
-                    {% set colSpan = serviceDetails.hasQuantity? 2 : 3 %}
+                    {% set colSpan = serviceDetails.hasQuantity ? 2 : 3 %}
                     {% for item in serviceDetails.items %}
                         <tr>
                             <td class="span9" colspan="{{ colSpan }}">{{ item.particular.particularCode }} - {{ item.particular.name }}</td>

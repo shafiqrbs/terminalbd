@@ -64,6 +64,27 @@ class TreatmentPlanController extends Controller
 
     public function appointmentDateScheduleAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $appointmentDate = isset($data['schedule']) ? $data['schedule'] : '';
+        $curDate =  New \DateTime("now");
+        $curDate = $curDate->format('d-m-Y');
+        $appointmentDate = !empty($appointmentDate)? $appointmentDate :(string)$curDate;
+        $data = array('appointmentDate' => $appointmentDate);
+        $user = $this->getUser();
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+     //   $appointments = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->appointmentDate($dmsConfig,$appointmentDate);
+        $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig,$data);
+        $html =  $this->renderView('DmsBundle:Invoice:schedule-plan.html.twig',
+            array('treatmentSchedule'=> $treatmentSchedule)
+        );
+        return  New Response($html);
+        exit;
+    }
+
+    public function dateWiseScheduleAction(Request $request)
+    {
+
         $data = $request->request->all();
         $appointmentDate = isset($data['schedule']) ? $data['schedule'] : '';
         $user = $this->getUser();
