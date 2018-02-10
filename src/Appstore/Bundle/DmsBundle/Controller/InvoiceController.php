@@ -127,9 +127,9 @@ class InvoiceController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
+
         /** @var  $invoiceParticularArr */
         $invoiceParticularArr = array();
-        $invoiceParticularServiceArr = array();
 
         /** @var DmsInvoiceParticular $row */
         if (!empty($entity->getInvoiceParticulars())){
@@ -139,6 +139,7 @@ class InvoiceController extends Controller
                 }
             endforeach;
         }
+
         if (in_array($entity->getProcess(), array('Done', 'Canceled'))) {
             return $this->redirect($this->generateUrl('dms_invoice_show', array('id' => $entity->getId())));
         }
@@ -456,33 +457,50 @@ class InvoiceController extends Controller
 
     public function showAction(DmsInvoice $entity)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getDmsConfig()->getId();
-        if ($inventory == $entity->getDmsConfig()->getId()) {
-
-
-          //  $invoiceDetails = [['items' => [],'serviceFormat' => [] ]];
-
-            foreach ($entity->getInvoiceParticulars() as $item) {
-
-                /** @var DmsInvoiceParticular $item */
-                if(!empty($item->getDmsParticular())) {
-                    $serviceName = $item->getDmsParticular()->getService()->getName();
-                    $serviceFormat = $item->getDmsParticular()->getService()->getServiceFormat();
-                    $invoiceDetails[$serviceName][]= $serviceName;
-                    $invoiceDetails[$serviceName]['items'][]= $item;
-                    $invoiceDetails[$serviceName]['serviceFormat'][]= $serviceFormat;
-
-                }
-
-            }
+        $em = $this->getDoctrine()->getManager();
+        $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
+        if ($dmsConfig->getId() == $entity->getDmsConfig()->getId()) {
             return $this->render('DmsBundle:Invoice:show.html.twig', array(
                 'entity' => $entity,
-                'invoiceDetails' => $invoiceDetails,
             ));
         } else {
             return $this->redirect($this->generateUrl('dms_invoice'));
         }
 
+    }
+
+    public function patientLoadAction(DmsInvoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
+        if ($dmsConfig->getId() == $entity->getDmsConfig()->getId()) {
+
+            /** @var  $invoiceParticularArr */
+            $invoiceParticularArr = array();
+
+            /** @var DmsInvoiceParticular $row */
+            if (!empty($entity->getInvoiceParticulars())) {
+                foreach ($entity->getInvoiceParticulars() as $row):
+                    if (!empty($row->getDmsParticular())) {
+                        $invoiceParticularArr[$row->getDmsParticular()->getId()] = $row;
+                    }
+                endforeach;
+            }
+
+            $services = $em->getRepository('DmsBundle:DmsService')->getServiceLists($dmsConfig);
+            $treatmentPlans = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig, array('treatment-plan', 'other-service'));
+            $treatmentSchedule = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
+            $html = $this->renderView('DmsBundle:Invoice:patient-overview.html.twig',
+                array(
+                    'entity' => $entity,
+                    'invoiceParticularArr' => $invoiceParticularArr,
+                    'particularService' => $treatmentPlans,
+                    'services' => $services,
+                    'treatmentSchedule' => $treatmentSchedule,
+                )
+            );
+            return New Response($html);
+        }
     }
 
     public function confirmAction(DmsInvoice $entity)
@@ -513,7 +531,7 @@ class InvoiceController extends Controller
             $entity->setProcess('In-progress');
             $em->flush();
             $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
-            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
+         //   $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
             return new Response('success');
 
         } elseif(!empty($entity) and $process == 'Done' and $entity->getTotal() <= $entity->getPayment()  ) {
@@ -547,8 +565,6 @@ class InvoiceController extends Controller
         return new Response(json_encode(array('success' => 'success')));
         exit;
     }
-
-
 
     public function invoiceReverseAction(DmsInvoice $invoice)
     {
@@ -638,38 +654,32 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
+        if ($dmsConfig->getId() == $entity->getDmsConfig()->getId()) {
 
-        if($entity->getDmsConfig()->getId() != $dmsConfig->getId()){
-            return $this->redirect($this->generateUrl('dms_invoice'));
+            /** @var  $invoiceParticularArr */
+            $invoiceParticularArr = array();
+
+            /** @var $row DmsInvoiceParticular  */
+            if (!empty($entity->getInvoiceParticulars())) {
+                foreach ($entity->getInvoiceParticulars() as $row):
+                    if (!empty($row->getDmsParticular())) {
+                        $invoiceParticularArr[$row->getDmsParticular()->getId()] = $row;
+                    }
+                endforeach;
+            }
+
+            $services = $em->getRepository('DmsBundle:DmsService')->findBy(array('dmsConfig'=>$dmsConfig,'serviceShow'=>1,'status'=>1),array('serviceSorting'=>'ASC'));
+            $treatmentSchedule = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
+            return  $this->render('DmsBundle:Print:print.html.twig',
+                array(
+                    'entity' => $entity,
+                    'invoiceParticularArr' => $invoiceParticularArr,
+                    'services' => $services,
+                    'treatmentSchedule' => $treatmentSchedule,
+                )
+            );
+
         }
-        $barcode = $this->getBarcode($entity->getInvoice());
-        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
-        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
-
-        /** @var  $invoiceParticularArr */
-        $invoiceParticularArr = array();
-
-        /** @var DmsInvoiceParticular $row */
-
-        if (!empty($entity->getInvoiceParticulars())){
-            foreach ($entity->getInvoiceParticulars() as $row):
-                if(!empty($row->getDmsParticular())){
-                    $invoiceParticularArr[$row->getDmsParticular()->getId()] = $row;
-                }
-            endforeach;
-        }
-        $services        = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
-        $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical','investigation'));
-        $attributes        = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
-        return $this->render('DmsBundle:Print:arman.html.twig', array(
-            'entity'                => $entity,
-            'particularService'     => $services,
-            'invoiceParticularArr'  => $invoiceParticularArr,
-            'particulars'           => $particulars,
-            'attributes'            => $attributes,
-            'inWords'               => $inWords,
-        ));
-
 
     }
 

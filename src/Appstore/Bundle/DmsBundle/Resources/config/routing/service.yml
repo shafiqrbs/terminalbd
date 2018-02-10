@@ -25,6 +25,6 @@ dms_service_status:
     defaults: { _controller: "DmsBundle:Service:status" }
 
 dms_service_sorted:
-    path:     /service-sorted
+    path:     /{fieldName}/service-sorted
     defaults: { _controller: "DmsBundle:Service:sorted" }
 

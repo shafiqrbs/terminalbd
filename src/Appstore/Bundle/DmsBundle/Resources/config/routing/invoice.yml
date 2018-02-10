@@ -122,6 +122,10 @@ dms_invoice_print_invoice:
     path:     /{id}/print
     defaults: { _controller: "DmsBundle:Invoice:invoicePrint" }
 
+dms_invoice_patient_load:
+    path:     /{id}/patient-load
+    defaults: { _controller: "DmsBundle:Invoice:patientLoad" }
+
 dms_invoice_process_update:
     path:     /hms-invoice/upadte-process
     defaults: { _controller: "DmsBundle:Invoice:invoiceProcessUpdate" }

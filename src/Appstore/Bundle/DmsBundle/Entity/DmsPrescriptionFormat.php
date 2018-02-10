@@ -8,10 +8,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * Service
  *
- * @ORM\Table( name ="dms_service")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Repository\DmsServiceRepository")
+ * @ORM\Table( name ="dms_prescription_format")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Repository\DmsPrescriptionFormatRepository")
  */
-class DmsService
+class DmsPrescriptionFormat
 {
     /**
      * @var integer
@@ -65,43 +65,6 @@ class DmsService
     private $serviceFormat;
 
 
-     /**
-     * @var int
-     *
-     * @ORM\Column(name="servicePosition", type="smallint", length =1, nullable=true)
-     */
-    private $servicePosition;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="serviceHeight", type="integer", length=3, nullable=true)
-     */
-    private $serviceHeight;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="serviceSorting", type="smallint",  length=2, nullable=true)
-     */
-    private $serviceSorting = 0;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="serviceHeaderShow", type="boolean", nullable=true)
-     */
-    private $serviceHeaderShow= false;
-
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="serviceShow", type="boolean", nullable=true)
-     */
-    private $serviceShow = false;
-
-
     /**
      * @var string
      *
@@ -115,6 +78,7 @@ class DmsService
      * @ORM\Column(name="code", type="string", length=10, nullable=true)
      */
     private $code;
+
 
     /**
      * @var int
@@ -136,7 +100,6 @@ class DmsService
      * @ORM\Column(name="status", type="boolean" )
      */
     private $status= true;
-
 
     /**
      * Get id
@@ -316,87 +279,6 @@ class DmsService
     public function setServiceFormat($serviceFormat)
     {
         $this->serviceFormat = $serviceFormat;
-    }
-
-
-    /**
-     * @return int
-     */
-    public function getServiceHeight()
-    {
-        return $this->serviceHeight;
-    }
-
-    /**
-     * @param int $serviceHeight
-     */
-    public function setServiceHeight($serviceHeight)
-    {
-        $this->serviceHeight = $serviceHeight;
-    }
-
-    /**
-     * @return int
-     */
-    public function getServiceSorting()
-    {
-        return $this->serviceSorting;
-    }
-
-    /**
-     * @param int $serviceSorting
-     */
-    public function setServiceSorting($serviceSorting)
-    {
-        $this->serviceSorting = $serviceSorting;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isServiceHeaderShow()
-    {
-        return $this->serviceHeaderShow;
-    }
-
-    /**
-     * @param bool $serviceHeaderShow
-     */
-    public function setServiceHeaderShow($serviceHeaderShow)
-    {
-        $this->serviceHeaderShow = $serviceHeaderShow;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isServiceShow()
-    {
-        return $this->serviceShow;
-    }
-
-    /**
-     * @param bool $serviceShow
-     */
-    public function setServiceShow($serviceShow)
-    {
-        $this->serviceShow = $serviceShow;
-    }
-
-    /**
-     * @return int
-     */
-    public function getServicePosition()
-    {
-        return $this->servicePosition;
-    }
-
-    /**
-     * @param int $servicePosition
-     */
-    public function setServicePosition($servicePosition)
-    {
-        $this->servicePosition = $servicePosition;
     }
 
 

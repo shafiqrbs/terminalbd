@@ -165,7 +165,7 @@ class ServiceController extends Controller
             );
             return $this->redirect($this->generateUrl('dms_service'));
         }
-
+        $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceLists($config);
         return $this->render('DmsBundle:Service:index.html.twig', array(
             'entity'      => $entity,
             'pagination'      => $pagination,
@@ -232,10 +232,10 @@ class ServiceController extends Controller
      * Lists all FeatureWidget entities.
      *
      */
-    public function sortedAction(Request $request)
+    public function sortedAction(Request $request,$fieldName)
     {
         $data = $request ->request->get('item');
-        $this->getDoctrine()->getRepository('DmsBundle:DmsService')->setListOrdering($data);
+        $this->getDoctrine()->getRepository('DmsBundle:DmsService')->setListOrdering($fieldName,$data);
         exit;
     }
 

@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Patient Diagnostic Invoice No # {{ entity.invoice }}
+                    Patient No # {{ entity.invoice }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,11 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('hms_invoice') }}">Diagnostic Invoice</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="#">Manage Diagnostic Invoice</a></li>
+                    <li><a href="#">Manage Patient Details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -34,12 +30,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Invoice Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Patient Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
-                                <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i> Diagnostic</a>
+                                <a class="btn red" href="{{ path('dms_invoice_new') }}"><i class="icon-plus-sign"></i> Add New Patient</a>
+                                <a class="btn" href="{{ path('dms_invoice') }}"><i class="icon-th-list"></i> Patient</a>
                             </div>
                         </div>
 
@@ -53,7 +49,7 @@
                                 <div class="span3">
                                     <h4>About:</h4>
                                     <ul class="unstyled">
-                                        {% if entity.customer is not empty %}<li><strong>Pt. ID:</strong>&nbsp;{{ entity.customer.customerId }}</li>{% endif %}
+                                        {% if entity.customer is not empty %}<li><strong>Pt. ID:</strong>&nbsp;{{ entity.invoice }}</li>{% endif %}
                                         {% if entity.customer is not empty %}<li><strong>Customer #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                                         {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
                                         {% if entity.customer is not empty %}<li><strong>Gender:</strong>&nbsp;{{ entity.customer.gender }}, &nbsp;{{ entity.customer.age }}&nbsp;{{ entity.customer.ageType }}</li>{% endif %}
@@ -83,220 +79,16 @@
                                     </ul>
                                 </div>
                                 <div class="span3">
-                                    <h4>Referred By:</h4>
-                                    {% if entity.referredDoctor is not empty %}
+                                    <h4>Assign Doctor By:</h4>
+                                    {% if entity.assignDoctor is not empty %}
                                         <ul class="unstyled">
-                                            <li><strong>Code:</strong>&nbsp;{{ entity.referredDoctor.particularCode }}</li>
-                                            <li><strong>Name:</strong>&nbsp;{{ entity.referredDoctor.name }}</li>
-                                            <li><strong>Mobile:</strong>&nbsp;{{ entity.referredDoctor.mobile }}</li>
-                                            <li><strong>Address:</strong>&nbsp;{{ entity.referredDoctor.address }}</li>
+                                            <li><strong>Name:</strong>&nbsp;{{ entity.assignDoctor.name }}</li>
                                         </ul>
                                     {% endif %}
                                 </div>
                             </div>
-                            {% include('flash-message.html.twig')  %}
-
-                            <table class="table table-bordered table-striped">
-                                <tbody>
-
-                                {% for key, serviceDetails in invoiceDetails %}
-                                    <tr><td colspan="2" class="span12 service-group"><strong>{{ key }}</strong></td></tr>
-                                    {% for key,item in serviceDetails.items %}
-                                        {% if item.metaCheck == 1 and item.dmsParticular.service.serviceFormat == 'checkbox' %}
-                                        <tr>
-                                            <td class="span3">{{ item.dmsParticular.name }}</td>
-                                        </tr>
-                                        {% elseif item.metaValue is not empty and item.dmsParticular.service.serviceFormat == 'text-field' %}
-                                                <tr>
-                                                    <td class="span3">{{ item.dmsParticular.name }}</td>
-                                                    <td class="span9">{{ item.metaValue }}</td>
-                                                </tr>
-                                        {% elseif item.dmsParticular.service.serviceFormat == 'checkbox-text-field' %}
-                                            {% if item.metaCheck == 1 or item.metaValue is not empty %}
-                                                <tr>
-                                                    <td class="span3">{% if item.metaCheck == 1 %}<input checked="checked" type="checkbox" value="1" >{% endif %} {{ item.dmsParticular.name }}</td>
-                                                    <td class="span9">{% if item.metaValue is not empty %}{{ item.metaValue }} {% endif %}</td>
-                                                </tr>
-                                            {% endif %}
-                                        {% elseif item.metaValue is not empty and item.dmsParticular.service.serviceFormat == 'textarea' %}
-                                            <tr>
-                                                <td class="span3">{{ item.dmsParticular.name }}</td>
-                                                <td class="span9">{{ item.metaValue|raw }}</td>
-                                            </tr>
-                                        {% endif %}
-
-                                    {% endfor %}
-                                {% endfor %}
-                                </tbody>
-
-                            </table>
-                            <table class="table table-border">
-                                <tr><td colspan="3">&nbsp;</td></tr>
-                                <tr><td colspan="3">&nbsp;</td></tr>
-                                <tr><td colspan="3">&nbsp;</td></tr>
-                                <tr>
-                                    <td class="span4">
-                                        <ul class="unstyled">
-                                            <li>Prepared By</li>
-                                            <li>{{ entity.createdBy.profile.name }}</li>
-                                        </ul>
-                                    </td>
-                                    <td class="span4 text-center">
-                                        <ul class="unstyled">
-                                            <li>Checked By</li>
-                                            <li>Printed: {{ "now"|date("d-m-Y h:m A") }}</li>
-                                        </ul>
-                                    </td>
-                                    <td class="span4 pull-right">
-                                        <ul class="unstyled">
-                                            <li>Printed By</li>
-                                            <li>{{ app.user }}</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr><td colspan="3">&nbsp;</td></tr>
-                            </table>
-
-            {#                <div class="row-fluid box green">
-                                {% if entity.invoiceParticulars is defined and  entity.invoiceParticulars is not empty  %}
-                                    <table class="table table-bordered table-striped table-condensed flip-content ">
-                                        <thead class="flip-content ">
-                                        <tr class="head-green">
-                                            <td class="span1">&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                            <th class="span1">Si/No</th>
-                                            <th class="span1">Code</th>
-                                            <th class="span4">Particular</th>
-                                            <th class="span2">Service</th>
-                                            <th class="span1">Qnt</th>
-                                            <th class="span1">Amount</th>
-                                            <th class="span1">Report</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for item in entity.invoiceParticulars %}
-                                            <tr id="remove-{{ item.id }}">
-                                                <td class="span1"><span class="badge badge-warning toggle badge-custom" id="{{ item.id  }}" ><span>[+]</span></span></td>
-                                                <td  class="span1">{{ loop.index }}</td>
-                                                <td  class="span1">{{ item.particular.particularCode }}</td>
-                                                <td class="span4">{{ item.particular.name }}</td>
-                                                <td class="span2">{{ item.particular.service.name }}</td>
-                                                <td class="span1">{{ item.quantity }}</td>
-                                                <td class="span1">{{ item.subTotal|number_format }}</td>
-                                                <td>
-                                                {% if item.particular.service.id == 1 and item.process =='Done'%}
-                                                    <a target="_blank" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"  class="btn blue mini"><i class="icon-print"></i> Report</a>
-                                                {% endif %}
-                                                </td>
-                                            </tr>
-                                            {% if item.particular.service.id == 1 %}
-                                                <tr id="show-{{ item.id }}" class="showing-overview">
-                                                    <td colspan="7">
-                                                        <table class="table table-bordered table-striped">
-                                                            <tr class="">
-                                                                <th class="span3" >Instruction</th>
-                                                                <td class="span9" >{{ item.particular.instruction }}</td>
-                                                            </tr>
-                                                            <tr class="">
-                                                                <th class="span3" >Pathological Comment</th>
-                                                                <td class="span9" >{{ item.comment }}</td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td colspan="8" class="span12" style="border: 1px double #000"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-                                            <td colspan="2" class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
-                                            <td colspan="2" class="span2"><strong id="vat">{{ entity.vat|number_format }}</strong></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
-                                            <td colspan="2" class="span2"><strong id="vat">{{ entity.discount|number_format }}</strong></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
-                                            <td colspan="2" class="span2"><strong id="vat">{{ entity.total|number_format }}</strong></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
-                                            <td colspan="2" class="span2"><strong id="vat">{{ entity.payment|number_format }}</strong></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
-                                            <td colspan="2" class="span2"><strong id="vat">{{ entity.due|number_format }}</strong></td>
-
-                                        </tr>
-
-                                        </tfoot>
-                                    </table>
-                                {% endif %}
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-                            <div class="row-fluid" id="showPayment">
-                                <div class="span12">
-                                    <table class="table table-bordered table-striped table-condensed table-fixed">
-                                        <thead>
-                                        <tr class="head-blue">
-                                            <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
-                                            <th class="numeric">Created</th>
-                                            <th class="numeric">Payment Method</th>
-                                            <th class="numeric">Discount</th>
-                                            <th class="numeric">Vat/Tax</th>
-                                            <th class="numeric">Amount</th>
-                                            <th class="numeric">Created By</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="invoiceTransaction">
-                                        {% for transaction in entity.invoiceTransactions %}
-                                            <tr>
-                                                <td  class="numeric">{{ loop.index }}</td>
-                                                <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                                                <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
-                                                <td class="numeric">{{ transaction.discount }}</td>
-                                                <td class="numeric">{{ transaction.vat }}</td>
-                                                <td class="numeric">{{ transaction.payment }}</td>
-                                                <td class="numeric">{{ transaction.createdBy }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                                            <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
-                                            <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
-                                            <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
-                                            <td class="numeric"></td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-                            <div class="form-actions portlet box grey">
-                                <div class="pull-right" id="action-{{ entity.id }}">
-                                    <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
-                                    #}{#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}{#
-                                    <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
-                                    <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
-                                    <span  id="show"  data-trigger="hover" data-original-title="All payment history" class=" btn purple receivePayment tooltips" ><i class="icon-money"></i>&nbsp;Payment History</span>
-                                    {% if  app.user.granted("ROLE_DOMAIN") %}
-                                        <a  href="{{ path('hms_invoice_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Admission Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
-                                    {% endif %}
-                                </div>
-                            </div>#}
+                            <div class="loader loader-double" ></div>
+                            <div id="patientLoad"></div>
                         </div>
                     </div>
                 </div>
@@ -304,6 +96,170 @@
             </div>
         </div>
     </div>
+    <style>
+        .border{border: 3px solid #fff;     border-radius: 5px;}
+
+        .tooltip-inner{
+            background-color: #d12610;
+        }
+        .tooltip.top .tooltip-arrow{
+            color: #d12610 !important;
+        }
+        .close{
+            background-image: none!important;
+        }
+        .dialogModal .dialogModal_top .dialogModal_header{
+            width: 100%!important;
+        }
+        .dialogModal .dialogModal_body{
+            width: 100%!important;
+        }
+        .dialogModal .dialogModal_content{
+
+        }
+        .dialogModal_content .mini{
+            height: 20px!important;
+        }
+
+        .check-list label{
+            width: 97%;
+        }
+        .feeds .col1 .cont .cont-col2 .desc{
+            margin-left: 10px;
+        }
+        .portlet.box .form .form-actions, .portlet.solid .form .form-actions {
+            margin-top: -9px !important;
+        }
+        .tab-height{
+            min-height: 525px;
+        }
+
+        .row-fluid label{
+            line-height: 30px!important;
+        }
+
+        input[class*="span"].wrap-custom{
+            height: 30px!important;
+
+        }
+
+        li.active > a {
+            color: #d12610 !important;
+        }
+        .tabs-right.tabbable-custom .nav-tabs > li a, .tabs-left.tabbable-custom .nav-tabs > li a {
+            padding: 8px 10px;
+            font-weight: bold;
+        }
+
+        .select2-container-multi .select2-choices {
+            min-height: 26px;
+            height: 32px!important;
+        }
+        .select2-container-multi .select2-choices .select2-search-choice div {
+            width: 20px!important;
+            background: #d12610;
+            color: #fff!important;
+            text-align: center;
+        }
+        #project-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 1em;
+        }
+        #project-icon {
+            float: left;
+            height: 32px;
+            width: 32px;
+        }
+        #project-description {
+            margin: 0;
+            padding: 0;
+        }
+        .dms-table {
+
+        }
+        .dms-table tr{
+            height:15px!important;
+            line-height: 15px!important;
+        }
+        .dms-table .dms-td{
+            height: 15px!important;
+            line-height: 15px;
+            padding: 1px!important;
+            width: 180px;
+
+        }
+        .dms-table .dms-td-border-none{
+            border: none!important;
+            text-align:right!important;
+        }
+        .dms-table .dms-td-border-bottom{
+            border-bottom:2px solid #4b8df8!important;
+        }
+
+        .dms-table .dms-td ul.rightTeeth , .dms-table .dms-td ul.leftTeeth{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dms-table .dms-td ul.rightTeeth{
+            float:right;
+        }
+        .dms-table .dms-td ul.leftTeeth{
+
+        }
+        .dms-table .dms-td ul.leftTeeth li, .dms-table .dms-td ul.rightTeeth li {
+            float: left;
+            border: 1px solid #000;
+            margin: 1px;
+            height: 15px;
+            line-height: 15px;
+            padding: 5px;
+            padding-bottom: 1px;
+            padding-top: 1px;
+        }
+        .dms-table .dms-td ul.leftTeeth li.active , .dms-table .dms-td ul.rightTeeth li.active{
+            color: #d12610 !important;
+            border: 1px solid #d12610!important;
+        }
+        .dms-teeth-plan{
+            margin-top: -18px;
+        }
+
+        .dms-teeth-plan .dms-plan-td{
+            padding: 1px!important;
+            width: 275px;
+
+        }
+        .dms-teeth-plan .dms-plan-td-border-none{
+            border: none!important;
+            text-align:right!important;
+        }
+        .dms-teeth-plan .dms-plan-td-border-bottom{
+            border-bottom:red 1px solid !important;
+        }
+        .dms-teeth-plan ul.leftFormatTeeth ,.dms-teeth-plan ul.rightFormatTeeth{
+            list-style:none;
+        }
+        .dms-teeth-plan .leftFormatTeeth li, .dms-teeth-plan .rightFormatTeeth li {
+            float: left;
+            padding: 3px;
+        }
+        .dms-teeth-plan .dms-td ul.rightFormatTeeth{
+            float:right;
+        }
+        .checkbox-custom{
+            color:red;
+            border:1px solid #FFF;
+            background-image:url("{{ asset('assets/img/tooth.png') }}");
+            background-size: 24px 24px;
+            background-repeat: no-repeat;
+        }
+        .checkbox-custom.focus{
+            border:red 1px solid ;
+        }
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -322,4 +278,17 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    $.ajax({
+    url :"{{ path('dms_invoice_patient_load',{'id':entity.id}) }}",
+    beforeSend: function(){
+        $('.loader-double').fadeIn(1000).addClass('is-active');
+    },
+    complete: function(){
+        $('.loader-double').fadeIn(1000).removeClass('is-active');
+    },
+    success:  function (data) {
+        $("#patientLoad").html(data);
+    }
+    });
+
 {% endblock %}

@@ -102,10 +102,14 @@ class DmsTreatmentPlanRepository extends EntityRepository
     public function appointmentDate(DmsConfig $config , $appointmentDate = '')
     {
 
-        $curDate =  New \DateTime("now");
+        if(empty($appointmentDate)){
+            $curDate =  New \DateTime("now");
+        }else{
+            $curDate =  New \DateTime($appointmentDate);
+        }
         $curDate = $curDate->format('d-m-Y');
-        $appointmentDate = !empty($appointmentDate)? $appointmentDate :(string)$curDate;
-        $data = array('appointmentDate' => '04-02-2018');
+        echo $appointmentDate = (string)$curDate;
+        $data = array('appointmentDate' => $appointmentDate);
         $results = $this->findTodaySchedule($config,$data);
         $data = '';
         $i = 1;

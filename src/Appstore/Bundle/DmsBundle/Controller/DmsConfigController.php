@@ -24,14 +24,16 @@ class DmsConfigController extends Controller
 
     public function manageAction()
     {
-
+        $em = $this->getDoctrine()->getManager();
         $entity = $this->getUser()->getGlobalOption()->getDmsConfig();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
         }
         $form = $this->createEditForm($entity);
+        $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceForPrescription($entity);
         return $this->render('DmsBundle:Config:manage.html.twig', array(
             'entity' => $entity,
+            'pagination' => $pagination,
             'form' => $form->createView(),
         ));
     }
@@ -67,6 +69,7 @@ class DmsConfigController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceForPrescription($entity);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -81,13 +84,15 @@ class DmsConfigController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Report has been created successfully"
             );
-
+            $data = $request->request->all();
+            $this->getDoctrine()->getRepository('DmsBundle:DmsService')->prescriptionServiceUpdate($data);
             return $this->redirect($this->generateUrl('dms_config_manage'));
         }
 
         return $this->render('DmsBundle:Config:manage.html.twig', array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
+            'entity'        => $entity,
+            'pagination'    => $pagination,
+            'form'          => $editForm->createView(),
         ));
     }
 

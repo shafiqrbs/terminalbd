@@ -88,6 +88,29 @@ $( ".autoMetaValue" ).autocomplete({
     }
 });
 
+$('.checkboxes').checkradios({
+    checkbox: {
+        iconClass:'fa fa-window-close'
+    }
+
+});
+$(document).on("click", "#patientOverview", function() {
+    var url = $(this).attr('data-url');
+    $.ajax({
+        url :url,
+        beforeSend: function(){
+            $('.loader-double').fadeIn(1000).addClass('is-active');
+        },
+        complete: function(){
+            $('.loader-double').fadeIn(1000).removeClass('is-active');
+        },
+        success:  function (data) {
+            $("#patientLoad").html(data);
+        }
+    });
+});
+
+
 
 $( "#mobile" ).autocomplete({
 
@@ -365,7 +388,7 @@ $(document).on('click', '#searchAppointment', function() {
     $.ajax({
         url: url,
         type: 'POST',
-        data: $('#appointmentForm').serialize(),
+        data:new FormData($('#appointmentForm')[0]),
         processData: false,
         contentType: false,
         success: function (response) {
@@ -466,6 +489,8 @@ $('#appstore_bundle_dmsbundle_invoice_customer_mobile').on('click', function(){
 $('#appstore_bundle_dmsbundle_invoice_customer_age').on('click', function(){
     form.element($(this));
 });
+
+
 
 $(document).on("click", "#savePatientButtonxxx", function() {
 

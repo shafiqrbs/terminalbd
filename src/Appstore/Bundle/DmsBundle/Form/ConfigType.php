@@ -52,11 +52,14 @@ class ConfigType extends AbstractType
                     'expanded'  => true,
                     'empty_data'  => null,
             ))*/
+            ->add('customPrescription')
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
             ->add('printInstruction')
+            ->add('bodyTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+            ->add('leftTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))

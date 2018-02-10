@@ -125,7 +125,7 @@
     $( ".sortable" ).on( "sortupdate", function( event, ui ) {
         var serialized = $(".sortable").sortable("serialize");
         $.ajax({
-        url: '{{ path('dms_service_sorted') }}',
+        url: '{{ path('dms_service_sorted',{'fieldName':'sorting'}) }}',
         type: "POST",
         data: serialized
         });

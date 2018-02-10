@@ -307,9 +307,16 @@ class DmsConfig
     /**
      * @var integer
      *
-     * @ORM\Column(name="reportHeight", type="integer", nullable = true)
+     * @ORM\Column(name="leftTopMargin", type="integer", nullable = true)
      */
-    private $reportHeight = 0;
+    private $leftTopMargin = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="bodyTopMargin", type="integer", nullable = true)
+     */
+    private $bodyTopMargin = 0;
 
 
     /**
@@ -346,6 +353,15 @@ class DmsConfig
      * @ORM\Column(name="printInstruction", type="boolean",  nullable=true)
      */
     private $printInstruction = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="customPrescription", type="boolean",  nullable=true)
+     */
+    private $customPrescription = true;
+
+
 
 
     /**
@@ -892,21 +908,6 @@ class DmsConfig
         $this->invoiceHeight = $invoiceHeight;
     }
 
-    /**
-     * @return int
-     */
-    public function getReportHeight()
-    {
-        return $this->reportHeight;
-    }
-
-    /**
-     * @param int $reportHeight
-     */
-    public function setReportHeight($reportHeight)
-    {
-        $this->reportHeight = $reportHeight;
-    }
 
     /**
      * @return smallint
@@ -1066,6 +1067,54 @@ class DmsConfig
     public function setInvoiceFontSize($invoiceFontSize)
     {
         $this->invoiceFontSize = $invoiceFontSize;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomPrescription()
+    {
+        return $this->customPrescription;
+    }
+
+    /**
+     * @param bool $customPrescription
+     */
+    public function setCustomPrescription($customPrescription)
+    {
+        $this->customPrescription = $customPrescription;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBodyTopMargin()
+    {
+        return $this->bodyTopMargin;
+    }
+
+    /**
+     * @param int $bodyTopMargin
+     */
+    public function setBodyTopMargin($bodyTopMargin)
+    {
+        $this->bodyTopMargin = $bodyTopMargin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLeftTopMargin()
+    {
+        return $this->leftTopMargin;
+    }
+
+    /**
+     * @param int $leftTopMargin
+     */
+    public function setLeftTopMargin($leftTopMargin)
+    {
+        $this->leftTopMargin = $leftTopMargin;
     }
 
 

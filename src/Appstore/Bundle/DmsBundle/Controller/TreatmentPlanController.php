@@ -86,7 +86,7 @@ class TreatmentPlanController extends Controller
     {
 
         $data = $request->request->all();
-        $appointmentDate = isset($data['schedule']) ? $data['schedule'] : '';
+        $appointmentDate = isset($data['dateSchedule']) ? $data['dateSchedule'] : '';
         $user = $this->getUser();
         $dmsConfig = $user->getGlobalOption()->getDmsConfig();
         $appointments = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->appointmentDate($dmsConfig,$appointmentDate);
