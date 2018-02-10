@@ -66,6 +66,8 @@ class DmsParticularRepository extends EntityRepository
             ->where('e.dmsConfig = :config')->setParameter('config', $config)
             ->andWhere('e.status = :status')->setParameter('status', 1)
             ->andWhere('s.serviceFormat is null')
+            ->andWhere('s.slug IN(:slugs)')
+            ->setParameter('slugs',array_values($services))
             ->orderBy('s.sorting','ASC')
             ->orderBy('e.name','ASC')
             ->getQuery()->getResult();

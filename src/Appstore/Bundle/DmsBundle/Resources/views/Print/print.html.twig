@@ -191,7 +191,7 @@
                         {% endfor %}
                     </table>
                 </div>
-                <div class="span span8" style="margin-top: {{  entity.dmsConfig.bodyTopMargin }}px">
+                <div class="span span8" style="margin-top:{{  entity.dmsConfig.bodyTopMargin }}px;margin-left:{{  entity.dmsConfig.bodyLeftMargin }}px">
                     <table class="table">
 
                         {% for service in services %}
@@ -368,7 +368,7 @@
     }
     .styled li{
         list-style: square!important;
-        margin-left: 15px!important;
+        margin-left: 0!important;
         padding-bottom: 5px!important;
         width: 100%;
         display: inline-block;

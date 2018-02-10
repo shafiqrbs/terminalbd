@@ -318,6 +318,13 @@ class DmsConfig
      */
     private $bodyTopMargin = 0;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="bodyLeftMargin", type="integer", nullable = true)
+     */
+    private $bodyLeftMargin = 0;
+
 
     /**
      * @var smallint
@@ -1115,6 +1122,22 @@ class DmsConfig
     public function setLeftTopMargin($leftTopMargin)
     {
         $this->leftTopMargin = $leftTopMargin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBodyLeftMargin()
+    {
+        return $this->bodyLeftMargin;
+    }
+
+    /**
+     * @param int $bodyLeftMargin
+     */
+    public function setBodyLeftMargin($bodyLeftMargin)
+    {
+        $this->bodyLeftMargin = $bodyLeftMargin;
     }
 
 
