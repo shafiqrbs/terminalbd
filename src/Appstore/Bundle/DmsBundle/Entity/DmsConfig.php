@@ -321,9 +321,16 @@ class DmsConfig
     /**
      * @var integer
      *
-     * @ORM\Column(name="bodyLeftMargin", type="integer", nullable = true)
+     * @ORM\Column(name="sidebarWidth", type="integer", nullable = true)
      */
-    private $bodyLeftMargin = 0;
+    private $sidebarWidth = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="bodyWidth", type="integer", nullable = true)
+     */
+    private $bodyWidth = 0;
 
 
     /**
@@ -1127,17 +1134,33 @@ class DmsConfig
     /**
      * @return int
      */
-    public function getBodyLeftMargin()
+    public function getSidebarWidth()
     {
-        return $this->bodyLeftMargin;
+        return $this->sidebarWidth;
     }
 
     /**
-     * @param int $bodyLeftMargin
+     * @param int $sidebarWidth
      */
-    public function setBodyLeftMargin($bodyLeftMargin)
+    public function setSidebarWidth($sidebarWidth)
     {
-        $this->bodyLeftMargin = $bodyLeftMargin;
+        $this->sidebarWidth = $sidebarWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBodyWidth()
+    {
+        return $this->bodyWidth;
+    }
+
+    /**
+     * @param int $bodyWidth
+     */
+    public function setBodyWidth($bodyWidth)
+    {
+        $this->bodyWidth = $bodyWidth;
     }
 
 

@@ -47,7 +47,7 @@
     <table class="table">
         <tr>
             <td>
-                <div class="span span4" style="margin-top: {{  entity.dmsConfig.leftTopMargin }}px">
+                <div class="span span4" style="margin-top: {{  entity.dmsConfig.leftTopMargin }}px;width:{{  entity.dmsConfig.sidebarWidth }}px!important;">
                     <table class="table">
                         {% for service in services %}
                             {% if service.serviceFormat == 'teeth-format' and service.servicePosition == 1 %}
@@ -191,7 +191,7 @@
                         {% endfor %}
                     </table>
                 </div>
-                <div class="span span8" style="margin-top:{{  entity.dmsConfig.bodyTopMargin }}px;margin-left:{{  entity.dmsConfig.bodyLeftMargin }}px">
+                <div class="span span8" style="margin-top:{{  entity.dmsConfig.bodyTopMargin }}px; width:{{  entity.dmsConfig.bodyWidth }}px!important;">
                     <table class="table">
 
                         {% for service in services %}
