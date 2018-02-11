@@ -1,6 +1,6 @@
 setting_tool_sms:
     resource: "@SettingToolBundle/Resources/config/routing/smssender.yml"
-    prefix:   /domain/sender-sms
+    prefix:   /sms/sender-sms
 
 setting_tool_invoicemodule:
     resource: "@SettingToolBundle/Resources/config/routing/invoicemodule.yml"

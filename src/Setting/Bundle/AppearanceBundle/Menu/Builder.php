@@ -1069,7 +1069,7 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'fa fa-files-o')
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_SMS_MANAGER')) {
-            $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('icon', 'icon-mobile')->setAttribute('dropdown', true);
+            $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('icon', 'icon-phone')->setAttribute('dropdown', true);
             $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs', array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
             $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
             $menu['Invoice Sms & Email']->addChild('Invoice Application', array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'fa fa-files-o');

@@ -2,14 +2,10 @@
 
 namespace Appstore\Bundle\DmsBundle\Controller;
 
+use Appstore\Bundle\DmsBundle\Entity\DentalService;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
+use Appstore\Bundle\DmsBundle\Entity\DmsService;
 use Appstore\Bundle\DmsBundle\Form\ConfigType;
-use Appstore\Bundle\DmsBundle\Form\InvoiceType;
-use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Frontend\FrontentBundle\Service\MobileDetect;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,6 +90,29 @@ class DmsConfigController extends Controller
             'pagination'    => $pagination,
             'form'          => $editForm->createView(),
         ));
+    }
+
+    public function resetDefaultServiceAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DentalService')->findBy(array('status'=>1));
+        /* @var $entity DentalService */
+        foreach ($entities as $entity){
+            $exist = $this->getDoctrine()->getRepository('DmsBundle:DmsService')->findOneBy(array('dmsConfig'=>$config,'dentalService'=>$entity));
+            if(empty($exist)){
+                $service = new DmsService();
+                $service->setName(trim($entity->getName()));
+                $service->setDentalService($entity);
+                $service->setSlug(trim($entity->getSlug()));
+                $service->setStatus(1);
+                $service->setDmsConfig($config);
+                $em->persist($service);
+                $em->flush();
+            }
+
+        }
+        return $this->redirect($this->generateUrl('dms_config_manage'));
     }
 
 }

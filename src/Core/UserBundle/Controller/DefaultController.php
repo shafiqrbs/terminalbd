@@ -22,19 +22,29 @@ class DefaultController extends Controller
 
         $user = $this->getUser();
 
-
+        $globalOption = $user->getGlobalOption();
         if( $user->getGlobalOption()){
-            $enable = $user->getGlobalOption()->getStatus();
+            $enable =$globalOption->getStatus();
         }else{
             $enable = 0;
         }
 
+        $modules = $globalOption->getSiteSetting()->getAppModules();
+        $apps = array();
+        if (!empty($globalOption ->getSiteSetting()) and !empty($modules)) {
+            /* @var AppModule $mod */
+            foreach ($modules as $mod) {
+                if (!empty($mod->getModuleClass())) {
+                    $apps[] = $mod->getSlug();
+                }
+            }
+        }
 
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
             return $this->redirect($this->generateUrl('bindu_build'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT') && $enable == 1) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT') && $enable == 1 and in_array('resturant',$apps)) {
             return $this->redirect($this->generateUrl('restaurant_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DMS') && $enable == 1) {
             return $this->redirect($this->generateUrl('dms_homepage'));

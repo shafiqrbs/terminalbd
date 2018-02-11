@@ -13,7 +13,7 @@ hms_customer:
 
 domain_notification:
     resource: "@DomainUserBundle/Resources/config/routing/notificationconfig.yml"
-    prefix:   /domain/notification
+    prefix:   /sms/notification
 
 domain_employee_branch:
     resource: "@DomainUserBundle/Resources/config/routing/employee_branch.yml"

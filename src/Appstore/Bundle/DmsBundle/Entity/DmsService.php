@@ -399,6 +399,14 @@ class DmsService
         $this->servicePosition = $servicePosition;
     }
 
+    /**
+     * @param DentalService $dentalService
+     */
+    public function setDentalService($dentalService)
+    {
+        $this->dentalService = $dentalService;
+    }
+
 
 }
 
