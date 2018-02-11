@@ -29,6 +29,7 @@ class InvoiceParticularController extends Controller
             $this->get('request')->query->get('page', 1)/*page number*/,
             50  /*limit per page*/
         );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
         return $pagination;
     }
 

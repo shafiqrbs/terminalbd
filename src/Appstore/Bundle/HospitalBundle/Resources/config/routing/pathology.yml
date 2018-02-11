@@ -28,6 +28,10 @@ hms_pathology_delete:
     path:     /{id}/delete
     defaults: { _controller: "HospitalBundle:Pathology:delete" }
 
+hms_pathology_reset_report:
+    path:     /reset-pathology-report
+    defaults: { _controller: "HospitalBundle:Pathology:resetPathologyTestWithReport" }
+
 hms_pathology_status:
     path:     /{id}/status
     defaults: { _controller: "HospitalBundle:Pathology:status" }

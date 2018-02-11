@@ -4,7 +4,6 @@ namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Core\UserBundle\Entity\User;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,6 +28,12 @@ class HmsMasterDiagnosticReport
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="hmsMasterDiagnosticReport")
      **/
     private $hmsParticulars;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsMasterDiagnosticReportFormat", mappedBy="hmsMasterDiagnosticReport")
+    * @ORM\OrderBy({"parent" = "ASC"})
+     **/
+    private $hmsMasterDiagnosticReportFormats;
 
    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="hmsMasterDiagnosticReportCategories")
@@ -354,6 +359,14 @@ class HmsMasterDiagnosticReport
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+    }
+
+    /**
+     * @return HmsMasterDiagnosticReportFormat
+     */
+    public function getHmsMasterDiagnosticReportFormats()
+    {
+        return $this->hmsMasterDiagnosticReportFormats;
     }
 
 

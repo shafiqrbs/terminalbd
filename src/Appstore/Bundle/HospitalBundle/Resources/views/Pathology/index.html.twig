@@ -36,14 +36,10 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Diagnostic</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('hms_pathology_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('hms_pathology') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('hms_pathology_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                {% if 'ROLE_DOMAIN' in app.user.roles %}
+                                <a class="btn purple" href="{{ path('hms_pathology_reset_report') }}"><i class="icon-refresh"></i>&nbsp;Reset</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -131,7 +127,7 @@
 
                                 </tbody>
                             </table>
-                            <div class="pagination" >
+                            <div class="pagination pull-center" >
                                 {{ knp_pagination_render(entities) }}
                             </div>
                         </div>
