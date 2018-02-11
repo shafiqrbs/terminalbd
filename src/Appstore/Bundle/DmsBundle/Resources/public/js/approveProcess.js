@@ -61,10 +61,6 @@ $(document).on("click", ".confirm", function() {
 });
 
 
-
-
-
-
 $(document).on("click", ".delete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
@@ -179,7 +175,26 @@ $(".select2Product").select2({
     minimumInputLength: 1
 });
 
-$(".select2Medicine").select2({
+$( ".select2Medicine" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax( {
+            url: Routing.generate('medicine_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        } );
+    },
+    minLength: 1,
+    select: function( event, ui ) {
+        $("#medicineId").val(ui.item.id); // save selected id to hidden input
+
+    }
+});
+
+$(".select2Medicinex").select2({
 
     placeholder: "Search medicine name",
     ajax: {
@@ -212,10 +227,29 @@ $(".select2Medicine").select2({
     initSelection: function (element, callback) {
      },
     allowClear: true,
-    minimumInputLength: 1
+    minimumInputLength: 2
 });
 
-$(".select2Generic").select2({
+$( ".select2Generic" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax( {
+            url: Routing.generate('generic_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        } );
+    },
+    minLength: 2,
+    select: function( event, ui ) {
+        $("#medicineId").val(ui.item.id); // save selected id to hidden input
+
+    }
+});
+
+$(".select2Genericx").select2({
 
     placeholder: "Search medicine name",
     ajax: {

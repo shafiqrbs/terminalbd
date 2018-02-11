@@ -49,11 +49,6 @@ class DmsInvoiceMedicineRepository extends EntityRepository
     public function insertInvoiceMedicine(DmsInvoice $invoice, $data)
     {
 
-        if(!empty($data['medicine'])){
-            $medicine = $this->_em->getRepository('MedicineBundle:MedicineBrand')->find($data['medicine']);
-        }elseif(!empty($data['generic'])){
-            $medicine = $this->_em->getRepository('MedicineBundle:MedicineBrand')->find($data['generic']);
-        }
         $em = $this->_em;
         $entity = new DmsInvoiceMedicine();
         $entity->setMedicineQuantity($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineQuantity'])->getNameBn());
@@ -62,7 +57,12 @@ class DmsInvoiceMedicineRepository extends EntityRepository
         $entity->setMedicineDuration($data['medicineDuration']);
         $entity->setMedicineDurationType($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDurationType'])->getNameBn());
         $entity->setDmsInvoice($invoice);
-        $entity->setMedicine($medicine);
+        if(!empty($data['medicineId'])) {
+            $medicine = $this->_em->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineId']);
+            $entity->setMedicine($medicine);
+        }elseif($data['medicine']){
+            $entity->setMedicineName($data['medicine']);
+        }
         $em->persist($entity);
         $em->flush();
 
@@ -76,7 +76,11 @@ class DmsInvoiceMedicineRepository extends EntityRepository
         $i = 1;
         /** @var $entity DmsInvoiceMedicine */
         foreach ($entities as $entity) {
-            $medicine = $entity->getMedicine()->getMedicineForm().'. '.$entity->getMedicine()->getName() .' '.$entity->getMedicine()->getStrength();
+            if($entity->getMedicine()){
+                $medicine = $entity->getMedicine()->getMedicineForm().'. '.$entity->getMedicine()->getName() .' '.$entity->getMedicine()->getStrength();
+            }else{
+                $medicine = $entity->getMedicineName();
+            }
             $data .= '<tr id="medicine-'.$entity->getId().'">';
             $data .= '<td class="numeric" >' . $i . '</td>';
             $data .= '<td class="numeric" >' . $medicine . '</td>';

@@ -237,6 +237,7 @@ $(document).on('click', '#addPrescriptionParticular', function() {
 
 
     var medicine = $('#medicine').val();
+    var medicineId = $('#medicineId').val();
     var generic = $('#generic').val();
     var medicineQuantity = parseInt($('#medicineQuantity').val());
     var medicineDose = $('#medicineDose').val();
@@ -247,9 +248,12 @@ $(document).on('click', '#addPrescriptionParticular', function() {
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'medicine='+medicine+'&generic='+generic+'&medicineQuantity='+medicineQuantity+'&medicineDose='+medicineDose+'&medicineDoseTime='+medicineDoseTime+'&medicineDuration='+medicineDuration+'&medicineDurationType='+medicineDurationType,
+        data: 'medicine='+medicine+'&medicineId='+medicineId+'&medicineQuantity='+medicineQuantity+'&medicineDose='+medicineDose+'&medicineDoseTime='+medicineDoseTime+'&medicineDuration='+medicineDuration+'&medicineDurationType='+medicineDurationType,
         success: function (response) {
             $('#invoiceMedicine').html(response);
+            $('#medicine').val('');
+            $('#generic').val('');
+            $('#medicineId').val('');
         }
     })
 });

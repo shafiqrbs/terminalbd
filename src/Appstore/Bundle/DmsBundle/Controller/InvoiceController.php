@@ -247,14 +247,15 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $medicine = $request->request->get('medicine');
+        $medicineId = $request->request->get('medicineId');
         $generic = $request->request->get('generic');
         $medicineQuantity = $request->request->get('medicineQuantity');
         $medicineDose = $request->request->get('medicineDose');
         $medicineDoseTime = $request->request->get('medicineDoseTime');
         $medicineDuration = $request->request->get('medicineDuration');
         $medicineDurationType = $request->request->get('medicineDurationType');
-        if($medicine > 0 OR $generic > 0){
-            $invoiceItems = array('medicine' => $medicine , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType);
+        if(!empty($medicine)  OR $medicineId > 0){
+            $invoiceItems = array('medicine' => $medicine ,'medicineId' => $medicineId , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType);
             $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->insertInvoiceMedicine($invoice, $invoiceItems);
             $result = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->getInvoiceMedicines($invoice);
             return new Response($result);
@@ -404,56 +405,6 @@ class InvoiceController extends Controller
         exit;
     }
 
-    public function discountDeleteAction(DmsInvoice $entity)
-    {
-
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updatePaymentReceive($entity);
-
-        $msg = 'Discount deleted successfully';
-        $result = $this->returnResultData($entity,$msg);
-        return new Response(json_encode($result));
-        exit;
-    }
-
-    public function searchAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $sales = $request->request->get('sales');
-        $barcode = $request->request->get('barcode');
-        $sales = $em->getRepository('DmsBundle:DmsInvoice')->find($sales);
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $purchaseItem = $em->getRepository('DmsBundle:PurchaseItem')->returnPurchaseItemDetails($inventory, $barcode);
-        $checkQuantity = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceItem')->checkInvoiceQuantity($purchaseItem);
-        $itemStock = $purchaseItem->getItemStock();
-
-        /* Device Detection code desktop or mobile */
-        $detect = new MobileDetect();
-        $device = '';
-        if( $detect->isMobile() || $detect->isTablet() ) {
-            $device = 'mobile' ;
-        }
-
-        if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
-
-            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceItem')->insertInvoiceItems($sales, $purchaseItem);
-            $sales = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($sales);
-            $salesItems = $em->getRepository('DmsBundle:DmsInvoiceItem')->getInvoiceItems($sales,$device);
-            $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
-
-        } else {
-
-            $sales = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($sales);
-            $salesItems = $em->getRepository('DmsBundle:DmsInvoiceItem')->getInvoiceItems($sales,$device);
-            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
-        }
-
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
-        exit;
-    }
 
     public function showAction(DmsInvoice $entity)
     {

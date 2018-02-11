@@ -226,21 +226,31 @@ class MedicineBrandController extends Controller
 
     public function autoSearchMedicineAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = $_REQUEST['term'];
+        $items = array();
         if ($item) {
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
+            $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
+            foreach ($entities as $entity):
+                $items[] = array('id' => $entity['id'], 'value' => $entity['text']);
+            endforeach;
         }
-        return new JsonResponse($item);
+        return new JsonResponse($items);
+
     }
 
     public function autoSearchGenericAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = $_REQUEST['term'];
+        $items = array();
         if ($item) {
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchGenericAutoComplete($item);
+            $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
+            foreach ($entities as $entity):
+                $items[] = array('id' => $entity['id'], 'value' => $entity['text']);
+            endforeach;
         }
-        return new JsonResponse($item);
+        return new JsonResponse($items);
     }
+
 
     public function searchProductNameAction($medicine)
     {

@@ -3,15 +3,15 @@
 <html>
 <head>
     <meta charset="utf-8">
-{#    <script type="text/javascript">
+    <script type="text/javascript">
         window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
         }, 2000);
-    </script>#}
+    </script>
 </head>
-<div style="margin-top:{{ entity.dmsConfig.printTopMargin }}px;margin-left:{{ entity.dmsConfig.printLeftMargin }}px; width: 880px;">
+<div style="margin-top:{{ entity.dmsConfig.printTopMargin }}px;margin-left:{{ entity.dmsConfig.printLeftMargin }}px; width: 1000px;">
     {%  if entity.dmsConfig.isPrintHeader == 1 %}
         <table class="table">
             <tr>
@@ -201,7 +201,7 @@
                                     <td style="height:{{ service.serviceHeight }}px;">
                                         <ul class="unstyled">
                                             {% for medicine in entity.invoiceMedicines %}
-                                                <li> {{ loop.index }}. {{ medicine.medicine.medicineForm }} {{ medicine.medicine.name }} {{ medicine.medicine.strength }} <br/>
+                                                <li> {{ loop.index }}. {% if medicine.medicine is not empty %}{{ medicine.medicine.medicineForm }}. {{ medicine.medicine.name }} {{ medicine.medicine.strength }}{% else %} {{ medicine.medicineName }}{% endif %} <br/>
                                                     {{ medicine.medicineQuantity }}  {{ medicine.medicineDose }} - {{ medicine.medicineDoseTime }} - {{ medicine.medicineDuration }} {{ medicine.medicineDurationType }}
                                                 </li>
                                             {% endfor %}
@@ -276,7 +276,7 @@
                             {% if (service.serviceFormat == 'checkbox'  and service.servicePosition == 2)  %}
                                 <tr>
                                     <td style="height:{{ service.serviceHeight }}px;">
-                                        <ul class="styled">
+                                        <ul class="check-styled">
                                             {% if service.serviceHeaderShow == 1 %}
                                                 <li><h3>{{ service.name }}</h3></li>
                                             {% endif %}
@@ -294,7 +294,7 @@
                             {% if (service.serviceFormat == 'checkbox-text-field' and service.servicePosition == 2) %}
                                 <tr>
                                     <td style="height:{{ service.serviceHeight }}px;">
-                                        <ul class="styled">
+                                        <ul class="check-styled">
                                             {% if service.serviceHeaderShow == 1 %}
                                                 <li><h3>{{ service.name }}</h3></li>
                                             {% endif %}
@@ -571,9 +571,5 @@
     .dms-table .dms-td ul.leftTeeth{
 
     }
-
-
-
-
 </style>
 </html>

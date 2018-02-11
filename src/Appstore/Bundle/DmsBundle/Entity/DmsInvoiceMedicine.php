@@ -60,9 +60,17 @@ class DmsInvoiceMedicine
     /**
      * @var string
      *
+     * @ORM\Column(name="medicineName", type="string", length=255, nullable=true)
+     */
+    private $medicineName;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="medicineDuration", type="string", length=10, nullable=true)
      */
     private $medicineDuration;
+
 
     /**
      * @var string
@@ -211,20 +219,53 @@ class DmsInvoiceMedicine
         $this->medicineDurationType = $medicineDurationType;
     }
 
+
     /**
-     * @return DmsPrescriptionAttribute
+     * @return \DateTime
      */
-    public function getPrescriptionAttribute()
+    public function getUpdated()
     {
-        return $this->prescriptionAttribute;
+        return $this->updated;
     }
 
     /**
-     * @param DmsPrescriptionAttribute $prescriptionAttribute
+     * @param \DateTime $updated
      */
-    public function setPrescriptionAttribute($prescriptionAttribute)
+    public function setUpdated($updated)
     {
-        $this->prescriptionAttribute = $prescriptionAttribute;
+        $this->updated = $updated;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMedicineName()
+    {
+        return $this->medicineName;
+    }
+
+    /**
+     * @param string $medicineName
+     */
+    public function setMedicineName($medicineName)
+    {
+        $this->medicineName = $medicineName;
     }
 
 

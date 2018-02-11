@@ -446,14 +446,16 @@
                                         </div>
                                     </div>
                                     <div class="clearfix">&nbsp;</div>
-                                    <div class="row-fluid">
-                                        <div class="row-fluid particular-info" >
-                                            <div class="span6">
+                                    <div class="row-fluid particular-info">
+                                        <div class="span6">
+                                            <div class="form-control">
                                                 <input type="text" id="medicine" name="medicine"  class="span12 m-wrap select2Medicine" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Search medicine brand">
+                                                <input type="hidden" name="medicineId" id="medicineId">
                                             </div>
-                                            <div class="span6">
-                                                <input type="text" id="generic" name="generic"  class="span12 m-wrap select2Generic" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Search generic name">
-                                            </div>
+                                        </div>
+                                        <div class="span6">
+                                            <input type="text" id="generic" name="generic"  class="span12 m-wrap select2Generic" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Search generic name">
+                                            <input type="hidden" name="genericId" id="genericId">
                                         </div>
                                     </div>
                                     <div class="row-fluid">
@@ -512,7 +514,7 @@
                                         {% for medicine in entity.invoiceMedicines %}
                                             <tr id="medicine-{{ medicine.id }}">
                                                 <td  class="numeric">{{ loop.index }}.</td>
-                                                <td  class="numeric">{{ medicine.medicine.medicineForm }}. {{ medicine.medicine.name }} {{ medicine.medicine.strength }}</td>
+                                                <td  class="numeric">{% if medicine.medicine is not empty %}{{ medicine.medicine.medicineForm }}. {{ medicine.medicine.name }} {{ medicine.medicine.strength }}{% else %} {{ medicine.medicineName }}{% endif %}</td>
                                                 <td class="numeric">{{ medicine.medicineQuantity }}</td>
                                                 <td class="numeric">{{ medicine.medicineDose }} - {{ medicine.medicineDoseTime }}</td>
                                                 <td class="numeric">{{ medicine.medicineDuration }} {{ medicine.medicineDurationType }}</td>
@@ -902,5 +904,4 @@
     $('#addParticular').attr("disabled", true);
     $("select.multi-select2").multiSelect();
     $('.leftFormatTeeth li div , .rightFormatTeeth li div').removeClass('checker');
-
 {% endblock %}

@@ -587,15 +587,18 @@ label.error {
     width: 100%;
     z-index: 99;
 }
-
-.ui-widget.ui-widget-content li{
+ul.ui-autocomplete{
+    background-color: #dddddd;
+}
+ul.ui-autocomplete li{
     margin: 0;
     cursor: pointer;
     width:100%!important;
     display: inline-block;
+    border-top:1px solid #8a8a8a;
 }
 
-.ui-widget.ui-widget-content a{
+ul.ui-autocomplete li a{
     position: relative;
     height: 30px!important;
     line-height: 30px!important;
@@ -604,15 +607,11 @@ label.error {
     display: inline-block;
     width:99%!important;
 }
-.ui-widget.ui-widget-content a:hover{
+ul.ui-autocomplete li a:hover{
     background:#4b8df8!important;
     color: #ffffff!important;
 }
 
-
-
-/*
-.ui-autocomplete-loading {
+.ui-autocomplete-input{
     background: white url("../img/loader-red.gif") right center no-repeat;
 }
-*/
