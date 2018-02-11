@@ -163,18 +163,12 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/jquery-ui.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
     '@DmsBundle/Resources/public/js/editable.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@DmsBundle/Resources/public/js/invoice.js'
+    '@DmsBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
