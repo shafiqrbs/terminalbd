@@ -13,7 +13,7 @@ use Appstore\Bundle\MedicineBundle\Form\MedicineCompanyType;
  * MedicineCompany controller.
  *
  */
-class MedicineBrandController extends Controller
+class MedicineController extends Controller
 {
 
     /**
@@ -25,11 +25,16 @@ class MedicineBrandController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('MedicineBundle:MedicineCompany')->findAll();
-
-        return $this->render('MedicineBundle:MedicineCompany:index.html.twig', array(
+        $entity = new MedicineCompany();
+        $form   = $this->createCreateForm($entity);
+        return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         ));
+
     }
+
     /**
      * Creates a new MedicineCompany entity.
      *

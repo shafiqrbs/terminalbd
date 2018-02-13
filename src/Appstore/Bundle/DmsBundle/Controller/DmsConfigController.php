@@ -82,6 +82,19 @@ class DmsConfigController extends Controller
             );
             $data = $request->request->all();
             $this->getDoctrine()->getRepository('DmsBundle:DmsService')->prescriptionServiceUpdate($data);
+            if($entity->isCustomPrescription() == 1){
+               /*// $print = '../src/Appstore/Bundle/DmsBundle/Resources/views/Print/print.html.twig';
+               // $copy = '../src/Appstore/Bundle/DmsBundle/Resources/views/Print/'.$entity->getGlobalOption()->getSlug().'.html.twig';
+
+                $srcfile='src/Appstore/Bundle/DmsBundle/Resources/views/Print/print.html.twig';
+                echo $dstfile='src/Appstore/Bundle/DmsBundle/Resources/views/Print/'.$entity->getGlobalOption()->getSlug().'.html.twig';
+               // mkdir(dirname($dstfile), 0777, true);
+              //  copy($srcfile, $dstfile);
+
+
+               // copy($print,$copy);
+               // chmod($copy,0777);*/
+            }
             return $this->redirect($this->generateUrl('dms_config_manage'));
         }
 

@@ -2,7 +2,9 @@
 
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine;
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * MedicineBrand
@@ -26,7 +28,6 @@ class MedicineBrand
      **/
     private $medicineGeneric;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineCompany", inversedBy="medicineBrands")
      **/
@@ -40,9 +41,16 @@ class MedicineBrand
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=150)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="globalOption", type="string", length=150)
+     */
+    private $globalOption;
 
 
     /**
@@ -392,5 +400,31 @@ class MedicineBrand
     {
         $this->medicineCompany = $medicineCompany;
     }
+
+    /**
+     * @return DmsInvoiceMedicine
+     */
+    public function getInvoiceMedicine()
+    {
+        return $this->invoiceMedicine;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param string $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
+    }
+
+
 }
 

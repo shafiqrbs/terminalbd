@@ -126,6 +126,15 @@ class Builder extends ContainerAware
                 }
             }
 
+            $applications = array('dms', 'hms', 'prescription', 'medicine');
+            $result = array_intersect($arrSlugs, $applications);
+            if (!empty($result)) {
+                $roles = $securityContext->getToken()->getUser()->getRoles();
+                if (array_intersect(array('ROLE_ADMIN','ROLE_SUPER_ADMIN','ROLE_DOMAIN_DOCTOR','ROLE_DOMAIN_MEDICINE_ADMIN','ROLE_DOMAIN_MEDICINE_MANAGER','ROLE_DOMAIN_HOSPITAL_MANAGER','ROLE_DOMAIN_HOSPITAL_DOCTOR','ROLE_DOMAIN_DMS_DOCTOR','ROLE_DOMAIN_DMS_ADMIN','ROLE_DOMAIN'),$roles)){
+                    $menu = $this->DrugMenu($menu);
+                }
+            }
+
             if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_SMS')) {
                 $menu = $this->manageDomainInvoiceMenu($menu);
                 //$menu = $this->manageCustomerOrderMenu($menu);
@@ -134,8 +143,6 @@ class Builder extends ContainerAware
             if ($securityContext->isGranted('ROLE_CUSTOMER')) {
                 $menu = $this->manageCustomerOrderMenu($menu);
             }
-
-
 
         }
         return $menu;
@@ -913,6 +920,43 @@ class Builder extends ContainerAware
 
     }
 
+    public function DrugMenu($menu)
+    {
+        $securityContext = $this->container->get('security.context');
+        $menu
+            ->addChild('Drug')
+            ->setAttribute('icon', 'fa fa-stethoscope')
+            ->setAttribute('dropdown', true);
+        $menu['Drug']->addChild('Add Drug', array('route' => 'medicine_create'))->setAttribute('icon', 'icon-medkit');
+        if ($securityContext->isGranted('ROLE_ADMIN') OR $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
+        $menu['Drug']->addChild('Drug', array('route' => 'medicine'))->setAttribute('icon', 'icon-medkit');
+        }
+        return $menu;
+    }
+
+    public function medicineMenu($menu)
+    {
+        $securityContext = $this->container->get('security.context');
+        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
+        $menu
+            ->addChild('Drug')
+            ->setAttribute('icon', 'fa fa-files-o')
+            ->setAttribute('dropdown', true);
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER') OR $securityContext->isGranted('ROLE_DOMAIN_DMS_DOCTOR') OR $securityContext->isGranted('ROLE_DOMAIN_HMS_DOCTOR')) {
+            $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('icon', 'icon-phone')->setAttribute('dropdown', true);
+            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs', array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
+            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
+            $menu['Invoice Sms & Email']->addChild('Invoice Application', array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'fa fa-files-o');
+        }
+        if ($securityContext->isGranted('ROLE_SMS_BULK')) {
+            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Bulk Sms', array('route' => 'smsbulk'))->setAttribute('icon', 'icon-envelope');
+        }
+        if ($securityContext->isGranted('ROLE_SMS_CONFIG')) {
+            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Notification Setup', array('route' => 'domain_notificationconfig'))->setAttribute('icon', 'fa fa-bell ');
+        }
+        return $menu;
+    }
+
     public function RestaurantMenu($menu)
     {
 
@@ -1058,6 +1102,10 @@ class Builder extends ContainerAware
         return $menu;
 
     }
+
+
+
+
 
 
     public function manageDomainInvoiceMenu($menu)

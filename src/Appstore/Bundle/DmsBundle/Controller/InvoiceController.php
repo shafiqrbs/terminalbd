@@ -621,7 +621,14 @@ class InvoiceController extends Controller
 
             $services = $em->getRepository('DmsBundle:DmsService')->findBy(array('dmsConfig'=>$dmsConfig,'serviceShow'=>1,'status'=>1),array('serviceSorting'=>'ASC'));
             $treatmentSchedule = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
-            return  $this->render('DmsBundle:Print:print.html.twig',
+
+            if($dmsConfig->isCustomPrescription() == 1){
+                $template = $dmsConfig->getGlobalOption()->getSlug();
+            }else{
+                $template = 'print';
+            }
+
+            return  $this->render('DmsBundle:Print:'.$template.'.html.twig',
                 array(
                     'entity' => $entity,
                     'invoiceParticularArr' => $invoiceParticularArr,
@@ -636,52 +643,50 @@ class InvoiceController extends Controller
 
     public function invoicePrintPdfAction(DmsInvoice $entity)
     {
-
         $em = $this->getDoctrine()->getManager();
         $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
+        if ($dmsConfig->getId() == $entity->getDmsConfig()->getId()) {
 
-        if($entity->getDmsConfig()->getId() != $dmsConfig->getId()){
-            return $this->redirect($this->generateUrl('dms_invoice'));
+            /** @var  $invoiceParticularArr */
+            $invoiceParticularArr = array();
+
+            /** @var $row DmsInvoiceParticular */
+            if (!empty($entity->getInvoiceParticulars())) {
+                foreach ($entity->getInvoiceParticulars() as $row):
+                    if (!empty($row->getDmsParticular())) {
+                        $invoiceParticularArr[$row->getDmsParticular()->getId()] = $row;
+                    }
+                endforeach;
+            }
+
+            $services = $em->getRepository('DmsBundle:DmsService')->findBy(array('dmsConfig' => $dmsConfig, 'serviceShow' => 1, 'status' => 1), array('serviceSorting' => 'ASC'));
+            $treatmentSchedule = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
+
+            if ($dmsConfig->isCustomPrescription() == 1) {
+                $template = $dmsConfig->getGlobalOption()->getSlug();
+            } else {
+                $template = 'print';
+            }
+
+            $html = $this->renderView(
+                'DmsBundle:Print:dental-care.html.twig', array(
+                    'entity' => $entity,
+                    'invoiceParticularArr' => $invoiceParticularArr,
+                    'services' => $services,
+                    'treatmentSchedule' => $treatmentSchedule,
+                )
+            );
+
+            $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+            $snappy = new Pdf($wkhtmltopdfPath);
+            $pdf = $snappy->getOutputFromHtml($html);
+
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="incomePdf.pdf"');
+            echo $pdf;
+
+            return new Response('');
         }
-        $barcode = $this->getBarcode($entity->getInvoice());
-        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
-        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
-
-        /** @var  $invoiceParticularArr */
-        $invoiceParticularArr = array();
-
-        /** @var DmsInvoiceParticular $row */
-
-        if (!empty($entity->getInvoiceParticulars())){
-            foreach ($entity->getInvoiceParticulars() as $row):
-                if(!empty($row->getDmsParticular())){
-                    $invoiceParticularArr[$row->getDmsParticular()->getId()] = $row;
-                }
-            endforeach;
-        }
-        $services        = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
-        $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical','investigation'));
-        $attributes        = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
-        $html = $this->renderView(
-            'DmsBundle:Print:arman.html.twig', array(
-                'entity'                => $entity,
-                'particularService'     => $services,
-                'invoiceParticularArr'  => $invoiceParticularArr,
-                'particulars'           => $particulars,
-                'attributes'            => $attributes,
-                'inWords'               => $inWords,
-            )
-        );
-
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="incomePdf.pdf"');
-        echo $pdf;
-
-        return new Response('');
     }
 
     public function appointmentTimeAction()

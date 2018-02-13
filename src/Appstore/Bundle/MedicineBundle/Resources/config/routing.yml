@@ -1,10 +1,10 @@
 medicine_medicine:
     resource: "@MedicineBundle/Resources/config/routing/medicinebrand.yml"
-    prefix:   /medicine
+    prefix:   /drug
 
 medicine_medicine_company:
     resource: "@MedicineBundle/Resources/config/routing/medicinecompany.yml"
-    prefix:   /medicine-company
+    prefix:   /drug-company
 
 medicine_homepage:
     path:     /hello/{name}

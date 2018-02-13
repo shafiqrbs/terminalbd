@@ -60,6 +60,7 @@ class GlobalOption
      **/
     protected $users;
 
+
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="globalOptionAgents" )
      **/

@@ -1,6 +1,6 @@
 medicine:
     resource: "@MedicineBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /medicine
 
 appstore_dms:
     resource: "@DmsBundle/Resources/config/routing.yml"
