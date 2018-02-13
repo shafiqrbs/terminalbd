@@ -927,7 +927,7 @@ class Builder extends ContainerAware
             ->addChild('Drug')
             ->setAttribute('icon', 'fa fa-stethoscope')
             ->setAttribute('dropdown', true);
-        $menu['Drug']->addChild('Add Drug', array('route' => 'medicine_create'))->setAttribute('icon', 'icon-medkit');
+        $menu['Drug']->addChild('Add Drug', array('route' => 'medicine_user'))->setAttribute('icon', 'icon-medkit');
         if ($securityContext->isGranted('ROLE_ADMIN') OR $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
         $menu['Drug']->addChild('Drug', array('route' => 'medicine'))->setAttribute('icon', 'icon-medkit');
         }

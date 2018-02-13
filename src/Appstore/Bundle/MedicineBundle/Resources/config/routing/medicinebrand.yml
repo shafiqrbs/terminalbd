@@ -46,3 +46,7 @@ medicine_name:
     defaults: { _controller: "MedicineBundle:MedicineBrand:searchProductName" }
     options:
             expose: true
+
+medicine_user:
+    path:     /medicine-user
+    defaults: { _controller: "MedicineBundle:Medicine:index" }

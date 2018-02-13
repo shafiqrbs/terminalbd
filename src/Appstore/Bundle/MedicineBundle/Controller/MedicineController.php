@@ -2,30 +2,29 @@
 
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
+use Appstore\Bundle\MedicineBundle\Form\MedicineType;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Appstore\Bundle\MedicineBundle\Entity\MedicineCompany;
-use Appstore\Bundle\MedicineBundle\Form\MedicineCompanyType;
-
 /**
- * MedicineCompany controller.
+ * MedicineBrand controller.
  *
  */
 class MedicineController extends Controller
 {
 
     /**
-     * Lists all MedicineCompany entities.
+     * Lists all MedicineBrand entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('MedicineBundle:MedicineCompany')->findAll();
-        $entity = new MedicineCompany();
+        $option = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('MedicineBundle:MedicineBrand')->findBy(array('globalOption' => $option->getSlug()));
+        $entity = new MedicineBrand();
         $form   = $this->createCreateForm($entity);
         return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
             'entities' => $entities,
@@ -36,231 +35,118 @@ class MedicineController extends Controller
     }
 
     /**
-     * Creates a new MedicineCompany entity.
+     * Creates a new MedicineBrand entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new MedicineCompany();
+        $em = $this->getDoctrine()->getManager();
+        $entity = new MedicineBrand();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $entities = $em->getRepository('MedicineBundle:MedicineBrand')->findBy(array('globalOption' => $option->getSlug()));
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('medicine_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('medicine_user'));
         }
-
-        return $this->render('MedicineBundle:MedicineCompany:new.html.twig', array(
+        return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
+            'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a MedicineCompany entity.
+     * Creates a form to create a MedicineBrand entity.
      *
-     * @param MedicineCompany $entity The entity
+     * @param MedicineBrand $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(MedicineCompany $entity)
+    private function createCreateForm(MedicineBrand $entity)
     {
-        $form = $this->createForm(new MedicineCompanyType(), $entity, array(
-            'action' => $this->generateUrl('medicine_create'),
+        $form = $this->createForm(new MedicineType(), $entity, array(
+            'action' => $this->generateUrl('medicine_user_create', array('id' => $entity->getId())),
             'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
         return $form;
     }
 
-    /**
-     * Displays a form to create a new MedicineCompany entity.
-     *
-     */
-    public function newAction()
-    {
-        $entity = new MedicineCompany();
-        $form   = $this->createCreateForm($entity);
-
-        return $this->render('MedicineBundle:MedicineCompany:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
 
     /**
-     * Finds and displays a MedicineCompany entity.
-     *
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MedicineBundle:MedicineCompany')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MedicineCompany entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('MedicineBundle:MedicineCompany:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Displays a form to edit an existing MedicineCompany entity.
+     * Displays a form to edit an existing MedicineBrand entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('MedicineBundle:MedicineCompany')->find($id);
+        $entity = $em->getRepository('MedicineBundle:MedicineBrand')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MedicineCompany entity.');
+            throw $this->createNotFoundException('Unable to find MedicineBrand entity.');
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('MedicineBundle:MedicineCompany:edit.html.twig', array(
+        return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a MedicineCompany entity.
+    * Creates a form to edit a MedicineBrand entity.
     *
-    * @param MedicineCompany $entity The entity
+    * @param MedicineBrand $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(MedicineCompany $entity)
+    private function createEditForm(MedicineBrand $entity)
     {
-        $form = $this->createForm(new MedicineCompanyType(), $entity, array(
-            'action' => $this->generateUrl('medicine_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
+        $form = $this->createForm(new MedicineType(), $entity, array(
+            'action' => $this->generateUrl('medicine_user_update', array('id' => $entity->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
         return $form;
+
+
     }
     /**
-     * Edits an existing MedicineCompany entity.
+     * Edits an existing MedicineBrand entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('MedicineBundle:MedicineCompany')->find($id);
+        $entity = $em->getRepository('MedicineBundle:MedicineBrand')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MedicineCompany entity.');
+            throw $this->createNotFoundException('Unable to find MedicineBrand entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
-
-            return $this->redirect($this->generateUrl('medicine_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('medicine_user_edit', array('id' => $id)));
         }
 
-        return $this->render('MedicineBundle:MedicineCompany:edit.html.twig', array(
+        return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-    /**
-     * Deletes a MedicineCompany entity.
-     *
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('MedicineBundle:MedicineCompany')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find MedicineCompany entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('medicine'));
-    }
-
-    /**
-     * Creates a form to delete a MedicineCompany entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('medicine_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
-
-
-    public function autoSearchMedicineAction(Request $request)
-    {
-        $item = $_REQUEST['term'];
-        $items = array();
-        if ($item) {
-            $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
-            foreach ($entities as $entity):
-                $items[] = array('id' => $entity['id'], 'value' => $entity['text']);
-            endforeach;
-        }
-        return new JsonResponse($items);
-
-    }
-
-    public function autoSearchGenericAction(Request $request)
-    {
-        $item = $_REQUEST['term'];
-        $items = array();
-        if ($item) {
-            $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
-            foreach ($entities as $entity):
-                $items[] = array('id' => $entity['id'], 'value' => $entity['text']);
-            endforeach;
-        }
-        return new JsonResponse($items);
-    }
-
-
-    public function searchProductNameAction($medicine)
-    {
-        return new JsonResponse(array(
-            'id' => $medicine,
-            'text' => $medicine
         ));
     }
 

@@ -2,6 +2,10 @@ medicine_medicine:
     resource: "@MedicineBundle/Resources/config/routing/medicinebrand.yml"
     prefix:   /drug
 
+medicine_medicine_user:
+    resource: "@MedicineBundle/Resources/config/routing/medicine.yml"
+    prefix:   /drug-user
+
 medicine_medicine_company:
     resource: "@MedicineBundle/Resources/config/routing/medicinecompany.yml"
     prefix:   /drug-company

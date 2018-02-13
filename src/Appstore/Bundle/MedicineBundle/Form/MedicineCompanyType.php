@@ -24,7 +24,7 @@ class MedicineType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineCompany'
+            'data_class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineBrand'
         ));
     }
 
