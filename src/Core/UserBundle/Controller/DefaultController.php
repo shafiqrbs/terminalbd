@@ -29,9 +29,10 @@ class DefaultController extends Controller
             $enable = 0;
         }
 
-        $modules = $globalOption->getSiteSetting()->getAppModules();
+
         $apps = array();
-        if (!empty($globalOption ->getSiteSetting()) and !empty($modules)) {
+        if (!empty($globalOption ->getSiteSetting())) {
+            $modules = $globalOption->getSiteSetting()->getAppModules();
             /* @var AppModule $mod */
             foreach ($modules as $mod) {
                 if (!empty($mod->getModuleClass())) {
