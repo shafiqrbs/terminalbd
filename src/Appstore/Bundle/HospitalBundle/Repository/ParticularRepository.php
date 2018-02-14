@@ -28,6 +28,7 @@ class ParticularRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.service = :service')->setParameter('service', $service) ;
+        $qb->andWhere('e.isDelete is null');
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }

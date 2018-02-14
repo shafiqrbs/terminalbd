@@ -223,23 +223,11 @@ class PathologyController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        try {
-
-            $em->remove($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'error',"Data has been deleted successfully"
-            );
-
-        } catch (ForeignKeyConstraintViolationException $e) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',"Data has been relation another Table"
-            );
-        }catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add(
-                'notice', 'Please contact system administrator further notification.'
-            );
-        }
+        $entity->setIsDelete(1);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
         return $this->redirect($this->generateUrl('hms_pathology'));
     }
 

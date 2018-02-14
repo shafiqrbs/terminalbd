@@ -210,6 +210,26 @@ class ParticularController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
+
+        $em = $this->getDoctrine()->getManager();
+        try {
+
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
+        }
+
         return $this->redirect($this->generateUrl('hms_particular'));
     }
 

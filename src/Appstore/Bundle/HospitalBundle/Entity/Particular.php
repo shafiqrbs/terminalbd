@@ -360,6 +360,14 @@ class Particular
     private $status= true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isDelete", type="boolean", nullable=true)
+     */
+    private $isDelete = false;
+
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $path;
@@ -1300,6 +1308,22 @@ class Particular
     public function setHmsMasterDiagnosticReport($hmsMasterDiagnosticReport)
     {
         $this->hmsMasterDiagnosticReport = $hmsMasterDiagnosticReport;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isDelete()
+    {
+        return $this->isDelete;
+    }
+
+    /**
+     * @param mixed $isDelete
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
     }
 
 
