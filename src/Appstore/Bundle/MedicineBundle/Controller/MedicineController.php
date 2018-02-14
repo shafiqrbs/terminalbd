@@ -21,13 +21,14 @@ class MedicineController extends Controller
      */
     public function indexAction()
     {
+
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('MedicineBundle:MedicineBrand')->findBy(array('globalOption' => $option->getSlug()));
         $entity = new MedicineBrand();
         $form   = $this->createCreateForm($entity);
         return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
-            'entities' => $entities,
+            'pagination' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));

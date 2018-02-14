@@ -40,23 +40,55 @@
                                 <!--/span-->
                                 <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Particular Type<span class="required">*</span></label>
+                                        <label class="control-label" for="name">Medicine Form<span class="required">*</span></label>
                                         <div class="controls">
-                                            {{ form_widget(form.service) }}
-                                            {{ form_errors(form.service) }}
+                                            <input type="text" id="medicineForm" name="medicineForm" required="required" class="m-wrap span12 select2MedicineForm" autocomplete="off" placeholder="Enter medicine brand name">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span8">
+                                <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Particular name<span class="required">*</span></label>
+                                        <label class="control-label" for="name">Brand Name<span class="required">*</span></label>
                                         <div class="controls">
-                                            {{ form_widget(form.name) }}
-                                            {{ form_errors(form.name) }}
+                                            <input type="text" id="brand" name="brand" required="required" class="m-wrap span12 select2Medicine" autocomplete="off" placeholder="Enter medicine brand name">
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="name">Generic<span class="required">*</span></label>
+                                        <div class="controls">
+                                            <input type="text" id="generic" name="generic" required="required" class="m-wrap span12 select2Generic" autocomplete="off" placeholder="Enter medicine brand name">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <!--/span-->
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="name">Company Name<span class="required">*</span></label>
+                                        <div class="controls">
+                                            <input type="text" id="companyName" name="companyName" required="required" class="m-wrap span12 select2MedicineCompany" autocomplete="off" placeholder="Enter medicine company name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="name">Pack Size<span class="required">*</span></label>
+                                        <div class="controls">
+                                            <input type="text" id="packSize" name="packSize" required="required" class="m-wrap span12 select2PackSize" autocomplete="off" placeholder="Enter medicine pack size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="name">Strength<span class="required">*</span></label>
+                                        <div class="controls">
+                                            <input type="text" id="strength" name="strength" required="required" class="m-wrap span12 select2Strength" autocomplete="off" placeholder="Enter medicine strength">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
@@ -73,26 +105,26 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Code</th>
+                                    <th class="numeric" >Medicine Form</th>
                                     <th class="numeric" >Name</th>
-                                    <th class="numeric" >Particular Type</th>
+                                    <th class="numeric" >Generic</th>
+                                    <th class="numeric" >Strength</th>
+                                    <th class="numeric" >Pack Size</th>
+                                    <th class="numeric" >Medicine Company</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.particularCode }}</td>
-                                        <td class="numeric" ><a href="{{ path('dms_particular_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >{{ entity.service.name }}</td>
+                                        <td class="numeric" >{{ entity.medicineForm }}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{{ entity.medicineGeneric.name }}</td>
+                                        <td class="numeric" >{{ entity.strength }}</td>
+                                        <td class="numeric" >{{ entity.packSize }}</td>
+                                        <td class="numeric" >{{ entity.medicineCompany.name }}</td>
                                         <td class="numeric" >
-                                            {% if( entity.status == 1) %}
-                                                <a class="btn mini blue btn-action" href="{{ path('dms_particular_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
-                                            {% else %}
-                                                <a class="btn mini red btn-action" href="{{ path('dms_particular_status', { 'id': entity.id}) }}">x</a>
-                                            {% endif %}
-                                            <a href="{{ path('dms_particular_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a title="Are you sure went to delete ?" href="{{ path('dms_particular_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a href="{{ path('medicine_user_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -112,6 +144,14 @@
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@DmsBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}

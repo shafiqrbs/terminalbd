@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class MedicineType extends AbstractType
+class MedicineCompanyType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
