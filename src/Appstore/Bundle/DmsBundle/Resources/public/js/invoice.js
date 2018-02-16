@@ -425,6 +425,26 @@ $(document).on("click", ".treatmentDelete", function() {
     });
 });
 
+$(document).on("click", "#printButton", function() {
+
+    var formData = new FormData($('form#invoiceForm')[0]);
+    var url = $('form#invoiceForm').attr('action');
+    var print = $(this).attr("data-url");
+    $.ajax({
+        url:url ,
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data:formData,
+        success: function(response){
+            window.open(print,'_blank');
+        }
+    });
+
+});
+
+
+
 /*
 $(document).on("change", "#invoiceFormxx", function() {
 
