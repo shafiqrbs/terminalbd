@@ -3,7 +3,7 @@
 namespace Appstore\Bundle\DmsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Service
@@ -103,9 +103,8 @@ class DmsService
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="slug", type="string", length=50, nullable=true)
+     * @Gedmo\Slug(fields={"name"})
+     * @Doctrine\ORM\Mapping\Column(length=255)
      */
     private $slug;
 
@@ -230,22 +229,6 @@ class DmsService
         $this->hasQuantity = $hasQuantity;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * @param string $slug
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
 
     /**
      * @return DmsInvoice
@@ -405,6 +388,22 @@ class DmsService
     public function setDentalService($dentalService)
     {
         $this->dentalService = $dentalService;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 
 
