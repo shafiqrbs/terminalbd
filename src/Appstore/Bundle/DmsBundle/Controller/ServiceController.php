@@ -64,7 +64,7 @@ class ServiceController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('dms_particular'));
+            return $this->redirect($this->generateUrl('dms_service'));
         }
 
         return $this->render('DmsBundle:Service:index.html.twig', array(

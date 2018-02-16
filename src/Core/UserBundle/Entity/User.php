@@ -333,9 +333,6 @@ class User extends BaseUser
     protected $deliveryReturnApprovedBy;
 
 
-
-
-
     /* ----------------------------------Accounting------------------*/
 
 
@@ -696,6 +693,18 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="approvedBy" , cascade={"persist", "remove"})
      */
     protected $restaurantPurchasesApprovedBy;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $customerInvoiceCreatedBy;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $customerInvoiceApprovedBy;
+
 
 
 

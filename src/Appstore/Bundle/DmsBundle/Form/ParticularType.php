@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DmsBundle\Form;
 
+use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
 use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
@@ -14,6 +15,19 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ParticularType extends AbstractType
 {
+
+
+
+    /** @var  DmsConfig */
+    private $dmsConfig;
+
+
+    function __construct(DmsConfig  $dmsConfig)
+    {
+
+        $this->dmsConfig = $dmsConfig;
+    }
+
 
     /**
      * @param FormBuilderInterface $builder
@@ -41,6 +55,7 @@ class ParticularType extends AbstractType
                     return $er->createQueryBuilder('e')
                     ->where("e.status = 1")
                     ->andWhere('e.dentalService is null')
+                    ->andWhere('e.dmsConfig ='.$this->dmsConfig->getId())
                     ->orderBy("e.sorting","ASC");
                 }
             ))

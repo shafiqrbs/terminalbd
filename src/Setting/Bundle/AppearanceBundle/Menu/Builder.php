@@ -46,7 +46,7 @@ class Builder extends ContainerAware
             $menu = $this->manageCustomerOrderMenu($menu);
 
 
-        } else {
+        }
 
             $modules = $globalOption->getSiteSetting()->getAppModules();
             $arrSlugs = array();
@@ -144,8 +144,7 @@ class Builder extends ContainerAware
                 $menu = $this->manageCustomerOrderMenu($menu);
             }
 
-        }
-        return $menu;
+            return $menu;
     }
 
     public function dashboardMenu($menu)
@@ -1060,7 +1059,6 @@ class Builder extends ContainerAware
 
     }
 
-
     public function PayrollMenu($menu)
     {
         $securityContext = $this->container->get('security.context');
@@ -1102,11 +1100,6 @@ class Builder extends ContainerAware
         return $menu;
 
     }
-
-
-
-
-
 
     public function manageDomainInvoiceMenu($menu)
     {

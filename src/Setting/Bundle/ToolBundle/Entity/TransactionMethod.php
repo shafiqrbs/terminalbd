@@ -162,6 +162,11 @@ class TransactionMethod
     protected $restaurantPurchase;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="transactionMethod" )
+     */
+    protected $customerInvoice;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

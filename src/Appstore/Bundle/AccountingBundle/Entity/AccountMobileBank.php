@@ -145,6 +145,11 @@ class AccountMobileBank
      */
     protected $dmsPurchases;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="accountMobileBank" )
+     */
+    protected $customerInvoice;
+
     /**
      * @var string
      *

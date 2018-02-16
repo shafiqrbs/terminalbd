@@ -16,6 +16,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -563,6 +564,20 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $restaurantConfig;
+
+
+    /*================================= OFFICE BUNDLE===========================================*/
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $customerInvoice;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="domainCustomer" , cascade={"persist", "remove"})
+     **/
+    private $domainCustomerInvoice;
+
 
 
     /**
@@ -1627,6 +1642,22 @@ class GlobalOption
     public function getDailyAttendance()
     {
         return $this->dailyAttendance;
+    }
+
+    /**
+     * @return CustomerInvoice
+     */
+    public function getCustomerInvoice()
+    {
+        return $this->customerInvoice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDomainCustomerInvoice()
+    {
+        return $this->domainCustomerInvoice;
     }
 
 

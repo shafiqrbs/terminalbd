@@ -63,6 +63,7 @@ class AppKernel extends Kernel
             new Appstore\Bundle\DmsBundle\DmsBundle(),
             new Appstore\Bundle\RestaurantBundle\RestaurantBundle(),
             new Appstore\Bundle\MedicineBundle\MedicineBundle(),
+            new Appstore\Bundle\OfficeBundle\OfficeBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

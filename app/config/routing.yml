@@ -1,3 +1,7 @@
+office:
+    resource: "@OfficeBundle/Resources/config/routing.yml"
+    prefix:   /office
+
 medicine:
     resource: "@MedicineBundle/Resources/config/routing.yml"
     prefix:   /medicine
