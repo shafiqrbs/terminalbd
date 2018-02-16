@@ -84,7 +84,7 @@
                                         <li  data-id="{{ entity.id }}" id="item_{{ entity.id }}" class="dd-item dd3-item">
                                             <span data-id="{{ entity.id }}" class="dd-handle dd3-handle"></span>
                                             <div class="dd3-content">
-                                                <div class="span6"><a href="{{ path('dms_service_edit',{'id': entity.id })}}">{{ entity.code }}-{{ entity.name }}</a></div>
+                                                <div class="span6"><a href="{{ path('dms_service_edit',{'id': entity.id })}}">{{ entity.name }}</a></div>
                                                 <div class="span3">{{ entity.serviceFormat }}</div>
                                                 <div class="span3">
                                                     {% if( entity.status == 1) %}

@@ -143,7 +143,8 @@ class ParticularController extends Controller
     private function createEditForm(DmsParticular $entity)
     {
 
-        $form = $this->createForm(new ParticularType(), $entity, array(
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $form = $this->createForm(new ParticularType($config), $entity, array(
             'action' => $this->generateUrl('dms_particular_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
