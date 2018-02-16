@@ -1,0 +1,30 @@
+customerinvoice:
+    path:     /
+    defaults: { _controller: "OfficeBundle:CustomerInvoice:index" }
+
+customerinvoice_show:
+    path:     /{id}/show
+    defaults: { _controller: "OfficeBundle:CustomerInvoice:show" }
+
+customerinvoice_new:
+    path:     /new
+    defaults: { _controller: "OfficeBundle:CustomerInvoice:new" }
+
+customerinvoice_create:
+    path:     /create
+    defaults: { _controller: "OfficeBundle:CustomerInvoice:create" }
+    methods:  POST
+
+customerinvoice_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "OfficeBundle:CustomerInvoice:edit" }
+
+customerinvoice_update:
+    path:     /{id}/update
+    defaults: { _controller: "OfficeBundle:CustomerInvoice:update" }
+    methods:  [POST, PUT]
+
+customerinvoice_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "OfficeBundle:CustomerInvoice:delete" }
+    methods:  [POST, DELETE]

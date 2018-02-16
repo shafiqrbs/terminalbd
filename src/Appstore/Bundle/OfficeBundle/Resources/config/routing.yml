@@ -1,0 +1,7 @@
+office_customerinvoice:
+    resource: "@OfficeBundle/Resources/config/routing/customerinvoice.yml"
+    prefix:   /customerinvoice
+
+office_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: OfficeBundle:Default:index }
