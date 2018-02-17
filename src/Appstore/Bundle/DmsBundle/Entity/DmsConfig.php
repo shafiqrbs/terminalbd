@@ -126,9 +126,9 @@ class DmsConfig
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isBranchInvoice", type="boolean",  nullable=true)
+     * @ORM\Column(name="medicineUsage", type="boolean",  nullable=true)
      */
-    private $isBranchInvoice = false;
+    private $medicineUsage = false;
 
     /**
      * @var boolean
@@ -1161,6 +1161,22 @@ class DmsConfig
     public function setBodyWidth($bodyWidth)
     {
         $this->bodyWidth = $bodyWidth;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMedicineUsage()
+    {
+        return $this->medicineUsage;
+    }
+
+    /**
+     * @param bool $medicineUsage
+     */
+    public function setMedicineUsage($medicineUsage)
+    {
+        $this->medicineUsage = $medicineUsage;
     }
 
 

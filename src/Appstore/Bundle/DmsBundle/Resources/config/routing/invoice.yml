@@ -174,9 +174,24 @@ dms_invoice_auto_particular_search:
     options:
             expose: true
 
+dms_invoice_investigation_search:
+    path:     /auto-investigation-search
+    defaults: { _controller: "DmsBundle:Invoice:autoInvestigationSearch" }
+    options:
+            expose: true
+
+dms_invoice_investigation_procedure:
+    path:     /{invoice}/investigation-file-procedure
+    defaults: { _controller: "DmsBundle:Invoice:investigationProcedure" }
+    methods:  POST
+    options:
+           expose: true
+
 dms_treatment_plan:
     path:     /treatment-plan
     defaults: { _controller: "DmsBundle:TreatmentPlan:index" }
+
+
 
 dms_treatment_appointment_schedule:
     path:     /treatment-appointment-date

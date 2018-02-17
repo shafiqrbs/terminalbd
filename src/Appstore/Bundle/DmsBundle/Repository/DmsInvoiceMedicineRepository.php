@@ -51,11 +51,23 @@ class DmsInvoiceMedicineRepository extends EntityRepository
 
         $em = $this->_em;
         $entity = new DmsInvoiceMedicine();
-        $entity->setMedicineQuantity($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineQuantity'])->getNameBn());
-        $entity->setMedicineDose($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDose'])->getNameBn());
-        $entity->setMedicineDoseTime($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDoseTime'])->getNameBn());
-        $entity->setMedicineDuration($data['medicineDuration']);
-        $entity->setMedicineDurationType($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDurationType'])->getNameBn());
+
+        if(!empty($data['medicineQuantity']) and $data['medicineQuantity'] != 'NaN'){
+            $entity->setMedicineQuantity($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineQuantity'])->getNameBn());
+        }
+        if(!empty($data['medicineDose']) and $data['medicineDose'] != 'NaN'){
+            $entity->setMedicineDose($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDose'])->getNameBn());
+        }
+        if(!empty($data['medicineDoseTime']) and $data['medicineDoseTime'] != 'NaN'){
+            $entity->setMedicineDoseTime($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDoseTime'])->getNameBn());
+        }
+        if(!empty($data['medicineDurationType']) and $data['medicineDurationType'] != 'NaN'){
+            $entity->setMedicineDurationType($em->getRepository('DmsBundle:DmsPrescriptionAttribute')->find($data['medicineDurationType'])->getNameBn());
+        }
+        if(!empty($data['medicineDuration'])){
+            $entity->setMedicineDuration($data['medicineDuration']);
+        }
+
         $entity->setDmsInvoice($invoice);
         if(!empty($data['medicineId'])) {
             $medicine = $this->_em->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineId']);

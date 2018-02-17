@@ -9,6 +9,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular;
 use Appstore\Bundle\DmsBundle\Entity\Invoice;
 use Appstore\Bundle\DmsBundle\Entity\InvoiceDmsParticular;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -58,6 +59,25 @@ class DmsInvoiceParticularRepository extends EntityRepository
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;
+    }
+
+    public function fileUpload(DmsInvoice $invoice,$data,$file)
+    {
+        $em = $this->_em;
+        if(isset($file['file'])){
+            $particular = new DmsInvoiceParticular();
+            $dmsService = $this->_em->getRepository('DmsBundle:DmsService')->find($data['dmsService']);
+            $particular->setDmsInvoice($invoice);
+            $particular->setDmsService($dmsService);
+            $img = $file['file'];
+            $fileName = $img->getClientOriginalName();
+            $imgName =  uniqid(). '.' .$fileName;
+            $img->move($particular->getUploadDir(), $imgName);
+            $particular->setMetaValue($data['investigation']);
+            $particular->setPath($imgName);
+            $em->persist($particular);
+            $em->flush();
+        }
     }
 
     public function insertInvoiceParticularSingle(DmsInvoice $invoice, $data)
@@ -189,6 +209,30 @@ class DmsInvoiceParticularRepository extends EntityRepository
     }
 
 
+    public function insertInvoiceInvestigationUpload(DmsInvoice $invoice, $data)
+    {
+        $em = $this->_em;
+
+        $service = $this->_em->getRepository('DmsBundle:DmsService')->find($data['dmsService']);
+        $invoiceParticulars = $this->findBy(array('dmsInvoice'=> $invoice,'dmsService' => $service ));
+        $data ='';
+        /* @var $invoiceParticular DmsInvoiceParticular */
+        foreach ($invoiceParticulars as $invoiceParticular ):
+
+            $date = $invoiceParticular->getCreated()->format('d-m-Y');
+            $data .='<tr id="remove-'.$invoiceParticular->getId().'">';
+            $data .='<td>'.$date.'</td>';
+            $data .='<td>'.$invoiceParticular->getMetaValue().'</td>';
+            $data .='<td><a target="_blank" href="'.$invoiceParticular->getWebPath().'">View Image</a></td>';
+            $data .='<td class="numeric">';
+            $data .='<a href="javascript:" class="btn red mini particularDelete" data-tab="'.$service->getSlug().'" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/dms/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
+            $data .='</td>';
+            $data .='</tr>';
+
+        endforeach;
+
+        return $data;
+    }
     public function insertInvoiceItems(DmsInvoice $invoice, $data)
     {
         $em = $this->_em;

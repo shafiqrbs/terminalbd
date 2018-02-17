@@ -71,6 +71,23 @@ $( ".autoProcedure" ).autocomplete({
     }
 });
 
+$( ".investigation" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax( {
+            url: Routing.generate('dms_invoice_investigation_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        } );
+    },
+    minLength: 1,
+    select: function( event, ui ) {
+    }
+});
+
 $( ".autoMetaValue" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
@@ -217,6 +234,64 @@ $(document).on('click', '.addProcedure', function() {
         }
     });
 });
+
+$(document).on('click', '.addInvestigation', function() {
+
+    var dataTab    = $(this).attr('data-tab');
+    var procedure =  $('#'+dataTab).find('#investigation').val();
+    if(procedure == ''){
+        alert('You have to add procedure text');
+        $('#'+dataTab).find('#investigation').focus();
+        return false;
+    }
+
+    var file =  $('#'+dataTab).find('#file').val();
+    if(file == ''){
+        alert('You have to add file');
+        $('#'+dataTab).find('#file').focus();
+        return false;
+    }
+
+    var url = $('form#invoiceForm').attr('action');
+    var showDiv    = $(this).attr('data-id');
+    var formData = new FormData($('form#invoiceForm')[0]);
+    $.ajax({
+        url:url ,
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data:formData,
+        success: function(response){
+            $('#'+dataTab).find('#procedure-'+showDiv).html(response);
+            $('#'+dataTab).find('#investigation').val('');
+            $('#'+dataTab).find('#file').val('');
+        }
+    });
+});
+
+$('#invoiceFormxxxx').submit(function(e){
+
+    var url = $('form#invoiceForm').attr('action');
+    $.ajax({
+
+        url: url,
+        type: 'POST',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        beforeSend: function(){
+            $('.ajax-loading').show().addClass('loading').fadeIn(3000);
+        },
+        success: function(response){
+            document.getElementById('frame').contentDocument.location.reload(true);
+            $('.ajax-loading').fadeOut(3000);
+        }
+    });
+    e.preventDefault();
+
+});
+
+
 
 $(document).on("click", ".particularDelete", function() {
     var id = $(this).attr("data-id");

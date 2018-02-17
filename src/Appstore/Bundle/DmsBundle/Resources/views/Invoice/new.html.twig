@@ -431,6 +431,55 @@
                                                                     </div>
                                                                 {% endfor %}
                                                             {% endif %}
+                                                         {% elseif service.serviceFormat == 'file'  %}
+                                                            <div class="clearfix">&nbsp;</div>
+                                                            <div class="row-fluid" id="">
+                                                                <div class="span4">
+                                                                    <input type="text" name="investigation" id="investigation" class="investigation span12 m-wrap" placeholder="Enter type investigation name">
+                                                                    <input type="hidden" name="dmsService" id="dmsService" value="{{ service.id }}">
+                                                                </div>
+                                                                <div class="span8">
+                                                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                                        <div class="input-append span12">
+                                                                            <div class="uneditable-input">
+                                                                                <i class="icon-file fileupload-exists"></i>
+                                                                                <span class="fileupload-preview"></span>
+                                                                            </div>
+                                                                            <span class="btn yellow btn-file">
+                                                                            <span class="fileupload-new">Select File</span>
+                                                                            <span class="fileupload-exists">Change</span>
+                                                                            <input type="file" name="file" id="file"  class="default span12">
+                                                                            </span><a href="#" class="btn red fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                                                            <button type="button"  class="btn blue addInvestigation" id="" data-id="{{ service.slug }}" data-tab="tab-{{ service.slug }}"  data-url="{{ path('dms_invoice_investigation_procedure',{'invoice':entity.id,'service':service.slug}) }}" ><i class="icon-save"></i> Upload</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="clearfix">&nbsp;</div>
+                                                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                                                        <thead class="flip-content ">
+                                                                        <tr class="head-grey">
+                                                                            <th class="numeric">Date</th>
+                                                                            <th class="numeric">Investigation Name</th>
+                                                                            <th class="numeric">Upload File</th>
+                                                                            <th class="numeric">Action</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody id="procedure-{{ service.slug }}">
+                                                                        {% for invoiceParticular in entity.invoiceParticulars %}
+                                                                            {% if invoiceParticular.dmsService is not empty and invoiceParticular.dmsService.slug|trim == service.slug %}
+                                                                                <tr id="remove-{{ invoiceParticular.id }}">
+                                                                                    <td  class="numeric">{{ invoiceParticular.created|date('d-m-Y') }}</td>
+                                                                                    <td  class="numeric">{{ invoiceParticular.metaValue }}</td>
+                                                                                    <td  class="numeric"><a target="_blank" href="/{{ invoiceParticular.webPath }}">View Image</a></td>
+                                                                                    <td class="numeric">
+                                                                                        <a href="javascript:" class="btn red mini particularDelete" data-id="{{ invoiceParticular.id }}" data-tab="{{ service.slug }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dms_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                        </tbody>
+                                                                    </table>
                                                          {% endif  %}
                                                         <div class="clearfix">&nbsp;</div>
                                                     </div>
@@ -463,31 +512,35 @@
                                             <div class="span12">
                                                 <div class="input-append span12" style="margin-bottom:0!important">
                                                     <select class="m-wrap span2" id="medicineQuantity" name="medicineQuantity"  >
+                                                        <option value="">--Medicine Quantity--</option>
                                                         {% for attribute in attributes %}
                                                             {% if attribute.parent == 'medicine-quantity' %}
-                                                                <option value="{{ attribute.id }}">{{ attribute.nameBn }}</option>
+                                                                <option value="{{ attribute.id }}">{% if entity.dmsConfig.medicineUsage == 1 %}{{ attribute.name }}{% else %}{{ attribute.nameBn }}{% endif %}</option>
                                                             {% endif %}
                                                         {% endfor %}
                                                     </select>
                                                     <select class="m-wrap span3" id="medicineDose" name="medicineDose">
+                                                        <option value="">--Medicine Dose--</option>
                                                         {% for attribute in attributes %}
                                                             {% if attribute.parent == 'medicine-dose' %}
-                                                                <option value="{{ attribute.id }}">{{ attribute.nameBn }}</option>
+                                                                <option value="{{ attribute.id }}">{% if entity.dmsConfig.medicineUsage == 1 %}{{ attribute.name }}{% else %}{{ attribute.nameBn }}{% endif %}</option>
                                                             {% endif %}
                                                         {% endfor %}
                                                     </select>
                                                     <select class="m-wrap span3" id="medicineDoseTime" name="medicineDoseTime" >
+                                                        <option value="">--Medicine Dose Time--</option>
                                                         {% for attribute in attributes %}
                                                             {% if attribute.parent == 'medicine-dose-time' %}
-                                                                <option value="{{ attribute.id }}">{{ attribute.nameBn }}</option>
+                                                                <option value="{{ attribute.id }}">{% if entity.dmsConfig.medicineUsage == 1 %}{{ attribute.name }}{% else %}{{ attribute.nameBn }}{% endif %}</option>
                                                             {% endif %}
                                                         {% endfor %}
                                                     </select>
                                                     <input type="number" class="m-wrap span2" style="margin-top:1px" id="medicineDuration" name="medicineDuration" value="7">
                                                     <select class="m-wrap span2" id="medicineDurationType" name="medicineDurationType">
+                                                        <option value="">--Medicine Duration--</option>
                                                         {% for attribute in attributes %}
                                                             {% if attribute.parent == 'medicine-duration-type' %}
-                                                                <option value="{{ attribute.id }}">{{ attribute.nameBn }}</option>
+                                                                <option value="{{ attribute.id }}">{% if entity.dmsConfig.medicineUsage == 1 %}{{ attribute.name }}{% else %}{{ attribute.nameBn }}{% endif %}</option>
                                                             {% endif %}
                                                         {% endfor %}
                                                     </select>
@@ -690,7 +743,7 @@
                                                     <div class="btn-group">
                                                         <button type="button"  class="btn blue" id="finalActionButton"><i class="icon-save"></i> Save</button>
                                                         {% if entity.process in ['Appointment','Visit','Done'] %}
-                                                        <a target="_blank" href="javascript:" data-url="{{ path('dms_invoice_print_invoice',{'id':entity.id}) }}" class="btn purple" id="printButton"><i class="icon-print"></i> Print</a>
+                                                        <a target="_blank" href="{{ path('dms_invoice_print_invoice',{'id':entity.id}) }}" class="btn purple" id="printButton"><i class="icon-print"></i> Print</a>
                                                         {% endif %}
                                                     </div>
                                                 </div>

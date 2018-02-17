@@ -142,7 +142,7 @@ class SettingBuilderController extends Controller
         $file = $request->files->all();
         $globalOption = $this->getUser()->getGlobalOption();
         $entity = $this->getDoctrine()->getRepository('SettingToolBundle:TemplateCustomize')->findOneBy(array('globalOption'=>$globalOption));
-        $this->getDoctrine()->getRepository('SettingToolBundle:TemplateCustomize')->updateTemplateCustomize($entity, $data, $file);
+        $this->getDoctrine()->getRepository('SettingAppearanceBundle:TemplateCustomize')->updateTemplateCustomize($entity, $data, $file);
         exit;
 
     }

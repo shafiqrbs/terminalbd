@@ -32,7 +32,18 @@ class DmsParticularRepository extends EntityRepository
         return $result;
     }
 
-
+    public function searchAutoComplete(DmsConfig $config,$q)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.name as id');
+        $query->where($query->expr()->like("e.name", "'$q%'"  ));
+        $query->andWhere("e.dmsConfig = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
+    }
 
     public function findWithSearch($config,$service, $data){
 

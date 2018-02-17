@@ -41,7 +41,8 @@ class ServiceType extends AbstractType
                     'text-field' => 'Text Field',
                     'checkbox-text-field' => 'Checkbox with Text Field',
                     'checkbox' => 'Checkbox',
-                    'textarea' => 'Text-area'
+                    'textarea' => 'Text-area',
+                    'file' => 'File Upload'
                 ),
             ))
             ->add('status')

@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\DmsBundle\Controller;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine;
@@ -108,6 +109,8 @@ class InvoiceController extends Controller
                 'class' => 'form-horizontal',
                 'id' => 'invoiceForm',
                 'novalidate' => 'novalidate',
+                'enctype' => 'multipart/form-data',
+
             )
         ));
         return $form;
@@ -235,6 +238,9 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+        if(!empty($particular->getPath())){
+            $particular->removeFileImage();
         }
         $em->remove($particular);
         $em->flush();
@@ -379,6 +385,7 @@ class InvoiceController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
+
         $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceItems($entity,$data);
         if($editForm->isValid() and !empty($entity->getInvoiceParticulars())) {
 
@@ -401,6 +408,14 @@ class InvoiceController extends Controller
                 }
             }
             $em->flush();
+            $file = $request->files->all();
+            if(!empty($file) and !empty($data['investigation'])){
+                $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->fileUpload($entity,$data,$file);
+                $data = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceInvestigationUpload($entity, $data);
+                return new Response($data);
+            }
+
+
         }
         exit;
     }
@@ -749,6 +764,34 @@ class InvoiceController extends Controller
         endforeach;
         return new JsonResponse($items);
 
+    }
+
+    public function autoInvestigationSearchAction()
+    {
+        $q = $_REQUEST['term'];
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->searchAutoComplete($config,$q);
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity['id']);
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
+    public function investigationProcedureAction(Request $request, DmsInvoiceParticular $particular)
+    {
+        $file = $request->request->all();
+       var_dump($file);
+        if(isset($file['file'])){
+
+            $img = $file['file'];
+            $fileName = $img->getClientOriginalName();
+            $imgName =  uniqid(). '.' .$fileName;
+            $img->move($particular->getUploadDir(), $imgName);
+            $particular->setFile($imgName);
+        }
+       exit;
     }
 
 
