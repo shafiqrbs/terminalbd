@@ -287,8 +287,11 @@ class DmsTreatmentPlanRepository extends EntityRepository
     public function monthlySales(DmsConfig $config , $data =array())
     {
 
-        $month = isset($data['month'])? $data['month'] :'';
-        $year = isset($data['year'])? $data['year'] :'';
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
 
         $sql = "SELECT DATE(appointment.updated) as date,SUM(appointment.subTotal) as subTotal,SUM(appointment.discount) as discount ,SUM(appointment.payment) as receive
                 FROM dms_treatment_plan as appointment
