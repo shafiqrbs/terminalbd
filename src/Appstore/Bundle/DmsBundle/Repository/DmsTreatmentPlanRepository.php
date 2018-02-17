@@ -117,7 +117,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
 
         foreach ($results as $entity) {
 
-            $action ='<a class="btn blue sms-confirm mini" href="javascript:" data-url="/dms/invoice/'.$entity['patientId'].'/'.$entity['id'].'/send-sms"><i class="icon-phone"></i> Send SMS</a>';
+            $action ='<a class="btn blue sms-confirm mini   " href="javascript:" data-url="/dms/invoice/'.$entity['patientId'].'/'.$entity['id'].'/send-sms"><i class="icon-phone"></i> Send SMS</a>';
             if ($entity['appointmentStatus'] == 1)  {
                 $appointmentDate = $entity['appointmentDate'];
                 $appointmentTime = $entity['appointmentTime'];
@@ -308,6 +308,21 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $qb->groupBy('date');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
+
+
+       /* $sql = "SELECT
+                FROM dms_treatment_plan AS dtp
+                INNER JOIN dmsInvoice ON dtp.dmsInvoice_id = dmsInvoice.id
+                INNER JOIN Item as item ON SalesItem.item_id = item.id
+                WHERE Sales.inventoryConfig_id = :inventoryConfig AND Sales.process IN ('In-progress', 'Courier')
+                GROUP BY item_id";
+        $stmt = $this->getEntityManager()
+            ->getConnection()
+            ->prepare($sql);
+        $stmt->bindValue('inventoryConfig', $inventory->getId());
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;*/
 
 
     }

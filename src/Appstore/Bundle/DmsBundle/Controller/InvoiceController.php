@@ -656,6 +656,47 @@ class InvoiceController extends Controller
 
     }
 
+    public function invoicePrintPreviewAction(DmsInvoice $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
+        if ($dmsConfig->getId() == $entity->getDmsConfig()->getId()) {
+
+            /** @var  $invoiceParticularArr */
+            $invoiceParticularArr = array();
+
+            /** @var $row DmsInvoiceParticular  */
+            if (!empty($entity->getInvoiceParticulars())) {
+                foreach ($entity->getInvoiceParticulars() as $row):
+                    if (!empty($row->getDmsParticular())) {
+                        $invoiceParticularArr[$row->getDmsParticular()->getId()] = $row;
+                    }
+                endforeach;
+            }
+
+            $services = $em->getRepository('DmsBundle:DmsService')->findBy(array('dmsConfig'=>$dmsConfig,'serviceShow'=>1,'status'=>1),array('serviceSorting'=>'ASC'));
+            $treatmentSchedule = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
+
+            if($dmsConfig->isCustomPrescription() == 1){
+                $template = $dmsConfig->getGlobalOption()->getSlug();
+            }else{
+                $template = 'print';
+            }
+
+            return  $this->render('DmsBundle:Print:'.$template.'.html.twig',
+                array(
+                    'entity' => $entity,
+                    'invoiceParticularArr' => $invoiceParticularArr,
+                    'services' => $services,
+                    'treatmentSchedule' => $treatmentSchedule,
+                )
+            );
+
+        }
+
+    }
+
     public function invoicePrintPdfAction(DmsInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
