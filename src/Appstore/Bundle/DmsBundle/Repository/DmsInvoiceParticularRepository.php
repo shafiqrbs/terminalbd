@@ -223,7 +223,7 @@ class DmsInvoiceParticularRepository extends EntityRepository
             $data .='<tr id="remove-'.$invoiceParticular->getId().'">';
             $data .='<td>'.$date.'</td>';
             $data .='<td>'.$invoiceParticular->getMetaValue().'</td>';
-            $data .='<td><a target="_blank" href="'.$invoiceParticular->getWebPath().'">View Image</a></td>';
+            $data .='<td><a target="_blank" href="/'.$invoiceParticular->getWebPath().'">View Image</a></td>';
             $data .='<td class="numeric">';
             $data .='<a href="javascript:" class="btn red mini particularDelete" data-tab="'.$service->getSlug().'" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/dms/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
             $data .='</td>';
