@@ -286,43 +286,23 @@ class DmsTreatmentPlanRepository extends EntityRepository
 
     public function monthlySales(DmsConfig $config , $data =array())
     {
-        $emConfig = $this->getEntityManager()->getConfiguration();
-        $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
-        $emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
-        $emConfig->addCustomDatetimeFunction('DAY', 'DoctrineExtensions\Query\Mysql\Day');
 
-        $qb = $this->createQueryBuilder('appointment');
-        $qb->join('appointment.dmsInvoice','invoice');
-        $qb->join('invoice.assignDoctor','doctor');
-        $qb->join('appointment.dmsParticular','particular');
-        $qb->join('invoice.customer','customer');
-        $qb->select('DAY(appointment.updated) as date');
-        $qb->addSelect('MONTH(appointment.updated) as month');
-        $qb->addSelect('YEAR(appointment.updated) as year');
-        $qb->addSelect('SUM(appointment.subTotal) as subTotal');
-        $qb->addSelect('SUM(appointment.discount) as discount');
-        $qb->addSelect('SUM(appointment.payment) as receive');
-        $qb->where('invoice.dmsConfig ='.$config->getId());
-        $qb->andWhere('appointment.status =1');
-        $this->monthlySummaryDate($qb,$data);
-        $qb->groupBy('date');
-        $result = $qb->getQuery()->getArrayResult();
-        return $result;
+        $month = isset($data['month'])? $data['month'] :'';
+        $year = isset($data['year'])? $data['year'] :'';
 
-
-       /* $sql = "SELECT
-                FROM dms_treatment_plan AS dtp
-                INNER JOIN dmsInvoice ON dtp.dmsInvoice_id = dmsInvoice.id
-                INNER JOIN Item as item ON SalesItem.item_id = item.id
-                WHERE Sales.inventoryConfig_id = :inventoryConfig AND Sales.process IN ('In-progress', 'Courier')
-                GROUP BY item_id";
-        $stmt = $this->getEntityManager()
-            ->getConnection()
-            ->prepare($sql);
-        $stmt->bindValue('inventoryConfig', $inventory->getId());
+        $sql = "SELECT DATE(appointment.updated) as date,SUM(appointment.subTotal) as subTotal,SUM(appointment.discount) as discount ,SUM(appointment.payment) as receive
+                FROM dms_treatment_plan as appointment
+                INNER JOIN dms_invoice as invoice ON appointment.dmsInvoice_id = invoice.id
+                WHERE invoice.dmsConfig_id = :dmsConfig AND appointment.status = :status AND MONTHNAME(appointment.updated) =:month AND YEAR(appointment.updated) =:year
+                GROUP BY date";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('dmsConfig', $config->getId());
+        $stmt->bindValue('status', 1);
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
         $stmt->execute();
         $result =  $stmt->fetchAll();
-        return $result;*/
+        return $result;
 
 
     }

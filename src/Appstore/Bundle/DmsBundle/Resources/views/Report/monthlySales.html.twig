@@ -85,7 +85,7 @@
                         {% for entity in entities %}
                             <tr>
                                 <td  class="numeric">{{ loop.index }}</td>
-                                <td  class="numeric">{{ entity.date }}-{{ entity.month }}-{{ entity.year }}</td>
+                                <td  class="numeric">{{ entity.date|date('d-m-Y') }}</td>
                                 <td  class="numeric">{{ entity.subTotal|number_format }}</td>
                                 <td  class="numeric">{{ entity.discount|number_format }}</td>
                                 <td  class="numeric">{{ (entity.subTotal - entity.discount)|number_format }}</td>
