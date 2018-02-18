@@ -41,13 +41,14 @@ class TreatmentPlanController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
-        $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig,$data);
-        $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('doctor'));
-
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($config,$data);
+        $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('doctor'));
+        $treatments = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));
         return $this->render('DmsBundle:Invoice:treatmentSchedule.html.twig', array(
             'treatmentSchedule' => $treatmentSchedule,
             'assignDoctors' => $assignDoctors,
+            'treatments' => $treatments,
         ));
 
     }

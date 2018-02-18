@@ -37,27 +37,13 @@ class ReportController extends Controller
         $data = $_REQUEST;
 
         $user = $this->getUser();
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $salesTotalTransactionOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->transactionOverview($config,$data);
+        $serviceOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findWithServiceOverview($config,$data);
+        return $this->render('DmsBundle:Report:salesSumary.html.twig', array(
 
-        $salesTotalTransactionOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->todaySalesOverview($user,$data);
-        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true');
-        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false');
-
-        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'diagnostic');
-        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'admission');
-        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
-        $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user,$data);
-        $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user,$data);
-
-        return $this->render('HospitalBundle:Report:salesSumary.html.twig', array(
-
-            'salesTotalTransactionOverview'      => $salesTotalTransactionOverview,
-            'salesTransactionOverview'      => $salesTransactionOverview,
-            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
-            'diagnosticOverview'            => $diagnosticOverview,
-            'admissionOverview'             => $admissionOverview,
+            'salesOverview'      => $salesTotalTransactionOverview,
             'serviceOverview'               => $serviceOverview,
-            'transactionOverview'           => $transactionOverview,
-            'commissionOverview'            => $commissionOverview,
             'searchForm'                    => $data,
 
         ));
@@ -87,6 +73,32 @@ class ReportController extends Controller
 
     }
 
+    public function allyearlySalesAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->allYearlySales($dmsConfig,$data);
+        return $this->render('DmsBundle:Report:allYearlySales.html.twig', array(
+            'entities' => $dailyReceive,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    public function yearlySalesAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->yearlySales($dmsConfig,$data);
+        return $this->render('DmsBundle:Report:yearlySales.html.twig', array(
+            'entities' => $dailyReceive,
+            'searchForm' => $data,
+        ));
+
+    }
+
     public function monthlySalesAction()
     {
         $data = $_REQUEST;
@@ -95,6 +107,42 @@ class ReportController extends Controller
         $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->monthlySales($dmsConfig,$data);
         return $this->render('DmsBundle:Report:monthlySales.html.twig', array(
             'entities' => $dailyReceive,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    public function salesAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->salesDetails($config,$data);
+        $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('doctor'));
+        $treatments = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));
+
+        return $this->render('DmsBundle:Report:sales.html.twig', array(
+            'entities' => $dailyReceive,
+            'assignDoctors' => $assignDoctors,
+            'treatments' => $treatments,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    public function treatmentWiseSalesAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->dailySales($dmsConfig,$data);
+        $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('doctor'));
+        $treatments = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('treatment'));
+
+        return $this->render('DmsBundle:Report:treatmentWiseSales.html.twig', array(
+            'entities' => $entities,
+            'assignDoctors' => $assignDoctors,
+            'treatments' => $treatments,
             'searchForm' => $data,
         ));
 

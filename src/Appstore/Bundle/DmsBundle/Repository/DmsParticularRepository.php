@@ -85,6 +85,21 @@ class DmsParticularRepository extends EntityRepository
             return  $qb;
     }
 
+    public function getFindDentalServiceParticular($config,$services){
+
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.service','s')
+            ->where('e.dmsConfig = :config')->setParameter('config', $config)
+            ->andWhere('e.status = :status')->setParameter('status', 1)
+            ->andWhere('s.serviceFormat IN(:slugs)')
+            ->setParameter('slugs',array_values($services))
+            ->orderBy('s.sorting','ASC')
+            ->orderBy('e.name','ASC')
+            ->getQuery()->getResult();
+        return  $qb;
+    }
+
+
     public function getServices($config,$services){
 
 
@@ -155,10 +170,10 @@ class DmsParticularRepository extends EntityRepository
             ->addSelect('e.purchasePrice')
             ->addSelect('e.purchaseQuantity')
             ->where('e.dmsConfig = :config')->setParameter('config', $config)
-            ->andWhere('s.slug IN(:process)')
+            ->andWhere('s.serviceFormat IN(:process)')
             ->setParameter('process',array_values(array('accessories')))
             ->orderBy('e.name','ASC')
-            ->getQuery()->getArrayResult();
+            ->getQuery();
             return  $qb;
     }
     public function getAccessoriesParticular($hospital){
@@ -182,8 +197,8 @@ class DmsParticularRepository extends EntityRepository
             ->addSelect('e.purchasePrice')
             ->addSelect('e.purchaseQuantity')
             ->where('e.dmsConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:process)')
-            ->setParameter('process',array_values(array(8)))
+            ->andWhere('s.serviceFormat IN(:process)')
+            ->setParameter('process',array_values(array('accessories')))
             ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;

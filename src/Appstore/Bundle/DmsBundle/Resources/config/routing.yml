@@ -39,7 +39,7 @@ dms_doctor:
 
 dms_medicine:
     resource: "@DmsBundle/Resources/config/routing/medicine.yml"
-    prefix:   /medicine
+    prefix:   /accessories
 
 
 dms_config:

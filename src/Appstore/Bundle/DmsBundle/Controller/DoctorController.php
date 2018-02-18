@@ -37,7 +37,7 @@ class DoctorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config , array('doctor'));
+        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config , array('doctor'));
         return $this->render('DmsBundle:Doctor:index.html.twig', array(
             'entities' => $pagination,
             'categories' => '',
@@ -61,7 +61,7 @@ class DoctorController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setDmsConfig($globalOption -> getDmsConfig());
-            $service = $this->getDoctrine()->getRepository('DmsBundle:DmsService')->findOneBy(array('slug'=>'doctor'));
+            $service = $this->getDoctrine()->getRepository('DmsBundle:DmsService')->findOneBy(array('serviceFormat'=>'doctor'));
             $entity->setService($service);
             $entity->setName($entity->getAssignDoctor()->getProfile()->getName());
             $entity->setMobile($entity->getAssignDoctor()->getProfile()->getMobile());

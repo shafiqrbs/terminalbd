@@ -902,15 +902,15 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
             $menu['Dental & Diagnosis']['Reports']->addChild('Sales Summary', array('route' => 'dms_report_sales_summary'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Daily', array('route' => 'dms_report_sales_daily'))
+            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Details', array('route' => 'dms_report_sales'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Reports']->addChild('Sales Monthly', array('route' => 'dms_report_sales_monthly'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Reports']->addChild('Sales Yearly', array('route' => 'dms_report_sales_yearly'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Details', array('route' => 'dms_report_sales_details'))
+            $menu['Dental & Diagnosis']['Reports']->addChild('All Sales Yearly', array('route' => 'dms_report_sales_all_yearly'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Service Wise Sales', array('route' => 'dms_report_sales_service'))
+            $menu['Dental & Diagnosis']['Reports']->addChild('Treatment Base Sales', array('route' => 'dms_report_sales_treatment'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Reports']->addChild('Purchase', array('route' => 'dms_report_purchase'))
                 ->setAttribute('icon', 'icon-th-list');

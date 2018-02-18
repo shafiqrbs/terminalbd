@@ -35,40 +35,10 @@
                     </div>
                 </div>
                 <div class="portlet-body form">
-                    <form class="search-form" action="" method="get" name="itemSearch">
-                        <div class="row-fluid">
-                            <div class="span6"></div>
-                            <div class="span6">
-                                <div class="controls">
-                                    <div class="input-append span12">
-                                        {%  set months = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
-                                        <select class="span6 m-wrap" name="month" id="month">
-                                            <option>--- Select Month---</option>
-                                            {% for month in months %}
-                                                <option {% if searchForm.month is defined and searchForm.month == month %}selected="selected"{% endif %} value="{{ month }}">{{ month }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        {%  set years = ['2018','2019','2020','2021','2022','2023','2024','2025'] %}
-                                        <select class="span5 m-wrap" name="year" id="year">
-                                            <option>--- Select Year---</option>
-                                            {% for year in years %}
-                                                <option {% if searchForm.year is defined and searchForm.year == year %}selected="selected"{% endif %} value="{{ year }}">{{ year }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <div class="btn-group">
-                                            <button class="btn blue" type="submit"><i class="icon-search"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="clearfix">&nbsp;</div>
                     <table class="table table-bordered table-striped table-condensed flip-content ">
                         <thead class="flip-content ">
                         <tr class="head-blue">
-                            <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                            <th class="numeric">Date</th>
+                            <th class="numeric"><i class="icon-list"></i>&nbsp;Year</th>
                             <th class="numeric">Sub-Total</th>
                             <th class="numeric">Discount</th>
                             <th class="numeric">Net Total</th>
@@ -85,8 +55,7 @@
                             {%  set discount = discount + entity.discount  %}
                             {%  set payment = payment + entity.payment  %}
                               <tr>
-                                <td  class="numeric">{{ loop.index }}</td>
-                                <th  class="numeric">{{ entity.date|date('d-m-Y') }}</th>
+                                <th  class="numeric">{{ entity.year }}</th>
                                 <td  class="numeric">{{ entity.subTotal|number_format }}</td>
                                 <td  class="numeric">{{ entity.discount|number_format }}</td>
                                 <td  class="numeric">{{ (entity.subTotal - entity.discount)|number_format }}</td>
@@ -96,7 +65,7 @@
                         {% endfor %}
                         </tbody>
                         <tfoot>
-                        <tr><th colspan="2">Sales Summary</th><th>{{ subTotal|number_format }}</th><th>{{ discount|number_format }}</th><th>{{ (subTotal- discount)|number_format }}</th><th>{{ payment|number_format }}</th><th>{{ (subTotal- discount - payment)|number_format }}</th></tr>
+                        <tr><th>Sales Summary</th><th>{{ subTotal|number_format }}</th><th>{{ discount|number_format }}</th><th>{{ (subTotal- discount)|number_format }}</th><th>{{ payment|number_format }}</th><th>{{ (subTotal- discount - payment)|number_format }}</th></tr>
                         </tfoot>
                     </table>
                     <div class="clearfix">&nbsp;</div>

@@ -118,6 +118,7 @@ class DmsConfigController extends Controller
                 $service->setName(trim($entity->getName()));
                 $service->setDentalService($entity);
                 $service->setSlug(trim($entity->getSlug()));
+                $service->setServiceFormat(trim($entity->getSlug()));
                 $service->setStatus(1);
                 $service->setDmsConfig($config);
                 $em->persist($service);

@@ -27,7 +27,7 @@ class TreatmentController extends Controller
         $entity = new DmsParticular();
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('treatment-plan'));
+        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));
         $form = $this->createCreateForm($entity);
         return $this->render('DmsBundle:Treatment:index.html.twig', array(
             'pagination' => $pagination,
@@ -46,7 +46,7 @@ class TreatmentController extends Controller
         $entity = new DmsParticular();
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('treatment-plan'));
+        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));
 
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -54,7 +54,7 @@ class TreatmentController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setDmsConfig($config);
-            $service = $this->getDoctrine()->getRepository('DmsBundle:DmsService')->findOneBy(array('slug'=>'treatment-plan'));
+            $service = $this->getDoctrine()->getRepository('DmsBundle:DmsService')->findOneBy(array('serviceFormat'=>'treatment'));
             $entity->setService($service);
             $em->persist($entity);
             $em->flush();
@@ -101,8 +101,7 @@ class TreatmentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->findBy(array('dmsConfig' => $config,'service'=> 2),array('name'=>'ASC'));
-        $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
+        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));      $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find DmsParticular entity.');
@@ -143,7 +142,7 @@ class TreatmentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->findBy(array('dmsConfig' => $config,'service'=> 2),array('name'=>'ASC'));
+        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));
         $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
 
         if (!$entity) {
