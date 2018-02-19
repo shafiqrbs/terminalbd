@@ -212,7 +212,9 @@ $(document).on('click', '.addProcedure', function() {
         success: function (response) {
             $('#'+dataTab).find('#procedure-'+showDiv).html(response);
             $('#'+dataTab).find('#procedure').val('');
-        }
+            $('#'+dataTab).find('.checkradios-checkbox').prop('checked', false);
+            $('#'+dataTab).find('.checked').removeClass('fa fa-window-close');
+           }
     });
 });
 

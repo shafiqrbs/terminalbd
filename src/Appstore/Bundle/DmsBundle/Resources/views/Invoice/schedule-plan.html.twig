@@ -22,14 +22,14 @@
             <div class="span3">
                 <div class="input-icon left">
                     <i class="icon-calendar"></i>
-                    <input class="m-wrap span12 search-input date-picker" name="startDate" id="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Appointment start date{% endif %}" >
+                    <input type="date" class="m-wrap span12 search-input" name="startDate" id="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Appointment start date{% endif %}" >
                 </div>
             </div>
 
             <div class="span3">
                 <div class="input-icon left">
                     <i class="icon-calendar"></i>
-                    <input class="m-wrap span12 search-input date-picker" name="endDate" id="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Appointment end date{% endif %}">
+                    <input type="date" class="m-wrap span12 search-input" name="endDate" id="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Appointment end date{% endif %}">
                 </div>
             </div>
         </div>
