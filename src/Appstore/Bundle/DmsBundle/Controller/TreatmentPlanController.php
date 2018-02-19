@@ -32,6 +32,7 @@ class TreatmentPlanController extends Controller
             $this->get('request')->query->get('page', 1)/*page number*/,
             25  /*limit per page*/
         );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
         return $pagination;
     }
 
@@ -43,10 +44,11 @@ class TreatmentPlanController extends Controller
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getDmsConfig();
         $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($config,$data);
+        $pagination = $this->paginate($treatmentSchedule);
         $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('doctor'));
         $treatments = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));
         return $this->render('DmsBundle:Invoice:treatmentSchedule.html.twig', array(
-            'treatmentSchedule' => $treatmentSchedule,
+            'treatmentSchedule' => $pagination,
             'assignDoctors' => $assignDoctors,
             'treatments' => $treatments,
             'searchForm' => $data,
