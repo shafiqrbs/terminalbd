@@ -1,9 +1,8 @@
-<link media="all" rel="stylesheet" href="{{ asset('assets/template/desktop/css/bootstrap.min.css') }}"/>
-<script src="{{ asset('assets/template/desktop/js/jquery.js') }}"></script>
-<script src="{{ asset('assets/template/plugin/matchHeight/height-match.js') }}"></script>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
+    <link media="all" rel="stylesheet" href="{{ asset('assets/template/desktop/css/bootstrap.min.css') }}"/>
     {% if print == 'print' %}
         <script type="text/javascript">
             window.print();
@@ -416,7 +415,9 @@
         </tbody>
 
     </table>
+    {% if print == 'print' %}
     <div class="footer-label">{{ portal_power }}</div>
+    {% endif %}
 </div>
 <style>
     .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
@@ -424,6 +425,9 @@
     }
     .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
         padding: 0!important;
+    }
+    .table th, .table td{
+        border: none!important;
     }
     ul{
         list-style: none;
