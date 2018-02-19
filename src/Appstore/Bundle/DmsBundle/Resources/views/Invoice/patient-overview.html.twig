@@ -154,35 +154,7 @@
             </div>
         {% endfor %}
     {% endif %}
-    <div class="clearfix">&nbsp;</div>
-    <div class="form-actions portlet box silver">
-        <div class="portlet-title">
-            <div class="caption"><i class="fa fa-medkit"></i>PRESCRIPTION</div>
-        </div>
-    </div>
-    <div class="clearfix">&nbsp;</div>
-    <table class="table table-bordered table-striped table-condensed flip-content ">
-        <thead class="flip-content ">
-        <tr class="head-grey">
-            <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-            <th class="numeric">Medicine Name</th>
-            <th class="numeric">Quantity</th>
-            <th class="numeric">Dose Time</th>
-            <th class="numeric">Duration</th>
-        </tr>
-        </thead>
-        <tbody id="invoiceMedicine">
-        {% for medicine in entity.invoiceMedicines %}
-            <tr id="medicine-{{ medicine.id }}">
-                <td  class="numeric">{{ loop.index }}.</td>
-                <td  class="numeric">{{ medicine.medicine.medicineForm }}. {{ medicine.medicine.name }} {{ medicine.medicine.strength }}</td>
-                <td class="numeric">{{ medicine.medicineQuantity }}</td>
-                <td class="numeric">{{ medicine.medicineDose }} - {{ medicine.medicineDoseTime }}</td>
-                <td class="numeric">{{ medicine.medicineDuration }} {{ medicine.medicineDurationType }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
     <div class="clearfix">&nbsp;</div>
     <div class="form-actions portlet box silver">
         <div class="portlet-title">
@@ -211,9 +183,9 @@
                     <td  class="numeric">{{ treatment.dmsParticular.particularCode }} - {{ treatment.dmsParticular.name }}</td>
                     <td  class="numeric">
                         {% if treatment.status ==1 %}
-                            {{ treatment.appointmentDate }} {{ treatment.appointmentTime }}
+                            {{ treatment.appointmentDate|date('d-m-Y') }} {{ treatment.appointmentTime }}
                         {% else %}
-                            <a  class="btn mini blue-stripe btn-action editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-value="{{ treatment.appointmentDate }}" data-format="YYYY-MM-DD" data-viewformat="DD-MM-YYYY" data-template="DD-MM-YYYY" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change appointment date">{{ treatment.appointmentDate }}</a>
+                            <a  class="btn mini blue-stripe btn-action editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-value="{{ treatment.appointmentDate|date('d-m-Y') }}" data-format="YYYY-MM-DD" data-viewformat="DD-MM-YYYY" data-template="DD-MM-YYYY" data-type="text" data-pk="{{ treatment.id }}" data-original-title="Change appointment date">{{ treatment.appointmentDate|date('d-m-Y') }}</a>
                             <a  data-type="select" class="btn mini purple-stripe btn-action editable" id="process" data-name="AppointmentTime" href="#" data-source="{{ path('dms_invoice_appointment_datetime_select') }}"  data-url="{{ path('dms_treatment_inline_update') }}" data-pk="{{ treatment.id }}" data-value="{{ treatment.appointmentTime }}" data-original-title="Change appointment time">{{ treatment.appointmentTime }}</a>
                         {% endif %}
                     </td>
@@ -241,6 +213,86 @@
             <th class="numeric">{{ entity.due }}</th>
             </tfoot>
 
+        </table>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="form-actions portlet box silver">
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-reorder"></i>Treatment Accessories</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="row-fluid">
+        <table class="table table-bordered table-striped table-condensed flip-content ">
+            <thead class="flip-content ">
+            <tr class="head-grey">
+                <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                <th class="numeric">Created</th>
+                <th class="numeric">Accessories</th>
+                <th class="numeric">Quantity</th>
+                <th class="numeric">Price</th>
+                <th class="numeric">Sub-Total</th>
+            </tr>
+            </thead>
+            <tbody id="invoiceAccessories">
+            {% set subTotal = 0 %}
+            {% for inAccess in entity.dmsInvoiceAccessories %}
+                {% set subTotal = subTotal + inAccess.subTotal %}
+                <tr>
+                    <td class="numeric">{{ loop.index }}</td>
+                    <td class="numeric">{{ inAccess.updated|date('d-m-Y') }}</td>
+                    <td class="numeric">{{ inAccess.dmsParticular.particularCode }} - {{ inAccess.dmsParticular.name }}</td>
+                    <td class="numeric">{{ inAccess.quantity }}</td>
+                    <td class="numeric">{{ inAccess.price }}</td>
+                    <td class="numeric">{{ inAccess.subTotal }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <th  class="numeric text-right" colspan="5" ><span class="pull-right">Total Summary</span></th>
+            <th class="numeric">{{ subTotal|number_format }}</th>
+            </tfoot>
+
+        </table>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="form-actions portlet box silver">
+        <div class="portlet-title">
+            <div class="caption"><i class="fa fa-medkit"></i>PRESCRIPTION</div>
+        </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="row-fluid">
+        <table class="table table-bordered table-striped table-condensed flip-content ">
+            <thead class="flip-content ">
+            <tr class="head-grey">
+                <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                <th class="numeric">Medicine Name</th>
+                <th class="numeric">Quantity</th>
+                <th class="numeric">Dose Time</th>
+                <th class="numeric">Duration</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set date ='' %}
+            {% for medicine in entity.invoiceMedicines %}
+                {% if medicine.created|date('d-m-Y') != date %}
+                    {% set date = medicine.created|date('d-m-Y') %}
+                    <tr><th colspan="5">{{ medicine.created|date('d-m-Y') }}</th></tr>
+                {% endif %}
+                <tr id="medicine-{{ medicine.id }}">
+                    <td  class="numeric">{{ loop.index }}.</td>
+                    <td  class="numeric">{{ medicine.medicine.medicineForm }}. {{ medicine.medicine.name }} {{ medicine.medicine.strength }}</td>
+                    <td class="numeric">{{ medicine.medicineQuantity }}</td>
+                    <td class="numeric">{{ medicine.medicineDose }} - {{ medicine.medicineDoseTime }}</td>
+                    <td class="numeric">{{ medicine.medicineDuration }} {{ medicine.medicineDurationType }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
         </table>
     </div>
     <div class="clearfix">&nbsp;</div>

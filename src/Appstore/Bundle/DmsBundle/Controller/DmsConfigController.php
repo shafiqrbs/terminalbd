@@ -81,7 +81,7 @@ class DmsConfigController extends Controller
                 'success',"Report has been created successfully"
             );
             $data = $request->request->all();
-            $this->getDoctrine()->getRepository('DmsBundle:DmsService')->prescriptionServiceUpdate($data);
+            $this->getDoctrine()->getRepository('DmsBundle:DmsService')->prescriptionServiceUpdate($entity,$data);
             if($entity->isCustomPrescription() == 1){
                /*// $print = '../src/Appstore/Bundle/DmsBundle/Resources/views/Print/print.html.twig';
                // $copy = '../src/Appstore/Bundle/DmsBundle/Resources/views/Print/'.$entity->getGlobalOption()->getSlug().'.html.twig';

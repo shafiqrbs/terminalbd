@@ -39,12 +39,12 @@ class DmsServiceRepository extends EntityRepository
         }
     }
 
-    public function prescriptionServiceUpdate($data)
+    public function prescriptionServiceUpdate(DmsConfig $entity,$data)
     {
         $i = 1;
         $em = $this->_em;
         $qb = $em->createQueryBuilder();
-        $this->removeServicePreviousCheck();
+        $this->removeServicePreviousCheck($entity);
         foreach ($data['serviceKey'] as $key => $value) {
             /* @var $entity DmsService */
             $entity= $em->getRepository('DmsBundle:DmsService')->find($value);
@@ -71,10 +71,10 @@ class DmsServiceRepository extends EntityRepository
 
     }
 
-    public function removeServicePreviousCheck()
+    public function removeServicePreviousCheck(DmsConfig $config)
     {
         $em = $this->_em;
-        $update = $em->createQuery("UPDATE DmsBundle:DmsService e SET e.serviceShow = 'NULL' , e.serviceHeight = 'NULL' , e.servicePosition = 'NULL' , e.serviceHeaderShow = 'NULL' WHERE e.status = 1 ");
+        $update = $em->createQuery("UPDATE DmsBundle:DmsService e SET e.serviceShow = 'NULL' , e.serviceHeight = 'NULL' , e.servicePosition = 'NULL' , e.serviceHeaderShow = 'NULL' WHERE e.status = 1 AND e.dmsConfig=".$config->getId());
         $update->execute();
     }
 

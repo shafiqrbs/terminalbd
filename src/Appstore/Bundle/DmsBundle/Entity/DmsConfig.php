@@ -373,7 +373,14 @@ class DmsConfig
      *
      * @ORM\Column(name="customPrescription", type="boolean",  nullable=true)
      */
-    private $customPrescription = true;
+    private $customPrescription = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showAccessories", type="boolean",  nullable=true)
+     */
+     private $showAccessories = false;
 
 
 
@@ -1177,6 +1184,22 @@ class DmsConfig
     public function setMedicineUsage($medicineUsage)
     {
         $this->medicineUsage = $medicineUsage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowAccessories()
+    {
+        return $this->showAccessories;
+    }
+
+    /**
+     * @param bool $showAccessories
+     */
+    public function setShowAccessories($showAccessories)
+    {
+        $this->showAccessories = $showAccessories;
     }
 
 

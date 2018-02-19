@@ -85,6 +85,7 @@ class DmsInvoiceMedicineRepository extends EntityRepository
     {
         $entities = $sales->getInvoiceMedicines();
         $data = '';
+        $date = '';
         $i = 1;
         /** @var $entity DmsInvoiceMedicine */
         foreach ($entities as $entity) {
@@ -92,6 +93,10 @@ class DmsInvoiceMedicineRepository extends EntityRepository
                 $medicine = $entity->getMedicine()->getMedicineForm().'. '.$entity->getMedicine()->getName() .' '.$entity->getMedicine()->getStrength();
             }else{
                 $medicine = $entity->getMedicineName();
+            }
+            if($entity->getUpdated()->format('d-m-Y') != $date ){
+                $date = $entity->getUpdated()->format('d-m-Y');
+                $data .= '<tr><th colspan="6">'.$entity->getUpdated()->format('d-m-Y').'</th></tr>';
             }
             $data .= '<tr id="medicine-'.$entity->getId().'">';
             $data .= '<td class="numeric" >' . $i . '</td>';

@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\DmsBundle\Controller;
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
@@ -84,6 +85,7 @@ class InvoiceController extends Controller
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
         $em->flush();
+
         if($dmsConfig->getIsDefaultMedicine() == 1 ){
             $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceMedicine')->defaultSetBeforeMedicine($entity,$lastObject);
         }
@@ -128,7 +130,6 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-
         $editForm = $this->createEditForm($entity);
 
         /** @var  $invoiceParticularArr */
@@ -143,28 +144,28 @@ class InvoiceController extends Controller
             endforeach;
         }
 
-        if (in_array($entity->getProcess(), array('Done', 'Canceled'))) {
+        if (in_array($entity->getProcess(), array('Done','Canceled'))) {
             return $this->redirect($this->generateUrl('dms_invoice_show', array('id' => $entity->getId())));
         }
+
         $teethPlans ='';
         if($entity->getCustomer()){
             $ageGroup = $entity->getCustomer()->getAgeGroup();
             $teethPlans         = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array('ageGroup' => $ageGroup),array('sorting'=>'ASC'));
         }
+
         $services    = $em->getRepository('DmsBundle:DmsService')->getServiceLists($dmsConfig);
-        $treatmentPlans     = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment-plan','other-service'));
-        $particulars        = $em->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('general','medical-history','physical'));
+        $treatmentPlans     = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment','other-service'));
+        $accessories        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('accessories'));
         $attributes         = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
-        $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig);
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'teethPlans' => $teethPlans,
             'particularService' => $treatmentPlans,
             'invoiceParticularArr' => $invoiceParticularArr,
             'services' => $services,
-            'particulars' => $particulars,
+            'accessories' => $accessories,
             'attributes' => $attributes,
-            'treatmentSchedule' => $treatmentSchedule,
             'form' => $editForm->createView(),
         ));
     }
@@ -218,11 +219,10 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $particularId = $request->request->get('particularId');
-        $quantity = $request->request->get('quantity');
         $price = $request->request->get('price');
         $appointmentDate = $request->request->get('appointmentDate');
         $appointmentTime = $request->request->get('appointmentTime');
-        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price,'appointmentDate'=>$appointmentDate , 'appointmentTime'=> $appointmentTime );
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => 1,'price' => $price,'appointmentDate'=>$appointmentDate , 'appointmentTime'=> $appointmentTime );
         $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->insertInvoiceItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($invoice);
         $msg = 'Particular added successfully';
@@ -246,7 +246,6 @@ class InvoiceController extends Controller
         $em->flush();
         exit;
     }
-
 
     public function addMedicineAction(Request $request, DmsInvoice $invoice)
     {
@@ -338,8 +337,15 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find particular entity.');
         }
+        $datetime = !empty($data['name']) ? $data['name'] : '' ;
+        if($datetime == 'AppointmentDate'){
+            $val = new \DateTime($data['value']);
+        }else{
+            $val = $data['value'];
+        }
+
         $setField = 'set'.$data['name'];
-        $entity->$setField($data['value']);
+        $entity->$setField($val);
         $em->flush();
         exit;
 
@@ -373,7 +379,6 @@ class InvoiceController extends Controller
         return new Response($res);
         exit;
     }
-
 
     public function updateAction(Request $request, DmsInvoice $entity)
     {
@@ -414,12 +419,9 @@ class InvoiceController extends Controller
                 $data = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceInvestigationUpload($entity, $data);
                 return new Response($data);
             }
-
-
         }
         exit;
     }
-
 
     public function showAction(DmsInvoice $entity)
     {
@@ -481,8 +483,6 @@ class InvoiceController extends Controller
         }
 
     }
-
-
 
     public function approveAction(Request $request , DmsInvoice $entity)
     {
@@ -568,7 +568,6 @@ class InvoiceController extends Controller
         return $this->redirect($this->generateUrl('dms_invoice'));
     }
 
-
     public function statusSelectAction()
     {
         $items  = array();
@@ -646,6 +645,7 @@ class InvoiceController extends Controller
             return  $this->render('DmsBundle:Print:'.$template.'.html.twig',
                 array(
                     'entity' => $entity,
+                    'print' => 'print',
                     'invoiceParticularArr' => $invoiceParticularArr,
                     'services' => $services,
                     'treatmentSchedule' => $treatmentSchedule,
@@ -683,15 +683,17 @@ class InvoiceController extends Controller
             }else{
                 $template = 'print';
             }
-
-            return  $this->render('DmsBundle:Print:'.$template.'.html.twig',
+            $html =  $this->renderView('DmsBundle:Print:'.$template.'.html.twig',
                 array(
                     'entity' => $entity,
+                    'print' => 'preview',
                     'invoiceParticularArr' => $invoiceParticularArr,
                     'services' => $services,
                     'treatmentSchedule' => $treatmentSchedule,
                 )
             );
+            return  New Response($html);
+            exit;
 
         }
 
@@ -747,7 +749,11 @@ class InvoiceController extends Controller
 
     public function appointmentTimeAction()
     {
-        $array = ['12.00 PM','12.15 PM',
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $appointments = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->findFreeAppointmentTime($dmsConfig,$data);
+        $arrays = ['12.00 PM','12.15 PM',
             '12.30 PM','12.45 PM','1.00 PM','1.15 PM','1.30 PM','1.45 PM','2.00 PM','2.15 PM',
             '2.30 PM','2.45 PM','3.00 PM','4.15 PM','4.30 PM','4.45 PM','5.00 PM','5.15 PM',
             '5.30 PM','5.45 PM','6.00 PM','6.15 PM','6.30 PM','6.45 PM','7.00 PM','7.15 PM',
@@ -755,7 +761,7 @@ class InvoiceController extends Controller
             '8.00 AM','8.15 AM','8.30 AM','8.45 AM','9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
             '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM',
             ];
-
+        $array = array_diff($arrays,$appointments);
         $items  = array();
         foreach ($array as $value):
             $items[]= array('value' => $value ,'text'=> $value);
@@ -823,9 +829,7 @@ class InvoiceController extends Controller
     public function investigationProcedureAction(Request $request, DmsInvoiceParticular $particular)
     {
         $file = $request->request->all();
-       var_dump($file);
         if(isset($file['file'])){
-
             $img = $file['file'];
             $fileName = $img->getClientOriginalName();
             $imgName =  uniqid(). '.' .$fileName;
@@ -835,6 +839,44 @@ class InvoiceController extends Controller
        exit;
     }
 
+    public function addAccessoriesAction(Request $request, DmsInvoice $invoice)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $accessories = $request->request->get('accessories');
+        echo $quantity = $request->request->get('quantity');
+        if(!empty($accessories)){
+            $invoiceItems = array('accessories' => $accessories ,'quantity' => $quantity);
+            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceAccessories')->insertInvoiceAccessories($invoice, $invoiceItems);
+            $result = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceAccessories')->getInvoiceAccessories($invoice);
+            return new Response($result);
+        }
+        exit;
+
+    }
+
+    public function deleteAccessoriesAction(DmsInvoiceAccessories $accessories){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$accessories) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+        $em->remove($accessories);
+        $em->flush();
+        exit;
+    }
+
+    public function approvedAccessoriesAction(DmsInvoiceAccessories $accessories){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$accessories) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+        $accessories->setStatus(1);
+        $em->flush();
+        $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getSalesUpdateQnt($accessories);
+        exit;
+    }
 
 }
 

@@ -21,12 +21,10 @@ class ConfigType extends AbstractType
     {
         $builder
 
-            ->add('vatRegNo','text', array('attr'=>array('class'=>'m-wrap span8','placeholder'=>'Enter vat registration no')))
             ->add('customerPrefix','text', array('attr'=>array('class'=>'m-wrap span5','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span5 ','maxlength'=> 4,'placeholder'=>'max 4 char')))
-            ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5','max'=> 100)))
-            ->add('vatEnable')
             ->add('isDefaultMedicine')
+            ->add('showAccessories')
             ->add('bodyFontSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),

@@ -62,14 +62,14 @@
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="appointmentStartDate" id="appointmentStartDate" value="{% if searchForm.appointmentStartDate is defined %}{{ searchForm.appointmentStartDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.appointmentStartDate is defined %}{{ searchForm.appointmentStartDate }}{% else %}Appointment start date{% endif %}" >
+                                                <input class="m-wrap span12 search-input date-picker" name="startDate" id="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Appointment start date{% endif %}" >
                                             </div>
                                         </div>
 
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="appointmentEndDate" id="appointmentEndDate" value="{% if searchForm.appointmentEndDate is defined %}{{ searchForm.appointmentEndDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.appointmentEndDate is defined %}{{ searchForm.appointmentEndDate }}{% else %}Appointment end date{% endif %}">
+                                                <input class="m-wrap span12 search-input date-picker" name="endDate" id="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Appointment end date{% endif %}">
                                             </div>
                                         </div>
                                     </div>
@@ -101,9 +101,9 @@
                                             </select>
                                             <select name="status" id="status" class="m-wrap span6">
                                                 <option value="" >--Status--</option>
-                                                {% set statuses ={0:'Pending',1:'Done'} %}
+                                                {% set statuses ={'pending':'Pending','done':'Done'} %}
                                                 {% for key,value in statuses %}
-                                                    <option value="{{ key }}" {% if searchForm.status is defined and searchForm.status === key %} selected="selected" {% endif %} >{{ value }}</option>
+                                                    <option value="{{ key }}" {% if searchForm.status is defined and searchForm.status == key %} selected="selected" {% endif %} >{{ value }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -147,9 +147,9 @@
                                             <td  class="numeric">{{ plan.particularCode }}-{{ plan.particularName }}</td>
                                             <td  class="numeric">
                                                 {% if plan.appointmentStatus ==1 %}
-                                                    {{ plan.appointmentDate }}
+                                                    {{ plan.appointmentDate|date('d-m-Y') }}
                                                 {% else %}
-                                                    <a  class="btn mini blue-stripe btn-action editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-value="{{ plan.appointmentDate }}" data-format="YYYY-MM-DD" data-viewformat="DD-MM-YYYY" data-template="DD-MM-YYYY" data-type="text" data-pk="{{ plan.id }}" data-original-title="Change appointment date">{{ plan.appointmentDate }}</a>
+                                                    <a  class="btn mini blue-stripe btn-action editable" data-name="AppointmentDate" href="javascript:"  data-url="{{ path('dms_treatment_inline_update') }}" data-value="{{ plan.appointmentDate|date('d-m-Y') }}" data-format="YYYY-MM-DD" data-viewformat="DD-MM-YYYY" data-template="DD-MM-YYYY" data-type="text" data-pk="{{ plan.id }}" data-original-title="Change appointment date">{{ plan.appointmentDate|date('d-m-Y') }}</a>
                                                 {% endif %}
                                             <td  class="numeric">
                                                 {% if plan.appointmentStatus ==1 %}
@@ -162,6 +162,10 @@
                                             <td  class="numeric">{% if  plan.appointmentStatus == 1 %}Done{% else %}Pending{% endif %}</td>
                                             <td  class="numeric">{% if  plan.sendSms == 1 %}Yes{% else %}No{% endif %}</td>
                                             <td  class="numeric">
+                                                {% set processIntArr = ['Appointment','Created','Done','Visit'] %}
+                                                {% if plan.process in  processIntArr %}
+                                                    <a href="{{ path('dms_invoice_edit', { 'id': plan.invoiceId }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>
+                                                {% endif %}
                                                 {% if plan.appointmentStatus != 1 %}
                                                 <a class="btn blue sms-confirm mini" href="javascript:" data-url="{{ path('dms_treatment_plan_sms',{'patient':plan.patientId,'id':plan.id}) }}"><i class="icon-phone"></i> Send SMS</a>
                                                 {% endif %}

@@ -63,6 +63,12 @@ class DmsInvoice
     private  $invoiceMedicines;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories", mappedBy="dmsInvoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private  $dmsInvoiceAccessories;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsInvoiceInvestigation" , cascade={"remove"} )
      **/
     private  $investigations;
@@ -1445,6 +1451,14 @@ class DmsInvoice
     public function setSendSms($sendSms)
     {
         $this->sendSms = $sendSms;
+    }
+
+    /**
+     * @return DmsInvoiceAccessories
+     */
+    public function getDmsInvoiceAccessories()
+    {
+        return $this->dmsInvoiceAccessories;
     }
 
 

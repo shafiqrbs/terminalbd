@@ -32,9 +32,20 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $status = isset($data['status'])? $data['status'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
-        $appointmentStartDate = isset($data['appointmentStartDate'])? $data['appointmentStartDate'] :'';
-        $appointmentEndDate = isset($data['appointmentEndDate'])? $data['appointmentEndDate'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
         $appointmentDate = isset($data['appointmentDate'])? $data['appointmentDate'] :'';
+
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $endDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['startDate']) and !empty($data['endDate'])){
+            $start = new \DateTime($data['startDate']);
+            $startDate = $start->format('Y-m-d 00:00:00');
+            $end = new \DateTime($data['endDate']);
+            $endDate = $end->format('Y-m-d 23:59:59');
+        }
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("invoice.invoice", "'$invoice%'"  ));
@@ -47,14 +58,14 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("customer.mobile", "'$customerMobile%'"  ));
         }
 
-        if (!empty($appointmentStartDate)) {
-            $qb->andWhere("appointment.appointmentDate >= :appointmentStartDate");
-            $qb->setParameter('appointmentStartDate', $appointmentStartDate);
-        }
 
-        if (!empty($appointmentEndDate)) {
-            $qb->andWhere("appointment.appointmentDate <= :appointmentEndDate");
-            $qb->setParameter('appointmentEndDate', $appointmentEndDate);
+        if (!empty($startDate) ) {
+            $qb->andWhere("appointment.appointmentDate >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($endDate)) {
+            $qb->andWhere("appointment.appointmentDate <= :endDate");
+            $qb->setParameter('endDate', $endDate);
         }
 
         if (!empty($appointmentDate)) {
@@ -74,9 +85,13 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $qb->andWhere("appointment.dmsParticular = :treatment");
             $qb->setParameter('treatment', $treatment);
         }
-        if(!empty($status)){
+        if($status == 'done'){
             $qb->andWhere("appointment.status = :status");
-            $qb->setParameter('status', $status);
+            $qb->setParameter('status', 1);
+        }
+        if($status == 'pending'){
+            $qb->andWhere("appointment.status = :status");
+            $qb->setParameter('status', 0);
         }
 
     }
@@ -85,24 +100,56 @@ class DmsTreatmentPlanRepository extends EntityRepository
     {
         if(empty($data)){
             $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        }else{
-            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $endDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['startDate']) and !empty($data['endDate'])){
+            $start = new \DateTime($data['startDate']);
+            $startDate = $start->format('Y-m-d 00:00:00');
+            $end = new \DateTime($data['endDate']);
+            $endDate = $end->format('Y-m-d 23:59:59');
         }
-
-        if (!empty($data['startDate']) ) {
+        if (!empty($startDate) ) {
             $qb->andWhere("appointment.updated >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+            $qb->setParameter('startDate', $startDate);
         }
-        if (!empty($data['endDate'])) {
+        if (!empty($endDate)) {
             $qb->andWhere("appointment.updated <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+            $qb->setParameter('endDate', $endDate);
         }
     }
 
+    public function findFreeAppointmentTime(DmsConfig $config,$data)
+    {
 
+        $start = new \DateTime($data['appointmentDate']);
+        $startDate = $start->format('Y-m-d 00:00:00');
+        $end = new \DateTime($data['appointmentDate']);
+        $endDate = $end->format('Y-m-d 23:59:59');
+
+        $qb = $this->createQueryBuilder('appointment');
+        $qb->join('appointment.dmsInvoice','invoice');
+        $qb->select('appointment.appointmentTime as appointmentTime');
+        $qb->where('invoice.dmsConfig ='.$config->getId());
+        $qb->andWhere('invoice.assignDoctor ='.$data['assignDoctor']);
+        $qb->andWhere('appointment.status = 0');
+        $qb->andWhere("invoice.process IN (:process)");
+        $qb->setParameter('process', array('Done','Visit','Appointment'));
+        if (!empty($startDate) ) {
+            $qb->andWhere("appointment.appointmentDate >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($endDate)) {
+            $qb->andWhere("appointment.appointmentDate <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+        $appointmentTimes =array();
+        $result = $qb->getQuery()->getArrayResult();
+        foreach ($result as $res){
+            $appointmentTimes[] = $res['appointmentTime'];
+        }
+        return $appointmentTimes;
+
+    }
 
     public function findTodaySchedule(DmsConfig $config,$data= array())
     {
@@ -115,6 +162,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $qb->select('customer.name as customerName');
         $qb->addSelect('doctor.name as doctorName');
         $qb->addSelect('invoice.invoice as patientId');
+        $qb->addSelect('invoice.id as invoiceId');
         $qb->addSelect('invoice.process as process');
         $qb->addSelect('particular.particularCode as particularCode');
         $qb->addSelect('particular.name as particularName');
@@ -125,6 +173,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $qb->addSelect('appointment.status as appointmentStatus');
         $qb->where('invoice.dmsConfig ='.$config->getId());
         $this->handleSearchBetween($qb,$data);
+      //  $this->handleDateRangeFind($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
@@ -132,33 +181,30 @@ class DmsTreatmentPlanRepository extends EntityRepository
 
     }
 
-    public function appointmentDate(DmsConfig $config , $appointmentDate = '')
+    public function appointmentDate(DmsConfig $config , $search = array())
     {
 
-        if(empty($appointmentDate)){
-            $curDate =  New \DateTime("now");
-        }else{
-            $curDate =  New \DateTime($appointmentDate);
-        }
-        $curDate = $curDate->format('d-m-Y');
-        echo $appointmentDate = (string)$curDate;
-        $data = array('appointmentDate' => $appointmentDate);
-        $results = $this->findTodaySchedule($config,$data);
+        $results = $this->findTodaySchedule($config,$search);
         $data = '';
         $i = 1;
         /* @var $entity DmsTreatmentPlan */
 
         foreach ($results as $entity) {
 
+            $href ='';
+            $processIntArr = ['Appointment','Created','Done','Visit'];
+            if (in_array($entity['process'],$processIntArr)){
+                $href= '<a href="/dms/invoice/'.$entity['invoiceId'].'/edit" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>';
+            }
             $action ='<a class="btn blue sms-confirm mini   " href="javascript:" data-url="/dms/invoice/'.$entity['patientId'].'/'.$entity['id'].'/send-sms"><i class="icon-phone"></i> Send SMS</a>';
             if ($entity['appointmentStatus'] == 1)  {
-                $appointmentDate = $entity['appointmentDate'];
+                $appointmentDate = $entity['appointmentDate']->format('d-m-Y');
                 $appointmentTime = $entity['appointmentTime'];
             }else{
-                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Date">'.$entity['appointmentDate'].'</a>';
+                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Date">'.$entity['appointmentDate']->format('d-m-Y').'</a>';
                 $appointmentTime ='<a data-type="select" class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update"  data-value="'.$entity['appointmentTime'].'" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Time">'.$entity['appointmentTime'].'</a>';
             }
-            $status = ($entity['appointmentStatus'] = 1)?'Yes':'No';
+            $status = ($entity['appointmentStatus'] == 1)?'Yes':'No';
             $sendSms = ($entity['sendSms'] = 1)?'Yes':'No';
 
             $data .= '<tr>';
@@ -172,7 +218,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $data .= '<td class="numeric" >' . $entity['process'] . '</td>';
             $data .= '<td class="numeric" >' . $status . '</td>';
             $data .= '<td class="numeric" >' . $sendSms . '</td>';
-            $data .= '<td class="numeric" >'.$action.'</td>';
+            $data .= '<td class="numeric" >'.$href.$action.'</td>';
             $data .= '</tr>';
             $i++;
         }
@@ -186,30 +232,13 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $particular = $this->_em->getRepository('DmsBundle:DmsParticular')->find($data['particularId']);
         $em = $this->_em;
         $entity = new DmsTreatmentPlan();
-        $invoiceDmsParticular = $this->_em->getRepository('DmsBundle:DmsTreatmentPlan')->findOneBy(array('dmsInvoice'=>$invoice ,'dmsParticular' => $particular));
-        if(!empty($invoiceDmsParticular)) {
-            $entity = $invoiceDmsParticular;
-            if ($particular->getService()->getHasQuantity() == 1){
-                $entity->setQuantity($invoiceDmsParticular->getQuantity() + $data['quantity']);
-            }else{
-                $entity->setQuantity(1);
-            }
-            $entity->setSubTotal($data['price'] * $entity->getQuantity());
-
-        }else{
-
-            if ($particular->getService()->getHasQuantity() == 1){
-                $entity->setQuantity($data['quantity']);
-            }else{
-                $entity->setQuantity(1);
-            }
-            $entity->setPrice($data['price']);
-            $entity->setSubTotal($data['price'] * $data['quantity']);
-        }
-
+        $entity->setQuantity(1);
+        $entity->setPrice($data['price']);
+        $entity->setSubTotal($data['price'] * $data['quantity']);
         $datetime = !empty($data['appointmentDate']) ? $data['appointmentDate'] : '' ;
+        $appointmentDate = new \DateTime($datetime);
         $appointmentTime = !empty($data['appointmentTime']) ? $data['appointmentTime'] : '' ;
-        $entity->setAppointmentDate($datetime);
+        $entity->setAppointmentDate($appointmentDate);
         $entity->setAppointmentTime($appointmentTime);
         $entity->setDmsInvoice($invoice);
         $entity->setDmsParticular($particular);
@@ -243,10 +272,10 @@ class DmsTreatmentPlanRepository extends EntityRepository
             }
 
             if ($entity->getStatus() == 1)  {
-                $appointmentDate = $entity->getAppointmentDate();
+                $appointmentDate = $entity->getAppointmentDate()->format('d-m-Y');
                 $appointmentTime = $entity->getAppointmentTime();
             }else{
-                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Date">'.$entity->getAppointmentDate().'</a>';
+                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Date">'.$entity->getAppointmentDate()->format('d-m-Y').'</a>';
                 $appointmentTime ='<a data-type="select"  class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update" data-value="'.$entity->getAppointmentTime().'" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Time">'.$entity->getAppointmentTime().'</a>';
             }
 
@@ -259,14 +288,16 @@ class DmsTreatmentPlanRepository extends EntityRepository
 
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="numeric" >' . $i . '</td>';
+            $data .= '<td class="numeric" >' . $entity->getUpdated()->format('d-m-Y'). '</td>';
             $data .= '<td class="numeric" >' . $entity->getDmsParticular()->getParticularCode().' - '. $entity->getDmsParticular()->getName(). '</td>';
-            $data .= '<td class="numeric" >' . $appointmentDate .'/'.$appointmentTime. '</td>';
+            $data .= '<td class="numeric" >' . $appointmentDate .$appointmentTime. '</td>';
             $data .= '<td class="numeric" >' . $entity->getPrice() . '</td>';
             $data .= '<td class="numeric" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="numeric" >' . $discount . '</td>';
             $data .= '<td class="numeric" >' . $payment . '</td>';
             $data .= '<td class="numeric" >'.$action.'</td>';
             $data .= '</tr>';
+
             $i++;
         }
         return $data;
@@ -281,26 +312,6 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $em->persist($invoiceDmsParticular);
         $em->flush();
     }
-
-
-
-    public function monthlySummaryDate($qb,$data)
-    {
-        $day = isset($data['day'])? $data['day'] :'';
-        $month = isset($data['month'])? $data['month'] :'';
-        $year = isset($data['year'])? $data['year'] :'';
-        $compare = new \DateTime($year.' '.$month);
-        $month =  $compare->format('m');
-        $year =  $compare->format('Y');
-        $qb->andWhere('YEAR(appointment.updated) = :year');
-        $qb->andWhere('MONTH(appointment.updated) = :month');
-        $qb->setParameter('month', $month);
-        $qb->setParameter('year', $year);
-
-    }
-
-
-
 
     public function transactionOverview(DmsConfig $config , $data =array())
     {

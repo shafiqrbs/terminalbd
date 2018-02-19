@@ -49,6 +49,7 @@ class TreatmentPlanController extends Controller
             'treatmentSchedule' => $treatmentSchedule,
             'assignDoctors' => $assignDoctors,
             'treatments' => $treatments,
+            'searchForm' => $data,
         ));
 
     }
@@ -67,18 +68,20 @@ class TreatmentPlanController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-        $appointmentDate = isset($data['schedule']) ? $data['schedule'] : '';
         $curDate =  New \DateTime("now");
         $curDate = $curDate->format('d-m-Y');
         $appointmentDate = !empty($appointmentDate)? $appointmentDate :(string)$curDate;
         $data = array('appointmentDate' => $appointmentDate);
         $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
-     //   $appointments = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->appointmentDate($dmsConfig,$appointmentDate);
-        $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($dmsConfig,$data);
-        $html =  $this->renderView('DmsBundle:Invoice:schedule-plan.html.twig',
-            array('treatmentSchedule'=> $treatmentSchedule)
-        );
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('doctor'));
+        $treatments = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));
+        $treatmentSchedule  = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findTodaySchedule($config,$data);
+        $html =  $this->renderView('DmsBundle:Invoice:schedule-plan.html.twig', array(
+            'treatmentSchedule' => $treatmentSchedule,
+            'assignDoctors' => $assignDoctors,
+            'treatments' => $treatments,
+        ));
         return  New Response($html);
         exit;
     }
@@ -87,13 +90,37 @@ class TreatmentPlanController extends Controller
     {
 
         $data = $request->request->all();
-        $appointmentDate = isset($data['dateSchedule']) ? $data['dateSchedule'] : '';
         $user = $this->getUser();
         $dmsConfig = $user->getGlobalOption()->getDmsConfig();
-        $appointments = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->appointmentDate($dmsConfig,$appointmentDate);
+        $appointments = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->appointmentDate($dmsConfig,$data);
         return  New Response($appointments);
         exit;
     }
+
+    public function appointmentFreeTimeScheduleAction()
+    {
+
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $appointments = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->findFreeAppointmentTime($dmsConfig,$data);
+        $arrays = ['12.00 PM','12.15 PM',
+            '12.30 PM','12.45 PM','1.00 PM','1.15 PM','1.30 PM','1.45 PM','2.00 PM','2.15 PM',
+            '2.30 PM','2.45 PM','3.00 PM','4.15 PM','4.30 PM','4.45 PM','5.00 PM','5.15 PM',
+            '5.30 PM','5.45 PM','6.00 PM','6.15 PM','6.30 PM','6.45 PM','7.00 PM','7.15 PM',
+            '7.30 PM','7.45 PM','8.00 PM','8.15 PM','8.30 PM','8.45 PM','9.00 PM','9.15 PM','9.30 PM','9.45 PM','10.00 PM','10.15 PM','10.30 PM','10.45 PM','11.00 PM',
+            '8.00 AM','8.15 AM','8.30 AM','8.45 AM','9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
+            '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM',
+        ];
+        $array = array_diff($arrays,$appointments);
+        $items  = array();
+        $items[]= "<option value=''>-Appointment Time-</option>";
+        foreach ($array as $value):
+            $items[]= "<option value='{$value}'>{$value}</option>";
+        endforeach;
+        return new JsonResponse($items);
+    }
+
 
 
 }

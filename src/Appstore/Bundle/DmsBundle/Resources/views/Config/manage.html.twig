@@ -79,6 +79,11 @@
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
+                                                {{ form_widget(form.showAccessories) }} Show Invoice Accessories
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
                                                 {{ form_widget(form.customPrescription) }} Custom Prescription
                                             </div>
                                         </div>
@@ -160,50 +165,7 @@
                                     </div>
 
                                  </div>
-
-                            <div class="form-actions portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>Vat Information</div>
-                                    </div>
-                                </div>
-                                <div class="clearfix">&nbsp;</div>
-                                <div class="row-fluid">
-                                    <div class="span2">
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="invoiceProcess">&nbsp;</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.vatEnable) }}
-                                                        {{ form_errors(form.vatEnable) }} Vat Enable
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="row-fluid">
-                                            <div class="span6">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="vatPercentage">Vat Registration No &nbsp;</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.vatRegNo) }}
-                                                        {{ form_errors(form.vatRegNo) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="span6">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="vatPercentage">Vat Percentage &nbsp;</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.vatPercentage) }}
-                                                        {{ form_errors(form.vatPercentage) }}%
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Prescription Format</div>

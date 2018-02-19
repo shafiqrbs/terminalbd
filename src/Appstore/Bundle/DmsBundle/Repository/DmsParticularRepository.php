@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DmsBundle\Repository;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
@@ -103,18 +104,18 @@ class DmsParticularRepository extends EntityRepository
     public function getServices($config,$services){
 
 
-        $particulars = $this->getServiceWithParticular($config,$services);
-
+        $particular = $this->getMedicineParticular($config,$services);
         $data = '';
         $service = '';
-        foreach ($particulars as $particular) {
+        $result = $particular->getArrayResult();
+        foreach ($result as $particular) {
             if ($service != $particular['serviceName']) {
                 if ($service != '') {
                     $data .= '</optgroup>';
                 }
                 $data .= '<optgroup label="' .ucfirst($particular['serviceName']) . '">';
             }
-            if ($particular['serviceCode'] != '04'){
+            if ($particular['serviceFormat'] != 'treatment'){
                 $data .= '<option value="/dms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
             }else{
                 $data .= '<option value="/dms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
@@ -149,7 +150,7 @@ class DmsParticularRepository extends EntityRepository
             return  $qb;
     }
 
-    public function getMedicineParticular($config){
+    public function getMedicineParticular($config,$services){
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
@@ -165,18 +166,20 @@ class DmsParticularRepository extends EntityRepository
             ->addSelect('e.minQuantity')
             ->addSelect('e.openingQuantity')
             ->addSelect('u.name as unit')
+            ->addSelect('s.serviceFormat as serviceFormat')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
             ->addSelect('e.purchasePrice')
             ->addSelect('e.purchaseQuantity')
             ->where('e.dmsConfig = :config')->setParameter('config', $config)
             ->andWhere('s.serviceFormat IN(:process)')
-            ->setParameter('process',array_values(array('accessories')))
+            ->setParameter('process',$services)
             ->orderBy('e.name','ASC')
             ->getQuery();
             return  $qb;
     }
-    public function getAccessoriesParticular($hospital){
+
+    public function getAccessoriesParticular($config,$services){
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
@@ -184,21 +187,14 @@ class DmsParticularRepository extends EntityRepository
             ->select('e.id')
             ->addSelect('e.name')
             ->addSelect('e.particularCode')
-            ->addSelect('e.price')
-            ->addSelect('e.minimumPrice')
-            ->addSelect('e.quantity')
             ->addSelect('e.status')
             ->addSelect('e.salesQuantity')
-            ->addSelect('e.minQuantity')
             ->addSelect('e.openingQuantity')
             ->addSelect('u.name as unit')
-            ->addSelect('s.name as serviceName')
-            ->addSelect('s.code as serviceCode')
-            ->addSelect('e.purchasePrice')
             ->addSelect('e.purchaseQuantity')
-            ->where('e.dmsConfig = :config')->setParameter('config', $hospital)
+            ->where('e.dmsConfig = :config')->setParameter('config', $config)
             ->andWhere('s.serviceFormat IN(:process)')
-            ->setParameter('process',array_values(array('accessories')))
+            ->setParameter('process',$services)
             ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;
@@ -219,7 +215,6 @@ class DmsParticularRepository extends EntityRepository
             /** @var DmsParticular  $particular */
 
             $particular = $purchaseItem->getDmsParticular();
-            
             $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
             $particular->setPurchaseQuantity($qnt);
             $em->persist($particular);
@@ -228,70 +223,14 @@ class DmsParticularRepository extends EntityRepository
         }
     }
 
-    public function insertAccessories(DmsInvoice $invoice){
+    public function getSalesUpdateQnt(DmsInvoiceAccessories  $accessories){
 
         $em = $this->_em;
-
-        $em = $this->_em;
-
-        /** @var DmsInvoiceParticular $item */
-
-        if(!empty($invoice->getInvoiceParticulars())){
-            foreach($invoice->getInvoiceParticulars() as $item ){
-                /** @var DmsParticular  $particular */
-                $particular = $item->getDmsParticular();
-                if( $particular->getService()->getId() == 4 ){
-                    $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                    $particular->setSalesQuantity($qnt);
-                    $em->persist($particular);
-                    $em->flush();
-                }
-            }
-        }
-    }
-
-    public function getSalesUpdateQnt(DmsInvoice $invoice){
-
-        $em = $this->_em;
-
-        /** @var InvoiceParticular $item */
-
-        foreach($invoice->getInvoiceParticulars() as $item ){
-
-            /** @var Particular  $particular */
-
-            $particular = $item->getParticular();
-            if( $particular->getService()->getId() == 4 ){
-
-                $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                $particular->setSalesQuantity($qnt);
-                $em->persist($particular);
-                $em->flush();
-            }
-        }
-    }
-
-    public function admittedPatientAccessories(InvoiceTransaction $transaction){
-
-        $em = $this->_em;
-
-        /** @var InvoiceParticular $item */
-        if(!empty($transaction->getAdmissionPatientParticulars())){
-
-            foreach($transaction->getAdmissionPatientParticulars() as $item ){
-
-                /** @var Particular  $particular */
-
-                $particular = $item->getParticular();
-                if( $particular->getService()->getId() == 4 ){
-                    $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                    $particular->setSalesQuantity($qnt);
-                    $em->persist($particular);
-                    $em->flush();
-                }
-            }
-        }
-
+        $particular = $accessories->getDmsParticular();
+        $qnt = $particular->getSalesQuantity() + $accessories->getQuantity();
+        $particular->setSalesQuantity($qnt);
+        $em->persist($particular);
+        $em->flush();
     }
 
     public function groupServiceBy(){
@@ -303,7 +242,6 @@ class DmsParticularRepository extends EntityRepository
             ->setParameter('service',array_values(array(1,2,3,4)));
         $qb->orderBy('e.name','ASC');
         $data = $qb->getQuery()->getResult();
-
         foreach ($data as $parent => $children){
 
             foreach($children as $child => $none){
@@ -313,11 +251,5 @@ class DmsParticularRepository extends EntityRepository
         }
 
     }
-
-
-
-
-
-
 
 }

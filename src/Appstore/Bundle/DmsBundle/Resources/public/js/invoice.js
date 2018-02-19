@@ -21,6 +21,12 @@ var bindDatePicker = function(element) {
     });
 };
 
+function datePickerReload() {
+    $( ".date-picker" ).datepicker({
+        dateFormat: "dd-mm-yy"
+    });
+}
+
 $("[id^=startPicker]").each(function() {
     bindDatePicker(this);
 });
@@ -182,31 +188,6 @@ $(document).on( "change", "#invoiceParticular", function(e){
     $('#appstore_bundle_dmsbundle_invoice_payment').val(price);
 });
 
-
-$(document).on('change', '#appointmentTime', function() {
-
-
-    var appointmentDate = $('#appointmentDate').val();
-    var appointmentTime = $('#appointmentTime').val();
-    if(appointmentTime == ''){
-        return false;
-    }
-    $.post( Routing.generate('dms_invoice_appointment_datetime_check') ,{appointmentDate:appointmentDate, appointmentTime:appointmentTime } )
-        .done(function( data ) {
-            if(data == 'invalid'){
-                $("#appointmentTime option:first").val();
-                $('#cabinInvalid').notifyModal({
-                    duration : 5000,
-                    placement : 'center',
-                    overlay : true,
-                    type : 'notify',
-                    icon : false,
-                });
-            }
-        });
-
-});
-
 $(document).on('click', '.addProcedure', function() {
 
     var dataTab    = $(this).attr('data-tab');
@@ -348,6 +329,135 @@ $(document).on("click", ".deleteMedicine", function() {
     });
 });
 
+$(document).on('click', '.prescription', function() {
+
+    var url = $(this).attr('data-url');
+    var dataTitle = $(this).attr('data-title');
+    $('.dialogModal_header').html(dataTitle);
+    $('.dialog_content').dialogModal({
+        topOffset: 0,
+        top: 0,
+        type: '',
+        onOkBut: function(event, el, current) {},
+        onCancelBut: function(event, el, current) {},
+        onLoad: function(el, current) {
+            $.ajax({
+                url: url,
+                async: true,
+                success: function (response) {
+                    el.find('.dialogModal_content').html(response);
+                }
+            });
+        },
+        onClose: function(el, current) {},
+        onChange: function(el, current) {}
+    });
+
+});
+
+
+
+$(document).on('change', '#particular', function() {
+
+    var url = $(this).val();
+    if(url == ''){
+        alert('You have to add particulars from drop down and this not service item');
+        return false;
+    }
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#particularId').val(obj['particularId']);
+            $('#price').val(obj['price']);
+            $('#instruction').html(obj['instruction']);
+            $('#addParticular').attr("disabled", false);
+        }
+    })
+});
+
+$(document).on('change', '#appointmentDate', function() {
+
+    var appointmentDate = $('#appointmentDate').val();
+    if(appointmentDate == ''){
+        return false;
+    }
+    var assignDoctor = $('#appstore_bundle_dmsbundle_invoice_assignDoctor').val();
+    $.get(Routing.generate('dms_invoice_appointment_schedule_time',{assignDoctor:assignDoctor,appointmentDate:appointmentDate}),
+            function(data){
+               $('#appointmentTime').html(data);
+            }
+        );
+});
+
+$(document).on('click', '#addParticular', function() {
+
+    var particularId = $('#particularId').val();
+    if (particularId == '') {
+
+        $('#particularId').addClass('input-error');
+        $('#particularId').focus();
+        alert('Please select treatment particular');
+        return false;
+    }
+
+    var appointmentDate = $('#appointmentDate').val();
+    if (appointmentDate == '') {
+
+        $('#appointmentDate').addClass('input-error');
+        $('#appointmentDate').focus();
+        alert('Please select appointment date');
+        return false;
+    }
+
+    var price = $('#price').val();
+    var appointmentTime = $('#appointmentTime').val();
+
+    var url = $('#addParticular').attr('data-url');
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: 'particularId='+particularId+'&price='+price+'&appointmentDate='+appointmentDate+'&appointmentTime='+appointmentTime,
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('.due').html(obj['due']);
+            $('.payment').html(obj['payment']);
+            $('.discount').html(obj['discount']);
+            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $("#particular").select2().select2("val","");
+            $('#price').val('');
+            $('#addParticular').attr("disabled", true);
+            $('#addPatientParticular').attr("disabled", true);
+            $(".editable").editable();
+
+        }
+    })
+});
+
+$(document).on("click", ".treatmentDelete", function() {
+
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( response ) {
+                obj = JSON.parse(response);
+                $('#remove-'+id).hide();
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.payment').html(obj['payment']);
+                $('.discount').html(obj['discount']);
+            });
+        }
+    });
+});
+
 $(document).on("click", ".approve", function() {
 
     var id = $(this).attr("data-id");
@@ -363,76 +473,59 @@ $(document).on("click", ".approve", function() {
     });
 });
 
-$(document).on('change', '#particular', function() {
+$(document).on('click', '#addAccessories', function() {
 
-    var url = $(this).val();
-    if(url == ''){
-        alert('You have to add particulars from drop down and this not service item');
+    var accessories = $('#accessories').val();
+    if (accessories == '') {
+        $('#accessories').focus();
+        $('#accessories').addClass('input-error');
+        alert('Please select accessories name');
         return false;
     }
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#particularId').val(obj['particularId']);
-            $('#quantity').val(obj['quantity']).focus();
-            $('#price').val(obj['price']);
-            $('#instruction').html(obj['instruction']);
-            $('#addParticular').attr("disabled", false);
-        }
-    })
-});
-
-$(document).on('click', '#addParticular', function() {
-
-    var particularId = $('#particularId').val();
-    if (particularId == '') {
-
-        $('#particularId').addClass('input-error');
-        $('#particularId').focus();
-        alert('Please select treatment particular');
-        return false;
-    }
-
     var quantity = parseInt($('#quantity').val());
-    var price = $('#price').val();
-    var appointmentDate = $('#appointmentDate').val();
-    var appointmentTime = $('#appointmentTime').val();
-    if (appointmentTime == '') {
-
-        $('#appointmentTime').addClass('input-error');
-        $('#appointmentTime').focus();
-        alert('Please select appointment date & time');
-        return false;
-    }
-
-    var url = $('#addParticular').attr('data-url');
+    var url = $(this).attr('data-url');
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price+'&appointmentDate='+appointmentDate+'&appointmentTime='+appointmentTime,
+        data: 'accessories='+accessories+'&quantity='+quantity,
         success: function (response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').val(obj['vat']);
-            $('.due').html(obj['due']);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-            $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $("#particular").select2().select2("val","");
-            $('#price').val('');
+            $("#accessories").select2().select2("val","");
             $('#quantity').val('1');
-            $('#addParticular').attr("disabled", true);
-            $('#addPatientParticular').attr("disabled", true);
+            $('#invoiceAccessories').html(response);
             $(".editable").editable();
 
         }
     })
+});
+
+$(document).on("click", ".deleteAccessories", function() {
+
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                $('#accessories-'+id).hide();
+            });
+        }
+    });
+});
+
+$(document).on("click", ".approveAccessories", function() {
+
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                $('#approved-'+id).hide();
+            });
+        }
+    });
 });
 
 $(document).on('click', '.appointmentSchedule', function() {
@@ -440,7 +533,7 @@ $(document).on('click', '.appointmentSchedule', function() {
     var url = $(this).attr('data-url');
     var dataTitle = $(this).attr('data-title');
     $('.dialogModal_header').html(dataTitle);
-    $('#dialog_content').dialogModal({
+    $('.dialog_content').dialogModal({
         topOffset: 0,
         top: 0,
         type: '',
@@ -463,7 +556,7 @@ $(document).on('click', '.appointmentSchedule', function() {
 
 $(document).on('click', '#searchAppointment', function() {
 
-    var url = $(this).attr('data-url');
+    var url = $('form#appointmentForm').attr('action');
     $.ajax({
         url: url,
         type: 'POST',
@@ -472,33 +565,14 @@ $(document).on('click', '#searchAppointment', function() {
         contentType: false,
         success: function (response) {
             $('#appointmentSchedule').html(response);
+            setTimeout(datePickerReload(),1000);
             EditableInit();
         }
     })
 
 });
 
-$(document).on("click", ".treatmentDelete", function() {
 
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                obj = JSON.parse(data);
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('.payment').html(obj['payment']);
-                $('.due').html(obj['due']);
-                $('.discountAmount').html(obj['discount']);
-                $('#msg').html(obj['msg']);
-                $('#remove-'+id).hide();
-            });
-        }
-    });
-});
 
 $(document).on("click", "#printButton", function() {
 

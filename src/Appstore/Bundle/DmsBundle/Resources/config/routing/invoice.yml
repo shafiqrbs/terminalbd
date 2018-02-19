@@ -54,6 +54,10 @@ dms_invoice_medicine_delete:
     path:     /{id}/medicine-delete
     defaults: { _controller: "DmsBundle:Invoice:deleteMedicine" }
 
+dms_invoice_prescription_preview:
+    path:     /{id}/prescription-preview
+    defaults: { _controller: "DmsBundle:Invoice:invoicePrintPreview" }
+
 dms_invoice_treatment_approved:
     path:     /{id}/treatment-approved
     defaults: { _controller: "DmsBundle:Invoice:treatmentApproved" }
@@ -75,12 +79,21 @@ dms_invoice_appointment_datetime_select:
     options:
            expose: true
 
-dms_invoice_discount_update:
-    path:     /invoice/invoice-dicount-update
-    defaults: { _controller: "DmsBundle:Invoice:invoiceDiscountUpdate" }
+dms_invoice_accessories_add:
+    path:     /{invoice}/accessories-add
+    defaults: { _controller: "DmsBundle:Invoice:addAccessories" }
     methods:  POST
     options:
             expose: true
+
+dms_invoice_accessories_delete:
+    path:     /{id}/accessories-delete
+    defaults: { _controller: "DmsBundle:Invoice:deleteAccessories" }
+
+dms_invoice_accessories_approved:
+    path:     /{id}/accessories-approved
+    defaults: { _controller: "DmsBundle:Invoice:approvedAccessories" }
+
 
 dms_invoice_approved:
     path:     /{id}/invoice-approved
@@ -98,17 +111,10 @@ dms_invoice_delete:
     path:     /{id}/delete
     defaults: { _controller: "DmsBundle:Invoice:delete" }
 
-dms_invoice_reverse:
-    path:     /{invoice}/invoice-reverse-create
-    defaults: { _controller: "DmsBundle:Invoice:pathologicalInvoiceReverse" }
-
 dms_invoice_reverse_show:
     path:     /{id}/invoice-reverse-show
     defaults: { _controller: "DmsBundle:Invoice:InvoiceReverseShow" }
 
-dms_invoice_discount_delete:
-    path:     /{id}/discount-delete
-    defaults: { _controller: "DmsBundle:Invoice:discountDelete" }
 
 dms_invoice_confirm:
     path:     /{id}/invoice-confirm
@@ -195,12 +201,16 @@ dms_treatment_plan:
     path:     /treatment-plan
     defaults: { _controller: "DmsBundle:TreatmentPlan:index" }
 
-
-
 dms_treatment_appointment_schedule:
     path:     /treatment-appointment-date
     defaults: { _controller: "DmsBundle:TreatmentPlan:appointmentDateSchedule" }
     methods:  POST
+    options:
+           expose: true
+
+dms_invoice_appointment_schedule_time:
+    path:     /treatment-appointment-free-time
+    defaults: { _controller: "DmsBundle:TreatmentPlan:appointmentFreeTimeSchedule" }
     options:
            expose: true
 

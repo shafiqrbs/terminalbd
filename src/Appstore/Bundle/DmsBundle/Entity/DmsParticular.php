@@ -42,6 +42,11 @@ class DmsParticular
     private $dmsDoctorInvoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories", mappedBy="assignDoctor")
+     **/
+    private $dmsInvoiceAccessories;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="assignDoctor")
      **/
     private $assignDoctorInvoices;
@@ -825,6 +830,14 @@ class DmsParticular
         $this->salesQuantity = $salesQuantity;
     }
 
+    /**
+     * @return int
+     */
+    public function getSalesQuantity()
+    {
+        return $this->salesQuantity;
+    }
+
 
     /**
      * @return User
@@ -1125,5 +1138,15 @@ class DmsParticular
     {
         $this->purchasePrice = $purchasePrice;
     }
+
+    /**
+     * @return DmsInvoiceAccessories
+     */
+    public function getDmsInvoiceAccessories()
+    {
+        return $this->dmsInvoiceAccessories;
+    }
+
+
 
 }

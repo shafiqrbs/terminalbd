@@ -86,9 +86,9 @@ class DmsTreatmentPlan
     private $balance;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="appointmentDate", type="string", nullable=true)
+     * @ORM\Column(name="appointmentDate",  type="datetime", nullable=true)
      */
     private $appointmentDate;
 
@@ -351,21 +351,6 @@ class DmsTreatmentPlan
         $this->discount = $discount;
     }
 
-    /**
-     * @return string
-     */
-    public function getAppointmentDate()
-    {
-        return $this->appointmentDate;
-    }
-
-    /**
-     * @param string $appointmentDate
-     */
-    public function setAppointmentDate($appointmentDate)
-    {
-        $this->appointmentDate = $appointmentDate;
-    }
 
     /**
      * @return string
@@ -397,6 +382,22 @@ class DmsTreatmentPlan
     public function setSendSms($sendSms)
     {
         $this->sendSms = $sendSms;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getAppointmentDate()
+    {
+        return $this->appointmentDate;
+    }
+
+    /**
+     * @param \DateTime $appointmentDate
+     */
+    public function setAppointmentDate($appointmentDate)
+    {
+        $this->appointmentDate = $appointmentDate;
     }
 
 

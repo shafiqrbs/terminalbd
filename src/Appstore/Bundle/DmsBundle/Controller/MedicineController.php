@@ -36,7 +36,7 @@ class MedicineController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'));
         $pagination = $this->paginate($entities);
         $entity = new DmsParticular();
         $form = $this->createCreateForm($entity);
@@ -57,7 +57,7 @@ class MedicineController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'));
         $pagination = $this->paginate($entities);
         $entity = new DmsParticular();
         $form = $this->createCreateForm($entity);
@@ -113,7 +113,7 @@ class MedicineController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'));
         $pagination = $this->paginate($entities);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find DmsParticular entity.');
@@ -155,7 +155,7 @@ class MedicineController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'));
         $pagination = $this->paginate($entities);
         $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
 
