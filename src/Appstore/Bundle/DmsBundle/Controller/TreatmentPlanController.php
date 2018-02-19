@@ -48,7 +48,7 @@ class TreatmentPlanController extends Controller
         $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('doctor'));
         $treatments = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindDentalServiceParticular($config,array('treatment'));
         return $this->render('DmsBundle:Invoice:treatmentSchedule.html.twig', array(
-            'treatmentSchedule' => $pagination,
+            'entities' => $pagination,
             'assignDoctors' => $assignDoctors,
             'treatments' => $treatments,
             'searchForm' => $data,

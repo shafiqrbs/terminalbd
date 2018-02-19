@@ -204,7 +204,7 @@ class InvoiceController extends Controller
             }
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
-            if(!empty($entity->getCustomer()) and empty($data['appstore_bundle_dmsbundle_invoice']['process'])){
+            if(!empty($entity->getCustomer()) and  $entity->getProcess() == 'Created'){
                 $entity->setProcess('Visit');
             }
             if (!in_array($entity->getProcess(), array('Canceled', 'Created')) and $entity->isSendSms() != 1) {

@@ -91,7 +91,7 @@ class DmsParticularRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
             ->where('e.dmsConfig = :config')->setParameter('config', $config)
-            ->andWhere('e.status = :status')->setParameter('status', 1)
+         /*   ->andWhere('e.status = :status')->setParameter('status', 1)*/
             ->andWhere('s.serviceFormat IN(:slugs)')
             ->setParameter('slugs',array_values($services))
             ->orderBy('s.sorting','ASC')
