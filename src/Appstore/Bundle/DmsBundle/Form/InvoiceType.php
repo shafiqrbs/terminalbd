@@ -43,7 +43,7 @@ class InvoiceType extends AbstractType
         $builder
 
             ->add('process', 'choice', array(
-                'attr'=>array('class'=>'m-wrap select-custom'),
+                'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'empty_value' => '---Choose process---',

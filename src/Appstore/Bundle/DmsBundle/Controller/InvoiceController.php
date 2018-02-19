@@ -39,6 +39,10 @@ class InvoiceController extends Controller
         return $pagination;
     }
 
+    /**
+     * @Secure(roles="ROLE_DMS")
+     */
+
     public function indexAction()
     {
 
@@ -119,8 +123,9 @@ class InvoiceController extends Controller
         return $form;
     }
 
-
-
+    /**
+     * @Secure(roles="ROLE_DMS")
+     */
 
     public function editAction($id)
     {
@@ -157,7 +162,10 @@ class InvoiceController extends Controller
 
         $services    = $em->getRepository('DmsBundle:DmsService')->getServiceLists($dmsConfig);
         $treatmentPlans     = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment','other-service'));
-        $accessories        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('accessories'));
+        $accessories ='';
+        if($entity->getDmsConfig()->isShowAccessories() == 1 ){
+            $accessories        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('accessories'));
+        }
         $attributes         = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
@@ -169,6 +177,85 @@ class InvoiceController extends Controller
             'attributes' => $attributes,
             'form' => $editForm->createView(),
         ));
+    }
+
+    /**
+     * @Secure(roles="ROLE_DMS")
+     */
+    public function updateAction(Request $request, DmsInvoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+        $data = $request->request->all();
+        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceItems($entity,$data);
+        if($editForm->isValid() and !empty($entity->getInvoiceParticulars())) {
+
+            if (!empty($data['customer']['name'])) {
+
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $data);
+                $entity->setCustomer($customer);
+                $entity->setMobile($mobile);
+            }
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+            $entity->setPaymentInWord($amountInWords);
+            if(!empty($entity->getCustomer()) and empty($data['appstore_bundle_dmsbundle_invoice']['process'])){
+                $entity->setProcess('Visit');
+            }
+            if (!in_array($entity->getProcess(), array('Canceled', 'Created')) and $entity->isSendSms() != 1) {
+                /* @var $option GlobalOption */
+                $option = $this->getUser()->getGlobalOption();
+                if(!empty($option->getNotificationConfig()) and  !empty($option->getSmsSenderTotal()->getRemaining() > 0) and $option->getNotificationConfig()->getSmsActive() == 1 ) {
+                    $dispatcher = $this->container->get('event_dispatcher');
+                    $dispatcher->dispatch('setting_tool.post.dms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\DmsInvoiceSmsEvent($entity));
+                    $entity->setSendSms(1);
+                }
+            }
+            $em->flush();
+            $file = $request->files->all();
+            if(!empty($file) and !empty($data['investigation'])){
+                $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->fileUpload($entity,$data,$file);
+                $data = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceInvestigationUpload($entity, $data);
+                return new Response($data);
+            }
+        }
+        exit;
+    }
+    /**
+     * @Secure(roles="ROLE_DMS")
+     */
+    public function showAction(DmsInvoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
+        if ($dmsConfig->getId() == $entity->getDmsConfig()->getId()) {
+            return $this->render('DmsBundle:Invoice:show.html.twig', array(
+                'entity' => $entity,
+            ));
+        } else {
+            return $this->redirect($this->generateUrl('dms_invoice'));
+        }
+
+    }
+    /**
+     * @Secure(roles="ROLE_DMS")
+     */
+    public function deleteAction(DmsInvoice $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        return new Response(json_encode(array('success' => 'success')));
+        exit;
     }
 
     public function particularSearchAction(DmsParticular $particular)
@@ -381,63 +468,6 @@ class InvoiceController extends Controller
         exit;
     }
 
-    public function updateAction(Request $request, DmsInvoice $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-        $data = $request->request->all();
-
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceItems($entity,$data);
-        if($editForm->isValid() and !empty($entity->getInvoiceParticulars())) {
-
-            if (!empty($data['customer']['name'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $data);
-                $entity->setCustomer($customer);
-                $entity->setMobile($mobile);
-            }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setPaymentInWord($amountInWords);
-            if (!in_array($entity->getProcess(), array('Canceled', 'Created')) and $entity->isSendSms() != 1) {
-                /* @var $option GlobalOption */
-                $option = $this->getUser()->getGlobalOption();
-                if(!empty($option->getNotificationConfig()) and  !empty($option->getSmsSenderTotal()->getRemaining() > 0) and $option->getNotificationConfig()->getSmsActive() == 1 ) {
-                    $dispatcher = $this->container->get('event_dispatcher');
-                    $dispatcher->dispatch('setting_tool.post.dms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\DmsInvoiceSmsEvent($entity));
-                    $entity->setSendSms(1);
-                }
-            }
-            $em->flush();
-            $file = $request->files->all();
-            if(!empty($file) and !empty($data['investigation'])){
-                $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->fileUpload($entity,$data,$file);
-                $data = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceInvestigationUpload($entity, $data);
-                return new Response($data);
-            }
-        }
-        exit;
-    }
-
-    public function showAction(DmsInvoice $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
-        if ($dmsConfig->getId() == $entity->getDmsConfig()->getId()) {
-            return $this->render('DmsBundle:Invoice:show.html.twig', array(
-                'entity' => $entity,
-            ));
-        } else {
-            return $this->redirect($this->generateUrl('dms_invoice'));
-        }
-
-    }
-
     public function patientLoadAction(DmsInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -516,22 +546,7 @@ class InvoiceController extends Controller
     }
 
 
-    /**
-     * @Secure(roles="ROLE_DMS")
-     */
 
-    public function deleteAction(DmsInvoice $entity)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
-        $em->remove($entity);
-        $em->flush();
-        return new Response(json_encode(array('success' => 'success')));
-        exit;
-    }
 
     public function invoiceReverseAction(DmsInvoice $invoice)
     {

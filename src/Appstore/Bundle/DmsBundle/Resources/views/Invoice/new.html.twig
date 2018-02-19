@@ -621,6 +621,7 @@
                                         </div>
                                     </div>
                                         <div class="clearfix">&nbsp;</div>
+                                        {% if entity.dmsConfig.showAccessories == 1 %}
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="form-actions portlet box green">
@@ -705,6 +706,7 @@
                                             </div>
                                         </div>
                                         <div class="clearfix">&nbsp;</div>
+                                        {% endif %}
                                         <div class="form-actions portlet box blue">
                                             <div class="portlet-title">
                                                 <div class="caption"><i class="icon-reorder"></i>Prescription</div>
@@ -722,6 +724,7 @@
                                             </div>
                                         </div>
                                         <div class="clearfix">&nbsp;</div>
+
                                         <div class="row-fluid particular-info">
                                             <div class="span6">
                                                 <div class="form-control">
@@ -825,7 +828,6 @@
                                                 {{ form_widget(form.process) }}
                                                 {{ form_errors(form.process) }}
                                                 <div class="btn-group">
-                                                    <button type="button"  class="btn blue" id="finalActionButton"><i class="icon-save"></i> Save</button>
                                                     <a class="btn yellow prescription"
                                                        data-title="{{ entity.customer.name }}<a target='_blank' href='{{ path('dms_invoice_print_invoice',{'id':entity.id}) }}' class='btn blue preview-print'><i class='icon-print'></i>&nbsp; Print</a>"
                                                        data-topoffset="0" data-top="10%"

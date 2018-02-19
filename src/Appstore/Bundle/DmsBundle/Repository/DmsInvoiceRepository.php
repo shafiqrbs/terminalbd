@@ -59,14 +59,14 @@ class DmsInvoiceRepository extends EntityRepository
         if (!empty($createdStart)) {
             $compareTo = new \DateTime($createdStart);
             $created =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.created => :created");
+            $qb->andWhere("e.created >= :created");
             $qb->setParameter('created', $created);
         }
 
         if (!empty($createdEnd)) {
             $compareTo = new \DateTime($createdEnd);
             $createdEnd =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.deliveryDateTime <= :createdEnd");
+            $qb->andWhere("e.created <= :createdEnd");
             $qb->setParameter('createdEnd', $createdEnd);
         }
 

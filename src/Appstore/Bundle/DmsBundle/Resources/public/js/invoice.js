@@ -250,30 +250,6 @@ $(document).on('click', '.addInvestigation', function() {
     });
 });
 
-$('#invoiceFormxxxx').submit(function(e){
-
-    var url = $('form#invoiceForm').attr('action');
-    $.ajax({
-
-        url: url,
-        type: 'POST',
-        data: new FormData(this),
-        processData: false,
-        contentType: false,
-        beforeSend: function(){
-            $('.ajax-loading').show().addClass('loading').fadeIn(3000);
-        },
-        success: function(response){
-            document.getElementById('frame').contentDocument.location.reload(true);
-            $('.ajax-loading').fadeOut(3000);
-        }
-    });
-    e.preventDefault();
-
-});
-
-
-
 $(document).on("click", ".particularDelete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
@@ -572,49 +548,6 @@ $(document).on('click', '#searchAppointment', function() {
 
 });
 
-
-
-$(document).on("click", "#printButton", function() {
-
-    var formData = new FormData($('form#invoiceForm')[0]);
-    var url = $('form#invoiceForm').attr('action');
-    var print = $(this).attr("data-url");
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        data:formData,
-        success: function(response){
-            window.open(print,'_blank');
-        }
-    });
-
-});
-
-
-
-/*
-$(document).on("change", "#invoiceFormxx", function() {
-
-    var url = $(this).attr("action");
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: new FormData($('#invoiceForm')[0]),
-        processData: false,
-        contentType: false,
-        success: function (response) {
-
-        }
-    })
-
-});
-
-*/
-
-
-
 var form = $("#invoiceForm").validate({
 
     rules: {
@@ -664,28 +597,6 @@ $('#appstore_bundle_dmsbundle_invoice_customer_age').on('click', function(){
 });
 
 
-
-$(document).on("click", "#savePatientButtonxxx", function() {
-
-
-        var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
-        var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
-        $.ajax({
-            url:url ,
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            data:formData,
-            beforeSend: function () {
-                $('.loader-double').fadeIn(1000).addClass('is-active');
-            },
-            success: function(response){
-                location.reload();
-            }
-        });
-
-});
-
 $(document).on("click", ".saveButton", function() {
 
     var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
@@ -703,7 +614,7 @@ $(document).on("click", ".saveButton", function() {
 
 });
 
-$(document).on("click", "#finalActionButton", function() {
+$(document).on("change", ".invoiceProcess", function() {
 
     var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
     var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
@@ -716,9 +627,7 @@ $(document).on("click", "#finalActionButton", function() {
                 contentType: false,
                 type: 'POST',
                 data: formData,
-                success: function (response) {
-                    location.reload();
-                }
+                success: function (response){}
             });
         }
     });
