@@ -14,7 +14,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_doctor') }}">Doctor</a>
+                    <a href="{{ path('dms_doctor') }}">Doctor</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Doctor Information</a></li>
@@ -36,8 +36,8 @@
                     <div class="caption"><i class="icon-reorder"></i>Doctor: {{ entity.assignDoctor.userFullName }}</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn red" href="{{ path('hms_doctor_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
-                            <a class="btn" href="{{ path('hms_doctor') }}"><i class="icon-th-list"></i> Doctor</a>
+                            <a class="btn red" href="{{ path('dms_doctor_new') }}"><i class="icon-plus-sign"></i> Add New Doctor</a>
+                            <a class="btn" href="{{ path('dms_doctor') }}"><i class="icon-th-list"></i> Doctor</a>
                         </div>
                     </div>
                 </div>
@@ -55,8 +55,6 @@
                         <div class="span4">
                             <h4>Personal:</h4>
                             <ul class="unstyled">
-                                <li><strong>Department:</strong>&nbsp;  {% if entity.department is not empty %}{{ entity.department.name }}{% endif %}</li>
-                                <li><strong>Category:</strong>&nbsp;  {% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</li>
                                 <li><strong>Current Job:</strong>&nbsp;  {% if entity.currentJob is not empty %}{{ entity.currentJob }}{% endif %}</li>
                             </ul>
                         </div>
@@ -65,9 +63,8 @@
                             <h4>Official:</h4>
                             <ul class="unstyled">
                                 <li><strong>Fee:</strong>&nbsp;  {{ entity.price }}</li>
-                                <li><strong>Commission:</strong>&nbsp;  {% if entity.commission is not empty %}{{ entity.commission }}{% endif %}</li>
                                 <li><strong>Room:</strong> {% if entity.room is not empty %}{{ entity.room }}{% endif %}</li>
-                                <li><strong>Assign Operator:</strong> {% if entity.assignOperator is not empty %}{{ entity.assignOperator.fullName }}{% endif %}}</li>
+                                <li><strong>Assign Operator:</strong> {% if entity.assignOperator is not empty %}{{ entity.assignOperator.fullName }}{% endif %}</li>
                                 <li><strong>Hour:</strong> {% if entity.startHour is not empty %}{{ entity.startHour }}{% endif %} To {% if entity.endHour is not empty %}{{ entity.endHour }}{% endif %}</li>
                                 <li><strong>Off Day:</strong>&nbsp;{% if entity.weeklyOffDay is not empty %}{% for off in  entity.weeklyOffDay %}{{ off }}{% endfor %}{% endif %}</li>
                             </ul>

@@ -153,7 +153,7 @@ class VendorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-            return $this->redirect($this->generateUrl('dms_vendor_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('dms_vendor'));
         }
 
         return $this->render('DmsBundle:Vendor:index.html.twig', array(

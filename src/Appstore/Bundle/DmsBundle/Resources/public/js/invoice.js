@@ -241,6 +241,10 @@ $(document).on('click', '.addInvestigation', function() {
     $.ajax({
         url:url ,
         type: 'POST',
+        beforeSend: function() {
+            $('.addInvestigation').show().addClass('btn-ajax-loading').fadeIn(3000);
+            $('.btn-ajax-loading').attr("disabled", true);
+        },
         processData: false,
         contentType: false,
         data:formData,
@@ -248,6 +252,8 @@ $(document).on('click', '.addInvestigation', function() {
             $('#'+dataTab).find('#procedure-'+showDiv).html(response);
             $('#'+dataTab).find('#investigation').val('');
             $('#'+dataTab).find('#file').val('');
+            $('.btn-ajax-loading').attr("disabled", false);
+            $('.addInvestigation').removeClass('btn-ajax-loading');
         }
     });
 });

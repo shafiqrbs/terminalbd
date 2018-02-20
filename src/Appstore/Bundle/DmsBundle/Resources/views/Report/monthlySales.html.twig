@@ -5,7 +5,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                Sales overview
+                Monthly Sales overview
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -14,7 +14,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="javascript:">Sales overview</a>
+                    <a href="javascript:">Monthly Sales overview</a>
                 </li>
                 <li class="pull-right btn blue disabled mini">
                     <i class="fa fa-calendar"></i>
@@ -31,7 +31,9 @@
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-reorder"></i>Monthly Sales Overview</div>
                     <div class="actions">
-                        <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
+                        {% set month = searchForm.month is defined ? searchForm.month :'' %}
+                        {% set year = searchForm.year is defined ? searchForm.year :'' %}
+                        <a target="_blank" href="{{ path('dms_report_sales_monthly_pdf',{'month':month,'year':year}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
                     </div>
                 </div>
                 <div class="portlet-body form">
@@ -100,7 +102,7 @@
                         </tfoot>
                     </table>
                     <div class="clearfix">&nbsp;</div>
-                    <div class="clearfix">&nbsp;</div>
+
                 </div>
             </div>
         </div>

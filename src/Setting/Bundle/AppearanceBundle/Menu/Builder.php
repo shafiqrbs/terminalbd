@@ -131,7 +131,7 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 $roles = $securityContext->getToken()->getUser()->getRoles();
                 if (array_intersect(array('ROLE_ADMIN','ROLE_SUPER_ADMIN','ROLE_DOMAIN_DOCTOR','ROLE_DOMAIN_MEDICINE_ADMIN','ROLE_DOMAIN_MEDICINE_MANAGER','ROLE_DOMAIN_HOSPITAL_MANAGER','ROLE_DOMAIN_HOSPITAL_DOCTOR','ROLE_DOMAIN_DMS_DOCTOR','ROLE_DOMAIN_DMS_ADMIN','ROLE_DOMAIN'),$roles)){
-                    $menu = $this->DrugMenu($menu);
+                  //  $menu = $this->DrugMenu($menu);
                 }
             }
 

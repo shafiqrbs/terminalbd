@@ -84,7 +84,7 @@ class PurchaseController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        $particulars = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config);
+        $particulars = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'));
 
         return $this->render('DmsBundle:Purchase:new.html.twig', array(
             'entity' => $entity,

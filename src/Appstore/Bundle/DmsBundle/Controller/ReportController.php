@@ -6,6 +6,7 @@ namespace Appstore\Bundle\DmsBundle\Controller;
 
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,7 +41,7 @@ class ReportController extends Controller
         $config = $user->getGlobalOption()->getDmsConfig();
         $salesTotalTransactionOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->transactionOverview($config,$data);
         $serviceOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findWithServiceOverview($config,$data);
-        return $this->render('DmsBundle:Report:salesSumary.html.twig', array(
+        return $this->render('DmsBundle:Report:salesSummary.html.twig', array(
 
             'salesOverview'      => $salesTotalTransactionOverview,
             'serviceOverview'               => $serviceOverview,
@@ -49,6 +50,36 @@ class ReportController extends Controller
         ));
 
     }
+
+
+    public function salesSummaryPdfAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $salesTotalTransactionOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->transactionOverview($config,$data);
+        $serviceOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findWithServiceOverview($config,$data);
+        $html = $this->renderView(
+            'DmsBundle:Report:salesSummaryPdf.html.twig', array(
+                'salesOverview'      => $salesTotalTransactionOverview,
+                'serviceOverview'               => $serviceOverview,
+                'searchForm'                    => $data,
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='sales-summary-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
+    }
+
+
+
     public function serviceBaseSummaryAction()
     {
 
@@ -73,7 +104,7 @@ class ReportController extends Controller
 
     }
 
-    public function allyearlySalesAction()
+    public function allYearSalesAction()
     {
         $data = $_REQUEST;
         $user = $this->getUser();
@@ -85,6 +116,29 @@ class ReportController extends Controller
         ));
 
     }
+
+    public function allYearSalesPdfAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->allYearlySales($dmsConfig,$data);
+        $html = $this->renderView(
+            'DmsBundle:Report:allYearlySalesPdf.html.twig', array(
+                'entities' => $dailyReceive,
+                'searchForm' => $data,
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='sales-summary-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
+    }
+
 
     public function yearlySalesAction()
     {
@@ -99,6 +153,30 @@ class ReportController extends Controller
 
     }
 
+    public function  yearlySalesPdfAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->monthlySales($dmsConfig,$data);
+        $html = $this->renderView(
+            'DmsBundle:Report:yearlySalesPdf.html.twig', array(
+                'entities' => $dailyReceive,
+                'searchForm' => $data,
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='yearly-sales-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
+
+    }
+
+
     public function monthlySalesAction()
     {
         $data = $_REQUEST;
@@ -109,6 +187,29 @@ class ReportController extends Controller
             'entities' => $dailyReceive,
             'searchForm' => $data,
         ));
+
+    }
+
+    public function monthlySalesPdfAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
+        $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->monthlySales($dmsConfig,$data);
+        $html = $this->renderView(
+            'DmsBundle:Report:monthlySalesPdf.html.twig', array(
+                'entities' => $dailyReceive,
+                'searchForm' => $data,
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='monthly-sales-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
 
     }
 
@@ -130,23 +231,71 @@ class ReportController extends Controller
 
     }
 
-    public function treatmentWiseSalesAction()
+    public function salesPdfAction()
     {
         $data = $_REQUEST;
         $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getDmsConfig();
-        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->dailySales($dmsConfig,$data);
-        $assignDoctors = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($dmsConfig,array('doctor'));
-        $treatments = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getFindWithParticular($config,array('treatment'));
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $dailyReceive = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->salesDetails($config,$data);
+        $html = $this->renderView(
+            'DmsBundle:Report:salesPdf.html.twig', array(
+                'entities' => $dailyReceive,
+                'searchForm' => $data,
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='daily-sales-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
+
+    }
+
+
+    public function treatmentWiseSalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $serviceOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findWithServiceOverview($config,$data);
 
         return $this->render('DmsBundle:Report:treatmentWiseSales.html.twig', array(
-            'entities' => $entities,
-            'assignDoctors' => $assignDoctors,
-            'treatments' => $treatments,
+            'serviceOverview' => $serviceOverview,
             'searchForm' => $data,
         ));
 
     }
+
+    public function treatmentWiseSalesPdfAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getDmsConfig();
+        $serviceOverview = $em->getRepository('DmsBundle:DmsTreatmentPlan')->findWithServiceOverview($config,$data);
+        $html = $this->renderView(
+            'DmsBundle:Report:treatmentWiseSalesPdf.html.twig', array(
+                'serviceOverview' => $serviceOverview,
+                'searchForm' => $data,
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='daily-sales-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
+
+    }
+
 
 
 

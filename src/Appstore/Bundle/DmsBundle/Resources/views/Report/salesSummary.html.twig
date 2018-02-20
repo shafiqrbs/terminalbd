@@ -30,13 +30,19 @@
             <div class="portlet box green">
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-reorder"></i>Sales Overview</div>
+                    <div class="actions">
+                        {% set process = searchForm.process is defined ? searchForm.process :'' %}
+                        {% set date = searchForm.date is defined ? searchForm.date :'' %}
+                        <a target="_blank" href="{{ path('dms_report_sales_summary_pdf',{'process':process,'date':date}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
+                    </div>
                 </div>
                 <div class="portlet-body form">
                     <form class="search-form" action="" method="get" name="itemSearch">
                         <div class="row-fluid">
-                            <div class="span3"></div>
+                            <div class="span6"></div>
                             <div class="span3">
                                 <select id="process" name="process" class="span12 m-wrap">
+                                    <option  value="">--Select Process--</option>
                                     <option {% if searchForm.process is defined and searchForm.process == 'visit' %} selected="selected" {% endif %} value="visit">Visit</option>
                                     <option {% if searchForm.process is defined and searchForm.process == 'appointment' %} selected="selected" {% endif %} value="appointment">Appointment</option>
                                     <option {% if searchForm.process is defined and searchForm.process == 'done' %} selected="selected" {% endif %} value="done">Done</option>
@@ -47,7 +53,7 @@
                             <div class="span3">
                                 <div class="controls">
                                     <div class="input-append span11">
-                                        <input type="text" id="date" name="date"  class="span11 m-wrap datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                        <input type="text" id="date" name="date"  class="span11 m-wrap date-picker" value="{% if searchForm.date is defined %}{{ searchForm.date }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.date is defined %}{{ searchForm.date }}{% endif %}">
                                         <div class="btn-group">
                                             <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                         </div>
@@ -59,9 +65,6 @@
                     <div class="form-actions portlet box green">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-money"></i>Sales Overview</div>
-                            <div class="actions">
-                                <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
-                            </div>
                         </div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
@@ -95,12 +98,10 @@
                     <div class="form-actions portlet box green">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-money"></i>Treatment Base Sales</div>
-                            <div class="actions">
-                                <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
-                            </div>
                         </div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
+                    {% if serviceOverview is defined and serviceOverview is not empty %}
                     <table class="table table-bordered table-striped table-condensed flip-content ">
                         <thead>
                         <tr>
@@ -113,7 +114,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% if serviceOverview is defined and serviceOverview is not empty %}
+
                             {% set subTotal = 0 %}
                             {% set discount = 0 %}
                             {% set payment = 0 %}
@@ -130,29 +131,23 @@
                                     <th class="numeric">{{ (service.subTotal - service.payment - service.discount)|number_format }}</th>
                                 </tr>
                             {% endfor %}
-                        {% endif %}
+
                         </tbody>
                         <tfoot>
                         <tr><th>Sales Summary</th><th>{{ subTotal|number_format }}</th><th>{{ discount|number_format }}</th><th>{{ (subTotal- discount)|number_format }}</th><th>{{ payment|number_format }}</th><th>{{ (subTotal- discount - payment)|number_format }}</th></tr>
                         </tfoot>
                     </table>
+                    {% endif %}
                     <div class="clearfix">&nbsp;</div>
                 </div>
             </div>
         </div>
     </div>
     {% endblock %}
-    {% block cssBlock %}
-        {% stylesheets filter='cssrewrite'
-        '@AccountingBundle/Resources/public/css/style.css'
-        %}
-        <link rel="stylesheet" href="{{ asset_url }}"/>
-        {% endstylesheets %}
-    {% endblock  %}
     {% block javascriptBlock %}
         {{ parent() }}
         {% javascripts
-        '@AccountingBundle/Resources/public/js/approveProcess.js'
+        '@DmsBundle/Resources/public/js/approveProcess.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}

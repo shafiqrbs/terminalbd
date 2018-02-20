@@ -35,8 +35,15 @@
                         <div class="caption"><i class="icon-reorder"></i> Report for Sales Details</div>
                         <div class="actions">
                             <div class="btn-group">
-                            <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
-                            <a target="_blank" href="" class="btn yellow"><i class="icon icon-download"></i> Excel</a>
+                                {% set name = searchForm.name is defined ? searchForm.name : '' %}
+                                {% set mobile = searchForm.mobile is defined ? searchForm.mobile : '' %}
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate : '' %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate : '' %}
+                                {% set treatment = searchForm.treatment is defined ? searchForm.treatment : '' %}
+                                {% set doctor = searchForm.doctor is defined ? searchForm.doctor : '' %}
+                                {% set process = searchForm.process is defined ? searchForm.process : '' %}
+                                {% set invoice = searchForm.invoice is defined ? searchForm.invoice : '' %}
+                                <a target="_blank" href="{{ path('dms_report_sales_pdf',{'name':name,'mobile':mobile,'startDate':startDate,'endDate':endDate,'treatment':treatment,'doctor':doctor,'process':process,'invoice':invoice}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
                             </div>
                         </div>
                     </div>
