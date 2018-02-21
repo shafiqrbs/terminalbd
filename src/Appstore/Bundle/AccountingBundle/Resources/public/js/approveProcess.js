@@ -1,4 +1,4 @@
-function AccountingApproveProcess(){
+function AccountingApproveProcess(){}
 
     $( ".date-picker" ).datepicker({
         dateFormat: "dd-mm-yy",
@@ -263,5 +263,5 @@ function AccountingApproveProcess(){
     });
 
 
-}
+
 

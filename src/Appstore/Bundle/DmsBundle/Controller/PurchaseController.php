@@ -64,8 +64,7 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new DmsPurchase();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entity->setHospitalConfig($config);
-        $entity->setMode('medicine');
+        $entity->setDmsConfig($config);
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
         $em->flush();
@@ -84,7 +83,7 @@ class PurchaseController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        $particulars = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'));
+        $particulars = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'))->getArrayResult();
 
         return $this->render('DmsBundle:Purchase:new.html.twig', array(
             'entity' => $entity,

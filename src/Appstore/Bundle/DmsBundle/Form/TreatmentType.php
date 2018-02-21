@@ -34,6 +34,11 @@ class TreatmentType extends AbstractType
 
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter treatment name')))
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter content')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter over head price'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input over head price')),
+                )
+            ))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),

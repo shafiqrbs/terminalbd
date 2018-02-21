@@ -1,3 +1,11 @@
+dms_expense:
+    resource: "@DmsBundle/Resources/config/routing/expenditure.yml"
+    prefix:   /dms-expense
+
+dms_expensecategory:
+    resource: "@DmsBundle/Resources/config/routing/expensecategory.yml"
+    prefix:   /dms-expense-category
+
 dms_report:
     resource: "@DmsBundle/Resources/config/routing/report.yml"
     prefix:   /report
@@ -5,6 +13,11 @@ dms_report:
 dms_purchase:
     resource: "@DmsBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
+
+
+dms_treatment_accessories:
+    resource: "@DmsBundle/Resources/config/routing/treatmentaccessories.yml"
+    prefix:   /treatment-accessories
 
 dms_vendor:
     resource: "@DmsBundle/Resources/config/routing/vendor.yml"

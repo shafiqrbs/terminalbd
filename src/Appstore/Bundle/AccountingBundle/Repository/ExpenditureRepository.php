@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ExpenditureRepository
@@ -53,6 +54,28 @@ class ExpenditureRepository extends EntityRepository
         if (!empty($category)) {
             $qb->andWhere("e.category = :category");
             $qb->setParameter('category', $category);
+        }
+    }
+
+    public function handleDateRangeFind($qb,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $endDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['startDate']) and !empty($data['endDate'])){
+            $start = new \DateTime($data['startDate']);
+            $startDate = $start->format('Y-m-d 00:00:00');
+            $end = new \DateTime($data['endDate']);
+            $endDate = $end->format('Y-m-d 23:59:59');
+        }
+        if (!empty($startDate) ) {
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($endDate)) {
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
         }
     }
 
@@ -133,8 +156,20 @@ class ExpenditureRepository extends EntityRepository
         $em->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($entity);
         $em->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($entity);
 
+    }
 
-
+    public function reportForExpenditure(GlobalOption $option,$data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.expenseCategory','ec');
+        $qb->select('SUM(e.amount) as amount');
+        $qb->addSelect('ec.name as categoryName');
+        $qb->where('e.globalOption =:option')->setParameter('option', $option);
+        $qb->andWhere('e.process =:process')->setParameter('process', 'approved');
+        $qb->groupBy('ec.name');
+        $this->handleDateRangeFind($qb,$data);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
     }
 
 }

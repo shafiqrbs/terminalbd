@@ -446,12 +446,15 @@ $(document).on("click", ".approve", function() {
 
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
+    $('#treatment-approved-'+id).hide();
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+                if(data == 'success'){
+                    location.reload();
+                }
             });
         }
     });

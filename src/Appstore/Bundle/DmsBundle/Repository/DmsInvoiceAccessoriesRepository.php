@@ -24,8 +24,38 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class DmsInvoiceAccessoriesRepository extends EntityRepository
 {
 
+    public function handleDateRangeFind($qb,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $endDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['startDate']) and !empty($data['endDate'])){
+            $start = new \DateTime($data['startDate']);
+            $startDate = $start->format('Y-m-d 00:00:00');
+            $end = new \DateTime($data['endDate']);
+            $endDate = $end->format('Y-m-d 23:59:59');
+        }
+        if (!empty($startDate) ) {
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($endDate)) {
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+    }
 
-    public function insertInvoiceAccessories(DmsInvoice $invoice, $data)
+    public function findInvoiceAccessories($config)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+        $qb->orderBy('e.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
+    }
+
+    public function insertAccessories($dmsConfig,$data)
     {
 
         $em = $this->_em;
@@ -37,10 +67,31 @@ class DmsInvoiceAccessoriesRepository extends EntityRepository
         $entity->setDmsParticular($accessories);
         $entity->setSubTotal($quantity * $accessories->getPrice());
         $entity->setPrice($accessories->getPrice());
+        $entity->setDmsConfig($dmsConfig);
+        $em->persist($entity);
+        $em->flush();
+
+    }
+
+    public function insertInvoiceAccessories(DmsInvoice $invoice, $data)
+    {
+
+        $em = $this->_em;
+        $entity = new DmsInvoiceAccessories();
+        $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
+        $entity->setQuantity($quantity);
+        $accessoriesId = $data['accessories'];
+        $accessories = $em->getRepository('DmsBundle:DmsParticular')->find($accessoriesId);
+        $entity->setDmsParticular($accessories);
+        $entity->setPrice($accessories->getPurchasePrice());
+        $entity->setSubTotal($quantity * $accessories->getPrice());
         $entity->setDmsInvoice($invoice);
+        $entity->setDmsConfig($invoice->getDmsConfig());
         $em->persist($entity);
         $em->flush();
     }
+
+
 
 
     public function getInvoiceAccessories(DmsInvoice $sales)
@@ -68,5 +119,23 @@ class DmsInvoiceAccessoriesRepository extends EntityRepository
         }
         return $data;
     }
+
+    public function reportAccessoriesOut(DmsConfig $config , $data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.subTotal) as subTotal');
+        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+        $this->handleDateRangeFind($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result['subTotal'];
+    }
+
+    public function accessoriesItemOut(DmsConfig $config , $data)
+    {
+
+    }
+
+
+
 
 }

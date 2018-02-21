@@ -56,11 +56,11 @@ class DmsPurchaseItemRepository extends EntityRepository
         foreach ($entities as $entity) {
             $data .= '<tr id="remove-'. $entity->getId() .'">';
             $data .= '<td class="span1" >' . $i . '</td>';
-            $data .= '<td class="span1" >' . $entity->getDmsParticular()->getDmsParticularCode() . '</td>';
-            $data .= '<td class="span4" >' . $entity->getDmsParticular()->getName() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getDmsParticular()->getParticularCode() . '</td>';
+            $data .= '<td class="span3" >' . $entity->getDmsParticular()->getName() . '</td>';
             $data .= '<td class="span1" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchasePrice() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
                      <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/dms/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>

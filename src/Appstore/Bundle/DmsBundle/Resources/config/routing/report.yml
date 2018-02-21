@@ -1,3 +1,39 @@
+dms_report_cash:
+    path:     /report-cash
+    defaults: { _controller: "DmsBundle:Report:cash" }
+
+dms_report_cash_pdf:
+    path:     /report-cash-pdf
+    defaults: { _controller: "DmsBundle:Report:cashPdf" }
+
+dms_report_expenditure:
+    path:     /expenditure
+    defaults: { _controller: "DmsBundle:Report:expenditure" }
+
+dms_report_expenditure_pdf:
+    path:     /expenditure-pdf
+    defaults: { _controller: "DmsBundle:Report:expenditurePdf" }
+
+dms_report_income:
+    path:     /report-income
+    defaults: { _controller: "DmsBundle:Report:income" }
+
+dms_report_income_pdf:
+    path:     /report-income-pdf
+    defaults: { _controller: "DmsBundle:Report:incomePdf" }
+
+dms_report_balance_sheet:
+    path:     /sales-summary
+    defaults: { _controller: "DmsBundle:Report:salesSummary" }
+
+dms_report_stock:
+    path:     /daily-sales-summary-pdf
+    defaults: { _controller: "DmsBundle:Default:pdfTodaySales" }
+
+dms_report_stock_out:
+    path:     /sales-summary
+    defaults: { _controller: "DmsBundle:Report:salesSummary" }
+
 dms_report_today_sales_summary_pdf:
     path:     /daily-sales-summary-pdf
     defaults: { _controller: "DmsBundle:Default:pdfTodaySales" }

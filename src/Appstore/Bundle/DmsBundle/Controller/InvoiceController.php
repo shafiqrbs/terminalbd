@@ -320,6 +320,78 @@ class InvoiceController extends Controller
 
     }
 
+    public function treatmentApprovedAction(DmsTreatmentPlan $treatmentPlan){
+
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$treatmentPlan) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+        if($treatmentPlan->getPayment() > 0){
+            $treatmentPlan->setStatus(true);
+            $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+            $treatmentPlan->setTransactionMethod($method);
+            $em->flush();
+            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updatePaymentReceive($treatmentPlan->getDmsInvoice());
+            $dms = $em->getRepository('AccountingBundle:AccountCash')->dmsInsertSalesCash($treatmentPlan);
+            $em->getRepository('AccountingBundle:Transaction')->dmsTransaction($treatmentPlan);
+            return new Response('success');
+        }
+        return new Response('failed');
+        exit;
+    }
+
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DmsBundle:DmsTreatmentPlan')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find particular entity.');
+        }
+        $datetime = !empty($data['name']) ? $data['name'] : '' ;
+        if($datetime == 'AppointmentDate'){
+            $val = new \DateTime($data['value']);
+        }else{
+            $val = $data['value'];
+        }
+
+        $setField = 'set'.$data['name'];
+        $entity->$setField($val);
+        $em->flush();
+        exit;
+
+    }
+
+    public function treatmentDeleteAction(DmsInvoice $invoice ,DmsTreatmentPlan $treatmentPlan){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$treatmentPlan) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+        $em->remove($treatmentPlan);
+        $em->flush();
+        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($invoice);
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
+        exit;
+    }
+
+    public function treatmentAppointmentDatetimeAction(Request $request){
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $appointmentDate = $data['appointmentDate'];
+        $appointmentTime = $data['appointmentTime'];
+        $entity = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->findOneBy(array('status'=> 0 ,'appointmentTime'=>$appointmentTime,'appointmentDate'=> $appointmentDate ));
+        if($entity){
+            $res = 'invalid';
+        }
+        $res = 'valid';
+        return new Response($res);
+        exit;
+    }
+
     public function invoiceParticularDeleteAction( $invoice, DmsInvoiceParticular $particular){
 
 
@@ -376,7 +448,6 @@ class InvoiceController extends Controller
         $payment = $request->request->get('payment');
         $discount = $request->request->get('discount');
         $discount = $discount !="" ? $discount : 0 ;
-        $discount = $discount !="" ? $discount : 0 ;
         $process = $request->request->get('process');
 
         if ( (!empty($entity) and !empty($payment)) or (!empty($entity) and $discount > 0 ) ) {
@@ -402,71 +473,6 @@ class InvoiceController extends Controller
         exit;
     }
 
-    public function treatmentApprovedAction(DmsTreatmentPlan $treatmentPlan){
-
-
-        $em = $this->getDoctrine()->getManager();
-        if (!$treatmentPlan) {
-            throw $this->createNotFoundException('Unable to find SalesItem entity.');
-        }
-        if($treatmentPlan->getPayment() > 0){
-        $treatmentPlan->setStatus(true);
-        $em->flush();
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updatePaymentReceive($treatmentPlan->getDmsInvoice());
-        }
-        exit;
-    }
-
-    public function inlineUpdateAction(Request $request)
-    {
-        $data = $request->request->all();
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('DmsBundle:DmsTreatmentPlan')->find($data['pk']);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find particular entity.');
-        }
-        $datetime = !empty($data['name']) ? $data['name'] : '' ;
-        if($datetime == 'AppointmentDate'){
-            $val = new \DateTime($data['value']);
-        }else{
-            $val = $data['value'];
-        }
-
-        $setField = 'set'.$data['name'];
-        $entity->$setField($val);
-        $em->flush();
-        exit;
-
-    }
-
-    public function treatmentDeleteAction(DmsInvoice $invoice ,DmsTreatmentPlan $treatmentPlan){
-
-        $em = $this->getDoctrine()->getManager();
-        if (!$treatmentPlan) {
-            throw $this->createNotFoundException('Unable to find SalesItem entity.');
-        }
-        $em->remove($treatmentPlan);
-        $em->flush();
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($invoice);
-        $result = $this->returnResultData($invoice);
-        return new Response(json_encode($result));
-        exit;
-    }
-
-    public function treatmentAppointmentDatetimeAction(Request $request){
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $request->request->all();
-        $appointmentDate = $data['appointmentDate'];
-        $appointmentTime = $data['appointmentTime'];
-        $entity = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->findOneBy(array('status'=> 0 ,'appointmentTime'=>$appointmentTime,'appointmentDate'=> $appointmentDate ));
-        if($entity){
-            $res = 'invalid';
-        }
-        $res = 'valid';
-        return new Response($res);
-        exit;
-    }
 
     public function patientLoadAction(DmsInvoice $entity)
     {
@@ -525,10 +531,8 @@ class InvoiceController extends Controller
 
         if ( (!empty($entity) and !empty($payment)) or (!empty($entity) and $discount > 0 ) ) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setProcess('In-progress');
+            $entity->setProcess($process);
             $em->flush();
-            $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
-         //   $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
             return new Response('success');
 
         } elseif(!empty($entity) and $process == 'Done' and $entity->getTotal() <= $entity->getPayment()  ) {
@@ -538,15 +542,11 @@ class InvoiceController extends Controller
             $entity->setPaymentStatus('Paid');
             $em->flush();
             return new Response('success');
-
         } else {
             return new Response('failed');
         }
         exit;
     }
-
-
-
 
     public function invoiceReverseAction(DmsInvoice $invoice)
     {
@@ -860,7 +860,7 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $accessories = $request->request->get('accessories');
-        echo $quantity = $request->request->get('quantity');
+        $quantity = $request->request->get('quantity');
         if(!empty($accessories)){
             $invoiceItems = array('accessories' => $accessories ,'quantity' => $quantity);
             $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceAccessories')->insertInvoiceAccessories($invoice, $invoiceItems);

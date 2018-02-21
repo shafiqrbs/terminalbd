@@ -68,7 +68,7 @@
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}</td>
                                     <td  class="span1">{{ item.dmsParticular.particularCode }}</td>
-                                    <td class="span4">{{ item.dmsParticular.name }}</td>
+                                    <td class="span3">{{ item.dmsParticular.name }}</td>
                                     <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.purchasePrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
@@ -100,7 +100,7 @@
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box purple">
                 <div class="pull-left span3">
-                    <a class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Medicine Item</a>
+                    <a class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Accessories Item</a>
                 </div>
                 <div class="pull-left span4 msg-hidden" style="display: none">
                     <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
@@ -123,13 +123,14 @@
                                     <select id="particular" name="particular" class="span12 select2">
                                         <option value="">--- Select accessories name ---</option>
                                        {% for particular in particulars %}
-                                           <option value="{{ path('dms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
+                                           <option value="{{ path('dms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} {{ particular.unit }} </option>
                                        {% endfor %}
                                      </select>
                                 </div>
-                                <div class="span2"><input type="text" class="m-wrap span12" id="purchasePrice" disabled="disabled" required="required" name="purchasePrice" placeholder="Purchase price" value="" maxlength="8"></div>
+                                <div class="span2"><input type="text" class="m-wrap span12 " id="purchasePrice" disabled="disabled" required="required" name="purchasePrice" placeholder="Purchase price" value="" maxlength="8"></div>
                                 <div class="span2"><input type="text" class="m-wrap span12" id="price" disabled="disabled" required="required" name="price" placeholder="Sales price" value="" maxlength="8"></div>
-                                <div class="span3">
+                                <div class="span4">
+                                    <div class="input-append">
                                     <div class="input-group">
                                             <span class="input-group-btn">
                                                <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity">
@@ -141,13 +142,14 @@
                                               <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
                                                       <span class="fa fa-plus"></span>
                                               </button>
-                                            </span>
+                                                <button type="button" class="btn blue" id="addParticular" data-url="{{ path('dms_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                                         </span>
+                                        <input type="hidden" id="particularId" name="particularId" value="">
+
+                                    </div>
                                     </div>
                                 </div>
-                                <div class="span1">
-                                    <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('dms_purchase_particular_add',{'invoice':entity.id}) }}" >Add</button>
-                                </div>
+
                             </div>
                         </div>
                     </div>

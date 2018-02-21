@@ -50,6 +50,11 @@ class PaymentCard
     protected $restaurantInvoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="paymentCard")
+     */
+    protected $dmsTreatmentPlans;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

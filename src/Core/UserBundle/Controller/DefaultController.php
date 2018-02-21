@@ -45,7 +45,7 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
             return $this->redirect($this->generateUrl('bindu_build'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT') && $enable == 1 and in_array('resturant',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT') && $enable == 1 and in_array('restaurant',$apps)) {
             return $this->redirect($this->generateUrl('restaurant_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DMS') && $enable == 1 && in_array('dms',$apps)) {
             return $this->redirect($this->generateUrl('dms_homepage'));

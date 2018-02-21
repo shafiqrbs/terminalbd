@@ -26,6 +26,11 @@ class DmsInvoiceAccessories
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsInvoiceAccessories")
+     **/
+    private $dmsConfig;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsInvoiceAccessories" )
      **/
     private  $dmsParticular;
@@ -220,6 +225,22 @@ class DmsInvoiceAccessories
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return DmsConfig
+     */
+    public function getDmsConfig()
+    {
+        return $this->dmsConfig;
+    }
+
+    /**
+     * @param DmsConfig $dmsConfig
+     */
+    public function setDmsConfig($dmsConfig)
+    {
+        $this->dmsConfig = $dmsConfig;
     }
 
 

@@ -868,6 +868,14 @@ class Builder extends ContainerAware
             }
         }
 
+        $menu['Dental & Diagnosis']->addChild('Expense')
+            ->setAttribute('icon', 'icon icon-money')
+            ->setAttribute('dropdown', true);
+        $menu['Dental & Diagnosis']['Expense']->addChild('Expenditure', array('route' => 'dms_account_expenditure'))
+            ->setAttribute('icon', 'fa fa-indent');
+        $menu['Dental & Diagnosis']['Expense']->addChild('Expense Category', array('route' => 'dms_expensecategory'))
+            ->setAttribute('icon', 'icon-tags');
+
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
 
             $menu['Dental & Diagnosis']->addChild('Master Data')
@@ -888,6 +896,8 @@ class Builder extends ContainerAware
             $menu['Dental & Diagnosis']->addChild('Manage Stock')
                 ->setAttribute('icon', 'icon icon-truck')
                 ->setAttribute('dropdown', true);
+            $menu['Dental & Diagnosis']['Manage Stock']->addChild('Accessories Out', array('route' => 'dms_treatment_accessories'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Manage Stock']->addChild('Accessories', array('route' => 'dms_medicine'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']->addChild('Purchase')
@@ -897,23 +907,42 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Purchase']->addChild('Vendor', array('route' => 'dms_vendor'))->setAttribute('icon', 'icon-tag');
 
-            $menu['Dental & Diagnosis']->addChild('Reports')
-                ->setAttribute('icon', 'icon icon-cog')
+            $menu['Dental & Diagnosis']->addChild('Sales Reports')
+                ->setAttribute('icon', 'icon-bar-chart')
                 ->setAttribute('dropdown', true);
-            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Summary', array('route' => 'dms_report_sales_summary'))
+            $menu['Dental & Diagnosis']['Sales Reports']->addChild('Sales Summary', array('route' => 'dms_report_sales_summary'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Details', array('route' => 'dms_report_sales'))
+            $menu['Dental & Diagnosis']['Sales Reports']->addChild('Sales Details', array('route' => 'dms_report_sales'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Monthly', array('route' => 'dms_report_sales_monthly'))
+            $menu['Dental & Diagnosis']['Sales Reports']->addChild('Sales Monthly', array('route' => 'dms_report_sales_monthly'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Sales Yearly', array('route' => 'dms_report_sales_yearly'))
+            $menu['Dental & Diagnosis']['Sales Reports']->addChild('Sales Yearly', array('route' => 'dms_report_sales_yearly'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('All Sales Yearly', array('route' => 'dms_report_sales_all_yearly'))
+            $menu['Dental & Diagnosis']['Sales Reports']->addChild('All Sales Yearly', array('route' => 'dms_report_sales_all_yearly'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Treatment Base Sales', array('route' => 'dms_report_sales_treatment'))
+            $menu['Dental & Diagnosis']['Sales Reports']->addChild('Treatment Base Sales', array('route' => 'dms_report_sales_treatment'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Reports']->addChild('Purchase', array('route' => 'dms_report_purchase'))
+            $menu['Dental & Diagnosis']['Sales Reports']->addChild('Purchase', array('route' => 'dms_report_purchase'))
                 ->setAttribute('icon', 'icon-th-list');
+            $menu['Dental & Diagnosis']->addChild('Accounting Report')
+                ->setAttribute('icon', 'icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Dental & Diagnosis']['Accounting Report']->addChild('Cash in Hand', array('route' => 'dms_report_cash'))
+                ->setAttribute('icon', 'icon-money');
+            $menu['Dental & Diagnosis']['Accounting Report']->addChild('Expenditure', array('route' => 'dms_report_expenditure'))
+                ->setAttribute('icon', 'fa fa-indent');
+            $menu['Dental & Diagnosis']['Accounting Report']->addChild('Income', array('route' => 'dms_report_income'))
+                ->setAttribute('icon', 'icon-credit-card');
+            $menu['Dental & Diagnosis']['Accounting Report']->addChild('Balance Sheet', array('route' => 'dms_report_balance_sheet'))
+                ->setAttribute('icon', 'icon-table');
+            $menu['Dental & Diagnosis']->addChild('Stock Report')
+                ->setAttribute('icon', 'icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Dental & Diagnosis']['Stock Report']->addChild('Accessories Stock', array('route' => 'dms_report_stock'))
+                ->setAttribute('icon', ' icon-inbox');
+            $menu['Dental & Diagnosis']['Stock Report']->addChild('Accessories Out', array('route' => 'dms_report_stock_out'))
+                ->setAttribute('icon', 'icon-hdd');
+
         }
         return $menu;
 

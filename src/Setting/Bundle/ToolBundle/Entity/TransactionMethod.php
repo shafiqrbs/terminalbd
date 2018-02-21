@@ -167,6 +167,11 @@ class TransactionMethod
     protected $customerInvoice;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="transactionMethod" )
+     */
+    protected $dmsTreatmentPlans;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

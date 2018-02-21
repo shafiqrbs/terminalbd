@@ -15,7 +15,7 @@ use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
- * HmsPurchase
+ * DmsPurchase
  *
  * @ORM\Table( name ="dms_purchase")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Repository\DmsPurchaseRepository")
@@ -225,7 +225,7 @@ class DmsPurchase
      *
      * @param string $invoice
      *
-     * @return HmsPurchase
+     * @return DmsPurchase
      */
     public function setInvoice($invoice)
     {
@@ -249,7 +249,7 @@ class DmsPurchase
      *
      * @param string $memo
      *
-     * @return HmsPurchase
+     * @return DmsPurchase
      */
     public function setMemo($memo)
     {
@@ -274,7 +274,7 @@ class DmsPurchase
      *
      * @param string $receiveDate
      *
-     * @return HmsPurchase
+     * @return DmsPurchase
      */
     public function setReceiveDate($receiveDate)
     {
@@ -298,7 +298,7 @@ class DmsPurchase
      *
      * @param \DateTime $created
      *
-     * @return HmsHmsPurchase
+     * @return DmsPurchase
      */
     public function setCreated($created)
     {
@@ -503,21 +503,7 @@ class DmsPurchase
         $this->asInvestment = $asInvestment;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getHospitalConfig()
-    {
-        return $this->dmsConfig;
-    }
 
-    /**
-     * @param mixed $dmsConfig
-     */
-    public function setHospitalConfig($dmsConfig)
-    {
-        $this->dmsConfig = $dmsConfig;
-    }
 
     /**
      * @return AccountPurchase

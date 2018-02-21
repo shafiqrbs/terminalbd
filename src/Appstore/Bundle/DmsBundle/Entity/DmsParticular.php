@@ -103,8 +103,6 @@ class DmsParticular
      **/
     private  $unit;
 
-
-
     /**
      * @var string
      *

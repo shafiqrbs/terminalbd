@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -95,7 +96,38 @@ class TransactionController extends Controller
 
     }
 
-   /**
+
+    public function transactionCashOverviewPdfAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $transactionMethods = array(1,4);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
+        $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
+        $html = $this->renderView('AccountingBundle:Transaction:cashoverviewPdf.html.twig', array(
+            'transactionCashOverviews'               => $transactionCashOverview,
+            'transactionBankCashOverviews'          => $transactionBankCashOverviews,
+            'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
+            'transactionAccountHeadCashOverviews'   => $transactionAccountHeadCashOverviews,
+            'searchForm' => $data,
+        ));
+
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='cash-summary-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
+        exit;
+    }
+
+
+    /**
      * Lists all Transaction entities.
      *
      */

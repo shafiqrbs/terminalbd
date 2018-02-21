@@ -11,6 +11,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
@@ -43,20 +44,26 @@ class TransactionRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-
-        if (!empty($data['startDate']) ) {
-
-            $qb->andWhere("ex.updated >= :startDate");
-            $qb->setParameter('startDate', $startDate.' 00:00:00');
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $endDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['startDate']) and !empty($data['endDate'])){
+            $start = new \DateTime($data['startDate']);
+            $startDate = $start->format('Y-m-d 00:00:00');
+            $end = new \DateTime($data['endDate']);
+            $endDate = $end->format('Y-m-d 23:59:59');
         }
-        if (!empty($data['endDate'])) {
-
+        if (!empty($startDate) ) {
+            $qb->andWhere("ex.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($endDate)) {
             $qb->andWhere("ex.updated <= :endDate");
-            $qb->setParameter('endDate', $endDate.' 23:59:59');
+            $qb->setParameter('endDate', $endDate);
         }
     }
+
 
     public function transactionOverview($globalOption,$accountHead = 0)
     {
@@ -150,6 +157,24 @@ class TransactionRepository extends EntityRepository
         return $result;
 
     }
+
+    public function reportDebitTransactionIncome($globalOption,$accountHeads,$data){
+
+        $qb = $this->createQueryBuilder('ex');
+        $qb->join('ex.accountHead','accountHead');
+        $qb->select('sum(ex.amount) as amount');
+        $qb->where("accountHead.id IN (:ids)");
+        $qb->setParameter('ids', $accountHeads);
+        $qb->andWhere('ex.globalOption = :globalOption');
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('ex.accountHead');
+        $res =  $qb->getQuery();
+        $result = $res->getOneOrNullResult();
+        return $result['amount'];
+
+    }
+
 
     public function reportTransactionVat($globalOption,$accountHeads,$data){
 
@@ -1170,9 +1195,6 @@ class TransactionRepository extends EntityRepository
 
     }
 
-
-
-
     public function purchaseGlobalTransaction($accountPurchase,$source='')
     {
         $this->insertGlobalInventoryAsset($accountPurchase);
@@ -1278,5 +1300,68 @@ class TransactionRepository extends EntityRepository
         }
 
     }
+
+    /** ======================== DMS ===============================*/
+
+    public function dmsTransaction(DmsTreatmentPlan $treatmentPlan)
+    {
+        $this->insertDmsSalesCashDebit($treatmentPlan);
+        $this->insertDmsCashCredit($treatmentPlan);
+    }
+
+    private function insertDmsSalesCashDebit(DmsTreatmentPlan $entity)
+    {
+        $amount = $entity->getPayment();
+        $invoice = $entity->getDmsInvoice();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($invoice->getDmsConfig()->getGlobalOption());
+            $transaction->setAccountRefNo($invoice->getInvoice());
+            $transaction->setProcessHead('Sales');
+            $transaction->setUpdated($entity->getUpdated());
+
+            /* Cash - Cash various */
+            if($entity->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $transaction->setProcess('Current Assets');
+            }elseif($entity->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+                $transaction->setProcess('Cash');
+            }
+
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+
+    public function insertDmsCashCredit(DmsTreatmentPlan $entity)
+    {
+
+        $invoice = $entity->getDmsInvoice();
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($invoice->getDmsConfig()->getGlobalOption());
+        $transaction->setAccountRefNo($invoice->getInvoice());
+
+        $transaction->setProcessHead('Sales');
+        $transaction->setProcess('Operating Revenue');
+        $transaction->setAccountRefNo($invoice->getInvoice());
+        $transaction->setUpdated($entity->getUpdated());
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
+        $transaction->setAmount('-'.$entity->getPayment());
+        $transaction->setCredit($entity->getPayment());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+        return $transaction;
+
+    }
+
 
 }

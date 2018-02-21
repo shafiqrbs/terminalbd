@@ -40,14 +40,14 @@ class DmsPurchaseListener
 
 
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository('HospitalBundle:HmsPurchase')->createQueryBuilder('s');
+        $qb = $entityManager->getRepository('DmsBundle:DmsPurchase')->createQueryBuilder('s');
 
         $qb
             ->select('MAX(s.code)')
-            ->where('s.hospitalConfig = :hospital')
+            ->where('s.dmsConfig = :dmsConfig')
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
-            ->setParameter('hospital', $entity->getHospitalConfig())
+            ->setParameter('dmsConfig', $entity->getDmsConfig())
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();

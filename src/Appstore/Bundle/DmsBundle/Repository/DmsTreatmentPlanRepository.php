@@ -295,7 +295,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $data .= '<td class="numeric" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="numeric" >' . $discount . '</td>';
             $data .= '<td class="numeric" >' . $payment . '</td>';
-            $data .= '<td class="numeric" >'.$action.'</td>';
+            $data .= '<td class="numeric" id="treatment-approved-'.$entity->getId().'" >'.$action.'</td>';
             $data .= '</tr>';
 
             $i++;

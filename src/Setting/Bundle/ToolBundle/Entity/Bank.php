@@ -75,6 +75,11 @@ class Bank
      */
     protected $restaurantInvoices;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="bank" )
+     */
+    protected $dmsTreatmentPlans;
+
 
 
 

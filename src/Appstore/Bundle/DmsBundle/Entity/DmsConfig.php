@@ -34,6 +34,11 @@ class DmsConfig
     private $dmsInvoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories", mappedBy="dmsConfig")
+     **/
+    private $dmsInvoiceAccessories;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", mappedBy="dmsConfig")
      **/
     private $dmsServices;
@@ -1200,6 +1205,14 @@ class DmsConfig
     public function setShowAccessories($showAccessories)
     {
         $this->showAccessories = $showAccessories;
+    }
+
+    /**
+     * @return DmsInvoiceAccessories
+     */
+    public function getDmsInvoiceAccessories()
+    {
+        return $this->dmsInvoiceAccessories;
     }
 
 

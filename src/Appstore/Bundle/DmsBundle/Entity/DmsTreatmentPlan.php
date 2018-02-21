@@ -2,10 +2,15 @@
 
 namespace Appstore\Bundle\DmsBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\Bank;
+use Setting\Bundle\ToolBundle\Entity\PaymentCard;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
@@ -35,6 +40,50 @@ class DmsTreatmentPlan
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $dmsInvoice;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="dmsTreatmentPlans" , cascade={"persist","remove"} )
+     **/
+    private  $transactionMethod;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="dmsTreatmentPlans" , cascade={"persist","remove"}  )
+     **/
+    private  $bank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="dmsTreatmentPlans" , cascade={"persist","remove"}  )
+     **/
+    private  $accountBank;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="dmsTreatmentPlans", cascade={"persist","remove"}  )
+     **/
+    private  $accountMobileBank;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="dmsTreatmentPlans" , cascade={"persist","remove","remove"}  )
+     **/
+    private  $paymentCard;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cardNo", type="string", length=100, nullable=true)
+     */
+    private $cardNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paymentMobile", type="string", length=50, nullable=true)
+     */
+    private $paymentMobile;
+
+
 
     /**
      * @var float
@@ -398,6 +447,118 @@ class DmsTreatmentPlan
     public function setAppointmentDate($appointmentDate)
     {
         $this->appointmentDate = $appointmentDate;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return Bank
+     */
+    public function getBank()
+    {
+        return $this->bank;
+    }
+
+    /**
+     * @param Bank $bank
+     */
+    public function setBank($bank)
+    {
+        $this->bank = $bank;
+    }
+
+    /**
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return PaymentCard
+     */
+    public function getPaymentCard()
+    {
+        return $this->paymentCard;
+    }
+
+    /**
+     * @param PaymentCard $paymentCard
+     */
+    public function setPaymentCard($paymentCard)
+    {
+        $this->paymentCard = $paymentCard;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCardNo()
+    {
+        return $this->cardNo;
+    }
+
+    /**
+     * @param string $cardNo
+     */
+    public function setCardNo($cardNo)
+    {
+        $this->cardNo = $cardNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMobile()
+    {
+        return $this->paymentMobile;
+    }
+
+    /**
+     * @param string $paymentMobile
+     */
+    public function setPaymentMobile($paymentMobile)
+    {
+        $this->paymentMobile = $paymentMobile;
     }
 
 

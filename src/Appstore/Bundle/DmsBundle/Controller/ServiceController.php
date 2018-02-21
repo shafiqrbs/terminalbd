@@ -200,7 +200,7 @@ class ServiceController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('dms_particular'));
+        return $this->redirect($this->generateUrl('dms_service'));
     }
 
    
@@ -226,7 +226,7 @@ class ServiceController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('dms_particular'));
+        return $this->redirect($this->generateUrl('dms_service:'));
     }
 
     /**

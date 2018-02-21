@@ -162,12 +162,12 @@ class AccountPurchaseRepository extends EntityRepository
     {
 
         $data = array('dmsVendor' => $entity->getDmsVendor()->getCompanyName());
-        $result = $this->accountPurchaseOverview($entity->getHospitalConfig()->getGlobalOption(),$data);
+        $result = $this->accountPurchaseOverview($entity->getDmsConfig()->getGlobalOption(),$data);
         $balance = ( $result['purchaseAmount'] - $result['payment']);
 
         $em = $this->_em;
         $accountPurchase = new AccountPurchase();
-        $accountPurchase->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
+        $accountPurchase->setGlobalOption($entity->getDmsConfig()->getGlobalOption());
         $accountPurchase->setDmsPurchase($entity);
         $accountPurchase->setDmsVendor($entity->getDmsVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());

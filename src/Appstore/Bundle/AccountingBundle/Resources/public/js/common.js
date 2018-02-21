@@ -1,12 +1,23 @@
 $( ".date-picker" ).datepicker({
-    dateFormat: "yy-mm-dd"
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true
 });
-// Getter
 
-var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
+$( ".datePicker" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-10:+0"
+});
 
-// Setter
-$( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+$( ".dateCalendar" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-100:+0"
+});
+
 
 function CommonJs(){
 

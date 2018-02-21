@@ -156,6 +156,11 @@ class AccountBank
      */
     protected $customerInvoice;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="accountBank" )
+     */
+    protected $dmsTreatmentPlans;
+
 
 
     /**

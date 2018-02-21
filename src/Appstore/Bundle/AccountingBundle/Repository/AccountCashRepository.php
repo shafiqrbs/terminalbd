@@ -13,6 +13,8 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
+use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Core\UserBundle\Entity\User;
@@ -351,7 +353,6 @@ class AccountCashRepository extends EntityRepository
         return $entity->getBalance();
     }
 
-
     public function insertAccountCash(AccountJournal $entity , $processHead ='Journal')
     {
 
@@ -627,5 +628,57 @@ class AccountCashRepository extends EntityRepository
         $em->flush();
 
     }
+
+    public function dmsInsertSalesCash(DmsTreatmentPlan $entity)
+    {
+
+        $invoice = $entity->getDmsInvoice();
+        $balance = $this->closingInsertCash($entity,$invoice->getDmsConfig()->getGlobalOption(),'Sales');
+        $em = $this->_em;
+        $cash = new AccountCash();
+
+        /* Cash - Cash various */
+        if($entity->getTransactionMethod()->getId() == 2 ){
+            /* Current Asset Bank Cash Debit */
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $cash->setAccountBank($entity->getAccountBank());
+        }elseif($entity->getTransactionMethod()->getId() == 3 ){
+            /* Current Asset Mobile Account Debit */
+            $cash->setAccountMobileBank($entity->getAccountMobileBank());
+            $account = $this->_em->getRepository('AccountingBundle:AccountHead')->find(10);
+            $cash->setAccountHead($account);
+        }else{
+            /* Cash - Cash Debit */
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+        }
+        $cash->setGlobalOption($invoice->getDmsConfig()->getGlobalOption());
+        $cash->setTransactionMethod($entity->getTransactionMethod());
+        $cash->setProcessHead('Sales');
+        $cash->setAccountRefNo($invoice->getInvoice());
+        $cash->setUpdated($entity->getUpdated());
+        $cash->setBalance($balance + $entity->getPayment() );
+        $cash->setDebit($entity->getPayment());
+        $em->persist($cash);
+        $em->flush();
+
+    }
+
+    public function closingInsertCash($entity,$globalOption,$processHead)
+    {
+        $em = $this->_em;
+        if($entity->getTransactionMethod()->getId() == 2){
+            $array = array('globalOption' => $globalOption,'transactionMethod' => $entity->getTransactionMethod() ,'accountBank' => $entity->getAccountBank(), 'processHead' => $processHead );
+        }elseif($entity->getTransactionMethod()->getId() == 3 ){
+            $array = array('globalOption' => $globalOption,'transactionMethod' => $entity->getTransactionMethod(),'accountMobileBank' => $entity->getAccountMobileBank(), 'processHead' => $processHead );
+        }else{
+            $array = array('globalOption' => $globalOption,'transactionMethod' => $entity->getTransactionMethod(), 'processHead' => $processHead );
+        }
+        $entity = $em->getRepository('AccountingBundle:AccountCash')->findOneBy($array,array('id' => 'DESC'));
+        if (empty($entity)) {
+            return 0;
+        }
+        return $entity->getBalance();
+    }
+
 
 }
