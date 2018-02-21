@@ -150,33 +150,37 @@ class DmsParticularRepository extends EntityRepository
             return  $qb;
     }
 
-    public function getMedicineParticular($config,$services){
+    public function getMedicineParticular($config,$services,$data = array()){
 
-        $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->leftJoin('e.unit','u')
-            ->select('e.id')
-            ->addSelect('e.name')
-            ->addSelect('e.particularCode')
-            ->addSelect('e.price')
-            ->addSelect('e.minimumPrice')
-            ->addSelect('e.quantity')
-            ->addSelect('e.status')
-            ->addSelect('e.salesQuantity')
-            ->addSelect('e.minQuantity')
-            ->addSelect('e.openingQuantity')
-            ->addSelect('u.name as unit')
-            ->addSelect('s.serviceFormat as serviceFormat')
-            ->addSelect('s.name as serviceName')
-            ->addSelect('s.code as serviceCode')
-            ->addSelect('e.purchasePrice')
-            ->addSelect('e.purchaseQuantity')
-            ->where('e.dmsConfig = :config')->setParameter('config', $config)
-            ->andWhere('s.serviceFormat IN(:process)')
-            ->setParameter('process',$services)
-            ->orderBy('e.name','ASC')
-            ->getQuery();
-            return  $qb;
+        $qb = $this->createQueryBuilder('e');
+            $qb->leftJoin('e.service','s');
+            $qb->leftJoin('e.unit','u');
+            $qb->select('e.id');
+            $qb->addSelect('e.name');
+            $qb->addSelect('e.particularCode');
+            $qb->addSelect('e.price');
+            $qb->addSelect('e.minimumPrice');
+            $qb->addSelect('e.quantity');
+            $qb->addSelect('e.status');
+            $qb->addSelect('e.salesQuantity');
+            $qb->addSelect('e.minQuantity');
+            $qb->addSelect('e.openingQuantity');
+            $qb->addSelect('u.name as unit');
+            $qb->addSelect('s.serviceFormat as serviceFormat');
+            $qb->addSelect('s.name as serviceName');
+            $qb->addSelect('s.code as serviceCode');
+            $qb->addSelect('e.purchasePrice');
+            $qb->addSelect('e.purchaseQuantity');
+            $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+            $qb->andWhere('s.serviceFormat IN(:process)');
+            $qb->setParameter('process',$services);
+            if(!empty($data['particular'])) {
+                $qb->andWhere('e.id =:particularId');
+                $qb->setParameter('particularId', $data['particular']);
+            }
+            $qb->orderBy('e.name','ASC');
+            $result = $qb->getQuery();
+            return  $result;
     }
 
     public function getAccessoriesParticular($config,$services){

@@ -28,8 +28,10 @@ class ReportController extends Controller
             $this->get('request')->query->get('page', 1)/*page number*/,
             25  /*limit per page*/
         );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
         return $pagination;
     }
+
 
     public function salesSummaryAction()
     {
@@ -434,8 +436,79 @@ class ReportController extends Controller
 
     }
 
+    public function stockOutAction()
+    {
 
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $stockOuts = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceAccessories')->getAccessoriesItemOut($user->getGlobalOption()->getDmsConfig(), $data);
+        return $this->render('DmsBundle:Report:stockout.html.twig', array(
+            'entities'      => $stockOuts,
+            'searchForm'        => $data,
+        ));
 
+    }
+
+    public function stockoutPdfAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $stockOuts = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceAccessories')->getAccessoriesItemOut($user->getGlobalOption()->getDmsConfig(), $data);
+        $html = $this->renderView('DmsBundle:Report:stockoutPdf.html.twig', array(
+            'entities'      => $stockOuts,
+            'searchForm'        => $data,
+        ));
+
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='stock-out-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
+        exit;
+
+    }
+
+    public function stockAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'),$data)->getArrayResult();
+        return $this->render('DmsBundle:Report:stock.html.twig', array(
+            'pagination' => $entities,
+            'searchForm'        => $data,
+        ));
+    }
+
+    public function stockPdfAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getMedicineParticular($config,array('accessories'),$data)->getArrayResult();
+        $html =  $this->renderView('DmsBundle:Report:stockPdf.html.twig', array(
+            'pagination' => $entities,
+            'searchForm'        => $data,
+        ));
+
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        $fileName ='stock-'.date('d-m-Y').'.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        echo $pdf;
+        return new Response('');
+        exit;
+
+    }
 
 }
 

@@ -130,8 +130,19 @@ class DmsInvoiceAccessoriesRepository extends EntityRepository
         return $result['subTotal'];
     }
 
-    public function accessoriesItemOut(DmsConfig $config , $data)
+    public function getAccessoriesItemOut(DmsConfig $config , $data)
     {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.dmsParticular','particular');
+        $qb->select('SUM(e.subTotal) as subTotal');
+        $qb->addSelect('SUM(e.quantity) as quantity');
+        $qb->addSelect('particular.name as particularName');
+        $qb->addSelect('particular.id');
+        $qb->where('particular.dmsConfig = :config')->setParameter('config', $config);
+        $this->handleDateRangeFind($qb,$data);
+        $qb->groupBy('particular.id');
+        $results = $qb->getQuery()->getArrayResult();
+        return $results;
 
     }
 

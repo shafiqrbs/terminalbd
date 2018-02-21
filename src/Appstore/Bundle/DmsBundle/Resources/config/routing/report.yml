@@ -27,12 +27,20 @@ dms_report_balance_sheet:
     defaults: { _controller: "DmsBundle:Report:salesSummary" }
 
 dms_report_stock:
-    path:     /daily-sales-summary-pdf
-    defaults: { _controller: "DmsBundle:Default:pdfTodaySales" }
+    path:     /report-stock
+    defaults: { _controller: "DmsBundle:Report:stock" }
+
+dms_report_stock_pdf:
+    path:     /report-stock-pdf
+    defaults: { _controller: "DmsBundle:Report:stockPdf" }
 
 dms_report_stock_out:
-    path:     /sales-summary
-    defaults: { _controller: "DmsBundle:Report:salesSummary" }
+    path:     /report-stock-out
+    defaults: { _controller: "DmsBundle:Report:stockOut" }
+
+dms_report_stock_out_pdf:
+    path:     /report-stock-out-pdf
+    defaults: { _controller: "DmsBundle:Report:stockOutPdf" }
 
 dms_report_today_sales_summary_pdf:
     path:     /daily-sales-summary-pdf
