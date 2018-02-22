@@ -3,8 +3,8 @@ home:
     defaults: { _controller: BinduBundle:Bindu:index }
 
 bindu_homepage:
-    path:     /
-    defaults: { _controller: BinduBundle:Bindu:index }
+    path:     /main
+    defaults: { _controller: BinduBundle:Bindu:home }
 
 bindu_desktop_home:
     path:     /desktop/{subdomain}

@@ -7,7 +7,7 @@
 
                     <div class="tm-row" style="text-align:center;padding:50px 0 100px 0;background:#eee;">
                         <div class="tm-wrap">
-                            <h1>Sign in</h1>
+                            <h1>Sign in   {{ app.user }}</h1>
 
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="checkbox block">
-                                                            <input type="checkbox" id="remember" name="_remember_me" value="on"/><label style="width: auto; line-height: 32px; color: #ffffff">&nbsp;&nbsp;Remember me</label>
+                                                            <input type="checkbox" id="remember" name="_remember_me" checked="checked" /><label style="width: auto; line-height: 32px; color: #ffffff">&nbsp;&nbsp;Remember me</label>
                                                         </div>
                                                         <p class="form-suphobmit" style="float: right">{#<span class="fa-icon"><i class="fa  fa-lock"></i></span>#}<input id="signup" class="tm-btn light small" type="submit" value="Login" name="submit"></p>
                                                     </div>
@@ -92,6 +92,13 @@
         </div>
         <!--tm-container-->
     </div>
+ <style>
+     .swraper.modern .stoggler.on {
+         background: -webkit-linear-gradient(red, red)!important;
+         font-size: 12px!important;
+         font-family:Arial, sans-serif!important;
+     }
+ </style>
 {% endblock %}
 
 {% block documentready %}

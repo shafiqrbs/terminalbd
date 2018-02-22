@@ -38,6 +38,27 @@ class BinduController extends Controller
 
     }
 
+    public function homeAction()
+    {
+
+        $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
+        $entity = new User();
+        $form   = $this->createCreateForm($entity);
+        $detect = new MobileDetect();
+        if( $detect->isMobile() OR  $detect->isTablet() ) {
+            $theme = 'Frontend/Mobile';
+        }else{
+            $theme = 'Frontend/Desktop';
+        }
+        return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
+             'entity' => $entity,
+             'slides' => $slides,
+             'form'   => $form->createView(),
+         ));
+
+    }
+
+
     public function builderAction()
     {
 

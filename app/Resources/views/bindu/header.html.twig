@@ -29,13 +29,18 @@
 
     <div id="tm-header-top">
         <div class="tm-wrap tm-table">
-            <div class="tm-logo">
-                <a href="/" class="tm-logo-simple">
-                    <img alt="Logo" width="230"  src="../../assets/frontend/img/logo.png">
-                </a>
-                <a href="/" class="tm-logo-retina">
-                    <img alt="Logo" width="230"  src="../../assets/frontend/img/logo.png">
-                </a>
+            <div class="one-half">
+                <div class="tm-logo">
+                    <a href="/" class="tm-logo-simple">
+                        <img alt="Logo" width="230"  src="../../assets/frontend/img/logo.png">
+                    </a>
+                    <a href="/" class="tm-logo-retina">
+                        <img alt="Logo" width="230"  src="../../assets/frontend/img/logo.png">
+                    </a>
+                </div>
+            </div>
+            <div  style="text-align: right">
+                <div style="height: 80px;line-height: 80px;font-weight: bold;font-size: 28px;">HOTLINE: +088 01828148148</div>
             </div>
 
         </div>
@@ -48,7 +53,7 @@
             <nav class="tm-nav">
                 <ul class="tm-menu tm-menu-simple">
                     <li>
-                        <a href="/">Home</a>
+                        <a href="{{ path('bindu_homepage') }}">Home</a>
                     </li>
                     {#
                     <li class="current-menu-item">

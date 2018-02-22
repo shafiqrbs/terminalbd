@@ -1,3 +1,6 @@
+a{
+  color: red;
+}
 ul.header-top-menu li{
   float: right;
   margin-right: 10px;
@@ -22,6 +25,11 @@ header #tm-header-nav.tm-menu-style2 nav.tm-nav ul.tm-menu > li.current-menu-ite
   color: #f2f2f2;
   text-decoration: underline;
 
+}
+
+.tm-btn.light:hover, .button.light:hover, input[type="submit"].light:hover {
+  color: #ffffff;
+  background-color: red;
 }
 
 .tm-btn.mini , .button.mini, input[type="submit"].mini {
@@ -57,7 +65,7 @@ header #tm-header-nav.tm-menu-style2 nav.tm-nav ul.tm-menu > li.current-menu-ite
 }
 
 #container-form{
-  background: #008d71;
+  background: #000;
   border: 5px #eee solid;
   border-radius: 2px;
 }
@@ -738,6 +746,11 @@ table#colors-swatchs div.swatch {
 
 }
 
+h4 {
+  font-size: 13px;
+  color: red;
+}
+
 /* Time Picker */
 
 #ptTimeSelectCntr .ui-widget.ui-widget-content {
@@ -768,7 +781,7 @@ blockquote.tm-style2-overwrite {
   background: #f2f2f2;
   padding: 5px;
   font-style: italic;
-  border-left: 5px solid #008d71;
+  border-left: 5px solid #fff7eb;
 }
 
 .tm-alert {
