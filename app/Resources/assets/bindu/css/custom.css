@@ -358,9 +358,8 @@ section.tags ul li a:hover {
 
 .tm-btn, input[type="submit"] {
   color: #ffffff;
-  background: #008d71;
   background-image: none;
-  background-color: #008d71;
+  background-color: #ff0800;
   padding: 0 25px;
   font-weight: bold;
   cursor: pointer;
@@ -924,6 +923,14 @@ ul.social-networks li a.last{
 }
 #bgImagePreview{
   max-height: 300px;
+}
+
+.content-title{
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  margin-top: 20px;
+  border-bottom: 1px solid #ddd;
 }
 
 

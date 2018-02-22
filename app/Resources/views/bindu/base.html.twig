@@ -47,6 +47,7 @@
     {% endstylesheets %}
     <link rel="shortcut icon" href="favicon.ico"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
 </head>
 <body>
 {{ include('bindu/header.html.twig')}}
@@ -208,7 +209,7 @@
         font: 12px/1.8 Arial, sans-serif!important;
     }
     .swraper.modern .stoggler.on {
-        background: -webkit-linear-gradient(#008d71, #567);
+        background: -webkit-linear-gradient(#ff0800, #ff0800);
         font-size: 12px!important;
         font: 12px/1.8 Arial, sans-serif!important;
     }
@@ -232,6 +233,13 @@
         border-radius: 2px;
         font-weight: normal;
         padding-left:5px;
+    }
+
+    #tm-page-footer {
+        background: #ddd;
+        padding: 35px 0;
+        border-top: 2px solid #000;
+        margin-top: 30px;
     }
 
 </style>

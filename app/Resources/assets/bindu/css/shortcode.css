@@ -413,7 +413,7 @@ ul.social-networks li a {
   position: relative;
 }
 ul.social-networks li a:hover {
-  background: #008d71;
+  background: #ff0800;
 }
 ul.social-networks li a:hover:before,
 ul.social-networks li a:hover:after {

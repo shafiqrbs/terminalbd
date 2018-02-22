@@ -75,6 +75,14 @@ class WidgetController extends Controller
         ));
     }
 
+    public function aboutFooterAction()
+    {
+        $about                     = $this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->find(1);
+        return $this->render('@Frontend/Widget/footer-aboutus.html.twig', array(
+            'about'           => $about,
+        ));
+    }
+
     public function admissionAction()
     {
         $admissions                     = $this->getDoctrine()->getRepository('SettingContentBundle:Admission')->findModuleContent(5);

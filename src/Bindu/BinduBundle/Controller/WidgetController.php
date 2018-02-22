@@ -132,7 +132,7 @@ class WidgetController extends Controller
         $em = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate');
         $form = $this->createForm(new \Setting\Bundle\ToolBundle\Form\DomainSearchType($em,$location), $entity, array(
             'action' => $this->generateUrl('bindu_search', array('id' => $entity->getId())),
-            'method' => 'POST',
+            'method' => 'GET',
             'attr' => array(
                 'id' => 'commentform',
                 'novalidate' => 'novalidate',

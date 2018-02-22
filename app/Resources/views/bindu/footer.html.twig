@@ -1,22 +1,26 @@
 <!--tm-page-body-->
-{#<div id="tm-page-footer">
+<div id="tm-page-footer">
     <div class="tm-sidebar-footer">
         <div class="tm-wrap">
             <div class="tm-sidebar-footer-inner">
                 <div class="tm-column tm3">
                     <aside class="widget widget_text">
-                        <div class="textwidget">
-                            <p>
-                                <img alt="img" src="../../assets/frontend/img/sample/home/logo.png" width="139" height="24">
-                            </p>
-                            <p>&#123;&#35;{% render controller("FrontendBundle:Widget:aboutus") %}&#35;&#125;</p>
+                        <div class="textwidget" style="text-align:justify">
+                            <img alt="img" src="{{ asset('assets/frontend/img/logo.png') }}" width="139" height="24">
+                            {% render controller("FrontendBundle:Widget:aboutFooter") %}
                         </div>
                     </aside>
                 </div>
                 <div class="tm-column tm2">
                     <aside class="widget tm-list-style1">
-                        {{ knp_menu_render('SettingAppearanceBundle:Builder:footerMenu', {'template':'SettingAppearanceBundle:Menu:simple-menu.html.twig','currentClass': 'active'}) }}
-                    </aside>
+                        <h3 class="tm-title">About Us</h3>
+                        <ul>
+                            <li><a href="">About us</a></li>
+                            <li><a href="">Terms & Condition</a></li>
+                            <li><a href="">Policy</a></li>
+                         </ul>
+          {#              {{ knp_menu_render('SettingAppearanceBundle:Builder:footerMenu', {'template':'SettingAppearanceBundle:Menu:simple-menu.html.twig','currentClass': 'active'}) }}
+          #}          </aside>
                 </div>
 
                 <div class="tm-column tm3">
@@ -24,12 +28,12 @@
                         <h3 class="tm-title">Contact Us</h3>
                         <div>
                             <address class="margin-bottom-40">
-                                House#18 , Road No# 1, Block G<br>
-                                Mirpur-1, Dhaka<br>
-                                Phone: +88 01558 148 148<br>
-                                Fax: +88 01558 148 148<br>
-                                Email: <a href="mailto:info@metronic.com">info@bdeducations.com</a><br>
-                                Skype: <a href="skype:bdeducations">bdeducations</a>
+                                27/3 (1st Floor), Central Road<br>
+                                Dhanmondi,Dhaka-1205<br>
+                                Bangladesh<br>
+                                Phone: +88 01828 148 148<br>
+                                Email: <a href="mailto:info@terminalbd.com">info@terminalbd.com</a><br>
+                                Facebook: <a href="https://facebook.com/terminalbd">terminalbd</a>
                             </address>
                         </div>
                     </aside>
@@ -38,7 +42,7 @@
                     <aside class="widget widget_text">
                         <h3 class="tm-title">Get the latest news and promotion!</h3>
                         <div class="textwidget">
-                            <form action="{{ path('frontend_newsletter') }}" method="post" class="newsletter">
+                            <form action="" method="post" class="newsletter">
                                 <input type="email" value="" name="email" required="required" class="tm-input required" placeholder="Email..." />
                                 <button class="tm-button" type="submit" role="button">Subscribe</button>
                             </form>
@@ -48,12 +52,12 @@
             </div>
         </div>
     </div>
-</div>#}
+</div>
 <!--tm-page-page-footer-->
 <footer>
     <div class="tm-wrap tm-table">
         <div class="copyright">
-            <p>© Copyright - Umar IT Limited Bangladesh</p>
+            <p>© Copyright - www.terminalbd.com</p>
         </div>
         <div class="tm-social-icons">
             <a class="tm-icon-facebook" href="#">

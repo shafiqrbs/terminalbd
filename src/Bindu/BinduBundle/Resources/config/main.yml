@@ -12,11 +12,11 @@ bindu_desktop_home:
 
 bindu_mobile_home:
     path:     /mobile/{subdomain}
-    defaults: { _controller: MobileBundle:Default:index }
+    defaults: { _controller: BinduBundle:Default:index }
 
 bindu_build_syndicate:
     path:     /syndicate/{syndicate}
-    defaults: { _controller: MobileBundle:Default:index }
+    defaults: { _controller: BinduBundle:Bindu:businessDirectoryDetails }
 
 bindu_search:
     path:     /search

@@ -32,10 +32,10 @@
             <div class="one-half">
                 <div class="tm-logo">
                     <a href="/" class="tm-logo-simple">
-                        <img alt="Logo" width="230"  src="../../assets/frontend/img/logo.png">
+                        <img alt="Logo" width="230"  src="{{ asset('assets/frontend/img/logo.png') }}">
                     </a>
                     <a href="/" class="tm-logo-retina">
-                        <img alt="Logo" width="230"  src="../../assets/frontend/img/logo.png">
+                        <img alt="Logo" width="230"  src="{{ asset('assets/frontend/img/logo.png') }}">
                     </a>
                 </div>
             </div>
@@ -51,22 +51,17 @@
         <div class="tm-wrap tm-table">
 
             <nav class="tm-nav">
-                <ul class="tm-menu tm-menu-simple">
+                <ul class="tm-menu">
                     <li>
                         <a href="{{ path('bindu_homepage') }}">Home</a>
                     </li>
-                    {#
-                    <li class="current-menu-item">
+                    <li><a href="{{ path('bindu_explore') }}">Our Client</a></li>
+                    <li>
                         <a href="{{ path('bindu_explore') }}">Explore</a>
                     </li>
-                    <li class="current-menu-item">
-                        <a href="{{ path('bindu_explore') }}">Partner</a>
-                    </li>
-                    #}
                     <li>
-                        <a href="{{ path('bindu_find') }}">Find me</a>
+                        <a href="{{ path('bindu_contact') }}">Connect</a>
                     </li>
-
                 </ul>
 
                 {#  {{ knp_menu_render('SettingAppearanceBundle:Builder:megaMenu', {'template':'SettingAppearanceBundle:Menu:mega-menu.html.twig','currentClass': 'active'}) }}#}
@@ -76,7 +71,7 @@
                 <a href="https://www.facebook.com/Terminalbd-304478469740886/?fref=ts" target="_blank" class="tm-icon-facebook">
                     <i class="fa fa-facebook"></i>
                 </a>
-                <a href="{{ path('homepage') }}" data-title="Login" id="" class="tm-icon-dribbble">
+                <a href="{{ path('home') }}" data-title="Login" id="" class="tm-icon-dribbble">
                     <i class="fa fa-lock"></i>
                 </a>
                 <a href="javascript:" id="search" data-title="Search" class="tm-icon-twitter">

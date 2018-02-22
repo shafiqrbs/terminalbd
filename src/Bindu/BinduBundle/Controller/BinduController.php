@@ -18,24 +18,8 @@ class BinduController extends Controller
 
     public function indexAction()
     {
-        
-        $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
-        $entity = new User();
-        $form   = $this->createCreateForm($entity);
-        $detect = new MobileDetect();
-        if( $detect->isMobile() OR  $detect->isTablet() ) {
-            $theme = 'Frontend/Mobile';
-        }else{
-            $theme = 'Frontend/Desktop';
-        }
+
         return $this->redirect($this->generateUrl('fos_user_security_login'));
-
-       /* return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
-            'entity' => $entity,
-            'slides' => $slides,
-            'form'   => $form->createView(),
-        ));*/
-
     }
 
     public function homeAction()
@@ -279,6 +263,10 @@ class BinduController extends Controller
         }else{
             $theme = 'Frontend/Desktop';
         }
+
+      $this->get('session')->getFlashBag()->add(
+        'success',"Dear Respected Customer, Thank you for being registered.Our Administrator will contact with You as soon as possible.Please wait until we response."
+    );
         return $this->render('BinduBundle:'.$theme.':confirm.html.twig', array(
             'entity' => $entity,
             'csrf_token' => $csrfToken,
@@ -388,10 +376,10 @@ class BinduController extends Controller
 
     }
 
-    public function businessDirectoryDetailsAction($directory)
+    public function businessDirectoryDetailsAction($syndicate)
     {
 
-        $syndicate = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('slug' => $directory));
+        $syndicate = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('slug' => $syndicate));
         // $data = array('syndicate' => $syndicate->getId());
        // $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data);
         $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBy(array('status'=>1,'syndicate' => $syndicate), array('name'=>'ASC'));
