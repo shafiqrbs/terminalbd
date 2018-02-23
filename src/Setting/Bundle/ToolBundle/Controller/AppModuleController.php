@@ -23,26 +23,13 @@ class AppModuleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SettingToolBundle:AppModule')->findAll(array(),array('name'=>'asc'));
-
-        $pagination = $this->paginate($entities);
-
+        $entities = $em->getRepository('SettingToolBundle:AppModule')->findAll(array(),array('name'=>'ASC'));
         return $this->render('SettingToolBundle:AppModule:index.html.twig', array(
-            'pagination' => $pagination
+            'pagination' => $entities
         ));
     }
 
-    public function paginate($entities)
-    {
 
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            30  /*limit per page*/
-        );
-        return $pagination;
-    }
 
     /**
      * Creates a new AppModule entity.
@@ -77,7 +64,8 @@ class AppModuleController extends Controller
      */
     private function createCreateForm(AppModule $entity)
     {
-        $form = $this->createForm(new AppModuleType(), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new AppModuleType($globalOption), $entity, array(
             'action' => $this->generateUrl('appmodule_create'),
             'method' => 'POST',
             'attr' => array(
@@ -158,7 +146,8 @@ class AppModuleController extends Controller
     */
     private function createEditForm(AppModule $entity)
     {
-        $form = $this->createForm(new AppModuleType(), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new AppModuleType($globalOption), $entity, array(
             'action' => $this->generateUrl('appmodule_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

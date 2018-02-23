@@ -524,16 +524,42 @@ class BinduController extends Controller
 
     }
 
-    public function paginate($entities)
+    public function paginate($entities,$limit = 20)
     {
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->get('page', 1)/*page number*/,
-            20  /*limit per page*/
+            $limit  /*limit per page*/
         );
         return $pagination;
+    }
+
+
+    public function applicationAction()
+    {
+        $slug = $_REQUEST['slug'];
+        $app =$this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findOneBy(array('slug'=>$slug));
+        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findByApplicationDomain($slug);
+        if(!empty($entities)){
+            $pagination = $this->paginate($entities,12);
+        }else{
+            $pagination = '';
+        }
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() OR  $detect->isTablet() ) {
+            $theme = 'Frontend/Mobile';
+        }else{
+            $theme = 'Frontend/Desktop';
+        }
+        return $this->render('BinduBundle:'.$theme.':application.html.twig', array(
+            'app' => $app,
+            'entities' => $pagination,
+        ));
+
+
     }
 
 

@@ -52,7 +52,8 @@
                                         <thead class="flip-content ">
                                         <tr class="head-grey">
                                             {%  set direction = app.request.query.get('direction') %}
-                                            <th {% if pagination.isSorted('name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Name', 'name') }}{% if(direction =='desc') %}<i class="fa fa-caret-up custom-fa"></i> {% else %}<i class="fa fa-caret-down custom-fa"></i> {% endif %}</th>
+                                            <th>App Name</th>
+                                            {#<th {% if pagination.isSorted('name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Name', 'name') }}{% if(direction =='desc') %}<i class="fa fa-caret-up custom-fa"></i> {% else %}<i class="fa fa-caret-down custom-fa"></i> {% endif %}</th>#}
                                             <th class="numeric" > Module Class Name</th>
                                             <th class="numeric" > Slug</th>
                                             <th class="numeric" >Action</th>
@@ -84,9 +85,7 @@
 
                                         </tbody>
                                     </table>
-                                    <div class="pagination" >
-                                        {{ knp_pagination_render(pagination) }}
-                                    </div>
+
                                 </div>
                             </div>
                         </div>

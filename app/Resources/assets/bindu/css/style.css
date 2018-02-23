@@ -881,7 +881,7 @@ header #tm-header-nav nav.tm-nav ul.tm-menu > li > ul.sub-menu {
 }
 header #tm-header-nav nav.tm-nav ul.tm-menu > li > ul.sub-menu li a {
   color: #000000;
-  padding: 15px;
+  padding: 15px!important;
   display: block;
 }
 header #tm-header-nav nav.tm-nav ul.tm-menu > li > ul.sub-menu li a:hover {

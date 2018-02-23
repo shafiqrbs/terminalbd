@@ -84,16 +84,16 @@ bindu_preview:
     path:     /web-builder/preview
     defaults: { _controller: BinduBundle:Bindu:preview }
 
-bindu_explore:
-    path:     /web-builder/explore
-    defaults: { _controller: BinduBundle:Bindu:find }
+bindu_application:
+    path:     /application
+    defaults: { _controller: BinduBundle:Bindu:application }
 
 bindu_partner:
-    path:     /web-builder/partner
+    path:     /partner
     defaults: { _controller: BinduBundle:Bindu:find }
 
 bindu_find:
-    path:     /web-builder/find
+    path:     /find
     defaults: { _controller: BinduBundle:Bindu:find }
 
 bindu_about:

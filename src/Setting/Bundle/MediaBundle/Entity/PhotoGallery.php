@@ -58,6 +58,12 @@ class PhotoGallery
 
     protected $pages;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule", mappedBy="photoGallery")
+     */
+
+    protected $appModules;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\SyndicateContent", mappedBy="photoGallery")

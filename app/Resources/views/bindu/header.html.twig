@@ -49,37 +49,8 @@
     <!--tm-header-top-->
     <div id="tm-header-nav" class="tm-menu-style1 tm-sticky-menu">
         <div class="tm-wrap tm-table">
+            {% render controller("BinduBundle:Widget:headerMenu") %}
 
-            <nav class="tm-nav">
-                <ul class="tm-menu">
-                    <li>
-                        <a href="{{ path('bindu_homepage') }}">Home</a>
-                    </li>
-                    <li><a href="{{ path('bindu_explore') }}">Our Client</a></li>
-                    <li>
-                        <a href="{{ path('bindu_explore') }}">Explore</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('bindu_contact') }}">Connect</a>
-                    </li>
-                </ul>
-
-                {#  {{ knp_menu_render('SettingAppearanceBundle:Builder:megaMenu', {'template':'SettingAppearanceBundle:Menu:mega-menu.html.twig','currentClass': 'active'}) }}#}
-            </nav>
-            <!--tm-nav-->
-            <div class="tm-social-icons">
-                <a href="https://www.facebook.com/Terminalbd-304478469740886/?fref=ts" target="_blank" class="tm-icon-facebook">
-                    <i class="fa fa-facebook"></i>
-                </a>
-                <a href="{{ path('home') }}" data-title="Login" id="" class="tm-icon-dribbble">
-                    <i class="fa fa-lock"></i>
-                </a>
-                <a href="javascript:" id="search" data-title="Search" class="tm-icon-twitter">
-                    <i class="fa fa-search"></i>
-                </a>
-
-            </div>
-            <!--tm-social-icons-->
         </div>
     </div>
     <!--tm-header-nav-->

@@ -83,6 +83,7 @@
     'assets/bindu/3rd/rcswitcher/js/rcswitcher.min.js'
     'assets/bindu/3rd/colorpicker/js/evol.colorpicker.min.js'
     'assets/bindu/3rd/time-picker/js/jquery.ptTimeSelect.js'
+    'assets/bindu/3rd/prettyPhoto.js'
     'assets/bindu/js/theme.js'
 
 %}
@@ -107,7 +108,7 @@
         $( "#search" ).click(function() {
             $( ".tm-search" ).slideToggle('slow');
         });
-
+        $("a[rel^='prettyPhoto']").prettyPhoto();
         $("#layerslider").layerSlider();
         $(".mobile").mask("(99999) 999-999");
         $(".secured").mask("9999");

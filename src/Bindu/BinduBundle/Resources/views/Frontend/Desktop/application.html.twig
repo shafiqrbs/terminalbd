@@ -1,0 +1,111 @@
+{% extends ':bindu:base.html.twig' %}
+{% block body %}
+    <div id="tm-page-body">
+        <div id="" class="tm-container tm-wrap">
+            <div class="page-content">
+
+                <div class="page-content-inner">
+                    <div class="tm-row" >
+                        <div class="header-double-line-right">
+                            <h1 class="tm-title">{{ app.name }}</h1>
+                        </div>
+                        <div class="tm-content tm-col-12">
+                            {{ app.content|raw }}
+                        </div>
+                        <div class="header-line-bottom">
+                            <h2 class="tm-title">PRODUCT PREVIEW</h2>
+                        </div>
+                        <div class="tm-col-12 tm-gallery">
+                            <div class="gallery-thumb">
+                            <ul class="">
+                                {% for gallery in app.photoGallery.galleryImages %}
+                                <li class=""><a class="tm-mask" title="You can add caption to pictures." href="" rel="prettyPhoto"><img src="{{ image(gallery.getAbsolutePath(app.photoGallery.globalOption.id,app.photoGallery.id)).scaleResize(400,400,'#000000') }}" alt="Red round shape" ></a></li>
+                            {% endfor %}
+                            </ul>
+                            </div>
+                        </div>
+                        <div class="header-line-center" style="margin-top: 30px">
+                            <h1 class="tm-title">OUR RESPECTABLE CLIENT</h1>
+                        </div>
+                        <div id="tm-portfolio" class="tm-portfolio-classic">
+                            <div class="tm-content tm-col-4">
+                                {% for entity in entities %}
+                                    {% if(entity.templateCustomize.webPath('logo') is defined and entity.templateCustomize.webPath('logo') is not empty) %}
+                                        <article>
+                                            <div class="client-logo">
+                                                <div class="tm-mask">
+                                                    <div class="tm-mask-content">
+                                                        <h3><a href="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% else %}javascript:{% endif %}">{{ entity.name }}</a></h3>
+                                                        <span class="line"></span>
+                                                        <div class="incategory">
+                                                            <a href="{{ path('bindu_build_syndicate',{'syndicate':entity.syndicate.slug }) }}">{{ entity.syndicate.name }}</a>
+                                                        </div>
+                                                        <a class="tm-btn" target="_blank" href="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% else %}javascript:{% endif %}" >Visit Website</a>
+                                                    </div>
+                                                </div>
+                                                {% if(entity.templateCustomize.webPath('logo') is defined and entity.templateCustomize.webPath('logo') is not empty) %}
+                                                    <img class="img-ceneter" src="{{ image(entity.templateCustomize.webPath('logo')).resize(250,200) }}">
+                                                {% endif %}
+                                            </div>
+                                            <div class="org-title" ><strong>{{ entity.name }}</strong></div>
+                                            <ul class="social-networks">
+                                                <li>
+                                                    <a target="_blank" href="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% else %}javascript:{% endif %}" data-title="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% endif %}" >
+                                                        <i class="fa fa-home"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-title="+88{{ entity.mobile }}">
+                                                        <i class="fa fa-phone"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-title="+88{{ entity.mobile }}">
+                                                        <i class="fa fa-comment"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-title="{{ entity.email }}">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="last" href="" data-title="{% if  entity.location is defined and entity.location is not null  %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}">
+                                                        <i class="fa fa-map-pin"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </article>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!--page-content-->
+        </div>
+        <!--tm-container-->
+    </div>
+<style>
+
+.client-logo{
+    height: 200px;
+    width: 250px
+}
+ul.social-networks {
+  /* fallback */
+  background-position: center center;
+  background-repeat: no-repeat;
+  padding-left: 18px!important;
+}
+.ul.social-networks li a::before{
+    width: 200px;
+}
+
+</style>
+{% endblock %}

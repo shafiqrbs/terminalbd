@@ -55,6 +55,19 @@ class GlobalOptionRepository extends EntityRepository
         return $qb;
     }
 
+    function findByApplicationDomain($slug) {
+
+        $qb =  $this->createQueryBuilder('e');
+        $qb->join('e.siteSetting', 'sitesetting');
+        $qb->join('sitesetting.appModules', 'appmodules');
+        $qb->orderBy('e.name', 'ASC');
+        $qb->where("e.status = 1");
+        $qb->andWhere("e.domain != :domain")->setParameter('domain', 'NULL');
+        $qb->andWhere("appmodules.slug = :slug")->setParameter('slug', $slug);
+        $result = $qb->getQuery();
+        return $result;
+    }
+
     function findByDomain($data = array()) {
 
         $qb =  $this->createQueryBuilder('e');
