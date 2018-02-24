@@ -158,6 +158,21 @@ class DmsConfig
     private $printMarginBottom = 0;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="headerLeftWidth", type="string",  nullable=true)
+     */
+    private $headerLeftWidth = 0;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="headerRightWidth", type="string",  nullable=true)
+     */
+    private $headerRightWidth = 0;
+
+    /**
      * @var smallint
      *
      * @ORM\Column(name="printMarginReportTop", type="smallint",  nullable=true)
@@ -324,16 +339,16 @@ class DmsConfig
     private $bodyTopMargin = 0;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="sidebarWidth", type="integer", nullable = true)
+     * @ORM\Column(name="sidebarWidth", type="string", nullable = true)
      */
     private $sidebarWidth = 0;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="bodyWidth", type="integer", nullable = true)
+     * @ORM\Column(name="bodyWidth", type="string", nullable = true)
      */
     private $bodyWidth = 0;
 
@@ -1143,37 +1158,6 @@ class DmsConfig
         $this->leftTopMargin = $leftTopMargin;
     }
 
-    /**
-     * @return int
-     */
-    public function getSidebarWidth()
-    {
-        return $this->sidebarWidth;
-    }
-
-    /**
-     * @param int $sidebarWidth
-     */
-    public function setSidebarWidth($sidebarWidth)
-    {
-        $this->sidebarWidth = $sidebarWidth;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBodyWidth()
-    {
-        return $this->bodyWidth;
-    }
-
-    /**
-     * @param int $bodyWidth
-     */
-    public function setBodyWidth($bodyWidth)
-    {
-        $this->bodyWidth = $bodyWidth;
-    }
 
     /**
      * @return bool
@@ -1213,6 +1197,54 @@ class DmsConfig
     public function getDmsInvoiceAccessories()
     {
         return $this->dmsInvoiceAccessories;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeaderLeftWidth()
+    {
+        return $this->headerLeftWidth;
+    }
+
+    /**
+     * @param string $headerLeftWidth
+     */
+    public function setHeaderLeftWidth($headerLeftWidth)
+    {
+        $this->headerLeftWidth = $headerLeftWidth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeaderRightWidth()
+    {
+        return $this->headerRightWidth;
+    }
+
+    /**
+     * @param string $headerRightWidth
+     */
+    public function setHeaderRightWidth($headerRightWidth)
+    {
+        $this->headerRightWidth = $headerRightWidth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSidebarWidth()
+    {
+        return $this->sidebarWidth;
+    }
+
+    /**
+     * @param string $sidebarWidth
+     */
+    public function setSidebarWidth($sidebarWidth)
+    {
+        $this->sidebarWidth = $sidebarWidth;
     }
 
 
