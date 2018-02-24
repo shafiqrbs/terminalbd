@@ -207,7 +207,7 @@ class DoctorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('dms_doctor'));
+            return $this->redirect($this->generateUrl('dms_doctor_edit',array('id' => $entity->getId())));
         }
 
         return $this->render('DmsBundle:Doctor:new.html.twig', array(

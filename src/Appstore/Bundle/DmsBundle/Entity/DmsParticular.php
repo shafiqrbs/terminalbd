@@ -199,9 +199,6 @@ class DmsParticular
      */
     private $purchasePrice;
 
-
-
-
     /**
      * @var string
      *
@@ -240,23 +237,10 @@ class DmsParticular
     /**
      * @var string
      *
-     * @ORM\Column(name="specialist", type="string", length=255, nullable=true)
+     * @ORM\Column(name="doctorPrescription", type="text", nullable=true)
      */
-    private $specialist;
+    private $doctorPrescription;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="educationalDegree", type="string", length=255, nullable=true)
-     */
-    private $educationalDegree;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="currentJob", type="string", length=256, nullable=true)
-     */
-    private $currentJob;
 
     /**
      * @var string
@@ -606,53 +590,6 @@ class DmsParticular
         $this->email = $email;
     }
 
-    /**
-     * @return string
-     */
-    public function getSpecialist()
-    {
-        return $this->specialist;
-    }
-
-    /**
-     * @param string $specialist
-     */
-    public function setSpecialist($specialist)
-    {
-        $this->specialist = $specialist;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEducationalDegree()
-    {
-        return $this->educationalDegree;
-    }
-
-    /**
-     * @param string $educationalDegree
-     */
-    public function setEducationalDegree($educationalDegree)
-    {
-        $this->educationalDegree = $educationalDegree;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCurrentJob()
-    {
-        return $this->currentJob;
-    }
-
-    /**
-     * @param string $currentJob
-     */
-    public function setCurrentJob($currentJob)
-    {
-        $this->currentJob = $currentJob;
-    }
 
     /**
      * @return string
@@ -853,21 +790,6 @@ class DmsParticular
         $this->assignDoctor = $assignDoctor;
     }
 
-    /**
-     * @return string
-     */
-    public function getSepcimen()
-    {
-        return $this->sepcimen;
-    }
-
-    /**
-     * @param string $sepcimen
-     */
-    public function setSepcimen($sepcimen)
-    {
-        $this->sepcimen = $sepcimen;
-    }
 
     /**
      * @return string
@@ -1145,6 +1067,21 @@ class DmsParticular
         return $this->dmsInvoiceAccessories;
     }
 
+    /**
+     * @return string
+     */
+    public function getDoctorPrescription()
+    {
+        return $this->doctorPrescription;
+    }
+
+    /**
+     * @param string $doctorPrescription
+     */
+    public function setDoctorPrescription($doctorPrescription)
+    {
+        $this->doctorPrescription = $doctorPrescription;
+    }
 
 
 }
