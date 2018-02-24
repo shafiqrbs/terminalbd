@@ -58,7 +58,7 @@ class DmsInvoice
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine", mappedBy="dmsInvoice" , cascade={"remove"} )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"updated" = "DESC"})
      **/
     private  $invoiceMedicines;
 
