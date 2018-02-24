@@ -1247,6 +1247,22 @@ class DmsConfig
         $this->sidebarWidth = $sidebarWidth;
     }
 
+    /**
+     * @return string
+     */
+    public function getBodyWidth()
+    {
+        return $this->bodyWidth;
+    }
+
+    /**
+     * @param string $bodyWidth
+     */
+    public function setBodyWidth($bodyWidth)
+    {
+        $this->bodyWidth = $bodyWidth;
+    }
+
 
 }
 
