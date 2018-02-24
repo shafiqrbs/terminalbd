@@ -33,6 +33,7 @@
                                             {% if entity.dmsConfig.globalOption.contactPage.location is not empty %}<li>{{ entity.dmsConfig.globalOption.contactPage.location.name }},{{ entity.dmsConfig.globalOption.contactPage.location.parent.name }}{% if entity.dmsConfig.globalOption.contactPage.postalCode is not empty %}-{{ entity.dmsConfig.globalOption.contactPage.postalCode }}{% endif %}</li>{% endif %}
                                             <li>For Serial : +088 {{ entity.dmsConfig.globalOption.mobile }}</li>
                                             <li>Consulting Hours: ({{ entity.dmsConfig.globalOption.contactPage.startHour }} - {{ entity.dmsConfig.globalOption.contactPage.endHour }}) {% for day in entity.dmsConfig.globalOption.contactPage.weeklyOffDay %}{{ day }} {% if not loop.last %},{% endif %}{% endfor %} Closed</li>
+                                            <li>Off Day: {% for day in entity.dmsConfig.globalOption.contactPage.weeklyOffDay %}{{ day }} {% if not loop.last %},{% endif %}{% endfor %}</li>
                                         </ul>
                                     </div>
                                 </div>
