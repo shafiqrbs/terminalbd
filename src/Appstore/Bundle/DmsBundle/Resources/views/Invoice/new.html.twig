@@ -560,7 +560,6 @@
                                                         <th class="numeric">Treatment Particular</th>
                                                         <th class="numeric">Appointment Date</th>
                                                         <th class="numeric">Price</th>
-                                                        <th class="numeric">SubTotal</th>
                                                         <th class="numeric">Discount</th>
                                                         <th class="numeric">Paid</th>
                                                         <th class="numeric">Action</th>
@@ -581,7 +580,6 @@
                                                                 {% endif %}
                                                             </td>
                                                             <th class="numeric">{{ treatment.price }}</th>
-                                                            <th class="numeric">{{ treatment.subTotal }}</th>
                                                             <th class="numeric">
                                                                 {% if treatment.status ==1 %}
                                                                     {{ treatment.discount }}
