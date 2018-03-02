@@ -233,7 +233,7 @@
                             <div class="pull-center">
                                 <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
                                 {% if(entity.id > 0 ) %}
-                                    <a href="{{ path('siteslider_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
+                                    <a href="{{ path('page_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
                                 {% endif %}
                             </div>
                         </div>

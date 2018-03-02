@@ -11,6 +11,7 @@ use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\InvoiceModule;
 
 /**
  * AccountCash
@@ -33,6 +34,11 @@ class AccountCash
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountCashes")
      **/
     protected $globalOption;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", inversedBy="accountCash" )
+     **/
+    private  $invoiceModule;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountCash" )
@@ -644,6 +650,23 @@ class AccountCash
     public function setCustomerInvoice($customerInvoice)
     {
         $this->customerInvoice = $customerInvoice;
+    }
+
+
+    /**
+     * @return InvoiceModule
+     */
+    public function getInvoiceModule()
+    {
+        return $this->invoiceModule;
+    }
+
+    /**
+     * @param InvoiceModule $invoiceModule
+     */
+    public function setInvoiceModule($invoiceModule)
+    {
+        $this->invoiceModule = $invoiceModule;
     }
 
 

@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
@@ -319,12 +320,22 @@ class GlobalOption
      * @ORM\Column(name="mobile", type="string", length=15, nullable = true )
      */
     private $mobile;
+
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=100, nullable = true )
      */
     private $email;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="monthlyAmount", type="float", length=100, nullable = true )
+     */
+    private $monthlyAmount;
+
+
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="globalOptions" , cascade={"persist", "remove"} )
      **/
@@ -578,6 +589,13 @@ class GlobalOption
      **/
     private $domainCustomerInvoice;
 
+
+ /*================================= OFFICE BUNDLE===========================================*/
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $businessConfig;
 
 
     /**
@@ -1470,13 +1488,6 @@ class GlobalOption
     }
 
     /**
-     * @return SidebarWidget
-     */
-    public function getSidebarWidgets()
-    {
-        return $this->sidebarWidgets;
-    }
-    /**
      * @return FeatureWidget
      */
     public function getFeatureWidgets()
@@ -1658,6 +1669,30 @@ class GlobalOption
     public function getDomainCustomerInvoice()
     {
         return $this->domainCustomerInvoice;
+    }
+
+    /**
+     * @return BusinessConfig
+     */
+    public function getBusinessConfig()
+    {
+        return $this->businessConfig;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMonthlyAmount()
+    {
+        return $this->monthlyAmount;
+    }
+
+    /**
+     * @param float $monthlyAmount
+     */
+    public function setMonthlyAmount($monthlyAmount)
+    {
+        $this->monthlyAmount = $monthlyAmount;
     }
 
 

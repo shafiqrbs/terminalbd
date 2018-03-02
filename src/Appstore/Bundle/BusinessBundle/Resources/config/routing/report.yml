@@ -1,0 +1,104 @@
+business_report_cash:
+    path:     /report-cash
+    defaults: { _controller: "DmsBundle:Report:cash" }
+
+business_report_cash_pdf:
+    path:     /report-cash-pdf
+    defaults: { _controller: "DmsBundle:Report:cashPdf" }
+
+business_report_expenditure:
+    path:     /expenditure
+    defaults: { _controller: "DmsBundle:Report:expenditure" }
+
+business_report_expenditure_pdf:
+    path:     /expenditure-pdf
+    defaults: { _controller: "DmsBundle:Report:expenditurePdf" }
+
+business_report_income:
+    path:     /report-income
+    defaults: { _controller: "DmsBundle:Report:income" }
+
+business_report_income_pdf:
+    path:     /report-income-pdf
+    defaults: { _controller: "DmsBundle:Report:incomePdf" }
+
+business_report_balance_sheet:
+    path:     /sales-summary
+    defaults: { _controller: "DmsBundle:Report:salesSummary" }
+
+business_report_stock:
+    path:     /report-stock
+    defaults: { _controller: "DmsBundle:Report:stock" }
+
+business_report_stock_pdf:
+    path:     /report-stock-pdf
+    defaults: { _controller: "DmsBundle:Report:stockPdf" }
+
+business_report_stock_out:
+    path:     /report-stock-out
+    defaults: { _controller: "DmsBundle:Report:stockOut" }
+
+business_report_stock_out_pdf:
+    path:     /report-stock-out-pdf
+    defaults: { _controller: "DmsBundle:Report:stockOutPdf" }
+
+business_report_today_sales_summary_pdf:
+    path:     /daily-sales-summary-pdf
+    defaults: { _controller: "DmsBundle:Default:pdfTodaySales" }
+
+business_report_sales_summary:
+    path:     /sales-summary
+    defaults: { _controller: "DmsBundle:Report:salesSummary" }
+
+business_report_sales_summary_pdf:
+    path:     /sales-summary-pdf
+    defaults: { _controller: "DmsBundle:Report:salesSummaryPdf" }
+
+business_report_sales:
+    path:     /sales-details
+    defaults: { _controller: "DmsBundle:Report:sales" }
+
+business_report_sales_pdf:
+    path:     /sales-details-pdf
+    defaults: { _controller: "DmsBundle:Report:salesPdf" }
+
+business_report_sales_monthly:
+    path:     /monthly-sales-summary
+    defaults: { _controller: "DmsBundle:Report:monthlySales" }
+
+business_report_sales_monthly_pdf:
+    path:     /monthly-sales-summary-pdf
+    defaults: { _controller: "DmsBundle:Report:monthlySalesPdf" }
+
+business_report_sales_all_yearly:
+    path:     /all-year-sales-summary
+    defaults: { _controller: "DmsBundle:Report:allYearSales" }
+
+business_report_sales_all_yearly_pdf:
+    path:     /all-year-sales-summary-pdf
+    defaults: { _controller: "DmsBundle:Report:allYearSalesPdf" }
+
+business_report_sales_yearly:
+    path:     /yearly-sales-summary
+    defaults: { _controller: "DmsBundle:Report:yearlySales" }
+
+business_report_sales_yearly_pdf:
+    path:     /yearly-sales-summary-pdf
+    defaults: { _controller: "DmsBundle:Report:yearlySalesPdf" }
+
+business_report_sales_treatment:
+    path:     /treatment-wise-sales
+    defaults: { _controller: "DmsBundle:Report:treatmentWiseSales" }
+
+business_report_sales_treatment_pdf:
+    path:     /treatment-wise-sales-pdf
+    defaults: { _controller: "DmsBundle:Report:treatmentWiseSalesPdf" }
+
+business_report_purchase_summary:
+    path:     /purchase-summary
+    defaults: { _controller: "DmsBundle:Report:purchaseSummary" }
+
+business_report_purchase:
+    path:     /purchase-summary
+    defaults: { _controller: "DmsBundle:Report:purchaseSummary" }
+

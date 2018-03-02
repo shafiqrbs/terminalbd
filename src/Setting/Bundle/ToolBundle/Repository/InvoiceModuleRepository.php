@@ -30,9 +30,17 @@ class InvoiceModuleRepository extends EntityRepository
 
     public function insertInvoiceItem(InvoiceModule $invoice)
     {
-        $this->insertAppModule($invoice);
-        $this->insertModule($invoice);
-        $this->insertSyndicateModule($invoice);
+
+        $item = New InvoiceModuleItem();
+        $item->setInvoiceModule($invoice);
+        $item->setName("Monthly service charge");
+        $item->setAmount($invoice->getGlobalOption()->getMonthlyAmount());
+        $this->_em->persist($item);
+
+        // $this->insertAppModule($invoice);
+        // $this->insertModule($invoice);
+        // $this->insertSyndicateModule($invoice);
+
         $this->updateInvoice($invoice);
     }
 
@@ -61,6 +69,7 @@ class InvoiceModuleRepository extends EntityRepository
 
                 $item = New InvoiceModuleItem();
                 $item->setInvoiceModule($invoice);
+                $item->setName($module->getName());
                 $item->setAppModule($module);
                 $item->setAmount($module->getPrice());
                 $this->_em->persist($item);
@@ -105,4 +114,32 @@ class InvoiceModuleRepository extends EntityRepository
             $this->_em->flush();
         }
     }
+
+    public function insertInvoiceModuleItem(InvoiceModule $invoiceModule, $data)
+    {
+
+        $em = $this->_em;
+        if ($invoiceModule and isset($data['name']) and !empty($data['amount'])) {
+
+            $i = 0;
+            foreach ($data['name'] as $row):
+                if (isset($data['name'][$i]) and !empty($data['amount'][$i])) {
+                    if (!empty($data['name'][$i]) and !empty($data['amount'][$i]) and !empty($data['metaId'][$i])) {
+                        $entity = $em->getRepository('SettingToolBundle:InvoiceModuleItem')->find($data['metaId'][$i]);
+                    }else{
+                        $entity = new InvoiceModuleItem();
+                        $entity->setInvoiceModule($invoiceModule);
+                    }
+                    $entity->setName($data['name'][$i]);
+                    $entity->setAmount($data['amount'][$i]);
+                    $em->persist($entity);
+                }
+                $i++;
+            endforeach;
+            $em->flush();
+
+        }
+
+    }
+
 }

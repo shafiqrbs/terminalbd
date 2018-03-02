@@ -40,6 +40,8 @@
         'assets/bindu/3rd/select2/select2.css'
         'assets/bindu/3rd/colorpicker/css/evol.colorpicker.min.css'
         'assets/bindu/3rd/time-picker/css/jquery.ptTimeSelect.css'
+        'assets/frontend/3rd/owl.carousel/assets/owl.carousel.css'
+        'assets/template/plugin/owl.carousel/owl.theme.min.css'
         'assets/bindu/css/custom.css'
     %}
 
@@ -47,7 +49,6 @@
     {% endstylesheets %}
     <link rel="shortcut icon" href="favicon.ico"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCgg9f-HbB1zWmQY_zsz-vPpYtQd6cA6JA"></script>
 </head>
 <body>
 {{ include('bindu/header.html.twig')}}
@@ -56,7 +57,7 @@
 {% block footer %}
 {% endblock footer %}
 {% javascripts
-    'assets/bindu/3rd/jquery/jquery-core.js'
+    'assets/template/desktop/js/jquery.js'
     'assets/bindu/3rd/jquery/jquery-ui.js'
     'assets/bindu/3rd/jquery/jquery-tinynav.js'
     'assets/bindu/3rd/jquery/jquery-isotope.js'
@@ -82,6 +83,7 @@
     'assets/bindu/3rd/jscroll/js/jquery.jscroll.min.js'
     'assets/bindu/3rd/rcswitcher/js/rcswitcher.min.js'
     'assets/bindu/3rd/colorpicker/js/evol.colorpicker.min.js'
+    'assets/template/plugin/owl.carousel/owl.carousel.min.js'
     'assets/bindu/3rd/time-picker/js/jquery.ptTimeSelect.js'
     'assets/bindu/js/theme.js'
 
@@ -90,25 +92,27 @@
 {% endjavascripts %}
 {% block javascriptBlock %}
 {% endblock %}
+
 <script type="text/javascript">
 
      jQuery(document).ready(function () {
 
-         $('.cpButton').colorpicker();
-         $('.select2').select2({
-
-            placeholder: "Select a institute level",
-            allowClear: true,
-            theme: "classic"
-
-
-         });
+        $('.cpButton').colorpicker();
         $( ".tm-search" ).hide();
         $( "#search" ).click(function() {
             $( ".tm-search" ).slideToggle('slow');
         });
-        $("a[rel^='prettyPhoto']").prettyPhoto();
+        $("a[rel^='prettyPhoto']").prettyPhoto({
+            autoplay_slideshow: true, /* true/false */
+        });
         $("#layerslider").layerSlider();
+
+         $('.flexslider').flexslider({
+             animation: 'fade',
+             prevText: '<i class="fa fa-angle-left"></i>',
+             nextText: '<i class="fa fa-angle-right"></i>',
+         });
+
         $(".mobile").mask("(99999) 999-999");
         $(".secured").mask("9999");
         $('.plainText').bind('keyup blur',function(){

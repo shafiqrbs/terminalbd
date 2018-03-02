@@ -542,6 +542,7 @@ class BinduController extends Controller
         $slug = $_REQUEST['slug'];
         $app =$this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findOneBy(array('slug'=>$slug));
         $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findByApplicationDomain($slug);
+        $testimonials =$this->getDoctrine()->getRepository('SettingToolBundle:ApplicationTestimonial')->findToTestimonials($app->getId());
         if(!empty($entities)){
             $pagination = $this->paginate($entities,12);
         }else{
@@ -556,6 +557,7 @@ class BinduController extends Controller
         }
         return $this->render('BinduBundle:'.$theme.':application.html.twig', array(
             'app' => $app,
+            'testimonials' => $testimonials,
             'entities' => $pagination,
         ));
 

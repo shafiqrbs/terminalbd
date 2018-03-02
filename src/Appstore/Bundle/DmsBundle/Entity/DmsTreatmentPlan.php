@@ -84,6 +84,14 @@ class DmsTreatmentPlan
     private $paymentMobile;
 
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transactionId", type="string", length=50, nullable=true)
+     */
+    private $transactionId;
+
+
 
     /**
      * @var float
@@ -559,6 +567,22 @@ class DmsTreatmentPlan
     public function setPaymentMobile($paymentMobile)
     {
         $this->paymentMobile = $paymentMobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * @param string $transactionId
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->transactionId = $transactionId;
     }
 
 

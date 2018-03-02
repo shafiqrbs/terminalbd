@@ -116,9 +116,9 @@ class DmsParticularRepository extends EntityRepository
                 $data .= '<optgroup label="' .ucfirst($particular['serviceName']) . '">';
             }
             if ($particular['serviceFormat'] != 'treatment'){
-                $data .= '<option value="/dms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
+                $data .= '<option value="/dms/invoice/' . $particular['id'] . '/treatment-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
             }else{
-                $data .= '<option value="/dms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
+                $data .= '<option value="/dms/invoice/' . $particular['id'] . '/treatment-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
             }
             $service = $particular['serviceName'];
         }
@@ -190,6 +190,8 @@ class DmsParticularRepository extends EntityRepository
             ->leftJoin('e.unit','u')
             ->select('e.id')
             ->addSelect('e.name')
+            ->addSelect('e.minimumPrice')
+            ->addSelect('e.price')
             ->addSelect('e.particularCode')
             ->addSelect('e.status')
             ->addSelect('e.salesQuantity')

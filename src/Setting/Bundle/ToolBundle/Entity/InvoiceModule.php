@@ -2,6 +2,9 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -32,16 +35,6 @@ class InvoiceModule
      **/
     protected $globalOption = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PortalBankAccount", inversedBy="invoiceModules" )
-     **/
-    private  $portalBankAccount;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PortalMobileBankAccount", inversedBy="invoiceModules" )
-     **/
-    private  $portalMobileBankAccount;
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -59,11 +52,68 @@ class InvoiceModule
      **/
     private  $receivedBy;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="invoiceModules" )
+     **/
+    private  $accountBank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="invoiceModules" )
+     **/
+    private  $accountMobileBank;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="invoiceModule" )
+     **/
+    private  $accountCash;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="invoiceModules" )
+     **/
+    private  $transactionMethod;
+
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable = true)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="billFor", type="string", length=255, nullable = true)
+     */
+    private $billFor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile", type="string", length=255, nullable = true)
+     */
+    private $mobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=255, nullable = true)
+     */
+    private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="string", length=255, nullable = true)
+     */
+    private $remark;
+
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="code", type="integer", length=255, nullable = true)
+     * @ORM\Column(name="code", type="integer", length=10, nullable = true)
      */
     private $code;
 
@@ -115,6 +165,15 @@ class InvoiceModule
      * @ORM\Column(name="process", type="string",  nullable = true)
      */
     private $process = 'Pending';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="customInvoice", type="boolean")
+     */
+    private $customInvoice = false;
+
+
 
     /**
      * @var \DateTime
@@ -333,21 +392,6 @@ class InvoiceModule
         $this->updated = $updated;
     }
 
-    /**
-     * @return PortalBankAccount
-     */
-    public function getPortalBankAccount()
-    {
-        return $this->portalBankAccount;
-    }
-
-    /**
-     * @param PortalBankAccount $portalBankAccount
-     */
-    public function setPortalBankAccount($portalBankAccount)
-    {
-        $this->portalBankAccount = $portalBankAccount;
-    }
 
     /**
      * @return mixed
@@ -437,20 +481,166 @@ class InvoiceModule
         $this->billMonth = $billMonth;
     }
 
+
     /**
-     * @return PortalMobileBankAccount
+     * @return string
      */
-    public function getPortalMobileBankAccount()
+    public function getAddress()
     {
-        return $this->portalMobileBankAccount;
+        return $this->address;
     }
 
     /**
-     * @param PortalMobileBankAccount $portalMobileBankAccount
+     * @param string $address
      */
-    public function setPortalMobileBankAccount($portalMobileBankAccount)
+    public function setAddress($address)
     {
-        $this->portalMobileBankAccount = $portalMobileBankAccount;
+        $this->address = $address;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * @param string $mobile
+     */
+    public function setMobile($mobile)
+    {
+        $this->mobile = $mobile;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBillFor()
+    {
+        return $this->billFor;
+    }
+
+    /**
+     * @param string $billFor
+     */
+    public function setBillFor($billFor)
+    {
+        $this->billFor = $billFor;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomInvoice()
+    {
+        return $this->customInvoice;
+    }
+
+    /**
+     * @param bool $customInvoice
+     */
+    public function setCustomInvoice($customInvoice)
+    {
+        $this->customInvoice = $customInvoice;
+    }
+
+    /**
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return AccountCash
+     */
+    public function getAccountCash()
+    {
+        return $this->accountCash;
+    }
+
+    /**
+     * @param AccountCash $accountCash
+     */
+    public function setAccountCash($accountCash)
+    {
+        $this->accountCash = $accountCash;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemark()
+    {
+        return $this->remark;
+    }
+
+    /**
+     * @param string $remark
+     */
+    public function setRemark($remark)
+    {
+        $this->remark = $remark;
     }
 }
 

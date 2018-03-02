@@ -77,6 +77,68 @@ $( ".autoProcedure" ).autocomplete({
     }
 });
 
+/*$( ".autoDiseases" ).autocomplete({
+    source: function( request, response ) {
+        $.ajax( {
+            url: Routing.generate('dms_invoice_procedure_diseases_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        } );
+    },
+    minLength: 1,
+    select: function( event, ui ) {
+    }
+});*/
+
+function split( val ) {
+    return val.split( /,\s*/ );
+}
+function extractLast( term ) {
+    return split( term ).pop();
+}
+
+$( ".autoDiseases" )
+// don't navigate away from the field on tab when selecting an item
+    .on( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).autocomplete( "instance" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        source: function( request, response ) {
+            $.getJSON( Routing.generate('dms_invoice_procedure_diseases_search') , {
+                term: extractLast( request.term )
+            }, response );
+        },
+        search: function() {
+            // custom minLength
+            var term = extractLast( this.value );
+            if ( term.length < 2 ) {
+                return false;
+            }
+        },
+        focus: function() {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
+
 $( ".investigation" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
@@ -185,21 +247,21 @@ $(document).on( "click", ".receivePayment", function(e){
 $(document).on( "change", "#invoiceParticular", function(e){
 
     var price = $(this).val();
-    $('#appstore_bundle_dmsbundle_invoice_payment').val(price);
+    $('#appstore_bundle_dmsinvoice_payment').val(price);
 });
 
 $(document).on('click', '.addProcedure', function() {
 
     var dataTab    = $(this).attr('data-tab');
     var procedure =  $('#'+dataTab).find('#procedure').val();
+    var diseases =  $('#'+dataTab).find('#diseases').val();
     if(procedure == ''){
         alert('You have to add procedure text');
         $('#'+dataTab).find('#procedure').focus();
         return false;
     }
     var checked = []
-    $('#'+dataTab).find("input[name='teethNo[]']:checked").each(function ()
-    {
+    $('#'+dataTab).find("input[name='teethNo[]']:checked").each(function (){
        checked.push(parseInt($(this).val()));
     });
 
@@ -208,10 +270,11 @@ $(document).on('click', '.addProcedure', function() {
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'procedure='+procedure+'&teethNo='+checked,
+        data: 'procedure='+procedure+'&teethNo='+checked+'&diseases='+diseases,
         success: function (response) {
             $('#'+dataTab).find('#procedure-'+showDiv).html(response);
             $('#'+dataTab).find('#procedure').val('');
+            $('#'+dataTab).find('#diseases').val('');
             $('#'+dataTab).find('.checkradios-checkbox').prop('checked', false);
             $('#'+dataTab).find('.checked').removeClass('fa fa-window-close');
            }
@@ -367,7 +430,7 @@ $(document).on('change', '#appointmentDate', function() {
     if(appointmentDate == ''){
         return false;
     }
-    var assignDoctor = $('#appstore_bundle_dmsbundle_invoice_assignDoctor').val();
+    var assignDoctor = $('#appstore_bundle_dmsinvoice_assignDoctor').val();
     $.get(Routing.generate('dms_invoice_appointment_schedule_time',{assignDoctor:assignDoctor,appointmentDate:appointmentDate}),
             function(data){
                $('#appointmentTime').html(data);
@@ -405,12 +468,14 @@ $(document).on('click', '#addParticular', function() {
         data: 'particularId='+particularId+'&price='+price+'&appointmentDate='+appointmentDate+'&appointmentTime='+appointmentTime,
         success: function (response) {
             obj = JSON.parse(response);
+            $('.estimateTotal').html(obj['estimateTotal']);
             $('.subTotal').html(obj['subTotal']);
             $('.netTotal').html(obj['netTotal']);
             $('.due').html(obj['due']);
             $('.payment').html(obj['payment']);
             $('.discount').html(obj['discount']);
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $('.completeTreatment').html(obj['completeTreatment']);
             $("#particular").select2().select2("val","");
             $('#price').val('');
             $('#addParticular').attr("disabled", true);
@@ -432,33 +497,72 @@ $(document).on("click", ".treatmentDelete", function() {
             $.get(url, function( response ) {
                 obj = JSON.parse(response);
                 $('#remove-'+id).hide();
+                $('.estimateTotal').html(obj['estimateTotal']);
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
                 $('.due').html(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
+                $('.completeTreatment').html(obj['completeTreatment']);
             });
         }
     });
 });
 
-$(document).on("click", ".approve", function() {
+$(document).on('click', '#received2Btn', function() {
 
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#treatment-approved-'+id).hide();
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                if(data == 'success'){
-                    location.reload();
-                }
-            });
+    var treatment = $('#treatment').val();
+    if (treatment == '') {
+        $('#treatment').focus();
+        $('#treatment').addClass('input-error');
+        alert('Please select treatment name');
+        return false;
+    }
+    if ($('input#adjustment').is(':checked')) {
+        var adjustment = 1;
+    }else{
+        var adjustment = 0;
+    }
+    var receive = $('#receive').val();
+    var discount = $('#discount').val();
+    var transactionMethod = $('#appstore_bundle_dmsinvoice_transactionMethod').val();
+    var transactionId = $('#appstore_bundle_dmsinvoice_transactionId').val();
+    var paymentMobile = $('#appstore_bundle_dmsinvoice_paymentMobile').val();
+    var mobileBank = $('#appstore_bundle_dmsinvoice_accountMobileBank').val();
+    var accountBank = $('#appstore_bundle_dmsinvoice_accountBank').val();
+    var paymentCard = $('#appstore_bundle_dmsinvoice_paymentCard').val();
+    var cardNo = $('#appstore_bundle_dmsinvoice_cardNo').val();
+
+    var url = $(this).attr('data-url');
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: 'treatment='+treatment+'&discount='+discount+'&receive='+receive+'&transactionMethod='+transactionMethod+'&transactionId='+transactionId+'&paymentMobile='+paymentMobile+'&mobileBank='+mobileBank+'&accountBank='+accountBank+'&paymentCard='+paymentCard+'&cardNo='+cardNo+'&adjustment='+adjustment,
+        success: function (response) {
+            obj = JSON.parse(response);
+            if(obj['success'] == 'success'){
+                $('.estimateTotal').html(obj['estimateTotal']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.payment').html(obj['payment']);
+                $('.discount').html(obj['discount']);
+                $("#treatment").val($("#treatment option:first").val());
+                $('#discount').val('');
+                $('#receive').val('');
+                $('#uniform-adjustment span').removeClass('checked');
+                $('#adjustment').attr('checked', false);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('.completeTreatment').html(obj['completeTreatment']);
+                $('#treatment-approved-'+treatment).hide();
+            }
+
         }
-    });
+    })
 });
+
+
+
 
 $(document).on('click', '#addAccessories', function() {
 
@@ -563,33 +667,38 @@ var form = $("#invoiceForm").validate({
 
     rules: {
 
-        "appstore_bundle_dmsbundle_invoice[customer][name]": {required: true},
-        "appstore_bundle_dmsbundle_invoice[customer][mobile]": {required: true},
-        "appstore_bundle_dmsbundle_invoice[customer][age]": {required: true},
-        "appstore_bundle_dmsbundle_invoice[customer][address]": {required: false},
+        "appstore_bundle_dmsinvoice[customer][name]": {required: true},
+        "appstore_bundle_dmsinvoice[customer][mobile]": {required: true},
+        "appstore_bundle_dmsinvoice[customer][age]": {required: true},
+        "appstore_bundle_dmsinvoice[customer][address]": {required: false},
     },
 
     messages: {
 
-        "appstore_bundle_dmsbundle_invoice[customer][name]":"Enter patient name",
-        "appstore_bundle_dmsbundle_invoice[customer][mobile]":"Enter patient mobile no",
-        "appstore_bundle_dmsbundle_invoice[customer][age]": "Enter patient age",
+        "appstore_bundle_dmsinvoice[customer][name]":"Enter patient name",
+        "appstore_bundle_dmsinvoice[customer][mobile]":"Enter patient mobile no",
+        "appstore_bundle_dmsinvoice[customer][age]": "Enter patient age",
     },
     tooltip_options: {
-        "appstore_bundle_dmsbundle_invoice[customer][name]": {placement:'top',html:true},
-        "appstore_bundle_dmsbundle_invoice[customer][mobile]": {placement:'top',html:true},
-        "appstore_bundle_dmsbundle_invoice[customer][age]": {placement:'top',html:true},
+        "appstore_bundle_dmsinvoice[customer][name]": {placement:'top',html:true},
+        "appstore_bundle_dmsinvoice[customer][mobile]": {placement:'top',html:true},
+        "appstore_bundle_dmsinvoice[customer][age]": {placement:'top',html:true},
     },
 
     submitHandler: function(form) {
 
         $.ajax({
-
             url         : $('form#invoiceForm').attr( 'action' ),
             type        : $('form#invoiceForm').attr( 'method' ),
             data        : new FormData($('form#invoiceForm')[0]),
             processData : false,
             contentType : false,
+            beforeSend: function(){
+                $('.loader-double').fadeIn(1000).addClass('is-active');
+            },
+            complete: function(){
+                $('.loader-double').fadeIn(1000).removeClass('is-active');
+            },
             success: function(response){
                 location.reload();
             }
@@ -597,13 +706,13 @@ var form = $("#invoiceForm").validate({
     }
 });
 
-$('#appstore_bundle_dmsbundle_invoice_customer_name').on('click', function(){
+$('#appstore_bundle_dmsinvoice_customer_name').on('click', function(){
     form.element($(this));
 });
-$('#appstore_bundle_dmsbundle_invoice_customer_mobile').on('click', function(){
+$('#appstore_bundle_dmsinvoice_customer_mobile').on('click', function(){
     form.element($(this));
 });
-$('#appstore_bundle_dmsbundle_invoice_customer_age').on('click', function(){
+$('#appstore_bundle_dmsinvoice_customer_age').on('click', function(){
     form.element($(this));
 });
 
@@ -644,23 +753,6 @@ $(document).on("change", ".invoiceProcess", function() {
     });
 
 });
-
-
-$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_payment', function() {
-
-    var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
-    var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
-    var dueAmount = (due - payment);
-    if(dueAmount > 0){
-        $('#balance').html('Due Tk.');
-        $('.due').html(dueAmount);
-    }else{
-        var balance =  payment - due ;
-        $('#balance').html('Return Tk.');
-        $('.due').html(balance);
-    }
-});
-
 
 
 $('.particular-info').on('keypress', 'input', function (e) {

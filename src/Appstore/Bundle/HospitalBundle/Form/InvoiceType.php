@@ -85,6 +85,7 @@ class InvoiceType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
+                        ->andWhere("e.slug != 'cash-on-delivery'")
                         ->orderBy("e.id","ASC");
                 }
             ))
@@ -105,7 +106,7 @@ class InvoiceType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Choose receive bank account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -119,7 +120,7 @@ class InvoiceType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Choose receive mobile bank account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')

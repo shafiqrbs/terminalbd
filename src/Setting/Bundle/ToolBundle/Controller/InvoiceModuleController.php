@@ -4,6 +4,8 @@ namespace Setting\Bundle\ToolBundle\Controller;
 
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\InvoiceModuleItem;
+use Setting\Bundle\ToolBundle\Form\InvoicePaymentReceiveType;
+use Setting\Bundle\ToolBundle\Form\InvoiceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -59,7 +61,104 @@ class InvoiceModuleController extends Controller
             'entities' => $entities,
         ));
     }
-   
+
+
+    public function addInvoiceAction()
+    {
+
+        $entity = new InvoiceModule();
+        $em = $this->getDoctrine()->getManager();
+        $entity->setProcess('Created');
+        $entity->setCustomInvoice(1);
+        $em->persist($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Invoice  has been generated successfully"
+        );
+        return $this->redirect($this->generateUrl('invoicemodule_modify', array('id' => $entity->getId())));
+
+    }
+
+    public function modifyAction(InvoiceModule $entity)
+    {
+        $editForm = $this->createEditForm($entity);
+        return $this->render('SettingToolBundle:InvoiceModule:edit.html.twig', array(
+            'entity'        => $entity,
+            'form'          => $editForm->createView(),
+        ));
+    }
+
+
+    public function updateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('SettingToolBundle:InvoiceModule')->find($id);
+        $data = $request->request->all();
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Theme entity.');
+        }
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            if($data['month'] and $data['year']){
+                $billMonth =$data['month'].','.$data['year'];
+                $entity->setBillMonth($billMonth);
+            }
+            $entity->setProcess('Pending');
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
+            $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceModule')->insertInvoiceModuleItem($entity,$data);
+            $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceModule')->updateInvoice($entity);
+            return $this->redirect($this->generateUrl('invoicemodule'));
+        }
+
+        return $this->render('SettingToolBundle:InvoiceModule:edit.html.twig', array(
+            'entity'        => $entity,
+            'form'          => $editForm->createView(),
+        ));
+    }
+
+    public function deleteItemAction(InvoiceModule $invoice, InvoiceModuleItem $item)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$item) {
+            throw $this->createNotFoundException('Unable to find InvoiceModule entity.');
+        }
+
+        $em->remove($item);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Invoice  has been deleted successfully"
+        );
+        $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceModule')->updateInvoice($invoice);
+        return $this->redirect($this->generateUrl('invoicemodule'));
+    }
+
+    /**
+     * Creates a form to edit a Theme entity.
+     *
+     * @param Theme $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(InvoiceModule $entity)
+    {
+        $form = $this->createForm(new InvoiceType(), $entity, array(
+            'action' => $this->generateUrl('invoicemodule_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
     /**
      * Displays a form to create a new InvoiceModule entity.
      *
@@ -103,10 +202,12 @@ class InvoiceModuleController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find InvoiceModule entity.');
         }
+        $editForm = $this->createReceivePaymentForm($entity);
         $banks = $em->getRepository('SettingToolBundle:PortalBankAccount')->findBy(array('status'=>1));
         $bkashs = $em->getRepository('SettingToolBundle:PortalBkashAccount')->findBy(array('status'=>1));
         return $this->render('SettingToolBundle:InvoiceModule:new.html.twig', array(
             'entity'      => $entity,
+            'form'          => $editForm->createView(),
             'banks'      => $banks,
             'bkashs'      => $bkashs,
 
@@ -127,7 +228,7 @@ class InvoiceModuleController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceModule')->updateInvoice($entity);
-        return $this->redirect($this->generateUrl('invoicemodule_show', array('invoice' => $entity->getInvoice())));
+        return $this->redirect($this->generateUrl('invoicemodule_show', array('id' => $entity->getId())));
     }
 
     /**
@@ -140,15 +241,35 @@ class InvoiceModuleController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find InvoiceModule entity.');
         }
-        $banks = $em->getRepository('SettingToolBundle:PortalBankAccount')->findBy(array('status'=>1));
-        $bkashs = $em->getRepository('SettingToolBundle:PortalBkashAccount')->findBy(array('status'=>1));
+        $editForm = $this->createReceivePaymentForm($entity);
         return $this->render('SettingToolBundle:InvoiceModule:show.html.twig', array(
             'entity'      => $entity,
-            'banks'      => $banks,
-            'bkashs'      => $bkashs,
+            'form'        => $editForm->createView(),
 
         ));
     }
+
+    /**
+     * Creates a form to edit a Theme entity.
+     *
+     * @param Theme $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createReceivePaymentForm(InvoiceModule $entity)
+    {
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new InvoicePaymentReceiveType($option), $entity, array(
+            'action' => $this->generateUrl('invoicemodule_ajax_payment', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
 
 
 
@@ -179,28 +300,12 @@ class InvoiceModuleController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find InvoiceModule entity.');
         }
-        $data = $request->request->all();
-        if( ($data['paymentMethod'] != "" && $data['bank'] != "") || ( $data['paymentMethod'] != "" && $data['bkash'] != "") ){
-
-            $entity->setPaymentMethod($data['paymentMethod']);
-            if($entity->getPaymentMethod() == 'Bank')
-            {
-                $bank = $this->getDoctrine()->getRepository('SettingToolBundle:PortalBankAccount')->find($data['bank']);
-                $entity->setPortalBankAccount($bank);
-
-            }else{
-
-                $bkash = $this->getDoctrine()->getRepository('SettingToolBundle:PortalBkashAccount')->find($data['bkash']);
-                $entity->setPortalBkash($bkash);
-            }
-            $entity->setCreatedBy($this->getUser());
+        $entity->setCreatedBy($this->getUser());
+        if($entity->getPaidAmount() >= $entity->getTotalAmount() ){
             $entity->setProcess('Paid');
-            $em->flush();
-            $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceModule')->updateInvoice($entity);
         }
-
-        exit;
-
+        $em->flush();
+        return $this->redirect($this->generateUrl('invoicemodule_show', array('id' => $entity->getId())));
     }
 
     /**

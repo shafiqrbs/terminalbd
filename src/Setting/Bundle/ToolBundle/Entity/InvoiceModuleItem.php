@@ -32,14 +32,11 @@ class InvoiceModuleItem
     protected $appModule = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="invoiceModuleItems")
-     **/
-    protected $module = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SyndicateModule", inversedBy="invoiceModuleItems")
-     **/
-    protected $syndicateModule = null;
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
 
 
     /**
@@ -93,37 +90,6 @@ class InvoiceModuleItem
         $this->appModule = $appModule;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getModule()
-    {
-        return $this->module;
-    }
-
-    /**
-     * @param mixed $module
-     */
-    public function setModule($module)
-    {
-        $this->module = $module;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSyndicateModule()
-    {
-        return $this->syndicateModule;
-    }
-
-    /**
-     * @param mixed $syndicateModule
-     */
-    public function setSyndicateModule($syndicateModule)
-    {
-        $this->syndicateModule = $syndicateModule;
-    }
 
     /**
      * @return mixed
@@ -139,6 +105,22 @@ class InvoiceModuleItem
     public function setInvoiceModule($invoiceModule)
     {
         $this->invoiceModule = $invoiceModule;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }
 

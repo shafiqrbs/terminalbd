@@ -14,6 +14,7 @@ use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\InvoiceModule;
 
 /**
  * AccountMobileBank
@@ -38,6 +39,11 @@ class AccountMobileBank
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountMobileBank")
      **/
     protected $globalOption;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", mappedBy="accountMobileBank" )
+     **/
+    private  $invoiceModules;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="accountMobileBank"  )
@@ -154,6 +160,11 @@ class AccountMobileBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="accountMobileBank" )
      */
     protected $dmsTreatmentPlans;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="accountMobileBank" )
+     */
+    protected $businessTransactions;
 
     /**
      * @var string
@@ -497,6 +508,14 @@ class AccountMobileBank
     public function getRestaurantInvoices()
     {
         return $this->restaurantInvoices;
+    }
+
+    /**
+     * @return InvoiceModule
+     */
+    public function getInvoiceModules()
+    {
+        return $this->invoiceModules;
     }
 
 

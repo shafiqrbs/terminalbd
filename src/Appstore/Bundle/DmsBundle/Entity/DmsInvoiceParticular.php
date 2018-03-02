@@ -62,6 +62,13 @@ class DmsInvoiceParticular
     /**
      * @var string
      *
+     * @ORM\Column(name="diseases", type="text", nullable=true)
+     */
+    private $diseases;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="teethPosition", type="string", length=25, nullable=true)
      */
     private $teethPosition;
@@ -397,6 +404,22 @@ class DmsInvoiceParticular
     public function setPath($path)
     {
         $this->path = $path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiseases()
+    {
+        return $this->diseases;
+    }
+
+    /**
+     * @param string $diseases
+     */
+    public function setDiseases($diseases)
+    {
+        $this->diseases = $diseases;
     }
 
 

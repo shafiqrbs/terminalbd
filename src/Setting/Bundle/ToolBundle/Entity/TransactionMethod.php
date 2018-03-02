@@ -43,6 +43,10 @@ class TransactionMethod
      **/
     private  $invoiceSmsEmails;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", mappedBy="transactionMethod" )
+     **/
+    private  $invoiceModules;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -170,6 +174,11 @@ class TransactionMethod
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="transactionMethod" )
      */
     protected $dmsTreatmentPlans;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="transactionMethod" )
+     */
+    protected $businessTransactions;
 
     /**
      * @var string
@@ -432,6 +441,14 @@ class TransactionMethod
     public function getDmsInvoice()
     {
         return $this->dmsInvoice;
+    }
+
+    /**
+     * @return InvoiceModule
+     */
+    public function getInvoiceModules()
+    {
+        return $this->invoiceModules;
     }
 }
 

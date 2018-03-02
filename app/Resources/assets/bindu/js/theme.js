@@ -401,11 +401,6 @@
 			nextText: '<i class="fa fa-angle-right"></i>',
 		});
 
-		// Dismiss button for message box
-		$(".tm-alert a.close").live('click', function(){
-			$(this).closest(".tm-alert").fadeOut();
-		});
-
 		// Goto top button
 		$('.tm-to-top').click(function () {
 			$('body,html').animate({

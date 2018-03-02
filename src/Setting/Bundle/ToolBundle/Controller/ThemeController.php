@@ -172,6 +172,7 @@ class ThemeController extends Controller
         ));
        return $form;
     }
+
     /**
      * Edits an existing Theme entity.
      *

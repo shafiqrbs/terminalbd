@@ -89,6 +89,7 @@ class DmsInvoiceParticularRepository extends EntityRepository
         $entity = new DmsInvoiceParticular();
         $entity->setDmsService($service);
         $entity->setMetaValue($data['procedure']);
+        $entity->setDiseases($data['diseases']);
         $entity->setTeethNo($explode);
         $entity->setDmsInvoice($invoice);
         $em->persist($entity);
@@ -198,6 +199,7 @@ class DmsInvoiceParticularRepository extends EntityRepository
 
             $data .= '</td>';
         }
+        $data .='<td  class="numeric">'.$invoiceParticular->getDiseases().'</td>';
         $data .='<td class="numeric">';
         $data .='<a href="javascript:" class="btn red mini particularDelete" data-tab="'.$service->getSlug().'" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/dms/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
         $data .='</td>';
@@ -432,6 +434,20 @@ class DmsInvoiceParticularRepository extends EntityRepository
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.metaValue');
         $query->orderBy('e.metaValue', 'ASC');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
+    }
+
+    public function searchProcedureDiseasesComplete(DmsConfig $config,$q)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.dmsInvoice', 'i');
+        $query->select('e.diseases as id');
+        $query->where($query->expr()->like("e.diseases", "'$q%'"  ));
+        $query->andWhere("i.dmsConfig = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.diseases');
+        $query->orderBy('e.diseases', 'ASC');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
     }

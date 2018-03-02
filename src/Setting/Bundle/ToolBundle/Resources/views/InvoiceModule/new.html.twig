@@ -96,55 +96,7 @@
                                 </div>
                             </div>
                             {% include('flash-message.html.twig')  %}
-                            {% if entity.process == 'Pending' %}
-                                <form name="payment" id="payment" action="" method="post" >
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="row-fluid">
-                                                <div class="span3 ">
-                                                    <div class="control-group">
-                                                        <div class="controls">
-                                                            <select name="paymentMethod" id="paymentMethod" class="span12 select2">
-                                                                <option value="">--Select Payment method--</option>
-                                                                <option value="Bank">Online Bank</option>
-                                                                <option value="bKash">bKash</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                                <div class="span7">
-                                                    <div class="control-group span12">
-                                                        <div class="controls span12" id="bankbox">
-                                                            <select name="bank" id="bank" class="select2 span12">
-                                                                <option value="">--Select Bank Account--</option>
-                                                                {% for bank in banks %}
-                                                                    <option value="{{ bank.id }}">{{ bank.bank.name }}-{{ bank.accountNo }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
-                                                        <div class="controls span12" id="bkashbox">
-                                                            <select name="bkash" id="bkash" class="select2 span12">
-                                                                <option value="">--Select bKash Account--</option>
-                                                                {% for bkash in bkashs %}
-                                                                    <option value="{{ bkash.id }}">{{ bkash.accountType }}-{{ bkash.mobile }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="span2 ">
-                                                    <div class="control-group">
-                                                        <div class="controls">
-                                                            <button type="submit" id="submitted" class="btn blue" data-url="{{ path('invoicemodule_ajax_payment',{id:entity.id}) }}"><i class=" icon-money"></i>&nbsp;Add Payment</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            {% endif %}
                             <div class="clearfix"><br/></div>
                             <div class="row-fluid box green">
                                 {% if entity.invoiceModuleItems is defined and  entity.invoiceModuleItems is not empty  %}
@@ -153,24 +105,14 @@
                                         <thead class="flip-content ">
                                         <tr class="head-grey">
                                             <th class="numeric" >Name</th>
-                                            <th class="numeric" >Total</th>
+                                            <th class="numeric span3" >Total</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for item in entity.invoiceModuleItems %}
                                             <tr id="remove-{{ item.id }}">
-                                                <td class="numeric" >
-                                                    {% if item.appModule is not empty %}
-                                                        {{ item.appModule.name }}
-                                                    {% elseif item.module is not empty %}
-                                                        {{ item.module.name }}
-                                                    {% elseif item.syndicateModule is not empty %}
-                                                        {{ item.syndicateModule.name }}
-                                                    {% endif %}
-                                                </td>
-                                                <td class="numeric" >
-                                                    <a href="#" class="editable" data-name="amount" data-type="text"  data-pk="{{ item.id }}"  data-url="{{ path('invoicemodule_inline_upate') }}" data-original-title="Customize module price"> {{ item.amount }}</a>
-                                                </td>
+                                                <td class="numeric" >{{ item.name }}</td>
+                                                <td class="numeric" ><input class="m-wrap span12" name="amount[]" id="amount" value="{{ item.amount }}"></td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -187,9 +129,87 @@
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <a  class="btn purple " href="{{ path('invoicemodule_generate',{invoice:entity.invoice}) }}" ><i class="icon-ok"></i>&nbsp;Confirm Invoice</a>
                                 </div>
-
-
                             </div>
+                            <div class="clearfix">&nbsp;</div>
+                            {% if entity.process == 'Pending' %}
+                                {{ form_start(form) }}
+                                {{ form_row(form._token) }}
+                                <div class="row-fluid">
+
+                                    <div class="span4">
+
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Transaction Method</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.transactionMethod) }}
+                                                        {{ form_errors(form.transactionMethod) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="span6">
+                                        <div class="row-fluid bankHide">
+                                            <div class="span12">
+                                                <div class="control-group ">
+                                                    <label class="control-label" for="firstName">Bank Account</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.accountBank) }}
+                                                        {{ form_errors(form.accountBank) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid bkashHide">
+                                            <div class="span12">
+                                                <div class="control-group ">
+                                                    <label class="control-label" for="firstName">Mobile Account</label>
+                                                    <div class="controls" for="accountBkash">
+                                                        {{ form_widget(form.accountMobileBank) }}
+                                                        {{ form_errors(form.accountMobileBank) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Receive Amount</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.paidAmount) }}
+                                                        {{ form_errors(form.paidAmount) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="remark">
+                                                {{ form_widget(form.remark) }}
+                                                {{ form_errors(form.remark) }}
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="form-actions portlet box grey">
+                                    <div class="pull-right">
+                                        <button type="submit" class="btn green"><i class="icon-save"></i>&nbsp;Payment</button>
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+
+                            {% endif %}
+                            <div class="clearfix">&nbsp;</div>
                         </div>
                     </div>
                 </div>
@@ -198,13 +218,6 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@SettingToolBundle/Resources/public/css/print.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

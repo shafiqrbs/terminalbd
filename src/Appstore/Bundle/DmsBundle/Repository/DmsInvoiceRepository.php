@@ -283,28 +283,17 @@ class DmsInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $total = $em->createQueryBuilder()
             ->from('DmsBundle:DmsTreatmentPlan','si')
-            ->select('sum(si.subTotal) as subTotal')
+            ->select('sum(si.price) as estimateTotal')
             ->where('si.dmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
 
-        $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
-        if($subTotal > 0){
-
-            if ($invoice->getDmsConfig()->getVatEnable() == 1 && $invoice->getDmsConfig()->getVatPercentage() > 0) {
-                $totalAmount = ($subTotal- $invoice->getDiscount());
-                $vat = $this->getCulculationVat($invoice,$totalAmount);
-                $invoice->setVat($vat);
-            }
-
-            $invoice->setSubTotal($subTotal);
-            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-            $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
-
+        $estimateTotal = !empty($total['estimateTotal']) ? $total['estimateTotal'] :0;
+        if($estimateTotal > 0){
+            $invoice->setEstimateTotal($estimateTotal);
+            $this->updatePaymentReceive($invoice);
         }else{
-
             $invoice->setSubTotal(0);
-            $invoice->setEstimateCommission(0);
             $invoice->setTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
@@ -323,14 +312,16 @@ class DmsInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $res = $em->createQueryBuilder()
             ->from('DmsBundle:DmsTreatmentPlan','si')
-            ->select('sum(si.payment) as payment ,sum(si.discount) as discount')
+            ->select('sum(si.price) as subTotal ,sum(si.payment) as payment ,sum(si.discount) as discount')
             ->where('si.dmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->andWhere('si.status = :status')
             ->setParameter('status', 1)
             ->getQuery()->getOneOrNullResult();
+        $subTotal = !empty($res['subTotal']) ? $res['subTotal'] :0;
         $payment = !empty($res['payment']) ? $res['payment'] :0;
         $discount = !empty($res['discount']) ? $res['discount'] :0;
+        $invoice->setSubTotal($subTotal);
         $invoice->setPayment($payment);
         $invoice->setDiscount($discount);
         $invoice->setTotal($invoice->getSubTotal() - $discount);

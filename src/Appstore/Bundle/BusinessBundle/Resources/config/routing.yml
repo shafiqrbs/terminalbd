@@ -1,0 +1,42 @@
+business_expense:
+    resource: "@BusinessBundle/Resources/config/routing/expenditure.yml"
+    prefix:   /business-expense
+
+business_expensecategory:
+    resource: "@BusinessBundle/Resources/config/routing/expensecategory.yml"
+    prefix:   /business-expense-category
+
+business_report:
+    resource: "@BusinessBundle/Resources/config/routing/report.yml"
+    prefix:   /report
+
+business_purchase:
+    resource: "@BusinessBundle/Resources/config/routing/purchase.yml"
+    prefix:   /purchase
+
+business_vendor:
+    resource: "@BusinessBundle/Resources/config/routing/vendor.yml"
+    prefix:   /vendor
+
+business_invoice:
+    resource: "@BusinessBundle/Resources/config/routing/invoice.yml"
+    prefix:   /invoice
+
+
+business_product:
+    resource: "@BusinessBundle/Resources/config/routing/product.yml"
+    prefix:   /product
+
+
+business_medicine:
+    resource: "@BusinessBundle/Resources/config/routing/medicine.yml"
+    prefix:   /accessories
+
+
+business_config:
+    resource: "@BusinessBundle/Resources/config/routing/config.yml"
+    prefix:   /config
+
+business_homepage:
+    path:     /dashoard
+    defaults: { _controller: BusinessBundle:Default:index }

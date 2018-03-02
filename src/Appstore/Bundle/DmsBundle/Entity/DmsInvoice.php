@@ -82,7 +82,7 @@ class DmsInvoice
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="dmsInvoice" , cascade={"remove"} )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"created" = "DESC"})
      **/
     private  $dmsTreatmentPlans;
 
@@ -225,24 +225,25 @@ class DmsInvoice
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="subTotal", type="decimal", nullable=true)
+     * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="referredCommission", type="decimal", nullable=true)
+     * @ORM\Column(name="estimateTotal", type="float", nullable=true)
      */
-    private $referredCommission;
+    private $estimateTotal;
+
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="discount", type="decimal", nullable=true)
+     * @ORM\Column(name="discount", type="float", nullable=true)
      */
     private $discount;
 
@@ -255,48 +256,25 @@ class DmsInvoice
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="vat", type="decimal", nullable=true)
+     * @ORM\Column(name="vat", type="float", nullable=true)
      */
     private $vat;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="total", type="decimal", nullable=true)
+     * @ORM\Column(name="total", type="float", nullable=true)
      */
     private $total;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="payment", type="decimal", nullable=true)
-     */
-    private $payment;
-
-    /**
      * @var float
      *
-     * @ORM\Column(name="estimateCommission", type="float" , nullable=true)
+     * @ORM\Column(name="payment", type="float", nullable=true)
      */
-    private $estimateCommission;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="commission", type="decimal", nullable=true)
-     */
-    private $commission;
-
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="commissionApproved", type="boolean" )
-     */
-    private $commissionApproved = false;
-
+    private $payment;
 
     /**
      * @var string
@@ -305,40 +283,10 @@ class DmsInvoice
      */
     private $comment;
 
-
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="chiefComplains", type="text", nullable=true)
-     */
-    private $chiefComplains;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="presentingComplains", type="text", nullable=true)
-     */
-    private $presentingComplains;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="drugHistory", type="text", nullable=true)
-     */
-    private $drugHistory;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="diagnosis", type="text", nullable=true)
-     */
-    private $diagnosis;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="due", type="decimal", nullable=true)
+     * @ORM\Column(name="due", type="float", nullable=true)
      */
     private $due;
 
@@ -904,53 +852,6 @@ class DmsInvoice
         $this->service = $service;
     }
 
-    /**
-     * @return Particular
-     */
-    public function getReferredDoctor()
-    {
-        return $this->referredDoctor;
-    }
-
-    /**
-     * @param Particular $referredDoctor
-     */
-    public function setReferredDoctor($referredDoctor)
-    {
-        $this->referredDoctor = $referredDoctor;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getDeliveryDate()
-    {
-        return $this->deliveryDate;
-    }
-
-    /**
-     * @param DateTime $deliveryDate
-     */
-    public function setDeliveryDate($deliveryDate)
-    {
-        $this->deliveryDate = $deliveryDate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryTime()
-    {
-        return $this->deliveryTime;
-    }
-
-    /**
-     * @param string $deliveryTime
-     */
-    public function setDeliveryTime($deliveryTime)
-    {
-        $this->deliveryTime = $deliveryTime;
-    }
 
     /**
      * @return int
@@ -971,118 +872,6 @@ class DmsInvoice
 
 
     /**
-     * @return string
-     */
-    public function getReferredCommission()
-    {
-        return $this->referredCommission;
-    }
-
-    /**
-     * @param string $referredCommission
-     */
-    public function setReferredCommission($referredCommission)
-    {
-        $this->referredCommission = $referredCommission;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryDateTime()
-    {
-        return $this->deliveryDateTime;
-    }
-
-    /**
-     * @param string $deliveryDateTime
-     */
-    public function setDeliveryDateTime($deliveryDateTime)
-    {
-        $this->deliveryDateTime = $deliveryDateTime;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrintFor()
-    {
-        return $this->printFor;
-    }
-
-    /**
-     * @param string $printFor
-     */
-    public function setPrintFor($printFor)
-    {
-        $this->printFor = $printFor;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getCabin()
-    {
-        return $this->cabin;
-    }
-
-    /**
-     * @param mixed $cabin
-     */
-    public function setCabin($cabin)
-    {
-        $this->cabin = $cabin;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInvoiceMode()
-    {
-        return $this->invoiceMode;
-    }
-
-    /**
-     * @param string $invoiceMode
-     */
-    public function setInvoiceMode($invoiceMode)
-    {
-        $this->invoiceMode = $invoiceMode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDisease()
-    {
-        return $this->disease;
-    }
-
-    /**
-     * @param string $disease
-     */
-    public function setDisease($disease)
-    {
-        $this->disease = $disease;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getDepartment()
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param Particular $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
-    }
-
-    /**
      * @return Particular
      */
     public function getAssignDoctor()
@@ -1098,86 +887,6 @@ class DmsInvoice
         $this->assignDoctor = $assignDoctor;
     }
 
-    /**
-     * @return InvoiceTransaction
-     */
-    public function getInvoiceTransactions()
-    {
-        return $this->invoiceTransactions;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCabinNo()
-    {
-        return $this->cabinNo;
-    }
-
-    /**
-     * @param string $cabinNo
-     */
-    public function setCabinNo($cabinNo)
-    {
-        $this->cabinNo = $cabinNo;
-    }
-
-
-    /**
-     * @return DoctorInvoice
-     */
-    public function getDoctorInvoices()
-    {
-        return $this->doctorInvoices;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCommission()
-    {
-        return $this->commission;
-    }
-
-    /**
-     * @param string $commission
-     */
-    public function setCommission($commission)
-    {
-        $this->commission = $commission;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getCommissionApproved()
-    {
-        return $this->commissionApproved;
-    }
-
-    /**
-     * @param bool $commissionApproved
-     */
-    public function setCommissionApproved($commissionApproved)
-    {
-        $this->commissionApproved = $commissionApproved;
-    }
-
-    /**
-     * @return User
-     */
-    public function getDeliveredBy()
-    {
-        return $this->deliveredBy;
-    }
-
-    /**
-     * @param User $deliveredBy
-     */
-    public function setDeliveredBy($deliveredBy)
-    {
-        $this->deliveredBy = $deliveredBy;
-    }
 
     /**
      * @return boolean
@@ -1195,61 +904,6 @@ class DmsInvoice
         $this->revised = $revised;
     }
 
-    /**
-     * @return float
-     */
-    public function getEstimateCommission()
-    {
-        return $this->estimateCommission;
-    }
-
-    /**
-     * @param float $estimateCommission
-     */
-    public function setEstimateCommission($estimateCommission)
-    {
-        $this->estimateCommission = $estimateCommission;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getReleaseDate()
-    {
-        return $this->releaseDate;
-    }
-
-    /**
-     * @param \DateTime $releaseDate
-     */
-    public function setReleaseDate($releaseDate)
-    {
-        $this->releaseDate = $releaseDate;
-    }
-
-    /**
-     * @return AdmissionPatientParticular
-     */
-    public function getAdmissionPatientParticulars()
-    {
-        return $this->admissionPatientParticulars;
-    }
-
-    /**
-     * @return HmsReverse
-     */
-    public function getHmsReverse()
-    {
-        return $this->hmsReverse;
-    }
-
-    /**
-     * @param HmsReverse $hmsReverse
-     */
-    public function setHmsReverse($hmsReverse)
-    {
-        $this->hmsReverse = $hmsReverse;
-    }
 
     /**
      * @return User
@@ -1301,69 +955,6 @@ class DmsInvoice
         return $this->dmsReverse;
     }
 
-    /**
-     * @return string
-     */
-    public function getChiefComplains()
-    {
-        return $this->chiefComplains;
-    }
-
-    /**
-     * @param string $chiefComplains
-     */
-    public function setChiefComplains($chiefComplains)
-    {
-        $this->chiefComplains = $chiefComplains;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPresentingComplains()
-    {
-        return $this->presentingComplains;
-    }
-
-    /**
-     * @param string $presentingComplains
-     */
-    public function setPresentingComplains($presentingComplains)
-    {
-        $this->presentingComplains = $presentingComplains;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDrugHistory()
-    {
-        return $this->drugHistory;
-    }
-
-    /**
-     * @param string $drugHistory
-     */
-    public function setDrugHistory($drugHistory)
-    {
-        $this->drugHistory = $drugHistory;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDiagnosis()
-    {
-        return $this->diagnosis;
-    }
-
-    /**
-     * @param string $diagnosis
-     */
-    public function setDiagnosis($diagnosis)
-    {
-        $this->diagnosis = $diagnosis;
-    }
 
     /**
      * @return DmsConfig
@@ -1397,21 +988,6 @@ class DmsInvoice
         return $this->dmsTreatmentPlans;
     }
 
-    /**
-     * @return DmsParticular
-     */
-    public function getInvestigations()
-    {
-        return $this->investigations;
-    }
-
-    /**
-     * @param  $investigations DmsParticular
-     */
-    public function setInvestigations($investigations)
-    {
-        $this->investigations = $investigations;
-    }
 
     /**
      * @return DmsInvoiceMedicine
@@ -1421,21 +997,6 @@ class DmsInvoice
         return $this->invoiceMedicines;
     }
 
-    /**
-     * @return DmsSpecialAdvise
-     */
-    public function getSpecialAdvises()
-    {
-        return $this->specialAdvises;
-    }
-
-    /**
-     * @param DmsSpecialAdvise $specialAdvises
-     */
-    public function setSpecialAdvises($specialAdvises)
-    {
-        $this->specialAdvises = $specialAdvises;
-    }
 
     /**
      * @return bool
@@ -1459,6 +1020,23 @@ class DmsInvoice
     public function getDmsInvoiceAccessories()
     {
         return $this->dmsInvoiceAccessories;
+    }
+
+
+    /**
+     * @return float
+     */
+    public function getEstimateTotal()
+    {
+        return $this->estimateTotal;
+    }
+
+    /**
+     * @param float $estimateTotal
+     */
+    public function setEstimateTotal($estimateTotal)
+    {
+        $this->estimateTotal = $estimateTotal;
     }
 
 

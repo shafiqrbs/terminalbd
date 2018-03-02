@@ -116,7 +116,9 @@ class DmsConfigController extends Controller
             if(empty($exist)){
                 $service = new DmsService();
                 $service->setName(trim($entity->getName()));
-                $service->setDentalService($entity);
+                if($entity->getSlug() != 'other-service'){
+                    $service->setDentalService($entity);
+                }
                 $service->setSlug(trim($entity->getSlug()));
                 $service->setServiceFormat(trim($entity->getSlug()));
                 $service->setStatus(1);

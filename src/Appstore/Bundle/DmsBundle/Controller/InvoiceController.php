@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DmsBundle\Controller;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories;
+use Appstore\Bundle\DmsBundle\Form\InvoiceCustomerType;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
@@ -83,6 +84,7 @@ class InvoiceController extends Controller
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
+        $entity->setProcess('Created');
         $entity->setCreatedBy($this->getUser());
         if(!empty($this->getUser()->getDmsParticularDoctor())){
             $entity->setAssignDoctor($this->getUser()->getDmsParticularDoctor());
@@ -105,6 +107,24 @@ class InvoiceController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
+    private function createInvoiceCustomerForm(DmsInvoice $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new InvoiceCustomerType($globalOption,$location), $entity, array(
+            'action' => $this->generateUrl('dms_invoice_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoiceForm',
+                'novalidate' => 'novalidate',
+                'enctype' => 'multipart/form-data',
+
+            )
+        ));
+        return $form;
+    }
+
     private function createEditForm(DmsInvoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
@@ -136,7 +156,11 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $editForm = $this->createEditForm($entity);
+        if($entity->getCustomer()){
+            $editForm = $this->createEditForm($entity);
+        }else{
+            $editForm = $this->createInvoiceCustomerForm($entity);
+        }
 
         /** @var  $invoiceParticularArr */
         $invoiceParticularArr = array();
@@ -159,20 +183,19 @@ class InvoiceController extends Controller
             $ageGroup = $entity->getCustomer()->getAgeGroup();
             $teethPlans         = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array('ageGroup' => $ageGroup),array('sorting'=>'ASC'));
         }
-
         $services    = $em->getRepository('DmsBundle:DmsService')->getServiceLists($dmsConfig);
-        $treatmentPlans     = $em->getRepository('DmsBundle:DmsParticular')->getServices($dmsConfig,array('treatment','other-service'));
         $accessories ='';
         if($entity->getDmsConfig()->isShowAccessories() == 1 ){
             $accessories        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('accessories'));
         }
+        $treatmentPlans        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('treatment'));
         $attributes         = $em->getRepository('DmsBundle:DmsPrescriptionAttribute')->findAll();
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'teethPlans' => $teethPlans,
-            'particularService' => $treatmentPlans,
             'invoiceParticularArr' => $invoiceParticularArr,
             'services' => $services,
+            'treatmentPlans' => $treatmentPlans,
             'accessories' => $accessories,
             'attributes' => $attributes,
             'form' => $editForm->createView(),
@@ -258,21 +281,38 @@ class InvoiceController extends Controller
         exit;
     }
 
-    public function particularSearchAction(DmsParticular $particular)
-    {
-        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
-    }
+
 
     public function returnResultData(DmsInvoice $entity,$msg=''){
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->getSalesItems($entity);
+        $completes ='';
+        $completes .='<option value="">--Select the complete treatment & service--</option>';
+        $completes .='<optgroup label="Treatment Particular">';
+
+        foreach ($entity->getDmsTreatmentPlans() as $plan){
+            if($plan->getStatus() != 1){
+            $date = $plan->getCreated()->format('Y-m-d');
+            $completes .= '<option value="'.$plan->getDmsParticular()->getId().'-'.$plan->getId().'">'.$date.' - '.$plan->getDmsParticular()->getName().' (Tk.'.$plan->getSubTotal().')</option>';
+            }
+        }
+        $completes .='</optgroup>';
+        $completes .='<optgroup label="Other Service">';
+        $others        = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($entity->getDmsConfig(),array('other-service'));
+        foreach ($others as $other){
+            $completes .= '<option value="'.$other['id'].'-0">'.$other['name'].'</option>';
+        }
+        $completes .='</optgroup>';
+
+        $estimateTotal = $entity->getEstimateTotal() > 0 ? $entity->getEstimateTotal() : 0;
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
         $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
-        $due = $entity->getDue() > 0 ? $entity->getDue() : 0;
+        $due = $entity->getDue();
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
         $data = array(
+           'estimateTotal' => $estimateTotal,
            'subTotal' => $subTotal,
            'netTotal' => $netTotal,
            'payment' => $payment ,
@@ -280,7 +320,7 @@ class InvoiceController extends Controller
            'vat' => $vat,
            'discount' => $discount,
            'invoiceParticulars' => $invoiceParticulars ,
-           'msg' => $msg ,
+           'completeTreatment' => $completes ,
            'success' => 'success'
        );
 
@@ -293,8 +333,9 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $procedure = $request->request->get('procedure');
+        $diseases = $request->request->get('diseases');
         $teethNo = $request->request->get('teethNo');
-        $invoiceItems = array('service'=> $service, 'procedure' => $procedure ,'teethNo' => $teethNo);
+        $invoiceItems = array('service'=> $service, 'procedure' => $procedure ,'diseases' => $diseases ,'teethNo' => $teethNo);
         $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceParticularSingle($invoice, $invoiceItems);
         $data = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceParticularReturn($invoice, $invoiceItems);
         return new Response($data);
@@ -302,7 +343,23 @@ class InvoiceController extends Controller
 
     }
 
-    public function addParticularAction(Request $request, DmsInvoice $invoice)
+    public function invoiceParticularDeleteAction( $invoice, DmsInvoiceParticular $particular){
+
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$particular) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+        if(!empty($particular->getPath())){
+            $particular->removeFileImage();
+        }
+        $em->remove($particular);
+        $em->flush();
+        exit;
+    }
+
+
+    public function treatmentParticularAddAction(Request $request, DmsInvoice $invoice)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -316,6 +373,31 @@ class InvoiceController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
+        exit;
+
+    }
+
+    public function treatmentParticularSearchAction(DmsParticular $particular)
+    {
+        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
+    }
+
+    public function treatmentPaymentAction(Request $request, DmsInvoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        if ((!empty($entity)) ) {
+            $treatmentPlan = $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->insertPaymentTransaction($entity,$data);
+            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($entity);
+            if($treatmentPlan->getPayment() > 0){
+                $em->getRepository('AccountingBundle:AccountCash')->dmsInsertSalesCash($treatmentPlan);
+                $em->getRepository('AccountingBundle:Transaction')->dmsTransaction($treatmentPlan);
+            }
+            $result = $this->returnResultData($entity);
+            return new Response(json_encode($result));
+        } else {
+            return new Response(json_encode(array('success'=>'failed')));
+        }
         exit;
 
     }
@@ -392,21 +474,6 @@ class InvoiceController extends Controller
         exit;
     }
 
-    public function invoiceParticularDeleteAction( $invoice, DmsInvoiceParticular $particular){
-
-
-        $em = $this->getDoctrine()->getManager();
-        if (!$particular) {
-            throw $this->createNotFoundException('Unable to find SalesItem entity.');
-        }
-        if(!empty($particular->getPath())){
-            $particular->removeFileImage();
-        }
-        $em->remove($particular);
-        $em->flush();
-        exit;
-    }
-
     public function addMedicineAction(Request $request, DmsInvoice $invoice)
     {
 
@@ -441,39 +508,6 @@ class InvoiceController extends Controller
         exit;
     }
 
-    public function addPaymentAction(Request $request , DmsInvoice $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $invoiceParticular = $request->request->get('invoiceParticular');
-        $payment = $request->request->get('payment');
-        $discount = $request->request->get('discount');
-        $discount = $discount !="" ? $discount : 0 ;
-        $process = $request->request->get('process');
-
-        if ( (!empty($entity) and !empty($payment)) or (!empty($entity) and $discount > 0 ) ) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess('In-progress');
-            $em->flush();
-            $transactionData = array('process'=> 'In-progress','invoiceParticular' => $invoiceParticular,'payment' => $payment, 'discount' => $discount);
-            $this->getDoctrine()->getRepository('DmsBundle:DmsTreatmentPlan')->insertPaymentTransaction($transactionData);
-            $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->updateInvoiceTotalPrice($entity);
-            return new Response('success');
-
-        } elseif(!empty($entity) and $process == 'Done' and $entity->getTotal() <= $entity->getPayment()  ) {
-
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess($process);
-            $entity->setPaymentStatus('Paid');
-            $em->flush();
-            return new Response('success');
-
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
-
     public function patientLoadAction(DmsInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -506,66 +540,6 @@ class InvoiceController extends Controller
             );
             return New Response($html);
         }
-    }
-
-    public function confirmAction(DmsInvoice $entity)
-    {
-        $inventory = $this->getUser()->getGlobalOption()->getDmsConfig()->getId();
-        if ($inventory == $entity->getDmsConfig()->getId()) {
-            return $this->render('DmsBundle:DmsInvoice:confirm.html.twig', array(
-                'entity' => $entity,
-            ));
-        } else {
-            return $this->redirect($this->generateUrl('dms_invoice'));
-        }
-
-    }
-
-    public function approveAction(Request $request , DmsInvoice $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $payment = $request->request->get('payment');
-        $discount = $request->request->get('discount');
-        $discount = $discount !="" ? $discount : 0 ;
-        $process = $request->request->get('process');
-
-        if ( (!empty($entity) and !empty($payment)) or (!empty($entity) and $discount > 0 ) ) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess($process);
-            $em->flush();
-            return new Response('success');
-
-        } elseif(!empty($entity) and $process == 'Done' and $entity->getTotal() <= $entity->getPayment()  ) {
-
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess($process);
-            $entity->setPaymentStatus('Paid');
-            $em->flush();
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
-    public function invoiceReverseAction(DmsInvoice $invoice)
-    {
-        $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entity = $this->getDoctrine()->getRepository('DmsBundle:HmsReverse')->findOneBy(array('dmsConfig' => $dmsConfig, 'hmsInvoice' => $invoice));
-        return $this->render('DmsBundle:Reverse:show.html.twig', array(
-            'entity' => $entity,
-        ));
-
-    }
-
-    public function invoiceReverseShowAction(DmsInvoice $invoice)
-    {
-        $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $entity = $this->getDoctrine()->getRepository('DmsBundle:HmsReverse')->findOneBy(array('dmsConfig' => $dmsConfig, 'hmsInvoice' => $invoice));
-        return $this->render('DmsBundle:Reverse:show.html.twig', array(
-            'entity' => $entity,
-        ));
-
     }
 
     /**
@@ -605,29 +579,6 @@ class InvoiceController extends Controller
         $em->flush();
         exit;
 
-    }
-
-    public function addPatientAction(Request $request,DmsInvoice $invoice)
-    {
-        $data = $request->request->all();
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->patientInsertUpdate($data,$invoice);
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoice')->patientAdmissionUpdate($data,$invoice);
-        return new Response(json_encode(array('patient' => $customer->getId())));
-        exit;
-    }
-
-    public function getBarcode($value)
-    {
-        $barcode = new BarcodeGenerator();
-        $barcode->setText($value);
-        $barcode->setType(BarcodeGenerator::Code39Extended);
-        $barcode->setScale(1);
-        $barcode->setThickness(25);
-        $barcode->setFontSize(8);
-        $code = $barcode->generate();
-        $data = '';
-        $data .= '<img src="data:image/png;base64,'.$code .'" />';
-        return $data;
     }
 
     public function invoicePrintAction(DmsInvoice $entity)
@@ -808,6 +759,19 @@ class InvoiceController extends Controller
         $q = $_REQUEST['term'];
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
         $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->searchAutoComplete($config,$q);
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity['id']);
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
+    public function procedureDiseasesSearchAction()
+    {
+        $q = $_REQUEST['term'];
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $entities = $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->searchProcedureDiseasesComplete($config,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('value' => $entity['id']);

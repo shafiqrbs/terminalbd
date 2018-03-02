@@ -705,6 +705,31 @@ class User extends BaseUser
      */
     protected $customerInvoiceApprovedBy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $businessInvoiceCreatedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $businessInvoiceApprovedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $businessTransactionCreatedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $businessPurchasesCreatedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $businessPurchasesApprovedBy;
+
 
 
 

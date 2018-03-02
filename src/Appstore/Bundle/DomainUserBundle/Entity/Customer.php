@@ -135,6 +135,13 @@ class Customer
     /**
      * @var string
      *
+     * @ORM\Column(name="company", type="string", length=255, nullable =true)
+     */
+    private $company;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="permanentAddress", type="text",  nullable =true)
      */
     private $permanentAddress;
@@ -907,6 +914,22 @@ class Customer
     public function getDmsInvoices()
     {
         return $this->dmsInvoices;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param string $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
     }
 
 }

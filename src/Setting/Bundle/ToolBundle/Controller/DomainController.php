@@ -129,7 +129,8 @@ class DomainController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
-        $entity->setStatus($data['value']);
+        $process = 'set'.$data['name'];
+        $entity->$process($data['value']);
         $em->flush();
 
         if($entity->getStatus() != 1){

@@ -7,8 +7,12 @@ invoicemodule_domain:
     defaults: { _controller: "SettingToolBundle:InvoiceModule:domain" }
 
 invoicemodule_show:
-    path:     /{invoice}/show
+    path:     /{id}/show
     defaults: { _controller: "SettingToolBundle:InvoiceModule:show" }
+
+invoicemodule_add:
+    path:      /add-invoice
+    defaults: { _controller: "SettingToolBundle:InvoiceModule:addInvoice" }
 
 invoicemodule_new:
     path:      /{option}/new
@@ -19,14 +23,22 @@ invoicemodule_edit:
     path:     /{invoice}/edit
     defaults: { _controller: "SettingToolBundle:InvoiceModule:edit" }
 
+invoicemodule_modify:
+    path:     /{id}/modify
+    defaults: { _controller: "SettingToolBundle:InvoiceModule:modify" }
+
 invoicemodule_print:
-    path:     /{invoice}/print
+    path:     /{id}/print
     defaults: { _controller: "SettingToolBundle:InvoiceModule:print" }
 
 invoicemodule_generate:
     path:     /{invoice}/generate-invoice
     defaults: { _controller: "SettingToolBundle:InvoiceModule:generateInvoice" }
 
+invoicemodule_update:
+    path:     /{id}/update
+    defaults: { _controller: "SettingToolBundle:InvoiceModule:update" }
+    methods:  [POST, PUT]
 
 invoicemodule_ajax_payment:
     path:     /{id}/payment
@@ -36,6 +48,10 @@ invoicemodule_ajax_payment:
 invoicemodule_delete:
     path:     /{invoice}/delete
     defaults: { _controller: "SettingToolBundle:InvoiceModule:delete" }
+
+invoicemodule_item_delete:
+    path:     /{invoice}/{item}/delete
+    defaults: { _controller: "SettingToolBundle:InvoiceModule:deleteItem" }
 
 invoicemodule_approve:
     path:     /{id}/invoice-approve

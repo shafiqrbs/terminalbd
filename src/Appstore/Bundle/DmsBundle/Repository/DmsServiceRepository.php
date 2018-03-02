@@ -51,7 +51,6 @@ class DmsServiceRepository extends EntityRepository
             $entity->setServicePosition($data['servicePosition'][$key]);
             $entity->setServiceHeight($data['serviceHeight'][$key]);
             $em->flush($entity);
-
         }
 
         foreach ($data['serviceShow'] as $key => $value) {

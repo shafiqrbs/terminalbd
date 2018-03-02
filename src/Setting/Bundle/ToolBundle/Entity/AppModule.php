@@ -31,6 +31,12 @@ class AppModule
     private $siteSettings;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ApplicationTestimonial", mappedBy="appModules")
+     **/
+
+    private $applicationTestimonial;
+
+    /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\AccessRole", mappedBy="appModule")
      **/
 
@@ -58,14 +64,27 @@ class AppModule
     protected $file;
 
 
-
-
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="designation", type="string", length=255)
+     */
+    private $designation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="companyName", type="string", length=255)
+     */
+    private $companyName;
+
 
     /**
      * @var string
@@ -384,6 +403,38 @@ class AppModule
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDesignation()
+    {
+        return $this->designation;
+    }
+
+    /**
+     * @param mixed $designation
+     */
+    public function setDesignation($designation)
+    {
+        $this->designation = $designation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
+    }
+
+    /**
+     * @param string $companyName
+     */
+    public function setCompanyName($companyName)
+    {
+        $this->companyName = $companyName;
     }
 }
 

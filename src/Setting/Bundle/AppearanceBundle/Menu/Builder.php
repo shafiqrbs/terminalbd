@@ -44,6 +44,7 @@ class Builder extends ContainerAware
             $menu = $this->manageSystemAccountMenu($menu);
             $menu = $this->PayrollMenu($menu);
             $menu = $this->manageCustomerOrderMenu($menu);
+            $menu = $this->BusinessMenu($menu);
 
 
         }
@@ -168,6 +169,93 @@ class Builder extends ContainerAware
         $menu['Inbox & Transaction']['Manage Inbox']->addChild('Email', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-envelope');
         $menu['Inbox & Transaction']['Manage Inbox']->addChild('SMS', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-phone');
         return $menu;
+    }
+
+
+    public function BusinessMenu($menu)
+    {
+
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        $menu
+            ->addChild('Business Management')
+            ->setAttribute('icon', 'fa fa-hospital-o')
+            ->setAttribute('dropdown', true);
+
+        $menu['Business Management']->addChild('Client', array('route' => 'business_invoice'))
+            ->setAttribute('icon', 'fa fa-medkit');
+        $menu['Business Management']->addChild('Add Invoice', array('route' => 'business_invoice_new'))
+            ->setAttribute('icon', 'fa fa-medkit');
+        $menu['Business Management']->addChild('Expense')
+            ->setAttribute('icon', 'icon icon-money')
+            ->setAttribute('dropdown', true);
+        $menu['Business Management']['Expense']->addChild('Expenditure', array('route' => 'business_account_expenditure'))
+            ->setAttribute('icon', 'fa fa-indent');
+        $menu['Business Management']['Expense']->addChild('Expense Category', array('route' => 'business_expensecategory'))
+            ->setAttribute('icon', 'icon-tags');
+
+        if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
+
+            $menu['Business Management']->addChild('Master Data')
+                ->setAttribute('icon', 'icon icon-cog')
+                ->setAttribute('dropdown', true);
+            if ($securityContext->isGranted('ROLE_DOMAIN_DMS_CONFIG')) {
+                $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))
+                    ->setAttribute('icon', 'icon-cog');
+            }
+            $menu['Business Management']->addChild('Manage Stock')
+                ->setAttribute('icon', 'icon icon-truck')
+                ->setAttribute('dropdown', true);
+            $menu['Business Management']['Manage Stock']->addChild('Accessories Out', array('route' => 'business_product'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Manage Stock']->addChild('Accessories', array('route' => 'business_product'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']->addChild('Purchase')
+                ->setAttribute('icon', 'icon icon-truck')
+                ->setAttribute('dropdown', true);
+            $menu['Business Management']['Purchase']->addChild('Receive', array('route' => 'business_purchase'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'))->setAttribute('icon', 'icon-tag');
+
+            $menu['Business Management']->addChild('Sales Reports')
+                ->setAttribute('icon', 'icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Business Management']['Sales Reports']->addChild('Sales Summary', array('route' => 'business_report_sales_summary'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Sales Reports']->addChild('Sales Details', array('route' => 'business_report_sales'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Sales Reports']->addChild('Sales Monthly', array('route' => 'business_report_sales_monthly'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Sales Reports']->addChild('Sales Yearly', array('route' => 'business_report_sales_yearly'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Sales Reports']->addChild('All Sales Yearly', array('route' => 'business_report_sales_all_yearly'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Sales Reports']->addChild('Treatment Base Sales', array('route' => 'business_report_sales_treatment'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Sales Reports']->addChild('Purchase', array('route' => 'business_report_purchase'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']->addChild('Accounting Report')
+                ->setAttribute('icon', 'icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Business Management']['Accounting Report']->addChild('Cash in Hand', array('route' => 'business_report_cash'))
+                ->setAttribute('icon', 'icon-money');
+            $menu['Business Management']['Accounting Report']->addChild('Expenditure', array('route' => 'business_report_expenditure'))
+                ->setAttribute('icon', 'fa fa-indent');
+            $menu['Business Management']['Accounting Report']->addChild('Income', array('route' => 'business_report_income'))
+                ->setAttribute('icon', 'icon-credit-card');
+            $menu['Business Management']['Accounting Report']->addChild('Balance Sheet', array('route' => 'business_report_balance_sheet'))
+                ->setAttribute('icon', 'icon-table');
+            $menu['Business Management']->addChild('Stock Report')
+                ->setAttribute('icon', 'icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Business Management']['Stock Report']->addChild('Accessories Stock', array('route' => 'business_report_stock'))
+                ->setAttribute('icon', ' icon-inbox');
+            $menu['Business Management']['Stock Report']->addChild('Accessories Out', array('route' => 'business_report_stock_out'))
+                ->setAttribute('icon', 'icon-hdd');
+
+        }
+        return $menu;
+
     }
 
     public function WebsiteMenu($menu,$menuName)
@@ -1217,6 +1305,7 @@ class Builder extends ContainerAware
         $menu['Tools']->addChild('Institute Level', array('route' => 'institutelevel'));
         $menu['Tools']->addChild('Syndicate Module', array('route' => 'syndicatemodule'));
         $menu['Tools']->addChild('Application Module', array('route' => 'appmodule'));
+        $menu['Tools']->addChild('Application Testimonial', array('route' => 'applicationtestimonial'));
         $menu['Tools']->addChild('Module', array('route' => 'module'));
         $menu['Tools']->addChild('Theme', array('route' => 'theme'));
         $menu['Tools']->addChild('Menu Custom', array('route' => 'menucustom'));

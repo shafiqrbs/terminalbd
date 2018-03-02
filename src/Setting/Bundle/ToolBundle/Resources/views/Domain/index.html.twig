@@ -62,7 +62,8 @@
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Domain/Sub-domain</th>
+                                    <th class="numeric" >Domain</th>
+                                    <th class="numeric" >Monthly</th>
                                     <th class="numeric" >Status</th>
                                     <th class="numeric" >Invoice/Payment</th>
                                 </tr>
@@ -73,14 +74,9 @@
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >
-                                            <a target="_blank" href="http://{{ entity.domain }}">{{ entity.domain }}</a>/
-                                            {% if entity.subDomain is not empty %}
-                                                <a target="_blank" href="">{{ entity.subDomain }}</a>
-                                            {% endif %}
-                                        </td>
-                                        <td class="numeric" >
-                                            <a href="#" class="editable" id="group" data-type="select" data-pk="{{ entity.id }}" data-value="{{ entity.status }}" data-source="{{ path('tools_option_status') }}" data-url="{{ path('tools_option_status_update') }}" data-original-title="Select domain status">{{ entity.currentStatus }}</a></td>
+                                        <td class="numeric" ><a target="_blank" href="http://{{ entity.domain }}">{{ entity.domain }}</a></td>
+                                        <td class="numeric" ><a href="#" class="editable" data-name="MonthlyAmount" id="group" data-type="text" data-pk="{{ entity.id }}" data-value="{{ entity.monthlyAmount }}"  data-url="{{ path('tools_option_status_update') }}" data-original-title="Enter monthly amount">{{ entity.monthlyAmount }}</a></td>
+                                        <td class="numeric" ><a href="#" class="editable" data-name="Status" id="group" data-type="select" data-pk="{{ entity.id }}" data-value="{{ entity.status }}" data-source="{{ path('tools_option_status') }}" data-url="{{ path('tools_option_status_update') }}" data-original-title="Select domain status">{{ entity.currentStatus }}</a></td>
                                         <td class="numeric" >
                                             <a href="javascript:" class="btn blue mini badge badge-warning toggle badge-custom" id="{{ entity.id }}" ><i class="icon-cogs"></i>&nbsp;Operation</a>
                                             <a href="javascript:" class="btn green mini badge badge-warning toggle badge-custom" id="software-{{ entity.id }}" ><i class="icon-money"></i>&nbsp;Software</a>

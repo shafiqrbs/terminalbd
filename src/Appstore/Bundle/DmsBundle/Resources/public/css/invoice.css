@@ -6,10 +6,15 @@
     display: none;
 }
 .particular-info{
-    background: #8a8a8a;
+    background: #ddd;
     padding: 10px;
     padding-left:0;
     padding-right: 4px;
+}
+
+div.checker {
+    border: 3px solid red;
+    margin-top: -4px;
 }
 
 .btn-show{
@@ -55,14 +60,16 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .sales-right{
     padding-right: 10px;
+    float: right;
+    text-align: right;
+    width: 190px;
 }
-.sales-right input{
-    width: 110px;
+.sales-right input[class*="span"].m-wrap{
     font-weight: bold;
-    margin-top: -5px;
-    text-align: left;
-    border: 1px solid #f39c12;
-    height: 23px
+    margin-top: -1px;
+    text-align: right;
+    border: 2px solid #4b8df8!important;
+    height: 23px!important;
 }
 .select2-search{
     padding-left: 0;
@@ -107,13 +114,13 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .form-horizontal .payment-info .control-group{
     margin-bottom: 0!important;
-    border-bottom: 1px solid #e67e22;
+    border-bottom: 1px solid #2e2e2e;
 }
 .form-horizontal .payment-info .control-label{
     float: left;
     text-align: left;
-    background: #f39c12;
-    color: #fff;
+    background: #f9f9f9;
+    color: #000;
     font-weight: bold;
     line-height: 32px;
     height: 33px;
@@ -122,7 +129,15 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     font-size: 14px;
 }
 
-.form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span , .form-horizontal .payment-info .control-label span{
+.form-horizontal .payment-info .control-label .label {
+    padding-left: 8px!important;
+    background: none;
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+}
+
+.form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span {
     padding-left: 8px;
 }
 
@@ -186,17 +201,12 @@ input[class*="span"].m-wrap  {
 .portlet.box .form .form-actions, .portlet.solid .form .form-actions {
     margin-top: -9px !important;
 }
-.tab-height{
-    min-height: 525px;
-}
-
 .row-fluid label{
     line-height: 30px!important;
 }
 
 input[class*="span"].wrap-custom{
     height: 30px!important;
-
 }
 
 li.active > a {

@@ -18,6 +18,10 @@ setting_tool_color:
     resource: "@SettingToolBundle/Resources/config/routing/color.yml"
     prefix:   /admin/color
 
+setting_tool_testimonial:
+    resource: "@SettingToolBundle/Resources/config/routing/applicationtestimonial.yml"
+    prefix:   /admin/testimonial
+
 setting_tool_size:
     resource: "@SettingToolBundle/Resources/config/routing/size.yml"
     prefix:   /admin/size

@@ -51,8 +51,6 @@ class CustomerInvoiceItem
      */
     private $quantity;
 
-
-
     /**
      * Get id
      *

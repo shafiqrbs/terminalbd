@@ -275,8 +275,6 @@ class GlobalOptionRepository extends EntityRepository
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
-
-
         $this->_em->flush();
 
     }

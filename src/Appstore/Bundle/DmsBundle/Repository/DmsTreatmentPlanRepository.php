@@ -4,6 +4,7 @@ namespace Appstore\Bundle\DmsBundle\Repository;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
+use Appstore\Bundle\DmsBundle\Form\TreatmentAccessoriesType;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -212,7 +213,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $data .= '<td class="numeric" >' . $entity['patientId']. '</td>';
             $data .= '<td class="numeric" >' . $entity['customerName']. '</td>';
             $data .= '<td class="numeric" >' . $entity['doctorName']. '</td>';
-            $data .= '<td class="numeric" >' . $entity['particularCode'].' - '. $entity['particularName']. '</td>';
+            $data .= '<td class="numeric" >' . $entity['particularName']. '</td>';
             $data .= '<td class="numeric" >' . $appointmentDate. '</td>';
             $data .= '<td class="numeric" >' . $appointmentTime. '</td>';
             $data .= '<td class="numeric" >' . $entity['process'] . '</td>';
@@ -259,22 +260,14 @@ class DmsTreatmentPlanRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
-            if ($entity->getStatus() == 1)  {
-               $discount = $entity->getDiscount();
-            }else{
-                $discount ='<a  class="editable" data-name="Discount" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change discount amount">'.$entity->getDiscount().'</a>';
-            }
-
-            if ($entity->getStatus() == 1)  {
-               $payment = $entity->getPayment();
-            }else{
-               $payment ='<a  class="editable" data-name="Payment" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change payment amount">'.$entity->getPayment().'</a>';
-            }
-
-            if ($entity->getStatus() == 1)  {
+            $discount = $entity->getDiscount();
+            $payment = $entity->getPayment();
+            $appointmentDate ='';
+            $appointmentTime ='';
+            if ($entity->getStatus() == 1 and !empty($entity->getAppointmentDate()))  {
                 $appointmentDate = $entity->getAppointmentDate()->format('d-m-Y');
                 $appointmentTime = $entity->getAppointmentTime();
-            }else{
+            }elseif(!empty($entity->getAppointmentDate())){
                 $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Date">'.$entity->getAppointmentDate()->format('d-m-Y').'</a>';
                 $appointmentTime ='<a data-type="select"  class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update" data-value="'.$entity->getAppointmentTime().'" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Time">'.$entity->getAppointmentTime().'</a>';
             }
@@ -282,8 +275,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
             if ($entity->getStatus() == 1)  {
                 $action ='Done';
             }else{
-                $action ='<a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to approve ?" data-url="/dms/invoice/' . $entity->getId() . '/treatment-approved" href="javascript:" class="btn blue mini approve" >Approve</a>
-                        <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/treatment-delete" href="javascript:" class="btn red mini treatmentDelete" ><i class="icon-trash"></i></a>';
+                $action ='<a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/treatment-delete" href="javascript:" class="btn red mini treatmentDelete" ><i class="icon-trash"></i></a>';
             }
 
             $data .= '<tr id="remove-'. $entity->getId() . '">';
@@ -292,24 +284,68 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $data .= '<td class="numeric" >' . $entity->getDmsParticular()->getParticularCode().' - '. $entity->getDmsParticular()->getName(). '</td>';
             $data .= '<td class="numeric" >' . $appointmentDate .$appointmentTime. '</td>';
             $data .= '<td class="numeric" >' . $entity->getPrice() . '</td>';
-            $data .= '<td class="numeric" >' . $discount . '</td>';
             $data .= '<td class="numeric" >' . $payment . '</td>';
             $data .= '<td class="numeric" id="treatment-approved-'.$entity->getId().'" >'.$action.'</td>';
             $data .= '</tr>';
-
             $i++;
         }
         return $data;
     }
 
-    public function insertPaymentTransaction($data)
+    public function insertPaymentTransaction($entity,$data)
     {
         $em = $this->_em;
-        $invoiceDmsParticular = $this->_em->getRepository('DmsBundle:DmsTreatmentPlan')->find($data['invoiceParticular']);
-        $invoiceDmsParticular->setPayment($data['payment']);
-        $invoiceDmsParticular->setDiscount($data['discount']);
-        $em->persist($invoiceDmsParticular);
+        $id = $data['treatment'];
+        $item = explode("-", $data['treatment']);
+        $particular =  $item[0]; // piece1
+        $treatmentId = $item[1]; // piece2
+
+
+        $transactionMethod = $data['transactionMethod'];
+        $paymentMobile = $data['paymentMobile'];
+        $transactionId = $data['transactionId'];
+        $mobileBank = $data['mobileBank'];
+        $accountBank = $data['accountBank'];
+        $paymentCard = $data['paymentCard'];
+        $cardNo = $data['cardNo'];
+        $adjustment = $data['adjustment'];
+        $discount = $data['discount'] !="" ? $data['discount'] : 0 ;
+        $payment = $data['receive'] !="" ? $data['receive'] : 0 ;
+
+        if($treatmentId > 0){
+            $treatmentPlan = $this->_em->getRepository('DmsBundle:DmsTreatmentPlan')->find($treatmentId);
+        }elseif(empty($treatmentPlan)){
+            $particular =  $this->_em->getRepository('DmsBundle:DmsParticular')->find($particular);
+            $treatmentPlan = new DmsTreatmentPlan();
+            $treatmentPlan->setDmsInvoice($entity);
+            $treatmentPlan->setDmsParticular($particular);
+            if($adjustment != 1){
+                $treatmentPlan->setEstimatePrice($payment);
+                $treatmentPlan->setPrice($payment);
+                $treatmentPlan->setSubTotal($payment);
+            }
+        }
+        $treatmentPlan->setStatus(1);
+        if($payment > 0) {
+            $treatmentPlan->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find($transactionMethod));
+            if ($mobileBank) {
+                $treatmentPlan->setAccountMobileBank($em->getRepository('AccountingBundle:AccountMobileBank')->find($mobileBank));
+            }
+            if ($accountBank) {
+                $treatmentPlan->setAccountBank($em->getRepository('AccountingBundle:AccountBank')->find($accountBank));
+            }
+            if ($paymentCard) {
+                $treatmentPlan->setPaymentCard($em->getRepository('SettingToolBundle:PaymentCard')->find($paymentCard));
+            }
+            $treatmentPlan->setPaymentMobile($paymentMobile);
+            $treatmentPlan->setTransactionId($transactionId);
+            $treatmentPlan->setCardNo($cardNo);
+            $treatmentPlan->setPayment($payment);
+            $treatmentPlan->setDiscount($discount);
+        }
+        $em->persist($treatmentPlan);
         $em->flush();
+        return $treatmentPlan;
     }
 
     public function transactionOverview(DmsConfig $config , $data =array())

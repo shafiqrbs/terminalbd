@@ -12,18 +12,42 @@
                         <div class="tm-content tm-col-12">
                             {{ app.content|raw }}
                         </div>
+                        <div class="clear"></div>
                         <div class="header-line-bottom">
                             <h2 class="tm-title">PRODUCT PREVIEW</h2>
                         </div>
-                        <div class="tm-col-12 tm-gallery">
-                            <div class="gallery-thumb">
-                            <ul class="">
-                                {% for gallery in app.photoGallery.galleryImages %}
-                                <li class=""><a class="tm-mask" title="You can add caption to pictures." href="" rel="prettyPhoto"><img src="{{ image(gallery.getAbsolutePath(app.photoGallery.globalOption.id,app.photoGallery.id)).scaleResize(400,400,'#000000') }}" alt="Red round shape" ></a></li>
+                        <div class="tm-recent-post">
+                        <ul>
+                            {% for gallery in app.photoGallery.galleryImages %}
+                                 <li class=""><a class="thumb" title="You can add caption to pictures." href="{{ image(gallery.getAbsolutePath(app.photoGallery.globalOption.id,app.photoGallery.id)).resize(750,450,'#fff') }}" rel="prettyPhoto[pp_gal]"><img src="{{ image(gallery.getAbsolutePath(app.photoGallery.globalOption.id,app.photoGallery.id)).resize(250,250,'#fff') }}" alt="Red round shape" ></a></li>
                             {% endfor %}
-                            </ul>
+                        </ul>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="header-double-line-right" >
+                            <h1 class="tm-title">CLIENT OPINION</h1>
+                        </div>
+                        <div class="clear"></div>
+                        {% if testimonials is not empty %}
+                        <div class="tm-content">
+                            <div id="testimonial-slider" class="owl-carousel">
+                                {% for testimonial in testimonials  %}
+                                <div class="testimonial">
+                                    <div class="pic">
+                                        <img src="{{ image(testimonial.webPath).resize(150,150) }}" alt="">
+                                    </div>
+                                    <p class="description">
+                                       {{ testimonial.content|raw }}
+                                    </p>
+                                    <h3 class="title">{{ testimonial.name }}
+                                        <span class="post"> - {{ testimonial.companyName }}</span>
+                                    </h3>
+                                </div>
+                                {% endfor %}
                             </div>
                         </div>
+                        {% endif %}
+                        <div class="clear"></div>
                         <div class="header-line-center" style="margin-top: 30px">
                             <h1 class="tm-title">OUR RESPECTABLE CLIENT</h1>
                         </div>
@@ -91,21 +115,18 @@
         </div>
         <!--tm-container-->
     </div>
-<style>
-
-.client-logo{
-    height: 200px;
-    width: 250px
-}
-ul.social-networks {
-  /* fallback */
-  background-position: center center;
-  background-repeat: no-repeat;
-  padding-left: 18px!important;
-}
-.ul.social-networks li a::before{
-    width: 200px;
-}
-
-</style>
 {% endblock %}
+    {% block documentready %}
+        {{ parent() }}
+        $("#testimonial-slider").owlCarousel({
+            items:2,
+            itemsDesktop:[1000,2],
+            itemsDesktopSmall:[979,1],
+            itemsTablet:[768,1],
+            pagination:false,
+            navigation:true,
+            navigationText:["",""],
+            autoPlay:true
+        });
+    {% endblock %}
+
