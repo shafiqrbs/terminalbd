@@ -532,7 +532,6 @@ $(document).on('click', '#received2Btn', function() {
     var accountBank = $('#appstore_bundle_dmsinvoice_accountBank').val();
     var paymentCard = $('#appstore_bundle_dmsinvoice_paymentCard').val();
     var cardNo = $('#appstore_bundle_dmsinvoice_cardNo').val();
-
     var url = $(this).attr('data-url');
     $.ajax({
         url: url,

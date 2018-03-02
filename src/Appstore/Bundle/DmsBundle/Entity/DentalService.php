@@ -73,13 +73,6 @@ class DentalService
     /**
      * @var boolean
      *
-     * @ORM\Column(name="hasQuantity", type="boolean" )
-     */
-    private $hasQuantity = false;
-
-    /**
-     * @var boolean
-     *
      * @ORM\Column(name="status", type="boolean" )
      */
     private $status= true;
@@ -159,23 +152,6 @@ class DentalService
     {
         $this->sorting = $sorting;
     }
-
-    /**
-     * @return bool
-     */
-    public function getHasQuantity()
-    {
-        return $this->hasQuantity;
-    }
-
-    /**
-     * @param bool $hasQuantity
-     */
-    public function setHasQuantity($hasQuantity)
-    {
-        $this->hasQuantity = $hasQuantity;
-    }
-
 
     /**
      * @return string

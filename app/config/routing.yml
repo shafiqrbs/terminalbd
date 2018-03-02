@@ -4,7 +4,7 @@ hotel:
 
 doctor_prescription:
     resource: "@DoctorPrescriptionBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /doctor-prescription
 
 education:
     resource: "@EducationBundle/Resources/config/routing.yml"

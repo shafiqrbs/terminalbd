@@ -81,6 +81,7 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_DMS')){
                     $menu = $this->DmsMenu($menu);
+                    $menu = $this->DpsMenu($menu);
                 }
             }
 
@@ -1030,6 +1031,44 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', ' icon-inbox');
             $menu['Dental & Diagnosis']['Stock Report']->addChild('Accessories Out', array('route' => 'dms_report_stock_out'))
                 ->setAttribute('icon', 'icon-hdd');
+
+        }
+        return $menu;
+
+    }
+
+    public function DpsMenu($menu)
+    {
+
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        $menu
+            ->addChild('Doctor Prescription')
+            ->setAttribute('icon', 'fa fa-hospital-o')
+            ->setAttribute('dropdown', true);
+        $menu['Doctor Prescription']->addChild('Patient', array('route' => 'dps_invoice'))
+            ->setAttribute('icon', 'fa fa-medkit');
+        $menu['Doctor Prescription']->addChild('Expense')
+            ->setAttribute('icon', 'icon icon-money')
+            ->setAttribute('dropdown', true);
+        $menu['Doctor Prescription']['Expense']->addChild('Expenditure', array('route' => 'dps_account_expenditure'))
+            ->setAttribute('icon', 'fa fa-indent');
+        $menu['Doctor Prescription']['Expense']->addChild('Expense Category', array('route' => 'dps_expensecategory'))
+            ->setAttribute('icon', 'icon-tags');
+        if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
+
+            $menu['Doctor Prescription']->addChild('Master Data')->setAttribute('icon', 'icon icon-cog')
+                ->setAttribute('dropdown', true);
+            $menu['Doctor Prescription']['Master Data']->addChild('Particular', array('route' => 'dps_particular'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Doctor Prescription']['Master Data']->addChild('Service', array('route' => 'dps_service'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Doctor Prescription']['Master Data']->addChild('Doctor', array('route' => 'dps_doctor'))
+                ->setAttribute('icon', 'icon-th-list');
+            if ($securityContext->isGranted('ROLE_DOMAIN_DMS_CONFIG')) {
+                $menu['Doctor Prescription']['Master Data']->addChild('Configuration', array('route' => 'dps_config_manage'))
+                    ->setAttribute('icon', 'icon-cog');
+            }
 
         }
         return $menu;

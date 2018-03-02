@@ -25,7 +25,7 @@ class SalesReturnItem
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturn", inversedBy="salesReturnItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $salesReturn;
+    private  $salesReturnItem;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", inversedBy="salesReturnItem" )
@@ -177,6 +177,22 @@ class SalesReturnItem
     public function getStockReturnItems()
     {
         return $this->stockReturnItems;
+    }
+
+    /**
+     * @return SalesReturnItem
+     */
+    public function getSalesReturnItem()
+    {
+        return $this->salesReturnItem;
+    }
+
+    /**
+     * @param SalesReturnItem $salesReturnItem
+     */
+    public function setSalesReturnItem($salesReturnItem)
+    {
+        $this->salesReturnItem = $salesReturnItem;
     }
 }
 

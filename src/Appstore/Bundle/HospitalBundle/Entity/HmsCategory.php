@@ -31,14 +31,14 @@ class HmsCategory
     private  $particulars;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsMasterDiagnosticReport", mappedBy="category" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport", mappedBy="category" )
      **/
-    private  $hmsMasterDiagnosticReportCategories;
+    private  $diagnosticReportCategories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsMasterDiagnosticReport", mappedBy="department" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport", mappedBy="department" )
      **/
-    private  $hmsMasterDiagnosticReportDepartments;
+    private  $diagnosticReportDepartments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="department" )

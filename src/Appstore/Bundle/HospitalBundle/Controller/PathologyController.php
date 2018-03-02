@@ -9,6 +9,8 @@ use Appstore\Bundle\HospitalBundle\Entity\PathologicalReport;
 use Appstore\Bundle\HospitalBundle\Form\ParticularType;
 use Appstore\Bundle\HospitalBundle\Form\PathologicalReportType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
+use Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport;
+use Appstore\Bundle\MedicineBundle\Entity\DiagnosticReportFormat;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -297,13 +299,15 @@ class PathologyController extends Controller
         return $this->redirect($this->generateUrl('hms_pathology'));
     }
 
-    public function insertMasterReport(HmsMasterDiagnosticReport $entity,Particular $pathological)
+    public function insertMasterReport(DiagnosticReport $entity,Particular $pathological)
     {
 
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
-        /* @var $report HmsMasterDiagnosticReportFormat */
+        /* @var $report DiagnosticReportFormat */
 
-        foreach ($entity->getHmsMasterDiagnosticReportFormats() as $report){
+        foreach ($entity->getDiagnosticReportFormats() as $report){
 
             $format = New PathologicalReport();
             $format->setParticular($pathological);

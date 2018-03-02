@@ -19,7 +19,6 @@ class DmsInvoiceListener
         // perhaps you only want to act on some "Sales" entity
         if ($entity instanceof DmsInvoice) {
 
-
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);

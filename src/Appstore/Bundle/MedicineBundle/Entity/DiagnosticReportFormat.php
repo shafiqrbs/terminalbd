@@ -1,17 +1,17 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Entity;
+namespace Appstore\Bundle\MedicineBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
- * PathologicalReport
+ * DiagnosticReportFormat
  *
  * @ORM\Table( name ="hms_master_diagnostic_report_format")
  * @ORM\Entity(repositoryClass="")
  */
-class HmsMasterDiagnosticReportFormat
+class DiagnosticReportFormat
 {
     /**
      * @var integer
@@ -23,22 +23,22 @@ class HmsMasterDiagnosticReportFormat
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PathologicalReport", inversedBy="children", cascade={"detach","merge"})
+     * @ORM\ManyToOne(targetEntity="DiagnosticReportFormat", inversedBy="children", cascade={"detach","merge"})
      * @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="PathologicalReport" , mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="DiagnosticReportFormat" , mappedBy="parent")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $children;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsMasterDiagnosticReport", inversedBy="hmsMasterDiagnosticReportFormats")
+     * @ORM\ManyToOne(targetEntity="DiagnosticReport", inversedBy="diagnosticReportFormats")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private $hmsMasterDiagnosticReport;
+    private $diagnosticReport;
 
 
     /**
@@ -145,7 +145,7 @@ class HmsMasterDiagnosticReportFormat
     }
 
    /**
-     * @return PathologicalReport
+     * @return DiagnosticReportFormat
      */
     public function getParent()
     {
@@ -153,7 +153,7 @@ class HmsMasterDiagnosticReportFormat
     }
 
     /**
-     * @param PathologicalReport $parent
+     * @param DiagnosticReportFormat $parent
      */
     public function setParent($parent)
     {
@@ -161,7 +161,7 @@ class HmsMasterDiagnosticReportFormat
     }
 
     /**
-     * @return PathologicalReport
+     * @return DiagnosticReportFormat
      */
     public function getChildren()
     {
@@ -218,19 +218,19 @@ class HmsMasterDiagnosticReportFormat
     }
 
     /**
-     * @return HmsMasterDiagnosticReport
+     * @return mixed
      */
-    public function getHmsMasterDiagnosticReport()
+    public function getDiagnosticReport()
     {
-        return $this->hmsMasterDiagnosticReport;
+        return $this->diagnosticReport;
     }
 
     /**
-     * @param HmsMasterDiagnosticReport $hmsMasterDiagnosticReport
+     * @param mixed $diagnosticReport
      */
-    public function setHmsMasterDiagnosticReport($hmsMasterDiagnosticReport)
+    public function setDiagnosticReport($diagnosticReport)
     {
-        $this->hmsMasterDiagnosticReport = $hmsMasterDiagnosticReport;
+        $this->diagnosticReport = $diagnosticReport;
     }
 
 

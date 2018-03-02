@@ -8,6 +8,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
@@ -590,12 +591,20 @@ class GlobalOption
     private $domainCustomerInvoice;
 
 
- /*================================= OFFICE BUNDLE===========================================*/
+    /*================================= OFFICE BUNDLE===========================================*/
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $businessConfig;
+
+
+     /*================================= OFFICE BUNDLE===========================================*/
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $dpsConfig;
 
 
     /**
@@ -1693,6 +1702,14 @@ class GlobalOption
     public function setMonthlyAmount($monthlyAmount)
     {
         $this->monthlyAmount = $monthlyAmount;
+    }
+
+    /**
+     * @return DpsConfig
+     */
+    public function getDpsConfig()
+    {
+        return $this->dpsConfig;
     }
 
 

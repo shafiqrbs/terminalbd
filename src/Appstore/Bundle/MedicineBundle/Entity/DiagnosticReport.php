@@ -1,7 +1,8 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Entity;
+namespace Appstore\Bundle\MedicineBundle\Entity;
 
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\LocationBundle\Entity\Location;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table( name = "hms_master_diagnostic_report")
  * @ORM\Entity(repositoryClass="")
  */
-class HmsMasterDiagnosticReport
+class DiagnosticReport
 {
     /**
      * @var integer
@@ -25,23 +26,28 @@ class HmsMasterDiagnosticReport
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="hmsMasterDiagnosticReport")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="diagnosticReport")
      **/
     private $hmsParticulars;
 
-   /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsMasterDiagnosticReportFormat", mappedBy="hmsMasterDiagnosticReport")
-    * @ORM\OrderBy({"parent" = "ASC"})
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="investigations")
      **/
-    private $hmsMasterDiagnosticReportFormats;
+    private $dpsInvoice;
 
    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="hmsMasterDiagnosticReportCategories")
+     * @ORM\OneToMany(targetEntity="DiagnosticReportFormat", mappedBy="diagnosticReport")
+    * @ORM\OrderBy({"parent" = "ASC"})
+     **/
+    private $diagnosticReportFormats;
+
+   /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="diagnosticReportCategories")
      **/
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="hmsMasterDiagnosticReportDepartments")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="diagnosticReportDepartments")
      **/
     private $department;
 
@@ -361,12 +367,21 @@ class HmsMasterDiagnosticReport
         $this->updated = $updated;
     }
 
+
     /**
-     * @return HmsMasterDiagnosticReportFormat
+     * @return DiagnosticReportFormat
      */
-    public function getHmsMasterDiagnosticReportFormats()
+    public function getDiagnosticReportFormats()
     {
-        return $this->hmsMasterDiagnosticReportFormats;
+        return $this->diagnosticReportFormats;
+    }
+
+    /**
+     * @return DpsInvoice
+     */
+    public function getDpsInvoice()
+    {
+        return $this->dpsInvoice;
     }
 
 
