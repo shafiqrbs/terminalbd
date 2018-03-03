@@ -692,11 +692,13 @@ var form = $("#invoiceForm").validate({
             data        : new FormData($('form#invoiceForm')[0]),
             processData : false,
             contentType : false,
-            beforeSend: function(){
-                $('.loader-double').fadeIn(1000).addClass('is-active');
+            beforeSend: function() {
+                $('#savePatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
+                $('.btn-ajax-loading').attr("disabled", true);
             },
             complete: function(){
-                $('.loader-double').fadeIn(1000).removeClass('is-active');
+                $('.btn-ajax-loading').attr("disabled", false);
+                $('#savePatientButton').removeClass('btn-ajax-loading');
             },
             success: function(response){
                 location.reload();

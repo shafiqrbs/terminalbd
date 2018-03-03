@@ -90,18 +90,19 @@ class GlobalOptionModifyType extends AbstractType
                 ))
 
                 ->add('email','text', array('attr'=>array('class'=>'m-wrap span12')))
-                ->add('facebookPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
+                ->add('webMail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your web mail url')))
+
+                /* ->add('facebookPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('instagramPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('customizeDesign')
                 ->add('twitterUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('googlePlus','text', array('attr'=>array('class'=>'m-wrap span12')))
-                ->add('webMail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your web mail url')))
                 ->add('smsIntegration')
                 ->add('emailIntegration')
                 ->add('facebookAds')
                 ->add('facebookApps')
                 ->add('promotion')
-                ->add('googleAds')
+                ->add('googleAds')*/
                 ->add('primaryNumber')
                 ->add('status', 'choice', array(
                     'attr'=>array('class'=>'selectbox span12'),
@@ -115,7 +116,7 @@ class GlobalOptionModifyType extends AbstractType
 
 
             ;
-            $builder->add('contactPage', new ContactOpeningType());
+         /*   $builder->add('contactPage', new ContactOpeningType());*/
             //$builder->add('templateCustomize', new TemplateSidebarType());
             $builder->add('siteSetting', new SiteSettingType($syndicateId));
 
