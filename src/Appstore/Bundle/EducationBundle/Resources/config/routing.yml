@@ -1,0 +1,3 @@
+education_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: EducationBundle:Default:index }
