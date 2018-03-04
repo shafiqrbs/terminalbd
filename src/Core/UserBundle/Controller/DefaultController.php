@@ -49,7 +49,7 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('restaurant_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DMS') && $enable == 1 && in_array('dms',$apps)) {
             return $this->redirect($this->generateUrl('dms_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DPS') && $enable == 1 && in_array('dms',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DPS') && $enable == 1 && in_array('dps',$apps)) {
             return $this->redirect($this->generateUrl('dps_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOSPITAL') && $enable == 1 && in_array('hms',$apps) ) {
             return $this->redirect($this->generateUrl('hospital_homepage'));

@@ -14,7 +14,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $config = $user->getGlobalOption()->getDmsConfig();
+        $config = $user->getGlobalOption()->getDpsConfig();
         $salesTotalTransactionOverview = $em->getRepository('DoctorPrescriptionBundle:DpsTreatmentPlan')->transactionOverview($config,$data);
         return $this->render('DoctorPrescriptionBundle:Default:index.html.twig', array(
             'salesOverview' => $salesTotalTransactionOverview,
@@ -29,7 +29,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $config = $user->getGlobalOption()->getDmsConfig();
+        $config = $user->getGlobalOption()->getDpsConfig();
         $salesTotalTransactionOverview = $em->getRepository('DoctorPrescriptionBundle:DpsTreatmentPlan')->transactionOverview($config,$data);
         $html = $this->renderView(
             'DoctorPrescriptionBundle:Default:today-sales-overview.html.twig', array(

@@ -161,4 +161,18 @@
         }
     </style>
 {% endblock %}
-
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@DoctorPrescriptionBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@DoctorPrescriptionBundle/Resources/public/js/patient.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
