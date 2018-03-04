@@ -2,17 +2,14 @@
 
 namespace Appstore\Bundle\DoctorPrescriptionBundle\Controller;
 use Appstore\Bundle\DoctorPrescriptionBundle\Form\InvoiceCustomerType;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\DoctorPrescriptionBundle\Form\InvoiceTransactionType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
-use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoiceMedicine;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoiceParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\DoctorPrescriptionBundle\Form\InvoiceType;
-use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -41,7 +38,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DPS")
      */
 
     public function indexAction()
@@ -56,6 +53,7 @@ class InvoiceController extends Controller
         $assignDoctors = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsParticular')->getFindWithParticular($dpsConfig,array('doctor'));
 
         return $this->render('DoctorPrescriptionBundle:Invoice:index.html.twig', array(
+            'dpsConfig' => $dpsConfig,
             'entities' => $pagination,
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
@@ -65,39 +63,51 @@ class InvoiceController extends Controller
 
     }
 
-
     public function newAction()
+    {
+        $entity = new DpsInvoice();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createInvoiceCustomerForm($entity);
+        $html = $this->renderView('DoctorPrescriptionBundle:Invoice:patient.html.twig', array(
+            'form'   => $form->createView(),
+        ));
+        return New Response($html);
+    }
+
+    public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new DpsInvoice();
-        $option = $this->getUser()->getGlobalOption();
-        $dpsConfig = $option->getDpsConfig();
-        $patient = isset($_REQUEST['patient']) ? $_REQUEST['patient']:'';
+        $dpsConfig = $this->getUser()->getGlobalOption()->getDpsConfig();
         $lastObject = $em->getRepository('DoctorPrescriptionBundle:DpsInvoice')->getLastInvoice($dpsConfig);
+        $form = $this->createInvoiceCustomerForm($entity);
+        $form->handleRequest($request);
+        $data = $request->request->all();
+        if ($form->isValid()) {
 
-        if(!empty($patient)){
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option,'id' => $patient));
-            $entity->setCustomer($customer);
-            $entity->setMobile($customer->getMobile());
+            $entity->setDpsConfig($dpsConfig);
+            $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+            $entity->setTransactionMethod($transactionMethod);
+            $entity->setProcess('Created');
+            $entity->setCreatedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            if (!empty($data['customer']['name'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
+                $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $data);
+            }
+
+            if($dpsConfig->getIsDefaultMedicine() == 1 ){
+                $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->defaultDpsBeforeMedicine($entity,$lastObject);
+            }
+            return $this->redirect($this->generateUrl('dps_invoice_edit', array('id' => $entity->getId())));
         }
-        $entity->setDpsConfig($dpsConfig);
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
-        $entity->setPaymentStatus('Pending');
-        $entity->setProcess('Created');
-        $entity->setCreatedBy($this->getUser());
-       /* if(!empty($this->getUser()->getDpsParticularDoctor())){
-            $entity->setAssignDoctor($this->getUser()->getDpsParticularDoctor());
-        }*/
-        $entity->setCreatedBy($this->getUser());
-        $em->persist($entity);
-        $em->flush();
-        if($dpsConfig->getIsDefaultMedicine() == 1 ){
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->defaultDpsBeforeMedicine($entity,$lastObject);
-        }
-        return $this->redirect($this->generateUrl('dps_invoice_edit', array('id' => $entity->getId())));
 
     }
+
 
     /**
      * Creates a form to edit a Invoice entity.wq
@@ -111,6 +121,25 @@ class InvoiceController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new InvoiceCustomerType($globalOption,$location), $entity, array(
+            'action' => $this->generateUrl('dps_invoice_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoicePatientForm',
+                'novalidate' => 'novalidate',
+                'enctype' => 'multipart/form-data',
+
+            )
+        ));
+        return $form;
+    }
+
+    private function createTransactionForm(DpsInvoice $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $diagnostic = $this->getDoctrine()->getRepository('MedicineBundle:DiagnosticReport');
+        $form = $this->createForm(new InvoiceTransactionType($globalOption,$location,$diagnostic), $entity, array(
             'action' => $this->generateUrl('dps_invoice_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -118,7 +147,6 @@ class InvoiceController extends Controller
                 'id' => 'invoiceForm',
                 'novalidate' => 'novalidate',
                 'enctype' => 'multipart/form-data',
-
             )
         ));
         return $form;
@@ -143,7 +171,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DPS")
      */
 
     public function editAction($id)
@@ -157,10 +185,10 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
 
-        if($entity->getCustomer()){
-            $editForm = $this->createEditForm($entity);
+        if($dpsConfig->getShowTransaction() == 1 ){
+            $editForm = $this->createTransactionForm($entity);
         }else{
-            $editForm = $this->createInvoiceCustomerForm($entity);
+            $editForm = $this->createEditForm($entity);
         }
 
 
@@ -197,7 +225,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DPS")
      */
     public function updateAction(Request $request, DpsInvoice $entity)
     {
@@ -237,7 +265,7 @@ class InvoiceController extends Controller
         exit;
     }
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DPS")
      */
     public function showAction(DpsInvoice $entity)
     {
@@ -253,7 +281,7 @@ class InvoiceController extends Controller
 
     }
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DPS")
      */
     public function deleteAction(DpsInvoice $entity)
     {
@@ -309,8 +337,7 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $procedure = $request->request->get('procedure');
         $diseases = $request->request->get('diseases');
-        $teethNo = $request->request->get('teethNo');
-        $invoiceItems = array('service'=> $service, 'procedure' => $procedure ,'diseases' => $diseases ,'teethNo' => $teethNo);
+        $invoiceItems = array('service'=> $service, 'procedure' => $procedure ,'diseases' => $diseases);
         $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsInvoiceParticular')->insertInvoiceParticularSingle($invoice, $invoiceItems);
         $data = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsInvoiceParticular')->insertInvoiceParticularReturn($invoice, $invoiceItems);
         return new Response($data);
@@ -518,7 +545,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DPS")
      */
 
     public function deleteEmptyInvoiceAction()

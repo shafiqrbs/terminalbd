@@ -36,8 +36,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('dps_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
-                       {#         <a class="btn purple" href="{{ path('dps_report_sales_summary') }}"><i class="icon-cart"></i> Sales Summary</a>#}
-                                <a class="btn red" href="{{ path('dps_invoice_new') }}"><i class="icon-plus-sign"></i> Add New Patient</a>
+                                <a class="btn red addPatient" href="javascript:"><i class="icon-plus-sign"></i> Add New Patient</a>
                             </div>
                         </div>
                     </div>
@@ -130,9 +129,11 @@
                                     <th class="numeric" >Patient No</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
+                                    {% if dpsConfig.showTransaction == 1 %}
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Balance</th>
+                                    {% endif %}
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -145,9 +146,11 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
+                                        {% if dpsConfig.showTransaction == 1 %}
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>
+                                        {% endif %}
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
@@ -180,7 +183,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/jquery-ui.css'
+    '@DoctorPrescriptionBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -188,12 +191,11 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@DoctorPrescriptionBundle/Resources/public/js/patient.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
 {% endblock %}

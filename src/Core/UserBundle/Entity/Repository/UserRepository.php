@@ -191,6 +191,16 @@ class UserRepository extends EntityRepository
             );
         }
 
+        $dms = array('dps');
+        $result = array_intersect($arrSlugs, $dms);
+        if (!empty($result)) {
+            $array['DMS'] = array(
+                'ROLE_DPS'                                  => 'Doctor Prescription',
+                'ROLE_DPS_DOCTOR'                           => 'Doctor',
+                'ROLE_DPS_ADMIN'                            => 'Doctor Admin',
+            );
+        }
+
         $array['SMS'] = array(
             'ROLE_SMS'                                  => 'Sms/E-mail',
             'ROLE_SMS_MANAGER'                          => 'Sms/E-mail Manager',

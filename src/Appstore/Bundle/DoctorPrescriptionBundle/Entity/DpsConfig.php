@@ -83,9 +83,9 @@ class DpsConfig
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isBranch", type="boolean",  nullable=true)
+     * @ORM\Column(name="showTransaction", type="boolean",  nullable=true)
      */
-    private $isBranch = false;
+    private $showTransaction = false;
 
     /**
      * @var boolean
@@ -1235,6 +1235,22 @@ class DpsConfig
     public function setBodyWidth($bodyWidth)
     {
         $this->bodyWidth = $bodyWidth;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowTransaction()
+    {
+        return $this->showTransaction;
+    }
+
+    /**
+     * @param bool $showTransaction
+     */
+    public function setShowTransaction($showTransaction)
+    {
+        $this->showTransaction = $showTransaction;
     }
 
 

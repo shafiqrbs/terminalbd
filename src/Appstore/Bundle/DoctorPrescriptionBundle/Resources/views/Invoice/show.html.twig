@@ -56,7 +56,7 @@
                                         {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
                                     </ul>
                                 </div>
-
+                                {% if entity.dpsConfig.showTransaction == 1 %}
                                 <div class="span3 invoice-payment">
                                     <h4>Payment Details:</h4>
                                     <ul class="unstyled">
@@ -66,15 +66,13 @@
                                         {% if entity.due %}<li><strong>Due BDT:</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}
                                         <li><strong>Payment status</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                                     </ul>
-
                                 </div>
+                                {% endif %}
                                 <div class="span3">
                                     <h4>Invoice Info:</h4>
                                     <ul class="unstyled">
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
-                                        <li><strong>Delivery:</strong>&nbsp;{{ entity.deliveryDateTime }}</li>
                                         <li><strong>Delivery Status:</strong>&nbsp;{{ entity.process|capitalize }}</li>
-                                        <li><strong>Payment Method:</strong>&nbsp;{{ entity.paymentMethod }}</li>
                                         <li><strong>Received By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
                                     </ul>
                                 </div>

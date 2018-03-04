@@ -37,6 +37,7 @@ class ServiceType extends AbstractType
                     new NotBlank(array('message'=>'Select service format'))
                 ),
                 'choices' => array(
+                    'label-value' => 'Label Value',
                     'text-field' => 'Text Field',
                     'checkbox-text-field' => 'Checkbox with Text Field',
                     'checkbox' => 'Checkbox',

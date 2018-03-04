@@ -61,7 +61,7 @@ class InvoiceCustomerType extends AbstractType
                         ->orderBy("e.name","ASC");
                 }
             ));
-           $builder->add('customer', new CustomerForDmsType($this->location ));
+           $builder->add('customer', new CustomerForDpsType($this->location ));
     }
     
     /**

@@ -247,7 +247,7 @@ $(document).on( "click", ".receivePayment", function(e){
 $(document).on( "change", "#invoiceParticular", function(e){
 
     var price = $(this).val();
-    $('#appstore_bundle_dmsinvoice_payment').val(price);
+    $('#appstore_bundle_dpsinvoice_payment').val(price);
 });
 
 $(document).on('click', '.addProcedure', function() {
@@ -260,23 +260,16 @@ $(document).on('click', '.addProcedure', function() {
         $('#'+dataTab).find('#procedure').focus();
         return false;
     }
-    var checked = []
-    $('#'+dataTab).find("input[name='teethNo[]']:checked").each(function (){
-        checked.push(parseInt($(this).val()));
-    });
-
     var url     = $(this).attr('data-url');
     var showDiv    = $(this).attr('data-id');
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'procedure='+procedure+'&teethNo='+checked+'&diseases='+diseases,
+        data: 'procedure='+procedure+'&diseases='+diseases,
         success: function (response) {
             $('#'+dataTab).find('#procedure-'+showDiv).html(response);
             $('#'+dataTab).find('#procedure').val('');
             $('#'+dataTab).find('#diseases').val('');
-            $('#'+dataTab).find('.checkradios-checkbox').prop('checked', false);
-            $('#'+dataTab).find('.checked').removeClass('fa fa-window-close');
         }
     });
 });
@@ -430,7 +423,7 @@ $(document).on('change', '#appointmentDate', function() {
     if(appointmentDate == ''){
         return false;
     }
-    var assignDoctor = $('#appstore_bundle_dmsinvoice_assignDoctor').val();
+    var assignDoctor = $('#appstore_bundle_dpsinvoice_assignDoctor').val();
     $.get(Routing.generate('dms_invoice_appointment_schedule_time',{assignDoctor:assignDoctor,appointmentDate:appointmentDate}),
         function(data){
             $('#appointmentTime').html(data);
@@ -525,13 +518,13 @@ $(document).on('click', '#received2Btn', function() {
     }
     var receive = $('#receive').val();
     var discount = $('#discount').val();
-    var transactionMethod = $('#appstore_bundle_dmsinvoice_transactionMethod').val();
-    var transactionId = $('#appstore_bundle_dmsinvoice_transactionId').val();
-    var paymentMobile = $('#appstore_bundle_dmsinvoice_paymentMobile').val();
-    var mobileBank = $('#appstore_bundle_dmsinvoice_accountMobileBank').val();
-    var accountBank = $('#appstore_bundle_dmsinvoice_accountBank').val();
-    var paymentCard = $('#appstore_bundle_dmsinvoice_paymentCard').val();
-    var cardNo = $('#appstore_bundle_dmsinvoice_cardNo').val();
+    var transactionMethod = $('#appstore_bundle_dpsinvoice_transactionMethod').val();
+    var transactionId = $('#appstore_bundle_dpsinvoice_transactionId').val();
+    var paymentMobile = $('#appstore_bundle_dpsinvoice_paymentMobile').val();
+    var mobileBank = $('#appstore_bundle_dpsinvoice_accountMobileBank').val();
+    var accountBank = $('#appstore_bundle_dpsinvoice_accountBank').val();
+    var paymentCard = $('#appstore_bundle_dpsinvoice_paymentCard').val();
+    var cardNo = $('#appstore_bundle_dpsinvoice_cardNo').val();
     var url = $(this).attr('data-url');
     $.ajax({
         url: url,
@@ -666,22 +659,22 @@ var form = $("#invoiceForm").validate({
 
     rules: {
 
-        "appstore_bundle_dmsinvoice[customer][name]": {required: true},
-        "appstore_bundle_dmsinvoice[customer][mobile]": {required: true},
-        "appstore_bundle_dmsinvoice[customer][age]": {required: true},
-        "appstore_bundle_dmsinvoice[customer][address]": {required: false},
+        "appstore_bundle_dpsinvoice[customer][name]": {required: true},
+        "appstore_bundle_dpsinvoice[customer][mobile]": {required: true},
+        "appstore_bundle_dpsinvoice[customer][age]": {required: true},
+        "appstore_bundle_dpsinvoice[customer][address]": {required: false},
     },
 
     messages: {
 
-        "appstore_bundle_dmsinvoice[customer][name]":"Enter patient name",
-        "appstore_bundle_dmsinvoice[customer][mobile]":"Enter patient mobile no",
-        "appstore_bundle_dmsinvoice[customer][age]": "Enter patient age",
+        "appstore_bundle_dpsinvoice[customer][name]":"Enter patient name",
+        "appstore_bundle_dpsinvoice[customer][mobile]":"Enter patient mobile no",
+        "appstore_bundle_dpsinvoice[customer][age]": "Enter patient age",
     },
     tooltip_options: {
-        "appstore_bundle_dmsinvoice[customer][name]": {placement:'top',html:true},
-        "appstore_bundle_dmsinvoice[customer][mobile]": {placement:'top',html:true},
-        "appstore_bundle_dmsinvoice[customer][age]": {placement:'top',html:true},
+        "appstore_bundle_dpsinvoice[customer][name]": {placement:'top',html:true},
+        "appstore_bundle_dpsinvoice[customer][mobile]": {placement:'top',html:true},
+        "appstore_bundle_dpsinvoice[customer][age]": {placement:'top',html:true},
     },
 
     submitHandler: function(form) {
@@ -701,19 +694,19 @@ var form = $("#invoiceForm").validate({
                 $('#savePatientButton').removeClass('btn-ajax-loading');
             },
             success: function(response){
-                location.reload();
+
             }
         });
     }
 });
 
-$('#appstore_bundle_dmsinvoice_customer_name').on('click', function(){
+$('#appstore_bundle_dpsinvoice_customer_name').on('click', function(){
     form.element($(this));
 });
-$('#appstore_bundle_dmsinvoice_customer_mobile').on('click', function(){
+$('#appstore_bundle_dpsinvoice_customer_mobile').on('click', function(){
     form.element($(this));
 });
-$('#appstore_bundle_dmsinvoice_customer_age').on('click', function(){
+$('#appstore_bundle_dpsinvoice_customer_age').on('click', function(){
     form.element($(this));
 });
 

@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
  * DmsInvoiceController controller.
  *
  */
-class InvoiceController extends Controller
+class OldInvoiceController extends Controller
 {
 
     public function paginate($entities)

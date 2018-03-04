@@ -66,13 +66,10 @@ class DpsInvoiceParticularRepository extends EntityRepository
     {
         $em = $this->_em;
         $service = $this->_em->getRepository('DoctorPrescriptionBundle:DpsService')->findOneBy(array('slug'=>$data['service']));
-        $teethNo = !empty($data['teethNo']) ? $data['teethNo'] : '' ;
-        $explode = explode(',',$teethNo);
         $entity = new DpsInvoiceParticular();
         $entity->setDpsService($service);
         $entity->setMetaValue($data['procedure']);
         $entity->setDiseases($data['diseases']);
-        $entity->setTeethNo($explode);
         $entity->setDpsInvoice($invoice);
         $em->persist($entity);
         $em->flush();

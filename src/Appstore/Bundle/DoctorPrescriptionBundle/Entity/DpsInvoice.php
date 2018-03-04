@@ -53,13 +53,6 @@ class DpsInvoice
     private  $invoiceParticulars;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoiceMedicine", mappedBy="dpsInvoice" , cascade={"remove"} )
-     * @ORM\OrderBy({"updated" = "DESC"})
-     **/
-    private  $invoiceMedicines;
-
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe", mappedBy="dpsInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
@@ -815,14 +808,6 @@ class DpsInvoice
         return $this->dpsTreatmentPlans;
     }
 
-
-    /**
-     * @return DpsInvoiceMedicine
-     */
-    public function getInvoiceMedicines()
-    {
-        return $this->invoiceMedicines;
-    }
 
 
     /**

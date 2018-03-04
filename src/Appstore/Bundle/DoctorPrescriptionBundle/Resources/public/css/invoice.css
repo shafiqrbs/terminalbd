@@ -218,14 +218,15 @@ li.active > a {
 }
 
 .select2-container-multi .select2-choices {
-    min-height: 26px;
-    height: 32px!important;
+    min-height: 30px;
 }
 .select2-container-multi .select2-choices .select2-search-choice div {
-    width: 20px!important;
-    background: #d12610;
-    color: #fff!important;
+    color: #000!important;
     text-align: center;
+}
+.form-control-select{
+    width: 100%;
+    overflow-y:scroll;
 }
 #project-label {
     display: block;

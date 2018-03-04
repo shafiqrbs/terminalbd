@@ -275,6 +275,13 @@ class Customer
     private $age;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="weight", type="string",length=50, nullable = true)
+     */
+    private $weight;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ageType", type="string", length=20, nullable = true)
@@ -930,6 +937,22 @@ class Customer
     public function setCompany($company)
     {
         $this->company = $company;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param int $weight
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
     }
 
 }

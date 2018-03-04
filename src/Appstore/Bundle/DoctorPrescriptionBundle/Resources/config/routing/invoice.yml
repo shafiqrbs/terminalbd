@@ -9,7 +9,13 @@ dps_invoice_show:
 dps_invoice_new:
     path:     /new
     defaults: { _controller: "DoctorPrescriptionBundle:Invoice:new" }
+    options:
+            expose: true
 
+dps_invoice_create:
+    path:     /create
+    defaults: { _controller: "DoctorPrescriptionBundle:Invoice:create" }
+    methods:  POST
 
 dps_invoice_edit:
     path:     /{id}/edit

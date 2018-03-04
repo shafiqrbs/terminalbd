@@ -83,7 +83,7 @@ class DpsTreatmentPlanRepository extends EntityRepository
             $qb->setParameter('process', $process);
         }
         if(!empty($treatment)){
-            $qb->andWhere("appointment.dmsParticular = :treatment");
+            $qb->andWhere("appointment.dpsParticular = :treatment");
             $qb->setParameter('treatment', $treatment);
         }
         if($status == 'done'){
@@ -128,9 +128,9 @@ class DpsTreatmentPlanRepository extends EntityRepository
         $endDate = $end->format('Y-m-d 23:59:59');
 
         $qb = $this->createQueryBuilder('appointment');
-        $qb->join('appointment.dmsInvoice','invoice');
+        $qb->join('appointment.dpsInvoice','invoice');
         $qb->select('appointment.appointmentTime as appointmentTime');
-        $qb->where('invoice.dmsConfig ='.$config->getId());
+        $qb->where('invoice.dpsConfig ='.$config->getId());
         $qb->andWhere('invoice.assignDoctor ='.$data['assignDoctor']);
         $qb->andWhere('appointment.status = 0');
         $qb->andWhere("invoice.process IN (:process)");
@@ -156,9 +156,9 @@ class DpsTreatmentPlanRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('appointment');
-        $qb->join('appointment.dmsInvoice','invoice');
+        $qb->join('appointment.dpsInvoice','invoice');
         $qb->join('invoice.assignDoctor','doctor');
-        $qb->join('appointment.dmsParticular','particular');
+        $qb->join('appointment.dpsParticular','particular');
         $qb->join('invoice.customer','customer');
         $qb->select('customer.name as customerName');
         $qb->addSelect('doctor.name as doctorName');
@@ -172,7 +172,7 @@ class DpsTreatmentPlanRepository extends EntityRepository
         $qb->addSelect('appointment.appointmentDate as appointmentDate');
         $qb->addSelect('appointment.appointmentTime as appointmentTime');
         $qb->addSelect('appointment.status as appointmentStatus');
-        $qb->where('invoice.dmsConfig ='.$config->getId());
+        $qb->where('invoice.dpsConfig ='.$config->getId());
         $this->handleSearchBetween($qb,$data);
       //  $this->handleDateRangeFind($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
@@ -195,15 +195,15 @@ class DpsTreatmentPlanRepository extends EntityRepository
             $href ='';
             $processIntArr = ['Appointment','Created','Done','Visit'];
             if (in_array($entity['process'],$processIntArr)){
-                $href= '<a href="/dms/invoice/'.$entity['invoiceId'].'/edit" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>';
+                $href= '<a href="/dps/invoice/'.$entity['invoiceId'].'/edit" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>';
             }
-            $action ='<a class="btn blue sms-confirm mini   " href="javascript:" data-url="/dms/invoice/'.$entity['patientId'].'/'.$entity['id'].'/send-sms"><i class="icon-phone"></i> Send SMS</a>';
+            $action ='<a class="btn blue sms-confirm mini   " href="javascript:" data-url="/dps/invoice/'.$entity['patientId'].'/'.$entity['id'].'/send-sms"><i class="icon-phone"></i> Send SMS</a>';
             if ($entity['appointmentStatus'] == 1)  {
                 $appointmentDate = $entity['appointmentDate']->format('d-m-Y');
                 $appointmentTime = $entity['appointmentTime'];
             }else{
-                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Date">'.$entity['appointmentDate']->format('d-m-Y').'</a>';
-                $appointmentTime ='<a data-type="select" class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update"  data-value="'.$entity['appointmentTime'].'" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Time">'.$entity['appointmentTime'].'</a>';
+                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dps/invoice/inline-update" data-type="text" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Date">'.$entity['appointmentDate']->format('d-m-Y').'</a>';
+                $appointmentTime ='<a data-type="select" class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dps/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dps/invoice/inline-update"  data-value="'.$entity['appointmentTime'].'" data-pk="'.$entity['id'].'" data-original-title="Change Appointment Time">'.$entity['appointmentTime'].'</a>';
             }
             $status = ($entity['appointmentStatus'] == 1)?'Yes':'No';
             $sendSms = ($entity['sendSms'] = 1)?'Yes':'No';
@@ -331,11 +331,11 @@ class DpsTreatmentPlanRepository extends EntityRepository
     public function transactionOverview(DpsConfig $config , $data =array())
     {
         $qb = $this->createQueryBuilder('appointment');
-        $qb->join('appointment.dmsInvoice','invoice');
+        $qb->join('appointment.dpsInvoice','invoice');
         $qb->select('SUM(appointment.subTotal) as subTotal');
         $qb->addSelect('SUM(appointment.discount) as discount');
         $qb->addSelect('SUM(appointment.payment) as payment');
-        $qb->where('invoice.dmsConfig ='.$config->getId());
+        $qb->where('invoice.dpsConfig ='.$config->getId());
         $qb->andWhere('appointment.status =1');
         if (empty($data)) {
             $datetime = new \DateTime("now");
@@ -368,11 +368,11 @@ class DpsTreatmentPlanRepository extends EntityRepository
 
 
         $qb = $this->createQueryBuilder('appointment');
-        $qb->join('appointment.dmsInvoice','invoice');
+        $qb->join('appointment.dpsInvoice','invoice');
         $qb->select('SUM(appointment.subTotal) as subTotal');
         $qb->addSelect('SUM(appointment.discount) as discount');
         $qb->addSelect('SUM(appointment.payment) as payment');
-        $qb->where('invoice.dmsConfig ='.$config->getId());
+        $qb->where('invoice.dpsConfig ='.$config->getId());
         $qb->andWhere('appointment.status =1');
         if (empty($data)) {
             $datetime = new \DateTime("now");
@@ -458,13 +458,13 @@ class DpsTreatmentPlanRepository extends EntityRepository
     public function findWithServiceOverview(DpsConfig $config, $data)
     {
         $qb = $this->createQueryBuilder('appointment');
-        $qb->leftJoin('appointment.dmsParticular','d');
+        $qb->leftJoin('appointment.dpsParticular','d');
         $qb->leftJoin('d.service','s');
         $qb->select('sum(appointment.subTotal) as subTotal');
         $qb->addSelect('sum(appointment.discount) as discount');
         $qb->addSelect('sum(appointment.payment) as payment');
         $qb->addSelect('d.name as particularName');
-        $qb->where('d.dmsConfig = :config')->setParameter('config', $config->getId());
+        $qb->where('d.dpsConfig = :config')->setParameter('config', $config->getId());
         $qb->andWhere('appointment.status = 1');
         $qb->andWhere("s.serviceFormat = 'treatment'");
         //$qb->andWhere("e.process IN (:process)");
@@ -486,12 +486,12 @@ class DpsTreatmentPlanRepository extends EntityRepository
         $year = isset($data['year'])? $data['year'] :$year;
 
         $sql = "SELECT DATE(appointment.updated) as date,SUM(appointment.subTotal) as subTotal,SUM(appointment.discount) as discount ,SUM(appointment.payment) as payment
-                FROM dms_treatment_plan as appointment
-                INNER JOIN dms_invoice as invoice ON appointment.dmsInvoice_id = invoice.id
-                WHERE invoice.dmsConfig_id = :dmsConfig AND appointment.status = :status AND MONTHNAME(appointment.updated) =:month AND YEAR(appointment.updated) =:year
+                FROM dps_treatment_plan as appointment
+                INNER JOIN dps_invoice as invoice ON appointment.dpsInvoice_id = invoice.id
+                WHERE invoice.dpsConfig_id = :dpsConfig AND appointment.status = :status AND MONTHNAME(appointment.updated) =:month AND YEAR(appointment.updated) =:year
                 GROUP BY date";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-        $stmt->bindValue('dmsConfig', $config->getId());
+        $stmt->bindValue('dpsConfig', $config->getId());
         $stmt->bindValue('status', 1);
         $stmt->bindValue('month', $month);
         $stmt->bindValue('year', $year);
@@ -511,12 +511,12 @@ class DpsTreatmentPlanRepository extends EntityRepository
         $year = isset($data['year'])? $data['year'] :$year;
 
         $sql = "SELECT YEAR(appointment.updated) as year,SUM(appointment.subTotal) as subTotal,SUM(appointment.discount) as discount ,SUM(appointment.payment) as payment
-                FROM dms_treatment_plan as appointment
-                INNER JOIN dms_invoice as invoice ON appointment.dmsInvoice_id = invoice.id
-                WHERE invoice.dmsConfig_id = :dmsConfig AND appointment.status = :status  AND YEAR(appointment.updated) =:year
+                FROM dps_treatment_plan as appointment
+                INNER JOIN dps_invoice as invoice ON appointment.dpsInvoice_id = invoice.id
+                WHERE invoice.dpsConfig_id = :dpsConfig AND appointment.status = :status  AND YEAR(appointment.updated) =:year
                 GROUP BY year ORDER BY year ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-        $stmt->bindValue('dmsConfig', $config->getId());
+        $stmt->bindValue('dpsConfig', $config->getId());
         $stmt->bindValue('status', 1);
         $stmt->bindValue('year', $year);
         $stmt->execute();
@@ -534,12 +534,12 @@ class DpsTreatmentPlanRepository extends EntityRepository
         $year = isset($data['year'])? $data['year'] :$year;
 
         $sql = "SELECT MONTHNAME(appointment.updated) as date,SUM(appointment.subTotal) as subTotal,SUM(appointment.discount) as discount ,SUM(appointment.payment) as payment
-                FROM dms_treatment_plan as appointment
-                INNER JOIN dms_invoice as invoice ON appointment.dmsInvoice_id = invoice.id
-                WHERE invoice.dmsConfig_id = :dmsConfig AND appointment.status = :status  AND YEAR(appointment.updated) =:year
+                FROM dps_treatment_plan as appointment
+                INNER JOIN dps_invoice as invoice ON appointment.dpsInvoice_id = invoice.id
+                WHERE invoice.dpsConfig_id = :dpsConfig AND appointment.status = :status  AND YEAR(appointment.updated) =:year
                 GROUP BY date ORDER BY date ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-        $stmt->bindValue('dmsConfig', $config->getId());
+        $stmt->bindValue('dpsConfig', $config->getId());
         $stmt->bindValue('status', 1);
         $stmt->bindValue('year', $year);
         $stmt->execute();
@@ -552,20 +552,20 @@ class DpsTreatmentPlanRepository extends EntityRepository
     public function salesDetails(DpsConfig $config , $data =array())
     {
         $qb = $this->createQueryBuilder('appointment');
-        $qb->join('appointment.dmsInvoice','dmsInvoice');
-        $qb->join('dmsInvoice.customer','customer');
-        $qb->join('dmsInvoice.assignDoctor','doctor');
-        $qb->join('appointment.dmsParticular','particular');
+        $qb->join('appointment.dpsInvoice','dpsInvoice');
+        $qb->join('dpsInvoice.customer','customer');
+        $qb->join('dpsInvoice.assignDoctor','doctor');
+        $qb->join('appointment.dpsParticular','particular');
         $qb->select('appointment.id as id');
         $qb->addSelect('appointment.updated as created');
-        $qb->addSelect('(dmsInvoice.invoice) as invoice');
+        $qb->addSelect('(dpsInvoice.invoice) as invoice');
         $qb->addSelect('(doctor.name) as doctorName');
         $qb->addSelect('(customer.name) as customerName');
         $qb->addSelect('(particular.name) as particularName');
         $qb->addSelect('(appointment.subTotal) as subTotal');
         $qb->addSelect('(appointment.discount) as discount');
         $qb->addSelect('(appointment.payment) as payment');
-        $qb->where('dmsInvoice.dmsConfig ='.$config->getId());
+        $qb->where('dpsInvoice.dpsConfig ='.$config->getId());
         $qb->andWhere('appointment.status =1');
         $this->handleSearchBetween($qb,$data);
         $this->handleDateRangeFind($qb,$data);

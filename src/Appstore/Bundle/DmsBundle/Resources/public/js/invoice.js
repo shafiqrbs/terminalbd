@@ -562,9 +562,6 @@ $(document).on('click', '#received2Btn', function() {
     })
 });
 
-
-
-
 $(document).on('click', '#addAccessories', function() {
 
     var accessories = $('#accessories').val();

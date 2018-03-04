@@ -48,6 +48,24 @@ class InvoiceType extends AbstractType
     {
         $builder
 
+            ->add('assignDoctor', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular',
+                'property' => 'name',
+                'multiple'    => false,
+                'expanded' => false,
+                'attr'=>array('class'=>'m-wrap span12'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.service",'s')
+                        ->where("e.status = 1")
+                        ->andWhere('e.dpsConfig =:dpsConfig')
+                        ->setParameter('dpsConfig', $this->globalOption->getDpsConfig()->getId())
+                        ->andWhere('s.slug IN (:slugs)')
+                        ->setParameter('slugs',array('doctor'))
+                        ->orderBy("e.name","ASC");
+                }
+            ))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
                 'expanded'      =>false,
@@ -76,82 +94,8 @@ class InvoiceType extends AbstractType
                         ->orderBy("e.name", "ASC");
                 }
 
-            ))
-
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
-            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('transactionMethod', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.slug != 'cash-on-delivery'")
-                        ->orderBy("e.id","ASC");
-                }
-            ))
-            ->add('paymentCard', 'entity', array(
-                'required'    => false,
-                'property' => 'name',
-                'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Choose payment card---',
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->orderBy("e.id","ASC");
-                }
-            ))
-
-            ->add('accountBank', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'empty_value' => '---Choose receive bank account---',
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.globalOption =".$this->globalOption->getId())
-                        ->orderBy("b.name", "ASC");
-                }
-            ))
-
-            ->add('accountMobileBank', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'empty_value' => '---Choose receive mobile bank account---',
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.globalOption =".$this->globalOption->getId())
-                        ->orderBy("b.name", "ASC");
-                }
-            ))
-            ->add('assignDoctor', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular',
-                'property' => 'name',
-                'multiple'    => false,
-                'expanded' => false,
-                'attr'=>array('class'=>'m-wrap span12'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->join("e.service",'s')
-                        ->where("e.status = 1")
-                        ->andWhere('e.dpsConfig =:dpsConfig')
-                        ->setParameter('dpsConfig', $this->globalOption->getDpsConfig()->getId())
-                        ->andWhere('s.slug IN (:slugs)')
-                        ->setParameter('slugs',array('doctor'))
-                        ->orderBy("e.name","ASC");
-                }
             ));
-           $builder->add('customer', new CustomerForDmsType( $this->location ));
+           $builder->add('customer', new CustomerForDpsType( $this->location ));
     }
     
     /**
