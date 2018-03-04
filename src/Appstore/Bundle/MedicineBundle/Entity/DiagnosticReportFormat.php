@@ -8,7 +8,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * DiagnosticReportFormat
  *
- * @ORM\Table( name ="medicine_diagnostic_report_format")
+ * @ORM\Table( name ="hms_master_diagnostic_report_format")
  * @ORM\Entity(repositoryClass="")
  */
 class DiagnosticReportFormat
