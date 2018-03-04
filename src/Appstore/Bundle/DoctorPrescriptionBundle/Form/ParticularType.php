@@ -19,13 +19,13 @@ class ParticularType extends AbstractType
 
 
     /** @var  DpsConfig */
-    private $dmsConfig;
+    private $dpsConfig;
 
 
-    function __construct(DpsConfig  $dmsConfig)
+    function __construct(DpsConfig  $dpsConfig)
     {
 
-        $this->dmsConfig = $dmsConfig;
+        $this->dpsConfig = $dpsConfig;
     }
 
 
@@ -54,8 +54,8 @@ class ParticularType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                     ->where("e.status = 1")
-                    ->andWhere('e.dentalService is null')
-                    ->andWhere('e.dmsConfig ='.$this->dmsConfig->getId())
+                    ->andWhere('e.doctorService is null')
+                    ->andWhere('e.dpsConfig ='.$this->dpsConfig->getId())
                     ->orderBy("e.sorting","ASC");
                 }
             ))

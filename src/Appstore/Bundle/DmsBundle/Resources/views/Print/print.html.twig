@@ -238,7 +238,7 @@
                                                     <td>
                                                         <ul class="unstyled">
                                                             {% set date ='' %}
-                                                            {% for medicine in entity.invoiceMedicines %}
+                                                            {% for medicine in entity.medicineDoctorPrescribes %}
                                                                 {% if medicine.created|date('d-m-Y') != date %}
                                                                 {% set date = medicine.created|date('d-m-Y') %}
                                                                 <li class="date">Date: {{ medicine.created|date('d-m-Y') }}</li>

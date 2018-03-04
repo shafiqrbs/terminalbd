@@ -36,8 +36,8 @@ class DpsParticularListener
         $qb = $entityManager->getRepository($class)->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-            ->where('s.dmsConfig = :dms')
-            ->setParameter('dms', $entity->getDpsConfig())
+            ->where('s.dpsConfig = :dps')
+            ->setParameter('dps', $entity->getDpsConfig())
             ->andWhere('s.service = :service')
             ->setParameter('service', $entity->getService());
         $lastCode = $qb->getQuery()->getSingleScalarResult();

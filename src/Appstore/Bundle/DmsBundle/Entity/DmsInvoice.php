@@ -8,6 +8,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -46,7 +47,15 @@ class DmsInvoice
      **/
     private $dmsDoctorInvoices;
 
-     /**
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe", mappedBy="dmsInvoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    private  $medicineDoctorPrescribes;
+
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="dmsInvoices")
      **/
     private $service;
@@ -1037,6 +1046,14 @@ class DmsInvoice
     public function setEstimateTotal($estimateTotal)
     {
         $this->estimateTotal = $estimateTotal;
+    }
+
+    /**
+     * @return MedicineDoctorPrescribe
+     */
+    public function getMedicineDoctorPrescribes()
+    {
+        return $this->medicineDoctorPrescribes;
     }
 
 

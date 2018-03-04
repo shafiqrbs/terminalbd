@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\DoctorPrescriptionBundle\Controller;
 
-use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DmsParticular;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\Particular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Form\DoctorType;
 use Appstore\Bundle\DoctorPrescriptionBundle\Form\CabinType;
@@ -39,10 +39,10 @@ class ParticularController extends Controller
      */
     public function indexAction()
     {
-        $entity = new DmsParticular();
+        $entity = new DpsParticular();
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $config = $this->getUser()->getGlobalOption()->getDpsConfig();
         $pagination = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->getServiceLists($config);
         //$pagination = $this->paginate($pagination);
         $editForm = $this->createCreateForm($entity);
@@ -60,9 +60,9 @@ class ParticularController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new DmsParticular();
+        $entity = new DpsParticular();
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $config = $this->getUser()->getGlobalOption()->getDpsConfig();
         $pagination = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->getServiceLists($config);
         //$pagination = $this->paginate($pagination);
         $form = $this->createCreateForm($entity);
@@ -70,7 +70,7 @@ class ParticularController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setDmsConfig($config);
+            $entity->setDpsConfig($config);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -89,13 +89,13 @@ class ParticularController extends Controller
     /**
      * Creates a form to create a Particular entity.
      *
-     * @param DmsParticular $entity The entity
+     * @param DpsParticular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(DmsParticular $entity)
+    private function createCreateForm(DpsParticular $entity)
     {
-        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $config = $this->getUser()->getGlobalOption()->getDpsConfig();
         $form = $this->createForm(new ParticularType($config), $entity, array(
             'action' => $this->generateUrl('dps_particular_create', array('id' => $entity->getId())),
             'method' => 'POST',
@@ -116,7 +116,7 @@ class ParticularController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $config = $this->getUser()->getGlobalOption()->getDpsConfig();
         $pagination = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->getServiceLists($config);
         //$pagination = $this->paginate($pagination);
         $entity = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->find($id);
@@ -140,10 +140,10 @@ class ParticularController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(DmsParticular $entity)
+    private function createEditForm(DpsParticular $entity)
     {
 
-        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $config = $this->getUser()->getGlobalOption()->getDpsConfig();
         $form = $this->createForm(new ParticularType($config), $entity, array(
             'action' => $this->generateUrl('dps_particular_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -161,7 +161,7 @@ class ParticularController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $config = $this->getUser()->getGlobalOption()->getDpsConfig();
         $pagination = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->getServiceLists($config);
         //$pagination = $this->paginate($pagination);
         $entity = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->find($id);
@@ -190,7 +190,7 @@ class ParticularController extends Controller
      * Deletes a Particular entity.
      *
      */
-    public function deleteAction(DmsParticular $entity)
+    public function deleteAction(DpsParticular $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -221,7 +221,7 @@ class ParticularController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(DmsParticular $entity)
+    public function statusAction(DpsParticular $entity)
     {
 
         $em = $this->getDoctrine()->getManager();

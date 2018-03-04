@@ -245,7 +245,7 @@
                     <tr>
                         <td  class="numeric">
                             <ul class="unstyled" style="margin-bottom: 50px !important; display: inline-block; margin-top: 40px!important;">
-                                {% for medicine in entity.invoiceMedicines %}
+                                {% for medicine in entity.medicineDoctorPrescribes %}
                                     <li> {{ loop.index }}. {{ medicine.medicine.medicineForm }} {{ medicine.medicine.name }} {{ medicine.medicine.strength }} <br/>
                                         {{ medicine.medicineQuantity }}  {{ medicine.medicineDose }} - {{ medicine.medicineDoseTime }} - {{ medicine.medicineDuration }} {{ medicine.medicineDurationType }}
                                     </li>

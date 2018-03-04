@@ -113,13 +113,6 @@ class DpsParticular
      */
     private $content;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="instruction", type="text", nullable=true)
-     */
-    private $instruction;
-
 
     /**
      * @var float

@@ -9,10 +9,12 @@ dms_invoice_show:
 dms_invoice_new:
     path:     /new
     defaults: { _controller: "DmsBundle:Invoice:new" }
+    options:
+            expose: true
 
-dms_invoice_admission:
-    path:     /admission-new
-    defaults: { _controller: "DmsBundle:Invoice:new" }
+dms_invoice_create:
+    path:     /create
+    defaults: { _controller: "DmsBundle:Invoice:create" }
 
 dms_invoice_edit:
     path:     /{id}/edit

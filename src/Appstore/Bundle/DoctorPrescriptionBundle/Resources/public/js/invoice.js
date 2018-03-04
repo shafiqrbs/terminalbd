@@ -63,7 +63,7 @@ $( "#name" ).autocomplete({
 $( ".autoProcedure" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('dps_invoice_procedure_search'),
+            url: Routing.generate('dms_invoice_procedure_search'),
             data: {
                 term: request.term
             },
@@ -80,7 +80,7 @@ $( ".autoProcedure" ).autocomplete({
 /*$( ".autoDiseases" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('dps_invoice_procedure_diseases_search'),
+            url: Routing.generate('dms_invoice_procedure_diseases_search'),
             data: {
                 term: request.term
             },
@@ -111,7 +111,7 @@ $( ".autoDiseases" )
     })
     .autocomplete({
         source: function( request, response ) {
-            $.getJSON( Routing.generate('dps_invoice_procedure_diseases_search') , {
+            $.getJSON( Routing.generate('dms_invoice_procedure_diseases_search') , {
                 term: extractLast( request.term )
             }, response );
         },
@@ -142,7 +142,7 @@ $( ".autoDiseases" )
 $( ".investigation" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('dps_invoice_investigation_search'),
+            url: Routing.generate('dms_invoice_investigation_search'),
             data: {
                 term: request.term
             },
@@ -159,7 +159,7 @@ $( ".investigation" ).autocomplete({
 $( ".autoMetaValue" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('dps_invoice_auto_particular_search'),
+            url: Routing.generate('dms_invoice_auto_particular_search'),
             data: {
                 term: request.term
             },
@@ -262,7 +262,7 @@ $(document).on('click', '.addProcedure', function() {
     }
     var checked = []
     $('#'+dataTab).find("input[name='teethNo[]']:checked").each(function (){
-       checked.push(parseInt($(this).val()));
+        checked.push(parseInt($(this).val()));
     });
 
     var url     = $(this).attr('data-url');
@@ -277,7 +277,7 @@ $(document).on('click', '.addProcedure', function() {
             $('#'+dataTab).find('#diseases').val('');
             $('#'+dataTab).find('.checkradios-checkbox').prop('checked', false);
             $('#'+dataTab).find('.checked').removeClass('fa fa-window-close');
-           }
+        }
     });
 });
 
@@ -431,11 +431,11 @@ $(document).on('change', '#appointmentDate', function() {
         return false;
     }
     var assignDoctor = $('#appstore_bundle_dmsinvoice_assignDoctor').val();
-    $.get(Routing.generate('dps_invoice_appointment_schedule_time',{assignDoctor:assignDoctor,appointmentDate:appointmentDate}),
-            function(data){
-               $('#appointmentTime').html(data);
-            }
-        );
+    $.get(Routing.generate('dms_invoice_appointment_schedule_time',{assignDoctor:assignDoctor,appointmentDate:appointmentDate}),
+        function(data){
+            $('#appointmentTime').html(data);
+        }
+    );
 });
 
 $(document).on('click', '#addParticular', function() {
@@ -692,11 +692,13 @@ var form = $("#invoiceForm").validate({
             data        : new FormData($('form#invoiceForm')[0]),
             processData : false,
             contentType : false,
-            beforeSend: function(){
-                $('.loader-double').fadeIn(1000).addClass('is-active');
+            beforeSend: function() {
+                $('#savePatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
+                $('.btn-ajax-loading').attr("disabled", true);
             },
             complete: function(){
-                $('.loader-double').fadeIn(1000).removeClass('is-active');
+                $('.btn-ajax-loading').attr("disabled", false);
+                $('#savePatientButton').removeClass('btn-ajax-loading');
             },
             success: function(response){
                 location.reload();

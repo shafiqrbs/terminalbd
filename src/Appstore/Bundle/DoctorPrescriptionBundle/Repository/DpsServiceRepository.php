@@ -95,6 +95,7 @@ class DpsServiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.doctorService is null');
         $qb->andWhere('e.dpsConfig = :config');
+        $qb->andWhere("e.serviceFormat !='other-service'");
         $qb->setParameter('config',$config);
         $qb->orderBy('e.sorting','ASC');
         $result = $qb->getQuery()->getResult();

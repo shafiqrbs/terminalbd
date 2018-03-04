@@ -96,7 +96,6 @@ class InvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
-
             ->add('accountMobileBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',

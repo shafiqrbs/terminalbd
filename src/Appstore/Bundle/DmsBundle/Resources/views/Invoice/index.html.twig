@@ -37,7 +37,7 @@
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('dms_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
                        {#         <a class="btn purple" href="{{ path('dms_report_sales_summary') }}"><i class="icon-cart"></i> Sales Summary</a>#}
-                                <a class="btn red" href="{{ path('dms_invoice_new') }}"><i class="icon-plus-sign"></i> Add New Patient</a>
+                                <a class="btn red addPatient"  href="javascript:"><i class="icon-plus-sign"></i> Add New Patient</a>
                             </div>
                         </div>
                     </div>
@@ -183,7 +183,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/jquery-ui.css'
+    '@DmsBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -191,12 +191,11 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@DmsBundle/Resources/public/js/patient.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
 {% endblock %}

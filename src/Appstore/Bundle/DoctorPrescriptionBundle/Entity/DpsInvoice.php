@@ -9,6 +9,7 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -56,6 +57,13 @@ class DpsInvoice
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
     private  $invoiceMedicines;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe", mappedBy="dpsInvoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    private  $medicineDoctorPrescribes;
 
 
     /**
@@ -179,14 +187,6 @@ class DpsInvoice
     private $paymentStatus = "Pending";
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="cabinNo", type="string", length=50, nullable=true)
-     */
-    private $cabinNo;
-
-
-    /**
      * @var float
      *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
@@ -255,13 +255,6 @@ class DpsInvoice
     /**
      * @var boolean
      *
-     * @ORM\Column(name="revised", type="boolean" )
-     */
-    private $revised = false;
-
-    /**
-     * @var boolean
-     *
      * @ORM\Column(name="sendSms", type="boolean" )
      */
     private $sendSms = false;
@@ -288,41 +281,6 @@ class DpsInvoice
      */
     private $updated;
 
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="releaseDate", type="datetime", nullable=true)
-     */
-    private $releaseDate;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="deliveryDate", type="datetime", nullable=true)
-     */
-    private $deliveryDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="deliveryTime", type="string", length=20, nullable=true)
-     */
-    private $deliveryTime;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="deliveryDateTime", type="string",  length=50, nullable=true)
-     */
-    private $deliveryDateTime;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="printFor", type="string",  length=100, nullable=true)
-     */
-    private $printFor ='pathological';
-
-
 
     /**
      * Get id
@@ -336,7 +294,7 @@ class DpsInvoice
 
 
     /**
-     * @return InvoiceParticular
+     * @return DpsInvoiceParticular
      */
     public function getInvoiceParticulars()
     {
@@ -344,34 +302,13 @@ class DpsInvoice
     }
 
     /**
-     * @param InvoiceParticular $invoiceParticulars
+     * @param DpsInvoiceParticular $invoiceParticulars
      */
     public function setInvoiceParticulars($invoiceParticulars)
     {
         $this->invoiceParticulars = $invoiceParticulars;
     }
 
-    /**
-     * @return string
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
-
-    /**
-     * @param string $paymentMethod
-     * Cash
-     * Cheque
-     * Giftcard
-     * Bkash
-     * Payment Card
-     * Other
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
 
     /**
      * @return string
@@ -799,7 +736,7 @@ class DpsInvoice
     }
 
     /**
-     * @return Service
+     * @return DpsService
      */
     public function getService()
     {
@@ -807,7 +744,7 @@ class DpsInvoice
     }
 
     /**
-     * @param Service $service
+     * @param DpsService $service
      */
     public function setService($service)
     {
@@ -834,7 +771,7 @@ class DpsInvoice
 
 
     /**
-     * @return Particular
+     * @return DpsParticular
      */
     public function getAssignDoctor()
     {
@@ -842,7 +779,7 @@ class DpsInvoice
     }
 
     /**
-     * @param Particular $assignDoctor
+     * @param DpsParticular $assignDoctor
      */
     public function setAssignDoctor($assignDoctor)
     {
@@ -850,72 +787,6 @@ class DpsInvoice
     }
 
 
-    /**
-     * @return boolean
-     */
-    public function getRevised()
-    {
-        return $this->revised;
-    }
-
-    /**
-     * @param boolean $revised
-     */
-    public function setRevised($revised)
-    {
-        $this->revised = $revised;
-    }
-
-
-    /**
-     * @return User
-     */
-    public function getApprovedBy()
-    {
-        return $this->approvedBy;
-    }
-
-    /**
-     * @param User $approvedBy
-     */
-    public function setApprovedBy($approvedBy)
-    {
-        $this->approvedBy = $approvedBy;
-    }
-
-    public function getDeliveryCount()
-    {
-        $count = 0;
-        foreach ($this->getInvoiceParticulars() as $data ){
-
-           /* @var $data InvoiceParticular */
-           if($data->getParticularDeliveredBy()){
-               $count++;
-           }
-        }
-        return $count;
-    }
-
-    public function getReportCount()
-    {
-        $count = 0;
-        foreach ($this->getInvoiceParticulars() as $data ){
-
-            /* @var $data InvoiceParticular */
-            if($data->getParticular()->getService()->getSlug() == 'diagnostic'){
-                $count++;
-            }
-        }
-        return $count;
-    }
-
-    /**
-     * @return DpsReverse
-     */
-    public function getDpsReverse()
-    {
-        return $this->dpsReverse;
-    }
 
 
     /**
@@ -934,13 +805,7 @@ class DpsInvoice
         $this->dpsConfig = $dpsConfig;
     }
 
-    /**
-     * @return DpsDoctorInvoice
-     */
-    public function getDpsDoctorInvoices()
-    {
-        return $this->dpsDoctorInvoices;
-    }
+
 
     /**
      * @return DpsTreatmentPlan
@@ -976,14 +841,6 @@ class DpsInvoice
         $this->sendSms = $sendSms;
     }
 
-    /**
-     * @return DpsInvoiceAccessories
-     */
-    public function getDpsInvoiceAccessories()
-    {
-        return $this->dpsInvoiceAccessories;
-    }
-
 
     /**
      * @return float
@@ -1016,6 +873,15 @@ class DpsInvoice
     {
         $this->investigations = $investigations;
     }
+
+    /**
+     * @return MedicineDoctorPrescribe
+     */
+    public function getMedicineDoctorPrescribes()
+    {
+        return $this->medicineDoctorPrescribes;
+    }
+
 
 
 }

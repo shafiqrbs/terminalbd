@@ -98,6 +98,7 @@ class DmsServiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.dentalService is null');
         $qb->andWhere('e.dmsConfig = :config');
+        $qb->andWhere("e.serviceFormat != 'other-service'");
         $qb->setParameter('config',$config);
         $qb->orderBy('e.sorting','ASC');
         $result = $qb->getQuery()->getResult();

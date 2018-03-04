@@ -12,7 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Particular
  *
  * @ORM\Table( name = "hms_master_diagnostic_report")
- * @ORM\Entity(repositoryClass="")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\DiagnosticReportRepository")
+
  */
 class DiagnosticReport
 {

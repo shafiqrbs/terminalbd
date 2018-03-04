@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\DoctorPrescriptionBundle\Controller;
 
-use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DmsParticular;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Form\DoctorType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,14 +29,14 @@ class DoctorController extends Controller
 
 
     /**
-     * Lists all DmsParticular entities.
+     * Lists all DpsParticular entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $config = $this->getUser()->getGlobalOption()->getDpsConfig();
         $pagination = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->getFindDentalServiceParticular($config , array('doctor'));
         return $this->render('DoctorPrescriptionBundle:Doctor:index.html.twig', array(
             'entities' => $pagination,
@@ -48,19 +48,19 @@ class DoctorController extends Controller
     }
 
     /**
-     * Creates a new DmsParticular entity.
+     * Creates a new DpsParticular entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new DmsParticular();
+        $entity = new DpsParticular();
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createCreateForm($entity,$globalOption);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setDmsConfig($globalOption -> getDmsConfig());
+            $entity->setDpsConfig($globalOption ->getDpsConfig());
             $service = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsService')->findOneBy(array('serviceFormat'=>'doctor'));
             $entity->setService($service);
             $entity->setName($entity->getAssignDoctor()->getProfile()->getName());
@@ -83,13 +83,13 @@ class DoctorController extends Controller
     }
 
     /**
-     * Creates a form to create a DmsParticular entity.
+     * Creates a form to create a DpsParticular entity.
      *
-     * @param DmsParticular $entity The entity
+     * @param DpsParticular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(DmsParticular $entity, $globalOption)
+    private function createCreateForm(DpsParticular $entity, $globalOption)
     {
 
         $form = $this->createForm(new DoctorType($globalOption), $entity, array(
@@ -104,12 +104,12 @@ class DoctorController extends Controller
     }
 
     /**
-     * Displays a form to create a new DmsParticular entity.
+     * Displays a form to create a new DpsParticular entity.
      *
      */
     public function newAction()
     {
-        $entity = new DmsParticular();
+        $entity = new DpsParticular();
         $globalOption = $this->getUser()->getGlobalOption();
         $form   = $this->createCreateForm($entity,$globalOption);
 
@@ -120,7 +120,7 @@ class DoctorController extends Controller
     }
 
     /**
-     * Finds and displays a DmsParticular entity.
+     * Finds and displays a DpsParticular entity.
      *
      */
     public function showAction($id)
@@ -128,7 +128,7 @@ class DoctorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
+            throw $this->createNotFoundException('Unable to find DpsParticular entity.');
         }
         return $this->render('DoctorPrescriptionBundle:Doctor:show.html.twig', array(
             'entity'      => $entity,
@@ -136,7 +136,7 @@ class DoctorController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing DmsParticular entity.
+     * Displays a form to edit an existing DpsParticular entity.
      *
      */
     public function editAction($id)
@@ -146,7 +146,7 @@ class DoctorController extends Controller
         $entity = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
+            throw $this->createNotFoundException('Unable to find DpsParticular entity.');
         }
         $globalOption = $this->getUser()->getGlobalOption();
         $editForm = $this->createEditForm($entity,$globalOption);
@@ -158,13 +158,13 @@ class DoctorController extends Controller
     }
 
     /**
-     * Creates a form to edit a DmsParticular entity.
+     * Creates a form to edit a DpsParticular entity.
      *
-     * @param DmsParticular $entity The entity
+     * @param DpsParticular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(DmsParticular $entity,$globalOption)
+    private function createEditForm(DpsParticular $entity,$globalOption)
     {
 
         $form = $this->createForm(new DoctorType($globalOption), $entity, array(
@@ -180,7 +180,7 @@ class DoctorController extends Controller
         return $form;
     }
     /**
-     * Edits an existing DmsParticular entity.
+     * Edits an existing DpsParticular entity.
      *
      */
     public function updateAction(Request $request, $id)
@@ -190,7 +190,7 @@ class DoctorController extends Controller
         $entity = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find DmsParticular entity.');
+            throw $this->createNotFoundException('Unable to find DpsParticular entity.');
         }
 
         $globalOption = $this->getUser()->getGlobalOption();
@@ -216,10 +216,10 @@ class DoctorController extends Controller
         ));
     }
     /**
-     * Deletes a DmsParticular entity.
+     * Deletes a DpsParticular entity.
      *
      */
-    public function deleteAction(DmsParticular $entity)
+    public function deleteAction(DpsParticular $entity)
     {
         $em = $this->getDoctrine()->getManager();
         try {
@@ -247,7 +247,7 @@ class DoctorController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(DmsParticular $entity)
+    public function statusAction(DpsParticular $entity)
     {
 
         $em = $this->getDoctrine()->getManager();

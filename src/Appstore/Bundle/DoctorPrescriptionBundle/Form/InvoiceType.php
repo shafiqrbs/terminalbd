@@ -10,6 +10,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
 use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
+use Appstore\Bundle\MedicineBundle\Repository\DiagnosticReportRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -24,13 +25,17 @@ class InvoiceType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
+    /** @var  DiagnosticReportRepository */
+    private $diagnostic;
+
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption ,  LocationRepository $location)
+    function __construct(GlobalOption $globalOption ,  LocationRepository $location ,  DiagnosticReportRepository $diagnostic)
     {
         $this->location         = $location;
+        $this->diagnostic         = $diagnostic;
         $this->globalOption     = $globalOption;
     }
 
@@ -56,6 +61,23 @@ class InvoiceType extends AbstractType
                     'Canceled' => 'Canceled',
                 ),
             ))
+
+            ->add('investigations', 'entity', array(
+                'required'    => true,
+                'multiple'      =>true,
+                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'class' => 'Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport',
+                'group_by'  => 'category.name',
+                'property'  => 'name',
+                'choice_translation_domain' => true,
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.category",'c')
+                        ->orderBy("e.name", "ASC");
+                }
+
+            ))
+
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
@@ -122,8 +144,8 @@ class InvoiceType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->join("e.service",'s')
                         ->where("e.status = 1")
-                        ->andWhere('e.dmsConfig =:dmsConfig')
-                        ->setParameter('dmsConfig', $this->globalOption->getDpsConfig()->getId())
+                        ->andWhere('e.dpsConfig =:dpsConfig')
+                        ->setParameter('dpsConfig', $this->globalOption->getDpsConfig()->getId())
                         ->andWhere('s.slug IN (:slugs)')
                         ->setParameter('slugs',array('doctor'))
                         ->orderBy("e.name","ASC");
@@ -147,7 +169,15 @@ class InvoiceType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_dmsinvoice';
+        return 'appstore_bundle_dpsinvoice';
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function categoryChoiceList()
+    {
+        return $categoryTree = $this->diagnostic->getInvestigationGroupList();
     }
 
 }

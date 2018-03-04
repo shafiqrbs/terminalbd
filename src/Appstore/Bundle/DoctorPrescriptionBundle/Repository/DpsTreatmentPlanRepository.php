@@ -260,32 +260,12 @@ class DpsTreatmentPlanRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
-            $discount = $entity->getDiscount();
             $payment = $entity->getPayment();
-            $appointmentDate ='';
-            $appointmentTime ='';
-            if ($entity->getStatus() == 1 and !empty($entity->getAppointmentDate()))  {
-                $appointmentDate = $entity->getAppointmentDate()->format('d-m-Y');
-                $appointmentTime = $entity->getAppointmentTime();
-            }elseif(!empty($entity->getAppointmentDate())){
-                $appointmentDate ='<a  class="btn mini blue-stripe btn-action editable editable-click" data-name="AppointmentDate" href="javascript:"  data-url="/dms/invoice/inline-update" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Date">'.$entity->getAppointmentDate()->format('d-m-Y').'</a>';
-                $appointmentTime ='<a data-type="select"  class="btn mini purple-stripe btn-action editable editable-click" data-name="AppointmentTime" data-source="/dms/invoice/inline-appointment-datetime-select" href="javascript:"  data-url="/dms/invoice/inline-update" data-value="'.$entity->getAppointmentTime().'" data-pk="'.$entity->getId().'" data-original-title="Change Appointment Time">'.$entity->getAppointmentTime().'</a>';
-            }
-
-            if ($entity->getStatus() == 1)  {
-                $action ='Done';
-            }else{
-                $action ='<a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/treatment-delete" href="javascript:" class="btn red mini treatmentDelete" ><i class="icon-trash"></i></a>';
-            }
-
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="numeric" >' . $i . '</td>';
             $data .= '<td class="numeric" >' . $entity->getUpdated()->format('d-m-Y'). '</td>';
-            $data .= '<td class="numeric" >' . $entity->getDpsParticular()->getParticularCode().' - '. $entity->getDpsParticular()->getName(). '</td>';
-            $data .= '<td class="numeric" >' . $appointmentDate .$appointmentTime. '</td>';
-            $data .= '<td class="numeric" >' . $entity->getPrice() . '</td>';
+            $data .= '<td class="numeric" >' . $entity->getDpsParticular()->getName(). '</td>';
             $data .= '<td class="numeric" >' . $payment . '</td>';
-            $data .= '<td class="numeric" id="treatment-approved-'.$entity->getId().'" >'.$action.'</td>';
             $data .= '</tr>';
             $i++;
         }

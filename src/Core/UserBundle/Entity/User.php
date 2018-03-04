@@ -667,6 +667,13 @@ class User extends BaseUser
      */
     protected $dmsDoctorInvoiceApprovedBy;
 
+    /*=========================== DPS Bundle =========================================*/
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="assignDoctor" , cascade={"persist", "remove"})
+     */
+    protected $dpsParticularDoctor;
+
     /*=========================== Restaurant Bundle =========================================*/
 
     /**

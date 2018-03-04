@@ -142,4 +142,19 @@ class HmsCategoryRepository extends MaterializedPathRepository
         }
     }
 
+    /**
+     * @param $results
+     * @return Category[]
+     */
+    protected function getCategoriesIndexedById($results)
+    {
+        $categories = array();
+
+        foreach ($results as $category) {
+            $categories[$category->getId()] = $category;
+        }
+        return $categories;
+    }
+
+
 }

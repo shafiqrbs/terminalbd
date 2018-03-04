@@ -1,17 +1,16 @@
 <?php
 
-namespace Appstore\Bundle\DoctorPrescriptionBundle\Entity;
+namespace Appstore\Bundle\MedicineBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * Service
  *
- * @ORM\Table( name ="dps_prescription_attribute")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\DoctorPrescriptionBundle\Repository\DpsPrescriptionAttributeRepository")
+ * @ORM\Table( name ="medicine_prescription_attribute")
+ * @ORM\Entity(repositoryClass="")
  */
-class DpsPrescriptionAttribute
+class PrescriptionAttribute
 {
     /**
      * @var integer
@@ -111,22 +110,6 @@ class DpsPrescriptionAttribute
     public function setNameBn($nameBn)
     {
         $this->nameBn = $nameBn;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDpsInvoiceMedicine()
-    {
-        return $this->dpsInvoiceMedicine;
-    }
-
-    /**
-     * @param mixed $dpsInvoiceMedicine
-     */
-    public function setDpsInvoiceMedicine($dpsInvoiceMedicine)
-    {
-        $this->dpsInvoiceMedicine = $dpsInvoiceMedicine;
     }
 
     /**

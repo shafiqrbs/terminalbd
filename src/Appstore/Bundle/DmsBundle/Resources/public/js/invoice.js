@@ -195,6 +195,7 @@ $(document).on("click", "#patientOverview", function() {
     });
 });
 
+/*
 
 
 $( "#mobile" ).autocomplete({
@@ -214,6 +215,7 @@ $( "#mobile" ).autocomplete({
     select: function( event, ui ) {}
 
 });
+*/
 
 
 
@@ -701,7 +703,7 @@ var form = $("#invoiceForm").validate({
                 $('#savePatientButton').removeClass('btn-ajax-loading');
             },
             success: function(response){
-                location.reload();
+
             }
         });
     }
