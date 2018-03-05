@@ -66,7 +66,7 @@
                                     <!--BEGIN TABS-->
                                     <div class="tabbable tabbable-custom tabs-left">
                                         <!-- Only required for left/right tabs -->
-                                        <ul class="nav nav-tabs tabs-left">
+                                        <ul data-match-height="tab-content" class="nav nav-tabs tabs-left">
                                             <li><a href="#tab_patient_overview" data-url="{{ path('dms_invoice_patient_load',{'id':entity.id}) }}" id="patientOverview" data-toggle="tab">Patient Overview</a></li>
                                             <li  class="active" ><a href="#tab_patient_info" data-toggle="tab">Patient Information</a></li>
                                             {% if entity.customer is not empty %}
@@ -75,8 +75,8 @@
                                                 {% endfor %}
                                             {% endif %}
                                         </ul>
-                                        <div class="tab-content">
-                                            <div class="tab-pane tab-height " id="tab_patient_overview" >
+                                        <div data-match-height="tab-content" style="overflow-y:scroll"  class="tab-content">
+                                            <div  class="tab-pane tab-height " id="tab_patient_overview" >
                                                 <div class="form-actions portlet box blue">
                                                     <div class="portlet-title">
                                                         <div class="caption"><i class="icon-reorder"></i>PATIENT PROFILE</div>
@@ -139,7 +139,7 @@
                                                 </div>
                                                 <div class="clearfix">&nbsp;</div>
                                             </div>
-                                            <div class="tab-pane active tab-height" id="tab_patient_info">
+                                            <div  class="tab-pane active tab-height" id="tab_patient_info">
                                                 <div class="form-actions portlet box blue">
                                                     <div class="portlet-title">
                                                         <div class="caption"><i class="icon-user"></i>PATIENT INFORMATION</div>
@@ -242,7 +242,7 @@
                                             </div>
                                             {% if entity.customer is not empty %}
                                                 {% for service in services %}
-                                                    <div class="tab-pane tab-height" id="tab-{{ service.slug }}" >
+                                                    <div  class="tab-pane tab-height" id="tab-{{ service.slug }}" >
                                                         <div class="form-actions portlet box blue">
                                                             <div class="portlet-title">
                                                                 <div class="caption"><i class="icon-th-list"></i>{{ service.name|upper }}</div>
@@ -252,8 +252,8 @@
                                                         {% if service.serviceFormat == 'teeth-format' %}
                                                             <div class="clearfix">&nbsp;</div>
                                                             <div class="row-fluid" id="">
-                                                                <div class="span4"><input type="text" name="procedure" id="procedure" class="span12 m-wrap autoProcedure" placeholder="Enter patient chief complaints particular"  ></div>
-                                                                <div class="span7">
+                                                                <div class="span3"><input type="text" name="procedure" id="procedure" class="span12 m-wrap autoProcedure" placeholder="Enter patient chief complaints particular"  ></div>
+                                                                <div class="span8">
                                                                     <table class="dms-teeth-plan">
                                                                         <tr><td class="dms-plan-td dms-plan-td-border-none dms-plan-td-border-bottom">
                                                                                 <ul class="leftFormatTeeth">
@@ -436,9 +436,39 @@
                                                             {% endif %}
                                                         {% elseif service.serviceFormat == 'checkbox'  %}
                                                             {% if service.dmsParticulars is not empty %}
-                                                                    <div class="row-fluid">
+                                                                <div class="row-fluid">
                                                                     <div class="span12">
-                                                                        <ul>
+                                                                        <ul class="unstyled">
+                                                                            {% for particular in service.dmsParticulars  %}
+                                                                                <li style="width: 100%; float: left"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == particular.id %} checked="checked" {% endif %} type="checkbox" value="{{ particular.id }}" name="metaCheck[]"> &nbsp;{{ particular.name }}</label>
+                                                                                <input type="hidden" value="" name="metaValue[]">
+                                                                                <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% elseif service.serviceFormat == 'checkbox-two'  %}
+                                                            {% if service.dmsParticulars is not empty %}
+                                                                <div class="row-fluid">
+                                                                    <div class="span12">
+                                                                        <ul class="unstyled">
+                                                                            {% for particular in service.dmsParticulars  %}
+                                                                                <li style="width: 50%; float: left"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == particular.id %} checked="checked" {% endif %} type="checkbox" value="{{ particular.id }}" name="metaCheck[]"> &nbsp;{{ particular.name }}</label>
+                                                                                <input type="hidden" value="" name="metaValue[]">
+                                                                                <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% elseif service.serviceFormat == 'checkbox-three'  %}
+                                                            {% if service.dmsParticulars is not empty %}
+                                                                <div class="row-fluid">
+                                                                    <div class="span12">
+                                                                        <ul class="unstyled">
                                                                             {% for particular in service.dmsParticulars  %}
                                                                                 <li style="width: 33%; float: left"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == particular.id %} checked="checked" {% endif %} type="checkbox" value="{{ particular.id }}" name="metaCheck[]"> &nbsp;{{ particular.name }}</label>
                                                                                 <input type="hidden" value="" name="metaValue[]">
@@ -447,7 +477,22 @@
                                                                             {% endfor %}
                                                                         </ul>
                                                                     </div>
-
+                                                                </div>
+                                                            {% endif %}
+                                                        {% elseif service.serviceFormat == 'checkbox-four'  %}
+                                                            {% if service.dmsParticulars is not empty %}
+                                                                <div class="row-fluid">
+                                                                    <div class="span12">
+                                                                        <ul class="unstyled">
+                                                                            {% for particular in service.dmsParticulars  %}
+                                                                                <li style="width: 25%; float: left"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == particular.id %} checked="checked" {% endif %} type="checkbox" value="{{ particular.id }}" name="metaCheck[]"> &nbsp;{{ particular.name }}</label>
+                                                                                <input type="hidden" value="" name="metaValue[]">
+                                                                                <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
                                                             {% endif %}
                                                         {% elseif service.serviceFormat == 'textarea'  %}
                                                             {% if service.dmsParticulars is not empty %}
@@ -610,7 +655,7 @@
                                                             </tbody>
                                                             <tfoot>
                                                             <tr>
-                                                                <th  class="numeric text-right" colspan="6" ><span class="pull-right">Estimate</span></th>
+                                                                <th  class="numeric text-right" colspan="6" ><span class="pull-right">Estimate Amount</span></th>
                                                                 <th  class="numeric estimateTotal" >{{ entity.estimateTotal }}</th>
                                                             </tr>
                                                             <tr>
@@ -622,7 +667,7 @@
                                                                 <th  class="numeric discount" >{{ entity.discount }}</th>
                                                             </tr>
                                                             <tr>
-                                                                <th  class="numeric text-right" colspan="6" ><span class="pull-right">Total</span></th>
+                                                                <th  class="numeric text-right" colspan="6" ><span class="pull-right">Total Receviable</span></th>
                                                                 <th  class="numeric netTotal" >{{ entity.total }}</th>
                                                             </tr>
                                                             <tr>
@@ -647,7 +692,7 @@
                                                             <div class="row-fluid">
                                                                 <div class="span12">
                                                                     <div class="control-group">
-                                                                        <label class="control-label" for="firstName"><span class="label">Payable TK.</span> <span class="pull-right sales-right netTotal">{{ entity.total }}</span></label>
+                                                                        <label class="control-label" for="firstName"><span class="label">Receviable TK.</span> <span class="pull-right sales-right netTotal">{{ entity.total }}</span></label>
                                                                     </div>
                                                                 </div>
                                                                 <!--/span-->

@@ -40,7 +40,10 @@ class ServiceType extends AbstractType
                     'teeth-format' => 'Teeth Format',
                     'text-field' => 'Text Field',
                     'checkbox-text-field' => 'Checkbox with Text Field',
-                    'checkbox' => 'Checkbox',
+                    'checkbox' => 'Checkbox 1 Column',
+                    'checkbox-two' => 'Checkbox 2 Column',
+                    'checkbox-three' => 'Checkbox 3 Column',
+                    'checkbox-four' => 'Checkbox 4 Column',
                     'textarea' => 'Text-area',
                     'file' => 'File Upload'
                 ),
