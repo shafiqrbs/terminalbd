@@ -44,6 +44,7 @@ function formSubmit() {
             "appstore_bundle_dpsinvoice[customer][mobile]": {required: true},
             "appstore_bundle_dpsinvoice[customer][age]": {required: true},
             "appstore_bundle_dpsinvoice[customer][address]": {required: false},
+            "appstore_bundle_dpsinvoice[customer][weight]": {required: false},
         },
 
         messages: {
@@ -59,8 +60,22 @@ function formSubmit() {
         },
 
         submitHandler: function (form) {
-            $('#savePatientButton').attr("disabled", true);
-            $("#invoicePatientForm").submit();
+            $.ajax({
+                url         : $('form#invoicePatientForm').attr( 'action' ),
+                type        : $('form#invoicePatientForm').attr( 'method' ),
+                data        : new FormData($('form#invoicePatientForm')[0]),
+                processData : false,
+                contentType : false,
+                beforeSend: function() {
+                    $('#saveNewPatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
+                    $('.btn-ajax-loading').attr("disabled", true);
+                },
+                success: function(response){
+                    $('.btn-ajax-loading').attr("disabled", false);
+                    $('#saveNewPatientButton').removeClass('btn-ajax-loading').fadeOut(3000);
+                    window.location.href = '/dms/invoice/'+response+'/edit';
+                }
+            });
         }
     });
 }

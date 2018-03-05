@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SalesReturnItem
  *
- * @ORM\Table()
+ * @ORM\Table(name="sales_return_item")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\InventoryBundle\Repository\SalesReturnItemRepository")
  */
 class SalesReturnItem
@@ -23,9 +23,8 @@ class SalesReturnItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturn", inversedBy="salesReturnItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $salesReturnItem;
+    private  $salesReturn;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", inversedBy="salesReturnItem" )
@@ -107,7 +106,7 @@ class SalesReturnItem
     }
 
     /**
-     * @return mixed
+     * @return SalesReturn
      */
     public function getSalesReturn()
     {
@@ -115,7 +114,7 @@ class SalesReturnItem
     }
 
     /**
-     * @param mixed $salesReturn
+     * @param SalesReturn $salesReturn
      */
     public function setSalesReturn($salesReturn)
     {
@@ -179,20 +178,6 @@ class SalesReturnItem
         return $this->stockReturnItems;
     }
 
-    /**
-     * @return SalesReturnItem
-     */
-    public function getSalesReturnItem()
-    {
-        return $this->salesReturnItem;
-    }
 
-    /**
-     * @param SalesReturnItem $salesReturnItem
-     */
-    public function setSalesReturnItem($salesReturnItem)
-    {
-        $this->salesReturnItem = $salesReturnItem;
-    }
 }
 

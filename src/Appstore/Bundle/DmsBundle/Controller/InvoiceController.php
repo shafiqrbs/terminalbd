@@ -107,7 +107,8 @@ class InvoiceController extends Controller
             if($dmsConfig->getIsDefaultMedicine() == 1 ){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->defaultDmsBeforeMedicine($entity,$lastObject);
             }
-            return $this->redirect($this->generateUrl('dms_invoice_edit', array('id' => $entity->getId())));
+            return new Response($entity->getId());
+        //    return $this->redirect($this->generateUrl('dms_invoice_edit', array('id' => $entity->getId())));
         }
 
     }

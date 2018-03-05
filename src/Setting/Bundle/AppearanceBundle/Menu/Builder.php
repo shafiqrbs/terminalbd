@@ -558,7 +558,7 @@ class Builder extends ContainerAware
         }
         $menu
             ->addChild('Inventory')
-            ->setAttribute('icon', 'irescon-archive')
+            ->setAttribute('icon', 'icon-archive')
             ->setAttribute('dropdown', true);
 
        /* if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {

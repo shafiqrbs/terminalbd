@@ -201,47 +201,47 @@ class Sales
 
 
         /**
-         * @var string
+         * @var float
          *
-         * @ORM\Column(name="subTotal", type="decimal", nullable=true)
+         * @ORM\Column(name="subTotal", type="float", nullable=true)
          */
-        private $subTotal;
+        private $subTotal = 0;
 
 
 
         /**
-         * @var string
+         * @var float
          *
-         * @ORM\Column(name="discount", type="decimal", nullable=true)
+         * @ORM\Column(name="discount", type="float", nullable=true)
          */
-        private $discount;
+        private $discount = 0;
 
         /**
-         * @var string
+         * @var float
          *
-         * @ORM\Column(name="vat", type="decimal", nullable=true)
+         * @ORM\Column(name="vat", type="float", nullable=true)
          */
-        private $vat;
+        private $vat = 0;
 
         /**
-         * @var string
+         * @var float
          *
-         * @ORM\Column(name="total", type="decimal", nullable=true)
+         * @ORM\Column(name="total", type="float", nullable=true)
          */
-        private $total;
+        private $total = 0;
 
 
         /**
-         * @var string
+         * @var float
          *
-         * @ORM\Column(name="payment", type="decimal", nullable=true)
+         * @ORM\Column(name="payment", type="float", nullable=true)
          */
-        private $payment;
+        private $payment = 0;
 
         /**
-         * @var string
+         * @var float
          *
-         * @ORM\Column(name="deliveryCharge", type="decimal", nullable=true)
+         * @ORM\Column(name="deliveryCharge", type="float", nullable=true)
          */
         private $deliveryCharge = 0;
 
@@ -254,11 +254,11 @@ class Sales
         private $comment;
 
         /**
-         * @var string
+         * @var float
          *
-         * @ORM\Column(name="due", type="decimal", nullable=true)
+         * @ORM\Column(name="due", type="float", nullable=true)
          */
-        private $due;
+        private $due = 0;
 
         /**
          * @var string
@@ -322,7 +322,7 @@ class Sales
         }
 
         /**
-         * @return string
+         * @return float
          */
         public function getSubTotal()
         {
@@ -330,7 +330,7 @@ class Sales
         }
 
         /**
-         * @param string $subTotal
+         * @param float $subTotal
          */
         public function setSubTotal($subTotal)
         {
@@ -338,7 +338,7 @@ class Sales
         }
 
         /**
-         * @return string
+         * @return float
          */
         public function getDiscount()
         {
@@ -346,7 +346,7 @@ class Sales
         }
 
         /**
-         * @param string $discount
+         * @param float $discount
          */
         public function setDiscount($discount)
         {
@@ -354,7 +354,7 @@ class Sales
         }
 
         /**
-         * @return string
+         * @return float
          */
         public function getVat()
         {
@@ -362,7 +362,7 @@ class Sales
         }
 
         /**
-         * @param string $vat
+         * @param float $vat
          */
         public function setVat($vat)
         {
@@ -370,7 +370,7 @@ class Sales
         }
 
         /**
-         * @return string
+         * @return float
          */
         public function getTotal()
         {
@@ -378,7 +378,7 @@ class Sales
         }
 
         /**
-         * @param string $total
+         * @param float $total
          */
         public function setTotal($total)
         {
@@ -402,7 +402,7 @@ class Sales
         }
 
         /**
-         * @return string
+         * @return float
          */
         public function getDue()
         {
@@ -410,7 +410,7 @@ class Sales
         }
 
         /**
-         * @param string $due
+         * @param float $due
          */
         public function setDue($due)
         {
@@ -661,7 +661,7 @@ class Sales
 
 
         /**
-         * @return string
+         * @return float
          */
         public function getPayment()
         {
@@ -669,7 +669,7 @@ class Sales
         }
 
         /**
-         * @param string $payment
+         * @param float $payment
          */
         public function setPayment($payment)
         {

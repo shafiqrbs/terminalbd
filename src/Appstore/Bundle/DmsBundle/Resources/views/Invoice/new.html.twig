@@ -436,13 +436,18 @@
                                                             {% endif %}
                                                         {% elseif service.serviceFormat == 'checkbox'  %}
                                                             {% if service.dmsParticulars is not empty %}
-                                                                {% for particular in service.dmsParticulars  %}
                                                                     <div class="row-fluid">
-                                                                        <input type="hidden" value="" name="metaValue[]">
-                                                                        <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
-                                                                        <div class="span12"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == particular.id %} checked="checked" {% endif %} type="checkbox" value="{{ particular.id }}" name="metaCheck[]"> &nbsp;{{ particular.name }}</label></div>
+                                                                    <div class="span12">
+                                                                        <ul>
+                                                                            {% for particular in service.dmsParticulars  %}
+                                                                                <li style="width: 33%; float: left"><label><input {% if invoiceParticularArr is not empty and invoiceParticularArr[particular.id] is defined and invoiceParticularArr[particular.id] is not empty and invoiceParticularArr[particular.id].metaCheck == particular.id %} checked="checked" {% endif %} type="checkbox" value="{{ particular.id }}" name="metaCheck[]"> &nbsp;{{ particular.name }}</label>
+                                                                                <input type="hidden" value="" name="metaValue[]">
+                                                                                <input type="hidden" id="metaKey" name="metaKey[]" value="{{ particular.id }}">
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
                                                                     </div>
-                                                                {% endfor %}
+
                                                             {% endif %}
                                                         {% elseif service.serviceFormat == 'textarea'  %}
                                                             {% if service.dmsParticulars is not empty %}
@@ -1047,11 +1052,6 @@
             background-size: 24px 24px;
             background-repeat: no-repeat;
         }
-
-        .btn-ajax-loading {
-            position:inherit;
-        }
-
     </style>
 
 {% endblock %}

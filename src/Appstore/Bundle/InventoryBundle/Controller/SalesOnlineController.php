@@ -400,16 +400,17 @@ class SalesOnlineController extends Controller
                 $entity->setVat($vat);
             }
             $entity->setDeliveryCharge($data['deliveryCharge']);
+            $due = $data['dueAmount'] == '' ? 0 :$data['dueAmount'];
+            $entity->setDue($due);
             $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
-            $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
+            $entity->setPayment($entity->getTotal() - $entity->getDue());
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
-
-            if ($data['paymentTotal'] <= $data['paymentAmount']) {
+            if ($entity->getTotal() <= $data['paymentAmount']) {
                 $entity->setPaymentStatus('Paid');
-            } else if ($data['paymentTotal'] > $data['paymentAmount']) {
+            } else if ($entity->getTotal() - $entity->getDue()) {
                 $entity->setPaymentStatus('Due');
             }
             if (empty($data['sales']['salesBy'])) {

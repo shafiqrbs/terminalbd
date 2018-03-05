@@ -367,18 +367,21 @@ class SalesManualController extends Controller
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
             }
+            $due = $data['dueAmount'] == '' ? 0 :$data['dueAmount'];
+            $entity->setDue($due);
             $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
-            $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
+            $entity->setPayment($entity->getTotal() - $entity->getDue());
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
 
-            if ($data['paymentTotal'] <= $data['paymentAmount']) {
+            if ($entity->getTotal() <= $data['paymentAmount']) {
                 $entity->setPaymentStatus('Paid');
-            } else if ($data['paymentTotal'] > $data['paymentAmount']) {
+            } else if ($entity->getTotal() - $entity->getDue()) {
                 $entity->setPaymentStatus('Due');
             }
+            $entity->setProcess('Done');
             if (empty($data['sales']['salesBy'])) {
                 $entity->setSalesBy($this->getUser());
             }

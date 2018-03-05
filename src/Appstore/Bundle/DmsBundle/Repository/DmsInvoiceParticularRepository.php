@@ -113,7 +113,7 @@ class DmsInvoiceParticularRepository extends EntityRepository
                 $data .='<table class="dms-table">';
                 $leftTeeths = [8,7,6,5,4,3,2,1];
                 $upperRightTeeths = array(9 =>1,10 =>2,11=>3,12=>4,13=>5,14=>6,15=>7,16=>8);
-                $lowerLeftTeeths = array(24=>8,23=>7,12=>6,21=>5,20=>4,19=>3,18=>2,17=>1);
+                $lowerLeftTeeths = array(24=>8,23=>7,22=>6,21=>5,20=>4,19=>3,18=>2,17=>1);
                 $lowerRightTeeths = array(25 =>1,26 =>2,27=>3,28=>4,29=>5,30=>6,31=>7,32=>8);
                 $data .='<tr>';
                 $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
@@ -154,14 +154,14 @@ class DmsInvoiceParticularRepository extends EntityRepository
                 $data .= '</table>';
             }else{
                 $data .='<table class="dms-table">';
-                $leftTeeths = array(37=>'E',36=>'D',35=>'C',34=>'B',33=>'A');
+                $upperLeftTeeths = array(37=>'E',36=>'D',35=>'C',34=>'B',33=>'A');
                 $upperRightTeeths = array(38=>'A',39=>'B',40=>'C',41=>'D',42=>'E');
                 $lowerLeftTeeths = array(47=>'E',46=>'D',45=>'C',44=>'B',43=>'A');
-                $lowerRightTeeths = array(38=>'A',49=>'B',50=>'C',51=>'D',52=>'E');
+                $lowerRightTeeths = array(48=>'A',49=>'B',50=>'C',51=>'D',52=>'E');
                 $data .='<tr>';
                 $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
                 $data .='<ul class="leftTeeth">';
-                foreach ($upperRightTeeths as $key=>$right) :
+                foreach ($upperLeftTeeths as $key=>$right) :
                     $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
                     $data .='<li '.$selected.'>'.$right.'</li>';
                 endforeach;

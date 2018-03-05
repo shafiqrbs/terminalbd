@@ -10,6 +10,10 @@ medicine_medicine_company:
     resource: "@MedicineBundle/Resources/config/routing/medicinecompany.yml"
     prefix:   /drug-company
 
+medicine_dental_investigation:
+    resource: "@MedicineBundle/Resources/config/routing/dentalinvestigation.yml"
+    prefix:   /dental-investigation
+
 medicine_homepage:
     path:     /hello/{name}
     defaults: { _controller: MedicineBundle:Default:index }

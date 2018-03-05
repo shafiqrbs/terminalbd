@@ -358,6 +358,7 @@ class SalesController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
+        var_dump($data);
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
 
             if (!empty($data['sales']['mobile'])) {
@@ -376,14 +377,16 @@ class SalesController extends Controller
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
             }
-            $entity->setDue($data['dueAmount']);
+
+            $due = $data['dueAmount'] == '' ? 0 :$data['dueAmount'];
+            $entity->setDue($due);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
-            $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
+            $entity->setPayment($entity->getTotal() - $entity->getDue());
 
-            if ($data['paymentTotal'] <= $data['paymentAmount']) {
+            if ($entity->getTotal() <= $data['paymentAmount']) {
                 $entity->setPaymentStatus('Paid');
-            } else if ($data['paymentTotal'] > $data['paymentAmount']) {
+            } else if ($entity->getTotal() - $entity->getDue()) {
                 $entity->setPaymentStatus('Due');
             }
             $entity->setProcess('Done');

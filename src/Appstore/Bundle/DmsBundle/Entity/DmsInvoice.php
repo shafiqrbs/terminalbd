@@ -78,18 +78,6 @@ class DmsInvoice
     private  $dmsInvoiceAccessories;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsInvoiceInvestigation" , cascade={"remove"} )
-     **/
-    private  $investigations;
-
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsSpecialAdvise", inversedBy="dmsInvoice" )
-     * @ORM\JoinColumn(name="dmsParticular_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-     **/
-    private  $specialAdvises;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="dmsInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"created" = "DESC"})
      **/
