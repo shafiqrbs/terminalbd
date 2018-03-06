@@ -68,7 +68,7 @@ class InvoiceModuleController extends Controller
 
         $entity = new InvoiceModule();
         $em = $this->getDoctrine()->getManager();
-        $entity->setProcess('Created');
+        $entity->setProcess('In-progress');
         $entity->setCustomInvoice(1);
         $em->persist($entity);
         $em->flush();
@@ -106,6 +106,9 @@ class InvoiceModuleController extends Controller
             if($data['month'] and $data['year']){
                 $billMonth =$data['month'].','.$data['year'];
                 $entity->setBillMonth($billMonth);
+            }
+            if ($entity->isCustomInvoice() == 1){
+                $entity->setProcess('In-progress');
             }
             $entity->setProcess('Pending');
             $em->flush();
@@ -203,14 +206,9 @@ class InvoiceModuleController extends Controller
             throw $this->createNotFoundException('Unable to find InvoiceModule entity.');
         }
         $editForm = $this->createReceivePaymentForm($entity);
-        $banks = $em->getRepository('SettingToolBundle:PortalBankAccount')->findBy(array('status'=>1));
-        $bkashs = $em->getRepository('SettingToolBundle:PortalBkashAccount')->findBy(array('status'=>1));
         return $this->render('SettingToolBundle:InvoiceModule:new.html.twig', array(
             'entity'      => $entity,
             'form'          => $editForm->createView(),
-            'banks'      => $banks,
-            'bkashs'      => $bkashs,
-
         ));
     }
 

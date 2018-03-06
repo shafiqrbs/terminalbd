@@ -1309,8 +1309,8 @@ class Builder extends ContainerAware
         $menu['Manage Domain']->addChild('Manage Operation')->setAttribute('icon', 'icon-cog')->setAttribute('dropdown', true);
         $menu['Manage Domain']['Manage Operation']->addChild('Domain', array('route' => 'tools_domain'))->setAttribute('icon', 'fa fa-server');
         $menu['Manage Domain']->addChild('Manage Invoice')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
+        $menu['Manage Domain']['Manage Invoice']->addChild('Customer Invoice', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-money');
         $menu['Manage Domain']['Manage Invoice']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
-        $menu['Manage Domain']['Manage Invoice']->addChild('Module Invoice', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-money');
 
         return $menu;
     }

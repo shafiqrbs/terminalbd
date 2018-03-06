@@ -65,6 +65,40 @@ class InvoiceController extends Controller
 
     public function newAction()
     {
+        $entity = new Invoice();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createInvoiceCustomerForm($entity);
+        $html = $this->renderView('DmsBundle:Invoice:patient.html.twig', array(
+            'form'   => $form->createView(),
+        ));
+        return New Response($html);
+    }
+
+
+    private function createInvoiceCustomerForm(Invoice $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new InvoiceType($globalOption,$category ,$location), $entity, array(
+            'action' => $this->generateUrl('hms_invoice_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoiceForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    public function createAction()
+    {
+
+    }
+
+    public function newxAction()
+    {
         $em = $this->getDoctrine()->getManager();
         $entity = new Invoice();
         $option = $this->getUser()->getGlobalOption();

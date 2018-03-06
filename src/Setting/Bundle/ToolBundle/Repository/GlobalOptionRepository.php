@@ -10,6 +10,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -285,16 +286,16 @@ class GlobalOptionRepository extends EntityRepository
             $this->_em->persist($config);
         }
 
-        $businessConfig = $this->_em->getRepository('BusinessBundle:BusinessConfig')->findOneBy(array('globalOption'=>$globalOption));
-        if(empty($businessConfig)){
-            $config = new BusinessConfig();
+        $medicineConfig = $this->_em->getRepository('MedicineBundle:MedicineBrand')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($medicineConfig)){
+            $config = new MedicineConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
 
-        $restaurantConfig = $this->_em->getRepository('RestaurantBundle:RestaurantConfig')->findOneBy(array('globalOption'=>$globalOption));
-        if(empty($restaurantConfig)){
-            $config = new RestaurantConfig();
+        $businessConfig = $this->_em->getRepository('BusinessBundle:BusinessConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($businessConfig)){
+            $config = new BusinessConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }

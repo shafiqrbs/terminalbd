@@ -1,3 +1,7 @@
+.btn-ajax-loading {
+    position:inherit;
+}
+
 .dropdown-menu .divider{
     margin: 0;
 }
@@ -5,10 +9,15 @@
     display: none;
 }
 .particular-info{
-    background: red;
+    background: #ddd;
     padding: 10px;
     padding-left:0;
     padding-right: 4px;
+}
+
+div.checker {
+    border: 3px solid red;
+    margin-top: -4px;
 }
 
 .btn-show{
@@ -54,14 +63,16 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .sales-right{
     padding-right: 10px;
+    float: right;
+    text-align: right;
+    width: 190px;
 }
-.sales-right input{
-    width: 110px;
+.sales-right input[class*="span"].m-wrap{
     font-weight: bold;
-    margin-top: -5px;
-    text-align: left;
-    border: 1px solid #f39c12;
-    height: 23px
+    margin-top: -1px;
+    text-align: right;
+    border: 2px solid #4b8df8!important;
+    height: 23px!important;
 }
 .select2-search{
     padding-left: 0;
@@ -79,14 +90,12 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 .form-horizontal .patient-info .control-label{
     float: left;
     text-align: left;
-    background: #E7DFBF;
-    color: #000;
-    line-height:20px;
-    height: 25px;
+    background: #8a8a8a;
+    color: #fff;
     margin:0!important;
     width: 99.5%;
     font-size: 14px;
-    border: 1px solid #DDD09E;
+    border: 1px solid #888888;
 }
 
 .referred-info{
@@ -108,13 +117,13 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .form-horizontal .payment-info .control-group{
     margin-bottom: 0!important;
-    border-bottom: 1px solid #e67e22;
+    border-bottom: 1px solid #2e2e2e;
 }
 .form-horizontal .payment-info .control-label{
     float: left;
     text-align: left;
-    background: #f39c12;
-    color: #fff;
+    background: #f9f9f9;
+    color: #000;
     font-weight: bold;
     line-height: 32px;
     height: 33px;
@@ -123,7 +132,15 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     font-size: 14px;
 }
 
-.form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span , .form-horizontal .payment-info .control-label span{
+.form-horizontal .payment-info .control-label .label {
+    padding-left: 8px!important;
+    background: none;
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+}
+
+.form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span {
     padding-left: 8px;
 }
 
@@ -154,4 +171,158 @@ input[class*="span"].m-wrap  {
 
 .yellow-alert td{
     background-color: yellow!important;
+}
+
+.tooltip-inner{
+    background-color: #d12610;
+}
+.tooltip.top .tooltip-arrow{
+    color: #d12610 !important;
+}
+.close{
+    background-image: none!important;
+}
+.dialogModal .dialogModal_top .dialogModal_header{
+    width: 100%!important;
+}
+.dialogModal .dialogModal_body{
+    width: 100%!important;
+}
+.dialogModal .dialogModal_content{
+
+}
+.dialogModal_content .mini{
+    height: 20px!important;
+}
+
+.check-list label{
+    width: 97%;
+}
+.feeds .col1 .cont .cont-col2 .desc{
+    margin-left: 10px;
+}
+.portlet.box .form .form-actions, .portlet.solid .form .form-actions {
+    margin-top: -9px !important;
+}
+.row-fluid label{
+    line-height: 30px!important;
+}
+
+input[class*="span"].wrap-custom{
+    height: 30px!important;
+}
+
+li.active > a {
+    color: #d12610 !important;
+}
+.tabs-right.tabbable-custom .nav-tabs > li a, .tabs-left.tabbable-custom .nav-tabs > li a {
+    padding: 8px 10px;
+    font-weight: bold;
+}
+
+.select2-container-multi .select2-choices {
+    min-height: 30px;
+}
+.select2-container-multi .select2-choices .select2-search-choice div {
+    color: #000!important;
+    text-align: center;
+}
+.form-control-select{
+    width: 100%;
+    overflow-y:scroll;
+}
+#project-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+#project-icon {
+    float: left;
+    height: 32px;
+    width: 32px;
+}
+#project-description {
+    margin: 0;
+    padding: 0;
+}
+.dms-table {
+
+}
+.dms-table tr{
+    height:15px!important;
+    line-height: 15px!important;
+}
+.dms-table .dms-td{
+    height: 15px!important;
+    line-height: 15px;
+    padding: 1px!important;
+    width: 180px;
+
+}
+.dms-table .dms-td-border-none{
+    border: none!important;
+    text-align:right!important;
+}
+.dms-table .dms-td-border-bottom{
+    border-bottom:2px solid #4b8df8!important;
+}
+
+.dms-table .dms-td ul.rightTeeth , .dms-table .dms-td ul.leftTeeth{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dms-table .dms-td ul.rightTeeth{
+    float:right;
+}
+.dms-table .dms-td ul.leftTeeth{
+
+}
+.dms-table .dms-td ul.leftTeeth li, .dms-table .dms-td ul.rightTeeth li {
+    float: left;
+    border: 1px solid #000;
+    margin: 1px;
+    height: 15px;
+    line-height: 15px;
+    padding: 5px;
+    padding-bottom: 1px;
+    padding-top: 1px;
+}
+.dms-table .dms-td ul.leftTeeth li.active , .dms-table .dms-td ul.rightTeeth li.active{
+    color: #d12610 !important;
+    border: 1px solid #d12610!important;
+}
+.dms-teeth-plan{
+    margin-top: -18px;
+}
+
+.dms-teeth-plan .dms-plan-td{
+    padding: 1px!important;
+    width: 275px;
+
+}
+.dms-teeth-plan .dms-plan-td-border-none{
+    border: none!important;
+    text-align:right!important;
+}
+.dms-teeth-plan .dms-plan-td-border-bottom{
+    border-bottom:red 1px solid !important;
+}
+.dms-teeth-plan ul.leftFormatTeeth ,.dms-teeth-plan ul.rightFormatTeeth{
+    list-style:none;
+}
+.dms-teeth-plan .leftFormatTeeth li, .dms-teeth-plan .rightFormatTeeth li {
+    float: left;
+    padding: 3px;
+}
+.dms-teeth-plan .dms-td ul.rightFormatTeeth{
+    float:right;
+}
+
+.checkbox-custom.focus{
+    border:red 1px solid ;
+}
+.preview-print{
+    float: right;
 }

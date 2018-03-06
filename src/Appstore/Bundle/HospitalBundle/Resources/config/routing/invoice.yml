@@ -9,6 +9,15 @@ hms_invoice_show:
 hms_invoice_new:
     path:     /new
     defaults: { _controller: "HospitalBundle:Invoice:new" }
+    options:
+            expose: true
+
+hms_invoice_create:
+    path:     /{invoice}/particular-add
+    defaults: { _controller: "HospitalBundle:Invoice:create" }
+    methods:  POST
+    options:
+            expose: true
 
 hms_invoice_admission:
     path:     /admission-new
