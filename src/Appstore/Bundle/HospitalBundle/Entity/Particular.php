@@ -101,6 +101,12 @@ class Particular
     private  $invoiceParticular;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular", mappedBy="particular" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $hmsInvoiceTemporaryParticular;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular", mappedBy="particular" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -231,6 +237,7 @@ class Particular
      */
     private $price;
 
+
     /**
      * @var \string
      *
@@ -351,6 +358,13 @@ class Particular
      * @ORM\Column(name="reportFormat", type="boolean" )
      */
     private $reportFormat = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="discountValid", type="boolean", nullable=true)
+     */
+    private $discountValid = false;
 
 
     /**
@@ -1296,22 +1310,6 @@ class Particular
     }
 
     /**
-     * @return HmsMasterDiagnosticReport
-     */
-    public function getHmsMasterDiagnosticReport()
-    {
-        return $this->hmsMasterDiagnosticReport;
-    }
-
-    /**
-     * @param HmsMasterDiagnosticReport $hmsMasterDiagnosticReport
-     */
-    public function setHmsMasterDiagnosticReport($hmsMasterDiagnosticReport)
-    {
-        $this->hmsMasterDiagnosticReport = $hmsMasterDiagnosticReport;
-    }
-
-    /**
      * @return mixed
      */
     public function isDelete()
@@ -1341,6 +1339,30 @@ class Particular
     public function setDiagnosticReport($diagnosticReport)
     {
         $this->diagnosticReport = $diagnosticReport;
+    }
+
+    /**
+     * @return HmsInvoiceTemporaryParticular
+     */
+    public function getHmsInvoiceTemporaryParticular()
+    {
+        return $this->hmsInvoiceTemporaryParticular;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDiscountValid()
+    {
+        return $this->discountValid;
+    }
+
+    /**
+     * @param bool $discountValid
+     */
+    public function setDiscountValid($discountValid)
+    {
+        $this->discountValid = $discountValid;
     }
 
 

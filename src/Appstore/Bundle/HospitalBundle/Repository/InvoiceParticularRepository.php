@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\HospitalBundle\Controller\InvoiceController;
 use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
+use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
@@ -57,7 +58,27 @@ class InvoiceParticularRepository extends EntityRepository
         return  $qb;
     }
 
+    public function insertMasterParticular(User $user,Invoice $invoice){
 
+        $entities = $user->getHmsInvoiceTemporaryParticulars();
+        $em = $this->_em;
+        /* @var $entity HmsInvoiceTemporaryParticular */
+        if(!empty($entities)){
+            foreach ($entities as $entity) {
+
+                $invoiceParticular = new InvoiceParticular();
+                $invoiceParticular->setHmsInvoice($invoice);
+                $invoiceParticular->setQuantity($entity->getQuantity());
+                $invoiceParticular->setSalesPrice($entity->getSalesPrice());
+                $invoiceParticular->setSubTotal($entity->getSubTotal());
+                $invoiceParticular->setParticular($entity->getParticular());
+                $invoiceParticular->setEstimatePrice($entity->getEstimatePrice());
+                $em->persist($invoiceParticular);
+                $em->flush();
+            }
+        }
+
+    }
 
     public function insertInvoiceItems($invoice, $data)
     {

@@ -43,14 +43,6 @@ class InvoiceReferredDoctorType extends AbstractType
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Doctor/Reference name')))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Enter doctor/agent address')))
-            ->add('department', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select Department---',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'property' => 'nestedLabel',
-                'choices'=> $this->DepartmentChoiceList()
-            ))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',

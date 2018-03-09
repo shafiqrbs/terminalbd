@@ -62,42 +62,7 @@ class InvoiceController extends Controller
 
     }
 
-
     public function newAction()
-    {
-        $entity = new Invoice();
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createInvoiceCustomerForm($entity);
-        $html = $this->renderView('DmsBundle:Invoice:patient.html.twig', array(
-            'form'   => $form->createView(),
-        ));
-        return New Response($html);
-    }
-
-
-    private function createInvoiceCustomerForm(Invoice $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new InvoiceType($globalOption,$category ,$location), $entity, array(
-            'action' => $this->generateUrl('hms_invoice_create'),
-            'method' => 'POST',
-            'attr' => array(
-                'class' => 'form-horizontal',
-                'id' => 'invoiceForm',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
-    }
-
-    public function createAction()
-    {
-
-    }
-
-    public function newxAction()
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Invoice();
@@ -200,7 +165,6 @@ class InvoiceController extends Controller
         $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($invoice);
-
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
@@ -457,7 +421,7 @@ class InvoiceController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     * @Secure(roles="ROLE_HMS")
      */
 
     public function deleteAction(Invoice $entity)

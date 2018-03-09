@@ -55,6 +55,7 @@ $(document).on("click", ".saveButton", function() {
 
 
 function formSubmit() {
+
     $("#invoicePatientForm").validate({
 
         rules: {

@@ -565,6 +565,11 @@ class User extends BaseUser
     /* ==================================== HMS =========================================**/
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular", mappedBy="user" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoiceTemporaryParticulars;
+
+     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="deliveredBy" , cascade={"persist", "remove"})
      */
     protected $hmsInvoiceDeliveredBy;
@@ -1460,6 +1465,14 @@ class User extends BaseUser
     public function getDmsParticularDoctor()
     {
         return $this->dmsParticularDoctor;
+    }
+
+    /**
+     * @return HmsInvoiceTemporaryParticular
+     */
+    public function getHmsInvoiceTemporaryParticulars()
+    {
+        return $this->hmsInvoiceTemporaryParticulars;
     }
 
 

@@ -302,6 +302,7 @@
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
+                                    <a  href="{{ path('hms_invoice_edit',{'id':entity.id}) }}" class="btn purple"><i class=" icon-pencil"></i>&nbsp;Manage Patient</a>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
                                 </div>
                             </div>

@@ -26,6 +26,7 @@ class ConfigType extends AbstractType
             ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span5 ','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5','max'=> 100)))
             ->add('vatEnable')
+            ->add('initialDiagnosticShow')
             ->add('invoiceProcess',
                 'choice', array(
                     'attr'=>array('class'=>'check-list  span12'),
@@ -39,7 +40,6 @@ class ConfigType extends AbstractType
                     'expanded'  => true,
                     'empty_data'  => null,
             ))
-            ->add('isBranch')
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')
             ->add('isPrintHeader')

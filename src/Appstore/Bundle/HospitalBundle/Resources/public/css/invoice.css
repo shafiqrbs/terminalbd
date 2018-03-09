@@ -65,7 +65,7 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     padding-right: 10px;
     float: right;
     text-align: right;
-    width: 190px;
+    width: 140px;
 }
 .sales-right input[class*="span"].m-wrap{
     font-weight: bold;
@@ -81,6 +81,13 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 .select2-search input{
     border: 1px solid #35aa47!important;
 }
+
+.discount-type{
+    margin-left: 8px!important;
+    height: 20px!important;
+    border: 2px solid red !important;
+}
+
 .patient-info{
 
 }
@@ -93,7 +100,7 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     background: #8a8a8a;
     color: #fff;
     margin:0!important;
-    width: 99.5%;
+    width: 100%;
     font-size: 14px;
     border: 1px solid #888888;
 }
@@ -125,8 +132,8 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     background: #f9f9f9;
     color: #000;
     font-weight: bold;
-    line-height: 32px;
-    height: 33px;
+    line-height: 40px;
+    height: 40px;
     margin:0!important;
     width: 100%;
     font-size: 14px;
@@ -245,80 +252,7 @@ li.active > a {
     margin: 0;
     padding: 0;
 }
-.dms-table {
 
-}
-.dms-table tr{
-    height:15px!important;
-    line-height: 15px!important;
-}
-.dms-table .dms-td{
-    height: 15px!important;
-    line-height: 15px;
-    padding: 1px!important;
-    width: 180px;
-
-}
-.dms-table .dms-td-border-none{
-    border: none!important;
-    text-align:right!important;
-}
-.dms-table .dms-td-border-bottom{
-    border-bottom:2px solid #4b8df8!important;
-}
-
-.dms-table .dms-td ul.rightTeeth , .dms-table .dms-td ul.leftTeeth{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.dms-table .dms-td ul.rightTeeth{
-    float:right;
-}
-.dms-table .dms-td ul.leftTeeth{
-
-}
-.dms-table .dms-td ul.leftTeeth li, .dms-table .dms-td ul.rightTeeth li {
-    float: left;
-    border: 1px solid #000;
-    margin: 1px;
-    height: 15px;
-    line-height: 15px;
-    padding: 5px;
-    padding-bottom: 1px;
-    padding-top: 1px;
-}
-.dms-table .dms-td ul.leftTeeth li.active , .dms-table .dms-td ul.rightTeeth li.active{
-    color: #d12610 !important;
-    border: 1px solid #d12610!important;
-}
-.dms-teeth-plan{
-    margin-top: -18px;
-}
-
-.dms-teeth-plan .dms-plan-td{
-    padding: 1px!important;
-    width: 275px;
-
-}
-.dms-teeth-plan .dms-plan-td-border-none{
-    border: none!important;
-    text-align:right!important;
-}
-.dms-teeth-plan .dms-plan-td-border-bottom{
-    border-bottom:red 1px solid !important;
-}
-.dms-teeth-plan ul.leftFormatTeeth ,.dms-teeth-plan ul.rightFormatTeeth{
-    list-style:none;
-}
-.dms-teeth-plan .leftFormatTeeth li, .dms-teeth-plan .rightFormatTeeth li {
-    float: left;
-    padding: 3px;
-}
-.dms-teeth-plan .dms-td ul.rightFormatTeeth{
-    float:right;
-}
 
 .checkbox-custom.focus{
     border:red 1px solid ;

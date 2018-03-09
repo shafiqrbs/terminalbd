@@ -46,6 +46,7 @@ class PathologyType extends AbstractType
             ->add('sepcimen','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sample collection')))
             ->add('testDuration')
             ->add('reportFormat')
+            ->add('discountValid')
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('instruction','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'3','placeholder'=>'Enter test related any instruction for patient')))
             ->add('minimumPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter minimum price')))

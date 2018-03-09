@@ -101,6 +101,11 @@
     <img src="{{ asset_url }}" alt="" />
     {% endimage %}
 </a>
+   {# <div class="navbar hor-menu hidden-phone hidden-tablet">
+        <div class="navbar-inner">
+            {{ knp_menu_render('SettingAppearanceBundle:HorizontalBuilder:mainMenu', {'template':'SettingAppearanceBundle:Menu:horizontal-menu.html.twig','currentClass': 'active'}) }}
+        </div>
+    </div>#}
 
     {% if is_granted('ROLE_CUSTOMER') %}
         {{ include('customer/topbar.html.twig')}}

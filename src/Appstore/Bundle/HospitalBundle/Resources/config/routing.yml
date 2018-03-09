@@ -26,6 +26,10 @@ hospital_invoice:
     resource: "@HospitalBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice
 
+hospital_invoice_temporary:
+    resource: "@HospitalBundle/Resources/config/routing/invoicetemporary.yml"
+    prefix:   /invoice-temporary
+
 hospital_doctor_invoice:
     resource: "@HospitalBundle/Resources/config/routing/doctorinvoice.yml"
     prefix:   /doctor-invoice

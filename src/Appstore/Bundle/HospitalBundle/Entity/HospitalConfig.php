@@ -98,28 +98,35 @@ class HospitalConfig
     /**
      * @var smallint
      *
-     * @ORM\Column(name="fontSizeValue", type="smallint",  nullable=true)
+     * @ORM\Column(name="fontSizeValue", type="smallint",  nullable = true)
      */
     private $fontSizeValue;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="vatRegNo", type="string",  nullable=true)
+     * @ORM\Column(name="vatRegNo", type="string",  nullable = true)
      */
     private $vatRegNo;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isBranch", type="boolean",  nullable=true)
+     * @ORM\Column(name="isBranch", type="boolean",  nullable = true)
      */
     private $isBranch = false;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="barcodePrint", type="boolean",  nullable=true)
+     * @ORM\Column(name="initialDiagnosticShow", type="boolean",  nullable = true)
+     */
+    private $initialDiagnosticShow = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="barcodePrint", type="boolean",  nullable = true)
      */
     private $barcodePrint = false;
 
@@ -1016,6 +1023,22 @@ class HospitalConfig
     public function setFontSizeValue($fontSizeValue)
     {
         $this->fontSizeValue = $fontSizeValue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getInitialDiagnosticShow()
+    {
+        return $this->initialDiagnosticShow;
+    }
+
+    /**
+     * @param bool $initialDiagnosticShow
+     */
+    public function setInitialDiagnosticShow($initialDiagnosticShow)
+    {
+        $this->initialDiagnosticShow = $initialDiagnosticShow;
     }
 
 

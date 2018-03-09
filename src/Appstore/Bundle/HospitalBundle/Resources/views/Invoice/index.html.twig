@@ -203,6 +203,10 @@
             </div>
         </div>
     </div>
+ <style>
+
+
+ </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -217,6 +221,9 @@
     {% javascripts
     '@HospitalBundle/Resources/public/js/patient.js'
     '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@HospitalBundle/Resources/public/js/invoice.js'
+    '@HospitalBundle/Resources/public/js/editable.js'
+    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

@@ -33,7 +33,7 @@ class ServiceController extends Controller
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsService')->getServiceLists($config);
+        $pagination = $em->getRepository('DmsBundle:DmsService')->findBy(array('dmsConfig'=>$config),array('name'=>'ASC'));
         $editForm = $this->createCreateForm($entity);
         return $this->render('DmsBundle:Service:index.html.twig', array(
             'pagination' => $pagination,
@@ -215,7 +215,6 @@ class ServiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
         }
-
         $status = $entity->getStatus();
         if($status == 1){
             $entity->setStatus(0);
@@ -226,7 +225,7 @@ class ServiceController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('dms_service:'));
+        return $this->redirect($this->generateUrl('dms_service'));
     }
 
     /**

@@ -1082,6 +1082,24 @@ class TransactionRepository extends EntityRepository
         }
     }
 
+    public function insertHmsCashCredit(InvoiceTransaction $entity , AccountSales $accountSales)
+    {
+
+        $transaction = new Transaction();
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+        $transaction->setProcessHead('Sales');
+        $transaction->setProcess('Operating Revenue');
+        $transaction->setUpdated($entity->getUpdated());
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
+        $transaction->setAmount('-'.$entity->getPayment());
+        $transaction->setCredit($entity->getPayment());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+        return $transaction;
+
+    }
+
+
     private function insertHmsSalesVatAccountPayable(InvoiceTransaction $entity, AccountSales $accountSales)
     {
 
