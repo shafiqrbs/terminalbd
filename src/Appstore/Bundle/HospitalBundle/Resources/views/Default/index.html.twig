@@ -10,22 +10,22 @@
                     {% if is_granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") %}
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat green">
-                            <a class="visual" href="{{ path('hms_invoice') }}">
+                            <a class="visual addPatient" href="javascript:">
                                 <i class="fa fa-hospital-o"></i>
                             </a>
-                            <a class="more" href="{{ path('hms_invoice') }}">
-                                Pathology Invoice <i class="m-icon-swapright m-icon-white"></i>
+                            <a class="more addPatient" href="javascript:">
+                                Diagnostic Invoice <i class="m-icon-swapright m-icon-white"></i>
                             </a>
                         </div>
                     </div>
                     {% endif %}
-                    {% if is_granted("ROLE_DOMAIN_HOSPITAL_MANAGER") %}
+                    {% if is_granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") %}
                         <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                             <div class="dashboard-stat purple">
-                                <a class="visual" href="{{ path('hms_invoice_admission') }}">
+                                <a class="visual" href="{{ path('hms_invoice_admission_new') }}">
                                     <i class="fa fa-ambulance"></i>
                                 </a>
-                                <a class="more" href="{{ path('hms_invoice_admission') }}">
+                                <a class="more" href="{{ path('hms_invoice_admission_new') }}">
                                     Admission Invoice <i class="m-icon-swapright m-icon-white"></i>
                                 </a>
                             </div>
@@ -83,4 +83,18 @@
         }
     </style>
 {% endblock %}
-
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@HospitalBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HospitalBundle/Resources/public/js/patient.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}

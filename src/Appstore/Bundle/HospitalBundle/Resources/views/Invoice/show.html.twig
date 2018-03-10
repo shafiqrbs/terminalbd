@@ -38,7 +38,7 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
+                                <a class="btn red addPatient" href="javascript:"><i class="icon-plus-sign"></i> Add Invoice</a>
                                 <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i> Diagnostic</a>
                             </div>
                         </div>
@@ -253,6 +253,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@HospitalBundle/Resources/public/js/patient.js'
     '@HospitalBundle/Resources/public/js/invoice.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

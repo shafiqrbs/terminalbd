@@ -57,8 +57,18 @@
                     <td colspan="9" class="span12" style="border: 1px double #000"></td>
                 </tr>
                 <tr>
-                    <td colspan="7" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                    <td colspan="7" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
                     <td class="span2"><strong class="subTotal">{{ temporarySubTotal|number_format }}</strong></td>
+                    <td class="span1"></td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                    <td class="span2"><strong class="initialDiscount">{{ initialDiscount|number_format }}</strong></td>
+                    <td class="span1"></td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
+                    <td class="span2"><strong class="initialGrandTotal">{{ temporarySubTotal|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>
                 </tfoot>
@@ -71,45 +81,6 @@
 <div class="portlet box blue">
     <div class="portlet-title">
         <div class="caption"><i class="icon-reorder"></i>Diagnostic Particulars</div>
-    </div>
-    <div class="row-fluid" id="showPayment" style="background: #ffffff">
-        <div class="span12">
-            <table class="table table-bordered table-striped table-condensed table-fixed">
-                <thead>
-                <tr class="head-blue">
-                    <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
-                    <th class="numeric">Created</th>
-                    <th class="numeric">Payment Method</th>
-                    <th class="numeric">Discount</th>
-                    <th class="numeric">Vat/Tax</th>
-                    <th class="numeric">Amount</th>
-                    <th class="numeric">Created By</th>
-                </tr>
-                </thead>
-                <tbody id="invoiceTransaction">
-                {% for transaction in entity.invoiceTransactions %}
-                    <tr>
-                        <td  class="numeric">{{ loop.index }}</td>
-                        <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                        <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
-                        <td class="numeric">{{ transaction.discount }}</td>
-                        <td class="numeric">{{ transaction.vat }}</td>
-                        <td class="numeric">{{ transaction.payment }}</td>
-                        <td class="numeric">{{ transaction.createdBy }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                    <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
-                    <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
-                    <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
-                    <td class="numeric"></td>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
     </div>
     <div class="clearfix">&nbsp;</div>
     <div class="row-fluid" style="background: #ffffff">
@@ -306,7 +277,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label" id="total">Total TK.</span> <span class="pull-right sales-right subTotal" style="text-align: left; width: 110px"  id="" >{{ temporarySubTotal|number_format }}</span></label>
+                        <label class="control-label" for="firstName"><span class="label" id="total">Total TK.</span> <span class="pull-right sales-right initialGrandTotal" style="text-align: left; width: 110px"  id="" >{{ temporarySubTotal|number_format }}</span></label>
                     </div>
                 </div>
                 <!--/span-->
@@ -318,7 +289,7 @@
                         <label class="control-label" for="firstName">
                             <span class="label" >Discount Type</span>
                             <span class="pull-right sales-right">
-                                <select class="span11 discount-type">
+                                <select class="span11 discount-type" id="discountType" name="discountType">
                                     <option value="flat">Flat</option>
                                     <option value="percentage">Percentage</option>
                                 </select>
@@ -348,7 +319,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label" id="balance">Due TK.</span> <span class="pull-right sales-right due" style="text-align: left; width: 110px"  id="" >{{ temporarySubTotal }}</span></label>
+                        <label class="control-label" for="firstName"><span class="label" id="balance">Due TK.</span> <span class="pull-right sales-right initialGrandTotal" style="text-align: left; width: 110px"  id="dueable" >{{ temporarySubTotal }}</span></label>
                     </div>
                 </div>
                 <!--/span-->
@@ -461,7 +432,8 @@
                 {{ form_widget(form.printFor) }}
                 {{ form_errors(form.printFor) }}
                 <div class="btn-group">
-                    <input type="hidden" name="initialDue" id="initialDue" value="{{ temporarySubTotal }}">
+                    <input type="hidden" class="initialGrandTotal" name="initialDue" id="initialDue" value="{{ temporarySubTotal }}">
+                    <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
                     <button type="submit" class="btn black" id="saveNewPatientButton"><i class="icon-save"></i> Save</button>
                 </div>
             </div>

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
+use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
@@ -35,9 +36,9 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,8,7));
         $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         $subTotal = $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->getSubTotalAmount($user);
-
         $html = $this->renderView('HospitalBundle:Invoice:patient.html.twig', array(
             'temporarySubTotal'   => $subTotal,
+            'initialDiscount'   => 0,
             'user'   => $user,
             'entity'   => $entity,
             'particularService' => $services,
@@ -125,8 +126,37 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
         }
+        if($hospital->getInitialDiagnosticShow() != 1){
+            $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->removeInitialParticular($user);
+        }
         return new Response($entity->getId());
         exit;
+
+    }
+
+    public function invoiceDiscountUpdateAction(Request $request)
+    {
+        $user = $this->getUser();
+        $discount = $request->request->get('discount');
+        $discountType = $request->request->get('discountType');
+        $subTotal = $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->getSubTotalAmount($user);
+        if($discountType == 'flat'){
+            $initialGrandTotal = ($subTotal  - $discount);
+        }else{
+            $discount = ($subTotal*$discount)/100;
+            $initialGrandTotal = ($subTotal  - $discount);
+
+        }
+
+        $data = array(
+            'subTotal' => $subTotal,
+            'initialGrandTotal' => $initialGrandTotal,
+            'initialDiscount' => $discount,
+            'success' => 'success'
+        );
+        return new Response(json_encode($data));
+        exit;
+
 
     }
 
@@ -166,22 +196,18 @@ class HmsInvoiceTemporaryParticularController extends Controller
 
     }
 
-    public function invoiceParticularDeleteAction( $invoice, InvoiceParticular $particular){
+    public function invoiceParticularDeleteAction(HmsInvoiceTemporaryParticular $particular){
 
 
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
         $em->remove($particular);
         $em->flush();
-        $entity =  $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->find($invoice);
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($entity);
-        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-
         $msg = 'Particular deleted successfully';
-        $result = $this->returnResultData($entity,$msg);
+        $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
         exit;
     }

@@ -100,60 +100,24 @@ function formSubmit() {
 
     $(document).on('change', '.initialDiscount', function() {
 
-        var discount = parseInt($('.discount').val());
-        var invoice = parseInt($('#invoiceId').val());
-        var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
-
+        var discountType = $('#discountType').val();
+        var discount = parseInt($('#appstore_bundle_hospitalbundle_invoice_discount').val());
         $.ajax({
-            url: Routing.generate('hms_invoice_discount_update'),
+            url: Routing.generate('hms_invoice_temporary_discount_update'),
             type: 'POST',
-            data:'discount=' + discount+'&invoice='+ invoice,
+            data:'discount=' + discount+'&discountType='+discountType,
             success: function(response) {
-
                 obj = JSON.parse(response);
                 $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('#netTotal').val(obj['netTotal']);
-                $('.paymentAmount').html(obj['payment']);
-                $('.vat').html(obj['vat']);
-                $('.due').html(obj['due']-payment);
-                $('#due').val(obj['due']);
-                $('.discountAmount').html(obj['discount']);
-                $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
-                $('#invoiceParticulars').html(obj['invoiceParticulars']);
-                $('#invoiceTransaction').html(obj['invoiceTransaction']);
-                $('.msg-hidden').show();
-                $('#msg').html(obj['msg']);
+                $('.initialGrandTotal').html(obj['initialGrandTotal']);
+                $('.initialDiscount').html(obj['initialDiscount']);
+                $('#initialDiscount').val(obj['initialDiscount']);
+
             }
 
         })
     });
 
-    $(document).on("click", ".initialRemoveDiscount", function() {
-
-        var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-
-                obj = JSON.parse(response);
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('#netTotal').val(obj['netTotal']);
-                $('.paymentAmount').html(obj['payment']);
-                $('.vat').html(obj['vat']);
-                $('.due').html(obj['due']);
-                $('#due').val(obj['due']);
-                $('.discountAmount').html(obj['discount']);
-                $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
-                $('#invoiceParticulars').html(obj['invoiceParticulars']);
-                $('#invoiceTransaction').html(obj['invoiceTransaction']);
-                $('.msg-hidden').show();
-                $('#msg').html(obj['msg']);
-            }
-        })
-    });
 
     $(document).on("click", ".initialParticularDelete", function() {
 
@@ -185,11 +149,11 @@ function formSubmit() {
         var dueAmount = (due - payment);
         if(dueAmount > 0){
             $('#balance').html('Due Tk.');
-            $('.due').html(dueAmount);
+            $('#dueable').html(dueAmount);
         }else{
             var balance =  payment - due ;
             $('#balance').html('Return Tk.');
-            $('.due').html(balance);
+            $('#dueable').html(balance);
         }
     });
 

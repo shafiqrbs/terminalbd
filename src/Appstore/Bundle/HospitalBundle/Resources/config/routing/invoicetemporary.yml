@@ -24,17 +24,13 @@ hms_invoice_temporary_particular_add:
 
 
 hms_invoice_temporary_discount_update:
-    path:     /invoice/invoice-dicount-update
+    path:     /dicount-update
     defaults: { _controller: "HospitalBundle:HmsInvoiceTemporaryParticular:invoiceDiscountUpdate" }
     methods:  POST
     options:
             expose: true
 
-hms_invoice_temporary_discount_delete:
-    path:     /{id}/discount-delete
-    defaults: { _controller: "HospitalBundle:HmsInvoiceTemporaryParticular:discountDelete" }
-
 hms_invoice_temporary_particular_delete:
     path:     /{id}/particular-delete
-    defaults: { _controller: "HospitalBundle:Invoice:invoiceParticularDelete" }
+    defaults: { _controller: "HospitalBundle:HmsInvoiceTemporaryParticular:invoiceParticularDelete" }
 

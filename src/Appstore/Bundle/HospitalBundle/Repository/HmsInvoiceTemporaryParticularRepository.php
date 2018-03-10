@@ -88,4 +88,12 @@ class HmsInvoiceTemporaryParticularRepository extends EntityRepository
         return $data;
     }
 
+    public function removeInitialParticular(User $user)
+    {
+        $em = $this->_em;
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $DoctorInvoice = $em->createQuery('DELETE HospitalBundle:HmsInvoiceTemporaryParticular e WHERE e.hospitalConfig = '.$config.' and e.user = '.$user->getId());
+        $DoctorInvoice->execute();
+    }
+
 }

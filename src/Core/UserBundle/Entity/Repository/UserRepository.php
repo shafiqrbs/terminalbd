@@ -159,6 +159,7 @@ class UserRepository extends EntityRepository
 
             $array['HMS'] = array(
                 'ROLE_HOSPITAL'                              => 'Hms',
+                'ROLE_DOMAIN_HOSPITAL_ADMISSION'             => 'Hms Patient Admission',
                 'ROLE_DOMAIN_HOSPITAL_MANAGER'               => 'Hms Manager',
                 'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Hms Officer',
                 'ROLE_DOMAIN_HOSPITAL_LAB'                   => 'Hms Lab Assistant',
