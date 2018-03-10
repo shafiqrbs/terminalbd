@@ -103,18 +103,17 @@
 
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Vendor receive item list</div>
+                                    <div class="caption"><i class="icon-reorder"></i>Purchase item lists</div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid box green">
-
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                     <thead class="flip-content ">
-                                    <tr class="head-grey">
-                                        <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                        <th class="numeric" >Vendor item name</th>
+                                    <tr class="head-green">
+                                        <th class="numeric" >Barcode</th>
+                                        <th class="numeric" >Item</th>
                                         <th class="numeric" >Qnt</th>
                                         <th class="numeric" >Purchase price</th>
                                         <th class="numeric" >Sub total</th>
@@ -123,78 +122,30 @@
                                         <th class="numeric" ></th>
                                     </tr>
                                     </thead>
-                                    <tbody id="purchaseItem" >
-                                    {% for vendorItem in entity.purchaseVendorItems %}
+                                    <tbody>
+                                    {% for purchaseItem in entity.purchaseItems %}
+
                                         <tr>
-                                            <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ vendorItem.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                            <td class="numeric" >{{ vendorItem.name }}</td>
-                                            <td class="numeric" >{{ vendorItem.quantity }}</td>
-                                            <td class="numeric" >{{ vendorItem.purchasePrice }}</td>
-                                            <td class="numeric" >{{ (vendorItem.purchasePrice*vendorItem.quantity) }}</td>
-                                            <td class="numeric" >{{ vendorItem.salesPrice }}</td>
-                                            <td class="numeric" >{{ (vendorItem.salesPrice*vendorItem.quantity) }}</td>
-
-                                            <td class="numeric">
-                                                    <span class="pull-right">
-                                                    {% if entity.process != 'approved' %}
-                                                        <a title="Are you sure went to delete ?" id="{{ entity.id }}" href="javascript:" rel="{{ path('purchase_vendor_item_delete', { 'id': vendorItem.id }) }}" class="btn red mini vendorItemDelete" ><i class="icon-trash"></i></a>
-                                                    {% endif %}
-                                                    </span>
+                                            <td class="numeric" >{{ purchaseItem.barcode }}</td>
+                                            <td class="numeric" >
+                                                {{ purchaseItem.item.name }}
                                             </td>
-
-                                        </tr>
-
-                                        <tr id="show-{{ vendorItem.id }}" class="showing-overview">
-                                            <td colspan="8">
-                                                {% if vendorItem.purchaseItems is defined and  vendorItem.purchaseItems is not empty  %}
-                                                    <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                                                        <thead class="flip-content ">
-                                                        <tr class="head-green">
-                                                            <th class="numeric" >Barcode</th>
-                                                            <th class="numeric" >Item</th>
-                                                            <th class="numeric" >Qnt</th>
-                                                            <th class="numeric" >Purchase price</th>
-                                                            <th class="numeric" >Sub total</th>
-                                                            <th class="numeric" >Sales price</th>
-                                                            <th class="numeric" >Sub total</th>
-                                                            <th class="numeric" ></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for purchaseItem in vendorItem.purchaseItems %}
-
-                                                            <tr>
-                                                                <td class="numeric" >{{ purchaseItem.barcode }}</td>
-                                                                <td class="numeric" >
-                                                                    {{ purchaseItem.item.name }}
-                                                                </td>
-                                                                <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                                                <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
-                                                                <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
-                                                                <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
-                                                                <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity }}</td>
-                                                                <td class=" numeric" >
-                                                                     <span class="pull-left">
-                                                                    {% if entity.process != 'approved' %}
-                                                                        <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
-                                                                    {% endif %}
-                                                                     </span>
-                                                                </td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-
-                                                    </table>
+                                            <td class="numeric" >{{ purchaseItem.quantity }}</td>
+                                            <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
+                                            <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
+                                            <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
+                                            <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity }}</td>
+                                            <td class=" numeric" >
+                                                {% if entity.process != 'approved' %}
+                                                    <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
+                                                <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn blue mini" ><i class="icon-plus"></i> Add Attribute</a>
                                             </td>
                                         </tr>
-
                                     {% endfor %}
-
                                     </tbody>
-                                </table>
 
+                                </table>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">

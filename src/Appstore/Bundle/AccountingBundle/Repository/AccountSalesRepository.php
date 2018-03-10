@@ -129,6 +129,24 @@ class AccountSalesRepository extends EntityRepository
         return $entity->getBalance();
     }
 
+    public function updateCustomerBalance(AccountSales $accountSales){
+
+        $customer = $accountSales->getCustomer()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount, SUM(e.amount) AS returnAmount ');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $accountSales->getGlobalOption()->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $qb->andWhere("e.customer = :customer");
+        $qb->setParameter('customer', $customer);
+        $result = $qb->getQuery()->getSingleResult();
+        $balance = ($result['totalAmount'] -  $result['receiveAmount']);
+        $accountSales->setBalance($balance);
+        $this->_em->flush();
+        return $accountSales;
+
+    }
+
     public function insertAccountSales(Sales $entity)
     {
 
@@ -143,14 +161,6 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getTotal());
         $accountSales->setAmount($entity->getPayment());
-
-        $data = array('mobile'=> $entity->getCustomer()->getMobile());
-
-        $result = $this->salesOverview($entity->getApprovedBy(),$data);
-        $balance = ($result['totalAmount'] -  $result['receiveAmount']);
-        $lastBalance = ($balance + $entity->getDue());
-        $accountSales->setBalance($lastBalance);
-
         $accountSales->setApprovedBy($entity->getApprovedBy());
         if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
@@ -159,8 +169,9 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
+        $accountSalesClose = $this->updateCustomerBalance($accountSales);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-        return $accountSales;
+        return $accountSalesClose;
 
     }
 
