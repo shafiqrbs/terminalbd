@@ -52,119 +52,123 @@ inventory_goods:
 
 inventory_purchasevendoritem:
     resource: "@InventoryBundle/Resources/config/routing/purchasevendoritem.yml"
-    prefix:   /inventory/purchasevendoritem
+    prefix:   /purchasevendoritem
 
 inventory_salesreturn:
     resource: "@InventoryBundle/Resources/config/routing/salesreturn.yml"
-    prefix:   /inventory/salesreturn
+    prefix:   /salesreturn
 
 inventory_purchasereturn:
     resource: "@InventoryBundle/Resources/config/routing/purchasereturn.yml"
-    prefix:   /inventory/purchase/return
+    prefix:   /purchase/return
 
 inventory_itemattribute:
     resource: "@InventoryBundle/Resources/config/routing/itemattribute.yml"
-    prefix:    /inventory/item-attribute
+    prefix:    /item-attribute
+
+inventory_purchaseitemattribute:
+    resource: "@InventoryBundle/Resources/config/routing/purchaseitemattribute.yml"
+    prefix:    /purchase-item-attribute
 
 inventory_itembrand:
     resource: "@InventoryBundle/Resources/config/routing/itembrand.yml"
-    prefix:    /inventory/brand
+    prefix:    /brand
 
 inventory_colorsize:
     resource: "@InventoryBundle/Resources/config/routing/colorsize.yml"
-    prefix:    /inventory/colorsize
+    prefix:    /colorsize
 
 inventory_itemsize:
     resource: "@InventoryBundle/Resources/config/routing/itemsize.yml"
-    prefix:    /inventory/item-size
+    prefix:    /item-size
 
 inventory_itemunit:
     resource: "@InventoryBundle/Resources/config/routing/itemunit.yml"
-    prefix:    /inventory/item-unit
+    prefix:    /item-unit
 
 inventory_itemcolor:
     resource: "@InventoryBundle/Resources/config/routing/itemcolor.yml"
-    prefix:    /inventory/item-color
+    prefix:    /item-color
 
 inventory_inventory_product:
     resource: "@InventoryBundle/Resources/config/routing/product.yml"
-    prefix:   /inventory/product
+    prefix:    /product
 
 inventory_sales:
     resource: "@InventoryBundle/Resources/config/routing/sales.yml"
-    prefix:   /inventory/sales
+    prefix:    /sales
 
 inventory_manual:
     resource: "@InventoryBundle/Resources/config/routing/salesmanual.yml"
-    prefix:   /inventory/sales-manual
+    prefix:    /sales-manual
 
 inventory_salesgeneral:
     resource: "@InventoryBundle/Resources/config/routing/salesgeneral.yml"
-    prefix:   /inventory/sales-general
+    prefix:   /sales-general
 
 inventory_salescustomer:
     resource: "@InventoryBundle/Resources/config/routing/salesonline.yml"
-    prefix:   /inventory/sales-online
+    prefix:   /sales-online
 
 inventory_stockitem:
     resource: "@InventoryBundle/Resources/config/routing/stockitem.yml"
-    prefix:   /inventory/stockitem
+    prefix:   /stockitem
 
 inventory_delivery_return:
     resource: "@InventoryBundle/Resources/config/routing/deliveryreturn.yml"
-    prefix:   /inventory/delivery-return
+    prefix:   /delivery-return
 
 inventory_damage:
     resource: "@InventoryBundle/Resources/config/routing/damage.yml"
-    prefix:   /inventory/damage
+    prefix:   /damage
 
 inventory_purchaseitem:
     resource: "@InventoryBundle/Resources/config/routing/purchaseitem.yml"
-    prefix:   /inventory/purchaseitem
+    prefix:   /purchaseitem
 
 inventory_category:
     resource: "@InventoryBundle/Resources/config/routing/category.yml"
-    prefix:   /inventory/category
+    prefix:   /category
 
 inventory_purchaseorder:
     resource: "@InventoryBundle/Resources/config/routing/purchaseorder.yml"
-    prefix:   /inventory/purchaseorder
+    prefix:   /purchaseorder
 
 inventory_purchase:
     resource: "@InventoryBundle/Resources/config/routing/purchase.yml"
-    prefix:   /inventory/purchase
+    prefix:   /purchase
 
 inventory_purchasesimple:
     resource: "@InventoryBundle/Resources/config/routing/purchasesimple.yml"
-    prefix:   /inventory/purchase-simple
+    prefix:   /purchase-simple
 
 inventory_vendor:
     resource: "@InventoryBundle/Resources/config/routing/vendor.yml"
-    prefix:   /inventory/vendor
+    prefix:   /vendor
 
 inventory_warehouse:
     resource: "@InventoryBundle/Resources/config/routing/warehouse.yml"
-    prefix:   /inventory/warehouse
+    prefix:   /warehouse
 
 inventory_item:
     resource: "@InventoryBundle/Resources/config/routing/item.yml"
-    prefix:   /inventory/item
+    prefix:   /item
 
 inventory_simple_item:
     resource: "@InventoryBundle/Resources/config/routing/inventoy_simple_item.yml"
-    prefix:   /inventory/simple-stock
+    prefix:   /simple-stock
 
 inventory_barcode:
     resource: "@InventoryBundle/Resources/config/routing/barcode.yml"
-    prefix:   /inventory/barcode
+    prefix:   /barcode
 
 inventory_itemtypegrouping:
     resource: "@InventoryBundle/Resources/config/routing/itemtypegrouping.yml"
-    prefix:   /inventory/itemtypegrouping
+    prefix:   /itemtypegrouping
 
 inventory_inventoryconfig:
     resource: "@InventoryBundle/Resources/config/routing/inventoryconfig.yml"
-    prefix:   /inventory
+    prefix:   /config
 
 stockitem_results:
     path:     /results

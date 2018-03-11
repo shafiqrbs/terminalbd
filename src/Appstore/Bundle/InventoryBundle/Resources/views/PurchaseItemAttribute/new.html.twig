@@ -1,0 +1,134 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN purchasepurchaseitemattribute HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="purchaseitemattribute-title">
+                    Purchase Item Attribute Components
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('purchaseitemattribute') }}">Purchase Item Attribute</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">{{ purchaseItem.item.name }}-{{ purchaseItem.barcode }}</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END purchaseitemattribute HEADER-->
+        <!-- BEGIN purchaseitemattribute CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>{{ purchaseItem.item.name }}-{{ purchaseItem.barcode }}</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="{{ path('purchaseitemattribute') }}"><i class="icon-th-list"></i>&nbsp;Purchase Item Attribute</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="portlet-body">
+
+                        <div class="portlet-body form">
+                            {% include('flash-message.html.twig')  %}
+                            <!-- BEGIN FORM-->
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+
+                            <div class="row-fluid">
+                                <div class="span12 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Serial No</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.serialNo) }}
+                                            {{ form_errors(form.serialNo) }}
+                                            <p class="help-block">Using serial no. E.g: 0xxxx,1yyyy,2zzzz</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Assurance Type</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.assuranceType) }}
+                                            {{ form_errors(form.assuranceType) }}
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Assurance From Vendor</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.assuranceFromVendor) }}
+                                            {{ form_errors(form.assuranceFromVendor) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Assurance To Customer</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.assuranceToCustomer) }}
+                                            {{ form_errors(form.assuranceToCustomer) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Expired Date</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-calendar"></i>
+                                                {{ form_widget(form.expiredDate) }}
+                                                {{ form_errors(form.expiredDate) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"><br/></div>
+                            <!--/span-->
+                            <div class="form-actions portlet box grey">
+                                <div class="pull-center">
+                                    <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    {% block documentready %}
+        {{ parent() }}
+        $( ".dateCalendar" ).datepicker({
+            dateFormat: "dd-mm-yy",
+            changeMonth: true,
+            changeYear: true,
+        });
+    {% endblock %}

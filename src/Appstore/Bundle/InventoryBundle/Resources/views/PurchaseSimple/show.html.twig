@@ -139,7 +139,7 @@
                                                 {% if entity.process != 'approved' %}
                                                     <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
-                                                <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn blue mini" ><i class="icon-plus"></i> Add Attribute</a>
+                                                <a href="{{ path('purchaseitemattribute_new', { 'purchaseItem': purchaseItem.id }) }}" rel="" id="{{  purchaseItem.id }}"  class="btn blue mini" ><i class="icon-plus"></i> Add Attribute</a>
                                             </td>
                                         </tr>
                                     {% endfor %}

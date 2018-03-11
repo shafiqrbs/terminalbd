@@ -67,7 +67,7 @@ appstore_billing:
 
 appstore_inventory:
     resource: "@InventoryBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /inventory
 
 appstore_ecommerce:
     resource: "@EcommerceBundle/Resources/config/routing.yml"

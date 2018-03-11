@@ -35,6 +35,11 @@ class PurchaseItem
      **/
     private  $stockItem;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItemAttribute", mappedBy="purchaseItem" , cascade={"remove"} )
+     **/
+    private  $purchaseItemAttributes;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseItems" )
@@ -156,7 +161,6 @@ class PurchaseItem
      * @ORM\Column(name="barcode", type="string",  nullable = true)
      */
     private $barcode;
-
 
     /**
      * Get id
@@ -523,6 +527,14 @@ class PurchaseItem
     public function getDeliveryItems()
     {
         return $this->deliveryItems;
+    }
+
+    /**
+     * @return PurchaseItemAttribute
+     */
+    public function getPurchaseItemAttributes()
+    {
+        return $this->purchaseItemAttributes;
     }
 
 

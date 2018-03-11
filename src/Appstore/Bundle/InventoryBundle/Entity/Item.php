@@ -39,6 +39,11 @@ class Item
     private  $inventoryConfig;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItemAttribute", mappedBy="item" , cascade={"remove"} )
+     **/
+    private  $purchaseItemAttributes;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="items" )
      **/
     private  $vendor;
@@ -1009,6 +1014,14 @@ class Item
     public function setSalesPrice($salesPrice)
     {
         $this->salesPrice = $salesPrice;
+    }
+
+    /**
+     * @return PurchaseItemAttribute
+     */
+    public function getPurchaseItemAttributes()
+    {
+        return $this->purchaseItemAttributes;
     }
 
 
