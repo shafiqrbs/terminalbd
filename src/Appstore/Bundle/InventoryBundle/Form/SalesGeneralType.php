@@ -46,7 +46,7 @@ class SalesGeneralType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -69,7 +69,7 @@ class SalesGeneralType extends AbstractType
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Sales By---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
@@ -83,7 +83,7 @@ class SalesGeneralType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Choose receive bank account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -113,7 +113,7 @@ class SalesGeneralType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Choose receive mobile account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')

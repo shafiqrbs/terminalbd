@@ -210,27 +210,6 @@ class Particular
     /**
      * @var string
      *
-     * @ORM\Column(name="startHour", type="string", length=10, nullable=true)
-     */
-    private $startHour;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="endHour", type="string", length=10, nullable=true)
-     */
-    private $endHour;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="weeklyOffDay", type="array", nullable=true)
-     */
-    private $weeklyOffDay;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="email", type="string", length=100, nullable=true)
      */
     private $email;
@@ -238,31 +217,9 @@ class Particular
     /**
      * @var string
      *
-     * @ORM\Column(name="specialist", type="string", length=255, nullable=true)
+     * @ORM\Column(name="sorting", type="string", length=5, nullable=true)
      */
-    private $specialist;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="educationalDegree", type="string", length=255, nullable=true)
-     */
-    private $educationalDegree;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="currentJob", type="string", length=256, nullable=true)
-     */
-    private $currentJob;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="designation", type="string", length=256, nullable=true)
-     */
-    private $designation;
-
+    private $sorting;
 
     /**
      * @var integer
@@ -282,30 +239,9 @@ class Particular
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255, nullable=true)
-     */
-    private $address;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="mobile", type="string", length=15, nullable=true)
      */
     private $mobile;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="testDuration", type="boolean" )
-     */
-    private $testDuration = false;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="reportFormat", type="boolean" )
-     */
-    private $reportFormat = false;
 
 
     /**
@@ -432,8 +368,6 @@ class Particular
     {
         return $this->price;
     }
-
-
 
     /**
      * Set commission
@@ -571,168 +505,6 @@ class Particular
         $this->service = $service;
     }
 
-
-    /**
-     * @return HmsCategory
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param HmsCategory $category
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-    }
-
-
-    /**
-     * @return HmsCategory
-     */
-    public function getDepartment()
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param HmsCategory $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRoom()
-    {
-        return $this->room;
-    }
-
-    /**
-     * @param string $room
-     */
-    public function setRoom($room)
-    {
-        $this->room = $room;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStartHour()
-    {
-        return $this->startHour;
-    }
-
-    /**
-     * @param string $startHour
-     */
-    public function setStartHour($startHour)
-    {
-        $this->startHour = $startHour;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEndHour()
-    {
-        return $this->endHour;
-    }
-
-    /**
-     * @param string $endHour
-     */
-    public function setEndHour($endHour)
-    {
-        $this->endHour = $endHour;
-    }
-
-    /**
-     * @return array
-     */
-    public function getWeeklyOffDay()
-    {
-        return $this->weeklyOffDay;
-    }
-
-    /**
-     * @param array $weeklyOffDay
-     */
-    public function setWeeklyOffDay($weeklyOffDay)
-    {
-        $this->weeklyOffDay = $weeklyOffDay;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSpecialist()
-    {
-        return $this->specialist;
-    }
-
-    /**
-     * @param string $specialist
-     */
-    public function setSpecialist($specialist)
-    {
-        $this->specialist = $specialist;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEducationalDegree()
-    {
-        return $this->educationalDegree;
-    }
-
-    /**
-     * @param string $educationalDegree
-     */
-    public function setEducationalDegree($educationalDegree)
-    {
-        $this->educationalDegree = $educationalDegree;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getPhoneNo()
-    {
-        return $this->phoneNo;
-    }
-
-    /**
-     * @param string $phoneNo
-     */
-    public function setPhoneNo($phoneNo)
-    {
-        $this->phoneNo = $phoneNo;
-    }
 
     /**
      * @return ProductUnit
@@ -914,31 +686,6 @@ class Particular
     public function getPurchaseItems()
     {
         return $this->purchaseItems;
-    }
-
-
-    /**
-     * @param string $sepcimen
-     */
-    public function setSepcimen($sepcimen)
-    {
-        $this->sepcimen = $sepcimen;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDesignation()
-    {
-        return $this->designation;
-    }
-
-    /**
-     * @param string $designation
-     */
-    public function setDesignation($designation)
-    {
-        $this->designation = $designation;
     }
 
 
@@ -1146,7 +893,7 @@ class Particular
 
     public function getCodeName()
     {
-       $codeName = $this->getParticularCode().' - '.$this->getName();
+       $codeName = $this->getSorting().' - '.$this->getName();
        return $codeName;
     }
 
@@ -1164,6 +911,38 @@ class Particular
     public function getInvoiceTokenNo()
     {
         return $this->invoiceTokenNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
+
+    /**
+     * @param string $sorting
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
 

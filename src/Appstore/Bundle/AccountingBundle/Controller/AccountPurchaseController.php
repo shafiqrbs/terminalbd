@@ -261,28 +261,15 @@ class AccountPurchaseController extends Controller
     {
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
-            if(!empty($entity->getVendor())){
-                $data = array('vendor' => $entity->getVendor()->getCompanyName());
-            }elseif(!empty($entity->getHmsVendor())){
-                $data = array('hmsVendor' => $entity->getHmsVendor()->getCompanyName());
-            }
-            $result = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($this->getUser()->getGlobalOption(),$data);
-            $lastBalance = ( $result['purchaseAmount'] - $result['payment']);
-            if($entity ->getPurchaseAmount() ==  0 and $entity ->getPayment() > 0 ) {
-                $entity->setBalance($lastBalance - $entity->getPayment());
-            }else{
-                $balance = ($lastBalance + $entity->getPurchaseAmount()) - $entity->getPayment();
-                $entity->setBalance($balance);
-            }
-            $entity->setTransactionMethod(null);
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
+            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($entity);
             if($entity ->getPurchaseAmount() ==  0 and $entity ->getPayment() > 0 ){
-                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($entity);
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($entity);
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
             }else{
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorOpeningTransaction($entity);
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorOpeningTransaction($accountPurchase);
             }
             return new Response('success');
         } else {

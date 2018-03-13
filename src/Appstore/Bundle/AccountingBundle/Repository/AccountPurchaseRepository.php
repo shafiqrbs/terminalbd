@@ -29,6 +29,30 @@ class AccountPurchaseRepository extends EntityRepository
         return $result;
 
     }
+
+    public function updateVendorBalance(AccountPurchase $accountPurchase){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.purchaseAmount) AS purchaseAmount, SUM(e.payment) AS payment');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $accountPurchase->getGlobalOption()->getId());
+        $qb->andWhere("e.process = 'approved'");
+        if(!empty($accountPurchase->getVendor())){
+            $vendor = $accountPurchase->getVendor()->getId();
+            $qb->andWhere("e.vendor = :vendor")->setParameter('vendor', $vendor);
+        }elseif(!empty($accountPurchase->getHmsVendor())){
+            $vendor = $accountPurchase->getHmsVendor()->getId();
+            $qb->andWhere("e.hmsVendor = :vendor")->setParameter('vendor', $vendor);
+        }
+        $result = $qb->getQuery()->getSingleResult();
+        $balance = ($result['purchaseAmount'] -  $result['payment']);
+        $accountPurchase->setBalance($balance);
+        $this->_em->flush();
+        return $accountPurchase;
+
+    }
+
+
     public function accountPurchaseOverview($globalOption,$data)
     {
 

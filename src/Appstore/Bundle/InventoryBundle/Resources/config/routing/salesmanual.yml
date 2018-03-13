@@ -37,6 +37,10 @@ inventory_salesmanual_update:
     defaults: { _controller: "InventoryBundle:SalesManual:update" }
     methods:  [POST, PUT]
 
+inventory_salesmanual_salesitem_delete:
+    path:     /{sales}/{salesItem}/manual-item-delete
+    defaults: { _controller: "InventoryBundle:SalesManual:itemDelete" }
+
 inventory_salesmanual_print_invoice:
     path:     /{invoice}/invoice
     defaults: { _controller: "InventoryBundle:SalesManual:invoicePrint" }

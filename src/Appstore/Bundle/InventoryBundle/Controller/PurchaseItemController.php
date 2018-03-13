@@ -297,11 +297,18 @@ class PurchaseItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-        if($entity->getPurchasePrice() < $data['value'] )
-        {
+        if($data['name'] == 'SalesPrice' and $entity->getPurchasePrice() < (float)$data['value']){
             $process = 'set'.$data['name'];
-            $entity->$process($data['value']);
+            $entity->$process((float)$data['value']);
             $em->flush();
+        }
+        if($data['name'] == 'Barcode'){
+            $existBarcode = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findBy(array('barcode' => $data['value']));
+            if(empty($existBarcode)){
+                $process = 'set'.$data['name'];
+                $entity->$process($data['value']);
+                $em->flush();
+            }
         }
         exit;
 

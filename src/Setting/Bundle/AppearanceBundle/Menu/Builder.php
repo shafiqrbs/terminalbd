@@ -1138,6 +1138,10 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['Restaurant']['Master Data']->addChild('Product', array('route' => 'restaurant_product'))
             ->setAttribute('icon', 'icon-th-list');
+        $menu['Restaurant']['Master Data']->addChild('Product Sorting', array('route' => 'restaurant_product_sorting'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Restaurant']['Master Data']->addChild('Category', array('route' => 'restaurant_category'))
+            ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Master Data']->addChild('Particular', array('route' => 'restaurant_particular'))
             ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Master Data']->addChild('Configuration', array('route' => 'restaurant_config_manage'))

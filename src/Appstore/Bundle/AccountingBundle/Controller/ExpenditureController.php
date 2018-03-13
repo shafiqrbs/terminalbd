@@ -74,6 +74,7 @@ class ExpenditureController extends Controller
             if(!empty($this->getUser()->getProfile()->getBranches())){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
+            $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -212,12 +213,15 @@ class ExpenditureController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->upload() && !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
+            $entity->upload();
             $em->flush();
-
             return $this->redirect($this->generateUrl('account_expenditure_edit', array('id' => $id)));
         }
 
-        return $this->render('AccountingBundle:Expenditure:edit.html.twig', array(
+        return $this->render('AccountingBundle:Expenditure:new.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -280,13 +284,16 @@ class ExpenditureController extends Controller
      * Deletes a Expenditure entity.
      *
      */
-    public function deleteAction(Expenditure $Expenditure)
+    public function deleteAction(Expenditure $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!$Expenditure) {
+        if (!$entity) {
             throw $this->createNotFoundException('Unable to find Expenditure entity.');
         }
-        $em->remove($Expenditure);
+        if($entity->upload() && !empty($entity->getFile())){
+            $entity->removeUpload();
+        }
+        $em->remove($entity);
         $em->flush();
         return new Response('success');
         exit;

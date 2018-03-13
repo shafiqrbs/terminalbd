@@ -47,21 +47,7 @@ $( "#mobile" ).autocomplete({
 });
 
 
-$(".addReferred").click(function(){
 
-    if ($(this).attr("id") == 'show') {
-
-        $('#hide').addClass('btn-show');
-        $( ".referred-add" ).slideDown( "slow" );
-        $( ".referred-search" ).slideUp( "slow" );
-
-    }else {
-        $( ".referred-add" ).slideUp( "slow" );
-        $( ".referred-search" ).slideDown( "slow" );
-
-    }
-
-});
 
 $(document).on('change', '.transactionMethod', function() {
 
@@ -78,16 +64,6 @@ $(document).on('change', '.transactionMethod', function() {
         $('#bkashMethod').hide();
     }
 
-});
-
-$(document).on( "click", ".patientShow", function(e){
-    $('#updatePatient').slideToggle(2000);
-    $("span", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
-});
-
-$(document).on( "click", ".receivePayment", function(e){
-    $("#showPayment").slideToggle(1000);
-    $("span", this).toggleClass("fa-minus fa-money");
 });
 
 $(document).on('click', '#addParticular', function() {
@@ -146,8 +122,6 @@ $(document).on('click', '.addCart', function() {
             $('#due').val(obj['due']);
             $('.discountAmount').html(obj['discount']);
             $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
-
-
         }
     })
 });

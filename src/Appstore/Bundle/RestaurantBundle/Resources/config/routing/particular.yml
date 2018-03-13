@@ -23,3 +23,8 @@ restaurant_particular_delete:
 restaurant_particular_status:
     path:     /{id}/status
     defaults: { _controller: "RestaurantBundle:Particular:status" }
+
+restaurant_particular_sorted:
+    path:     /product-sorted
+    defaults: { _controller: "RestaurantBundle:Particular:sorted" }
+

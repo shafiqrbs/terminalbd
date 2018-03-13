@@ -178,6 +178,7 @@ class PurchaseSimpleController extends Controller
         $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
+            $entity->setDueAmount($entity->getTotalAmount() - $entity->getPaymentAmount());
             $em->flush();
             if($entity->getProcess() == 'approved' ){
                 $this->approveAction($entity);
@@ -257,8 +258,8 @@ class PurchaseSimpleController extends Controller
     public function searchNameAction($grn)
     {
         return new JsonResponse(array(
-            'id'=>$grn,
-            'text'=>$grn
+            'id'=> $grn,
+            'text'=> $grn
         ));
     }
 

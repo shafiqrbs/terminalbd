@@ -73,17 +73,17 @@
                                     <ul class="unstyled">
                                         <li><strong>Total Quantity:</strong>&nbsp;{{ entity.totalItem }}</li>
                                         <li><strong>Total item:</strong>&nbsp;{{ entity.totalItem }}</li>
-                                        <li><strong>Total BDT:</strong>&nbsp;{{ entity.total|number_format() }}</li>
-                                        <li><strong>Payment BDT:</strong>&nbsp;{{ entity.payment|number_format() }}</li>
-                                        {% if entity.discount %}<li><strong>Discount BDT:</strong>&nbsp;{{ entity.discount|number_format() }}</li>{% endif %}
-                                        {% if entity.due %}<li><strong>Due BDT:</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}
-                                        <li><strong>Payment status</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
+                                        <li><strong>Total Tk.</strong>&nbsp;{{ entity.total|number_format() }}</li>
+                                        <li><strong>Payment Tk.</strong>&nbsp;{{ entity.payment|number_format() }}</li>
+                                        {% if entity.discount %}<li><strong>Discount Tk.</strong>&nbsp;{{ entity.discount|number_format() }}</li>{% endif %}
+                                        {% if entity.due %}<li><strong>Due Tk.</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}
                                     </ul>
                                 </div>
                                 <div class="span4">
                                     <h4>Payment Method:</h4>
                                     <ul class="unstyled">
-                                        <li><strong>Payment Method:</strong>&nbsp;{{ entity.paymentMethod }}</li>
+
+                                        <li><strong>Payment Method:</strong>&nbsp;{% if entity.payment > 0 %}{{ entity.paymentMethod }}{% endif %}</li>
                                         {% if entity.accountMobileBank is not empty %}<li><strong>Received Mobile:</strong>&nbsp;{{ entity.accountMobileBank.name }}</li>{% endif %}
                                         {% if entity.paymentMobile is not empty %}<li><strong>Mobile/Transaction:</strong>&nbsp;{{ entity.paymentMobile }}/{{ entity.transactionId }}</li>{% endif %}
                                         {% if entity.accountBank is not empty %}<li><strong>Received Bank:</strong>&nbsp;{{ entity.accountBank.name }}</li>{% endif %}
@@ -91,6 +91,7 @@
                                         {% if entity.bank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.bank.name  }}</li>{% endif %}
                                         <li><strong>Sales By:</strong>&nbsp;{% if entity.salesBy is defined and entity.salesBy is not empty %}{{ entity.salesBy }}{% endif %}</li>
                                         <li><strong>Received By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
+                                        <li><strong>Process: </strong>&nbsp;{{  entity.process|capitalize }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -122,32 +123,32 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td class="numeric" colspan="5" ><strong class="pull-right">Total BDT</strong></td>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Total Tk.</strong></td>
                                             <td class="numeric" >={{ entity.subTotal|number_format() }}</td>
                                         </tr>
                                         <tr>
                                             {% if entity.vat %}
-                                            <td class="numeric" colspan="5" ><strong class="pull-right">Vat BDT</strong></td>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Vat Tk.</strong></td>
                                             <td class="numeric" >={{ entity.vat|number_format() }}</td>
                                             {% endif %}
                                         </tr>
                                         <tr>
                                             {% if entity.discount %}
-                                            <td class="numeric" colspan="5" ><strong class="pull-right">Discount BDT</strong></td>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Discount Tk.</strong></td>
                                             <td class="numeric" >={{ entity.discount|number_format() }}</td>
                                             {% endif %}
                                         </tr>
                                         <tr>
-                                            <td class="numeric" colspan="5" ><strong class="pull-right">Grand Total BDT</strong></td>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Grand Total Tk.</strong></td>
                                             <td class="numeric" >={{ entity.total|number_format() }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="numeric" colspan="5" ><strong class="pull-right">Payment BDT</strong></td>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Payment Tk.</strong></td>
                                             <td class="numeric" >={{ entity.payment|number_format() }}</td>
                                         </tr>
                                         <tr>
                                             {% if entity.due %}
-                                            <td class="numeric" colspan="5" ><strong class="pull-right">Payment BDT</strong></td>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Due Tk.</strong></td>
                                             <td class="numeric" >={{ entity.due|number_format() }}</td>
                                             {% endif %}
                                         </tr>
@@ -161,9 +162,9 @@
 
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <a target="_blank"  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
-                                    {#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
-                                    <span  class="btn blue"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
-
+                                    {% if entity.due > 0 %}
+                                        <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn yellow"><i class="icon-money"></i> Receive Amount</a>
+                                    {% endif %}
                                 </div>
 
 

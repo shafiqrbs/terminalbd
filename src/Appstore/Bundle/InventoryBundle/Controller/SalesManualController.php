@@ -2,7 +2,10 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Form\InventoryItemType;
 use Appstore\Bundle\InventoryBundle\Form\SalesGeneralType;
+use Appstore\Bundle\InventoryBundle\Form\SalesItemType;
 use Appstore\Bundle\InventoryBundle\Form\SalesManualType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -83,6 +86,7 @@ class SalesManualController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
         $entity->setCustomer($customer);
+        $entity->setMobile($customer->getMobile());
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $entity->setSalesMode('Manual');
@@ -137,28 +141,42 @@ class SalesManualController extends Controller
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
-        $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Item')->findWithSearch($inventory,$data);
-        $pagination = $this->paginate($entities);
-        $purchaseItems = array();
-        foreach ($pagination as $value){
-            $purchaseItems[] = $value->getId();
-        }
-        $ongoingItem = $em->getRepository('InventoryBundle:SalesItem')->ongoingSalesManuelQuantity($inventory,$purchaseItems);
+        $createItemForm = $this->createItemForm(New SalesItem(),$entity);
         $editForm = $this->createEditForm($entity);
         return $this->render('InventoryBundle:SalesManual:sales.html.twig', array(
-            'entities' => $pagination,
+            'entities' => '',
             'entity' => $entity,
-            'ongoingItem' => $ongoingItem,
-            'searchForm' => $data,
             'form' => $editForm->createView(),
+            'itemForm' => $createItemForm->createView(),
         ));
 
+    }
+
+    public function searchAction(Request $request)
+    {
+        $product = $request->request->get('item');
+        $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($product);
+        $unit='';
+        if(!empty($item->getMasterItem()->getProductUnit())){
+            $unit = $item->getMasterItem()->getProductUnit()->getName();
+        }
+        return new Response(json_encode(array('itemId'=> $item->getId() ,'price'=> $item->getSalesPrice(),'purchasePrice'=> $item->getAvgPurchasePrice(), 'quantity'=> $item->getRemainingQuantity(),'unit'=>$unit)));
+    }
+
+    private function createItemForm(SalesItem $item , Sales $entity)
+    {
+        $form = $this->createForm(new SalesItemType($entity->getInventoryConfig()), $item, array(
+            'action' => $this->generateUrl('inventory_salesmanual_insert_item', array('sales' => $entity->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
     }
 
     /**
@@ -179,10 +197,6 @@ class SalesManualController extends Controller
         ));
     }
 
-    public function searchAction()
-    {
-
-    }
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
@@ -194,7 +208,8 @@ class SalesManualController extends Controller
         $item = $request->request->get('item');
         $quantity = $request->request->get('quantity');
         $salesPrice = $request->request->get('salesPrice');
-        $data = array('quantity' => $quantity ,'salesPrice' => $salesPrice);
+        $purchasePrice = $request->request->get('purchasePrice');
+        $data = array('quantity' => $quantity ,'salesPrice' => $salesPrice,'purchasePrice' => $purchasePrice);
         $item = $em->getRepository('InventoryBundle:Item')->find($item);
         $remainingQuantity = $item->getRemainingQuantity();
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesItemQuantity($item);
@@ -203,9 +218,9 @@ class SalesManualController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesManualItems($sales, $item ,$data);
             $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $this->get('session')->getFlashBag()->add('success', 'Product added successfully.');
-        }else{
-            $this->get('session')->getFlashBag()->add('error', 'There is no product in our inventory');
         }
+        $result = $this->returnResultData($sales);
+        return new Response(json_encode($result));
         exit;
     }
 
@@ -281,8 +296,6 @@ class SalesManualController extends Controller
         exit;
     }
 
-
-
     /**
      * Finds and displays a Sales entity.
      *
@@ -323,6 +336,29 @@ class SalesManualController extends Controller
         return $form;
     }
 
+    public function returnResultData(Sales $entity){
+
+        $salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getManualSalesItems($entity);
+        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
+        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
+        $due = $entity->getDue() > 0 ? $entity->getDue() : 0;
+        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $data = array(
+            'subTotal' => $subTotal,
+            'netTotal' => $netTotal,
+            'payment' => $payment ,
+            'due' => $due,
+            'vat' => $vat,
+            'discount' => $discount,
+            'salesItems' => $salesItems,
+        );
+        return $data;
+
+    }
+
+
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
@@ -339,49 +375,41 @@ class SalesManualController extends Controller
         $editForm->handleRequest($request);
         $data = $request->request->all();
 
-        if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
+        if ($editForm->isValid()) {
             $globalOption = $this->getUser()->getGlobalOption();
             if (!empty($data['sales_general']['customer']['mobile'])) {
 
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales_general']['customer']['mobile']);
+                echo $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales_general']['customer']['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomer($globalOption,$mobile,$data);
                 $entity->setCustomer($customer);
 
             } elseif(!empty($data['mobile'])) {
 
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+                echo $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
                 $entity->setCustomer($customer);
 
-            } else {
-
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
-                if(empty($customer)){
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
-
-                }
-                $entity->setCustomer($customer);
             }
 
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
             }
-            $due = $data['dueAmount'] == '' ? 0 :$data['dueAmount'];
+            $due = $data['dueAmount'] == '' ? 0 : $data['dueAmount'];
             $entity->setDue($due);
             $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
             $entity->setPayment($entity->getTotal() - $entity->getDue());
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
-            $entity->setPaymentInWord($amountInWords);
-
+            if($entity->getPayment() > 0) {
+                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+                $entity->setPaymentInWord($amountInWords);
+            }
             if ($entity->getTotal() <= $data['paymentAmount']) {
                 $entity->setPaymentStatus('Paid');
-            } else if ($entity->getTotal() - $entity->getDue()) {
+            }else{
                 $entity->setPaymentStatus('Due');
             }
-            $entity->setProcess('Done');
             if (empty($data['sales']['salesBy'])) {
                 $entity->setSalesBy($this->getUser());
             }
@@ -410,8 +438,6 @@ class SalesManualController extends Controller
             }elseif($entity->getProcess() =='Created' or $entity->getProcess() =='In-progress' ){
                 return $this->redirect($this->generateUrl('inventory_salesmanual_edit', array('code' => $entity->getInvoice())));
             }
-
-
         }
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entities = $em->getRepository('InventoryBundle:Item')->findWithSearch($inventory,$data);
@@ -462,7 +488,6 @@ class SalesManualController extends Controller
     public function deleteAction(Sales $sales)
     {
 
-
         $em = $this->getDoctrine()->getManager();
         if (!$sales) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
@@ -492,12 +517,9 @@ class SalesManualController extends Controller
         $em->remove($entity);
         $em->flush();
         $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'success' => 'success')));
+        $result = $this->returnResultData($sales);
+        return new Response(json_encode($result));
         exit;
-
     }
 
     public function itemPurchaseDetailsAction(Request $request)

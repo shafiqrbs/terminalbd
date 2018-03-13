@@ -266,14 +266,12 @@ class Item
      */
     private $status=true;
 
-
     /**
      * @var float
      *
      * @ORM\Column(name="salesPrice", type="float", nullable=true)
      */
     private $salesPrice;
-
 
 
     /**
@@ -667,8 +665,6 @@ class Item
         $this->size = $size;
     }
 
-
-
     /**
      * @return string
      */
@@ -1014,6 +1010,14 @@ class Item
     public function setSalesPrice($salesPrice)
     {
         $this->salesPrice = $salesPrice;
+    }
+
+    public function getItemName(){
+        $unit ='';
+        if($this->getMasterItem()->getProductUnit()){
+            $unit = $this->getMasterItem()->getProductUnit()->getName();
+        }
+       return $this->getSku().'-'.$this->getMasterItem()->getName().'-'.$this->getRemainingQuantity().' '.$unit;
     }
 
     /**

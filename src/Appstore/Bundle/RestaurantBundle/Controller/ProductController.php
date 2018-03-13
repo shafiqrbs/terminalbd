@@ -52,6 +52,8 @@ class ProductController extends Controller
 
     }
 
+
+
     /**
      * Creates a new Particular entity.
      *
@@ -358,4 +360,29 @@ class ProductController extends Controller
 
 
     }
+
+    public function sortingAction()
+    {
+        $entity = new Particular();
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('product','stockable'));
+        $editForm = $this->createCreateForm($entity);
+        return $this->render('RestaurantBundle:Product:sorting.html.twig', array(
+            'pagination' => $pagination,
+            'searchForm' => $data,
+            'entity' => $entity,
+            'form'   => $editForm->createView(),
+        ));
+
+    }
+
+    public function sortedAction(Request $request)
+    {
+        $data = $request ->request->get('item');
+        $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->setProductSorting($data);
+        exit;
+    }
+
 }

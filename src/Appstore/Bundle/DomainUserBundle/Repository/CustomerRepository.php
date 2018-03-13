@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -51,14 +52,10 @@ class CustomerRepository extends EntityRepository
         $name = $data['sales_general']['customer']['name'];
         $location = $data['sales_general']['customer']['location'];
         $address = $data['sales_general']['customer']['address'];
-
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
         if($entity){
-
             return $entity;
-
         }else{
-
             $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
             $entity = new Customer();
             $entity->setMobile($mobile);
@@ -93,7 +90,7 @@ class CustomerRepository extends EntityRepository
         }
     }
 
-    public function findExistingCustomer($sales, $mobile)
+    public function findExistingCustomer(Sales $sales, $mobile)
     {
         $em = $this->_em;
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $sales->getInventoryConfig()->getGlobalOption(),'mobile'=>$mobile));

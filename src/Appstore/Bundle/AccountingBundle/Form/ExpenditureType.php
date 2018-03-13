@@ -108,7 +108,9 @@ class ExpenditureType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->where("e.globalOption =".$this->globalOption->getId());
                 },
-            ));
+            ))
+            ->add('file');
+        ;
     }
     
     /**

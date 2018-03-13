@@ -9,7 +9,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * RestaurantCategory
  *
  * @ORM\Table( name ="restaurant_product_category")
- * @ORM\Entity(repositoryClass="")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\RestaurantBundle\Repository\CategoryRepository")
  */
 class Category
 {
@@ -32,6 +32,7 @@ class Category
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", mappedBy="category")
+     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $particulars;
 

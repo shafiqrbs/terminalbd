@@ -31,13 +31,13 @@ class SalesCustomerType extends AbstractType
         $builder
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 customer-input','autocomplete'=>'off','placeholder'=>'Customer name'))
             )
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile customer-input','autocomplete'=>'off','placeholder'=>'Mobile no'))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12  customer-input','autocomplete'=>'off','placeholder'=>'Mobile no'))
             )
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter customer address')))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 span12 customer-input'),
+                'attr'=>array('class'=>'select2 span11 customer-input'),
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
                 'choices'=> $this->LocationChoiceList(),
                 'choices_as_values' => true,

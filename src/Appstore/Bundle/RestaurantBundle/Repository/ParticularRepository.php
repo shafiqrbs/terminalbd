@@ -77,12 +77,11 @@ class ParticularRepository extends EntityRepository
 
         $name = isset($data['name'])? $data['name'] :'';
         $category = isset($data['category'])? $data['category'] :'';
-
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.service','s');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('s.slug IN (:slugs)')->setParameter('slugs',array($service)) ;
-        $qb->orderBy('e.name','ASC');
+        $qb->andWhere('s.slug IN (:slugs)')->setParameter('slugs',$service) ;
+        $qb->orderBy('e.sorting','ASC');
         $result = $qb->getQuery()->getResult();
         return  $result;
     }
@@ -304,7 +303,6 @@ class ParticularRepository extends EntityRepository
         $qb->orderBy('c.name', 'ASC')->addOrderBy('p.name', 'ASC');
         $qb->andWhere('s.slug IN(:slugs)')->setParameter('slugs',array_values(array('product','stockable')));
         $products = $qb->getQuery()->execute();
-
         $choices = [];
         foreach ($products as $product) {
             $choices[$product->getCategory()->getName()][$product->getId()] =  $product->getName();
@@ -313,10 +311,30 @@ class ParticularRepository extends EntityRepository
 
     }
 
-
-
-
-
-
+    public function setParticularSorting($data)
+    {
+        $i = 1;
+        $em = $this->_em;
+        foreach ($data as $key => $value){
+            $particular = $this->find($value);
+            $particular->setSorting($i);
+            $em->persist($particular);
+            $em->flush();
+            $i++;
+        }
+    }
+    public function setProductSorting($data)
+    {
+        $i = 1;
+        $em = $this->_em;
+        foreach ($data as $key => $value){
+            $sort = sprintf("%s", str_pad($i,3, '0', STR_PAD_LEFT));
+            $particular = $this->find($value);
+            $particular->setSorting($sort);
+            $em->persist($particular);
+            $em->flush();
+            $i++;
+        }
+    }
 
 }

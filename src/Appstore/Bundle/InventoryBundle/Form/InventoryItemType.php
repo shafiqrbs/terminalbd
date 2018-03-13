@@ -3,13 +3,18 @@
 namespace Appstore\Bundle\InventoryBundle\Form;
 
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\ItemTypeGrouping;
+use Appstore\Bundle\InventoryBundle\Repository\ItemTypeGroupingRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-
-class SalesItemType extends AbstractType
+class InventoryItemType extends AbstractType
 {
 
 
@@ -31,12 +36,12 @@ class SalesItemType extends AbstractType
     {
 
         $builder
-            ->add('item', 'entity', array(
+            ->add('name', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Item',
                 'empty_value' => '---Choose a item ---',
-                'property' => 'itemName',
-                'attr'=>array('class'=>'span12 select2 itemSearch'),
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -45,14 +50,14 @@ class SalesItemType extends AbstractType
                 },
             ));
     }
-
+    
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\InventoryBundle\Entity\SalesItem'
+            'data_class' => 'Appstore\Bundle\InventoryBundle\Entity\Item'
         ));
     }
 
@@ -61,8 +66,15 @@ class SalesItemType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_salesitem';
+        return 'appstore_bundle_inventorybundle_item';
     }
 
+    /**
+     * @return mixed
+     */
+    protected function ItemTypeChoiceList()
+    {
+        return $itemTypeTree = $this->em->getItemTypeTree();
 
+    }
 }

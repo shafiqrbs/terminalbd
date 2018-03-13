@@ -283,15 +283,11 @@ class AccountSalesController extends Controller
     {
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
-
-            $data = array('mobile' => $entity->getCustomer()->getMobile());
-            $result = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($this->getUser(),$data);
-            $balance = $result['totalAmount'] - ($result['receiveAmount'] + $entity->getAmount());
-            $entity->setBalance($balance);
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
             if($entity->getSales()){
+                $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
                 $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesPaymentReceive($entity);
             }
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);

@@ -99,12 +99,14 @@
                                         <th class="numeric" >Invoice</th>
                                         <th class="numeric" >Date</th>
                                         <th class="numeric" >Sub-Total</th>
+                                        <th class="numeric" >Vat</th>
                                         <th class="numeric" >Discount</th>
                                         <th class="numeric" >Net Total</th>
                                         <th class="numeric" >Payment</th>
                                         <th class="numeric" >Due</th>
                                         <th class="numeric" >Customer</th>
                                         <th class="numeric" >Sales By</th>
+                                        <th class="numeric" >Process</th>
                                         <th class="numeric" >Action</th>
                                     </tr>
                                     </thead>
@@ -115,23 +117,25 @@
                                                 <td class="numeric" >{{ entity.invoice }}</td>
                                                 <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                                 <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
+                                                <td class="numeric" >{{ entity.vat|number_format  }}</td>
                                                 <td class="numeric" >{{ entity.discount|number_format  }}</td>
                                                 <th class="numeric" >{{ entity.total|number_format  }}</th>
                                                 <th class="numeric" >{{ entity.payment|number_format }}</th>
                                                 <td class="numeric" >{{ entity.due|number_format }}</td>
                                                 <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                                <td class="numeric" >{% if entity.salesBy %}{{ entity.salesBy.profile.name }}{% endif %}</td>
+                                                <td class="numeric" >{% if entity.salesBy %}{{ entity.salesBy }}{% endif %}</td>
+                                                <td class="numeric" >{{ entity.process|capitalize }}</td>
                                                 <td class="numeric" >
                                                     {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                                         <a href="{{ path('inventory_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                                         <a target="_blank" href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" rel=""  class="btn green mini print" ><i class="icon-print"></i></a>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == "Pending" %}
-                                                        <a href="{{ path('inventory_salesmanual_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
+                                                        <a href="{{ path('inventory_salesmanual_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
                                                         <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                     {% endif %}
-                                                    {% if entity.paymentStatus == "Due" %}
-                                                        <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                                    {% if entity.due > 0 %}
+                                                        <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini yellow"><i class="icon-money"></i> Receive</a>
                                                     {% endif %}
                                                 </td>
                                             </tr>

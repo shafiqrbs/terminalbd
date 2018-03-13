@@ -216,6 +216,7 @@ class SalesRepository extends EntityRepository
     public function updateSalesPaymentReceive(AccountSales $accountSales)
     {
         /* @var Sales $sales **/
+
         $sales = $accountSales->getSales();
         $sales->setPayment($sales->getPayment() + $accountSales->getAmount());
         $sales->setDue($sales->getDue() - $accountSales->getAmount());

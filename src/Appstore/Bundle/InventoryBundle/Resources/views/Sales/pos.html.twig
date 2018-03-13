@@ -368,7 +368,7 @@
                                         {% endif %}
                                         {% endif %}
                                         {% if dailySales.paymentStatus == "Due" %}
-                                            <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                            <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini yellow"><i class="icon-money"></i></a>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -503,7 +503,6 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-
     $( "#searchProduct" ).click(function() {
         $( "#search-product" ).slideToggle( "slow" );
     });

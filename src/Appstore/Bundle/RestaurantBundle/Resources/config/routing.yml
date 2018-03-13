@@ -23,6 +23,10 @@ restaurant_particular:
     resource: "@RestaurantBundle/Resources/config/routing/particular.yml"
     prefix:   /particular
 
+restaurant_category:
+    resource: "@RestaurantBundle/Resources/config/routing/category.yml"
+    prefix:   /category
+
 restaurant_product:
     resource: "@RestaurantBundle/Resources/config/routing/product.yml"
     prefix:   /product

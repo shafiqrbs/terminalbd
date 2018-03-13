@@ -344,6 +344,17 @@ class DmsInvoiceParticular
             : $this->getUploadDir().'/'.$this->path;
     }
 
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
+
     public function removeFileImage()
     {
         $path = null === $this->path
@@ -384,7 +395,7 @@ class DmsInvoiceParticular
             $filename
         );
         // set the path property to the filename where you've saved the file
-        $this->path = $this->getFile()->getClientOriginalName();
+        $this->path = $filename;
 
         // clean up the file property as you won't need it anymore
         $this->file = null;

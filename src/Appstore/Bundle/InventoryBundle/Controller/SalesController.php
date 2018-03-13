@@ -358,11 +358,9 @@ class SalesController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
-        var_dump($data);
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
 
-            if (!empty($data['sales']['mobile'])) {
-
+            /*if (!empty($data['sales']['mobile'])) {
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales']['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $mobile);
                 $entity->setCustomer($customer);
@@ -371,7 +369,7 @@ class SalesController extends Controller
                 $globalOption = $this->getUser()->getGlobalOption();
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
                 $entity->setCustomer($customer);
-            }
+            }*/
 
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
@@ -398,19 +396,19 @@ class SalesController extends Controller
             }
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
-
             $em->flush();
 
             if (in_array('CustomerSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
-
                 if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                     $dispatcher = $this->container->get('event_dispatcher');
                     $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
                 }
             }
             if ($entity->getTransactionMethod()->getId() == 4) {
+
                 return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
-            } else {
+
+            }else{
 
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);

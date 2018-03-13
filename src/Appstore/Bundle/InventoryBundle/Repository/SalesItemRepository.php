@@ -160,10 +160,11 @@ class SalesItemRepository extends EntityRepository
     {
         $em = $this->_em;
         $existEntity = $this->findOneBy(array('sales'=> $sales,'item'=> $item));
-
         if(!empty($existEntity)){
-            $existEntity->setQuantity($data['quantity']);
-            $existEntity->setSubTotal($data['salesPrice'] * $data['quantity']);
+
+            $curQuantity =  $existEntity->getQuantity() + $data['quantity'];
+            $existEntity->setQuantity($curQuantity);
+            $existEntity->setSubTotal($data['salesPrice'] * $curQuantity);
             $em->persist($existEntity);
 
         }else{
@@ -174,7 +175,7 @@ class SalesItemRepository extends EntityRepository
             $entity->setSalesPrice($data['salesPrice']);
             $entity->setEstimatePrice($item->getSalesPrice());
             $entity->setQuantity($data['quantity']);
-            $entity->setPurchasePrice(100);
+            $entity->setPurchasePrice($data['purchasePrice']);
             $entity->setCustomPrice($data['salesPrice']);
             $entity->setSubTotal($data['salesPrice'] * $data['quantity']);
             $em->persist($entity);
@@ -280,11 +281,12 @@ class SalesItemRepository extends EntityRepository
         return $data;
     }
 
-    public function getManualSalesItems($sales)
+    public function getManualSalesItems(Sales $sales)
     {
         $entities = $sales->getSalesItems();
         $data = '';
         $i = 1;
+        /* @var $entity SalesItem */
         foreach( $entities as $entity){
 
             if (!empty($entity->getItem()->getMasterItem()) and !empty($entity->getItem()->getMasterItem()->getProductUnit())){
@@ -292,24 +294,15 @@ class SalesItemRepository extends EntityRepository
             } else{
                 $unit = '';
             }
-
             $itemName = $entity->getItem()->getName();
-            $data .=' <tr id="remove-'.$entity->getId().'">';
+            $data .='<tr id="remove-'.$entity->getId().'">';
             $data .='<td class="numeric" >'.$i.'</td>';
-            $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode();
-            $data .='</br><span>'.$itemName.'</span>';
-            $data .='</td>';
-            $data .='<td class=" span3" ><div class="input-append">';
-            $data .='<input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span6 quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'">';
-            $data .='<span class="add-on">'.$unit.'</span>';
-            $data .='</div></td>';
-            $data .='<td class=" span3" >';
-            $data .='<input class="m-wrap span8 salesPrice" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
-            $data .='</td>';
-            $data .='<td class="" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
-            $data .='<td class="" >
-                     <a id="'.$entity->getId().'" title="Are you sure went to delete ?" rel="/inventory/sales/'.$entity->getSales()->getId().'/'.$entity->getId().'/delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                     </td>';
+            $data .='<td class="numeric" >'.$itemName.'</td>';
+            $data .='<td class="numeric" >'.$entity->getSalesPrice().'</td>';
+            $data .='<td class="numeric" >'.$entity->getQuantity().'</td>';
+            $data .='<td class="numeric" >'.$unit.'</td>';
+            $data .='<td class="" >'.$entity->getSubTotal().'</td>';
+            $data .='<td class="" ><a id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/inventory/sales-manual/'.$entity->getSales()->getId().'/'.$entity->getId().'/manual-item-delete" href="javascript:" class="btn red mini remove" ><i class="icon-trash"></i></a></td>';
             $data .='</tr>';
             $i++;
         }

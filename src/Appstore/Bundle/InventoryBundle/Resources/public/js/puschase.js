@@ -40,7 +40,7 @@ function InventoryPurchasePage(){
     });
 
 
-    $('#addPurchaseForm').click(function(e) {
+    $('#addPurchaseFormxx').click(function(e) {
 
         $('#confirm-content').confirmModal({
             topOffset: 0,

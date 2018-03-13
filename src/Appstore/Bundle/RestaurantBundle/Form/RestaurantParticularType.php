@@ -54,8 +54,9 @@ class RestaurantParticularType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.category",'c')
-                        ->orderBy("c.name", "ASC")
-                        ->orderBy("e.name", "ASC");
+                        ->where("c.status=1")
+                        ->orderBy("c.sorting", "ASC")
+                        ->addOrderBy("e.sorting", "ASC");
                 }
             ])
             /*  ->add('salesPrice', 'choice', array(

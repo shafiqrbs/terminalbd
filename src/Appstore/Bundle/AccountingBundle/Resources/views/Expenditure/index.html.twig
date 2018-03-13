@@ -90,6 +90,7 @@
                                     <th class="numeric" >Ref No.</th>
                                     <th class="numeric" >Trans. Method</th>
                                     <th class="numeric" >Amount</th>
+                                    <th class="numeric" >Attach</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -110,6 +111,7 @@
                                                 <a class="editable" data-name="amount" href="#"  data-url="{{ path('account_expenditure_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
                                             {% endif %}
                                         </td>
+                                        <td class="numeric" >{% if entity.webPath is not empty %}<a href="/{{ entity.webPath }}" target="_blank">Download</a>{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved'  %}
                                                 <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_expenditure_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>

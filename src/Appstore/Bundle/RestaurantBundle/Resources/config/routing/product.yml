@@ -23,3 +23,12 @@ restaurant_product_delete:
 restaurant_product_status:
     path:     /{id}/status
     defaults: { _controller: "RestaurantBundle:Product:status" }
+
+restaurant_product_sorting:
+    path:     /product-sorting
+    defaults: { _controller: "RestaurantBundle:Product:sorting" }
+
+restaurant_product_sorted:
+    path:     /product-sorted
+    defaults: { _controller: "RestaurantBundle:Product:sorted" }
+

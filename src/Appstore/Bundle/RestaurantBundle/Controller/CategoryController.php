@@ -2,18 +2,18 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Controller;
 
-use Appstore\Bundle\RestaurantBundle\Entity\Particular;
-use Appstore\Bundle\RestaurantBundle\Form\ParticularType;
+use Appstore\Bundle\RestaurantBundle\Entity\Category;
+use Appstore\Bundle\RestaurantBundle\Form\CategoryType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 /**
- * ParticularController controller.
+ * CategoryController controller.
  *
  */
-class ParticularController extends Controller
+class CategoryController extends Controller
 {
 
     public function paginate($entities)
@@ -29,19 +29,19 @@ class ParticularController extends Controller
 
 
     /**
-     * Lists all Particular entities.
+     * Lists all Category entities.
      *
      */
     public function indexAction()
     {
-        $entity = new Particular();
+        $entity = new Category();
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig()->getId();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('token','category'));
+        $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array(),array('sorting'=>'ASC'));
         //$pagination = $this->paginate($pagination);
         $editForm = $this->createCreateForm($entity);
-        return $this->render('RestaurantBundle:Particular:index.html.twig', array(
+        return $this->render('RestaurantBundle:Category:index.html.twig', array(
             'pagination' => $pagination,
             'searchForm' => $data,
             'form'   => $editForm->createView(),
@@ -50,15 +50,15 @@ class ParticularController extends Controller
     }
 
     /**
-     * Creates a new Particular entity.
+     * Creates a new Category entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Particular();
+        $entity = new Category();
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('token','category'));
+        $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array(),array('sorting'=>'ASC'));
         //$pagination = $this->paginate($pagination);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -71,10 +71,10 @@ class ParticularController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('restaurant_particular'));
+            return $this->redirect($this->generateUrl('restaurant_category'));
         }
 
-        return $this->render('RestaurantBundle:Particular:index.html.twig', array(
+        return $this->render('RestaurantBundle:Category:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,
             'form'   => $form->createView(),
@@ -82,16 +82,16 @@ class ParticularController extends Controller
     }
 
     /**
-     * Creates a form to create a Particular entity.
+     * Creates a form to create a Category entity.
      *
-     * @param Particular $entity The entity
+     * @param Category $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Particular $entity)
+    private function createCreateForm(Category $entity)
     {
-        $form = $this->createForm(new ParticularType(), $entity, array(
-            'action' => $this->generateUrl('restaurant_particular_create', array('id' => $entity->getId())),
+        $form = $this->createForm(new CategoryType(), $entity, array(
+            'action' => $this->generateUrl('restaurant_category_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -104,23 +104,23 @@ class ParticularController extends Controller
 
 
     /**
-     * Displays a form to edit an existing Particular entity.
+     * Displays a form to edit an existing Category entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('token','category'));
+        $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array(),array('sorting'=>'ASC'));
         //$pagination = $this->paginate($pagination);
-        $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
+        $entity = $em->getRepository('RestaurantBundle:Category')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find Category entity.');
         }
         $editForm = $this->createEditForm($entity);
 
-        return $this->render('RestaurantBundle:Particular:index.html.twig', array(
+        return $this->render('RestaurantBundle:Category:index.html.twig', array(
             'entity'      => $entity,
             'pagination'      => $pagination,
             'form'   => $editForm->createView(),
@@ -128,17 +128,17 @@ class ParticularController extends Controller
     }
 
     /**
-     * Creates a form to edit a Particular entity.
+     * Creates a form to edit a Category entity.
      *
-     * @param Particular $entity The entity
+     * @param Category $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Particular $entity)
+    private function createEditForm(Category $entity)
     {
 
-        $form = $this->createForm(new ParticularType(), $entity, array(
-            'action' => $this->generateUrl('restaurant_particular_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new CategoryType(), $entity, array(
+            'action' => $this->generateUrl('restaurant_category_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -148,19 +148,19 @@ class ParticularController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Particular entity.
+     * Edits an existing Category entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('token','category'));
+        $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array(),array('sorting'=>'ASC'));
         //$pagination = $this->paginate($pagination);
-        $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
+        $entity = $em->getRepository('RestaurantBundle:Category')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find Category entity.');
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
@@ -170,24 +170,24 @@ class ParticularController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('restaurant_particular'));
+            return $this->redirect($this->generateUrl('restaurant_category'));
         }
 
-        return $this->render('RestaurantBundle:Particular:index.html.twig', array(
+        return $this->render('RestaurantBundle:Category:index.html.twig', array(
             'entity'      => $entity,
             'pagination'      => $pagination,
             'form'   => $editForm->createView(),
         ));
     }
     /**
-     * Deletes a Particular entity.
+     * Deletes a Category entity.
      *
      */
-    public function deleteAction(Particular $entity)
+    public function deleteAction(Category $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find Category entity.');
         }
         try {
 
@@ -206,7 +206,7 @@ class ParticularController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('restaurant_particular'));
+        return $this->redirect($this->generateUrl('restaurant_category'));
     }
 
    
@@ -214,7 +214,7 @@ class ParticularController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(Particular $entity)
+    public function statusAction(Category $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -232,13 +232,13 @@ class ParticularController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('restaurant_particular'));
+        return $this->redirect($this->generateUrl('restaurant_category'));
     }
 
     public function sortedAction(Request $request)
     {
         $data = $request ->request->get('item');
-        $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->setParticularSorting($data);
+        $this->getDoctrine()->getRepository('RestaurantBundle:Category')->setCategorySorting($data);
         exit;
     }
 
