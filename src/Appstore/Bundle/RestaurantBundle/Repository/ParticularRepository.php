@@ -329,7 +329,7 @@ class ParticularRepository extends EntityRepository
         $em = $this->_em;
         foreach ($data as $key => $value){
             $sort = sprintf("%s", str_pad($i,3, '0', STR_PAD_LEFT));
-            $particular = $this->find($value);
+            $particular = $this->findOneBy(array('status'=> 1,'id' => $value));
             $particular->setSorting($sort);
             $em->persist($particular);
             $em->flush();

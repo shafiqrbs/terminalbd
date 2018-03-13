@@ -55,6 +55,7 @@ class RestaurantParticularType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->join("e.category",'c')
                         ->where("c.status=1")
+                        ->andWhere("e.status=1")
                         ->orderBy("c.sorting", "ASC")
                         ->addOrderBy("e.sorting", "ASC");
                 }

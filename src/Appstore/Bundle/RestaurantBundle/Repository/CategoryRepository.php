@@ -25,7 +25,7 @@ class CategoryRepository extends EntityRepository
         $i = 1;
         $em = $this->_em;
         foreach ($data as $key => $value){
-            $particular = $this->find($value);
+            $particular = $this->findOneBy(array('status'=> 1,'id' => $value));
             $particular->setSorting($i);
             $em->persist($particular);
             $em->flush();
