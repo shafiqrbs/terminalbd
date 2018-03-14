@@ -90,8 +90,10 @@ class ParticularRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.service','s');
+        $qb->leftJoin('e.category','c');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.status = :status')->setParameter('status', 1) ;
+        $qb->andWhere('c.status = :cstatus')->setParameter('cstatus', 1) ;
         $qb->andWhere('s.slug IN (:slugs)')->setParameter('slugs',$service) ;
         $qb->orderBy('e.sorting','ASC');
         $result = $qb->getQuery()->getResult();
