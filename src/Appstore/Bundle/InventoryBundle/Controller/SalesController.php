@@ -678,7 +678,21 @@ class SalesController extends Controller
         $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
         $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);
 
-        return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
+        return $this->render('InventoryBundle:SalesPrint:invoice.html.twig', array(
+            'entity'      => $entity,
+            'barcode'     => $barcode,
+            'inWard'     => $inWard,
+        ));
+    }
+
+    public function chalanPrintAction(Sales $entity)
+    {
+
+        $barcode = $this->getBarcode($entity->getInvoice());
+        $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
+        $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);
+
+        return $this->render('InventoryBundle:SalesPrint:chalan.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,
             'inWard'     => $inWard,

@@ -127,7 +127,7 @@
                                                 <td class="numeric" >{{ entity.process|capitalize }}</td>
                                                 <td class="numeric" >
                                                     {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
-                                                        <a href="{{ path('inventory_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                                        <a href="{{ path('inventory_salesmanual_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                                         <a target="_blank" href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" rel=""  class="btn green mini print" ><i class="icon-print"></i></a>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == "Pending" %}

@@ -52,6 +52,10 @@ inventory_sales_print_invoice:
     path:     /{invoice}/invoice
     defaults: { _controller: "InventoryBundle:Sales:invoicePrint" }
 
+inventory_sales_print_chalan:
+    path:     /{invoice}/chalan
+    defaults: { _controller: "InventoryBundle:Sales:chalanPrint" }
+
 inventory_sales_discount_update:
     path:     /sales/discount-update
     defaults: { _controller: "InventoryBundle:Sales:salesDiscountUpdate" }
