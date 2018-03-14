@@ -86,6 +86,18 @@ class ParticularRepository extends EntityRepository
         return  $result;
     }
 
+     public function productSortingList($config,$service){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.service','s');
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.status = :status')->setParameter('status', 1) ;
+        $qb->andWhere('s.slug IN (:slugs)')->setParameter('slugs',$service) ;
+        $qb->orderBy('e.sorting','ASC');
+        $result = $qb->getQuery()->getResult();
+        return  $result;
+    }
+
     public function getFindWithParticular($hospital,$services){
 
         $qb = $this->createQueryBuilder('e')
