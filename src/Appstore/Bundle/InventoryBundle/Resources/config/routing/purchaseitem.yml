@@ -1,3 +1,16 @@
+inventory_purchaseitem:
+    path:     /
+    defaults: { _controller: "InventoryBundle:PurchaseItem:index" }
+
+inventory_purchaseitem_multi_add:
+    path:     /{purchase}/multi-add
+    defaults: { _controller: "InventoryBundle:PurchaseItem:multiAdd" }
+
+inventory_purchaseitem_multi_insert:
+    path:     /{purchase}/multi-insert
+    defaults: { _controller: "InventoryBundle:PurchaseItem:multiInsert" }
+    methods:  POST
+
 inventory_purchaseitem_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:PurchaseItem:show" }

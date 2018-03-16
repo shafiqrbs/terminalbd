@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Form\SalesGeneralType;
+use Appstore\Bundle\InventoryBundle\Form\SalesOnlineType;
 use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -92,7 +93,7 @@ class SalesOnlineController extends Controller
             $entity->setMobile($customerEntity->getMobile());
         }
 
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(4);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $entity->setSalesMode('online');
         $entity->setPaymentStatus('Pending');
@@ -159,7 +160,7 @@ class SalesOnlineController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new SalesGeneralType($globalOption,$location), $entity, array(
+        $form = $this->createForm(new SalesOnlineType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('inventory_salesonline_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -373,9 +374,9 @@ class SalesOnlineController extends Controller
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
 
             $globalOption = $this->getUser()->getGlobalOption();
-            if (!empty($data['sales_general']['customer']['mobile'])) {
+            if (!empty($data['sales_online']['customer']['mobile'])) {
 
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales_general']['customer']['mobile']);
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales_online']['customer']['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomer($globalOption,$mobile,$data);
                 $entity->setCustomer($customer);
 

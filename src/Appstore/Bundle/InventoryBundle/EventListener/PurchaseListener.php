@@ -20,11 +20,10 @@ class PurchaseListener
         if ($entity instanceof Purchase) {
 
             $datetime = new \DateTime("now");
-
             $lastCode = $this->getLastCode($args, $datetime, $entity);
-
             $entity->setCode($lastCode+1);
-            $entity->setGrn(sprintf("%s%s%s",$entity->getInventoryConfig()->getGlobalOption()->getId(),$datetime->format('mY'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
+            $entity->setGrn(sprintf("%s%s%s",$entity->getInventoryConfig()->getGlobalOption()->getId(),$datetime->format('ym'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
+
         }
     }
 

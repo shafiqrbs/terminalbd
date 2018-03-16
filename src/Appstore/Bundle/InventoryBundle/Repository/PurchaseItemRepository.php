@@ -94,7 +94,6 @@ class PurchaseItemRepository extends EntityRepository
         $qb->setParameter('inventoryConfig', $inventory);
 
         if (!empty($item)) {
-
             $qb->join('item.masterItem', 'm');
             $qb->andWhere("m.name = :name");
             $qb->setParameter('name', $item);
@@ -339,6 +338,27 @@ class PurchaseItemRepository extends EntityRepository
             $this->_em->flush($item);
         }
 
+
+    }
+
+
+    public function insertPurchaseItemAttribute($data){
+
+        $em = $this->_em;
+
+        foreach($data['purchaseItem'] as $key => $val ){
+            $entity = $this->find($val);
+            $entity->setAssuranceFromVendor($data['assuranceFromVendor'][$key]);
+            $entity->setAssuranceToCustomer($data['assuranceToCustomer'][$key]);
+            $entity->setAssuranceType($data['assuranceType'][$key]);
+            $entity->setSerialNo($data['serialNo'][$key]);
+            if($data['expiredDate'][$key]){
+                $datetime = (new \DateTime($data['expiredDate'][$key]));
+                $entity->setExpiredDate($datetime);
+            }
+            $em->persist($entity);
+            $em->flush();
+        }
 
     }
 

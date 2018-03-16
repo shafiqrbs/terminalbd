@@ -38,7 +38,7 @@
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
                                         <div class="span3">
-                                            <input type="text" id="barcode" name="barcode"  class="span11 select2Barcode " value="{% if searchForm.barcode is defined %}{{ searchForm.barcode }}{% endif %}"  autocomplete="off" placeholder="Enter item barcode ">
+                                            <input type="text" id="barcode" name="barcode"  class="span12 select2Barcode " value="{% if searchForm.barcode is defined %}{{ searchForm.barcode }}{% endif %}"  autocomplete="off" placeholder="Enter item barcode ">
                                         </div>
                                         <div class="span3">
                                             <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
@@ -58,12 +58,13 @@
                                         <div class="span3">
                                             <input type="text" id="category" name="category"  class="leftMargin span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
                                         </div>
-                                        <div class="span5">
+                                        <div class="span3">
                                             <input type="text" id="vendor" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
                                         </div>
-                                        <div class="span1">
+                                        <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span11">
+                                                    <input type="text" id="grn" name="grn"  class="span11 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="Enter grn name">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>

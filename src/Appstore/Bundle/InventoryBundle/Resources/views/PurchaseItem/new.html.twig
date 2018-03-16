@@ -39,24 +39,7 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    <li><a href="{{ path('item') }}"><i class="icon-th-list"></i>&nbsp;Item</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp;Item create</a></li>
-                                    <li><a href="{{ path('inventory_product') }}"><i class="icon-plus-sign"></i>&nbsp;Master item</a></li>
-                                    <li><a href="{{ path('inventory_product_new') }}"><i class="icon-plus-sign  "></i>&nbsp;Master item create</a></li>
-                                    <li class="divider"></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('purchase_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('purchase_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="btn red" href="{{ path('inventory_purchaseitem') }}"><i class="icon-th-list"></i>&nbsp;Purchase Item</a></li>
                             </div>
                         </div>
 
@@ -103,99 +86,80 @@
                                 </div>
                                 <div class="span3 image-preview"></div>
                             </div>
+
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
-                            {% set total = 0 %}
-                            {% for vendorItem in purchaseInfo.purchaseVendorItems %}
-
-                                {% set total = total + vendorItem.quantity %}
-
-                                <div class="form-actions portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="span3">
-                                            <div class="caption"><i class="icon-reorder"></i>&nbsp;{% if vendorItem.masterItem is not empty %}{{ vendorItem.masterItem.name }}&nbsp;-{% endif %}&nbsp;{{ vendorItem.name }}</div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i> Purchase Item: {{ entity.item.name }}-{{ entity.barcode }}</div>
+                                </div>
+                             </div>
+                            <div class="clearfix"><br/></div>
+                            <div class="row-fluid">
+                                <div class="span12 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Serial No</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.serialNo) }}
+                                            {{ form_errors(form.serialNo) }}
+                                            <p class="help-block">Using serial no. E.g: 0xxxx,1yyyy,2zzzz</p>
                                         </div>
-                                        <div class="span8">
-                                            <div class="span3">Purchase: {{ vendorItem.purchasePrice }}</div>
-                                            <div class="span5">Quantity: {{ vendorItem.quantity }}</div>
-                                            <div class="span3">Sales:{{ vendorItem.salesPrice }}</div>
-                                        </div>
-                                        <div class="span1"><button type="button" data-ref-id="{{vendorItem.id }}"  class="btn green mini addmore" ><i class="icon-plus m-icon-white"></i></button></div>
 
                                     </div>
                                 </div>
-                                <div class="clearfix">&nbsp;</div>
-                               <!--/span-->
-                                <div class="clone-block" id="clone-block-{{vendorItem.id }}">
-                                    <div class="row-fluid clone  box blue">
-                                        <div class="span5">
-                                           <select class="span12" name="item[]" style="height: 32px">
-                                               {% for item in items %}
-                                               <option value="{{ item.id }}">
-                                                   {{ item.name }}
-                                               </option>
-                                               {% endfor %}
-                                           </select>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Assurance Type</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.assuranceType) }}
+                                            {{ form_errors(form.assuranceType) }}
                                         </div>
-                                        <div class="span6">
-                                            <div class="span6"><input type="hidden" id="" name="purchaseVendorItem[]" class="" value="{{ vendorItem.id }}"  >
-                                                <div class="input-append span8">
-                                                    <input type="number" id="" name="quantity[]" min="1" max="{{ vendorItem.quantity }}" class="m-wrap tooltips span12" required="required" value="" placeholder="no of quantity" , data-original-title ="No of quantity" , data-trigger = "hover" ><span class="add-on">{% if vendorItem.masterItem.productUnit is defined and vendorItem.masterItem.productUnit is not empty %}{{ vendorItem.masterItem.productUnit.name }}{% endif %}</span>
-                                                </div>
-                                            </div>
-                                            <div class="span4">
-                                            <input type="text" id="" name="salesPrice[]" class="m-wrap span12 tooltips"  placeholder="sales price" value="" , data-original-title ="Please add sales price" , data-trigger = "hover" >
-                                            </div>
 
-                                        </div>
-                                        <div class="span1"><button type="button" class="btn red  remove hidden" ><i class="icon-trash m-icon-white"></i></button></div>
                                     </div>
                                 </div>
-                                {% if  vendorItem.purchaseItems is not empty %}
-                                {% for purchaseItem in vendorItem.purchaseItems %}
-                                    <div class="clone-block" id="clone-block-{{vendorItem.id }}">
-                                        <div class="row-fluid clone  box blue">
-                                            <div class="span5">
-                                                <select class="span12" name="item[]" style="height: 32px">
-                                                    {% for item in items %}
-                                                        <option value="{{ item.id }}">
-                                                            {{ item.name }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="span6">
-                                                <div class="span6"><input type="hidden" id="" name="purchaseVendorItem[]" class="" value="{{ vendorItem.id }}"  >
-                                                    <div class="input-append span8">
-                                                        <input type="number" id="" name="quantity[]" min="1" max="{{ vendorItem.quantity }}" class="m-wrap tooltips span12" required="required" value="{{ purchaseItem.quantity }}" placeholder="no of quantity" , data-original-title ="No of quantity" , data-trigger = "hover" ><span class="add-on">{% if vendorItem.masterItem.productUnit is defined and vendorItem.masterItem.productUnit is not empty %}{{ vendorItem.masterItem.productUnit.name }}{% endif %}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="span4">
-                                                    <input type="text" id="" name="salesPrice[]" class="m-wrap span12 tooltips"  placeholder="sales price" value="{{ purchaseItem.salesPrice }}" , data-original-title ="Please add sales price" , data-trigger = "hover" >
-                                                </div>
-
-                                            </div>
-                                            <div class="span1">
-                                                <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Assurance From Vendor</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.assuranceFromVendor) }}
+                                            {{ form_errors(form.assuranceFromVendor) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Assurance To Customer</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.assuranceToCustomer) }}
+                                            {{ form_errors(form.assuranceToCustomer) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Expired Date</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-calendar"></i>
+                                                {{ form_widget(form.expiredDate) }}
+                                                {{ form_errors(form.expiredDate) }}
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
-                            {% endif %}
-                            {% endfor %}
+                                </div>
+                            </div>
+                            <div class="clearfix"><br/></div>
+                            <!--/span-->
                             <div class="form-actions portlet box grey">
-                                <div class="span8" id="message"></div>
                                 <div class="pull-right">
-                                    <input type="hidden" id="totalQnt" value="{{ total }}">
-                                    <button type="reset" class="btn purple action-button"><i class="icon-refresh"></i> Reset</button>
-                                    <button type="button" id="purchaseBtn" class="btn green action-button addPurchase"><i class="icon-ok"></i>&nbsp;Submit</button>
-
+                                    <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
                                 </div>
                             </div>
                             {{ form_end(form) }}
-
                         </div>
                     </div>
                 </div>
@@ -205,11 +169,11 @@
     </div>
 
 {% endblock %}
-{% block javascriptBlock %}
+{% block documentready %}
     {{ parent() }}
-    {% javascripts
-    '@InventoryBundle/Resources/public/js/puschaseItem.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock  %}
+    $( ".dateCalendar" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    });
+{% endblock %}

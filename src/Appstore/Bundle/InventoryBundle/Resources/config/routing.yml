@@ -66,10 +66,6 @@ inventory_itemattribute:
     resource: "@InventoryBundle/Resources/config/routing/itemattribute.yml"
     prefix:    /item-attribute
 
-inventory_purchaseitemattribute:
-    resource: "@InventoryBundle/Resources/config/routing/purchaseitemattribute.yml"
-    prefix:    /purchase-item-attribute
-
 inventory_itembrand:
     resource: "@InventoryBundle/Resources/config/routing/itembrand.yml"
     prefix:    /brand

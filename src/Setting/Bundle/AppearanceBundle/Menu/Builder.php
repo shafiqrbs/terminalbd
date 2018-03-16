@@ -125,14 +125,6 @@ class Builder extends ContainerAware
                 }
             }
 
-            $applications = array('accounting', 'e-commerce', 'inventory');
-            $result = array_intersect($arrSlugs, $applications);
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_CONFIG')){
-                    $menu = $this->applicationSettingMenu($menu);
-                }
-            }
-
             $applications = array('dms', 'hms', 'prescription', 'medicine');
             $result = array_intersect($arrSlugs, $applications);
             if (!empty($result)) {
@@ -418,15 +410,16 @@ class Builder extends ContainerAware
         $inventory = array('inventory');
         $result = array_intersect($arrSlugs, $inventory);
         if (!empty($result)) {
-
+            $menu['Accounting']->addChild('Sales & Purchase', array('route' => 'account_expenditure'))
+                ->setAttribute('icon', 'fa fa-money')
+                ->setAttribute('dropdown', true);
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
-                $menu['Accounting']->addChild('Sales', array('route' => 'account_sales'));
-                $menu['Accounting']->addChild('Sales Return', array('route' => 'account_sales_return'));
+                $menu['Accounting']['Sales & Purchase']->addChild('Sales', array('route' => 'account_sales'));
+                $menu['Accounting']['Sales & Purchase']->addChild('Sales Return', array('route' => 'account_sales_return'));
             }
-
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
-                $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase'));
-                $menu['Accounting']->addChild('Purchase Return', array('route' => 'account_purchase_return'));
+                $menu['Accounting']['Sales & Purchase']->addChild('Purchase', array('route' => 'account_purchase'));
+                $menu['Accounting']['Sales & Purchase']->addChild('Purchase Return', array('route' => 'account_purchase_return'));
             }
         }
         $accounting = array('e-commerce');
@@ -452,10 +445,18 @@ class Builder extends ContainerAware
 
         }
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
-
             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');
         }
+        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_CONFIG')) {
 
+            $menu['Accounting']->addChild('Master Data', array('route' => ''))
+                ->setAttribute('icon', 'fa fa-building-o')
+                ->setAttribute('dropdown', true);
+            $menu['Accounting']['Master Data']->addChild('Bank Account', array('route' => 'appsetting_bank'));
+            $menu['Accounting']['Master Data']->addChild('Mobile Account', array('route' => 'appsetting_mobile_bank'));
+            $menu['Accounting']['Master Data']->addChild('Account Head', array('route' => 'accounthead'));
+
+        }
 
         return $menu;
 
@@ -525,7 +526,6 @@ class Builder extends ContainerAware
 
                 if (in_array('ManualSales', $deliveryProcess)) {
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_MANUAL')){
-
                         $menu['Sales']
                             ->addChild('Manual Sales')
                             ->setAttribute('icon', 'fa fa-shopping-basket')
@@ -587,8 +587,6 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', ' icon-reply');
             $menu['Inventory']['Manage Purchase']->addChild('Purchase Import', array('route' => 'inventory_excelimproter'))
                 ->setAttribute('icon', 'icon-upload');
-
-
         }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
@@ -601,6 +599,7 @@ class Builder extends ContainerAware
             $menu['Inventory']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
             $menu['Inventory']['Manage Stock']->addChild('Stock Item', array('route' => 'inventory_item'))
                 ->setAttribute('icon', 'icon-hdd');
+            $menu['Inventory']['Manage Stock']->addChild('Purcahse Item', array('route' => 'inventory_purchaseitem'))->setAttribute('icon', 'icon-hdd');
             $menu['Inventory']['Manage Stock']->addChild('Barcode wise Stock', array('route' => 'inventory_barcode_branch_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Manage Stock']->addChild('Barcode Stock Details', array('route' => 'inventory_barcode_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Manage Stock']->addChild('Stock Item Details', array('route' => 'inventory_stockitem'))
@@ -613,6 +612,20 @@ class Builder extends ContainerAware
             }
             $menu['Inventory']['Manage Stock']->addChild('Damage', array('route' => 'inventory_damage'))
                 ->setAttribute('icon', ' icon-trash');
+
+            $menu['Inventory']->addChild('Master Data', array('route' => ''))
+                ->setAttribute('icon', 'fa fa-archive')
+                ->setAttribute('dropdown', true);
+            $menu['Inventory']['Master Data']->addChild('Master Item', array('route' => 'inventory_product'));
+            $menu['Inventory']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())));
+            $menu['Inventory']['Master Data']->addChild('Custom category', array('route' => 'inventory_category'));
+            $menu['Inventory']['Master Data']->addChild('Vendor', array('route' => 'inventory_vendor'));
+            $menu['Inventory']['Master Data']->addChild('Brand', array('route' => 'itembrand'));
+            $menu['Inventory']['Master Data']->addChild('Size Group', array('route' => 'itemsize_group'));
+            if ($inventory->getIsBranch() == 1) {
+            $menu['Inventory']['Master Data']->addChild('Branches')->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);
+            $menu['Inventory']['Master Data']['Branches']->addChild('Branch Shop', array('route' => 'appsetting_branchshop'))->setAttribute('icon', 'icon-building');
+            }
         }
 
 
@@ -707,90 +720,20 @@ class Builder extends ContainerAware
         $menu['E-commerce']->addChild('Coupon', array('route' => 'ecommerce_coupon'))->setAttribute('icon', 'icon-tags');
         if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
             $menu['E-commerce']->addChild('Configuration', array('route' => 'ecommerce_config_modify'))->setAttribute('icon', 'fa fa-cog');
+            $menu['E-commerce']->addChild('Master Data', array('route' => ''))
+                ->setAttribute('icon', 'fa fa-shopping-cart')
+                ->setAttribute('dropdown', true);
+            if (empty($resInventory)) {
+                $menu['E-commerce']['Master Data']->addChild('Master Item', array('route' => 'inventory_product'))->setAttribute('icon', 'icon-th-list');
+                $menu['E-commerce']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())))->setAttribute('icon', 'icon-th-list');
+                $menu['E-commerce']['Master Data']->addChild('Custom category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-th-list');
+                $menu['E-commerce']['Master Data']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
+            }
         }
+
         return $menu;
     }
 
-    public function applicationSettingMenu($menu)
-    {
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
-
-        $menu
-            ->addChild('Master Data')
-            ->setAttribute('icon', 'fa fa-server')
-            ->setAttribute('dropdown', true);
-
-        $globalOption = $user->getGlobalOption();
-        $modules = $user->getGlobalOption()->getSiteSetting()->getAppModules();
-        $arrSlugs = array();
-        if (!empty($globalOption->getSiteSetting()) and !empty($modules)) {
-            foreach ($globalOption->getSiteSetting()->getAppModules() as $mod) {
-                if (!empty($mod->getModuleClass())) {
-                    $arrSlugs[] = $mod->getSlug();
-                }
-            }
-        }
-        $accounting = array('accounting');
-        $result = array_intersect($arrSlugs, $accounting);
-        if (!empty($result)) {
-            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_CONFIG')) {
-
-                $menu['Master Data']->addChild('Accounting', array('route' => ''))
-                    ->setAttribute('icon', 'fa fa-building-o')
-                    ->setAttribute('dropdown', true);
-                $menu['Master Data']['Accounting']->addChild('Bank Account', array('route' => 'appsetting_bank'))->setAttribute('icon', 'fa fa-bank');
-                $menu['Master Data']['Accounting']->addChild('Mobile Account', array('route' => 'appsetting_mobile_bank'))->setAttribute('icon', 'fa fa-mobile');
-                $menu['Master Data']['Accounting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon', 'fa fa-bar-chart-o');
-
-            }
-        }
-
-        $inventories = array('inventory');
-        $result = array_intersect($arrSlugs, $inventories);
-        if (!empty($result)) {
-
-            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
-
-                $menu['Master Data']->addChild('Inventory', array('route' => ''))
-                    ->setAttribute('icon', 'fa fa-archive')
-                    ->setAttribute('dropdown', true);
-                $menu['Master Data']['Inventory']->addChild('Master Item', array('route' => 'inventory_product'))->setAttribute('icon', 'icon-th-list');
-                $menu['Master Data']['Inventory']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())))->setAttribute('icon', 'icon-th-list');
-                $menu['Master Data']['Inventory']->addChild('Custom category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-th-list');
-                $menu['Master Data']['Inventory']->addChild('Vendor', array('route' => 'inventory_vendor'))->setAttribute('icon', 'icon-th-list');
-                $menu['Master Data']['Inventory']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
-                //$menu['Master Data']['Inventory Setting']->addChild('Color', array('route' => 'itemcolor'))->setAttribute('icon', 'icon-th-list');
-                $menu['Master Data']['Inventory']->addChild('Size Group', array('route' => 'itemsize_group'))->setAttribute('icon', 'icon-th-list');
-                //$menu['Master Data']['Inventory Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');
-                if ($inventory->getIsBranch() == 1) {
-                    $menu['Master Data']->addChild('Branches')->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);
-                    $menu['Master Data']['Branches']->addChild('Branch Shop', array('route' => 'appsetting_branchshop'))->setAttribute('icon', 'icon-building');
-                }
-            }
-        }
-
-        $ecommerce = array('e-commerce');
-        $result = array_intersect($arrSlugs, $ecommerce);
-        $resInventory = array_intersect($arrSlugs, $inventories);
-        if (!empty($result)) {
-
-            if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE')) {
-                $menu['Master Data']->addChild('E-commerce', array('route' => ''))
-                    ->setAttribute('icon', 'fa fa-shopping-cart')
-                    ->setAttribute('dropdown', true);
-                if (empty($resInventory)) {
-                    $menu['Master Data']['E-commerce']->addChild('Master Item', array('route' => 'inventory_product'))->setAttribute('icon', 'icon-th-list');
-                    $menu['Master Data']['E-commerce']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())))->setAttribute('icon', 'icon-th-list');
-                    $menu['Master Data']['E-commerce']->addChild('Custom category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-th-list');
-                    $menu['Master Data']['E-commerce']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
-                }
-
-            }
-        }
-        return $menu;
-    }
 
     public function AnonymousProductSalesMenu($menu)
     {
@@ -1099,7 +1042,7 @@ class Builder extends ContainerAware
         $securityContext = $this->container->get('security.context');
         $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
         $menu
-            ->addChild('Drug')
+            ->addChild('Invoice Sms & Email')
             ->setAttribute('icon', 'fa fa-files-o')
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER') OR $securityContext->isGranted('ROLE_DOMAIN_DMS_DOCTOR') OR $securityContext->isGranted('ROLE_DOMAIN_HMS_DOCTOR')) {

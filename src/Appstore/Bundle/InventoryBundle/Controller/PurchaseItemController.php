@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,6 +18,18 @@ use Symfony\Component\HttpFoundation\Response;
 class PurchaseItemController extends Controller
 {
 
+    public function paginate($entities)
+    {
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
     /**
      * Lists all PurchaseItem entities.
      *
@@ -24,13 +37,33 @@ class PurchaseItemController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('InventoryBundle:PurchaseItem')->findAll();
-
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:PurchaseItem')->findWithSearch($config,$data);
+        $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:PurchaseItem:index.html.twig', array(
-            'entities' => $entities,
+            'pagination' => $pagination,
         ));
     }
+
+    public function multiAddAction(Purchase $purchase)
+    {
+        $em = $this->getDoctrine()->getManager();
+        return $this->render('InventoryBundle:PurchaseItem:group.html.twig', array(
+            'entity'      => $purchase,
+        ));
+    }
+
+    public function multiInsertAction(Request $request,Purchase $purchase)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->insertPurchaseItemAttribute($data);
+        return $this->redirect($this->generateUrl('inventory_purchaseitem_multi_add', array('id' => $purchase->getId())));
+
+    }
+
+
     /**
      * Creates a new PurchaseItem entity.
      *
@@ -186,12 +219,10 @@ class PurchaseItemController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('InventoryBundle:PurchaseItem:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+        return $this->render('InventoryBundle:PurchaseItem:new.html.twig', array(
+            'purchaseInfo' => $entity->getPurchase(),
+            'entity' => $entity,
+            'form'   => $editForm->createView(),
         ));
     }
 
@@ -209,9 +240,6 @@ class PurchaseItemController extends Controller
             'action' => $this->generateUrl('inventory_purchaseitem_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
         return $form;
     }
     /**
@@ -227,21 +255,17 @@ class PurchaseItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
-
             return $this->redirect($this->generateUrl('inventory_purchaseitem_edit', array('id' => $id)));
         }
 
-        return $this->render('InventoryBundle:PurchaseItem:edit.html.twig', array(
+        return $this->render('InventoryBundle:PurchaseItem:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
     /**

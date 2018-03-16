@@ -249,6 +249,12 @@ var InventorySales = function(sales) {
         })
     });
 
+    $(document).on('change', '#serialNo', function() {
+        if($(this).val() !='') {
+            $.get($(this).val());
+        }
+        return false;
+    });
 
 
    $('#salesItem').on("click", ".delete", function() {

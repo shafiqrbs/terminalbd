@@ -73,12 +73,17 @@
                                     <div class="span3">
                                         <input type="text" id="" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
                                     </div>
-                                    <div class="span5">
+                                    <div class="span3">
                                         <input type="text" id="category" name="category"  class="span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Enter category name">
                                     </div>
-                                    <div class="span1">
-                                        <div class="btn-group">
-                                            <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                    <div class="span3">
+                                        <div class="controls">
+                                            <div class="input-append span11">
+                                                <input type="text" id="grn" name="grn" class="span11 m-wrap" value="" autocomplete="off" placeholder="Enter grn no">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -140,8 +145,6 @@
                                     <td class="numeric" >{{ entity.salesQuantity }}</td>
                                     <td class="numeric" >{{ entity.salesQuantityReturn }}</td>
                                     <td class="numeric" >{{ entity.damageQuantity }}</td>
-                                    {#  <td class="numeric" >{{ entity.minQnt }}</td>
-                                         <td class="numeric" >{{ entity.maxQnt }}</td>#}
                                     <td class="numeric" >{{ entity.purchaseQuantity - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity - entity.salesQuantityReturn)  }}</td>
                                     <th class="numeric" >
                                         <a href="{{ path('inventory_stockitem_show', { 'item': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
@@ -170,7 +173,7 @@
                                                     <tr>
                                                         <td class="numeric" >{{ stockItem.created|date('d-m-Y') }}</td>
                                                         <td class="numeric" >{{ stockItem.process }}</td>
-                                                        <td class="numeric" > {{ stockItem.purchaseItem.barcode }}</td>
+                                                        <td class="numeric" >{% if stockItem.purchaseItem is not empty %} {{ stockItem.purchaseItem.barcode }}{% endif %}</td>
                                                         <td class="numeric" >
                                                             {% if(stockItem.process == 'purchase') %}
                                                                 {{ stockItem.purchaseItem.purchase.grn }}

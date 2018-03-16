@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -34,12 +35,6 @@ class PurchaseItem
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="purchaseItem" , cascade={"remove"} )
      **/
     private  $stockItem;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItemAttribute", mappedBy="purchaseItem" , cascade={"remove"} )
-     **/
-    private  $purchaseItemAttributes;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseItems" )
@@ -161,6 +156,60 @@ class PurchaseItem
      * @ORM\Column(name="barcode", type="string",  nullable = true)
      */
     private $barcode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="serialNo", type="text", length=255, nullable = true)
+     */
+    private $serialNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="assuranceType", type="string", length=50, nullable = true)
+     */
+    private $assuranceType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="assuranceFromVendor", type="string", length=100, nullable = true)
+     */
+    private $assuranceFromVendor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="assuranceToCustomer", type="string", length=100, nullable = true)
+     */
+    private $assuranceToCustomer;
+
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="expiredDate", type="datetime", nullable=true)
+     */
+    private $expiredDate;
+
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
+     */
+    private $created;
+
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated", type="datetime")
+     */
+    private $updated;
+
+
 
     /**
      * Get id
@@ -326,8 +375,6 @@ class PurchaseItem
     {
         $this->item = $item;
     }
-
-
 
     /**
      * @return float
@@ -530,11 +577,115 @@ class PurchaseItem
     }
 
     /**
-     * @return PurchaseItemAttribute
+     * @return string
      */
-    public function getPurchaseItemAttributes()
+    public function getSerialNo()
     {
-        return $this->purchaseItemAttributes;
+        return $this->serialNo;
+    }
+
+    /**
+     * @param string $serialNo
+     */
+    public function setSerialNo($serialNo)
+    {
+        $this->serialNo = $serialNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssuranceType()
+    {
+        return $this->assuranceType;
+    }
+
+    /**
+     * @param string $assuranceType
+     */
+    public function setAssuranceType($assuranceType)
+    {
+        $this->assuranceType = $assuranceType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssuranceFromVendor()
+    {
+        return $this->assuranceFromVendor;
+    }
+
+    /**
+     * @param string $assuranceFromVendor
+     */
+    public function setAssuranceFromVendor($assuranceFromVendor)
+    {
+        $this->assuranceFromVendor = $assuranceFromVendor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssuranceToCustomer()
+    {
+        return $this->assuranceToCustomer;
+    }
+
+    /**
+     * @param string $assuranceToCustomer
+     */
+    public function setAssuranceToCustomer($assuranceToCustomer)
+    {
+        $this->assuranceToCustomer = $assuranceToCustomer;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getExpiredDate()
+    {
+        return $this->expiredDate;
+    }
+
+    /**
+     * @param datetime $expiredDate
+     */
+    public function setExpiredDate($expiredDate)
+    {
+        $this->expiredDate = $expiredDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
     }
 
 

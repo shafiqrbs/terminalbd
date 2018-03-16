@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -49,6 +50,42 @@ class SalesItem
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $sales;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="serialNo", type="text", length=255, nullable = true)
+     */
+    private $serialNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="assuranceType", type="string", length=50, nullable = true)
+     */
+    private $assuranceType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="assuranceFromVendor", type="string", length=100, nullable = true)
+     */
+    private $assuranceFromVendor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="assuranceToCustomer", type="string", length=100, nullable = true)
+     */
+    private $assuranceToCustomer;
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="expiredDate", type="datetime", nullable=true)
+     */
+    private $expiredDate;
+
 
 
     /**
@@ -273,6 +310,86 @@ class SalesItem
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSerialNo()
+    {
+        return $this->serialNo;
+    }
+
+    /**
+     * @param string $serialNo
+     */
+    public function setSerialNo($serialNo)
+    {
+        $this->serialNo = $serialNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssuranceType()
+    {
+        return $this->assuranceType;
+    }
+
+    /**
+     * @param string $assuranceType
+     */
+    public function setAssuranceType($assuranceType)
+    {
+        $this->assuranceType = $assuranceType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssuranceFromVendor()
+    {
+        return $this->assuranceFromVendor;
+    }
+
+    /**
+     * @param string $assuranceFromVendor
+     */
+    public function setAssuranceFromVendor($assuranceFromVendor)
+    {
+        $this->assuranceFromVendor = $assuranceFromVendor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssuranceToCustomer()
+    {
+        return $this->assuranceToCustomer;
+    }
+
+    /**
+     * @param string $assuranceToCustomer
+     */
+    public function setAssuranceToCustomer($assuranceToCustomer)
+    {
+        $this->assuranceToCustomer = $assuranceToCustomer;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getExpiredDate()
+    {
+        return $this->expiredDate;
+    }
+
+    /**
+     * @param datetime $expiredDate
+     */
+    public function setExpiredDate($expiredDate)
+    {
+        $this->expiredDate = $expiredDate;
     }
 
 

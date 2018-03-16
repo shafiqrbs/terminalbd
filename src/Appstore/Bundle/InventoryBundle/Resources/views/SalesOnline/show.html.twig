@@ -38,15 +38,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_salesonline_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Sales</a></li>
-                                    <li><a href="{{ path('inventory_salesonline') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-
-                                </ul>
+                                <a class="btn  red" href="{{ path('inventory_salesonline_new') }}"><i class="icon-th-list"></i>&nbsp;Add Sales</a>
+                                <a class="btn" href="{{ path('inventory_salesonline') }}"><i class="icon-th-list"></i>&nbsp;Sales</a>
                             </div>
                         </div>
 
@@ -104,6 +97,7 @@
                                             <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
                                             <th class="numeric" >Item</th>
                                             <th class="numeric" >Barcode</th>
+                                            <th class="numeric" >Serial No</th>
                                             <th class="numeric" >Qnt</th>
                                             <th class="numeric" >Estimate price</th>
                                             <th class="numeric" >Sales price</th>
@@ -120,6 +114,7 @@
                                                 <td class="numeric" >{{ loop.index }}</td>
                                                 <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
                                                 <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
+                                                <td class="numeric" >{{ salesItem.serialNo }}</td>
                                                 <td class="numeric" >{{ salesItem.quantity }}</td>
                                                 <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                                 <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>

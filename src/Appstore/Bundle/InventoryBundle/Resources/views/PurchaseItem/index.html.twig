@@ -1,0 +1,148 @@
+
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Purchase Item Lists
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('itemattribute') }}">Purchase Item</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Purchase Item Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Purchase Item Information</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row-fluid">
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid">
+                                    <div class="span3">
+                                        <input type="text" id="barcode" name="barcode"  class="span12 select2Barcode " value="{% if searchForm.barcode is defined %}{{ searchForm.barcode }}{% endif %}"  autocomplete="off" placeholder="Enter item barcode ">
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="vendor" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
+                                    </div>
+                                    <div class="span3">
+                                        <div class="controls">
+                                            <div class="input-append span11">
+                                                <input type="text" id="grn" name="grn"  class="span11 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="Enter grn name">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                            <thead class="flip-content ">
+                            <tr class="head-grey">
+                                <th class="numeric" ><i class="icon icon-reorder"></i></th>
+                                <th class="numeric" >SKU</th>
+                                <th class="numeric" >Name</th>
+                                <th class="numeric" >Barcode</th>
+                                <th class="numeric" >Quantity</th>
+                                <th class="numeric" >Purchase Price</th>
+                                <th class="numeric" >Sales Price</th>
+                                <th class="numeric" >Grn/Date</th>
+                                <th class="numeric" >Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for entity in pagination %}
+                                <tr>
+                                    <td><span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
+                                    <td class="numeric" >{{ entity.item.sku }}</td>
+                                    <td class="numeric" >{{ entity.item.name }}</td>
+                                    <td class="numeric" >
+                                        <a class="editable" data-name="Barcode" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product barcode">{{ entity.barcode }}</a>
+                                    </td>
+                                    <td class="numeric" >{{ entity.quantity }}</td>
+                                    <td class="numeric" >{{ entity.purchasePrice }}</td>
+                                    <td class="numeric" >
+                                        <a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product sales price"> {{ entity.salesPrice }}</a>
+                                    </td>
+                                    <td class="numeric" >{{ entity.purchase.grn }}/{{ entity.purchase.receiveDate|date('d-m-Y') }}</td>
+                                    <td class="numeric" >
+                                        <a href="{{ path('inventory_purchaseitem_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                    </td>
+                                </tr>
+                                <tr id="show-{{ entity.id }}" class="showing-overview">
+                                    <td colspan="11">
+                                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                                            <tr>
+                                                <th class="numeric" >Serial No</th>
+                                                <td class="numeric" colspan="5" >{{ entity.serialNo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="numeric" >Assurance Type</th>
+                                                <td class="numeric" >{{ entity.assuranceType }}</td>
+                                                <th class="numeric" >Assurance From Vendor</th>
+                                                <td class="numeric" >{{ entity.assuranceFromVendor }}</td>
+                                                <th class="numeric" >Assurance To Customer</th>
+                                                <td class="numeric" >{{ entity.assuranceToCustomer }}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                        <div class="pagination pull-center"  >
+                            {{ knp_pagination_render(pagination) }}
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    '@InventoryBundle/Resources/public/js/editable.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    ApproveProcess();
+    EditableInit();
+{% endblock %}
+
+
+

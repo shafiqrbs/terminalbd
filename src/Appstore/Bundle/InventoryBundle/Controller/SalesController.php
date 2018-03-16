@@ -477,6 +477,22 @@ class SalesController extends Controller
     }
 
     /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
+    public function itemSerialNoUpdateAction(SalesItem  $salesItem, $serial)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $salesItem->setSerialNo($serial);
+        $salesItem->setAssuranceType($salesItem->getPurchaseItem()->getAssuranceType());
+        $salesItem->setAssuranceFromVendor($salesItem->getPurchaseItem()->getAssuranceFromVendor());
+        $salesItem->setAssuranceToCustomer($salesItem->getPurchaseItem()->getAssuranceToCustomer());
+        $salesItem->setExpiredDate($salesItem->getPurchaseItem()->getExpiredDate());
+        $em->flush();
+        exit;
+    }
+
+    /**
      * Deletes a SalesItem entity.
      *
      */
@@ -487,7 +503,6 @@ class SalesController extends Controller
         if (!$salesItem) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
-
         $em->remove($entity);
         $em->flush();
         $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);

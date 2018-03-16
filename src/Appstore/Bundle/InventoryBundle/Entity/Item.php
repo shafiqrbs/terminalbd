@@ -38,10 +38,6 @@ class Item
      **/
     private  $inventoryConfig;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItemAttribute", mappedBy="item" , cascade={"remove"} )
-     **/
-    private  $purchaseItemAttributes;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="items" )
@@ -1019,15 +1015,6 @@ class Item
         }
        return $this->getSku().'-'.$this->getMasterItem()->getName().'-'.$this->getRemainingQuantity().' '.$unit;
     }
-
-    /**
-     * @return PurchaseItemAttribute
-     */
-    public function getPurchaseItemAttributes()
-    {
-        return $this->purchaseItemAttributes;
-    }
-
 
 }
 
