@@ -97,6 +97,13 @@ class Item
      */
     private $sku;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="barcode", type="string", length=255,nullable = true)
+     */
+    private $barcode;
+
     /**
      * @var string
      *
@@ -1014,6 +1021,22 @@ class Item
             $unit = $this->getMasterItem()->getProductUnit()->getName();
         }
        return $this->getSku().'-'.$this->getMasterItem()->getName().'-'.$this->getRemainingQuantity().' '.$unit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBarcode()
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param string $barcode
+     */
+    public function setBarcode($barcode)
+    {
+        $this->barcode = $barcode;
     }
 
 }
