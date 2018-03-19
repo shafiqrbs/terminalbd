@@ -480,10 +480,8 @@ class Builder extends ContainerAware
             $deliveryProcess = $inventory->getDeliveryProcess();
             if (!empty($deliveryProcess)) {
 
-                if (in_array('Pos', $deliveryProcess)) {
-
+                if ('pos' == $deliveryProcess) {
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_POS')){
-
                         $menu['Sales']->addChild('Point of Sales')
                             ->setAttribute('icon', 'fa fa-shopping-basket')
                             ->setAttribute('dropdown', true);
@@ -495,21 +493,18 @@ class Builder extends ContainerAware
                         $menu['Sales']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
                     }
                 }
-
-                if (in_array('OnlineSales', $deliveryProcess)) {
-
+                if ('customer-base-sales' == $deliveryProcess) {
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')){
                         $menu['Sales']
-                            ->addChild('Online Sales')
+                            ->addChild('Customer base Sales')
                             ->setAttribute('icon', 'icon icon-truck')
                             ->setAttribute('dropdown', true);
-                        $menu['Sales']['Online Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
-                        $menu['Sales']['Online Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
+                        $menu['Sales']['Customer base Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
+                        $menu['Sales']['Customer base Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
                     }
 
                 }
-
-                if (in_array('GeneralSales', $deliveryProcess)) {
+                if ('general-sales' == $deliveryProcess) {
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_GENERAL')){
                         $menu['Sales']
                             ->addChild('General Sales')
@@ -523,8 +518,7 @@ class Builder extends ContainerAware
                         $menu['Sales']['General Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
                     }
                 }
-
-                if (in_array('ManualSales', $deliveryProcess)) {
+                if ('manual-sales' == $deliveryProcess) {
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_MANUAL')){
                         $menu['Sales']
                             ->addChild('Manual Sales')
@@ -539,7 +533,7 @@ class Builder extends ContainerAware
                     }
                 }
 
-                if (in_array('Order', $deliveryProcess)) {
+                if ('order' == $deliveryProcess) {
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ORDER')){
                         $menu['Sales']
                             ->addChild('Online Order')

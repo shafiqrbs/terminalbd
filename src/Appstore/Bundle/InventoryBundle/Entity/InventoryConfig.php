@@ -199,9 +199,9 @@ class InventoryConfig
 
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="deliveryProcess", type="array", nullable=true )
+     * @ORM\Column(name="deliveryProcess", type="string", nullable=true )
      */
     private $deliveryProcess;
 
@@ -682,21 +682,6 @@ class InventoryConfig
         $this->isBrand = $isBrand;
     }
 
-    /**
-     * @return array
-     */
-    public function getDeliveryProcess()
-    {
-        return $this->deliveryProcess;
-    }
-
-    /**
-     * @param array $deliveryProcess
-     */
-    public function setDeliveryProcess($deliveryProcess)
-    {
-        $this->deliveryProcess = $deliveryProcess;
-    }
 
     /**
      * @return Damage
@@ -1196,6 +1181,22 @@ class InventoryConfig
     public function setIsAttribute($isAttribute)
     {
         $this->isAttribute = $isAttribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeliveryProcess()
+    {
+        return $this->deliveryProcess;
+    }
+
+    /**
+     * @param string $deliveryProcess
+     */
+    public function setDeliveryProcess($deliveryProcess)
+    {
+        $this->deliveryProcess = $deliveryProcess;
     }
 
 

@@ -25,18 +25,16 @@ class InventoryConfigType extends AbstractType
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span4')))
             ->add('deliveryProcess',
                 'choice', array(
-                'attr'=>array('class'=>'check-list  span12'),
+                'attr'=>array('class'=>'m-wrap  span12'),
                 'choices' => array(
-                    'Pos'           => 'Point of Sales(POS)',
-                    'OnlineSales'   => 'Online Sales',
-                    'GeneralSales'  => 'General Sales',
-                    'ManualSales'   => 'Manual Sales',
-                    'Order'         => 'Online Order',
-                    'BranchInvoice' => 'Branch Invoice',
+                    '' => '--Select Sales Mode--',
+                    'pos'           => 'Point of Sales(POS)',
+                    'customer-base-sales'  => 'General base Sales',
+                    'manual-sales'   => 'manual-sales',
                 ),
-                'required'    => true,
-                'multiple'    => true,
-                'expanded'  => true,
+                'required'    => false,
+                'multiple'    => false,
+                'expanded'  => false,
                 'empty_data'  => null,
             ))
             ->add('printer',
