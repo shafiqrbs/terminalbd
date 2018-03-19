@@ -257,28 +257,35 @@ var InventorySales = function(sales) {
     });
 
 
-   $('#salesItem').on("click", ".delete", function() {
+    $(document).on("click", ".delete", function() {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("id");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                obj = JSON.parse(response);
-                if ('success' == obj['success']) {
-                    $('#remove-' + id).hide();
-                    $('.salesTotal').html(obj['salesTotal']);
-                    $('#subTotal').val(obj['salesSubTotal']);
-                    $('#vat').val(obj['salesVat']);
-                    $('#paymentTotal').val(obj['salesTotal']);
-                    $('#paymentSubTotal').val(obj['salesTotal']);
-                    $('#dueAmount').val(obj['salesTotal']);
-                }
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        obj = JSON.parse(response);
+                        if ('success' == obj['success']) {
+                            $('#remove-' + id).hide();
+                            $('.salesTotal').html(obj['salesTotal']);
+                            $('#subTotal').val(obj['salesSubTotal']);
+                            $('#vat').val(obj['salesVat']);
+                            $('#paymentTotal').val(obj['salesTotal']);
+                            $('#paymentSubTotal').val(obj['salesTotal']);
+                            $('#dueAmount').val(obj['salesTotal']);
+                        }
 
 
-            },
-        })
+                    },
+                })
+            }
+        });
+
     });
 
     $(document).on('change', '#discount', function() {
@@ -352,21 +359,6 @@ var InventorySales = function(sales) {
 
     });
 
-    $('#sales').on("click", ".delete", function() {
-
-        var url = $(this).attr("rel");
-        var id = $(this).attr("id");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                obj = JSON.parse(response);
-                if ('success' == obj['success']) {
-                    $('#salesRemove-' + id).hide();
-                }
-            }
-        })
-    });
 
     $(".select2Item").select2({
 

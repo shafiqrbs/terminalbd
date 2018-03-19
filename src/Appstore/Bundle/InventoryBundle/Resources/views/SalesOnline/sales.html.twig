@@ -132,9 +132,11 @@
                                             <tr class="head-blue">
                                                 <th class="numeric" >S/N</th>
                                                 <th class="numeric span3">Barcode</th>
-                                                <th  class="numeric span2">Qnt</th>
+                                                {% if entity.inventoryConfig.isAttribute == 1 %}
                                                 <th  class="numeric span2">Serial no</th>
-                                                <th>Price</th>
+                                                {% endif %}
+                                                <th  class="numeric span1">Quantity</th>
+                                                <th class="numeric span2">Price</th>
                                                 <th>Total</th>
                                                 <th><i class="icon-trash"></i></th>
                                             </tr>
@@ -147,6 +149,7 @@
                                                         {{ salesitem.purchaseItem.barcode }}<br/>
                                                         <span>{{ salesitem.item.name }}</span>
                                                     </td>
+                                                    {% if entity.inventoryConfig.isAttribute == 1 %}
                                                     <td class="span2" >
                                                         {% if salesitem.purchaseItem.serialNo is not empty %}
                                                             <select class="m-wrap span12" name="serialNo" id="serialNo" >
@@ -157,12 +160,18 @@
                                                             </select>
                                                         {% endif %}
                                                     </td>
-                                                    <td class=" span2" >
+                                                    {% endif %}
+                                                    <td class=" span1" >
                                                         <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span12 quantity" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
                                                     </td>
-
-                                                    <td>{{ salesitem.salesPrice }}
-                                                        <input class="m-wrap salesPrice"  readonly="readonly"  rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="hidden" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
+                                                    <td>
+                                                        <div class="input-prepend">
+                                                                    <span class="add-on add-on-box">
+                                                                        <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
+                                                                        <input type="checkbox" {% if salesitem.customPrice == 1 and salesitem.salesPrice != salesitem.estimatePrice %} checked="checked" {% endif %} name="customPrice" rel="{{ salesitem.id }}" id="customPrice-{{ salesitem.id }}" class="customPrice" value="1" >
+                                                                    </span>
+                                                            <input class="m-wrap span8 numeric salesPrice" {% if salesitem.customPrice != 1 and salesitem.salesPrice == salesitem.estimatePrice %} readonly="readonly" {% endif %} rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
+                                                        </div>
                                                     </td>
                                                     <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
                                                     <td>
@@ -483,7 +492,6 @@
 
         .input-append .add-on, .input-prepend .add-on, .input-prepend .add-on-custom{
             font-weight: bold;
-            height: 23px !important;
             border: 1px solid #e5e5e5;
         }
         .input-prepend .add-on-custom{
@@ -508,7 +516,6 @@
             border: 5px solid #fff;
             height: 50px !important;
             font-size: 30px;
-            color: #fff;
         }
 
         #barcode-box {
@@ -571,7 +578,6 @@
     '@InventoryBundle/Resources/public/js/posprint.js'
     '@InventoryBundle/Resources/public/js/editable.js'
     '@InventoryBundle/Resources/public/js/sales.js'
-    '@InventoryBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -580,5 +586,4 @@
     {{ parent() }}
     InventorySales({{ entity.id ? entity.id : 0 }});
     EditableInit();
-    ApproveProcess();
 {% endblock %}

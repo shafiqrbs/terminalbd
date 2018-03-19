@@ -339,6 +339,13 @@ class InventoryConfig
      */
     private $barcodeSize;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isAttribute", type="boolean",  nullable=true)
+     */
+    private $isAttribute = false;
+
 
     /**
      * @var smallint
@@ -1173,6 +1180,22 @@ class InventoryConfig
     public function setInvoicePrintLogo($invoicePrintLogo)
     {
         $this->invoicePrintLogo = $invoicePrintLogo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttribute()
+    {
+        return $this->isAttribute;
+    }
+
+    /**
+     * @param bool $isAttribute
+     */
+    public function setIsAttribute($isAttribute)
+    {
+        $this->isAttribute = $isAttribute;
     }
 
 

@@ -100,6 +100,7 @@
                                     <th class="numeric" >Date</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
+                                    <th class="numeric" >Due</th>
                                     <th class="numeric" >Customer</th>
                                     {% if inventoryConfig.isBranch == 1 %}<td class="numeric">Branch</td>{% endif %}
                                     <th class="numeric" >Process</th>
@@ -113,6 +114,7 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <th class="numeric" >{{ entity.total|number_format  }}</th>
                                         <th class="numeric" >{{ entity.payment|number_format }}</th>
+                                        <th class="numeric" >{{ entity.due|number_format }}</th>
                                         <td class="numeric" >{% if entity.customer %}<a href="{{ path('inventory_customer_show',{'id':entity.customer.id}) }}" target="_blank"  class="btn mini blue">{{ entity.customer.mobile }}</a>{% endif %}</td>
                                         {% if inventoryConfig.isBranch == 1 %}<td class="numeric">{% if entity.branches is not empty %}{{ entity.branches.name }} {% else %}Central{% endif %}</td>{% endif %}
                                         <td class="numeric"> {{ entity.process|capitalize }}</td>
@@ -133,7 +135,7 @@
                                             {% endif %}
                                             {% if entity.paymentStatus == "Due" and entity.process != "Returned" %}
                                                 {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_MANAGER") or app.user.granted("ROLE_DOMAIN_INVENTORY"))  %}
-                                                    <a href="{{ path('account_sales_due',{'id':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                                    <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                                 {% endif %}
                                             {% endif %}
 

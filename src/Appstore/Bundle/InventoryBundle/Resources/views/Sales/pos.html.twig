@@ -144,8 +144,11 @@
                                                     <tr class="head-blue">
                                                         <th class="numeric" >S/N</th>
                                                         <th class="numeric span3">Barcode</th>
-                                                        <th  class="numeric span2">Qnt</th>
-                                                        <th>Price</th>
+                                                        {% if entity.inventoryConfig.isAttribute == 1 %}
+                                                            <th  class="numeric span2">Serial no</th>
+                                                        {% endif %}
+                                                        <th  class="numeric span1">Quantity</th>
+                                                        <th class="numeric span2">Price</th>
                                                         <th>Total</th>
                                                         <th><i class="icon-trash"></i></th>
                                                     </tr>
@@ -159,10 +162,24 @@
                                                                 <span>{{ salesitem.item.name }}
                                                                 </span>
                                                             </td>
-                                                            <td class="numeric" ><input type="number" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span10 quantity" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}"></td>
+                                                            {% if entity.inventoryConfig.isAttribute == 1 %}
+                                                                <td class="span2" >
+                                                                    {% if salesitem.purchaseItem.serialNo is not empty %}
+                                                                        <select class="m-wrap span12" name="serialNo" id="serialNo" >
+                                                                            <option>--Serial no--</option>
+                                                                            {% for serial in  salesitem.purchaseItem.serialNo|split(',') %}
+                                                                                <option {% if salesitem.serialNo == serial %} selected="selected" {% endif %} value="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id,'serial':serial}) }}" >{{ serial }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    {% endif %}
+                                                                </td>
+                                                            {% endif %}
+                                                            <td class=" span1" >
+                                                                <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span12 quantity" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
+                                                            </td>
                                                             <td>
                                                                 <div class="input-prepend">
-                                                                    <span class="add-on">
+                                                                    <span class="add-on add-on-box">
                                                                         <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
                                                                         <input type="checkbox" {% if salesitem.customPrice == 1 and salesitem.salesPrice != salesitem.estimatePrice %} checked="checked" {% endif %} name="customPrice" rel="{{ salesitem.id }}" id="customPrice-{{ salesitem.id }}" class="customPrice" value="1" >
                                                                     </span>

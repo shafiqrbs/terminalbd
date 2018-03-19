@@ -122,8 +122,15 @@ input[class*="span"].m-wrap {
 .select2{
     margin-left: 0!important;
 }
+
 .input-append .add-on, .input-prepend input[class*="numeric"]{
     font-size: 13px!important;
+}
+.add-on-box{
+    padding-bottom: 6px!important;
+    background-color: #666!important;
+    margin-top: 1px;
+    padding-left: 10px!important;
 }
 .input-append .add-on, .input-prepend .add-on{
     display: inline-block;

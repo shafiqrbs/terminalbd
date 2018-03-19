@@ -216,10 +216,27 @@ class SalesItemRepository extends EntityRepository
 
     public function getSalesItems($sales , $device = '' )
     {
+        $isAttribute = $sales->getInventoryConfig()->isAttribute();
         $entities = $sales->getSalesItems();
+
         $data = '';
         $i = 1;
+        /* @var $entity SalesItem */
+
         foreach( $entities as $entity){
+
+            $option = '';
+            if(!empty($entity->getPurchaseItem()->getSerialNo())){
+                $serials = explode(",",$entity->getPurchaseItem()->getSerialNo());
+                $option .="<select id='serialNo' name='serialNo'>";
+                $option .="<option>--Serial no--</option>";
+                foreach ($serials as $serial){
+                    $selected = $serial == $entity->getSerialNo() ? 'selected=selected':'';
+                    $option.="<option ".$selected." value='/inventory/sales/".$entity->getId().'/'.$serial."/update-serial-no'>{$serial}</option>";
+                }
+                $option .="</select>";
+            }
+
             if ($entity->isCustomPrice() == 1 and $entity->getSalesPrice() != $entity->getEstimatePrice()){
                 $checked = 'checked="checked"';
             } else{
@@ -236,6 +253,8 @@ class SalesItemRepository extends EntityRepository
                 $unit = '';
             }
 
+
+
             $itemName = $entity->getItem()->getName();
             if($device == 'mobile'){
 
@@ -250,26 +269,28 @@ class SalesItemRepository extends EntityRepository
                      </td>';
                 $data .='</tr>';
 
-            }else{
+            }else {
 
-                $data .=' <tr id="remove-'.$entity->getId().'">';
-                $data .='<td class="numeric" >'.$i.'</td>';
-                $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode();
-                $data .='</br><span>'.$itemName.'</span>';
+                $data .= '<tr id="remove-' . $entity->getId() . '">';
+                $data .= '<td class="numeric" >' . $i . '</td>';
+                $data .= '<td class="numeric" >' . $entity->getPurchaseItem()->getBarcode();
+                $data .= '</br><span>' . $itemName . '</span>';
+                $data .= '</td>';
+                if ($isAttribute == 1){
+                    $data .= '<td class="numeric" >'.$option.'</td>';
+                }
+                $data .='<td class="numeric" >';
+                $data .='<input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span12 quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'">';
                 $data .='</td>';
-                $data .='<td class=" span3" ><div class="input-append">';
-                $data .='<input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span6 quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'">';
-                $data .='<span class="add-on">'.$unit.'</span>';
-                $data .='</div></td>';
-                $data .='<td class=" span3" ><div class="input-prepend">';
-                $data .='<span class="add-on">';
+                $data .='<td class="" ><div class="input-prepend">';
+                $data .='<span class="add-on add-on-box">';
                 $data .='<input type="hidden" name="estimatePrice" id="estimatePrice-'.$entity->getId().'" value="'.$entity->getEstimatePrice().'">';
                 $data .='<input type="checkbox"  class="customPrice" value="1"  '. $checked .' rel="'.$entity->getId().'" id="customPrice-'.$entity->getId().'">';
                 $data .='</span>';
-                $data .='<input class="m-wrap span8 salesPrice"  '.$readonly.' rel="'.$entity->getId().'" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
+                $data .='<input class="m-wrap span6 salesPrice"  '.$readonly.' rel="'.$entity->getId().'" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
                 $data .='</div></td>';
-                $data .='<td class="" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
-                $data .='<td class="" >
+                $data .='<td class="numeric" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
+                $data .='<td class="numeric" >
                      <a id="'.$entity->getId().'" title="Are you sure went to delete ?" rel="/inventory/sales/'.$entity->getSales()->getId().'/'.$entity->getId().'/delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';
                 $data .='</tr>';
@@ -282,6 +303,34 @@ class SalesItemRepository extends EntityRepository
     }
 
     public function getManualSalesItems(Sales $sales)
+    {
+        $entities = $sales->getSalesItems();
+        $data = '';
+        $i = 1;
+        /* @var $entity SalesItem */
+        foreach( $entities as $entity){
+
+            if (!empty($entity->getItem()->getMasterItem()) and !empty($entity->getItem()->getMasterItem()->getProductUnit())){
+                $unit = $entity->getItem()->getMasterItem()->getProductUnit()->getName();
+            } else{
+                $unit = '';
+            }
+            $itemName = $entity->getItem()->getName();
+            $data .='<tr id="remove-'.$entity->getId().'">';
+            $data .='<td class="numeric" >'.$i.'</td>';
+            $data .='<td class="numeric" >'.$itemName.'</td>';
+            $data .='<td class="numeric" >'.$entity->getSalesPrice().'</td>';
+            $data .='<td class="numeric" >'.$entity->getQuantity().'</td>';
+            $data .='<td class="numeric" >'.$unit.'</td>';
+            $data .='<td class="" >'.$entity->getSubTotal().'</td>';
+            $data .='<td class="" ><a id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/inventory/sales-manual/'.$entity->getSales()->getId().'/'.$entity->getId().'/manual-item-delete" href="javascript:" class="btn red mini remove" ><i class="icon-trash"></i></a></td>';
+            $data .='</tr>';
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getOnlineSalesItems(Sales $sales)
     {
         $entities = $sales->getSalesItems();
         $data = '';

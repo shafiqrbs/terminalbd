@@ -66,9 +66,8 @@ class InventoryConfigType extends AbstractType
                     'expanded'  => false,
                     'empty_data'  => null,
             ))
-
-
             ->add('vatEnable')
+            ->add('isAttribute')
             ->add('isBranch')
             ->add('isColor')
             ->add('isSize')
