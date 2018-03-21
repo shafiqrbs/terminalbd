@@ -74,27 +74,12 @@ class AppModule
     /**
      * @var string
      *
-     * @ORM\Column(name="designation", type="string", length=255)
-     */
-    private $designation;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="companyName", type="string", length=255)
-     */
-    private $companyName;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="moduleClass", type="string", length=255)
+     * @ORM\Column(name="moduleClass", type="string", length=255, nullable=true)
      */
     private $moduleClass;
 
     /**
-     * @Gedmo\Slug(fields={"name"})
+     * @Gedmo\Slug(fields={"moduleClass"})
      * @ORM\Column(length=255, unique=true)
      */
     private $slug;
@@ -405,36 +390,14 @@ class AppModule
         $this->file = null;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getDesignation()
-    {
-        return $this->designation;
-    }
+
 
     /**
-     * @param mixed $designation
+     * @return ApplicationTestimonial
      */
-    public function setDesignation($designation)
+    public function getApplicationTestimonial()
     {
-        $this->designation = $designation;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCompanyName()
-    {
-        return $this->companyName;
-    }
-
-    /**
-     * @param string $companyName
-     */
-    public function setCompanyName($companyName)
-    {
-        $this->companyName = $companyName;
+        return $this->applicationTestimonial;
     }
 }
 

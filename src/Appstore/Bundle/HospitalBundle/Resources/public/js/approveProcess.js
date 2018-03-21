@@ -179,7 +179,7 @@ $(".select2Medicine").select2({
     placeholder: "Search medicine name",
     ajax: {
 
-        url: Routing.generate('medicine_search'),
+        url: Routing.generate('medicine_select_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {

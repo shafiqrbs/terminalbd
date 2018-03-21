@@ -142,6 +142,11 @@ class AccountBank
      */
     protected $dmsPurchases;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="accountBank" )
+     */
+    protected $medicinePurchases;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="accountBank" )
      */

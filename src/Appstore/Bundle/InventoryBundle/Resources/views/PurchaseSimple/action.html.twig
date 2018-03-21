@@ -12,7 +12,7 @@
     {% endif %}
 {% endif %}
 {% if ( app.user.granted("ROLE_DOMAIN")  and entity.process == 'imported' or app.user.granted("ROLE_DOMAIN_INVENTORY_APPROVAL")  and entity.process == 'imported' or app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'imported' )  %}
-    <a href="{{ path('pinventory_purchasesimple_edit_approve', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-eye-open"></i> Upadte & Approve</a>
+    <a href="{{ path('inventory_purchasesimple_edit_approve', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-eye-open"></i> Upadte & Approve</a>
     <a  title="Are you sure went to delete ?" href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('inventory_purchasesimple_delete', { 'id': entity.id }) }}" class="btn red mini delete approved-{{ entity.id }}" ><i class="icon-trash"></i></a>
 {% endif %}
 {% if entity.process == 'approved' %}

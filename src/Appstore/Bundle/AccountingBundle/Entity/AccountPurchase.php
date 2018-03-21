@@ -8,6 +8,8 @@ use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
@@ -79,6 +81,17 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsVendor", inversedBy="accountPurchases" )
          **/
         private  $dmsVendor;
+
+        /**
+         * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", inversedBy="accountPurchase" )
+         * @ORM\JoinColumn(name="medicinePurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+         **/
+        private  $medicinePurchase;
+
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="accountPurchases" )
+         **/
+        private  $medicineVendor;
 
 
         /**
@@ -719,6 +732,38 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setDmsVendor($dmsVendor)
         {
             $this->dmsVendor = $dmsVendor;
+        }
+
+        /**
+         * @return MedicinePurchase
+         */
+        public function getMedicinePurchase()
+        {
+            return $this->medicinePurchase;
+        }
+
+        /**
+         * @param MedicinePurchase $medicinePurchase
+         */
+        public function setMedicinePurchase($medicinePurchase)
+        {
+            $this->medicinePurchase = $medicinePurchase;
+        }
+
+        /**
+         * @return MedicineVendor
+         */
+        public function getMedicineVendor()
+        {
+            return $this->medicineVendor;
+        }
+
+        /**
+         * @param MedicineVendor $medicineVendor
+         */
+        public function setMedicineVendor($medicineVendor)
+        {
+            $this->medicineVendor = $medicineVendor;
         }
 
     }

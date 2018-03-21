@@ -18,6 +18,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Core\UserBundle\Entity\User;
@@ -599,12 +600,20 @@ class GlobalOption
     private $businessConfig;
 
 
-     /*================================= OFFICE BUNDLE===========================================*/
+    /*================================= PRESCRIPTION BUNDLE===========================================*/
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $dpsConfig;
+
+
+     /*================================= MEDICINE BUNDLE===========================================*/
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $medicineConfig;
 
 
     /**
@@ -1710,6 +1719,14 @@ class GlobalOption
     public function getDpsConfig()
     {
         return $this->dpsConfig;
+    }
+
+    /**
+     * @return MedicineConfig
+     */
+    public function getMedicineConfig()
+    {
+        return $this->medicineConfig;
     }
 
 

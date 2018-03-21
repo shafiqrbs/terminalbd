@@ -707,6 +707,22 @@ class User extends BaseUser
     protected $restaurantPurchasesApprovedBy;
 
 
+    /*=========================== MEDICINE BUNDLE ====================================*/
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $medicinePurchase;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $medicinePurchasesApprovedBy;
+
+
+    /*=========================== BUSINESS BUNDLE ====================================*/
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
      */

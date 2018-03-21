@@ -55,7 +55,7 @@ class PurchaseItemType extends AbstractType
                     '4 Year 6 Month' => '4 Year 6 Month',
                     '5 Year' => '5 Year',
                     '5 Year 6 Month' => '5 Year 6 Month',
-                    'Life Time' => 'Life Time',
+                    'Product Life Time' => 'Product Life Time',
                     'Others' => 'Others',
 
                 ),
@@ -77,7 +77,7 @@ class PurchaseItemType extends AbstractType
                     '4 Year 6 Month' => '4 Year 6 Month',
                     '5 Year' => '5 Year',
                     '5 Year 6 Month' => '5 Year 6 Month',
-                    'Life Time' => 'Life Time',
+                    'Product Life Time' => 'Product Life Time',
                     'Others' => 'Others',
                 ),
             ))

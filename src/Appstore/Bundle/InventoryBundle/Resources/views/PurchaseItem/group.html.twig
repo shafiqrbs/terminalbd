@@ -108,7 +108,7 @@
                             {% set assuranceTypes =['Grantee','Warranty','Other'] %}
                             {% set assuranceFromVendors =['1 Month','3 Month','4 Month','6 Month','1 Year',
                             '1 Year 6 Month','2 Year','2 Year 6 Month','3 Year','3 Year 6 Month',
-                            '4 Year','4 Year 6 Month','5 Year','5 Year 6 Month','Life Time','Others'
+                            '4 Year','4 Year 6 Month','5 Year','5 Year 6 Month','Product Life Time','Others'
                             ] %}
                             <form name="purchase-attribute" id="purchase-attribute" method="post" action="{{ path('inventory_purchaseitem_multi_insert',{'purchase':entity.id}) }}">
                             {% for purchaseItem in entity.purchaseItems %}

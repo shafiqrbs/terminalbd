@@ -1,0 +1,9 @@
+medicine_config_manage:
+    path:     /manage
+    defaults: { _controller: "MedicineBundle:MedicineConfig:manage" }
+
+medicine_config_update:
+    path:     /update
+    defaults: { _controller: "MedicineBundle:MedicineConfig:update" }
+    methods:  [POST, PUT]
+

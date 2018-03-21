@@ -6,6 +6,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ContentBundle\Entity\TradeItem;
@@ -57,6 +58,11 @@ class ProductUnit
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $dmsParticulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $medicineStocks;
 
 
     /**
@@ -195,6 +201,14 @@ class ProductUnit
     public function getDmsParticulars()
     {
         return $this->dmsParticulars;
+    }
+
+    /**
+     * @return MedicineStock
+     */
+    public function getMedicineStocks()
+    {
+        return $this->medicineStocks;
     }
 
 

@@ -178,6 +178,7 @@ $(".select2Product").select2({
 });
 
 $( ".select2Medicine" ).autocomplete({
+
     source: function( request, response ) {
         $.ajax( {
             url: Routing.generate('medicine_search'),
@@ -197,6 +198,7 @@ $( ".select2Medicine" ).autocomplete({
 });
 
 $( ".select2Generic" ).autocomplete({
+
     source: function( request, response ) {
         $.ajax( {
             url: Routing.generate('generic_search'),
@@ -290,9 +292,6 @@ $( ".select2MedicineCompany" ).autocomplete({
 
     }
 });
-
-
-
 
 $(".select2CustomerCode" ).autocomplete({
 

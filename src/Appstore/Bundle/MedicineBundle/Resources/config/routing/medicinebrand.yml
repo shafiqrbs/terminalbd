@@ -29,6 +29,12 @@ medicine_delete:
     defaults: { _controller: "MedicineBundle:MedicineCompany:delete" }
     methods:  [POST, DELETE]
 
+medicine_select_search:
+    path:     /select-medicine-search
+    defaults: { _controller: "MedicineBundle:MedicineBrand:selectSearchMedicine" }
+    options:
+            expose: true
+
 medicine_search:
     path:     /medicine-search
     defaults: { _controller: "MedicineBundle:MedicineBrand:autoSearchMedicine" }

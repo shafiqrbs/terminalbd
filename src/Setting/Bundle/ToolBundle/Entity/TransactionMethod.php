@@ -181,6 +181,11 @@ class TransactionMethod
     protected $businessTransactions;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="transactionMethod" )
+     */
+    protected $medicinePurchases;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

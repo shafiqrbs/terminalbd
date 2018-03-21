@@ -14,6 +14,22 @@ medicine_dental_investigation:
     resource: "@MedicineBundle/Resources/config/routing/dentalinvestigation.yml"
     prefix:   /dental-investigation
 
+medicine_medicine_config:
+    resource: "@MedicineBundle/Resources/config/routing/config.yml"
+    prefix:   /config
+
+medicine_medicine_stock:
+    resource: "@MedicineBundle/Resources/config/routing/stock.yml"
+    prefix:   /stock
+
+medicine_medicine_purchase:
+    resource: "@MedicineBundle/Resources/config/routing/purchase.yml"
+    prefix:   /purchase
+
+medicine_medicine_vendor:
+    resource: "@MedicineBundle/Resources/config/routing/vendor.yml"
+    prefix:   /vendor
+
 medicine_homepage:
-    path:     /hello/{name}
+    path:     /
     defaults: { _controller: MedicineBundle:Default:index }

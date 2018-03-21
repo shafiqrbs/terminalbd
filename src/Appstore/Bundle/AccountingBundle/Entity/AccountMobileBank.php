@@ -141,6 +141,7 @@ class AccountMobileBank
      */
     protected $dmsInvoices;
 
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="accountMobileBank" )
      */
@@ -150,6 +151,11 @@ class AccountMobileBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="accountMobileBank" )
      */
     protected $dmsPurchases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="accountMobileBank" )
+     */
+    protected $medicinePurchases;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="accountMobileBank" )

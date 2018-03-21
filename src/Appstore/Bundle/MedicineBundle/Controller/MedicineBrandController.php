@@ -218,8 +218,7 @@ class MedicineBrandController extends Controller
             ->setAction($this->generateUrl('medicine_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
     }
 
 
@@ -234,6 +233,20 @@ class MedicineBrandController extends Controller
             endforeach;
         }
         return new JsonResponse($items);
+
+    }
+
+    public function selectSearchMedicineAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        $items = array();
+        if ($item) {
+            $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
+           /* foreach ($entities as $entity):
+                $items[] = array('id' => $entity['id'], 'value' => $entity['text']);
+            endforeach;*/
+        }
+        return new JsonResponse($entities);
 
     }
 

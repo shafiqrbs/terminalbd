@@ -83,6 +83,13 @@ class Builder extends ContainerAware
                 }
             }
 
+            $result = array_intersect($menuName, array('Miss'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_MEDICINE')){
+                    $menu = $this->medicineMenu($menu);
+                }
+            }
+
             $result = array_intersect($menuName, array('Dps'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_DPS')){
@@ -493,18 +500,18 @@ class Builder extends ContainerAware
                         $menu['Sales']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
                     }
                 }
-                if ('customer-base-sales' == $deliveryProcess) {
+                if ('general-sales' == $deliveryProcess) {
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')){
                         $menu['Sales']
-                            ->addChild('Customer base Sales')
+                            ->addChild('General Sales')
                             ->setAttribute('icon', 'icon icon-truck')
                             ->setAttribute('dropdown', true);
-                        $menu['Sales']['Customer base Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
-                        $menu['Sales']['Customer base Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
+                        $menu['Sales']['General Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
+                        $menu['Sales']['General Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
                     }
 
                 }
-                if ('general-sales' == $deliveryProcess) {
+                if ('general-x-sales' == $deliveryProcess) {
                     if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_GENERAL')){
                         $menu['Sales']
                             ->addChild('General Sales')
@@ -727,7 +734,6 @@ class Builder extends ContainerAware
 
         return $menu;
     }
-
 
     public function AnonymousProductSalesMenu($menu)
     {
@@ -1034,24 +1040,47 @@ class Builder extends ContainerAware
     public function medicineMenu($menu)
     {
         $securityContext = $this->container->get('security.context');
-        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
+        $user = $securityContext->getToken()->getUser();
         $menu
-            ->addChild('Invoice Sms & Email')
-            ->setAttribute('icon', 'fa fa-files-o')
+            ->addChild('Medicine')
+            ->setAttribute('icon', 'icon icon-th-large')
             ->setAttribute('dropdown', true);
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER') OR $securityContext->isGranted('ROLE_DOMAIN_DMS_DOCTOR') OR $securityContext->isGranted('ROLE_DOMAIN_HMS_DOCTOR')) {
-            $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('icon', 'icon-phone')->setAttribute('dropdown', true);
-            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs', array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
-            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
-            $menu['Invoice Sms & Email']->addChild('Invoice Application', array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'fa fa-files-o');
-        }
-        if ($securityContext->isGranted('ROLE_SMS_BULK')) {
-            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Bulk Sms', array('route' => 'smsbulk'))->setAttribute('icon', 'icon-envelope');
-        }
-        if ($securityContext->isGranted('ROLE_SMS_CONFIG')) {
-            $menu['Invoice Sms & Email']['Manage Sms']->addChild('Notification Setup', array('route' => 'domain_notificationconfig'))->setAttribute('icon', 'fa fa-bell ');
+
+        $menu['Medicine']->addChild('Point of Sales ', array('route' => 'restaurant_invoice_new'))
+            ->setAttribute('icon', 'icon-th-large');
+        $menu['Medicine']->addChild('Manage Sales', array('route' => 'restaurant_invoice'))
+            ->setAttribute('icon', 'icon-list');
+        $menu['Medicine']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
+        if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
+            $menu['Medicine']->addChild('Master Data')
+                ->setAttribute('icon', 'icon icon-cog')
+                ->setAttribute('dropdown', true);
+            $menu['Medicine']['Master Data']->addChild('Configuration', array('route' => 'medicine_config_manage'))
+                ->setAttribute('icon', 'icon-cog');
+            $menu['Medicine']->addChild('Manage Stock')
+                ->setAttribute('icon', 'icon icon-truck')
+                ->setAttribute('dropdown', true);
+            $menu['Medicine']['Manage Stock']->addChild('Stock Medicine', array('route' => 'medicine_stock'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Manage Stock']->addChild('Purchase', array('route' => 'medicine_purchase'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Manage Stock']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
+            $menu['Medicine']->addChild('Reports')
+                ->setAttribute('icon', 'icon icon-cog')
+                ->setAttribute('dropdown', true);
+            $menu['Medicine']['Reports']->addChild('Sales Summary', array('route' => 'restaurant_report_sales_summary'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Sales Details', array('route' => 'restaurant_report_sales_details'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Product Wise Sales', array('route' => 'restaurant_report_sales_service'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Stock Wise Sales', array('route' => 'restaurant_report_sales_service'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Stock Summary', array('route' => 'restaurant_report_stock'))
+                ->setAttribute('icon', 'icon-th-list');
         }
         return $menu;
+
     }
 
     public function RestaurantMenu($menu)
@@ -1091,7 +1120,6 @@ class Builder extends ContainerAware
         $menu['Restaurant']['Manage Stock']->addChild('Purchase', array('route' => 'restaurant_purchase'))
             ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Manage Stock']->addChild('Vendor', array('route' => 'restaurant_vendor'))->setAttribute('icon', 'icon-tag');
-
         $menu['Restaurant']->addChild('Reports')
             ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);

@@ -29,8 +29,8 @@ class InventoryConfigType extends AbstractType
                 'choices' => array(
                     '' => '--Select Sales Mode--',
                     'pos'           => 'Point of Sales(POS)',
-                    'customer-base-sales'  => 'General base Sales',
-                    'manual-sales'   => 'manual-sales',
+                    'general-sales'  => 'General Sales',
+                    'manual-sales'   => 'Manual Sales',
                 ),
                 'required'    => false,
                 'multiple'    => false,
