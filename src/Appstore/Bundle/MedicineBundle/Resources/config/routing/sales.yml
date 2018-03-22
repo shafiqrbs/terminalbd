@@ -1,0 +1,67 @@
+medicine_sales:
+    path:     /
+    defaults: { _controller: "MedicineBundle:Sales:index" }
+
+medicine_sales_show:
+    path:     /{id}/show
+    defaults: { _controller: "MedicineBundle:Sales:show" }
+
+medicine_sales_new:
+    path:     /new
+    defaults: { _controller: "MedicineBundle:Sales:new" }
+
+medicine_sales_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "MedicineBundle:Sales:edit" }
+
+medicine_sales_update:
+    path:     /{id}/update
+    defaults: { _controller: "MedicineBundle:Sales:update" }
+    methods:  [POST, PUT]
+
+medicine_sales_status:
+    path:     /{id}/status
+    defaults: { _controller: "MedicineBundle:Sales:edit" }
+
+
+medicine_sales_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "MedicineBundle:Sales:approve" }
+
+medicine_sales_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "MedicineBundle:Sales:delete" }
+
+medicine_sales_stock_search:
+    path:     /{id}/medicine-stock-search
+    defaults: { _controller: "MedicineBundle:Sales:stockSearch" }
+    options:
+            expose: true
+
+
+medicine_sales_item_add:
+    path:     /{invoice}/medicine-add
+    defaults: { _controller: "MedicineBundle:Sales:addMedicine" }
+    methods:  POST
+    options:
+            expose: true
+
+medicine_sales_discount_update:
+    path:     /purchase/dicount-update
+    defaults: { _controller: "MedicineBundle:Sales:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+medicine_sales_approved:
+    path:     /{id}/invoice-approved
+    defaults: { _controller: "MedicineBundle:Sales:approved" }
+
+
+medicine_sales_item_delete:
+    path:     /{invoice}/{id}/sales-item-delete
+    defaults: { _controller: "MedicineBundle:Sales:salesItemDelete" }
+
+medicine_sales_print_invoice:
+    path:     /{id}/print
+    defaults: { _controller: "MedicineBundle:Sales:invoicePrint" }

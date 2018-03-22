@@ -15,7 +15,13 @@ $(document).on("click", ".approve", function() {
     });
 });
 
-
+$(".addCustomer").click(function(){
+    $( ".customer" ).slideToggle( "slow" );
+}).toggle( function() {
+    $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+}, function() {
+    $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+});
 
 $(document).on('change', '.transactionMethod', function() {
 
@@ -34,29 +40,29 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
-$(document).on('change', '#appstore_bundle_dmspurchase_medicineStock', function() {
+$(document).on('change', '#appstore_bundle_salesitem_medicineStock', function() {
 
-    var medicine = $('#appstore_bundle_dmspurchase_medicineStock').val();
+    var medicine = $('#appstore_bundle_salesitem_medicineStock').val();
     $.ajax({
-        url: Routing.generate('medicine_purchase_particular_search',{'id':medicine}),
+        url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#appstore_bundle_dmspurchase_salesPrice').val(obj['salesPrice']);
-            $('#appstore_bundle_dmspurchase_purchasePrice').val(obj['purchasePrice']);
+            $('#appstore_bundle_salesitem_barcode').html(obj['purchaseItems']);
+            $('#appstore_bundle_salesitem_salesPrice').val(obj['salesPrice']);
         }
     })
 
 });
 
-$('#appstore_bundle_dmspurchase_medicineStock').on("select2-selecting", function (e) {
+$('#appstore_bundle_salesitem_medicineStock').on("select2-selecting", function (e) {
     setTimeout(function () {
-        $('#appstore_bundle_dmspurchase_purchasePrice').focus();
+        $('#appstore_bundle_salesitem_barcode').focus();
     }, 2000)
 });
 
 
-$('form#purchaseItemForm').on('keypress', '.input', function (e) {
+$('form#salesItemForm').on('keypress', '.input', function (e) {
 
     if (e.which === 13) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
@@ -68,50 +74,47 @@ $('form#purchaseItemForm').on('keypress', '.input', function (e) {
         }
         switch (this.id) {
 
-            case 'appstore_bundle_dmspurchase_quantity':
+            case 'appstore_bundle_salesitem_quantity':
                 $('#addParticular').focus();
                 break;
             case 'addParticular':
-                $('#appstore_bundle_dmspurchase_medicineStock').select2('open');
+                $('#appstore_bundle_salesitem_medicineStock').select2('open');
                 break;
         }
         return false;
     }
 });
 
-var form = $("#purchaseItemForm").validate({
+var form = $("#salesItemForm").validate({
 
     rules: {
 
-        "appstore_bundle_dmspurchase[medicineStock]": {required: true},
-        "appstore_bundle_dmspurchase[purchasePrice]": {required: true},
-        "appstore_bundle_dmspurchase[salesPrice]": {required: true},
-        "appstore_bundle_dmspurchase[quantity]": {required: true},
-        "appstore_bundle_dmspurchase[expirationDate]": {required: true},
+        "appstore_bundle_salesitem[medicineStock]": {required: true},
+        "appstore_bundle_salesitem[barcode]": {required: true},
+        "appstore_bundle_salesitem[salesPrice]": {required: true},
+        "appstore_bundle_salesitem[quantity]": {required: true},
     },
 
     messages: {
 
-        "appstore_bundle_dmspurchase[medicineStock]":"Enter medicine name",
-        "appstore_bundle_dmspurchase[purchasePrice]":"Enter purchase price",
-        "appstore_bundle_dmspurchase[salesPrice]":"Enter sales price",
-        "appstore_bundle_dmspurchase[quantity]":"Enter medicine quantity",
-        "appstore_bundle_dmspurchase[expirationDate]": "Enter medicine expiration date",
+        "appstore_bundle_salesitem[medicineStock]":"Enter medicine name",
+        "appstore_bundle_salesitem[barcode]":"Select barcode",
+        "appstore_bundle_salesitem[salesPrice]":"Enter sales price",
+        "appstore_bundle_salesitem[quantity]":"Enter medicine quantity",
     },
     tooltip_options: {
-        "appstore_bundle_dmspurchase[medicineStock]": {placement:'top',html:true},
-        "appstore_bundle_dmspurchase[purchasePrice]": {placement:'top',html:true},
-        "appstore_bundle_dmspurchase[salesPrice]": {placement:'top',html:true},
-        "appstore_bundle_dmspurchase[quantity]": {placement:'top',html:true},
-        "appstore_bundle_dmspurchase[expirationDate]": {placement:'top',html:true},
+        "appstore_bundle_salesitem[medicineStock]": {placement:'top',html:true},
+        "appstore_bundle_salesitem[barcode]": {placement:'top',html:true},
+        "appstore_bundle_salesitem[salesPrice]": {placement:'top',html:true},
+        "appstore_bundle_salesitem[quantity]": {placement:'top',html:true},
     },
 
     submitHandler: function(form) {
 
         $.ajax({
-            url         : $('form#purchaseItemForm').attr( 'action' ),
-            type        : $('form#purchaseItemForm').attr( 'method' ),
-            data        : new FormData($('form#purchaseItemForm')[0]),
+            url         : $('form#salesItemForm').attr( 'action' ),
+            type        : $('form#salesItemForm').attr( 'method' ),
+            data        : new FormData($('form#salesItemForm')[0]),
             processData : false,
             contentType : false,
             beforeSend: function() {
@@ -124,7 +127,7 @@ var form = $("#purchaseItemForm").validate({
             },
             success: function(response){
                 obj = JSON.parse(response);
-                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('#invoiceParticulars').html(obj['salesItems']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#vat').val(obj['vat']);
                 $('.grandTotal').html(obj['grandTotal']);
@@ -132,12 +135,9 @@ var form = $("#purchaseItemForm").validate({
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);
                 $('#msg').html(obj['msg']);
-                $('#appstore_bundle_dmspurchase_salesPrice').val('');
-                $('#appstore_bundle_dmspurchase_purchasePrice').val('');
-                $('#appstore_bundle_dmspurchase_expirationDate').val('');
-                $('#appstore_bundle_dmspurchase_quantity').val('');
-                $("#appstore_bundle_dmspurchase_medicineStock").select2().select2("val","");
-                $('#purchaseItemForm')[0].reset();
+                $('#appstore_bundle_salesitem_salesPrice').val('');
+                $('#appstore_bundle_salesitem_quantity').val('');
+                $('#salesItemForm')[0].reset();
             }
         });
     }
@@ -163,8 +163,7 @@ $('#invoiceParticulars').on("click", ".delete", function() {
     })
 });
 
-
-$(document).on('change', '#appstore_bundle_medicine_sales_discount', function() {
+$(document).on('change', '#appstore_bundle_sales_discount', function() {
 
     var discountType = $('#discountType').val();
     var discount = parseInt($('#appstore_bundle_hospitalbundle_invoice_discount').val());
@@ -184,10 +183,10 @@ $(document).on('change', '#appstore_bundle_medicine_sales_discount', function() 
 
 });
 
-$(document).on('change', '#appstore_bundle_medicinepurchase_payment , #appstore_bundle_medicinepurchase_discount', function() {
+$(document).on('change', '#appstore_bundle_sales_payment , #appstore_bundle_sales_discount', function() {
 
-    var payment     = parseInt($('#appstore_bundle_medicinepurchase_payment').val()  != '' ? $('#appstore_bundle_medicinepurchase_payment').val() : 0 );
-    var discount     = parseInt($('#appstore_bundle_medicinepurchase_discount').val()  != '' ? $('#appstore_bundle_medicinepurchase_discount').val() : 0 );
+    var payment     = parseInt($('#appstore_bundle_sales_payment').val()  != '' ? $('#appstore_bundle_sales_payment').val() : 0 );
+    var discount     = parseInt($('#appstore_bundle_sales_discount').val()  != '' ? $('#appstore_bundle_sales_discount').val() : 0 );
     var due =  parseInt($('#due').val());
     var dueAmount = (due-discount-payment);
     if(dueAmount > 0){
@@ -202,7 +201,7 @@ $(document).on('change', '#appstore_bundle_medicinepurchase_payment , #appstore_
 
 
 
-$('form#purchaseForm').on('keypress', '.inputs', function (e) {
+$('form#salesForm').on('keypress', '.inputs', function (e) {
 
     if (e.which === 13) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
@@ -214,7 +213,7 @@ $('form#purchaseForm').on('keypress', '.inputs', function (e) {
             inputs[idx + 1].focus(); //  handles submit buttons
         }
         switch (this.id) {
-                case 'appstore_bundle_medicinepurchase_payment':
+            case 'appstore_bundle_sales_payment':
                 $('#receiveBtn').focus();
                 break;
         }

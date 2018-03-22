@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -74,6 +75,11 @@ class Bank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="bank" )
      */
     protected $restaurantInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="bank" )
+     */
+    protected $medicineSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="bank" )
@@ -178,6 +184,14 @@ class Bank
     public function getDmsInvoices()
     {
         return $this->dmsInvoices;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
     }
 }
 

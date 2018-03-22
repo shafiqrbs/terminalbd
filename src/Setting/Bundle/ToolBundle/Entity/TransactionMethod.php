@@ -18,6 +18,7 @@ use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -184,6 +185,11 @@ class TransactionMethod
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="transactionMethod" )
      */
     protected $medicinePurchases;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="transactionMethod" )
+     */
+    protected $medicineSales;
 
     /**
      * @var string
@@ -454,6 +460,14 @@ class TransactionMethod
     public function getInvoiceModules()
     {
         return $this->invoiceModules;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
     }
 }
 

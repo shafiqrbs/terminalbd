@@ -25,8 +25,8 @@ class VendorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new MedicineVendor();
         $form = $this->createCreateForm($entity);
-        $hospital = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('dmsConfig' => $hospital),array('companyName'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
@@ -40,21 +40,21 @@ class VendorController extends Controller
     public function createAction(Request $request)
     {
         $entity = new MedicineVendor();
-        $hospital = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('dmsConfig' => $hospital),array('companyName'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $hospital = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $entity->setMedicineConfig($hospital);
+            $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $entity->setMedicineConfig($config);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            return $this->redirect($this->generateUrl('dms_vendor', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('medicine_vendor', array('id' => $entity->getId())));
         }
 
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
@@ -74,7 +74,7 @@ class VendorController extends Controller
     private function createCreateForm(MedicineVendor $entity)
     {
         $form = $this->createForm(new VendorType(), $entity, array(
-            'action' => $this->generateUrl('dms_vendor_create'),
+            'action' => $this->generateUrl('medicine_vendor_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -91,8 +91,8 @@ class VendorController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('dmsConfig' => $hospital),array('companyName'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
 
         $entity = $em->getRepository('MedicineBundle:MedicineVendor')->find($id);
 
@@ -120,7 +120,7 @@ class VendorController extends Controller
     private function createEditForm(MedicineVendor $entity)
     {
         $form = $this->createForm(new VendorType(), $entity, array(
-            'action' => $this->generateUrl('dms_vendor_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('medicine_vendor_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -136,8 +136,8 @@ class VendorController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('dmsConfig' => $hospital),array('companyName'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
 
         $entity = $em->getRepository('MedicineBundle:MedicineVendor')->find($id);
 
@@ -153,7 +153,7 @@ class VendorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-            return $this->redirect($this->generateUrl('dms_vendor'));
+            return $this->redirect($this->generateUrl('medicine_vendor'));
         }
 
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
@@ -193,7 +193,7 @@ class VendorController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('dms_vendor'));
+        return $this->redirect($this->generateUrl('medicine_vendor'));
     }
 
 
@@ -221,7 +221,7 @@ class VendorController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('dms_vendor'));
+        return $this->redirect($this->generateUrl('medicine_vendor'));
     }
 
     public function autoSearchAction(Request $request)

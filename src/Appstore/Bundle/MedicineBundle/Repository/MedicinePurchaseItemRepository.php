@@ -56,17 +56,16 @@ class MedicinePurchaseItemRepository extends EntityRepository
         /* @var $entity MedicinePurchaseItem */
 
         foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() .'">';
-            $data .= '<td class="span1" >' . $i . '</td>';
-            $data .= '<td class="span1" >' . $entity->getMedicineStock()->getSku() . '</td>';
+            $data .= '<tr id="remove-'. $entity->getId().'">';
+            $data .= '<td class="span1" >' . $i.'. '.$entity->getBarcode().'</td>';
             $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getExpirationDate()->format('d-m-Y') . '</td>';
             $data .= '<td class="span1" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchasePrice() . '</td>';
             $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getExpirationDate() . '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
-                     <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/dms/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                     <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/medicine/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';
             $data .= '</tr>';
             $i++;

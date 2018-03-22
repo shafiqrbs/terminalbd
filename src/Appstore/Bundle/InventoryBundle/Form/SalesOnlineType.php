@@ -47,7 +47,7 @@ class SalesOnlineType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
+                'attr'=>array('class'=>'span12 m-wrap transactionMethod inputs'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -71,7 +71,7 @@ class SalesOnlineType extends AbstractType
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap inputs'),
                 'empty_value' => '---Sales By---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')

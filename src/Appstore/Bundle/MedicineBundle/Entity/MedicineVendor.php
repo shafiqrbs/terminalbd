@@ -243,23 +243,6 @@ class MedicineVendor
     }
 
 
-    /**
-     * @return mixed
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param mixed $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-
 
     /**
      * @return string

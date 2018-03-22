@@ -519,6 +519,13 @@ class MedicineStock
         return $this->medicinePurchaseItems;
     }
 
+    public function getMedicineStockSkuQuantity(){
+
+        $medicineStockSkuQuantity = $this->getSku().'-'.$this->getName().'-'.$this->getRackNo().'('.$this->getRemainingQuantity().')';
+            return $medicineStockSkuQuantity;
+
+    }
+
 
 }
 

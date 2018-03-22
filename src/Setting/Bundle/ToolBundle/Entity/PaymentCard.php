@@ -4,6 +4,8 @@ namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +50,11 @@ class PaymentCard
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="paymentCard")
      */
     protected $restaurantInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="paymentCard")
+     */
+    protected $medicineSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="paymentCard")
@@ -135,13 +142,6 @@ class PaymentCard
         return $this->sales;
     }
 
-    /**
-     * @return ServiceSales
-     */
-    public function getServiceSales()
-    {
-        return $this->serviceSales;
-    }
 
     /**
      * @return Invoice
@@ -149,6 +149,14 @@ class PaymentCard
     public function getHmsInvoices()
     {
         return $this->hmsInvoices;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
     }
 
 }

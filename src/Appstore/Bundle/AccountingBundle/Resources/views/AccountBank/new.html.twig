@@ -1,10 +1,10 @@
 {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
-        <!-- BEGIN account_bank HEADER-->
+        <!-- BEGIN accountbank HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="account_bank-title">
+                <h3 class="accountbank-title">
                     Bank Account
                 </h3>
                 <ul class="breadcrumb">
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('appsetting_bank') }}">Bank Payment</a>
+                        <a href="{{ path('accountbank') }}">Bank Payment</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Bank Payment new/edit</a></li>
@@ -25,8 +25,8 @@
                 </ul>
             </div>
         </div>
-        <!-- END account_bank HEADER-->
-        <!-- BEGIN account_bank CONTENT-->
+        <!-- END accountbank HEADER-->
+        <!-- BEGIN accountbank CONTENT-->
         <div class="row-fluid">
             <div class="span12">
 
@@ -41,11 +41,11 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('appsetting_bank_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('appsetting_bank') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('accountbank_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('accountbank') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                     {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('appsetting_bank_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('appsetting_bank_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
+                                        <li><a href="{{ path('accountbank_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
+                                        <li><a href="{{ path('accountbank_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
                                     {% endif %}
                                 </ul>
                             </div>
@@ -146,7 +146,7 @@
                                 <div class="pull-right">
                                     <button type="submit" class="btn green"><i class="icon-ok"></i>&nbsp;Save</button>
                                     {% if(entity.id > 0 ) %}
-                                        <a href="{{ path('account_bank_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
+                                        <a href="{{ path('accountbank_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
                                     {% endif %}
                                 </div>
                             </div>

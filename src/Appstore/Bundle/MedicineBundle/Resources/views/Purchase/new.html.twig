@@ -45,19 +45,59 @@
         <div class="portlet-body form">
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
+            <div class="clearfix">&nbsp;</div>
+            {{ form_start(purchaseItem) }}
+            {{ form_row(purchaseItem._token) }}
+            <div class="row-fluid particular-info" >
+                <div class="span5">
+                    {{ form_widget(purchaseItem.medicineStock) }}
+                    {{ form_errors(purchaseItem.medicineStock) }}
+                </div>
+                <div class="span4">
+                    {{ form_widget(purchaseItem.purchasePrice) }}
+                    {{ form_errors(purchaseItem.purchasePrice) }}
+                    {{ form_widget(purchaseItem.salesPrice) }}
+                    {{ form_errors(purchaseItem.salesPrice) }}
+                    {{ form_widget(purchaseItem.expirationDate) }}
+                    {{ form_errors(purchaseItem.expirationDate) }}
+                </div>
+                <div class="span3">
+                    <div class="input-append">
+                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                               <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity">
+                                                        <span class="fa fa-minus"></span>
+                                               </button>
+                                            </span>
+                            {{ form_widget(purchaseItem.quantity) }}
+                            {{ form_errors(purchaseItem.quantity) }}
+                            <span class="input-group-btn">
+                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
+                                                      <span class="fa fa-plus"></span>
+                                              </button>
+                                                <button type="submit" class="btn blue" id="addParticular" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                                         </span>
+                            <input type="hidden" id="particularId" name="particularId" value="">
 
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {{ form_end(purchaseItem) }}
+            <div class="clearfix">&nbsp;</div>
             <div class="row-fluid">
                 <div class="span12" id="particular-table">
                     <table class="table table-bordered table-striped table-condensed table-fixed">
                         <thead>
                         <tr>
-                            <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
-                            <th class="span1">Sku</th>
+                            <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
                             <th class="span3">Name</th>
+                            <th class="span1">Expiration Date</th>
                             <th class="span1">Sales Price</th>
-                            <th class="span1">Receive Price</th>
+                            <th class="span1">Purchase Price</th>
                             <th class="span1">Qnt</th>
-                            <th class="span1">Sub Total</th>
+                            <th class="span1">Purchase Sub-total</th>
                             <th class="span1"><i class="icon-trash"></i></th>
                         </tr>
                         </thead>
@@ -65,9 +105,9 @@
                         {% if entity.purchaseItems is not empty %}
                             {% for item in entity.purchaseItems %}
                                 <tr id="remove-{{ item.id }}">
-                                    <td  class="span1">{{ loop.index }}</td>
-                                    <td  class="span1">{{ item.medicineParticular.particularCode }}</td>
-                                    <td class="span3">{{ item.medicineParticular.name }}</td>
+                                    <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
+                                    <td class="span3">{{ item.medicineStock.name }}</td>
+                                    <td class="span1">{{ item.expirationDate|date('d-m-Y') }}</td>
                                     <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.purchasePrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
@@ -99,7 +139,7 @@
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box purple">
                 <div class="pull-left span3">
-                    <a class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Medicine</a>
+                    <span class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Remark</span>
                 </div>
                 <div class="pull-left span4 msg-hidden" style="display: none">
                     <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
@@ -112,44 +152,7 @@
                 </div>
 
             </div>
-            <div class="clearfix">&nbsp;</div>
-                {{ form_start(purchaseItem) }}
-                {{ form_row(purchaseItem._token) }}
-                <div class="row-fluid particular-info" >
-                    <div class="span5">
-                        {{ form_widget(purchaseItem.medicineStock) }}
-                        {{ form_errors(purchaseItem.medicineStock) }}
-                    </div>
-                    <div class="span4">
-                        <input type="text" class="m-wrap span4" id="purchasePrice" required="required" name="purchasePrice" placeholder="Purchase price" value="" maxlength="8">
-                        <input type="text" class="m-wrap span4" id="salesPrice"  required="required" name="salesPrice" placeholder="Sales price" value="" maxlength="8">
-                        {{ form_widget(purchaseItem.expirationDate) }}
-                        {{ form_errors(purchaseItem.expirationDate) }}
-                    </div>
-                    <div class="span3">
-                        <div class="input-append">
-                            <div class="input-group">
-                                            <span class="input-group-btn">
-                                               <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity">
-                                                        <span class="fa fa-minus"></span>
-                                               </button>
-                                            </span>
-                                <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="10000">
-                                <span class="input-group-btn">
-                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
-                                                      <span class="fa fa-plus"></span>
-                                              </button>
-                                                <button type="submit" class="btn blue" id="addParticular" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
-                                         </span>
-                                <input type="hidden" id="particularId" name="particularId" value="">
 
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                {{ form_end(purchaseItem) }}
-            <div class="clearfix">&nbsp;</div>
             {{ form_start(form) }}
             {{ form_row(form._token) }}
             <div class="clearfix">&nbsp;</div>
@@ -166,30 +169,7 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="firstName"><span class="label">Discount TK.</span> <span class="pull-right sales-right"><input class="numeric span12 m-wrap"  name="discount" id="discount" value="{{ entity.discount }}" autocomplete="off" type="text"></span></label>
-                            </div>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="control-label" for="firstName"><span class="label">Payment TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}
-                                        </span>
-                                </label>
-                                <div class="controls">
-                                {{ form_errors(form.payment) }}
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="control-label" for="firstName"><span class="label" id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="text-align: left; width: 110px"  id="" >{{ entity.due }}</span></label>
+                                <label class="control-label" for="firstName"><span class="label">Discount TK.</span> <span class="pull-right sales-right">{{ form_widget(form.discount) }}</span></label>
                             </div>
                         </div>
                         <!--/span-->
@@ -261,9 +241,30 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-
-
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
+                                <label class="control-label" for="firstName"><span class="label">Payment TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}
+                                        </span>
+                                </label>
+                                <div class="controls">
+                                    {{ form_errors(form.payment) }}
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
                     <div class="clearfix"></div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
+                                <label class="control-label" for="firstName"><span class="label" id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="text-align: left; width: 110px"  id="" >{{ entity.due }}</span></label>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <div class="clearfix"></div>
+
                 </div>
             </div>
             <div class="clearfix">&nbsp;</div>

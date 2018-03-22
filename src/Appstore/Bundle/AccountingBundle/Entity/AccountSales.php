@@ -6,6 +6,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -102,6 +103,12 @@ class AccountSales
      * @ORM\JoinColumn(name="restaurant_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $restaurantInvoice;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="medicine_sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $medicineSales;
 
     /**
      * @var string
@@ -588,6 +595,22 @@ class AccountSales
     public function setDmsInvoices($dmsInvoices)
     {
         $this->dmsInvoices = $dmsInvoices;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
+    }
+
+    /**
+     * @param MedicineSales $medicineSales
+     */
+    public function setMedicineSales($medicineSales)
+    {
+        $this->medicineSales = $medicineSales;
     }
 }
 

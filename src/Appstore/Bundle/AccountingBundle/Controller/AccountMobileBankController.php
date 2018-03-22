@@ -19,7 +19,7 @@ class AccountMobileBankController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
 
@@ -38,7 +38,7 @@ class AccountMobileBankController extends Controller
 
     /**
      * Creates a new AccountMobileBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function createAction(Request $request)
@@ -57,7 +57,7 @@ class AccountMobileBankController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('appsetting_mobile_bank'));
+            return $this->redirect($this->generateUrl('accountmobilebank'));
         }
 
         return $this->render('AccountingBundle:MobileBankAccount:new.html.twig', array(
@@ -77,7 +77,7 @@ class AccountMobileBankController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountMobileBankType($globalOption), $entity, array(
-            'action' => $this->generateUrl('appsetting_mobile_bank_create'),
+            'action' => $this->generateUrl('accountmobilebank_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -89,7 +89,7 @@ class AccountMobileBankController extends Controller
 
     /**
      * Displays a form to create a new AccountMobileBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function newAction()
@@ -105,7 +105,7 @@ class AccountMobileBankController extends Controller
 
     /**
      * Finds and displays a AccountMobileBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function showAction($id)
@@ -125,7 +125,7 @@ class AccountMobileBankController extends Controller
 
     /**
      * Displays a form to edit an existing AccountMobileBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function editAction($id)
@@ -157,7 +157,7 @@ class AccountMobileBankController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountMobileBankType($globalOption), $entity, array(
-            'action' => $this->generateUrl('appsetting_mobile_bank_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('accountmobilebank_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -170,7 +170,7 @@ class AccountMobileBankController extends Controller
 
     /**
      * Edits an existing AccountMobileBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
 
@@ -192,7 +192,7 @@ class AccountMobileBankController extends Controller
             $name = $entity->getMobile().','.$entity->getServiceName();
             $entity->setName($name);
             $em->flush();
-            return $this->redirect($this->generateUrl('appsetting_mobile_bank_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('accountmobilebank_edit', array('id' => $id)));
         }
 
         return $this->render('AccountingBundle:MobileBankAccount:new.html.twig', array(
@@ -203,7 +203,7 @@ class AccountMobileBankController extends Controller
 
     /**
      * Deletes a Expenditure entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function deleteAction(AccountMobileBank $entity)

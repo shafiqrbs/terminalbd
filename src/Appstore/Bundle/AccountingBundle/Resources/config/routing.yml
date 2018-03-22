@@ -50,6 +50,14 @@ accounting_accounthead:
     resource: "@AccountingBundle/Resources/config/routing/accounthead.yml"
     prefix:   /finance/accounthead
 
+accounting_accountbank:
+    resource: "@AccountingBundle/Resources/config/routing/accountbank.yml"
+    prefix:   /finance/bank-account
+
+accounting_accountmobilebank:
+    resource: "@AccountingBundle/Resources/config/routing/accountmobilebank.yml"
+    prefix:   /finance/mobile-bank-account
+
 accounting_account_purchase:
     resource: "@AccountingBundle/Resources/config/routing/accountpurchase.yml"
     prefix:   /finance/purchase

@@ -281,28 +281,28 @@
                                 <div class="row-fluid">
                                     <div class="span12 ">
                                         <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span7 numeric" name="discount" id="discount" value="{{ entity.discount }}" type="text">
+                                            <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span7 numeric inputs" name="discount" id="discount" value="{{ entity.discount }}" type="text">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span7 numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder="">
+                                            <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span7 numeric inputs" type="text" name="paymentAmount" id="paymentAmount" placeholder="">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Delivery Charge</span><input class="m-wrap span7 numeric" type="text" name="deliveryCharge" id="deliveryCharge" placeholder="">
+                                            <span class="add-on add-on-custom span3">Delivery Charge</span><input class="m-wrap span7 numeric inputs" type="text" name="deliveryCharge" id="deliveryCharge" placeholder="">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12 input-append-border">
-                                        <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
-                                        <a href="javascript:" class="pull-right btn green addCustomer"><i class="icon-user"></i></a>
+                                        <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
+                                        <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
                                     </div>
                                 </div>
                                 <div class="row-fluid customer" id="">
@@ -348,9 +348,9 @@
                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
                                         {% if entity.inventoryConfig.onlineSalesPrinter == 'printer' %}
-                                            <button rel=""  type="submit" class="btn blue" name="saveType" value="print" ><i class="icon-print m-icon-white"></i>&nbsp;Print</button>
+                                            <button rel=""  type="submit" id="onlineSalesPos" class="btn blue" name="saveType" value="print" ><i class="icon-print m-icon-white"></i>&nbsp;Print</button>
                                         {% elseif entity.inventoryConfig.onlineSalesPrinter == 'pos'  %}
-                                            <button  rel="{{ path('inventory_salesonline_posprint',{'code':entity.invoice}) }}" name="onlineSalesPos"  type="button" class="btn blue" id="onlineSalesPos"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
+                                            <button   rel="{{ path('inventory_salesonline_posprint',{'code':entity.invoice}) }}" name="onlineSalesPos"  type="button" class="btn blue" id="onlineSalesPos"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
                                         {% else %}
                                             <button type="submit" class="btn blue" name="saveType" value="save" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
                                         {% endif %}
@@ -418,7 +418,7 @@
                                         {% endif %}
                                         {% if dailySales.paymentStatus == "Due" %}
                                         {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_INVENTORY_MANAGER") or app.user.granted("ROLE_DOMAIN_INVENTORY"))  %}
-                                            <a href="{{ path('account_sales_due',{'id':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                            <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                         {% endif %}
                                         {% endif %}
                                     </td>

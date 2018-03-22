@@ -11,6 +11,7 @@ use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -156,6 +157,11 @@ class AccountMobileBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="accountMobileBank" )
      */
     protected $medicinePurchases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="accountMobileBank" )
+     */
+    protected $medicineSales;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="accountMobileBank" )
@@ -522,6 +528,14 @@ class AccountMobileBank
     public function getInvoiceModules()
     {
         return $this->invoiceModules;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
     }
 
 

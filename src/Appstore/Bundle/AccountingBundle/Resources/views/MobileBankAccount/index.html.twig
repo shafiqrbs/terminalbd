@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('appsetting_mobile_bank') }}">Account of Mobile Bank</a>
+                        <a href="{{ path('accountmobilebank') }}">Account of Mobile Bank</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="javascript:">Account of Mobile Bank</a></li>
@@ -41,8 +41,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('appsetting_mobile_bank_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('appsetting_mobile_bank') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('accountmobilebank_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('accountmobilebank') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -73,8 +73,8 @@
                                         <td class="numeric" >{{ entity.authorised }}</td>
                                         <td class="numeric" >{{ entity.accountType }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('appsetting_mobile_bank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>
-                                            <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('appsetting_mobile_bank_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                            <a href="{{ path('accountmobilebank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>
+                                            <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('accountmobilebank_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

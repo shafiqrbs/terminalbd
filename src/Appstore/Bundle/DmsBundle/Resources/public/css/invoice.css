@@ -1,3 +1,6 @@
+.input-number{
+    text-align: center;
+}
 .btn-ajax-loading {
     position:inherit;
 }
@@ -18,6 +21,11 @@
 div.checker {
     border: 3px solid red;
     margin-top: -4px;
+}
+
+.discount-type {
+    height: 20px!important;
+    border: 2px solid red !important;
 }
 
 .btn-show{

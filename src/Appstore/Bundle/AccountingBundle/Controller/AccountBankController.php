@@ -20,7 +20,7 @@ class AccountBankController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG_ACCOUNTING_CONFIG")
      */
 
 
@@ -39,7 +39,7 @@ class AccountBankController extends Controller
 
     /**
      * Creates a new AccountBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function createAction(Request $request)
@@ -58,7 +58,7 @@ class AccountBankController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('appsetting_bank'));
+            return $this->redirect($this->generateUrl('accountbank'));
         }
 
         return $this->render('AccountingBundle:AccountBank:new.html.twig', array(
@@ -78,7 +78,7 @@ class AccountBankController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountBankType($globalOption), $entity, array(
-            'action' => $this->generateUrl('appsetting_bank_create'),
+            'action' => $this->generateUrl('accountbank_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -90,7 +90,7 @@ class AccountBankController extends Controller
 
     /**
      * Displays a form to create a new AccountBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function newAction()
@@ -106,7 +106,7 @@ class AccountBankController extends Controller
 
     /**
      * Finds and displays a AccountBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function showAction($id)
@@ -126,7 +126,7 @@ class AccountBankController extends Controller
 
     /**
      * Displays a form to edit an existing AccountBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function editAction($id)
@@ -158,7 +158,7 @@ class AccountBankController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountBankType($globalOption), $entity, array(
-            'action' => $this->generateUrl('appsetting_bank_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('accountbank_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -171,7 +171,7 @@ class AccountBankController extends Controller
 
     /**
      * Edits an existing AccountBank entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
 
@@ -192,7 +192,7 @@ class AccountBankController extends Controller
             $name = $entity->getBank()->getName().','.$entity->getBranch();
             $entity->setName($name);
             $em->flush();
-            return $this->redirect($this->generateUrl('appsetting_bank_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('accountbank_edit', array('id' => $id)));
         }
 
         return $this->render('AccountingBundle:AccountBank:new.html.twig', array(
@@ -203,7 +203,7 @@ class AccountBankController extends Controller
 
     /**
      * Deletes a Expenditure entity.
-     * @Secure(roles="ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
     public function deleteAction(AccountBank $entity)

@@ -459,8 +459,8 @@ class Builder extends ContainerAware
             $menu['Accounting']->addChild('Master Data', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-building-o')
                 ->setAttribute('dropdown', true);
-            $menu['Accounting']['Master Data']->addChild('Bank Account', array('route' => 'appsetting_bank'));
-            $menu['Accounting']['Master Data']->addChild('Mobile Account', array('route' => 'appsetting_mobile_bank'));
+            $menu['Accounting']['Master Data']->addChild('Bank Account', array('route' => 'accountbank'));
+            $menu['Accounting']['Master Data']->addChild('Mobile Account', array('route' => 'accountmobilebank'));
             $menu['Accounting']['Master Data']->addChild('Account Head', array('route' => 'accounthead'));
 
         }
@@ -1046,9 +1046,9 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon icon-th-large')
             ->setAttribute('dropdown', true);
 
-        $menu['Medicine']->addChild('Point of Sales ', array('route' => 'restaurant_invoice_new'))
+        $menu['Medicine']->addChild('Point of Sales ', array('route' => 'medicine_sales_new'))
             ->setAttribute('icon', 'icon-th-large');
-        $menu['Medicine']->addChild('Manage Sales', array('route' => 'restaurant_invoice'))
+        $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
             ->setAttribute('icon', 'icon-list');
         $menu['Medicine']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
         if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {

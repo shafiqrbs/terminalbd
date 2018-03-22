@@ -32,6 +32,26 @@
 
 var InventorySales = function(sales) {
 
+    $('form#salesForm').on('keypress', '.inputs', function (e) {
+
+        if (e.which === 13) {
+            var inputs = $(this).parents("form").eq(0).find("input,select");
+            var idx = inputs.index(this);
+
+            if (idx == inputs.length - 1) {
+                inputs[0].select()
+            } else {
+                inputs[idx + 1].focus(); //  handles submit buttons
+            }
+            switch (this.id) {
+                case 'mobile':
+                    $('#onlineSalesPos').focus();
+                    break;
+            }
+            return false;
+        }
+    });
+
     $('input[name=barcode]').focus();
 
     $('#item').select2('open');

@@ -38,13 +38,56 @@ class MedicinePurchaseItem
      **/
     private  $medicinePurchase;
 
-
     /**
-     * @var float
+     * @var integer
      *
-     * @ORM\Column(name="quantity", type="float")
+     * @ORM\Column(name="quantity", type="integer",nullable=true)
      */
     private $quantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesQuantity", type="integer",nullable=true)
+     */
+    private $salesQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesReturnQuantity", type="integer",nullable=true)
+     */
+    private $salesReturnQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesReplaceQuantity", type="integer",nullable=true)
+     */
+    private $salesReplaceQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseReturnQuantity", type="integer",nullable=true)
+     */
+    private $purchaseReturnQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="damageQuantity", type="integer",nullable=true)
+     */
+    private $damageQuantity;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="remainingQuantity", type="integer",nullable=true)
+     */
+    private $remainingQuantity;
+
 
     /**
      * @var float
@@ -78,10 +121,10 @@ class MedicinePurchaseItem
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="barcode", type="string",  nullable = true)
-     */
+ * @var string
+ *
+ * @ORM\Column(name="barcode", type="string",  nullable = true)
+ */
     private $barcode;
 
     /**
@@ -276,6 +319,102 @@ class MedicinePurchaseItem
     public function setExpirationDate($expirationDate)
     {
         $this->expirationDate = $expirationDate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesQuantity()
+    {
+        return $this->salesQuantity;
+    }
+
+    /**
+     * @param int $salesQuantity
+     */
+    public function setSalesQuantity($salesQuantity)
+    {
+        $this->salesQuantity = $salesQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesReturnQuantity()
+    {
+        return $this->salesReturnQuantity;
+    }
+
+    /**
+     * @param int $salesReturnQuantity
+     */
+    public function setSalesReturnQuantity($salesReturnQuantity)
+    {
+        $this->salesReturnQuantity = $salesReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesReplaceQuantity()
+    {
+        return $this->salesReplaceQuantity;
+    }
+
+    /**
+     * @param int $salesReplaceQuantity
+     */
+    public function setSalesReplaceQuantity($salesReplaceQuantity)
+    {
+        $this->salesReplaceQuantity = $salesReplaceQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseReturnQuantity()
+    {
+        return $this->purchaseReturnQuantity;
+    }
+
+    /**
+     * @param int $purchaseReturnQuantity
+     */
+    public function setPurchaseReturnQuantity($purchaseReturnQuantity)
+    {
+        $this->purchaseReturnQuantity = $purchaseReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDamageQuantity()
+    {
+        return $this->damageQuantity;
+    }
+
+    /**
+     * @param int $damageQuantity
+     */
+    public function setDamageQuantity($damageQuantity)
+    {
+        $this->damageQuantity = $damageQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRemainingQuantity()
+    {
+        return $this->remainingQuantity;
+    }
+
+    /**
+     * @param int $remainingQuantity
+     */
+    public function setRemainingQuantity($remainingQuantity)
+    {
+        $this->remainingQuantity = $remainingQuantity;
     }
 
 

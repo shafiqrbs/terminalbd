@@ -35,6 +35,21 @@ class MedicineConfig
     private $medicineStock;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="medicineConfig")
+     **/
+    private $medicineSales;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="medicineConfig")
+     **/
+    private $medicinePurchases;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", mappedBy="medicineConfig")
+     **/
+    private $medicineVendors;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="printer", type = "string", length = 50, nullable = true)
@@ -371,6 +386,30 @@ class MedicineConfig
     public function getMedicineStock()
     {
         return $this->medicineStock;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
+    }
+
+    /**
+     * @return MedicinePurchase
+     */
+    public function getMedicinePurchases()
+    {
+        return $this->medicinePurchases;
+    }
+
+    /**
+     * @return MedicineVendor
+     */
+    public function getMedicineVendors()
+    {
+        return $this->medicineVendors;
     }
 
 }

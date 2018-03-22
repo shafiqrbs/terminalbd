@@ -3,9 +3,10 @@
 namespace Appstore\Bundle\MedicineBundle\EventListener;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-class MedicinePurchaseListener
+class MedicineSalesListener
 {
     public function prePersist(LifecycleEventArgs $args)
     {
@@ -17,12 +18,12 @@ class MedicinePurchaseListener
         $entity = $args->getEntity();
 
         // perhaps you only want to act on some "Sales" entity
-        if ($entity instanceof MedicinePurchase) {
+        if ($entity instanceof MedicineSales) {
 
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $entity->setGrn(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
+            $entity->setInvoice(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),5, '0', STR_PAD_LEFT)));
 
         }
     }
@@ -40,7 +41,7 @@ class MedicinePurchaseListener
 
 
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository('MedicineBundle:MedicinePurchase')->createQueryBuilder('s');
+        $qb = $entityManager->getRepository('MedicineBundle:MedicineSales')->createQueryBuilder('s');
 
         $qb
             ->select('MAX(s.code)')

@@ -1,3 +1,6 @@
+.customer{
+    display: none;
+}
 .btn-ajax-loading {
     position:inherit;
 }

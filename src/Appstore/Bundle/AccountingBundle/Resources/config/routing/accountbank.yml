@@ -1,41 +1,41 @@
-account_bank:
+accountbank:
     path:     /
     defaults: { _controller: "AccountingBundle:AccountBank:index" }
 
-account_bank_show:
+accountbank_show:
     path:     /{id}/show
     defaults: { _controller: "AccountingBundle:AccountBank:show" }
 
-account_bank_new:
+accountbank_new:
     path:     /new
     defaults: { _controller: "AccountingBundle:AccountBank:new" }
 
-account_bank_create:
+accountbank_create:
     path:     /create
     defaults: { _controller: "AccountingBundle:AccountBank:create" }
     methods:  POST
 
-account_bank_edit:
+accountbank_edit:
     path:     /{id}/edit
     defaults: { _controller: "AccountingBundle:AccountBank:edit" }
 
-account_bank_update:
+accountbank_update:
     path:     /{id}/update
     defaults: { _controller: "AccountingBundle:AccountBank:update" }
     methods:  [POST, PUT]
 
-account_bank_approve:
+accountbank_approve:
     path:     /{id}/payment-approve
     defaults: { _controller: "AccountingBundle:AccountBank:approve" }
     options:
            expose: true
 
-account_bank_inline:
+accountbank_inline:
     path:     /inline-update
     defaults: { _controller: "AccountingBundle:AccountBank:inlineUpdate" }
 
 
-account_bank_delete:
+accountbank_delete:
     path:     /{id}/delete
     defaults: { _controller: "AccountingBundle:AccountBank:delete" }
     options:

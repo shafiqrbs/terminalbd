@@ -22,6 +22,10 @@ medicine_medicine_stock:
     resource: "@MedicineBundle/Resources/config/routing/stock.yml"
     prefix:   /stock
 
+medicine_medicine_sales:
+    resource: "@MedicineBundle/Resources/config/routing/sales.yml"
+    prefix:   /sales
+
 medicine_medicine_purchase:
     resource: "@MedicineBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase

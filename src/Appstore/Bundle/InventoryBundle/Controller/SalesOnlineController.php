@@ -165,6 +165,7 @@ class SalesOnlineController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
+                'id' => 'salesForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -401,7 +402,7 @@ class SalesOnlineController extends Controller
                 $entity->setVat($vat);
             }
             $entity->setDeliveryCharge($data['deliveryCharge']);
-            $due = $data['dueAmount'] == '' ? 0 :$data['dueAmount'];
+            $due = (float)$data['dueAmount'] == '' ? 0 : $data['dueAmount'];
             $entity->setDue($due);
             $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
@@ -424,17 +425,7 @@ class SalesOnlineController extends Controller
                 $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
                 $entity->setPaymentInWord($amountInWords);
             }
-
             $em->flush();
-
-            if (in_array('OnlineSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
-
-                if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-                    $dispatcher = $this->container->get('event_dispatcher');
-                    $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-                }
-            }
-
             if ($data['saveType'] == 'print' or $entity->getTransactionMethod()->getId() == 4 ) {
 
                 return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));

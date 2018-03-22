@@ -7,6 +7,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -61,6 +62,12 @@ class Customer
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $restaurantInvoice;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="customer")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $medicineSales;
 
 
     /**
@@ -953,6 +960,14 @@ class Customer
     public function setWeight($weight)
     {
         $this->weight = $weight;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
     }
 
 }

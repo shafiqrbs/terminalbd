@@ -1,7 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 
 
 /**
@@ -48,83 +51,25 @@ class MedicineStockRepository extends EntityRepository
         return  $qb;
     }
 
+    public function getPurchaseUpdateQnt(MedicinePurchase $purchase){
 
-    public function getServiceWithParticular($hospital,$services){
+        $em = $this->_em;
+        /** @var MedicinePurchaseItem $purchaseItem */
 
-        $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->select('e.id')
-            ->addSelect('e.name')
-            ->addSelect('e.particularCode')
-            ->addSelect('e.price')
-            ->addSelect('e.minimumPrice')
-            ->addSelect('e.quantity')
-            ->addSelect('s.name as serviceName')
-            ->addSelect('s.code as serviceCode')
-            ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:service)')
-            ->setParameter('service',array_values($services))
-            ->orderBy('e.service','ASC')
-            ->getQuery()->getArrayResult();
-            return  $qb;
+        foreach($purchase->getMedicinePurchaseItems() as $purchaseItem ){
+
+            /** @var  $particular MedicineStock */
+            $particular = $purchaseItem->getMedicineStock();
+            $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
+            $particular->setPurchaseQuantity($qnt);
+            $em->persist($particular);
+            $em->flush();
+
+        }
     }
 
-    public function getMedicineParticular($hospital){
 
-        $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->leftJoin('e.unit','u')
-            ->select('e.id')
-            ->addSelect('e.name')
-            ->addSelect('e.particularCode')
-            ->addSelect('e.price')
-            ->addSelect('e.minimumPrice')
-            ->addSelect('e.quantity')
-            ->addSelect('e.status')
-            ->addSelect('e.salesQuantity')
-            ->addSelect('e.minQuantity')
-            ->addSelect('e.openingQuantity')
-            ->addSelect('u.name as unit')
-            ->addSelect('s.name as serviceName')
-            ->addSelect('s.code as serviceCode')
-            ->addSelect('e.purchasePrice')
-            ->addSelect('e.purchaseQuantity')
-            ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:process)')
-            ->setParameter('process',array_values(array(4)))
-            ->orderBy('e.name','ASC')
-            ->getQuery()->getArrayResult();
-            return  $qb;
-    }
-    public function getAccessoriesParticular($hospital){
-
-        $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->leftJoin('e.unit','u')
-            ->select('e.id')
-            ->addSelect('e.name')
-            ->addSelect('e.particularCode')
-            ->addSelect('e.price')
-            ->addSelect('e.minimumPrice')
-            ->addSelect('e.quantity')
-            ->addSelect('e.status')
-            ->addSelect('e.salesQuantity')
-            ->addSelect('e.minQuantity')
-            ->addSelect('e.openingQuantity')
-            ->addSelect('u.name as unit')
-            ->addSelect('s.name as serviceName')
-            ->addSelect('s.code as serviceCode')
-            ->addSelect('e.purchasePrice')
-            ->addSelect('e.purchaseQuantity')
-            ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:process)')
-            ->setParameter('process',array_values(array(8)))
-            ->orderBy('e.name','ASC')
-            ->getQuery()->getArrayResult();
-            return  $qb;
-    }
-
-    public function findHmsExistingCustomer($hospital, $mobile,$data)
+    public function findMedicineExistingCustomer($hospital, $mobile,$data)
     {
         $em = $this->_em;
 
@@ -145,7 +90,7 @@ class MedicineStockRepository extends EntityRepository
                 $entity->setLocation($location);
             }
             if(!empty($department)){
-                $department = $em->getRepository('MedicineBundle:HmsCategory')->find($department);
+                $department = $em->getRepository('MedicineBundle:MedicineCategory')->find($department);
                 $entity->setDepartment($department);
             }
             $entity->setService($em->getRepository('MedicineBundle:Service')->find(6));
@@ -160,25 +105,6 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
-    public function getPurchaseUpdateQnt(HmsPurchase $purchase){
-
-        $em = $this->_em;
-
-        /** @var HmsPurchaseItem $purchaseItem */
-
-        foreach($purchase->getPurchaseItems() as $purchaseItem ){
-
-            /** @var Particular  $particular */
-
-            $particular = $purchaseItem->getParticular();
-            
-            $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
-            $particular->setPurchaseQuantity($qnt);
-            $em->persist($particular);
-            $em->flush();
-
-        }
-    }
 
     public function insertAccessories(Invoice $invoice){
 
@@ -210,14 +136,10 @@ class MedicineStockRepository extends EntityRepository
 
             /** @var Particular  $particular */
 
-            $particular = $item->getParticular();
-            if( $particular->getService()->getId() == 4 ){
-
-                $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                $particular->setSalesQuantity($qnt);
-                $em->persist($particular);
-                $em->flush();
-            }
+            $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+            $particular->setSalesQuantity($qnt);
+            $em->persist($particular);
+            $em->flush();
         }
     }
 
@@ -243,31 +165,5 @@ class MedicineStockRepository extends EntityRepository
         }
 
     }
-
-    public function groupServiceBy(){
-
-        $pass2 = array();
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :config')->setParameter('config', 1) ;
-        $qb->andWhere('e.service IN(:service)')
-            ->setParameter('service',array_values(array(1,2,3,4)));
-        $qb->orderBy('e.name','ASC');
-        $data = $qb->getQuery()->getResult();
-
-        foreach ($data as $parent => $children){
-
-            foreach($children as $child => $none){
-                $pass2[$parent][$child] = true;
-                $pass2[$child][$parent] = true;
-            }
-        }
-
-    }
-
-
-
-
-
-
 
 }
