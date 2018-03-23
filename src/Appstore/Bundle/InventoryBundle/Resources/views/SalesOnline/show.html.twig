@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Online Sales Invoice # {{ entity.invoice }} {% if inventoryConfig.isBranch == 1 %} - {% if entity.branches is not empty %}{{ entity.branches.name }} {% else %}Central{% endif %} {% endif %}
+                    Customer Base Sales Invoice # {{ entity.invoice }} {% if inventoryConfig.isBranch == 1 %} - {% if entity.branches is not empty %}{{ entity.branches.name }} {% else %}Central{% endif %} {% endif %}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('inventory_salesonline') }}">Online Sales</a>
+                        <a href="{{ path('inventory_salesonline') }}">Customer Base Sales</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Add/Edit sales</a></li>

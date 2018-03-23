@@ -102,4 +102,22 @@ class SalesType extends AbstractType
 
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Appstore\Bundle\InventoryBundle\Entity\Sales'
+        ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'sales';
+    }
+
 }

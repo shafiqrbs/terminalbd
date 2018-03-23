@@ -106,8 +106,9 @@ class SalesOnlineType extends AbstractType
                         ->andWhere("b.globalOption =".$this->globalOption->getId())
                         ->orderBy("b.name", "ASC");
                 }
-            ));
-            $builder->add('customer', new SalesOnlineCustomerType($this->location));
+            ))
+        ;
+            //$builder->add('customer', new SalesOnlineCustomerType($this->location));
 
     }
 
@@ -119,6 +120,14 @@ class SalesOnlineType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'Appstore\Bundle\InventoryBundle\Entity\Sales'
         ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'sales';
     }
 
 }

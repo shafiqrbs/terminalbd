@@ -103,6 +103,8 @@
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Customer</th>
                                     {% if inventoryConfig.isBranch == 1 %}<td class="numeric">Branch</td>{% endif %}
+                                    <th class="numeric" >Sales By</th>
+                                    <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -117,6 +119,8 @@
                                         <th class="numeric" >{{ entity.due|number_format }}</th>
                                         <td class="numeric" >{% if entity.customer %}<a href="{{ path('inventory_customer_show',{'id':entity.customer.id}) }}" target="_blank"  class="btn mini blue">{{ entity.customer.mobile }}</a>{% endif %}</td>
                                         {% if inventoryConfig.isBranch == 1 %}<td class="numeric">{% if entity.branches is not empty %}{{ entity.branches.name }} {% else %}Central{% endif %}</td>{% endif %}
+                                        <td class="numeric"> {{ entity.salesBy }}</td>
+                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric"> {{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
                                             {% if entity.salesItems is defined and  entity.salesItems is not empty  %}

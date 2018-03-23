@@ -30,27 +30,72 @@
     });
 }*/
 
+
+$(".select2Customer").select2({
+
+    ajax: {
+
+        url: Routing.generate('domain_customer_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var customer = $(element).val();
+        $.ajax(Routing.generate('domain_customer_name', { customer : customer}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 2
+});
+
+$('form#salesForm').on('keypress', '.inputs', function (e) {
+
+    if (e.which === 13) {
+        var inputs = $(this).parents("form").eq(0).find("input,select");
+        var idx = inputs.index(this);
+
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        switch (this.id) {
+            case 'mobile':
+                $('#onlineSalesPos').focus();
+                break;
+        }
+        return false;
+    }
+});
+
+
 var InventorySales = function(sales) {
 
-    $('form#salesForm').on('keypress', '.inputs', function (e) {
 
-        if (e.which === 13) {
-            var inputs = $(this).parents("form").eq(0).find("input,select");
-            var idx = inputs.index(this);
-
-            if (idx == inputs.length - 1) {
-                inputs[0].select()
-            } else {
-                inputs[idx + 1].focus(); //  handles submit buttons
-            }
-            switch (this.id) {
-                case 'mobile':
-                    $('#onlineSalesPos').focus();
-                    break;
-            }
-            return false;
-        }
-    });
 
     $('input[name=barcode]').focus();
 
@@ -311,6 +356,11 @@ var InventorySales = function(sales) {
     $(document).on('change', '#discount', function() {
 
         var discount = parseInt($('#discount').val());
+        var total =  parseInt($('#paymentTotal').val());
+        if(discount >= total ){
+            $('#discount').val(0)
+            return false;
+        }
         $.ajax({
             url: Routing.generate('inventory_sales_discount_update'),
             type: 'POST',
@@ -359,6 +409,25 @@ var InventorySales = function(sales) {
         }else{
             $(".paymentBtn").attr("disabled", true);
         }
+
+    });
+
+    $(document).on("click", ".receiveBtn", function() {
+
+        var total =  parseInt($('#paymentTotal').val());
+        if(total === 0 ){
+            alert('Please add sales item');
+            $('input[name=barcode]').focus();
+            return false;
+        }
+
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $('form#salesForm').submit();
+            }
+        });
 
     });
 

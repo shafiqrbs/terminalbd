@@ -136,4 +136,13 @@ class SalesGeneralType extends AbstractType
         ));
     }
 
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'sales';
+    }
+
 }

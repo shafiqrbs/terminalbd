@@ -48,7 +48,7 @@ class SalesOnlineController extends Controller
         $em = $this->getDoctrine()->getManager();
         $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $data = $_REQUEST;
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() , $mode='online', $data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() , $mode='general-sales', $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesOnline:index.html.twig', array(
@@ -82,20 +82,15 @@ class SalesOnlineController extends Controller
 
     public function newAction()
     {
-        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
+
         $em = $this->getDoctrine()->getManager();
         $entity = new Sales();
         $globalOption = $this->getUser()->getGlobalOption();
-
-        $customerEntity = $em->getRepository('DomainUserBundle:Customer')->find($customer);
-        if (!empty($customer) && !empty($customerEntity)) {
-            $entity->setCustomer($customerEntity);
-            $entity->setMobile($customerEntity->getMobile());
-        }
-
+        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
+        $entity->setCustomer($customer);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
-        $entity->setSalesMode('online');
+        $entity->setSalesMode('general-sales');
         $entity->setPaymentStatus('Pending');
         $entity->setInventoryConfig($globalOption->getInventoryConfig());
         $entity->setSalesBy($this->getUser());
@@ -123,9 +118,8 @@ class SalesOnlineController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'online');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'online');
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'general-sales');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'general-sales');
 
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));
@@ -141,7 +135,7 @@ class SalesOnlineController extends Controller
             $theme = 'sales';
         }
 
-        return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
+        return $this->render('InventoryBundle:SalesOnline:sales.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,
             'todaySalesOverview' => $todaySalesOverview,
@@ -317,8 +311,6 @@ class SalesOnlineController extends Controller
      */
     public function showAction(Sales $entity)
     {
-
-
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
 
         if ($inventory->getId() == $entity->getInventoryConfig()->getId()) {
@@ -375,9 +367,8 @@ class SalesOnlineController extends Controller
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
 
             $globalOption = $this->getUser()->getGlobalOption();
-            if (!empty($data['sales_online']['customer']['mobile'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales_online']['customer']['mobile']);
+            if (!empty($data['customerMobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomer($globalOption,$mobile,$data);
                 $entity->setCustomer($customer);
 
@@ -404,7 +395,6 @@ class SalesOnlineController extends Controller
             $entity->setDeliveryCharge($data['deliveryCharge']);
             $due = (float)$data['dueAmount'] == '' ? 0 : $data['dueAmount'];
             $entity->setDue($due);
-            $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
             $entity->setPayment($entity->getTotal() - $entity->getDue());
@@ -415,54 +405,29 @@ class SalesOnlineController extends Controller
             } else if ($entity->getTotal() - $entity->getDue()) {
                 $entity->setPaymentStatus('Due');
             }
-            if (empty($data['sales']['salesBy'])) {
-                $entity->setSalesBy($this->getUser());
+            $entity->setApprovedBy($this->getUser());
+            $entity->setProcess('Done');
+            if ($data['process'] == 'In-progress') {
+                $entity->setProcess('In-progress');
             }
-            if ($entity->getTransactionMethod()->getId() != 4) {
-                $entity->setApprovedBy($this->getUser());
-                $entity->setProcess('Done');
-            } else if ($entity->getTransactionMethod()->getId() == 4) {
-                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-                $entity->setPaymentInWord($amountInWords);
-            }
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+            $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            if ($data['saveType'] == 'print' or $entity->getTransactionMethod()->getId() == 4 ) {
-
-                return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
-
-            } else {
-
+            if ($data['process'] != 'In-progress'){
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
                 $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
                 $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+            }
+            if ($data['process'] == 'print') {
+                return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
+            } else {
                 return $this->redirect($this->generateUrl('inventory_salesonline_new'));
             }
 
         }
-        $user = $this->getUser();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($user , $mode='online');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($user,$mode='online');
 
-        /* Device Detection code desktop or mobile */
-
-        $detect = new MobileDetect();
-
-        if( $detect->isMobile() || $detect->isTablet() ) {
-            $theme = 'm-sales';
-        }else{
-            $theme = 'sales';
-        }
-        $this->get('session')->getFlashBag()->add(
-            'error',"Add item with Customer information must be"
-        );
-        return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
-            'entity' => $entity,
-            'todaySales' => $todaySales,
-            'todaySalesOverview' => $todaySalesOverview,
-            'form' => $editForm->createView(),
-        ));
 
     }
 
