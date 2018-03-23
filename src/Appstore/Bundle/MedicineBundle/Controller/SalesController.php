@@ -56,13 +56,15 @@ class SalesController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entity->setMedicineConfig($config);
         $entity->setCreatedBy($this->getUser());
+        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($this->getUser()->getGlobalOption());
+        $entity->setCustomer($customer);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('medicine_sales_edit', array('id' => $entity->getId())));
 
     }
-
-
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -198,9 +200,9 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $discount = $request->request->get('discount');
-        $purchase = $request->request->get('invoice');
+        $invoice = $request->request->get('invoice');
 
-        $purchase = $em->getRepository('MedicineBundle:MedicineSales')->find($purchase);
+        $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($invoice);
         $total = ($purchase->getSubTotal() - $discount);
         $vat = 0;
         if($total > $discount ){
@@ -223,15 +225,27 @@ class SalesController extends Controller
     public function updateAction(Request $request, MedicineSales $entity)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $globalOption = $this->getUser()->getGlobalOption();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find MedicineSales entity.');
         }
-
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem() , $entity);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
         if ($editForm->isValid()) {
+            if (!empty($data['customerMobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
+                $entity->setCustomer($customer);
+
+            } elseif(!empty($data['mobile'])) {
+
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
+                $entity->setCustomer($customer);
+
+            }
             $entity->setProcess('Done');
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();

@@ -40,24 +40,24 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
-$(document).on('change', '#appstore_bundle_salesitem_medicineStock', function() {
+$(document).on('change', '#salesitem_medicineStock', function() {
 
-    var medicine = $('#appstore_bundle_salesitem_medicineStock').val();
+    var medicine = $('#salesitem_medicineStock').val();
     $.ajax({
         url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#appstore_bundle_salesitem_barcode').html(obj['purchaseItems']);
-            $('#appstore_bundle_salesitem_salesPrice').val(obj['salesPrice']);
+            $('#salesitem_barcode').html(obj['purchaseItems']);
+            $('#salesitem_salesPrice').val(obj['salesPrice']);
         }
     })
 
 });
 
-$('#appstore_bundle_salesitem_medicineStock').on("select2-selecting", function (e) {
+$('#salesitem_medicineStock').on("select2-selecting", function (e) {
     setTimeout(function () {
-        $('#appstore_bundle_salesitem_barcode').focus();
+        $('#salesitem_barcode').focus();
     }, 2000)
 });
 
@@ -74,11 +74,11 @@ $('form#salesItemForm').on('keypress', '.input', function (e) {
         }
         switch (this.id) {
 
-            case 'appstore_bundle_salesitem_quantity':
+            case 'salesitem_quantity':
                 $('#addParticular').focus();
                 break;
             case 'addParticular':
-                $('#appstore_bundle_salesitem_medicineStock').select2('open');
+                $('#salesitem_medicineStock').select2('open');
                 break;
         }
         return false;
@@ -89,24 +89,24 @@ var form = $("#salesItemForm").validate({
 
     rules: {
 
-        "appstore_bundle_salesitem[medicineStock]": {required: true},
-        "appstore_bundle_salesitem[barcode]": {required: true},
-        "appstore_bundle_salesitem[salesPrice]": {required: true},
-        "appstore_bundle_salesitem[quantity]": {required: true},
+        "salesitem[medicineStock]": {required: true},
+        "salesitem[barcode]": {required: true},
+        "salesitem[salesPrice]": {required: true},
+        "salesitem[quantity]": {required: true},
     },
 
     messages: {
 
-        "appstore_bundle_salesitem[medicineStock]":"Enter medicine name",
-        "appstore_bundle_salesitem[barcode]":"Select barcode",
-        "appstore_bundle_salesitem[salesPrice]":"Enter sales price",
-        "appstore_bundle_salesitem[quantity]":"Enter medicine quantity",
+        "salesitem[medicineStock]":"Enter medicine name",
+        "salesitem[barcode]":"Select barcode",
+        "salesitem[salesPrice]":"Enter sales price",
+        "salesitem[quantity]":"Enter medicine quantity",
     },
     tooltip_options: {
-        "appstore_bundle_salesitem[medicineStock]": {placement:'top',html:true},
-        "appstore_bundle_salesitem[barcode]": {placement:'top',html:true},
-        "appstore_bundle_salesitem[salesPrice]": {placement:'top',html:true},
-        "appstore_bundle_salesitem[quantity]": {placement:'top',html:true},
+        "salesitem[medicineStock]": {placement:'top',html:true},
+        "salesitem[barcode]": {placement:'top',html:true},
+        "salesitem[salesPrice]": {placement:'top',html:true},
+        "salesitem[quantity]": {placement:'top',html:true},
     },
 
     submitHandler: function(form) {
@@ -135,8 +135,8 @@ var form = $("#salesItemForm").validate({
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);
                 $('#msg').html(obj['msg']);
-                $('#appstore_bundle_salesitem_salesPrice').val('');
-                $('#appstore_bundle_salesitem_quantity').val('');
+                $('#salesitem_salesPrice').val('');
+                $('#salesitem_quantity').val('');
                 $('#salesItemForm')[0].reset();
             }
         });
@@ -163,14 +163,20 @@ $('#invoiceParticulars').on("click", ".delete", function() {
     })
 });
 
-$(document).on('change', '#appstore_bundle_sales_discount', function() {
+$(document).on('change', '#sales_discount', function() {
 
     var discountType = $('#discountType').val();
-    var discount = parseInt($('#appstore_bundle_hospitalbundle_invoice_discount').val());
+    var discount = parseInt($('#sales_discount').val());
+    var invoice = parseInt($('#invoiceId').val());
+    var total =  parseInt($('#dueAmount').val());
+    if( discount >= total ){
+        $('#sales_discount').val(0)
+        return false;
+    }
     $.ajax({
-        url: Routing.generate('hms_invoice_temporary_discount_update'),
+        url: Routing.generate('medicine_sales_discount_update'),
         type: 'POST',
-        data:'discount=' + discount+'&discountType='+discountType,
+        data:'discount=' + discount+'&discountType='+discountType+'&invoice='+invoice,
         success: function(response) {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
@@ -183,10 +189,10 @@ $(document).on('change', '#appstore_bundle_sales_discount', function() {
 
 });
 
-$(document).on('change', '#appstore_bundle_sales_payment , #appstore_bundle_sales_discount', function() {
+$(document).on('change', '#sales_payment , #sales_discount', function() {
 
-    var payment     = parseInt($('#appstore_bundle_sales_payment').val()  != '' ? $('#appstore_bundle_sales_payment').val() : 0 );
-    var discount     = parseInt($('#appstore_bundle_sales_discount').val()  != '' ? $('#appstore_bundle_sales_discount').val() : 0 );
+    var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
+    var discount     = parseInt($('#sales_discount').val()  != '' ? $('#sales_discount').val() : 0 );
     var due =  parseInt($('#due').val());
     var dueAmount = (due-discount-payment);
     if(dueAmount > 0){
@@ -213,7 +219,7 @@ $('form#salesForm').on('keypress', '.inputs', function (e) {
             inputs[idx + 1].focus(); //  handles submit buttons
         }
         switch (this.id) {
-            case 'appstore_bundle_sales_payment':
+            case 'sales_payment':
                 $('#receiveBtn').focus();
                 break;
         }

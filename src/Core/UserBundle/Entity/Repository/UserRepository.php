@@ -85,8 +85,9 @@ class UserRepository extends EntityRepository
 
             $array['Inventory'] = array(
                 'ROLE_INVENTORY'                                    => 'Inventory',
-                'ROLE_DOMAIN_INVENTORY_PURCHASE'                    => 'Inventory Purchase',
                 'ROLE_DOMAIN_INVENTORY_SALES'                       => 'Inventory Sales',
+                'ROLE_DOMAIN_INVENTORY'                             => 'Inventory Domain',
+                'ROLE_DOMAIN_INVENTORY_PURCHASE'                    => 'Inventory Purchase',
                 'ROLE_DOMAIN_INVENTORY_CUSTOMER'                    => 'Inventory Customer',
                 'ROLE_DOMAIN_INVENTORY_APPROVAL'                    => 'Inventory Approval',
                 'ROLE_DOMAIN_INVENTORY_STOCK'                       => 'Inventory Stock',
@@ -95,7 +96,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER'              => 'Inventory Branch Manager',
                 'ROLE_DOMAIN_INVENTORY_MANAGER'                     => 'Inventory Manager',
                 'ROLE_DOMAIN_INVENTORY_CONFIG'                      => 'Inventory Config',
-                'ROLE_DOMAIN_INVENTORY'                             => 'Inventory All',
+                'ROLE_DOMAIN_INVENTORY_ADMIN'                       => 'Inventory Admin',
             );
         }
 
@@ -116,7 +117,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_ACCOUNTING_TRANSACTION'        => 'Accounting Transaction',
                 'ROLE_DOMAIN_ACCOUNTING_CONFIG'             => 'Accounting Config',
                 'ROLE_DOMAIN_ACCOUNTING_REPORT'             => 'Accounting Report',
-                'ROLE_DOMAIN_ACCOUNTING'                    => 'Accounting All',
+                'ROLE_DOMAIN_ACCOUNTING'                    => 'Accounting Admin',
             );
         }
 

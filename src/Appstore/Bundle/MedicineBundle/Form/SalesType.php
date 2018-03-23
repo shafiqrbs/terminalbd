@@ -121,7 +121,7 @@ class SalesType extends AbstractType
             ->add('doctorAddress','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter prescribe doctor address','data-original-title'=>'Enter prescribe doctor address','autocomplete'=>'off')))
 
         ;
-        $builder->add('customer', new CustomerForMedicineType());
+      //  $builder->add('customer', new CustomerForMedicineType());
     }
     
     /**
@@ -139,7 +139,7 @@ class SalesType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_sales';
+        return 'sales';
     }
 
 }

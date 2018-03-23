@@ -13,10 +13,6 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('inventory_salesonline') }}">Customer Base Sales</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
                     <li><a href="#">Customer Base Sales Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
@@ -137,10 +133,8 @@
                                                     <a href="{{ path('inventory_salesonline_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
                                                     <a title="Are you sure went to delete ?" data-id="{{ entity.id }}" data-url="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            {% if entity.paymentStatus == "Due" and entity.process != "Returned" %}
-                                                {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_MANAGER") or app.user.granted("ROLE_DOMAIN_INVENTORY"))  %}
-                                                    <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
-                                                {% endif %}
+                                            {% if entity.paymentStatus == "Due" %}
+                                                <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                             {% endif %}
 
                                         </td>
@@ -157,6 +151,7 @@
             </div>
         </div>
     </div>
+
     <div id="responsive" class="modal hide fade" tabindex="-1" data-width="950"  data-height="" style="background: #ffffff"  >
     </div>
     {% if inventoryConfig.onlineSalesPrinter == 'pos' %}

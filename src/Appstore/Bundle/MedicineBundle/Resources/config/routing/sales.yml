@@ -47,7 +47,7 @@ medicine_sales_item_add:
             expose: true
 
 medicine_sales_discount_update:
-    path:     /purchase/dicount-update
+    path:     /sales/dicount-update
     defaults: { _controller: "MedicineBundle:Sales:invoiceDiscountUpdate" }
     methods:  POST
     options:

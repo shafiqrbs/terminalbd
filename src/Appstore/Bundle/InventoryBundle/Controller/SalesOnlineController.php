@@ -369,7 +369,7 @@ class SalesOnlineController extends Controller
             $globalOption = $this->getUser()->getGlobalOption();
             if (!empty($data['customerMobile'])) {
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomer($globalOption,$mobile,$data);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
                 $entity->setCustomer($customer);
 
             } elseif(!empty($data['mobile'])) {
@@ -378,16 +378,7 @@ class SalesOnlineController extends Controller
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
                 $entity->setCustomer($customer);
 
-            } else {
-
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
-                if(empty($customer)){
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
-
-                }
-                $entity->setCustomer($customer);
             }
-
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
@@ -402,7 +393,7 @@ class SalesOnlineController extends Controller
             $entity->setPaymentInWord($amountInWords);
             if ($entity->getTotal() <= $data['paymentAmount']) {
                 $entity->setPaymentStatus('Paid');
-            } else if ($entity->getTotal() - $entity->getDue()) {
+            }else{
                 $entity->setPaymentStatus('Due');
             }
             $entity->setApprovedBy($this->getUser());

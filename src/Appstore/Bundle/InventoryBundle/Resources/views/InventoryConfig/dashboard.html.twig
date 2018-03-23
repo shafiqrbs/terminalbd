@@ -23,15 +23,16 @@
                                     </a>
                                 </div>
                             </div>
+
                         {% endif %}
                         {% if 'general-sales' ==  sales  %}
                             <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                                 <div class="dashboard-stat purple">
-                                    <a class="visual" href="{{ path('inventory_salesonline') }}">
-                                        <i class="fa fa-truck"></i>
+                                    <a class="visual" href="{{ path('inventory_salesonline_new') }}">
+                                        <i class="fa fa-shopping-basket"></i>
                                     </a>
-                                    <a class="more" href="{{ path('inventory_salesonline') }}">
-                                        General Sales <i class="m-icon-swapright m-icon-white"></i>
+                                    <a class="more" href="{{ path('inventory_salesonline_new') }}">
+                                        Add Sales <i class="m-icon-swapright m-icon-white"></i>
                                     </a>
                                 </div>
                             </div>
@@ -39,10 +40,10 @@
                         {% if 'manual-sales' ==  sales  %}
                             <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                                 <div class="dashboard-stat green">
-                                    <a class="visual" href="{{ path('inventory_salesmanual') }}">
+                                    <a class="visual" href="{{ path('inventory_salesmanual_new') }}">
                                         <i class="fa fa-shopping-cart"></i>
                                     </a>
-                                    <a class="more" href="{{ path('inventory_salesmanual') }}">
+                                    <a class="more" href="{{ path('inventory_salesmanual_new') }}">
                                         Sales Invoice <i class="m-icon-swapright m-icon-white"></i>
                                     </a>
                                 </div>

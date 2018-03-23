@@ -290,8 +290,7 @@
                             <div class="row-fluid">
                                 <div class="input-icon left input-height">
                                     <i class="icon-user"></i>
-                                    {{ form_widget(form.customer.name) }}
-                                    {{ form_errors(form.customer.name) }}
+                                    <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
                                 </div>
                             </div>
                         </div>
@@ -301,8 +300,7 @@
                             <div class="row-fluid">
                                 <div class="input-icon left input-height">
                                     <i class="icon-phone"></i>
-                                    {{ form_widget(form.customer.mobile) }}
-                                    {{ form_errors(form.customer.mobile) }}
+                                    <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
                                 </div>
                             </div>
                         </div>
@@ -310,8 +308,7 @@
                     <div class="row-fluid customer">
                         <div class="span12 input-append-border">
                             <div class="row-fluid">
-                                {{ form_widget(form.customer.address) }}
-                                {{ form_errors(form.customer.address) }}
+                                <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
                             </div>
                         </div>
                     </div>
@@ -357,7 +354,7 @@
                         {{ form_widget(form.process) }}
                         {{ form_errors(form.process) }}
                         <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">
-                        <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">
+                        <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.netTotal }}">
                         <div class="pull-right">
                             <button type="button" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Payment</button>
