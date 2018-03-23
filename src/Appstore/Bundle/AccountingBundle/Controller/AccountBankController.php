@@ -20,7 +20,7 @@ class AccountBankController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG_ACCOUNTING_CONFIG")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
 
