@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -23,12 +24,13 @@ class InventoryConfigController extends Controller
      */
     public function indexAction()
     {
+
         $em = $this->getDoctrine()->getManager();
+        /* @var GlobalOption $globalOption */
+        $globalOption = $this->getUser()->getGlobalOption();
 
-        $entities = $em->getRepository('InventoryBundle:InventoryConfig')->findAll();
-
-        return $this->render('InventoryBundle:InventoryConfig:index.html.twig', array(
-            'entities' => $entities,
+        return $this->render('InventoryBundle:InventoryConfig:dashboard.html.twig', array(
+            'globalOption' => $globalOption,
         ));
     }
 

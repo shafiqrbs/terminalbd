@@ -85,7 +85,7 @@ security:
 
         # THIS IS PART OF INVENTORY
 
-        ROLE_INVENTORY:                                 [ROLE_INVENTORY,ROLE_WEBSITE]
+        ROLE_INVENTORY:                                 [ROLE_INVENTORY]
         ROLE_DOMAIN_INVENTORY_REPORT:                   [ROLE_DOMAIN_INVENTORY_REPORT]
         ROLE_DOMAIN_INVENTORY_STOCK:                    [ROLE_DOMAIN_INVENTORY_STOCK]
         ROLE_DOMAIN_INVENTORY_CONFIG:                   [ROLE_DOMAIN_INVENTORY_CONFIG]

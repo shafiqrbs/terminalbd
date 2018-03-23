@@ -286,7 +286,7 @@ class GlobalOptionRepository extends EntityRepository
             $this->_em->persist($config);
         }
 
-        $medicineConfig = $this->_em->getRepository('MedicineBundle:MedicineBrand')->findOneBy(array('globalOption'=>$globalOption));
+        $medicineConfig = $this->_em->getRepository('MedicineBundle:MedicineConfig')->findOneBy(array('globalOption'=>$globalOption));
         if(empty($medicineConfig)){
             $config = new MedicineConfig();
             $config->setGlobalOption($globalOption);
