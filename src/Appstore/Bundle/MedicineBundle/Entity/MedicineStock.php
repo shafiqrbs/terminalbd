@@ -45,6 +45,11 @@ class MedicineStock
     private $unit;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticular", inversedBy="medicineStockRocks")
+     **/
+    private $rackNo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255,nullable = true)
@@ -65,12 +70,6 @@ class MedicineStock
      */
     private $sku;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="rackNo", type="smallint", nullable=true)
-     */
-    private $rackNo;
 
     /**
      * @var integer
@@ -175,21 +174,6 @@ class MedicineStock
         return $this->id;
     }
 
-    /**
-     * @return float
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * @param float $price
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-    }
 
     /**
      * @return MedicineBrand
@@ -207,21 +191,6 @@ class MedicineStock
         $this->medicineBrand = $medicineBrand;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRackNo()
-    {
-        return $this->rackNo;
-    }
-
-    /**
-     * @param mixed $rackNo
-     */
-    public function setRackNo($rackNo)
-    {
-        $this->rackNo = $rackNo;
-    }
 
     /**
      * @return float
@@ -524,6 +493,22 @@ class MedicineStock
         $medicineStockSkuQuantity = $this->getSku().'-'.$this->getName().'-'.$this->getRackNo().'('.$this->getRemainingQuantity().')';
             return $medicineStockSkuQuantity;
 
+    }
+
+    /**
+     * @return MedicineParticular
+     */
+    public function getRackNo()
+    {
+        return $this->rackNo;
+    }
+
+    /**
+     * @param MedicineParticular $rackNo
+     */
+    public function setRackNo($rackNo)
+    {
+        $this->rackNo = $rackNo;
     }
 
 

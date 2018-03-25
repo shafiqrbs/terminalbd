@@ -34,6 +34,10 @@ medicine_medicine_vendor:
     resource: "@MedicineBundle/Resources/config/routing/vendor.yml"
     prefix:   /vendor
 
+medicine_medicine_particular:
+    resource: "@MedicineBundle/Resources/config/routing/particular.yml"
+    prefix:   /particular
+
 medicine_homepage:
     path:     /
     defaults: { _controller: MedicineBundle:Default:index }

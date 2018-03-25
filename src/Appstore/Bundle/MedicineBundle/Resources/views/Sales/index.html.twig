@@ -48,20 +48,42 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span4">
-                                            <div class="controls">
-
-                                            </div>
+                                        <div class="span3">
+                                            <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
                                         </div>
-                                        <div class="span4">
-                                            <div class="controls">
-
-                                            </div>
+                                        <div class="span3">
+                                            <input type="text" id="toUser" name="toUser"  class="span12 m-wrap select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Enter sales user">
                                         </div>
-                                        <div class="span4">
+                                        <div class="span3">
+                                            <select name="process" id="process" class="span12 m-wrap">
+                                                <option  value="">Select Process</option>
+                                                <option {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
+                                                <option {% if searchForm.process is defined and searchForm.process == 'Hold' %} selected="selected" {% endif %} value="In-progress">Hold</option>
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <select name="transactionMethod" id="transactionMethod" class="span12 m-wrap">
+                                                <option value="">Transaction Method</option>
+                                                {% for method in transactionMethods %}
+                                                    <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <input type="text" id="invoice" name="invoice"  class="span12 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="salesBy" name="salesBy"  class="span12 m-wrap select2User" value="{% if searchForm.select2User is defined %}{{ searchForm.select2User }}{% endif %}"  autocomplete="off" placeholder="Enter sales by ">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        </div>
+                                        <div class="span3">
                                             <div class="controls">
-                                                <div class="input-append span11">
-                                                    <input type="text" id="name" name="name"  class="span11 m-wrap" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
+                                                <div class="input-append span10">
+                                                    <input type="text" id="endDate"  name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
@@ -77,10 +99,11 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
-                                    <th class="numeric" >Vendor Name</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
+                                    <th class="numeric" >Sales By</th>
+                                    <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -91,10 +114,11 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{% if entity.dmsVendor is defined and entity.dmsVendor is not empty %}{{ entity.dmsVendor.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.netTotal - entity.received)|number_format }}</td>
                                         <td class="numeric" >{{ entity.received|number_format }}</td>
+                                        <td class="numeric" >{{ entity.due|number_format }}</td>
+                                        <td class="numeric" >{{ entity.salesBy }}</td>
+                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'Created' or entity.process == 'Pending' %}

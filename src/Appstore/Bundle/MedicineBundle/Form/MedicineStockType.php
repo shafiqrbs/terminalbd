@@ -54,6 +54,19 @@ class MedicineStockType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
+            ->add('rackNo', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
+                'empty_value' => '---Choose a rack no ---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'constraints' =>array( new NotBlank(array('message'=>'Select rack no')) ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('wt')
+                        ->andWhere("wt.particularType = '")
+                        ->where("wt.status = 1");
+                },
+            ))
             ->add('noDiscount')
         ;
     }

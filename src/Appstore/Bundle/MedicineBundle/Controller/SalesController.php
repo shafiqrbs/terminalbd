@@ -43,8 +43,11 @@ class SalesController extends Controller
         $data = $_REQUEST;
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->invoiceLists($this->getUser(),$data);
         $pagination = $this->paginate($entities);
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('MedicineBundle:Sales:index.html.twig', array(
             'entities' => $pagination,
+            'transactionMethods' => $transactionMethods,
+            'searchForm' => $data,
         ));
     }
 
@@ -166,7 +169,7 @@ class SalesController extends Controller
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
         $entity->setMedicineSales($invoice);
-        $barcode = $data['appstore_bundle_salesitem']['barcode'];
+        $barcode = $data['salesitem']['barcode'];
         $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($barcode);
         $entity->setMedicinePurchaseItem($purchaseItem);
         $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
@@ -199,26 +202,27 @@ class SalesController extends Controller
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $discountType = $request->request->get('discountType');
         $discount = $request->request->get('discount');
         $invoice = $request->request->get('invoice');
-
         $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($invoice);
-        $total = ($purchase->getSubTotal() - $discount);
+        $subTotal = $entity->getSubTotal();
+        if($discountType == 'flat'){
+            $total = ($subTotal  - $discount);
+        }else{
+            $discount = ($subTotal*$discount)/100;
+            $total = ($subTotal  - $discount);
+        }
         $vat = 0;
         if($total > $discount ){
-
-            $purchase->setDiscount($discount);
-            $purchase->setNetTotal($total + $vat);
-            $purchase->setDue($total + $vat);
-            $em->persist($purchase);
+            $entity->setDiscount(round($discount));
+            $entity->setNetTotal(round($total + $vat));
+            $entity->setDue(round($total + $vat));
             $em->flush();
         }
-
-        $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->getMedicineSalesItems($purchase);
-        $subTotal = $purchase->getSubTotal() > 0 ? $purchase->getSubTotal() : 0;
-        $grandTotal = $purchase->getNetTotal() > 0 ? $purchase->getNetTotal() : 0;
-        $dueAmount = $purchase->getDue() > 0 ? $purchase->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        $msg = 'Discount successfully';
+        $result = $this->returnResultData($entity,$msg);
+        return new Response(json_encode($result));
         exit;
     }
 
@@ -232,7 +236,7 @@ class SalesController extends Controller
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem() , $entity);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
+        $data = $request->request->all();
         if ($editForm->isValid()) {
             if (!empty($data['customerMobile'])) {
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
@@ -244,10 +248,18 @@ class SalesController extends Controller
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
                 $entity->setCustomer($customer);
-
             }
-            $entity->setProcess('Done');
-            $entity->setDue($entity->getNetTotal() - $entity->getPayment());
+            if($data['process'] == 'Hold'){
+                $entity->setProcess('Hold');
+            }else{
+                $entity->setProcess('Done');
+            }
+            $entity->setDue($entity->getNetTotal() - $entity->getReceived());
+            if($entity->getDue() > 0){
+                $entity->setPaymentStatus('Due');
+            }else{
+                $entity->setPaymentStatus('Paid');
+            }
             $em->flush();
             return $this->redirect($this->generateUrl('medicine_sales_show', array('id' => $entity->getId())));
         }
@@ -294,8 +306,6 @@ class SalesController extends Controller
         }
         exit;
     }
-
-
 
     /**
      * Deletes a Vendor entity.

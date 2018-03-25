@@ -106,6 +106,6 @@ class PurchaseItemType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_purchaseitem';
+        return 'purchaseitem';
     }
 }

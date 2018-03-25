@@ -36,17 +36,6 @@ class SalesType extends AbstractType
     {
         $builder
 
-            ->add('process', 'choice', array(
-                'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'empty_value' => '---Choose process---',
-                'choices' => array(
-                    'Created' => 'Created',
-                    'Hold' => 'Hold',
-                    'Done' => 'Done'
-                ),
-            ))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('received','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
             ->add('discount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))

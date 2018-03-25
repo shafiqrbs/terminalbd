@@ -130,8 +130,8 @@ var form = $("#salesItemForm").validate({
                 $('#invoiceParticulars').html(obj['salesItems']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#vat').val(obj['vat']);
-                $('.grandTotal').html(obj['grandTotal']);
-                $('#paymentTotal').val(obj['grandTotal']);
+                $('.grandTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);
                 $('#msg').html(obj['msg']);
@@ -179,10 +179,12 @@ $(document).on('change', '#sales_discount', function() {
         data:'discount=' + discount+'&discountType='+discountType+'&invoice='+invoice,
         success: function(response) {
             obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.initialGrandTotal').html(obj['initialGrandTotal']);
-            $('.initialDiscount').html(obj['initialDiscount']);
-            $('#initialDiscount').val(obj['initialDiscount']);
+            $('#subTotal').html(obj['subTotal']);
+            $('.grandTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#sales_discount').val(obj['discount']);
+            $('#due').val(obj['due']);
+            $('.dueAmount').html(obj['due']);
         }
 
     })

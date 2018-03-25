@@ -108,7 +108,7 @@ class ExcelImporterController extends Controller
                 'success',"Data has been migration successfully"
             );
             $em->flush();
-            return $this->redirect($this->generateUrl('purchase'));
+            return $this->redirect($this->generateUrl('inventory_purchasesimple'));
         }else{
             $this->get('session')->getFlashBag()->add(
                 'error',"Excel File memo no null or exist in your system"

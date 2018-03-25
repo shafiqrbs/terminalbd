@@ -67,6 +67,6 @@ class SalesItemType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_salesitem';
+        return 'salesitem';
     }
 }

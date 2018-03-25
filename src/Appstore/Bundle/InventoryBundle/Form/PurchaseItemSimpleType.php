@@ -35,7 +35,7 @@ class PurchaseItemSimpleType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Item',
                 'empty_value' => '---Choose a item ---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 select2 itemInput'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -47,15 +47,15 @@ class PurchaseItemSimpleType extends AbstractType
                 },
             ))
 
-            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span8','placeholder'=>'Item quantity'),
+            ->add('quantity','text', array('attr'=>array('class'=>'itemInput m-wrap span8','placeholder'=>'Item quantity'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add item quantity')))))
 
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Item sales price'),
+            ->add('salesPrice','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item sales price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add sales price')))))
 
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Item purchase price'),
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item purchase price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add purchase price')))))
             ;
@@ -77,6 +77,6 @@ class PurchaseItemSimpleType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_purchaseitem';
+        return 'purchaseitem';
     }
 }

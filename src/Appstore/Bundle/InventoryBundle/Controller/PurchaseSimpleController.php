@@ -177,12 +177,15 @@ class PurchaseSimpleController extends Controller
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $entity->setDueAmount($entity->getTotalAmount() - $entity->getPaymentAmount());
+            $entity->upload();
             $em->flush();
             if($entity->getProcess() == 'approved' ){
                 $this->approveAction($entity);
                 return $this->redirect($this->generateUrl('inventory_purchasesimple_show', array('id' => $id)));
-            }else{
+            }elseif($entity->getProcess() == 'complete' ){
                 return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $id)));
+            }else{
+                return $this->redirect($this->generateUrl('inventory_purchasesimple', array('id' => $id)));
             }
         }
         return $this->render('InventoryBundle:PurchaseSimple:new.html.twig', array(
@@ -296,7 +299,7 @@ class PurchaseSimpleController extends Controller
     {
         $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
         $form = $this->createForm(new PurchaseApproveType($inventoryConfig), $entity, array(
-            'action' => $this->generateUrl('purchase_update_approve', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('inventory_purchasesimple_update_approve', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -326,6 +329,8 @@ class PurchaseSimpleController extends Controller
 
             $entity->setApprovedBy($this->getUser());
             $entity->setProcess('approved');
+            $due = $entity->getTotalAmount() - ($entity->getPaymentAmount() + $entity->getCommissionAmount());
+            $entity->setDueAmount($due);
             $em->flush();
             $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($entity);
             if($entity->getAsInvestment() == 1){
@@ -338,7 +343,7 @@ class PurchaseSimpleController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success', "Purchase invoice approved successfully"
             );
-            return $this->redirect($this->generateUrl('purchase'));
+            return $this->redirect($this->generateUrl('inventory_purchasesimple'));
         }
 
         return $this->render('InventoryBundle:PurchaseSimple:editApprove.html.twig', array(
@@ -394,12 +399,7 @@ class PurchaseSimpleController extends Controller
         $purchaseItemForm->handleRequest($request);
         if ($purchaseItemForm->isValid()) {
             $purchaseItem->setPurchase($purchase);
-            $getItem = $data["appstore_bundle_inventorybundle_purchaseitem"]["item"];
-            $quantity = $data["appstore_bundle_inventorybundle_purchaseitem"]["quantity"];
-            $item = $em->getRepository('InventoryBundle:Item')->find($getItem);
-            $purchaseItem->setName($item->getName());
-            $purchaseItem->setItem($item);
-            $purchaseItem->setQuantity($quantity);
+            $purchaseItem->setName($purchaseItem->getItem()->getName());
             $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getPurchasePrice());
             $purchaseItem->setPurchaseSubTotal($purchaseSubTotal);
             $salesSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getSalesPrice());

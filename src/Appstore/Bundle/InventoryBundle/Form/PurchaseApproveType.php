@@ -32,7 +32,7 @@ class PurchaseApproveType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -42,13 +42,14 @@ class PurchaseApproveType extends AbstractType
                         ->orderBy("e.id","ASC");
                 }
             ))
-
+            ->add('totalAmount','text', array('attr'=>array('class'=>' m-wrap span12 numeric','placeholder'=>'Net total amount BDT')))
+            ->add('dueAmount','text', array('attr'=>array('class'=>' m-wrap span12 numeric','placeholder'=>'Due amount BDT')))
             ->add('accountBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -61,7 +62,7 @@ class PurchaseApproveType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -75,7 +76,7 @@ class PurchaseApproveType extends AbstractType
                 )))
             ->add('purchaseTo', 'choice', array(
                 'required'    => false,
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Choose a purchase To ---',
                 'choices' => array(
                     'International' => 'International',
@@ -101,6 +102,6 @@ class PurchaseApproveType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_purchase';
+        return 'purchase';
     }
 }

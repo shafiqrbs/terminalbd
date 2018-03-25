@@ -33,7 +33,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap purchaseInput'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('wt')
@@ -45,7 +45,7 @@ class PurchaseType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'attr'=>array('class'=>'span12 m-wrap transactionMethod purchaseInput'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -61,7 +61,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap purchaseInput'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -74,7 +74,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap purchaseInput'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -82,7 +82,7 @@ class PurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
+            ->add('memo','text', array('attr'=>array('class'=>'purchaseInput m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  memo no'))
             )))
@@ -95,14 +95,14 @@ class PurchaseType extends AbstractType
 
                 ),
                 'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span12 datePicker'),
+                'attr' => array('class'=>'m-wrap span12 datePicker purchaseInput'),
                 'view_timezone' => 'Asia/Dhaka'))
 
-            ->add('totalAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Net total amount BDT'),
+            ->add('totalAmount','text', array('attr'=>array('class'=>' m-wrap span12 numeric','placeholder'=>'Net total amount BDT'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add total amount BDT'))
                 )))
-            ->add('paymentAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Net payment amount BDT'),
+            ->add('paymentAmount','text', array('attr'=>array('class'=>'purchaseInput m-wrap span12 numeric','placeholder'=>'Net payment amount BDT'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
                 )))
@@ -117,7 +117,7 @@ class PurchaseType extends AbstractType
                 )))
             ->add('purchaseTo', 'choice', array(
                 'required'    => false,
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'m-wrap span12 purchaseInput'),
                 'empty_value' => '---Choose a purchase To ---',
                 'choices' => array(
                     'International' => 'International',
@@ -127,7 +127,7 @@ class PurchaseType extends AbstractType
             ))
             ->add('process', 'choice', array(
                 'required'    => false,
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'purchaseInput m-wrap span12'),
                 'choices' => array(
                     'created' => 'Created',
                     'complete' => 'Complete',
@@ -135,6 +135,7 @@ class PurchaseType extends AbstractType
                 ),
             ))
             ->add('asInvestment')
+            ->add('file','file',array('attr'=>array('class'=>'m-wrap span3')))
 
             /*->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             /*->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
@@ -164,6 +165,6 @@ class PurchaseType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_purchase';
+        return 'purchase';
     }
 }

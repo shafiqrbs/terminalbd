@@ -145,7 +145,6 @@ class HmsInvoiceTemporaryParticularController extends Controller
         }else{
             $discount = ($subTotal*$discount)/100;
             $initialGrandTotal = ($subTotal  - $discount);
-
         }
 
         $data = array(

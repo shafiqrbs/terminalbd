@@ -17,7 +17,6 @@ function InventoryPurchasePage(){
         }
     });
 
-   
     $('#addMasterItem').click(function(e) {
 
         var url =  $('#masterProduct').attr("action");
@@ -38,9 +37,7 @@ function InventoryPurchasePage(){
         });
         e.preventDefault();
     });
-
-
-    $('#addPurchaseFormxx').click(function(e) {
+    $('#addPurchaseForm').click(function(e) {
 
         $('#confirm-content').confirmModal({
             topOffset: 0,
@@ -51,26 +48,11 @@ function InventoryPurchasePage(){
         });
         e.preventDefault();
     });
-
-    $(' #action-button').click(function(e) {
-
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {
-                $('#purchaseForm').submit()
-            }
-        });
-        e.preventDefault();
-    });
-
     $('#addInventory').click(function(e) {
-        $( "#inventoryItem" ).fadeToggle( "slow", function() {
-            // Animation complete.
-        });
+        $( "#inventoryItem" ).fadeToggle();
     });
 
-   
+
     $(document).on("click", ".vendorItemDelete", function() {
 
         var url = $(this).attr("rel");
@@ -162,7 +144,7 @@ function InventoryPurchasePage(){
         })
     });
 
-    
+
 
     $('#appstore_bundle_inventorybundle_purchase_memo').attr("required", true);
     $('#appstore_bundle_inventorybundle_purchase_dueAmount').attr("disabled", true);
@@ -198,7 +180,7 @@ function InventoryPurchasePage(){
         $(this).closest('.subTotalPurchase').val(subTotal);
     });
 
-    var validator =  $("from.purchase").validate({
+    var validator =  $("from#purchaseForm").validate({
 
         rules: {
 

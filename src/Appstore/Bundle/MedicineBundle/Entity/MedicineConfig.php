@@ -35,6 +35,11 @@ class MedicineConfig
     private $medicineStock;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticular", mappedBy="medicineConfig")
+     **/
+    private $medicineParticulars;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="medicineConfig")
      **/
     private $medicineSales;
@@ -410,6 +415,14 @@ class MedicineConfig
     public function getMedicineVendors()
     {
         return $this->medicineVendors;
+    }
+
+    /**
+     * @return MedicineParticular
+     */
+    public function getMedicineParticulars()
+    {
+        return $this->medicineParticulars;
     }
 
 }
