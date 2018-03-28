@@ -305,6 +305,33 @@ $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_payment', func
     }
 });
 
+$('form#invoiceForm').on('keypress', '.admissionInput', function (e) {
+
+    if (e.which === 13) {
+        var inputs = $(this).parents("form").eq(0).find("input,select");
+        var idx = inputs.index(this);
+
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        switch (this.id) {
+            case 'id="appstore_bundle_hospitalbundle_invoice_discount"':
+                $('#appstore_bundle_hospitalbundle_transactionMethod').focus();
+                break;
+            case 'appstore_bundle_hospitalbundle_invoice_transactionMethod':
+                $('#appstore_bundle_hospitalbundle_invoice_payment').focus();
+                break;
+            case 'appstore_bundle_hospitalbundle_invoice_payment':
+                $('#receiveBtn').focus();
+                break;
+        }
+        return false;
+    }
+});
+
+
 
 
 $('.particular-info').on('keypress', 'input', function (e) {

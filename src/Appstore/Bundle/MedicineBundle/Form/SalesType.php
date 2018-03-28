@@ -36,16 +36,16 @@ class SalesType extends AbstractType
     {
         $builder
 
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
-            ->add('discount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
-            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
+            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
+            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
+            ->add('discount','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
+            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
+                'attr'=>array('class'=>'salesInput span12 m-wrap transactionMethod'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -57,7 +57,7 @@ class SalesType extends AbstractType
                 'required'    => false,
                 'property' => 'name',
                 'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'salesInput span12 m-wrap'),
                 'empty_value' => '---Choose payment card---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
@@ -70,7 +70,7 @@ class SalesType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'salesInput span12 m-wrap'),
                 'empty_value' => '---Choose receive bank account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -83,7 +83,7 @@ class SalesType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap salesInput'),
                 'empty_value' => '---Choose receive mobile bank account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -96,7 +96,7 @@ class SalesType extends AbstractType
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap salesInput'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
                         ->where("u.isDelete != 1")
@@ -105,9 +105,9 @@ class SalesType extends AbstractType
                 }
             ))
 
-            ->add('doctor','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter prescribe doctor','data-original-title'=>'Enter prescribe doctor','autocomplete'=>'off')))
-            ->add('doctorMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile inputs','placeholder'=>'Enter prescribe doctor','data-original-title'=>'Enter prescribe doctor','autocomplete'=>'off')))
-            ->add('doctorAddress','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter prescribe doctor address','data-original-title'=>'Enter prescribe doctor address','autocomplete'=>'off')))
+            ->add('doctor','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor','data-original-title'=>'Enter prescribe doctor','autocomplete'=>'off')))
+            ->add('doctorMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Enter prescribe doctor','data-original-title'=>'Enter prescribe doctor','autocomplete'=>'off')))
+            ->add('doctorAddress','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor address','data-original-title'=>'Enter prescribe doctor address','autocomplete'=>'off')))
 
         ;
       //  $builder->add('customer', new CustomerForMedicineType());

@@ -152,7 +152,7 @@
                                                     {% if entity.inventoryConfig.isAttribute == 1 %}
                                                     <td class="span2" >
                                                         {% if salesitem.purchaseItem.serialNo is not empty %}
-                                                            <select class="m-wrap span12" name="serialNo" id="serialNo" >
+                                                            <select class="m-wrap span12 inputs" name="serialNo" id="serialNo" >
                                                                 <option>--Serial no--</option>
                                                                 {% for serial in  salesitem.purchaseItem.serialNo|split(',') %}
                                                                     <option {% if salesitem.serialNo == serial %} selected="selected" {% endif %} value="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id,'serial':serial}) }}" >{{ serial }}</option>
@@ -162,7 +162,7 @@
                                                     </td>
                                                     {% endif %}
                                                     <td class=" span1" >
-                                                        <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span12 quantity" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
+                                                        <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span12 quantity inputs" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
                                                     </td>
                                                     <td>
                                                         <div class="input-prepend">
@@ -170,7 +170,7 @@
                                                                         <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
                                                                         <input type="checkbox" {% if salesitem.customPrice == 1 and salesitem.salesPrice != salesitem.estimatePrice %} checked="checked" {% endif %} name="customPrice" rel="{{ salesitem.id }}" id="customPrice-{{ salesitem.id }}" class="customPrice" value="1" >
                                                                     </span>
-                                                            <input class="m-wrap span8 numeric salesPrice" {% if salesitem.customPrice != 1 and salesitem.salesPrice == salesitem.estimatePrice %} readonly="readonly" {% endif %} rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
+                                                            <input class="m-wrap span8 numeric salesPrice inputs" {% if salesitem.customPrice != 1 and salesitem.salesPrice == salesitem.estimatePrice %} readonly="readonly" {% endif %} rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
                                                         </div>
                                                     </td>
                                                     <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
@@ -201,15 +201,15 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">VAT/TAX TK.</span><input class="m-wrap span7 numeric disabled-field" readonly="readonly" name="vat" id="vat" type="text" value="{{ entity.vat }}">
-                                            <input class="m-wrap span9 numeric" name="vat" id="vat" type="hidden">
+                                            <span class="add-on add-on-custom span3">VAT/TAX TK.</span><input class="m-wrap span7 numeric disabled-field" name="vat" id="vat" readonly="readonly" type="text" value="{{ entity.vat }}">
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="span12 input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span7 numeric disabled-field" type="text" name="dueAmount" readonly="readonly" id="dueAmount" value="{{ entity.due }}">
+                                            <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span7 numeric disabled-field" name="dueAmount" id="dueAmount" type="text"  readonly="readonly" value="{{ entity.due }}">
                                         </div>
                                     </div>
                                 </div>
@@ -281,21 +281,24 @@
                                 <div class="row-fluid">
                                     <div class="span12 ">
                                         <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span7 numeric inputs" name="discount" id="discount" value="{{ entity.discount }}" type="text">
+                                            <span class="add-on add-on-custom span3">Discount TK.</span>  {{ form_widget(form.discount) }}
+                                            {{ form_errors(form.discount) }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span7 numeric inputs" type="text" name="paymentAmount" id="paymentAmount" placeholder="">
+                                            <span class="add-on add-on-custom span3">Receive TK.</span>{{ form_widget(form.payment) }}
+                                            {{ form_errors(form.payment) }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Delivery Charge</span><input class="m-wrap span7 numeric inputs" type="text" name="deliveryCharge" id="deliveryCharge" placeholder="">
+                                            <span class="add-on add-on-custom span3">Delivery Charge</span>{{ form_widget(form.deliveryCharge) }}
+                                            {{ form_errors(form.deliveryCharge) }}
                                         </div>
                                     </div>
                                 </div>
@@ -570,7 +573,7 @@
     {% javascripts
     '@InventoryBundle/Resources/public/js/posprint.js'
     '@InventoryBundle/Resources/public/js/editable.js'
-    '@InventoryBundle/Resources/public/js/sales.js'
+    '@InventoryBundle/Resources/public/js/sales-manual.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -579,4 +582,9 @@
     {{ parent() }}
     InventorySales({{ entity.id ? entity.id : 0 }});
     EditableInit();
+    if($('#sales_discount').val() == 0 ){
+        $('#sales_discount').removeAttr('value');
+    }
+    $('#sales_payment').removeAttr('value');
+    $('#sales_deliveryCharge').removeAttr('value');
 {% endblock %}

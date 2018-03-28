@@ -209,7 +209,7 @@ $(document).on('change', '#sales_payment , #sales_discount', function() {
 
 
 
-$('form#salesForm').on('keypress', '.inputs', function (e) {
+$('form#salesForm').on('keypress', '.salesInput', function (e) {
 
     if (e.which === 13) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
@@ -221,7 +221,13 @@ $('form#salesForm').on('keypress', '.inputs', function (e) {
             inputs[idx + 1].focus(); //  handles submit buttons
         }
         switch (this.id) {
-            case 'sales_payment':
+            case 'sales_transactionMethod':
+                $('#sales_salesBy').focus();
+                break;
+            case 'sales_salesBy':
+                $('#sales_received').focus();
+                break;
+            case 'sales_received':
                 $('#receiveBtn').focus();
                 break;
         }

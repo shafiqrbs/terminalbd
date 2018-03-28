@@ -201,28 +201,21 @@ class SalesOnlineController extends Controller
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
         $itemStock = $purchaseItem->getItemStock();
 
-
         if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
 
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
             $msg = 'Product added successfully';
 
         } else {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
             $msg = 'There is no product in our inventory';
         }
-
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
+        $data = $this->returnResultData($sales,$msg);
+        return new Response(json_encode($data));
         exit;
     }
-
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
@@ -247,12 +240,8 @@ class SalesOnlineController extends Controller
             $em->persist($sales);
             $em->flush();
         }
-
-
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        $data = $this->returnResultData($sales);
+        return new Response(json_encode($data));
         exit;
     }
 
@@ -272,7 +261,7 @@ class SalesOnlineController extends Controller
 
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($salesItem->getPurchaseItem());
         $itemStock = $salesItem->getPurchaseItem()->getItemStock();
-
+        $sales = $salesItem->getSales();
 
         if (!empty($salesItem) && $itemStock > $checkQuantity || !empty($salesItem) && $itemStock == $checkQuantity && $checkQuantity > $quantity ) {
 
@@ -284,26 +273,12 @@ class SalesOnlineController extends Controller
             $salesItem->setSubTotal($quantity * $salesPrice);
             $em->persist($salesItem);
             $em->flush();
-
-            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-            $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-            $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'Product added successfully' , 'success' => 'success')));
-
-        } else {
-
-            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-            $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-            $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'There is no product in our inventory' , 'success' => 'success')));
+            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
         }
-
+        $data = $this->returnResultData($sales);
+        return new Response(json_encode($data));
         exit;
     }
-
-
 
     /**
      * Finds and displays a Sales entity.
@@ -379,19 +354,28 @@ class SalesOnlineController extends Controller
                 $entity->setCustomer($customer);
 
             }
-            if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
-                $entity->setVat($vat);
-            }
+
+           /*
             $entity->setDeliveryCharge($data['deliveryCharge']);
             $due = (float)$data['dueAmount'] == '' ? 0 : $data['dueAmount'];
             $entity->setDue($due);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
             $entity->setPayment($entity->getTotal() - $entity->getDue());
+
+           */
+            $entity->setTotal($entity->getSubTotal() - $entity->getDiscount());
+            if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
+                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$entity->getTotal());
+                $entity->setVat($vat);
+            }
+            $entity->setTotal($entity->getTotal() + $entity->getVat());
+            $entity->setDue($entity->getTotal() - $entity->getPayment());
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
-            if ($entity->getTotal() <= $data['paymentAmount']) {
+
+            if ($entity->getTotal() <= $entity->getPayment()) {
+                $entity->setPayment($entity->getTotal());
                 $entity->setPaymentStatus('Paid');
             }else{
                 $entity->setPaymentStatus('Due');
@@ -401,8 +385,6 @@ class SalesOnlineController extends Controller
             if ($data['process'] == 'In-progress') {
                 $entity->setProcess('In-progress');
             }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setPaymentInWord($amountInWords);
             $em->flush();
             if ($data['process'] != 'In-progress'){
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
@@ -421,6 +403,32 @@ class SalesOnlineController extends Controller
 
 
     }
+
+    public function returnResultData(Sales $entity,$msg=''){
+
+        $salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
+        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
+        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $due = $entity->getDue();
+        $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
+        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $data = array(
+            'msg' => $msg,
+            'salesSubTotal' => $subTotal,
+            'salesTotal' => $netTotal,
+            'payment' => $payment ,
+            'due' => $due,
+            'discount' => $discount,
+            'vat' => $vat,
+            'salesItems' => $salesItems ,
+            'success' => 'success'
+        );
+
+        return $data;
+
+    }
+
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_APPROVE")
@@ -497,7 +505,6 @@ class SalesOnlineController extends Controller
         return new Response($data);
     }
 
-
     public function getBarcode($invoice)
     {
         $barcode = new BarcodeGenerator();
@@ -511,7 +518,6 @@ class SalesOnlineController extends Controller
         $data .= '<img src="data:image/png;base64,' . $code . '" />';
         return $data;
     }
-
 
     public function deleteEmptyInvoiceAction()
     {
@@ -586,7 +592,6 @@ class SalesOnlineController extends Controller
 
     }
 
-
     public function approvedOrder(Sales $entity)
     {
         if (!empty($entity)) {
@@ -609,7 +614,6 @@ class SalesOnlineController extends Controller
         }
         exit;
     }
-
 
     public function returnCancelOrder(Sales $entity)
     {
