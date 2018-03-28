@@ -84,6 +84,16 @@ class PurchaseApproveType extends AbstractType
                     'In House' => 'In House'
                 ),
             ))
+            ->add('receiveDate', 'date', array(
+                'widget' => 'single_text',
+                'placeholder' => array(
+                    'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
+
+                ),
+                'format' => 'dd-MM-yyyy',
+                'attr' => array('class'=>'m-wrap span12 datePicker purchaseInput'),
+                'view_timezone' => 'Asia/Dhaka'))
+
             ->add('asInvestment');
     }
     
