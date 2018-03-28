@@ -127,6 +127,7 @@ class PurchaseItemRepository extends EntityRepository
         $qb->select('pi.barcode');
         $qb->addSelect('pi.quantity');
         $qb->addSelect('item.name');
+        $qb->addSelect('pi.serialNo');
         $qb->where("e.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig()->getId());
         $this->handleWithSearch($qb,$data);
