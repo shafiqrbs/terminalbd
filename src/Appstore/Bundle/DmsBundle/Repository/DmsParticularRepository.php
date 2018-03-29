@@ -183,27 +183,30 @@ class DmsParticularRepository extends EntityRepository
             return  $result;
     }
 
-    public function getAccessoriesParticular($config,$services){
+    public function getAccessoriesParticular($config,$services,$flag = ''){
 
-        $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->leftJoin('e.unit','u')
-            ->select('e.id')
-            ->addSelect('e.name')
-            ->addSelect('e.minimumPrice')
-            ->addSelect('e.price')
-            ->addSelect('e.particularCode')
-            ->addSelect('e.status')
-            ->addSelect('e.salesQuantity')
-            ->addSelect('e.openingQuantity')
-            ->addSelect('u.name as unit')
-            ->addSelect('e.purchaseQuantity')
-            ->where('e.dmsConfig = :config')->setParameter('config', $config)
-            ->andWhere('s.serviceFormat IN(:process)')
-            ->setParameter('process',$services)
-            ->orderBy('e.name','ASC')
-            ->getQuery()->getArrayResult();
-            return  $qb;
+        $qb = $this->createQueryBuilder('e');
+            $qb->leftJoin('e.service','s');
+            $qb->leftJoin('e.unit','u');
+            $qb->select('e.id');
+            $qb->addSelect('e.name');
+            $qb->addSelect('e.minimumPrice');
+            $qb->addSelect('e.price');
+            $qb->addSelect('e.particularCode');
+            $qb->addSelect('e.status');
+            $qb->addSelect('e.salesQuantity');
+            $qb->addSelect('e.openingQuantity');
+            $qb->addSelect('u.name as unit');
+            $qb->addSelect('e.purchaseQuantity');
+            $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+            $qb->andWhere('s.serviceFormat IN(:process)');
+            $qb->setParameter('process',$services);
+            if($flag == 'true') {
+                $qb->andWhere('e.status =1');
+            }
+            $qb->orderBy('e.name','ASC');
+            $result = $qb->getQuery()->getArrayResult();
+            return  $result;
     }
 
     public function findDmsExistingCustomer($hospital, $mobile,$data)

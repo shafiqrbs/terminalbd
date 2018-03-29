@@ -196,10 +196,10 @@ class InvoiceController extends Controller
         $services    = $em->getRepository('DmsBundle:DmsService')->getServiceLists($dmsConfig);
         $accessories ='';
         if($entity->getDmsConfig()->isShowAccessories() == 1 ){
-            $accessories        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('accessories'));
+            $accessories        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('accessories'),'true');
         }
-        $treatmentPlans        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('treatment'));
-        $others        = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($entity->getDmsConfig(),array('other-service'));
+        $treatmentPlans        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('treatment'),'true');
+        $others        = $this->getDoctrine()->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($entity->getDmsConfig(),array('other-service'),'true');
         $attributes         = $em->getRepository('MedicineBundle:PrescriptionAttribute')->findAll();
 
         return $this->render('DmsBundle:Invoice:new.html.twig', array(
