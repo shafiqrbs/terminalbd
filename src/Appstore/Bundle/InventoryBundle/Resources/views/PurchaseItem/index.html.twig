@@ -14,10 +14,6 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('itemattribute') }}">Purchase Item</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
                     <li><a href="#">Purchase Item Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
@@ -38,6 +34,38 @@
                     <div class="portlet-body">
                         <div class="row-fluid">
                             <form class="search-form" action="" method="get" name="itemSearch">
+                                {% if config.isAttribute == 1 %}
+                                {% set assuranceTypes =['Grantee','Warranty','Other'] %}
+                                {% set assuranceFromVendors =['1 Month','3 Month','4 Month','6 Month','1 Year',
+                                '1 Year 6 Month','2 Year','2 Year 6 Month','3 Year','3 Year 6 Month',
+                                '4 Year','4 Year 6 Month','5 Year','5 Year 6 Month','Product Life Time','Others'
+                                ] %}
+                                <div class="row-fluid">
+                                    <div class="span3">
+                                        <select id="assuranceType" name="assuranceType" class="span12 m-wrap">
+                                            <option value="">--Assurance Type--</option>
+                                            {% for type in assuranceTypes %}
+                                                <option {% if searchForm.assuranceType is defined and type == searchForm.assuranceType %} selected="selected" {% endif %} value="{{ type }}">{{ type }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span3">
+                                        <select id="assuranceToCustomer" name="assuranceToCustomer" class="span12 m-wrap">
+                                            <option value="">--Assurance Customer--</option>
+                                            {% for toCustomer in assuranceFromVendors %}
+                                                <option {% if searchForm.assuranceToCustomer is defined and toCustomer == searchForm.assuranceToCustomer %} selected="selected" {% endif %} value="{{ toCustomer }}">{{ toCustomer }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="startDate" name="startDate"  class="span6 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Expired start date{% endif %} ">
+                                        <input type="text" id="endDate" name="endDate"  class="span6 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Expired end date{% endif %} ">
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="serialNo" name="serialNo"  class="span12 m-wrap" value="{% if searchForm.serialNo is defined %}{{ searchForm.serialNo }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.serialNo is defined %}{{ searchForm.serialNo }}{% else %}Search serial no{% endif %} ">
+                                    </div>
+                                </div>
+                                {% endif %}
                                 <div class="row-fluid">
                                     <div class="span3">
                                         <input type="text" id="barcode" name="barcode"  class="span12 select2Barcode " value="{% if searchForm.barcode is defined %}{{ searchForm.barcode }}{% endif %}"  autocomplete="off" placeholder="Enter item barcode ">
@@ -69,6 +97,9 @@
                                 <th class="numeric" >SKU</th>
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Barcode</th>
+                                {% if config.isAttribute == 1 %}
+                                <th class="numeric" >Expired</th>
+                                {% endif %}
                                 <th class="numeric" >Quantity</th>
                                 <th class="numeric" >Purchase Price</th>
                                 <th class="numeric" >Sales Price</th>
@@ -86,6 +117,14 @@
                                     <td class="numeric" >
                                         <a class="editable" data-name="Barcode" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product barcode">{{ entity.barcode }}</a>
                                     </td>
+                                    {% if config.isAttribute == 1 %}
+                                    <td class="numeric" >
+                                        {% if entity.expiredDate is not empty %}
+                                            {{ entity.expiredDate|date('d-m-Y') }} /
+                                           <span class="btn yellow mini">{{ date(entity.expiredDate|date).diff(date("now")).days }} Days</span>
+                                        {% endif %}
+                                    </td>
+                                    {% endif %}
                                     <td class="numeric" >{{ entity.quantity }}</td>
                                     <td class="numeric" >{{ entity.purchasePrice }}</td>
                                     <td class="numeric" >
@@ -140,6 +179,11 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    $( ".dateCalendar" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    });
     ApproveProcess();
     EditableInit();
 {% endblock %}

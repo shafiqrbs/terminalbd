@@ -42,7 +42,9 @@ class PurchaseItemController extends Controller
         $entities = $em->getRepository('InventoryBundle:PurchaseItem')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:PurchaseItem:index.html.twig', array(
+            'config' => $config,
             'pagination' => $pagination,
+            'searchForm' => $data,
         ));
     }
 
@@ -59,7 +61,10 @@ class PurchaseItemController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
         $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->insertPurchaseItemAttribute($data);
-        return $this->redirect($this->generateUrl('inventory_purchaseitem_multi_add', array('id' => $purchase->getId())));
+        $this->get('session')->getFlashBag()->add(
+            'success',"Data has been inserted successfully"
+        );
+        return $this->redirect($this->generateUrl('inventory_purchaseitem_multi_add', array('purchase' => $purchase->getId())));
 
     }
 

@@ -38,18 +38,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('inventory_purchasesimple_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('inventory_purchasesimple_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="red btn" href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a class="btn" href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Purchase</a>
                             </div>
                         </div>
 
@@ -92,8 +82,6 @@
                                         <li><strong>Payment BDT:</strong> {{ entity.paymentAmount|number_format() }}</li>
                                         <li><strong>Due BDT:</strong> {{ entity.dueAmount|number_format() }}</li>
                                         <li><strong>Commission BDT:</strong> {{ entity.commissionAmount|number_format() }}</li>
-
-
                                     </ul>
                                 </div>
                                 <div class="span3 image-preview"></div>
@@ -105,7 +93,9 @@
                                     <div class="caption"><i class="icon-reorder"></i>Purchase item lists</div>
                                     <div class="actions">
                                         <div class="btn-group">
-                                        <a href="{{ path('inventory_purchaseitem_multi_add',{'purchase':entity.id}) }}" rel=""   class="btn red" ><i class="icon-plus"></i> Add All Item Attribute</a>
+                                        {% if entity.inventoryConfig.isAttribute == 1 %}
+                                            <a href="{{ path('inventory_purchaseitem_multi_add',{'purchase':entity.id}) }}" rel=""   class="btn red" ><i class="icon-plus"></i> Add All Item Attribute</a>
+                                        {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -118,6 +108,9 @@
                                     <tr class="head-green">
                                         <th class="numeric" >Barcode</th>
                                         <th class="numeric" >Item</th>
+                                        {% if entity.inventoryConfig.isAttribute == 1 %}
+                                        <th class="numeric" >Serial No</th>
+                                        {% endif %}
                                         <th class="numeric" >Qnt</th>
                                         <th class="numeric" >Purchase price</th>
                                         <th class="numeric" >Sub total</th>
@@ -131,9 +124,10 @@
 
                                         <tr>
                                             <td class="numeric" >{{ purchaseItem.barcode }}</td>
-                                            <td class="numeric" >
-                                                {{ purchaseItem.item.name }}
-                                            </td>
+                                            <td class="numeric" >{{ purchaseItem.item.name }}</td>
+                                            {% if entity.inventoryConfig.isAttribute == 1 %}
+                                            <td class="numeric" >{{ purchaseItem.serialNo }}</td>
+                                            {% endif %}
                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                             <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
                                             <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
@@ -143,8 +137,11 @@
                                                 {% if entity.process != 'approved' %}
                                                     <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
+                                                {% if entity.inventoryConfig.isAttribute == 1 %}
                                                 <a href="{{ path('inventory_purchaseitem_edit', { 'id': purchaseItem.id }) }}" rel="" id="{{  purchaseItem.id }}"  class="btn blue mini" ><i class="icon-plus"></i> Add Attribute</a>
+                                                {% endif %}
                                             </td>
+
                                         </tr>
                                     {% endfor %}
                                     </tbody>

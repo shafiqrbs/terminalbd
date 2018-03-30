@@ -1185,7 +1185,6 @@ class StockItemRepository extends EntityRepository
             $table .= '<tr class="head-blue" >';
             $table .= '<td>Barcode</td>';
             $table .= '<td>Item Name</td>';
-            $table .= '<td>Serial No</td>';
             $table .= '<td>Central Stock</td>';
             $branches = $globalOption->getBranches();
             foreach ($branches as $branch) {
@@ -1199,7 +1198,6 @@ class StockItemRepository extends EntityRepository
                 $table .='<tr>';
                 $table .= '<td>'.$row['barcode'].'</td>';
                 $table .= '<td>'.$row['name'].'</td>';
-                $table .= '<td>'.$row['serialNo'].'</td>';
                 $table .= '<td>'.$row['quantity'].'</td>';
                 $branchQnt = 0;
                 $branchTotalReceiveQnt = 0;

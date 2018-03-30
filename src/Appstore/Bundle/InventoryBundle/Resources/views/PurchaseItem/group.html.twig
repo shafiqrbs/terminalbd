@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('purchase') }}">Purchase</a>
+                        <a href="{{ path('inventory_purchasesimple') }}">Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Add/Edit purchase</a></li>
@@ -39,24 +39,9 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    <li><a href="{{ path('item') }}"><i class="icon-th-list"></i>&nbsp;Item</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp;Item create</a></li>
-                                    <li><a href="{{ path('inventory_product') }}"><i class="icon-plus-sign"></i>&nbsp;Master item</a></li>
-                                    <li><a href="{{ path('inventory_product_new') }}"><i class="icon-plus-sign  "></i>&nbsp;Master item create</a></li>
-                                    <li class="divider"></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('purchase_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('purchase_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="red btn" href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a class="btn yellow" href="{{ path('inventory_purchasesimple_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a>
+                                <a class="btn" href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Purchase</a>
                             </div>
                         </div>
 

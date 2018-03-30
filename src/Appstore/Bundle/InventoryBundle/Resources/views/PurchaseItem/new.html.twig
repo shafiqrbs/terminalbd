@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('purchase') }}">Purchase</a>
+                        <a href="{{ path('inventory_purchasesimple') }}">Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Add/Edit purchase</a></li>
@@ -39,7 +39,9 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('inventory_purchaseitem') }}"><i class="icon-th-list"></i>&nbsp;Purchase Item</a></li>
+                                <a class="red btn" href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a class="btn yellow" href="{{ path('inventory_purchasesimple_show',{'id':purchaseInfo.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a>
+                                <a class="btn" href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Purchase</a>
                             </div>
                         </div>
 

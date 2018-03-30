@@ -87,6 +87,12 @@ class PurchaseItemRepository extends EntityRepository
         $brand = isset($data['brand'])? $data['brand'] :'';
         $barcode = isset($data['barcode'])? $data['barcode'] :'';
 
+        $assuranceType = isset($data['assuranceType'])? $data['assuranceType'] :'';
+        $assuranceToCustomer = isset($data['assuranceToCustomer'])? $data['assuranceToCustomer'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
+        $serialNo = isset($data['serialNo'])? $data['serialNo'] :'';
+
         $qb = $this->createQueryBuilder('pi');
         $qb->join("pi.purchase",'purchase');
         $qb->join("pi.item",'item');
@@ -99,7 +105,6 @@ class PurchaseItemRepository extends EntityRepository
             $qb->setParameter('name', $item);
         }
         if (!empty($brand)) {
-
             $qb->join('item.brand', 'b');
             $qb->andWhere("b.name = :brand");
             $qb->setParameter('brand', $brand);
@@ -112,6 +117,27 @@ class PurchaseItemRepository extends EntityRepository
         if (!empty($barcode)) {
             $qb->andWhere("pi.barcode = :barcode");
             $qb->setParameter('barcode', $barcode);
+        }
+        if (!empty($assuranceType)) {
+            $qb->andWhere("pi.assuranceType = :assuranceType");
+            $qb->setParameter('assuranceType', $assuranceType);
+        }
+        if (!empty($assuranceToCustomer)) {
+            $qb->andWhere("pi.assuranceToCustomer = :assuranceToCustomer");
+            $qb->setParameter('assuranceToCustomer', $assuranceToCustomer);
+        }
+        if(!empty($startDate) and !empty($endDate)){
+            $start = new \DateTime($endDate);
+            $startDate = $start->format('Y-m-d 00:00:00');
+            $end = new \DateTime($endDate);
+            $endDate = $end->format('Y-m-d 23:59:59');
+            $qb->andWhere("pi.expiredDate >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+            $qb->andWhere("pi.expiredDate <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+        if (!empty($serialNo)) {
+            $qb->andWhere($qb->expr()->like("pi.serialNo", "'%$serialNo%'"  ));
         }
         $qb->orderBy('item.name','ASC');
         $sql = $qb->getQuery();
@@ -128,6 +154,10 @@ class PurchaseItemRepository extends EntityRepository
         $qb->addSelect('pi.quantity');
         $qb->addSelect('item.name');
         $qb->addSelect('pi.serialNo');
+        $qb->addSelect('pi.expiredDate');
+        $qb->addSelect('pi.assuranceType');
+        $qb->addSelect('pi.assuranceFromVendor');
+        $qb->addSelect('pi.assuranceToCustomer');
         $qb->where("e.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig()->getId());
         $this->handleWithSearch($qb,$data);
@@ -357,7 +387,6 @@ class PurchaseItemRepository extends EntityRepository
                 $datetime = (new \DateTime($data['expiredDate'][$key]));
                 $entity->setExpiredDate($datetime);
             }
-            $em->persist($entity);
             $em->flush();
         }
 
