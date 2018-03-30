@@ -131,6 +131,7 @@ class PurchaseType extends AbstractType
                 'choices' => array(
                     'created' => 'Created',
                     'complete' => 'Complete',
+                    'imported' => 'Imported',
                     'approved' => 'Approved',
                 ),
             ))
