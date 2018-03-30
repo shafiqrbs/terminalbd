@@ -135,6 +135,7 @@
                                         <a href="{{ path('inventory_purchaseitem_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                     </td>
                                 </tr>
+                            {% if config.isAttribute == 1 %}
                                 <tr id="show-{{ entity.id }}" class="showing-overview">
                                     <td colspan="11">
                                         <table class="table table-bordered table-striped table-condensed flip-content ">
@@ -153,6 +154,7 @@
                                         </table>
                                     </td>
                                 </tr>
+                            {% endif %}
                             {% endfor %}
 
                             </tbody>
