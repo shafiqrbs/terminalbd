@@ -24,7 +24,7 @@ class PaymentSalaryListener
             $lastCode = $this->getLastCode($args, $datetime, $entity);
 
             $entity->setCode($lastCode+1);
-            $entity->setAccountRefNo(sprintf("%s%s", $datetime->format('Ymd'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            $entity->setAccountRefNo(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
         }
     }
 

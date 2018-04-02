@@ -464,7 +464,7 @@ class TransactionRepository extends EntityRepository
     {
 
 
-        $amount =  $entity->getTotal();
+        $amount =  $entity->getTotal() - $entity->getVat();
         $transaction = new Transaction();
         $transaction->setGlobalOption($accountSales->getGlobalOption());
         if(!empty($accountSales->getBranches())){

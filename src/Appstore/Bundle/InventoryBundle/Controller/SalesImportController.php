@@ -107,7 +107,6 @@ class SalesImportController extends Controller
         $reader = $this->get('appstore_inventory.importer.sales_excel_data_reader');
         $file =  realpath($SalesImport->getAbsolutePath());
         $importer->import($reader->getData($file));
-
         $SalesImport->setProgress('migrated');
         $em->flush();
 
@@ -173,7 +172,6 @@ class SalesImportController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-
             return $this->redirect($this->generateUrl('inventory_salesimport_edit', array('id' => $id)));
         }
 

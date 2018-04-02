@@ -17,10 +17,17 @@ class SalesExcel
     public function import($data)
     {
         $this->data = $data;
-
+        $config = $this->salesImport->getInventoryConfig();
         $sales = new Sales();
         $sales->setSalesImport($this->salesImport);
-        $sales->setInventoryConfig($this->salesImport->getInventoryConfig());
+        $sales->setInventoryConfig($config);
+        $customer = $this->getDoctrain()->getRepository('DomainUserBundle:Customer')->defaultCustomer($config->getGlobalOpton());
+        $sales->setCustomer($customer);
+        $transactionMethod = $this->getDoctrain()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $sales->setTransactionMethod($transactionMethod);
+        $sales->setSalesMode($config->getDeliveryProcess());
+        $sales->setProcess('In-progress');
+        $sales->setPaymentStatus('Paid');
         $this->persist($sales);
 
         foreach($this->data as $key => $item) {
@@ -36,8 +43,8 @@ class SalesExcel
                 $salesItem->setQuantity($item['Quantity']);
                 $salesItem->setPurchasePrice($purchaseItem->getPurchasePrice());
                 $salesItem->setEstimatePrice($purchaseItem->getPurchasePrice());
-                $salesItem->setSalesPrice($item['Price']);
-                $salesItem->setSubTotal($item['Total']);
+                $salesItem->setSalesPrice($item['UnitPrice']);
+                $salesItem->setSubTotal($item['SubTotal']);
                 $this->persist($salesItem);
                 $this->flush();
             }

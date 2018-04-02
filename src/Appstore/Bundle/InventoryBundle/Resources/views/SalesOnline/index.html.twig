@@ -102,6 +102,7 @@
                                     <th class="numeric" >Sales By</th>
                                     <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Process</th>
+                                    <th class="numeric" >Revised</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -118,6 +119,8 @@
                                         <td class="numeric"> {{ entity.salesBy }}</td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric"> {{ entity.process|capitalize }}</td>
+                                        <td class="numeric"> {% if entity.revised == 1  %}<a class="btn yellow mini" href="{{ path('inventory_sales_barcode_show',{'invoice':entity.invoice}) }}">Revised</a>{% endif %}</td>
+
                                         <td class="numeric" >
                                             {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                                 <a href="{{ path('inventory_salesonline_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>

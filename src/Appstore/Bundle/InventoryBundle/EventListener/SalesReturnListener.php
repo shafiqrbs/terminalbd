@@ -24,7 +24,7 @@ class SalesReturnListener
             $lastCode = $this->getLastCode($args, $datetime, $entity);
 
             $entity->setCode($lastCode+1);
-            $entity->setInvoice(sprintf("%s%s%s",$entity->getInventoryConfig()->getGlobalOption()->getId(), $datetime->format('mY'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
         }
     }
 

@@ -169,3 +169,7 @@ inventory_inventoryconfig:
 stockitem_results:
     path:     /results
     defaults: { _controller: "InventoryBundle:StockItem:indexResults" }
+
+inventory_reverse:
+    resource: "@InventoryBundle/Resources/config/routing/reverse.yml"
+    prefix:   /reverse

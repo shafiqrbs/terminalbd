@@ -22,6 +22,11 @@ class InventoryConfig
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Reverse", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $reverses;
+
+    /**
      * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
     protected $categories;
@@ -1197,6 +1202,14 @@ class InventoryConfig
     public function setDeliveryProcess($deliveryProcess)
     {
         $this->deliveryProcess = $deliveryProcess;
+    }
+
+    /**
+     * @return Reverse
+     */
+    public function getReverses()
+    {
+        return $this->reverses;
     }
 
 

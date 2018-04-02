@@ -122,7 +122,7 @@ class SalesOnlineController extends Controller
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'general-sales');
 
         if ($entity->getProcess() != "In-progress") {
-            return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
         }
 
         /* Device Detection code desktop or mobile */
@@ -322,8 +322,6 @@ class SalesOnlineController extends Controller
         }
     }
 
-
-
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
@@ -373,9 +371,9 @@ class SalesOnlineController extends Controller
             $entity->setDue($entity->getTotal() - $entity->getPayment());
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
-
             if ($entity->getTotal() <= $entity->getPayment()) {
                 $entity->setPayment($entity->getTotal());
+                $entity->setDue(0);
                 $entity->setPaymentStatus('Paid');
             }else{
                 $entity->setPaymentStatus('Due');
@@ -1144,6 +1142,8 @@ class SalesOnlineController extends Controller
         $entity->setPaymentInWord($amountInWords);
 
         if ($data['paymentTotal'] <= $data['paymentAmount']) {
+            $entity->setPayment($entity->getTotal());
+            $entity->setDue(0);
             $entity->setPaymentStatus('Paid');
         } else if ($data['paymentTotal'] > $data['paymentAmount']) {
             $entity->setPaymentStatus('Due');
@@ -1178,21 +1178,32 @@ class SalesOnlineController extends Controller
         }
     }
 
-    public function reverseAction(Sales $entity)
+    public function reverseAction($invoice)
     {
-        $em = $this->getDoctrine()->getManager();
-        
-        $em->getRepository('InventoryBundle:Item')->itemReverse($entity);
-        $em->getRepository('InventoryBundle:StockItem')->itemStockReverse($entity);
-        $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
-        $accountSales = $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
-
-
-        /*       $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-               $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-               $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
-               $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-               $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);*/
-    }
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory,'invoice' => $invoice));
+            $em = $this->getDoctrine()->getManager();
+            $em->getRepository('InventoryBundle:Item')->itemReverse($entity);
+            $em->getRepository('InventoryBundle:StockItem')->itemStockReverse($entity);
+            $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
+            $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
+            $em = $this->getDoctrine()->getManager();
+            $entity->setRevised(true);
+            $entity->setProcess('In-progress');
+            $entity->setRevised(true);
+            $entity->setTotal($entity->getSubTotal());
+            $entity->setPaymentStatus('Due');
+            $entity->setDiscount(null);
+            $entity->setDue($entity->getSubTotal());
+            $entity->setPaymentInWord(null);
+            $entity->setPayment(null);
+            $em->flush();
+            $template = $this->get('twig')->render('InventoryBundle:Reverse:salesReverse.html.twig', array(
+                'entity' => $entity,
+                'inventoryConfig' => $inventory,
+            ));
+            $em->getRepository('InventoryBundle:Reverse')->insertSales($entity, $template);
+            return $this->redirect($this->generateUrl('inventory_salesonline_edit', array('code' => $entity->getInvoice())));
+        }
 
 }

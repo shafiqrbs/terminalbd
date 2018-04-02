@@ -57,7 +57,7 @@ class SalesDataReader
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
 
-                $key = $dataArray['Barcode']. $dataArray['Price'].$dataArray['Total'];
+                $key = $dataArray['Barcode']. $dataArray['UnitPrice'].$dataArray['SubTotal'];
 
                 if (empty($dataArray['Quantity'])) {
                     $dataArray['Quantity'] = 1;

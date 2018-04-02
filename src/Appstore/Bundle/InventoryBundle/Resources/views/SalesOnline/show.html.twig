@@ -153,6 +153,7 @@
                                     {#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
+                                    <a href="{{ path('inventory_online_sales_reverse',{'invoice':entity.invoice}) }}"  class="btn red" ><i class="icon-refresh"></i> Reverse Sales</a>
 
                                 </div>
 

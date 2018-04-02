@@ -505,12 +505,10 @@ class Builder extends ContainerAware
 
                 }
                 if ('general-sales' == $deliveryProcess) {
-                    $menu['Sales']
-                        ->addChild('General Sales')
-                        ->setAttribute('icon', 'icon icon-truck')
-                        ->setAttribute('dropdown', true);
-                    $menu['Sales']['General Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
-                    $menu['Sales']['General Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
+                    $menu['Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
+                    $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
+                    $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
+                    $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
                 }
                 if ('general-x-sales' == $deliveryProcess) {
                     $menu['Sales']

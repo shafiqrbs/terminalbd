@@ -1432,7 +1432,6 @@ class StockItemRepository extends EntityRepository
     {
         $em = $this->_em;
         /* @var SalesItem $item */
-
         foreach ($sales->getSalesItems() as $item ){
             $StockItem = $em->createQuery('DELETE InventoryBundle:StockItem e WHERE e.salesItem = '.$item->getId());
             $StockItem->execute();

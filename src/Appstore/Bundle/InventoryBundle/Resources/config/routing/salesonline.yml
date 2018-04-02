@@ -52,6 +52,10 @@ inventory_salesonline_print_invoice:
     path:     /{invoice}/invoice
     defaults: { _controller: "InventoryBundle:SalesOnline:invoicePrint" }
 
+inventory_online_sales_reverse:
+    path:     /{invoice}/invoice-reverse
+    defaults: { _controller: "InventoryBundle:SalesOnline:reverse" }
+
 inventory_salesonline_empty_delete:
     path:     /delete/empty-invoice
     defaults: { _controller: "InventoryBundle:SalesOnline:deleteEmptyInvoice" }

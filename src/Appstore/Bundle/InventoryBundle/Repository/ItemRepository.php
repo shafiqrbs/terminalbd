@@ -457,7 +457,6 @@ class ItemRepository extends EntityRepository
         foreach ($sales->getSalesItems() as $item ){
 
             /* @var Item $itemEntity */
-
             $itemEntity = $item->getItem();
             $current = ( $itemEntity->getSalesQuantity() - $item->getQuantity() );
             $itemEntity->setSalesQuantity($current);
