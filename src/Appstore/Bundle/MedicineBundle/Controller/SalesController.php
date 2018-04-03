@@ -258,6 +258,8 @@ class SalesController extends Controller
             if($entity->getDue() > 0){
                 $entity->setPaymentStatus('Due');
             }else{
+                $entity->setPayment($entity->getNetTotal());
+                $entity->setDue(0);
                 $entity->setPaymentStatus('Paid');
             }
             $em->flush();

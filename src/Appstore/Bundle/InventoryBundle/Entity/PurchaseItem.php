@@ -158,9 +158,9 @@ class PurchaseItem
     private $barcode;
 
     /**
-     * @var string
+     * @var text
      *
-     * @ORM\Column(name="serialNo", type="text", length=255, nullable = true)
+     * @ORM\Column(name="serialNo", type="text", nullable = true)
      */
     private $serialNo;
 
@@ -576,21 +576,6 @@ class PurchaseItem
         return $this->deliveryItems;
     }
 
-    /**
-     * @return string
-     */
-    public function getSerialNo()
-    {
-        return $this->serialNo;
-    }
-
-    /**
-     * @param string $serialNo
-     */
-    public function setSerialNo($serialNo)
-    {
-        $this->serialNo = $serialNo;
-    }
 
     /**
      * @return string
@@ -686,6 +671,22 @@ class PurchaseItem
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+    }
+
+    /**
+     * @return text
+     */
+    public function getSerialNo()
+    {
+        return $this->serialNo;
+    }
+
+    /**
+     * @param text $serialNo
+     */
+    public function setSerialNo($serialNo)
+    {
+        $this->serialNo = $serialNo;
     }
 
 

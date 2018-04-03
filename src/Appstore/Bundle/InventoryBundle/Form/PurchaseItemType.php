@@ -27,7 +27,7 @@ class PurchaseItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('serialNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Attribute name')))
+            ->add('serialNo','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Attribute name')))
             ->add('expiredDate', 'date', array(
                 'widget' => 'single_text',
                 'placeholder' => array(

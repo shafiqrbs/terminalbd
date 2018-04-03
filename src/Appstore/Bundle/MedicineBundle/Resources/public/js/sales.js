@@ -183,6 +183,7 @@ $(document).on('change', '#sales_discount', function() {
             $('.grandTotal').html(obj['netTotal']);
             $('#paymentTotal').val(obj['netTotal']);
             $('#sales_discount').val(obj['discount']);
+            $('.discount').html(obj['discount']);
             $('#due').val(obj['due']);
             $('.dueAmount').html(obj['due']);
         }

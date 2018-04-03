@@ -126,7 +126,7 @@
                                             <td class="numeric" >{{ purchaseItem.barcode }}</td>
                                             <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                             {% if entity.inventoryConfig.isAttribute == 1 %}
-                                            <td class="numeric" >{{ purchaseItem.serialNo }}</td>
+                                            <td class="numeric" >{{ purchaseItem.serialNo|raw }}</td>
                                             {% endif %}
                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                             <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
