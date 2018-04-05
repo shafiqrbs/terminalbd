@@ -685,10 +685,11 @@ class SalesController extends Controller
         return new JsonResponse($items);
     }
 
-    public function invoicePrintAction(Sales $entity)
+    public function invoicePrintAction($invoice)
     {
-
+        $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $invoice));
         $barcode = $this->getBarcode($entity->getInvoice());
         $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
         $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);
