@@ -256,6 +256,13 @@ class InventoryConfig
     private $vatEnable = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="customPrint", type="boolean",  nullable=true)
+     */
+    private $customPrint = false;
+
+    /**
      * @var smallint
      *
      * @ORM\Column(name="printMarginTop", type="smallint",  nullable=true)
@@ -393,6 +400,20 @@ class InventoryConfig
      * @ORM\Column(name="barcodePadding", type="smallint", nullable = true)
      */
     private $barcodePadding = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodePageTopMargin", type="smallint", nullable = true)
+     */
+    private $barcodePageTopMargin = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodePageLeftMargin", type="smallint", nullable = true)
+     */
+    private $barcodePageLeftMargin = 0;
 
     /**
      * @var smallint
@@ -1210,6 +1231,54 @@ class InventoryConfig
     public function getReverses()
     {
         return $this->reverses;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodePageTopMargin()
+    {
+        return $this->barcodePageTopMargin;
+    }
+
+    /**
+     * @param smallint $barcodePageTopMargin
+     */
+    public function setBarcodePageTopMargin($barcodePageTopMargin)
+    {
+        $this->barcodePageTopMargin = $barcodePageTopMargin;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodePageLeftMargin()
+    {
+        return $this->barcodePageLeftMargin;
+    }
+
+    /**
+     * @param smallint $barcodePageLeftMargin
+     */
+    public function setBarcodePageLeftMargin($barcodePageLeftMargin)
+    {
+        $this->barcodePageLeftMargin = $barcodePageLeftMargin;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomPrint()
+    {
+        return $this->customPrint;
+    }
+
+    /**
+     * @param bool $customPrint
+     */
+    public function setCustomPrint($customPrint)
+    {
+        $this->customPrint = $customPrint;
     }
 
 

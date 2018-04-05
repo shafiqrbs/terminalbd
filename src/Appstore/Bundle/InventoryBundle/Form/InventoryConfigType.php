@@ -50,20 +50,7 @@ class InventoryConfigType extends AbstractType
                     'expanded'  => false,
                     'empty_data'  => null,
             ))
-
-            ->add('onlineSalesPrinter',
-                'choice', array(
-                    'attr'=>array('class'=>'m-wrap span12'),
-                    'choices' => array(
-                        'save'          => 'Save',
-                        'printer'       => 'Printer',
-                        'pos'           => 'Pos Printer',
-                    ),
-                    'required'    => true,
-                    'multiple'    => false,
-                    'expanded'  => false,
-                    'empty_data'  => null,
-            ))
+            ->add('customPrint')
             ->add('vatEnable')
             ->add('isAttribute')
             ->add('isBranch')
@@ -73,7 +60,6 @@ class InventoryConfigType extends AbstractType
             ->add('barcodePrint')
             ->add('barcodeSize')
             ->add('isPrintFooter')
-            ->add('invoicePrintUserMobile')
             ->add('invoicePrintLogo')
             ->add('barcodeBrandVendor',
                 'choice', array(
@@ -140,6 +126,8 @@ class InventoryConfigType extends AbstractType
                     'expanded'  => false,
                     'empty_data'  =>1,
             ))
+            ->add('barcodePageLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('barcodePageTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('barcodeText','text',array('attr'=>array('class'=>'m-wrap span12')))

@@ -688,13 +688,18 @@ class SalesController extends Controller
     public function invoicePrintAction(Sales $entity)
     {
 
-
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $barcode = $this->getBarcode($entity->getInvoice());
         $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
         $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);
-
-        return $this->render('InventoryBundle:SalesPrint:invoice.html.twig', array(
+        if($inventory->isCustomPrint() == 1){
+            $print = $this->getUser()->getGlobalOption()->getSlug();
+        }else{
+            $print = 'invoice';
+        }
+        return $this->render('InventoryBundle:SalesPrint:'.$print.'.html.twig', array(
             'entity'      => $entity,
+            'inventory'      => $inventory,
             'barcode'     => $barcode,
             'inWard'     => $inWard,
         ));
