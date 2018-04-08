@@ -224,39 +224,6 @@ class SalesManualController extends Controller
         exit;
     }
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
-
-    public function salesDiscountUpdateAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
-        $sales = $request->request->get('sales');
-
-        $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
-        $total = ($sales->getSubTotal() - $discount);
-        if($total > $discount ){
-            if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
-                $sales->setVat($vat);
-            }
-            $sales->setDiscount($discount);
-            $sales->setTotal($total + $vat);
-            $sales->setDue($total+$vat);
-            $em->persist($sales);
-            $em->flush();
-        }
-
-
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
-        exit;
-    }
-
-
     public function salesItemUpdateAction(Request $request, SalesItem $salesItem)
     {
         $em = $this->getDoctrine()->getManager();
@@ -297,6 +264,34 @@ class SalesManualController extends Controller
     }
 
     /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
+    public function salesDiscountUpdateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $discount = $request->request->get('discount');
+        $sales = $request->request->get('sales');
+        /* @var $sales Sales */
+        $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
+        $total = ($sales->getSubTotal() - $discount);
+        if($total > 0 ){
+            if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
+                $sales->setVat($vat);
+            }
+            $sales->setDiscount($discount);
+            $sales->setTotal($total + $vat);
+            $sales->setDue($total+$vat);
+            $em->persist($sales);
+            $em->flush();
+        }
+        $data = $this->returnResultData($sales);
+        return new Response(json_encode($data));
+        exit;
+    }
+
+    /**
      * Finds and displays a Sales entity.
      *
      */
@@ -312,7 +307,6 @@ class SalesManualController extends Controller
         }
 
     }
-
 
     /**
      * Creates a form to edit a Sales entity.wq
@@ -330,6 +324,7 @@ class SalesManualController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
+                'id' => 'salesForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -348,11 +343,12 @@ class SalesManualController extends Controller
         $data = array(
             'subTotal' => $subTotal,
             'netTotal' => $netTotal,
-            'payment' => $payment ,
-            'due' => $due,
             'vat' => $vat,
+            'due' => $due,
+            'payment' => $payment ,
             'discount' => $discount,
             'salesItems' => $salesItems,
+            'success' => 'success'
         );
         return $data;
 
@@ -376,59 +372,49 @@ class SalesManualController extends Controller
         $data = $request->request->all();
 
         if ($editForm->isValid()) {
-            $globalOption = $this->getUser()->getGlobalOption();
-            if (!empty($data['sales_general']['customer']['mobile'])) {
 
-                echo $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales_general']['customer']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomer($globalOption,$mobile,$data);
+            $globalOption = $this->getUser()->getGlobalOption();
+            if (!empty($data['customerMobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
                 $entity->setCustomer($customer);
 
             } elseif(!empty($data['mobile'])) {
 
-                echo $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
                 $entity->setCustomer($customer);
 
             }
 
+            $entity->setTotal($entity->getSubTotal() - $entity->getDiscount());
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
+                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$entity->getTotal());
                 $entity->setVat($vat);
             }
-            $due = $data['dueAmount'] == '' ? 0 : $data['dueAmount'];
-            $entity->setDue($due);
-            $entity->setDue($data['dueAmount']);
-            $entity->setDiscount($data['discount']);
-            $entity->setTotal($data['paymentTotal']);
-            $entity->setPayment($entity->getTotal() - $entity->getDue());
-            if($entity->getPayment() > 0) {
-                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
-                $entity->setPaymentInWord($amountInWords);
-            }
-            if ($entity->getTotal() <= $data['paymentAmount']) {
+            $entity->setTotal($entity->getTotal() + $entity->getVat());
+            $entity->setDue($entity->getTotal() - $entity->getPayment());
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+            $entity->setPaymentInWord($amountInWords);
+            if ($entity->getTotal() <= $entity->getPayment()) {
+                $entity->setPayment($entity->getTotal());
+                $entity->setDue(0);
                 $entity->setPaymentStatus('Paid');
             }else{
                 $entity->setPaymentStatus('Due');
             }
-            if (empty($data['sales']['salesBy'])) {
-                $entity->setSalesBy($this->getUser());
-            }
-            if ($entity->getTransactionMethod()->getId() != 4) {
+            if($entity->getProcess() =='Done'){
                 $entity->setApprovedBy($this->getUser());
-            } else if ($entity->getTransactionMethod()->getId() == 4) {
-                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-                $entity->setPaymentInWord($amountInWords);
             }
-
             $em->flush();
-
+            /*
             if (in_array('CustomerSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
 
                 if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                     $dispatcher = $this->container->get('event_dispatcher');
                     $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
                 }
-            }
+            }*/
             if($entity->getProcess() =='Done'){
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesManualStockItem($entity);
@@ -457,6 +443,8 @@ class SalesManualController extends Controller
         ));
 
     }
+
+
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_APPROVE")
@@ -502,10 +490,6 @@ class SalesManualController extends Controller
         exit;
     }
 
-    /**
-     * Deletes a SalesItem entity.
-     *
-     */
     public function itemDeleteAction(Sales $sales, $salesItem)
     {
         $em = $this->getDoctrine()->getManager();
@@ -531,7 +515,6 @@ class SalesManualController extends Controller
         return new Response($data);
     }
 
-
     public function getBarcode($invoice)
     {
         $barcode = new BarcodeGenerator();
@@ -545,7 +528,6 @@ class SalesManualController extends Controller
         $data .= '<img src="data:image/png;base64,' . $code . '" />';
         return $data;
     }
-
 
     public function deleteEmptyInvoiceAction()
     {
@@ -611,7 +593,6 @@ class SalesManualController extends Controller
 
     }
 
-
     public function approvedOrder(Sales $entity)
     {
         if (!empty($entity)) {
@@ -633,7 +614,6 @@ class SalesManualController extends Controller
         }
         exit;
     }
-
 
     public function returnCancelOrder(Sales $entity)
     {

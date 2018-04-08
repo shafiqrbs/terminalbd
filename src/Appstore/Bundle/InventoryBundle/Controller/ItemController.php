@@ -485,4 +485,19 @@ class ItemController extends Controller
 
     }
 
+    public function updatePurchaseQuantity()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $items = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findItemWithPurchaseQuantity($inventory);
+        foreach ($items as $row){
+           $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($row['item']);
+           $item->setPurchaseQuantity($row['quantity']);
+           $em->flush();
+        }
+        return $this->redirect($this->generateUrl('item'));
+    }
+
 }

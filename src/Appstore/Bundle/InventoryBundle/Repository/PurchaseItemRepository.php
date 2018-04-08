@@ -386,9 +386,25 @@ class PurchaseItemRepository extends EntityRepository
             if($data['expiredDate'][$key]){
                 $datetime = (new \DateTime($data['expiredDate'][$key]));
                 $entity->setExpiredDate($datetime);
+            }else{
+
             }
             $em->flush();
         }
+
+    }
+
+    public function findItemWithPurchaseQuantity(InventoryConfig $inventory )
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchase', 'p');
+        $qb->select('sum(e.quantity)  as quantity','e.item AS item');
+        $qb->where("p.inventoryConfig = :purchase");
+        $qb->setParameter('purchase', $inventory->getId());
+        $qb->groupBy('e.item');
+        $qb->orderBy('e.item','ASC');
+        $qb = $qb->getQuery()->getArrayResult();
+        return $qb;
 
     }
 

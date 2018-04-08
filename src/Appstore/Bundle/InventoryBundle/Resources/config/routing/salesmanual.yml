@@ -28,6 +28,13 @@ inventory_salesmanual_item_search:
     options:
             expose: true
 
+inventory_salesmanual_discount_update:
+    path:     /sales/discount-update
+    defaults: { _controller: "InventoryBundle:SalesManual:salesDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
 inventory_salesmanual_edit:
     path:     /{code}/manual-sales
     defaults: { _controller: "InventoryBundle:SalesManual:edit" }

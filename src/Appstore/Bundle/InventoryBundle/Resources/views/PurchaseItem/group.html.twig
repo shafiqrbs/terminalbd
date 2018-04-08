@@ -90,10 +90,10 @@
                             </div>
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
-                            {% set assuranceTypes =['Grantee','Warranty','Other'] %}
+                            {% set assuranceTypes =['Grantee','Warranty','No Warranty'] %}
                             {% set assuranceFromVendors =['1 Month','3 Month','4 Month','6 Month','1 Year',
                             '1 Year 6 Month','2 Year','2 Year 6 Month','3 Year','3 Year 6 Month',
-                            '4 Year','4 Year 6 Month','5 Year','5 Year 6 Month','Product Life Time','Others'
+                            '4 Year','4 Year 6 Month','5 Year','5 Year 6 Month','Product Life Time','No Warranty'
                             ] %}
                             <form name="purchase-attribute" id="purchase-attribute" method="post" action="{{ path('inventory_purchaseitem_multi_insert',{'purchase':entity.id}) }}">
                             {% for purchaseItem in entity.purchaseItems %}
@@ -120,7 +120,7 @@
                                                 <div class="control-group">
                                                     <label class="control-label" for="firstName">Serial No</label>
                                                     <div class="controls">
-                                                        <textarea rows="3" type="text" id="serialNo" name="serialNo[]" value="{{ purchaseItem.serialNo }}"  class="m-wrap span12" placeholder="Attribute name"></textarea>
+                                                        <textarea rows="3" type="text" id="serialNo" name="serialNo[]" class="m-wrap span12" placeholder="Product serial no">{{ purchaseItem.serialNo }}</textarea>
                                                         <p class="help-block">Using serial no. E.g: 0xxxx,1yyyy,2zzzz</p>
                                                     </div>
 

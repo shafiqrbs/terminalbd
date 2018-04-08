@@ -302,16 +302,16 @@ class AccountCashRepository extends EntityRepository
         $compareStart = new \DateTime($startDate);
         }
         $start =  $compareStart->format('Y-m-d 00:00:01');
-        $qb->andWhere("e.updated > :start");
-        $qb->setParameter('start', $start);
+        $qb->andWhere("e.updated >= :startDate");
+        $qb->setParameter('startDate', $start);
 
         $compareEnd = new \DateTime();
         if (!empty($endDate) ) {
         $compareEnd = new \DateTime($endDate);
         }
         $end =  $compareEnd->format('Y-m-d 23:59:59');
-        $qb->andWhere("e.updated < :end");
-        $qb->setParameter('end', $end);
+        $qb->andWhere("e.updated <= :endDate");
+        $qb->setParameter('endDate', $end);
 
         if (!empty($accountBank)) {
 

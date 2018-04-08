@@ -56,7 +56,7 @@ class PurchaseItemType extends AbstractType
                     '5 Year' => '5 Year',
                     '5 Year 6 Month' => '5 Year 6 Month',
                     'Product Life Time' => 'Product Life Time',
-                    'Others' => 'Others',
+                    'No Warranty' => 'No Warranty',
 
                 ),
             ))
@@ -78,7 +78,7 @@ class PurchaseItemType extends AbstractType
                     '5 Year' => '5 Year',
                     '5 Year 6 Month' => '5 Year 6 Month',
                     'Product Life Time' => 'Product Life Time',
-                    'Others' => 'Others',
+                    'No Warranty' => 'No Warranty',
                 ),
             ))
             ->add('assuranceType', 'choice', array(
@@ -86,7 +86,7 @@ class PurchaseItemType extends AbstractType
                 'choices' => array(
                     'Warranty' => 'Warranty',
                     'Grantee' => 'Grantee',
-                    'Others' => 'Others',
+                    'No Warranty' => 'No Warranty',
                 ),
             ));
     }

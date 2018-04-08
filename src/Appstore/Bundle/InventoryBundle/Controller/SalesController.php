@@ -125,7 +125,7 @@ class SalesController extends Controller
 
         $branch = $this->getUser()->getProfile()->getBranches();
         $branchStockItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($this->getUser(),$purchaseItem);
-
+        $msg ='';
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
         $device = '';
@@ -135,30 +135,48 @@ class SalesController extends Controller
         if (!empty($branch) and $branchStockItem == 'invalid' ) {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales,$device);
             $msg = '<div class="alert"><strong>Warning!</strong> There is no product in '.$branch->getName().' inventory.</div>';
 
         }elseif(!empty($purchaseItem) and $itemStock >= $checkQuantity) {
 
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales,$device);
             $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
 
         } else {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales,$device);
             $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
         }
-
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
+        $data = $this->returnResultData($sales,$msg);
+        return new Response(json_encode($data));
         exit;
     }
 
+    public function returnResultData(Sales $entity,$msg=''){
+
+        $salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
+        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
+        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $due = $entity->getDue();
+        $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
+        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $data = array(
+            'msg' => $msg,
+            'salesSubTotal' => $subTotal,
+            'salesTotal' => $netTotal,
+            'payment' => $payment ,
+            'due' => $due,
+            'discount' => $discount,
+            'vat' => $vat,
+            'salesItems' => $salesItems ,
+            'success' => 'success'
+        );
+
+        return $data;
+
+    }
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
@@ -169,11 +187,10 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $discount = $request->request->get('discount');
         $sales = $request->request->get('sales');
-
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $total = ($sales->getSubTotal() - $discount);
         $vat = 0;
-        if($total > $discount ){
+        if($total > 0 ){
             if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
                 $sales->setVat($vat);
@@ -184,12 +201,8 @@ class SalesController extends Controller
             $em->persist($sales);
             $em->flush();
         }
-
-
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        $data = $this->returnResultData($sales);
+        return new Response(json_encode($data));
         exit;
     }
 
@@ -209,7 +222,7 @@ class SalesController extends Controller
         $checkOngoingSalesQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($salesItem->getPurchaseItem());
         $itemStock = $salesItem->getPurchaseItem()->getItemStock();
         $currentRemainingQnt = ($itemStock + $salesItem->getQuantity()) - ($checkOngoingSalesQuantity + $quantity) ;
-
+        $sales = $salesItem->getSales();
         if(!empty($salesItem) && $itemStock > 0 && $currentRemainingQnt >= 0 ){
 
             $salesItem->setQuantity($quantity);
@@ -220,26 +233,13 @@ class SalesController extends Controller
             $salesItem->setSubTotal($quantity * $salesPrice);
             $em->persist($salesItem);
             $em->flush();
-
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-            $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-            $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
             $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
-
-            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
-
         } else {
-
-            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-            $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-            $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
             $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
-
-            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
-        }
-
+         }
+        $data = $this->returnResultData($sales,$msg);
+        return new Response(json_encode($data));
         exit;
     }
 
@@ -311,7 +311,6 @@ class SalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['value']);
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $mobile);
         $entity->setCustomer($customer);
@@ -359,23 +358,10 @@ class SalesController extends Controller
         $editForm->handleRequest($request);
         $data = $request->request->all();
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
-
-            /*if (!empty($data['sales']['mobile'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $mobile);
-                $entity->setCustomer($customer);
-                $entity->setMobile($mobile);
-            } else {
-                $globalOption = $this->getUser()->getGlobalOption();
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
-                $entity->setCustomer($customer);
-            }*/
-
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
             }
-
             $due = $data['dueAmount'] == '' ? 0 :$data['dueAmount'];
             $entity->setDue($due);
             $entity->setDiscount($data['discount']);
@@ -506,10 +492,8 @@ class SalesController extends Controller
         $em->remove($entity);
         $em->flush();
         $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'success' => 'success')));
+        $data = $this->returnResultData($sales,$msg);
+        return new Response(json_encode($data));
         exit;
 
     }
@@ -720,10 +704,6 @@ class SalesController extends Controller
         ));
     }
 
-    /**
-     * @param $code
-     * @return Response
-     */
     public function printAction($code)
     {
 

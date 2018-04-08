@@ -493,46 +493,29 @@ class Builder extends ContainerAware
             if (!empty($deliveryProcess)) {
 
                 if ('pos' == $deliveryProcess) {
-                    $menu['Sales']->addChild('Point of Sales')
-                        ->setAttribute('icon', 'fa fa-shopping-basket')
-                        ->setAttribute('dropdown', true);
-                    $menu['Sales']['Point of Sales']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon', 'icon-shopping-cart');
-                    $menu['Sales']['Point of Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER') or $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER')) {
-                        $menu['Sales']['Point of Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
-                    }
-                    $menu['Sales']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
+                    $menu['Sales']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon', 'icon icon-shopping-cart');
+                    $menu['Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon', 'icon icon-th-list');
+                    $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon icon-share-alt');
+                    $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon icon-upload');
 
                 }
                 if ('general-sales' == $deliveryProcess) {
-                    $menu['Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
-                    $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
-                    $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
-                    $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                    $menu['Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', 'icon icon-plus');
+                    $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', 'icon icon-th-list');
+                    $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon icon-upload');
+                    $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon icon-share-alt');
                 }
                 if ('general-x-sales' == $deliveryProcess) {
-                    $menu['Sales']
-                        ->addChild('General Sales')
-                        ->setAttribute('icon', 'icon icon-truck')
-                        ->setAttribute('dropdown', true);
-                    $menu['Sales']['General Sales']->addChild('Add Sales', array('route' => 'inventory_salesgeneral_new'))->setAttribute('icon', ' icon-plus');
-                    $menu['Sales']['General Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'))->setAttribute('icon', ' icon-th-list');
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER') or $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER') ) {
-                        $menu['Sales']['General Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
-                    }
-                    $menu['Sales']['General Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
+                    $menu['Sales']->addChild('Add Sales', array('route' => 'inventory_salesgeneral_new'))->setAttribute('icon', 'icon icon-plus');
+                    $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'))->setAttribute('icon', 'icon icon-th-list');
+                    $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon icon-share-alt');
+                    $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon icon-upload');
 
                 }
                 if ('manual-sales' == $deliveryProcess) {
-                    $menu['Sales']
-                        ->addChild('Manual Sales')
-                        ->setAttribute('icon', 'fa fa-shopping-basket')
-                        ->setAttribute('dropdown', true);
-                    $menu['Sales']['Manual Sales']->addChild('Add Sales', array('route' => 'inventory_salesmanual_new'))->setAttribute('icon', 'fa fa-cart-plus');
-                    $menu['Sales']['Manual Sales']->addChild('Sales', array('route' => 'inventory_salesmanual'))->setAttribute('icon', ' icon-th-list');
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER') or $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER')) {
-                        $menu['Sales']['Manual Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-exchange');
-                    }
+                    $menu['Sales']->addChild('Add Sales', array('route' => 'inventory_salesmanual_new'))->setAttribute('icon', 'fa fa-cart-plus');
+                    $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesmanual'))->setAttribute('icon', 'fa icon-th-list');
+                    $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-exchange');
                 }
 
                 if ('order' == $deliveryProcess) {

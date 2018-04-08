@@ -1,7 +1,4 @@
-
 function ApproveProcess(){
-
-
 
     $( ".date-picker" ).datepicker({
         dateFormat: "dd-mm-yy"
@@ -11,7 +8,6 @@ function ApproveProcess(){
         dateFormat: "dd-mm-yy",
         changeMonth: true,
         changeYear: true,
-        yearRange: "-100:+0",
     });
 
     $(document).on("click", ".delete", function() {

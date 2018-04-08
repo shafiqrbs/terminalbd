@@ -1,391 +1,165 @@
-/**
- * Created by rbs on 2/9/16.
- */
-
-/*function initializeAutoTabOptionOnEnterKey($form) {
-    $('#particular').select2('open');
-    $('#particular').on("select2-selecting", function (e) {
-        setTimeout(function () {
-            gotoNextFieldOfParticular();
-        }, 50)
-    });
-
-    $form.on('keypress', 'input', function (e) {
-
-        if (e.which == 13) {
-            e.preventDefault();
-
-            switch (this.id) {
-                case 'particular':
-                    gotoNextFieldOfParticular();
-                    break;
-                case 'description':
-                    $amountField.focus();
-                    break;
-                case 'amount':
-                    $form.find('input.btn').trigger('click');
-                    break;
-            }
-        }
-    });
-}*/
-
-
-$(".select2Customer").select2({
-
-    ajax: {
-
-        url: Routing.generate('domain_customer_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
-        var customer = $(element).val();
-        $.ajax(Routing.generate('domain_customer_name', { customer : customer}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-    },
-    allowClear: true,
-    minimumInputLength: 2
+$('#addItem').attr("disabled", true);
+$(".addCustomer").click(function(){
+    $( ".customer" ).slideToggle( "slow" );
+}).toggle( function() {
+    $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+}, function() {
+    $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
 });
-
-$('form#salesForm').on('keypress', '.inputs', function (e) {
-
-    if (e.which === 13) {
-        var inputs = $(this).parents("form").eq(0).find("input,select");
-        var idx = inputs.index(this);
-
-        if (idx == inputs.length - 1) {
-            inputs[0].select()
-        } else {
-            inputs[idx + 1].focus(); //  handles submit buttons
-        }
-        switch (this.id) {
-            case 'mobile':
-                $('#onlineSalesPos').focus();
-                break;
-        }
-        return false;
-    }
-});
-
 
 var InventorySales = function(sales) {
 
+    $(".select2CustomerName").select2({
 
-
-    $('input[name=barcode]').focus();
-
-    $('#item').select2('open');
-    $('#item').focus();
-
-    $(".addCustomer").click(function(){
-        $( ".customer" ).slideToggle( "slow" );
-    }).toggle( function() {
-        $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
-    }, function() {
-        $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
-    });
-
-
-    $( "#searchToggole" ).click(function() {
-        $( "#search-product" ).slideToggle( "slow" );
-    });
-
-    $('form.horizontal-form').on('keypress', 'input', function (e) {
-
-        if (e.which == 13) {
-            e.preventDefault();
-
-            switch (this.id) {
-
-                case 'discount':
-                    $('#paymentAmount').focus();
-                    break;
-
-                case 'paymentAmount':
-                    $('#mobile').select2('open');
-                    $('#sales_mobile').focus();
-                    $(".paymentBtn").attr("disabled", false);
-                    break;
-            }
-        }
-    });
-
-    $('#sales_general_salesBy').on("select2-selecting", function (e) {
-        setTimeout(function () {
-            $('#discount').focus();
-        }, 2000)
-    });
-
-    $(document).on('change', '#barcode', function() {
-
-        var barcode = $('#barcode').val();
-        if(barcode == ''){
-            $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('inventory_sales_item_search'),
-            type: 'POST',
-            data:'barcode='+barcode+'&sales='+ sales,
-            success: function(response){
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#purchaseItem').html(obj['purchaseItem']);
-                $('#salesItem').html(obj['salesItem']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
+        ajax: {
+            url: Routing.generate('domain_customer_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
             },
-
-        })
-    });
-
-    $(document).on('change', '#barcodeNo', function() {
-
-        var barcode = $('#barcodeNo').val();
-        if(barcode == ''){
-            $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('inventory_sales_online_item_search'),
-            type: 'POST',
-            data:'barcode='+barcode+'&sales='+ sales,
-            success: function(response) {
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#purchaseItem').html(obj['purchaseItem']);
-                $('#salesItem').html(obj['salesItem']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
+            results: function (data, page) {
+                return {
+                    results: data
+                };
             },
-        })
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var customer = $(element).val();
+            $.ajax(Routing.generate('domain_customer_name', {customer: customer}), {
+                dataType: "json"
+            }).done(function (data) {
+                return callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength: 3
     });
 
-    $(document).on('click', '.addSales', function() {
+    $(document).on("click", ".remove", function () {
 
-        var barcode = $(this).attr('id');
-        if(barcode == ''){
-            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('inventory_sales_item_search'),
-            type: 'POST',
-            data:'barcode='+barcode+'&sales='+ sales,
-            success: function(response) {
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#purchaseItem').html(obj['purchaseItem']);
-                $('#salesItem').html(obj['salesItem']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
-            },
-        })
-    });
-
-    $(document).on('change', '#item', function() {
-
-        var item = $('#item').val();
-        if(item == ''){
-            $('#stockItemDetails').hide();
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('inventory_sales_item_purchase'),
-            type: 'POST',
-            data:'item='+ item +'&sales=' + sales,
-            success: function(response) {
-                $('#stockItemDetails').show();
-                $('#itemDetails').html(response);
-                $(".editable").editable();
-            },
-        })
-    });
-
-
-
-    $(document).on("click", ".customPrice", function() {
-
-        var rel = $(this).attr('rel');
-        var estimatePrice = parseInt($('#estimatePrice-'+rel).val());
-        var quantity = parseInt($('#quantity-'+rel).val());
-        if($(this).is(':checked'))
-        {
-            $("#salesPrice-"+rel).attr("readonly", false).focus().val(estimatePrice);
-
-        }else{
-
-            var customPrice = 0;
-            $("#salesPrice-"+rel).attr("readonly", true).focus().val(estimatePrice);
-            var subTotal  = (quantity * estimatePrice);
-            $("#subTotalShow-"+rel).html(subTotal);
-            $.ajax({
-                url: Routing.generate('inventory_sales_item_update'),
-                type: 'POST',
-                data:'salesItemId='+rel+'&quantity='+quantity+'&salesPrice='+estimatePrice+'&customPrice='+customPrice,
-                success: function(response) {
-                    obj = JSON.parse(response);
-                    $('.salesTotal').html(obj['salesTotal']);
-                    $('#subTotal').val(obj['salesSubTotal']);
-                    $('#vat').val(obj['salesVat']);
-                    $('#paymentTotal').val(obj['salesTotal']);
-                    $('#paymentSubTotal').val(obj['salesTotal']);
-                    $('#dueAmount').html(obj['salesTotal']);
-                },
-
-            })
-        }
-    });
-
-
-
-    $(document).on('change', '.quantity , .salesPrice', function() {
-
-        var rel = $(this).attr('rel');
-
-        var quantity = parseFloat($('#quantity-'+rel).val());
-        var price = parseFloat($('#salesPrice-'+rel).val());
-        if($('#customPrice-'+rel).is(':checked')){
-            var customPrice = 1;
-        }else{
-            var customPrice = 0;
-        }
-        var subTotal  = (quantity * price);
-        $("#subTotalShow-"+rel).html(subTotal);
-
-        $.ajax({
-            url: Routing.generate('inventory_sales_item_update'),
-            type: 'POST',
-            data:'salesItemId='+ rel +'&quantity='+ quantity +'&salesPrice='+ price +'&customPrice='+ customPrice,
-            success: function(response) {
-                obj = JSON.parse(response);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-            },
-
-        })
-    });
-
-    $(document).on('change', '#serialNo', function() {
-        if($(this).val() !='') {
-            $.get($(this).val());
-        }
-        return false;
-    });
-
-
-    $(document).on("click", ".delete", function() {
-
-        var url = $(this).attr("rel");
-        var id = $(this).attr("id");
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('id');
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
-            onOkBut: function(event, el) {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (response) {
-                        obj = JSON.parse(response);
-                        if ('success' == obj['success']) {
-                            $('#remove-' + id).hide();
-                            $('.salesTotal').html(obj['salesTotal']);
-                            $('#subTotal').val(obj['salesSubTotal']);
-                            $('#vat').val(obj['salesVat']);
-                            $('#paymentTotal').val(obj['salesTotal']);
-                            $('#paymentSubTotal').val(obj['salesTotal']);
-                            $('#dueAmount').val(obj['salesTotal']);
-                        }
-
-
-                    },
-                })
+            onOkBut: function (event, el) {
+                $.get(url, function (response) {
+                    $('#remove' + id).hide();
+                    obj = JSON.parse(response);
+                    $('#subTotal').val(obj['subTotal']);
+                    $('.netTotal').html(obj['netTotal']);
+                    $('#netTotal').val(obj['netTotal']);
+                    $('#salesItem').html(obj['salesItems']);
+                    $('#vat').val(obj['vat']);
+                    $('#dueAmount').val(obj['due']);
+                });
             }
         });
 
     });
 
-    $(document).on('change', '#sales_discount', function() {
+    $(document).on('change', '.itemSearch', function () {
+        var item = $(this).val();
+        if (item == '') {
+            alert('You have to select item from drop down and this not item');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_salesmanual_item_search'),
+            type: 'POST',
+            data: 'item=' + item,
+            success: function (response) {
+                obj = JSON.parse(response);
+                $('#itemId').val(obj['itemId']);
+                $('#salesPrice').val(obj['price']);
+                $('#purchasePrice').val(obj['purchasePrice']);
+                if (obj['unit']) {
+                    $('.unit').html(obj['unit']);
+                }
+                $('#addItem').attr("disabled", false);
+            }
+        })
+    });
+
+    $(document).on('click', '#addItem', function (e) {
+
+        var url = $(this).attr('data-url');
+        var item = $('#salesitem_item').val();
+        var salesPrice = $('#salesPrice').val();
+        var quantity = $('#quantity').val();
+        var purchasePrice = $('#purchasePrice').val();
+        if (item == '') {
+            alert('You have to select item from drop down and this not item');
+            return false;
+        }
+        if (quantity == '') {
+            alert('Add Product Price & Quantity , Please try again.');
+            return false;
+        }
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: 'item=' + item + '&quantity=' + quantity + '&salesPrice=' + salesPrice + '&purchasePrice=' + purchasePrice,
+            success: function (response) {
+                obj = JSON.parse(response);
+                $('#subTotal').val(obj['subTotal']);
+                $('#netTotal').val(obj['netTotal']);
+                $('#vat').val(obj['vat']);
+                $('#salesItem').html(obj['salesItems']);
+                $('#dueAmount').val(obj['netTotal']);
+                $('#addItem').attr("disabled", true);
+                $("#appstore_bundle_inventorybundle_salesitem_item").select2().select2("val", "");
+                $('#salesPrice').val('');
+                $('#quantity').val('1');
+            },
+        })
+        e.preventDefault();
+
+    });
+
+    $(document).on('change', '#sales_discount', function () {
 
         var discount = parseInt($('#sales_discount').val());
-        var total =  parseInt($('#paymentTotal').val());
-        if(discount >= total ){
+        var total = parseInt($('#netTotal').val());
+        alert(total);
+        if (discount >= total) {
             $('#sales_discount').val(0);
             return false;
         }
         $.ajax({
-            url: Routing.generate('inventory_sales_discount_update'),
+            url: Routing.generate('inventory_salesmanual_discount_update'),
             type: 'POST',
-            data:'discount=' + discount+'&sales='+ sales,
-            success: function(response) {
+            data: 'discount=' + discount + '&sales=' + sales,
+            success: function (response) {
                 obj = JSON.parse(response);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('.totalVat').html(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('.dueAmount').html(obj['salesTotal']);
+                $('#subTotal').val(obj['subTotal']);
+                $('#netTotal').val(obj['netTotal']);
+                $('#vat').val(obj['vat']);
+                $('#dueAmount').val(obj['netTotal']);
             },
 
         })
     });
 
-    $(document).on('change', '#sales_payment', function() {
+    $(document).on('change', '#sales_payment', function () {
 
-        var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
-        var total =  parseInt($('#paymentTotal').val());
-        if( payment >= total ){
+        var payment = parseInt($('#sales_payment').val() != '' ? $('#sales_payment').val() : 0);
+        var total = parseInt($('#netTotal').val());
+        if (payment >= total) {
 
             var returnAmount = ( payment - total );
             $('#returnAmount').val(returnAmount).addClass('payment-yellow');
@@ -393,132 +167,100 @@ var InventorySales = function(sales) {
             $('#dueAmount').val('').removeClass('payment-red');
             $('.dueAmount').html('').removeClass('payment-red');
 
-        }else{
+        } else {
 
-            var dueAmount = (total-payment);
-            if(dueAmount > 0){
+            var dueAmount = (total - payment);
+            if (dueAmount > 0) {
                 $('#returnAmount').val('').removeClass('payment-yellow');
                 $('.returnAmount').html('').removeClass('payment-yellow');
                 $('#dueAmount').val(dueAmount).addClass('payment-red');
                 $('.dueAmount').html(dueAmount).addClass('payment-red');
             }
         }
-        if(payment > 0 && total > 0  ){
+        if (payment > 0 && total > 0) {
             $(".paymentBtn").attr("disabled", false);
-        }else{
+        } else {
             $(".paymentBtn").attr("disabled", true);
         }
 
     });
 
-    $(document).on("click", ".receiveBtn", function() {
+    $(document).on("click", ".btn-qnt-particular", function (e) {
 
-        var total =  parseInt($('#paymentTotal').val());
+        e.preventDefault();
+        var productId = $(this).attr('data-text');
+        var price = $(this).attr('data-title');
+        fieldId = $(this).attr('data-id');
+        fieldName = $(this).attr('data-field');
+        type = $(this).attr('data-type');
+        var input = $('#quantity');
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if (type == 'minus') {
+                if (currentVal > input.attr('min')) {
+                    var existVal = (currentVal - 1);
+                    input.val(existVal).change();
+                }
+                if (parseInt(input.val()) == input.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+
+            } else if (type == 'plus') {
+
+                if (currentVal < input.attr('max')) {
+                    var existVal = (currentVal + 1);
+                    input.val(existVal).change();
+                }
+                if (parseInt(input.val()) == input.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+
+            }
+        } else {
+            input.val(1);
+        }
+
+    });
+
+    $('form#salesForm').on('keypress', '.inputs', function (e) {
+
+        if (e.which === 13) {
+            var inputs = $(this).parents("form").eq(0).find("input,select");
+            var idx = inputs.index(this);
+            if (idx == inputs.length - 1) {
+                inputs[0].select()
+            } else {
+                inputs[idx + 1].focus(); //  handles submit buttons
+            }
+            switch (this.id) {
+                case 'sales_payment':
+                    $('#sales_process').focus();
+                    break;
+                case 'sales_process':
+                    $('#submitBtn').focus();
+                    break;
+            }
+            return false;
+        }
+    });
+
+    $(document).on("click", ".paymentBtn", function (e) {
+
+        var total =  parseInt($('#netTotal').val());
         if(total === 0 ){
             alert('Please add sales item');
-            $('input[name=barcode]').focus();
+            $('#salesitem_item').focus();
             return false;
         }
 
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
-            onOkBut: function(event, el) {
-                $('form#salesForm').submit();
+            onOkBut: function (event, el) {
+                $('form').submit();
             }
         });
-
+        e.preventDefault();
     });
-
-
-    $(document).on('change', '#sales_transactionMethod', function() {
-
-        var paymentMethod = $(this).val();
-        if( paymentMethod == 2){
-            $('#cartMethod').show();
-            $('#bkashMethod').hide();
-        }else if( paymentMethod == 3){
-            $('#bkashMethod').show();
-            $('#cartMethod').hide();
-        }else{
-            $('#cartMethod').hide();
-            $('#bkashMethod').hide();
-        }
-
-    });
-
-
-    $(".select2Item").select2({
-
-        placeholder: "Search item, color, size & brand name",
-        ajax: {
-            url: Routing.generate('item_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function(item){
-
-            //return item.name +' => '+ (item.remainingQuantity)
-            return item.name
-
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
-        initSelection: function(element, callback) {
-            var id = $(element).val();
-        },
-        allowClear: true,
-        minimumInputLength:1
-    });
-
-    $("#barcodeNo").select2({
-
-        placeholder: "Enter specific barcode",
-        allowClear: true,
-        ajax: {
-
-            url: Routing.generate('inventory_purchaseitem_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function(item){ return item.text}, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.text }, // omitted for brevity, see the source of this page
-        initSelection: function(element, callback) {
-            var id = $(element).val();
-        },
-        allowClear: true,
-        minimumInputLength:1
-    });
-
-
 }
 

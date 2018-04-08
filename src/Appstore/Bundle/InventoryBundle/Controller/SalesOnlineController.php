@@ -229,7 +229,7 @@ class SalesOnlineController extends Controller
 
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $total = ($sales->getSubTotal() - $discount);
-        if($total > $discount ){
+        if($total > 0 ){
             if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
                 $sales->setVat($vat);
@@ -337,7 +337,7 @@ class SalesOnlineController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
-        if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
+        if ($editForm->isValid()) {
 
             $globalOption = $this->getUser()->getGlobalOption();
             if (!empty($data['customerMobile'])) {
@@ -1197,6 +1197,7 @@ class SalesOnlineController extends Controller
             $entity->setDue($entity->getSubTotal());
             $entity->setPaymentInWord(null);
             $entity->setPayment(null);
+            $entity->setPaymentStatus('Pending');
             $em->flush();
             $template = $this->get('twig')->render('InventoryBundle:Reverse:salesReverse.html.twig', array(
                 'entity' => $entity,

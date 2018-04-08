@@ -51,15 +51,15 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span3">
-                                        <select name="accountMobileBank" id="accountMobileBank" class="select2 leftMargin span12">
+                                        <select name="accountMobileBank" id="accountMobileBank" class="leftMargin span12">
                                             <option value="" >--Select Mobile Account--</option>
                                             {% for account in accountMobileBanks %}
                                                 <option {% if searchForm.accountMobileBank is defined and searchForm.accountMobileBank == account.id %} selected="selected" {% endif %} value="{{ account.id }}" >{{ account.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="span3">
-                                        <select name="processHead" id="processHead" class="leftMargin select2 span12">
+                                    <div class="span2">
+                                        <select name="processHead" id="processHead" class="leftMargin span12">
                                             <option value="" >--Select Process--</option>
                                             {% for process in processHeads %}
                                                 <option {% if searchForm.processHead is defined and searchForm.processHead == process.slug %} selected="selected" {% endif %} value="{{ process.slug }}" >{{ process.name }}</option>
@@ -70,12 +70,12 @@
                                         <input type="text" id="accountRefNo" name="accountRefNo"  class="m-wrap  span12 search-input  " value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% else %}Enter Ref No{% endif %} ">
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="m-wrap  span12 date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="m-wrap span12 dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
-                                    <div class="span2">
+                                    <div class="span3">
                                         <div class="controls">
-                                            <div class="input-append span10">
-                                                <input type="text" id="endDate" name="endDate"  class="span11 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                            <div class="input-append span11">
+                                                <input type="text" id="endDate" name="endDate"  class="span11 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>

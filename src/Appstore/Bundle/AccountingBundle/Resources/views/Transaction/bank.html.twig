@@ -39,7 +39,7 @@
                                 <ul class="dropdown-menu pull-right">
                                     <li><a href="{{ path('account_transaction_cash') }}"><i class="icon-plus-sign"></i>&nbsp;Account of Cash</a></li>
                                     <li><a href="{{ path('account_transaction_bank') }}"><i class="icon-th-list"></i>&nbsp;Account of Bank</a></li>
-                                    <li><a href="{{ path('account_transaction_mobilebank') }}"><i class="icon-th-list"></i>&nbsp;Account of bKash</a></li>
+                                    <li><a href="{{ path('account_transaction_mobilebank') }}"><i class="icon-th-list"></i>&nbsp;Account of Mobile</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -51,15 +51,15 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span3">
-                                        <select name="accountBank" id="accountBank" class="select2 span12 leftMargin">
+                                        <select name="accountBank" id="accountBank" class=" span12 leftMargin">
                                             <option value="" >--Select Bank Account--</option>
                                             {% for account in accountBanks %}
                                                 <option {% if searchForm.accountBank is defined and searchForm.accountBank == account.id %} selected="selected" {% endif %} value="{{ account.id }}" >{{ account.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="span3">
-                                        <select name="processHead" id="processHead" class="leftMargin select2 span12">
+                                    <div class="span2">
+                                        <select name="processHead" id="processHead" class="leftMargin span12">
                                             <option value="" >--Select Process--</option>
                                             {% for process in processHeads %}
                                                 <option {% if searchForm.processHead is defined and searchForm.processHead == process.slug %} selected="selected" {% endif %} value="{{ process.slug }}" >{{ process.name }}</option>
@@ -70,12 +70,12 @@
                                         <input type="text" id="accountRefNo" name="accountRefNo"  class="m-wrap  span12 search-input  " value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% else %}Enter Ref No{% endif %} ">
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="m-wrap  span12 date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="m-wrap span12 dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
-                                    <div class="span2">
+                                    <div class="span3">
                                         <div class="controls">
-                                            <div class="input-append span10">
-                                                <input type="text" id="endDate" name="endDate"  class="span11 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                            <div class="input-append span11">
+                                                <input type="text" id="endDate" name="endDate"  class="span11 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>

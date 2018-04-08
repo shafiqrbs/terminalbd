@@ -39,14 +39,16 @@ class SalesGeneralType extends AbstractType
     {
         $builder
 
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card/cheque no','data-original-title'=>'Add payment card/cheque no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
-            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span7 inputs','placeholder'=>'Enter payment amount','data-original-title'=>'Enter payment amount','autocomplete'=>'off')))
+            ->add('discount','text', array('attr'=>array('class'=>'m-wrap span7 inputs','placeholder'=>'Enter discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Add payment card/cheque no','data-original-title'=>'Add payment card/cheque no','autocomplete'=>'off')))
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
+            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile inputs','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
+                'attr'=>array('class'=>'span12 m-wrap transactionMethod inputs'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -57,7 +59,7 @@ class SalesGeneralType extends AbstractType
                 'required'    => false,
                 'property' => 'name',
                 'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap inputs'),
                 'empty_value' => '---Choose payment method---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
@@ -69,7 +71,7 @@ class SalesGeneralType extends AbstractType
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap inputs'),
                 'empty_value' => '---Sales By---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
@@ -83,7 +85,7 @@ class SalesGeneralType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap inputs'),
                 'empty_value' => '---Choose receive bank account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -94,7 +96,7 @@ class SalesGeneralType extends AbstractType
             ))
             ->add('process', 'choice', array(
                 'required'    => false,
-                'attr'=>array('class'=>'span8 m-wrap'),
+                'attr'=>array('class'=>'span8 m-wrap inputs'),
                 'empty_value' => '---Choose current process---',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select current process'))
@@ -113,7 +115,7 @@ class SalesGeneralType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap inputs'),
                 'empty_value' => '---Choose receive mobile account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -122,7 +124,7 @@ class SalesGeneralType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ));
-            $builder->add('customer', new SalesCustomerType($this->location));
+           // $builder->add('customer', new SalesCustomerType($this->location));
 
     }
 

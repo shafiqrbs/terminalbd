@@ -85,3 +85,8 @@ item_price:
     path:      /price
     defaults: { _controller: "InventoryBundle:Item:price" }
     methods:  [POST]
+
+item_purcahse_quantity_update:
+    path:      /stock-purcahse-quantity-update
+    defaults: { _controller: "InventoryBundle:Item:updatePurchaseQuantity" }
+    methods:  [POST]

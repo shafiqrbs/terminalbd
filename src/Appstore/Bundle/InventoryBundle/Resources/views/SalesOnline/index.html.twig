@@ -75,12 +75,12 @@
                                         <input type="text" id="courierInvoice" name="courierInvoice"  class="span12 m-wrap" value="{% if searchForm.courierInvoice is defined %}{{ searchForm.courierInvoice }}{% endif %}"  autocomplete="off" placeholder="Enter courier invoice no ">
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="endDate"  name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                <input type="text" id="endDate"  name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
