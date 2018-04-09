@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Doctrine\Common\Util\Debug;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,10 +46,12 @@ class BarcodeController extends Controller
 
     }
 
-    public function barCoder($barcoder)
+    public function barCoder(PurchaseItem $barcoder,InventoryConfig $config)
     {
 
-        if ((!empty($barcoder->getItem()->getColor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeColor() == 1) and (!empty($barcoder->getItem()->getSize()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeSize() == 1)) {
+
+
+        if ((!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1)) {
 
             if ($barcoder->getItem()->getColor()->getName() != 'Default'){
                 $color = $barcoder->getItem()->getColor()->getName();
@@ -62,48 +65,53 @@ class BarcodeController extends Controller
             }
             $sizeColor =  $color.$size;
 
-        } elseif (!empty($barcoder->getItem()->getSize()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeSize() == 1 and $barcoder->getItem()->getSize()->getName() != 'Default') {
+        } elseif (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1 and $barcoder->getItem()->getSize()->getName() != 'Default') {
             $sizeColor = $barcoder->getItem()->getSize()->getName();
-        } elseif (!empty($barcoder->getItem()->getColor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeColor() == 1 and $barcoder->getItem()->getColor()->getName() != 'Default') {
+        } elseif (!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1 and $barcoder->getItem()->getColor()->getName() != 'Default') {
             $sizeColor = $barcoder->getItem()->getColor()->getName();
         }else {
             $sizeColor = '';
         }
 
-        if (!empty($barcoder->getItem()->getVendor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeBrandVendor() == 2 ){
+        if (!empty($barcoder->getItem()->getVendor()) and $config->getBarcodeBrandVendor() == 2 ){
             $vendorBrand = $barcoder->getPurchase()->getVendor()->getVendorCode();
-        }elseif(!empty($barcoder->getItem()->getBrand()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeBrandVendor() == 1){
+        }elseif(!empty($barcoder->getItem()->getBrand()) and $config->getBarcodeBrandVendor() == 1){
             $vendorBrand = $barcoder->getItem()->getBrand()->getBrandCode();
         }else{
             $vendorBrand = '';
         }
 
-        $barcodeWidth = $barcoder->getItem()->getInventoryConfig()->getBarcodeWidth().'px';
-        $barcodeHeight = $barcoder->getItem()->getInventoryConfig()->getBarcodeHeight().'px';
-        $barcodeMargin = $barcoder->getItem()->getInventoryConfig()->getBarcodeMargin();
+        $barcodeWidth = $config->getBarcodeWidth().'px';
+        $barcodeHeight = $config->getBarcodeHeight().'px';
+        $barcodeMargin = $config->getBarcodeMargin();
         if($barcodeMargin == 0 ){
             $margin = 0;
         }else{
             $margin = $barcodeMargin.'px';
         }
-        $barcodePadding = $barcoder->getItem()->getInventoryConfig()->getBarcodePadding();
+        $barcodePadding = $config->getBarcodePadding();
         if($barcodePadding == 0 ){
             $padding = 0;
         }else{
             $padding = $barcodePadding.'px';
         }
-        $barcodeBorder = $barcoder->getItem()->getInventoryConfig()->getBarcodeBorder();
+        $barcodeBorder = $config->getBarcodeBorder();
         if($barcodeBorder > 0 ){
             $border = $barcodeBorder.'px';
         }else{
             $border = 0;
         }
 
-        $shopName = $barcoder->getItem()->getInventoryConfig()->getShopName();
+        $shopName = $config->getShopName();
+        if($config->getBarcodePriceHide() == 1){
+            $price ='';
+        }else{
+            $price ="TK. {$barcoder->getSalesPrice()} ";
+        }
+        $scale = $config->getBarcodeScale();
+        $fontsize = $config->getBarcodeFontSize();
+        $thickness = $config->getBarcodeThickness();
 
-        $scale = $barcoder->getItem()->getInventoryConfig()->getBarcodeScale();
-        $fontsize = $barcoder->getItem()->getInventoryConfig()->getBarcodeFontSize();
-        $thickness = $barcoder->getItem()->getInventoryConfig()->getBarcodeThickness();
         $barcode = new BarcodeGenerator();
         $barcode->setText($barcoder->getBarcode());
         $barcode->setType(BarcodeGenerator::Code128);
@@ -122,7 +130,7 @@ class BarcodeController extends Controller
         }
         $data .='<div class="clearfix"></div>';
         $data .='<img src="data:image/png;base64,'.$code.'" />';
-        $data .='<p><span class="center">TK '.$barcoder->getSalesPrice().' '.$barcoder->getItem()->getInventoryConfig()->getBarcodeText().'</span></p>';
+        $data .='<p><span class="center">'.$price.$config->getBarcodeText().'</span></p>';
         $data .='</div>';
         $data .='</div>';
         return $data;
@@ -169,13 +177,14 @@ class BarcodeController extends Controller
 
     public function createAction(Request $request)
     {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $x = 0;
         foreach ($data['item'] as $row) {
             $barcode = $em->getRepository('InventoryBundle:PurchaseItem')->find($row);
             for ($i = 0; $data['barcodeQnt'][$x] > $i; $i++){
-                $barCoder[] = $this->barCoder($barcode);
+                $barCoder[] = $this->barCoder($barcode,$config);
             }
             $x++;
         }
@@ -188,8 +197,9 @@ class BarcodeController extends Controller
 
     public function printAction()
     {
-        $printLeftMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintLeftMargin();
-        $printTopMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintTopMargin();
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $printLeftMargin = $config->getBarcodePageLeftMargin();
+        $printTopMargin = $config->getBarcodePageTopMargin();
         $barCoder = $this->get('session')->get('barcodeQ');
         if($printLeftMargin == 0){
             $leftMargin = 0;
@@ -203,8 +213,8 @@ class BarcodeController extends Controller
         }
 
         return $this->render('InventoryBundle:Barcode:print.html.twig', array(
-            'printLeftMargin'       => $leftMargin,
-            'printTopMargin'        => $topMargin,
+            'barcodePageLeftMargin'       => $leftMargin,
+            'barcodePageTopMargin'        => $topMargin,
             'barCoder'              => $barCoder
         ));
     }

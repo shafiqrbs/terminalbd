@@ -239,7 +239,12 @@ class InventoryConfig
      */
     private $invoicePrintLogo = true;
 
-
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="barcodePriceHide", type="boolean",  nullable=true)
+     */
+    private $barcodePriceHide = false;
 
     /**
      * @var boolean
@@ -1279,6 +1284,22 @@ class InventoryConfig
     public function setCustomPrint($customPrint)
     {
         $this->customPrint = $customPrint;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getBarcodePriceHide()
+    {
+        return $this->barcodePriceHide;
+    }
+
+    /**
+     * @param bool $barcodePriceHide
+     */
+    public function setBarcodePriceHide($barcodePriceHide)
+    {
+        $this->barcodePriceHide = $barcodePriceHide;
     }
 
 
