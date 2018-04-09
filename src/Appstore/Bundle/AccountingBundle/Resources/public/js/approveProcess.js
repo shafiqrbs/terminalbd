@@ -10,7 +10,6 @@ function AccountingApproveProcess(){}
         dateFormat: "dd-mm-yy",
         changeMonth: true,
         changeYear: true,
-        yearRange: "-10:+0"
     });
 
     $( ".dateCalendar" ).datepicker({

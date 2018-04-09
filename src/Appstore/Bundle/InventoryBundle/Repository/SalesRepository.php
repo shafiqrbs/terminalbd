@@ -38,16 +38,14 @@ class SalesRepository extends EntityRepository
             $mode =    isset($data['mode'])? $data['mode'] :'';
 
             if (!empty($startDate)) {
-               // $start = $startDate->format('Y-m-d 00:00:00');
                 $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
-                $qb->andWhere("s.updated >= :startDate");
+                $qb->andWhere("s.created >= :startDate");
                 $qb->setParameter('startDate',$start);
             }
 
             if (!empty($endDate)) {
-                //$end = $startDate->format('Y-m-d 00:00:00');
                 $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
-                $qb->andWhere("s.updated <= :endDate");
+                $qb->andWhere("s.created <= :endDate");
                 $qb->setParameter('endDate',$end);
             }
 

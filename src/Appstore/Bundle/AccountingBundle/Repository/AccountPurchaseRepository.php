@@ -90,6 +90,7 @@ class AccountPurchaseRepository extends EntityRepository
 
         }else{
 
+                $grn = isset($data['grn'])  ? $data['grn'] : '';
                 $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $inventoryVendor =    isset($data['vendor'])? $data['vendor'] :'';
@@ -102,10 +103,15 @@ class AccountPurchaseRepository extends EntityRepository
                     $qb->setParameter('startDate', $startDate.' 00:00:00');
                 }
                 if (!empty($data['endDate']) and !empty($data['startDate'])) {
-
                     $qb->andWhere("e.updated <= :endDate");
                     $qb->setParameter('endDate', $endDate.' 00:00:00');
                 }
+                if (!empty($inventoryVendor)) {
+                    $qb->join('e.vendor','v');
+                    $qb->andWhere("v.companyName = :vendor");
+                    $qb->setParameter('vendor', $inventoryVendor);
+                }
+
                 if (!empty($inventoryVendor)) {
                     $qb->join('e.vendor','v');
                     $qb->andWhere("v.companyName = :vendor");
@@ -121,6 +127,12 @@ class AccountPurchaseRepository extends EntityRepository
                 if (!empty($transactionMethod)) {
                     $qb->andWhere("e.transactionMethod = :transactionMethod");
                     $qb->setParameter('transactionMethod', $transactionMethod);
+                }
+
+                if (!empty($grn)) {
+                    $qb->leftJoin("e.purchase",'p');
+                    $qb->andWhere("p.grn = :grn");
+                    $qb->setParameter('grn', $grn);
                 }
         }
 

@@ -60,7 +60,7 @@
                                         <input type="text" id="invoice" name="invoice"  class="leftMargin span12 select2Invoice m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Invoice no">
                                     </div>
                                     <div class="span2">
-                                        <select name="transactionMethod" id="transactionMethod" class="select2 leftMargin span12 m-wrap">
+                                        <select name="transactionMethod" id="transactionMethod" class="leftMargin span12 m-wrap">
                                             <option value="" >--Transaction--</option>
                                             {% for method in transactionMethods %}
                                                 <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
@@ -68,15 +68,15 @@
                                         </select>
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="accountRefNo" name="accountRefNo"  class="span12 search-input  m-wrap" value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% else %}Enter Ref No{% endif %} ">
+                                        <input type="text" id="accountRefNo" name="accountRefNo"  class="span12 search-input  m-wrap" value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="Enter reference no">
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker m-wrap" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input  dateCalendar m-wrap" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span2">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="endDate" name="endDate"  class="span10 search-input date-picker m-wrap" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <input type="text" id="endDate" name="endDate"  class="span10 search-input dateCalendar m-wrap" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -112,7 +112,6 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Invoice</th>
-                                    <th class="numeric" >Mode</th>
                                     <th class="numeric" >Ref No.</th>
                                     <th class="numeric" >Trans. Method</th>
                                     <th class="numeric" >Sales</th>
@@ -128,9 +127,6 @@
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.sales is not empty %}{{ entity.sales.invoice }} {% endif %}
-                                        </td>
-                                        <td class="numeric" >
-                                            {% if entity.sales is not empty %}{{ entity.sales.salesMode }} {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                          <td class="numeric" >

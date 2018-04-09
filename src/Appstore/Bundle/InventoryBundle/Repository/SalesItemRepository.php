@@ -372,12 +372,12 @@ class SalesItemRepository extends EntityRepository
 
             if (!empty($data['startDate']) ) {
 
-                $qb->andWhere("sales.updated >= :startDate");
+                $qb->andWhere("sales.created >= :startDate");
                 $qb->setParameter('startDate', $startDate.' 00:00:00');
             }
             if (!empty($data['endDate'])) {
 
-                $qb->andWhere("sales.updated <= :endDate");
+                $qb->andWhere("sales.created <= :endDate");
                 $qb->setParameter('endDate', $endDate.' 23:59:59');
             }
     }
