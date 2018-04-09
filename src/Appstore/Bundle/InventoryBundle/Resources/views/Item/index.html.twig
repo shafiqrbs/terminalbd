@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Item Lists
+                   Stock Item Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('item') }}">Item</a>
+                        <a href="{{ path('item') }}">Stock Items</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Item Lists</a></li>
@@ -33,7 +33,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Item lists</div>
+                        <div class="caption"><i class="icon-reorder"></i>Stock Item lists</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -116,7 +116,7 @@
                                     <tr>
                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.sku }}</td>
-                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" ><a href="javascript:" data-url="{{ path('inventory_item_sku_update',{'item':entity.id}) }}" id="sku-{{ entity.id }}" data-id="{{ entity.id }}" class="skuUpdate" >{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn) - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity+ entity.onlineOrderQuantity) }}</td>
                                         <td class="numeric" >{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>

@@ -81,6 +81,10 @@ inventory_item_inline_update:
     options:
            expose: true
 
+inventory_item_sku_update:
+    path:     /{item}/sku-update
+    defaults: { _controller: "InventoryBundle:Item:skuUpdate" }
+
 item_price:
     path:      /price
     defaults: { _controller: "InventoryBundle:Item:price" }

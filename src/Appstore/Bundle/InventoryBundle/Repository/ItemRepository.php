@@ -467,5 +467,86 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function skuUpdate(InventoryConfig $config ,Item $entity)
+    {
+
+        $masterItem         = $entity->getMasterItem()->getSTRPadCode();
+        $masterSlug         = $entity->getMasterItem()->getSlug();
+        $masterName         = $entity->getMasterItem()->getName();
+
+        $color ='';
+        $colorName ='';
+
+        if(!empty($config->getIsColor()) and $config->getIsColor() == 1 ){
+            $color              = '-C'.$entity->getColor()->getSTRPadCode();
+            $colorSlug          = $entity->getColor()->getSlug();
+            $colorName          = '-'.$entity->getColor()->getName();
+        }elseif(!empty($entity->getColor())){
+            $colorSlug          =$entity->getColor()->getSlug();
+        }else{
+            $colorSlug ='';
+        }
+
+        $size ='';
+        $sizeName = '';
+
+        if(!empty($config->getIsSize()) and $config->getIsSize() == 1){
+            $size               = '-S'.$entity->getSize()->getSTRPadCode();
+            $sizeSlug           = $entity->getSize()->getSlug();
+            $sizeName           = '-'.$entity->getSize()->getName();
+        }elseif(!empty($entity->getSize())){
+            $sizeSlug           = $entity->getSize()->getSlug();
+        }else{
+            $sizeSlug = '';
+        }
+
+        $brand ='';
+        $brandName = '';
+
+        if(!empty($config->getIsBrand()) and $config->getIsBrand() == 1){
+            $brand               = '-B'.$entity->getBrand()->getSTRPadCode();
+            $brandSlug           = $entity->getBrand()->getSlug();
+            $brandName           = '-'.$entity->getBrand()->getName();
+        }elseif(!empty($entity->getBrand())){
+            $brandSlug           = $entity->getBrand()->getSlug();
+        }else{
+            $brandSlug = '';
+        }
+
+
+        $vendor ='';
+        $vendorName ='';
+
+        if(!empty($config->getIsVendor()) and $config->getIsVendor() == 1 ){
+
+            $vendor             = '-V'.$entity->getVendor()->getSTRPadCode();
+            $vendorSlug         =  $entity->getVendor()->getSlug();
+            $vendorName         = '-'.$entity->getVendor()->getVendorCode();
+
+        }elseif(!empty($entity->getVendor())){
+            $vendorSlug           = $entity->getVendor()->getSlug();
+        }else{
+            $vendorSlug = '';
+        }
+
+        $sku            = $masterItem.$color.$size.$brand.$vendor;
+        $name           = $masterName.$colorName.$sizeName.$brandName.$vendorName;
+        $skuSlug        = $masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug;
+
+
+        $domainSlug     = $config->getGlobalOption()->getSlug();
+        $skuWeb         = $skuSlug.'_'.$domainSlug;
+
+        $em = $this->_em;
+        $entity->setName($name);
+        $entity->setSku($sku);
+        $entity->setSlug($skuSlug);
+        $entity->setSkuSlug($skuSlug);
+        $entity->setSkuWebSlug($skuWeb);
+        $em->persist($entity);
+        $em->flush();
+
+    }
+
 
 }

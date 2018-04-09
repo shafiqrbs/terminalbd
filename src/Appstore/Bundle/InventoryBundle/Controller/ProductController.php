@@ -240,6 +240,7 @@ class ProductController extends Controller
                 $entity->removeUpload();
             }
             $entity->upload();
+            $entity->setSlug($entity->getName());
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

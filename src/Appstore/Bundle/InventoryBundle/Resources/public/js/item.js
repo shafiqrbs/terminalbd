@@ -15,6 +15,14 @@ var InventoryItemListPage = function () {
         }
         $.cookie('barcodes', itemArr, {path: '/'});
     });
+
+    $(document).on("click", ".skuUpdate", function() {
+        var id = $(this).attr("data-id");
+        var url = $(this).attr("data-url");
+        $.get(url, function(response){
+            $('#sku-'+id).html(response);
+        });
+    });
 };
 
 var InventoryItemEditPage = function (item) {
@@ -77,7 +85,9 @@ var InventoryItemEditPage = function (item) {
             },
         })
 
-    })
+    });
+
+
 
     var count = 0;
 

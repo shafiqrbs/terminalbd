@@ -407,6 +407,13 @@ class ItemController extends Controller
         $entity ->upload($option->getId(),$item->getId());
     }
 
+    public function skuUpdateAction(Item $item)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $this->getDoctrine()->getRepository('InventoryBundle:Item')->skuUpdate($inventory,$item);
+        return new JsonResponse($item->getName());
+    }
+
     public function autoSearchAction(Request $request)
     {
         $item = $_REQUEST['q'];
