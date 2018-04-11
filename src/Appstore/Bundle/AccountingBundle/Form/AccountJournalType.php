@@ -35,7 +35,7 @@ class AccountJournalType extends AbstractType
                 )))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('transactionType', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please choose required'))
                 ),
@@ -49,7 +49,7 @@ class AccountJournalType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'empty_value' => '---Choose a transaction method---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -61,46 +61,40 @@ class AccountJournalType extends AbstractType
                 }
             ))
 
-            ->add('accountHeadDebit', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
-                'empty_value' => '---Choose a debit head---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
+            ->add('accountHeadDebit', 'entity', [
+                'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
+                'group_by'  => 'parent.name',
+                'property'  => 'name',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->where("e.toIncrease ='Debit'")
-                        ->andWhere("e.parent > 0")
-                        ->orderBy("e.name");
+                        ->join("e.parent",'c')
+                        ->where("e.toIncrease = 'Debit'")
+                        ->orderBy("e.name", "ASC");
                 }
-            ))
+            ])
 
-            ->add('accountHeadCredit', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
-                'empty_value' => '---Choose a credit head---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
+            ->add('accountHeadCredit', 'entity', [
+                'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
+                'group_by'  => 'parent.name',
+                'property'  => 'name',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
+                        ->join("e.parent",'c')
                         ->where("e.toIncrease = 'Credit'")
-                        ->andWhere("e.parent > 0")
-                        ->orderBy("e.name");
+                        ->orderBy("e.name", "ASC");
                 }
-            ))
+            ])
 
             ->add('accountBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -113,7 +107,7 @@ class AccountJournalType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile account---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -124,9 +118,9 @@ class AccountJournalType extends AbstractType
             ->add('toUser', 'entity', array(
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
-                'empty_value' => '---Choose a user---',
+                'empty_value' => '--- Select a user name ---',
                 'property' => 'username',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.isDelete !=  :delete')

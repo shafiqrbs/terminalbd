@@ -34,26 +34,27 @@ class AccountJournalRepository extends EntityRepository
         return $result;
     }
 
-    public function accountCashOverview(User $user,$transactionMethods,$data)
+    public function accountCashOverview(User $user,$type,$data)
     {
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
-        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->select('SUM(e.amount) AS amount');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = 'approved'");
+        $qb->andWhere("e.transactionType = :transactionType");
+        $qb->setParameter('transactionType', $type);
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
-        $qb->andWhere("t.id IN(:transactionMethod)");
-        $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
-        $data =  array('debit'=> $result['debit'],'credit'=> $result['credit']);
-        return $data;
+        $amount =  $result['amount'];
+        return $amount;
 
     }
 
@@ -70,7 +71,9 @@ class AccountJournalRepository extends EntityRepository
             $accountRefNo = isset($data['accountRefNo'])  ? $data['accountRefNo'] : '';
             $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
             $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
-
+            $toUser = isset($data['toUser']) ? $data['toUser'] :'';
+            $accountHeadDebit = isset($data['accountHeadDebit']) ? $data['accountHeadDebit'] :'';
+            $accountHeadCredit = isset($data['accountHeadCredit']) ? $data['accountHeadCredit'] :'';
             $startDate = isset($data['startDate']) and $data['startDate'] != '' ? $data['startDate'].' 00:00:00' : $today_startdatetime;
             $endDate =   isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate'].' 23:59:59' : $today_enddatetime;
 
@@ -87,10 +90,16 @@ class AccountJournalRepository extends EntityRepository
                 $qb->andWhere("e.toUser = :toUser");
                 $qb->setParameter('toUser', $toUser);
             }
-            if (!empty($accountHead)) {
+            if (!empty($accountHeadCredit)) {
 
-                $qb->andWhere("e.accountHead = :accountHead");
-                $qb->setParameter('accountHead', $accountHead);
+                $qb->andWhere("e.accountHeadCredit = :accountHeadCredit");
+                $qb->setParameter('accountHeadCredit', $accountHeadCredit);
+            }
+
+            if (!empty($accountHeadDebit)) {
+
+                $qb->andWhere("e.accountHeadDebit = :accountHeadDebit");
+                $qb->setParameter('accountHeadDebit', $accountHeadDebit);
             }
 
             if (!empty($data['startDate']) ) {

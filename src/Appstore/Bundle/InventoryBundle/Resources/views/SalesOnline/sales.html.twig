@@ -287,7 +287,7 @@
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <div class="span12">
+                                    <div class="span12 receive-empty" id="receiveChange">
                                         <div class="input-prepend input-append input-append-border span12">
                                             <span class="add-on add-on-custom span3">Receive TK.</span>{{ form_widget(form.payment) }}
                                             {{ form_errors(form.payment) }}
@@ -465,6 +465,13 @@
         </div>
     </div>
     <style>
+
+        .receive-empty{
+            border: 5px solid red;
+        }
+        .receive-value{
+            border: 5px solid #4b8df8;
+        }
 
         input[class*="span"].m-wrap {
             height: 33px!important;

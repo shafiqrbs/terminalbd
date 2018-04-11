@@ -13,13 +13,16 @@ class AccountHeadRepository extends EntityRepository
 {
 
 
-    public function getChildrenAccountHead($parent)
+    public function getChildrenAccountHead($parent = '')
     {
         $query = $this->createQueryBuilder('e');
         $query->select('e.id as id');
         $query->addSelect('e.name as name');
-        $query->where("e.parent IN (:parent)");
-        $query->setParameter('parent', $parent);
+        $query->addSelect('e.toIncrease as toIncrease');
+        if(!empty($parent)) {
+            $query->where("e.parent IN (:parent)");
+            $query->setParameter('parent', $parent);
+        }
         $query->orderBy('e.name', 'ASC');
         return $query->getQuery()->getResult();
 

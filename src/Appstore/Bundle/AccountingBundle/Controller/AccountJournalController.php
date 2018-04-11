@@ -39,10 +39,14 @@ class AccountJournalController extends Controller
         $data = $_REQUEST;
         $entities = $em->getRepository('AccountingBundle:AccountJournal')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(1,5,9,12,17,20,23,29,44));
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent'=>1),array('name'=>'ASC'));
+        $debit = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountCashOverview($this->getUser(),'Debit',$data);
+        $credit = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountCashOverview($this->getUser(),'Credit',$data);
+        $overview = array('debit' => $debit,'credit' => $credit);
         return $this->render('AccountingBundle:AccountJournal:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
+            'overview' => $overview,
             'accountHead' => $accountHead,
         ));
     }

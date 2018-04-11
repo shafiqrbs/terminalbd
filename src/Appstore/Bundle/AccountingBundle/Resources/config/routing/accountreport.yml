@@ -30,3 +30,14 @@ account_bank_show:
     path:     /{id}/show
     defaults: { _controller: "AccountingBundle:AccountBank:show" }
 
+report_journal_user_summary:
+    path:     /journal-user-base-dabit-credit
+    defaults: { _controller: "AccountingBundle:Report:monthlyIncome" }
+
+report_journal_account_head_summary:
+    path:     /income-pdf
+    defaults: { _controller: "AccountingBundle:Report:pdfIncome" }
+
+report_journal_transaction_summary:
+    path:     /income-print
+    defaults: { _controller: "AccountingBundle:Report:printIncome" }

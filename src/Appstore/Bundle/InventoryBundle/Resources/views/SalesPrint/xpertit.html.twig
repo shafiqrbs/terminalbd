@@ -54,10 +54,9 @@ setTimeout(function () {
         {% for salesItem in entity.salesItems %}
             <tr>
                 <td class="numeric span2" >{{ salesItem.purchaseItem.barcode }}</td>
-                <td class="numeric" >{{ salesItem.item.name }}{% if salesItem.serialNo %}-{{ salesItem.serialNo }}{% endif %}
-                    {% if salesItem.serialNo %}
-                    <br>
-                    {{ salesItem.assuranceType }} - {{ salesItem.assuranceToCustomer }}
+                <td class="numeric" >{{ salesItem.item.name }}
+                    {% if salesItem.serialNo %}<br>S/N: {{ salesItem.serialNo }}{% endif %}
+                    {% if salesItem.serialNo %}, {{ salesItem.assuranceType }} - {{ salesItem.assuranceToCustomer }}
                     {% endif %}
                 </td>
                 <td class="numeric" >{{ salesItem.quantity }}</td>
@@ -71,27 +70,26 @@ setTimeout(function () {
         {% if entity.discount %}<tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Discount Amount</strong></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
         {% if entity.vat %}<tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Vat/Tax Amount</strong></td><td><strong>{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
         {% if entity.deliveryCharge %}<tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Delivery Charge</strong></td><td><strong>{{ entity.deliveryCharge|number_format() }}</strong></td></tr>{% endif %}
-        <tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ (entity.total + entity.deliveryCharge) |number_format() }}</strong></td></tr>
+        <tr><td colspan="3" class="border-left-right-top-bottom"><strong>In word TK.</strong>({{ inWard|raw }} only).</td><td class="border-left-right-top-bottom"><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ (entity.total + entity.deliveryCharge) |number_format() }}</strong></td></tr>
         <tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Paid Amount</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
         {% if entity.due > 0 %}<tr><td class="border-left-right-top-bottom" colspan="4"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ (entity.due + entity.deliveryCharge) |number_format() }}</strong></td></tr>{% endif %}
-        <tr><td colspan="5" class="border-left-right-top-bottom" style="text-align:right"><strong>In word TK.</strong>({{ inWard|raw }} only).</td></tr>
         <tr>
             <td colspan="5" style="border: #ffffff!important;">
                 <div class="approve-box span6" style="font-size: 14px!important;text-align: left!important;">
-                    <span style="display:inline-block;border-top:2px solid #000">Received with good condition by</span>
+                   {# <span style="display:inline-block;border-top:2px solid #000">Received with good condition by</span>#}
                 </div>
                 <div class="approve-box span6" style="text-align: right; font-size: 14px!important;">
                     <span style="display:inline-block;border-top:2px solid #000">Authorized signature</span>
                 </div>
             </td>
         </tr>
-        <tr>
+       {# <tr>
             <td colspan="5" style="border: #ffffff!important;">
                 <div class="span12 text-center">
                     In Warranty Period Customer will bear carrying Cost. Warranty will be void if seal broken, physical damage/burn or improper use.
                 </div>
             </td>
-        </tr>
+        </tr>#}
         {% if inventory.isPrintFooter == 1 %}
         <tr><td colspan="5" style="text-align:center">{{ portal_power }}</td></tr>
         {% endif %}

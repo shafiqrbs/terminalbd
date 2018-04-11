@@ -135,7 +135,7 @@ class SalesOnlineController extends Controller
             $theme = 'sales';
         }
 
-        return $this->render('InventoryBundle:SalesOnline:sales.html.twig', array(
+        return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,
             'todaySalesOverview' => $todaySalesOverview,

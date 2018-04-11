@@ -37,14 +37,7 @@
                         <div class="spn5" id="message"></div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('account_journal_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('account_journal') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('account_journal_new') }}"><i class="icon-th-list"></i>&nbsp; Create</a>
                             </div>
                         </div>
                     </div>
@@ -54,24 +47,48 @@
                             {% include('flash-message.html.twig') %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span4">
-                                        <select class="search-input span12" id="accountHead" name="accountHead">
-                                            <option value="">Select account head</option>
+                                    <div class="span3">
+                                        <select class="search-input  span12" id="accountHeadDebit" name="accountHeadDebit">
+                                            <option value="">Account Debit Head</option>
                                             {% for account in accountHead %}
-                                                <option value="{{ account.id }}">{{ account.name }}</option>
+                                                {% if account.children is not empty %}
+                                                    <optgroup label="{{ account.name }}">
+                                                     {% for child in account.children %}
+                                                        {% if child.toIncrease == 'Debit' %}
+                                                            <option {% if searchForm.accountHeadDebit is defined and searchForm.accountHeadDebit == child.id %} selected="selected" {% endif %} value="{{ child.id }}">{{ child.name }}</option>
+                                                        {% endif %}
+                                                     {% endfor %}
+                                                    </optgroup>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin " value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
+                                        <select class="search-input  span12" id="accountHeadCredit" name="accountHeadCredit">
+                                            <option value="">Account Credit Head</option>
+                                            {% for account in accountHead %}
+                                                {% if account.children is not empty %}
+                                                    <optgroup label="{{ account.name }}">
+                                                        {% for child in account.children %}
+                                                            {% if child.toIncrease == 'Credit' %}
+                                                                <option {% if searchForm.accountHeadDebit is defined and searchForm.accountHeadDebit == child.id %} selected="selected" {% endif %} value="{{ child.id }}">{{ child.name }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </optgroup>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin " value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="Search user name">
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                    </div>
+                                    <div class="span2">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="endDate" name="endDate"  class="span10 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <input type="text" id="endDate" name="endDate"  class="span8 m-wrap search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -80,6 +97,22 @@
                                     </div>
                                 </div>
                             </form>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content">
+                                <tr class="head-red">
+                                    <th class="numeric" ><strong>Debit</strong></th>
+                                    <th class="numeric" ><strong>Credit</strong></th>
+                                    <th class="numeric" ><strong>Balance</strong></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="numeric" ><strong>{{ overview.debit|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ overview.credit|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ (overview.debit - overview.credit)|number_format }}</strong></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="portlet-body flip-scroll">
 
@@ -88,10 +121,11 @@
                                 <thead class="flip-content ">
                                  <tr class="head-blue">
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Transaction Method</th>
+                                    <th class="numeric" >User</th>
+                                    <th class="numeric" >Method</th>
                                     <th class="numeric" >Ref No</th>
-                                    <th class="numeric" >Debit head</th>
-                                    <th class="numeric" >Credit head</th>
+                                    <th class="numeric" >Debit</th>
+                                    <th class="numeric" >Credit</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
                                     <th class="numeric" >Action</th>
@@ -101,6 +135,7 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" ><a href="javascript:" class="tooltips" data-title="{{ entity.toUser.profile.name }}" data-trigger="hover">{{ entity.toUser }}</a></td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{% if entity.accountHeadDebit is not empty %}{{ entity.accountHeadDebit.name }}{% endif %}</td>

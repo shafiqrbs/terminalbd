@@ -667,7 +667,7 @@
                                                                 <th  class="numeric discount" >{{ entity.discount }}</th>
                                                             </tr>
                                                             <tr>
-                                                                <th  class="numeric text-right" colspan="6" ><span class="pull-right">Total Receviable</span></th>
+                                                                <th  class="numeric text-right" colspan="6" ><span class="pull-right">Total Receivable</span></th>
                                                                 <th  class="numeric netTotal" >{{ entity.total }}</th>
                                                             </tr>
                                                             <tr>
@@ -1043,7 +1043,6 @@
                                                         <td class="numeric">{{ medicine.medicineDose }} - {{ medicine.medicineDoseTime }}</td>
                                                         <td class="numeric">{{ medicine.medicineDuration }} {{ medicine.medicineDurationType }}</td>
                                                         <td class="numeric">
-
                                                             <a  href="javascript:" data-url="{{ path('dms_invoice_medicine_delete',{'id':medicine.id}) }}" data-id="{{ medicine.id }}" id="{{ medicine.id }}"  class="btn red mini deleteMedicine"> <i class="icon-trash"></i></a>
                                                         </td>
                                                     </tr>

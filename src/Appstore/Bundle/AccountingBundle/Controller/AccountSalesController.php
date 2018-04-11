@@ -286,8 +286,8 @@ class AccountSalesController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
+            $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
             if($entity->getSales()){
-                $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
                 $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesPaymentReceive($entity);
             }
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);

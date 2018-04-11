@@ -91,7 +91,7 @@
                                 <tr class="head-red">
                                     <th class="numeric" ><strong>Total Amount</strong></th>
                                     <th class="numeric" ><strong>Received Amount</strong></th>
-                                    <th class="numeric" ><strong>Balance</strong></th>
+                                    <th class="numeric" ><strong>Due/Advance</strong></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -110,6 +110,7 @@
 
                                 <thead class="flip-content "><tr class="head-blue">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Ref No.</th>
@@ -124,6 +125,7 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.sales is not empty %}{{ entity.sales.invoice }} {% endif %}
@@ -150,7 +152,7 @@
                                             {% elseif entity.process == 'approved' %}
                                                 <a href="javascript:" id="" data-id="" class="btn blue mini "><i class="icon-check"></i>&nbsp;Approved</a>
                                             {% endif %}
-                                            {% if entity.sales.paymentStatus == 'Due' %}
+                                            {% if entity.sales is not empty and  entity.sales.paymentStatus == 'Due' %}
                                             <a href="{{ path('account_sales_due',{'sales':entity.sales.id}) }}" class="btn mini yellow"><i class="icon-money"></i></a>
                                             {% endif %}
                                         </td>
