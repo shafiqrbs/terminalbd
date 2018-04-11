@@ -61,14 +61,14 @@
                             <div class="row-fluid">
                                 <table class="table table-bordered table-striped table-condensed flip-conten" id="stockItemDetails">
                                     <thead class="flip-content ">
-                                    <tr class="head-green">
-                                        <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
-                                        <th class="numeric" >Stock</th>
-                                        <th class="numeric" >Price</th>
-                                        <th class="numeric" >Action</th>
-                                    </tr>
+                                        <tr class="head-green">
+                                            <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
+                                            <th class="numeric" >Stock</th>
+                                            <th class="numeric" >Price</th>
+                                            <th class="numeric" >Action</th>
+                                        </tr>
                                     </thead>
-                                    <tbody id="salesItems"></tbody>
+                                    <tbody id="itemDetails"></tbody>
                                 </table>
                             </div>
                             <div class="row-fluid">
@@ -91,12 +91,15 @@
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
-
-                                        <table class="table table-bordered table-hover">
-                                            <thead class="">
+                                        <div class="portlet-body  flip-scroll">
+                                            <table class="table table-bordered table-striped table-condensed flip-content">
+                                            <thead class="flip-content ">
                                             <tr class="head-blue">
-                                                <th>S/N</th>
+                                                <th>Barcode</th>
                                                 <th>Item</th>
+                                                {% if entity.inventoryConfig.isAttribute == 1 %}
+                                                    <th  class="numeric span2">Serial no</th>
+                                                {% endif %}
                                                 <th>Qnt</th>
                                                 <th>Price</th>
                                                 <th>Total</th>
@@ -106,10 +109,22 @@
                                             <tbody id="salesItem" >
                                             {% for salesitem in entity.salesItems %}
                                                 <tr id="remove-{{ salesitem.id }}">
-                                                    <td> {{ loop.index }}</td>
+                                                    <td>{{ salesitem.purchaseItem.barcode }}</td>
                                                     <td  class="numeric">
                                                        {{ salesitem.item.name }}
                                                     </td>
+                                                    {% if entity.inventoryConfig.isAttribute == 1 %}
+                                                        <td class="numeric" >
+                                                            {% if salesitem.purchaseItem.serialNo is not empty %}
+                                                                <select class="m-wrap span12 inputs serial-no" name="serialNo" id="serialNo" >
+                                                                    <option>--Serial no--</option>
+                                                                    {% for serial in  salesitem.purchaseItem.serialNo|split(',') %}
+                                                                        <option {% if salesitem.serialNo == serial %} selected="selected" {% endif %} value="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id,'serial':serial}) }}" >{{ serial }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            {% endif %}
+                                                        </td>
+                                                    {% endif %}
                                                     <td>
                                                         {{ salesitem.quantity }}{% if salesitem.item.masterItem is not empty and salesitem.item.masterItem.productUnit is not empty %}-{{  salesitem.item.masterItem.productUnit.name }}{% endif %}
                                                     </td>
@@ -124,11 +139,9 @@
                                             {% endfor %}
                                             </tbody>
                                         </table>
-
+                                        </div>
                                     </div>
-
                                 </div>
-
                                 <div class="clearfix">&nbsp;</div>
                             </div>
                             <div class="span4" id="payment-info">
@@ -406,8 +419,15 @@
         </div>
     </div>
     <style>
+
         #barcode{
             color: #000000!important;
+        }
+        select.serial-no{
+            line-height: 20px !important;
+            height: 20px!important;
+            width: 100% !important;
+            padding: 0!important;
         }
         .select2Item{
             border: 5px solid #4b8df8

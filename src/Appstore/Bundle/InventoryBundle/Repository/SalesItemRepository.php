@@ -228,7 +228,7 @@ class SalesItemRepository extends EntityRepository
             $option = '';
             if(!empty($entity->getPurchaseItem()->getSerialNo())){
                 $serials = explode(",",$entity->getPurchaseItem()->getSerialNo());
-                $option .="<select id='serialNo' name='serialNo'>";
+                $option .="<select class='serial-no' id='serialNo' name='serialNo'>";
                 $option .="<option>--Serial no--</option>";
                 foreach ($serials as $serial){
                     $selected = $serial == $entity->getSerialNo() ? 'selected=selected':'';
@@ -259,8 +259,11 @@ class SalesItemRepository extends EntityRepository
             if($device == 'mobile'){
 
                 $data .=' <tr id="remove-'.$entity->getId().'">';
-                $data .='<td>'.$i.'</td>';
+                $data .='<td>'.$entity->getPurchaseItem()->getBarcode().'</td>';
                 $data .='<td>'.$itemName.'</td>';
+                if ($isAttribute == 1){
+                    $data .= '<td class="numeric" >'.$option.'</td>';
+                }
                 $data .='<td>'.$entity->getQuantity().$unit.'</td>';
                 $data .='<td>'.$entity->getSalesPrice().'</td>';
                 $data .='<td>'.$entity->getSubTotal().'</td>';

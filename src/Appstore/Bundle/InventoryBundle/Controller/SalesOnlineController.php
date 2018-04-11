@@ -404,7 +404,12 @@ class SalesOnlineController extends Controller
 
     public function returnResultData(Sales $entity,$msg=''){
 
-        $salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
+        $device ="";
+        $detect = new MobileDetect();
+        if( $detect->isMobile() || $detect->isTablet() ) {
+        $device = 'mobile';
+        }
+        $salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity,$device);
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
