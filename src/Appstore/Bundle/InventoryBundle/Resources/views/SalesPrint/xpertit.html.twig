@@ -45,8 +45,8 @@ setTimeout(function () {
         <tr class="head-black">
             <th class="numeric span2" ><i class="icon-reorder"></i> &nbsp;Barcode</th>
             <th class="numeric span7" >Description</th>
-            <th class="numeric span1" >Quantity</th>
-            <th class="numeric" style="width: 40px" >Unit</th>
+            <th class="numeric"  style="width: 30px" >Qnt</th>
+            <th class="numeric" style="width: 35px" >Unit</th>
             <th class="numeric span1" >Total</th>
         </tr>
         </thead>
@@ -70,7 +70,7 @@ setTimeout(function () {
         {% if entity.discount %}<tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Discount Amount</strong></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
         {% if entity.vat %}<tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Vat/Tax Amount</strong></td><td><strong>{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
         {% if entity.deliveryCharge %}<tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Delivery Charge</strong></td><td><strong>{{ entity.deliveryCharge|number_format() }}</strong></td></tr>{% endif %}
-        <tr><td colspan="4" class="border-left-right-top-bottom"><strong style="display: inline-block; text-align: left!important">In word TK. ({{ inWard|raw }} only).</strong><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ (entity.total + entity.deliveryCharge) |number_format() }}</strong></td></tr>
+        <tr><td colspan="4" class="border-left-right-top-bottom"><span style="display: inline-block; text-align: left!important"><strong>In word</strong>: {{ inWard|raw }}.</span><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ (entity.total + entity.deliveryCharge) |number_format() }}</strong></td></tr>
         <tr><td colspan="4" class="border-left-right-top-bottom"><strong class="pull-right" >Paid Amount</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
         {% if entity.due > 0 %}<tr><td class="border-left-right-top-bottom" colspan="4"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ (entity.due + entity.deliveryCharge) |number_format() }}</strong></td></tr>{% endif %}
         {% if inventory.isPrintFooter == 1 %}
