@@ -29,8 +29,6 @@ class HmsInvoiceTemporaryParticular
      **/
     private  $hospitalConfig;
 
-
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoiceTemporaryParticular")
      **/

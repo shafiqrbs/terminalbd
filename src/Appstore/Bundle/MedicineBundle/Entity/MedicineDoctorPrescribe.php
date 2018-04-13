@@ -26,15 +26,8 @@ class MedicineDoctorPrescribe
      */
     private $id;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", inversedBy="invoiceMedicines")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private $dmsInvoice;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", inversedBy="invoiceMedicines")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", inversedBy="medicineDoctorPrescribes")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $dpsInvoice;

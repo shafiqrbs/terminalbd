@@ -72,7 +72,7 @@ class DpsInvoice
 
 
    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="dpsInvoices" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="dpsInvoice" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $accountSales;
@@ -96,7 +96,7 @@ class DpsInvoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="dpsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="dpsInvoices" )
      **/
     private  $transactionMethod;
 
@@ -528,13 +528,6 @@ class DpsInvoice
         return $this->accountSales;
     }
 
-    /**
-     * @param AccountSales $accountSales
-     */
-    public function setAccountSales($accountSales)
-    {
-        $this->accountSales = $accountSales;
-    }
 
     /**
      * @return Customer

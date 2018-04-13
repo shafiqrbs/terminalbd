@@ -73,6 +73,11 @@ class HospitalConfig
      **/
     private $particulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular", mappedBy="hospitalConfig")
+     **/
+    private $hmsInvoiceTemporaryParticular;
+
 
     /**
      * @var string
@@ -1039,6 +1044,14 @@ class HospitalConfig
     public function setInitialDiagnosticShow($initialDiagnosticShow)
     {
         $this->initialDiagnosticShow = $initialDiagnosticShow;
+    }
+
+    /**
+     * @return HmsInvoiceTemporaryParticular
+     */
+    public function getHmsInvoiceTemporaryParticular()
+    {
+        return $this->hmsInvoiceTemporaryParticular;
     }
 
 

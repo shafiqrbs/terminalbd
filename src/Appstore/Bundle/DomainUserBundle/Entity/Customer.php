@@ -4,6 +4,7 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
@@ -56,6 +57,12 @@ class Customer
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $dmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="customer")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $dpsInvoices;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="customer")
@@ -968,6 +975,14 @@ class Customer
     public function getMedicineSales()
     {
         return $this->medicineSales;
+    }
+
+    /**
+     * @return DpsInvoice
+     */
+    public function getDpsInvoices()
+    {
+        return $this->dpsInvoices;
     }
 
 }

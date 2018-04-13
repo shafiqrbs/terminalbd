@@ -131,6 +131,11 @@ class TransactionMethod
      */
     protected $hmsInvoices;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="transactionMethod" , cascade={"persist", "remove"})
+     */
+    protected $dpsInvoices;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */

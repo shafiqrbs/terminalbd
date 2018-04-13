@@ -49,7 +49,7 @@ class AppModule
     private $invoiceModuleItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", inversedBy="AppModules")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", inversedBy="appModules")
      */
     protected $photoGallery;
 

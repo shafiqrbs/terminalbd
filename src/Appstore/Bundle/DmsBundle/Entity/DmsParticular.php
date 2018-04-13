@@ -42,7 +42,7 @@ class DmsParticular
     private $dmsDoctorInvoices;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories", mappedBy="assignDoctor")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories", mappedBy="dmsParticular")
      **/
     private $dmsInvoiceAccessories;
 

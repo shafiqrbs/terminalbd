@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -97,6 +98,12 @@ class AccountSales
      * @ORM\JoinColumn(name="dmsInvoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $dmsInvoices;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="dpsInvoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $dpsInvoice;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", inversedBy="accountSales" )
@@ -611,6 +618,22 @@ class AccountSales
     public function setMedicineSales($medicineSales)
     {
         $this->medicineSales = $medicineSales;
+    }
+
+    /**
+     * @return DpsInvoice
+     */
+    public function getDpsInvoice()
+    {
+        return $this->dpsInvoice;
+    }
+
+    /**
+     * @param DpsInvoice $dpsInvoice
+     */
+    public function setDpsInvoice($dpsInvoice)
+    {
+        $this->dpsInvoice = $dpsInvoice;
     }
 }
 

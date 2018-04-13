@@ -677,7 +677,9 @@ class User extends BaseUser
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="assignDoctor" , cascade={"persist", "remove"})
      */
-    protected $dpsParticularDoctor;
+    protected $assignDoctorInvoices;
+
+
 
     /*=========================== Restaurant Bundle =========================================*/
 
@@ -706,6 +708,14 @@ class User extends BaseUser
      */
     protected $restaurantPurchasesApprovedBy;
 
+
+    /*=========================== DPS BUNDLE ====================================*/
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $dpsInvoiceCreatedBy;
 
     /*=========================== MEDICINE BUNDLE ====================================*/
 
@@ -768,7 +778,7 @@ class User extends BaseUser
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="createdBy" , cascade={"persist", "remove"})
      */
-    protected $businessPurchasesCreatedBy;
+    protected $businessPurchase;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="approvedBy" , cascade={"persist", "remove"})

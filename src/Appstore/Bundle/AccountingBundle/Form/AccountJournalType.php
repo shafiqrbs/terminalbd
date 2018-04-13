@@ -57,7 +57,7 @@ class AccountJournalType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
                         ->andWhere("e.slug != 'cash-on-delivery'")
-                        ->orderBy("e.name");
+                        ->orderBy("e.id");
                 }
             ))
 
