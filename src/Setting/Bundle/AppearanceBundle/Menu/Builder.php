@@ -534,6 +534,8 @@ class Builder extends ContainerAware
 
 
             }
+            $menu['Sales']->addChild('Pre-purchase', array('route' => 'prepurchaseitem'))->setAttribute('icon', 'icon icon-archive');
+
         }
         return $menu;
 

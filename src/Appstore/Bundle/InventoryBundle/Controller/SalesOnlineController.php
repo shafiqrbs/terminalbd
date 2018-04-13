@@ -353,15 +353,6 @@ class SalesOnlineController extends Controller
 
             }
 
-           /*
-            $entity->setDeliveryCharge($data['deliveryCharge']);
-            $due = (float)$data['dueAmount'] == '' ? 0 : $data['dueAmount'];
-            $entity->setDue($due);
-            $entity->setDiscount($data['discount']);
-            $entity->setTotal($data['paymentTotal']);
-            $entity->setPayment($entity->getTotal() - $entity->getDue());
-
-           */
             $entity->setTotal($entity->getSubTotal() - $entity->getDiscount());
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$entity->getTotal());
@@ -385,8 +376,8 @@ class SalesOnlineController extends Controller
             }
             $em->flush();
             if ($data['process'] != 'In-progress'){
-                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
                 $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
@@ -1156,26 +1147,24 @@ class SalesOnlineController extends Controller
         if (empty($data['sales_general']['salesBy'])) {
             $entity->setSalesBy($this->getUser());
         }
-        if ($entity->getTransactionMethod()->getId() != 4) {
+        if ( $data['process'] != 'in-progress') {
             $entity->setApprovedBy($this->getUser());
-        } else if ($entity->getTransactionMethod()->getId() == 4) {
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setPaymentInWord($amountInWords);
         }
         $em->flush();
 
+        /*
         if (in_array('OnlineSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
 
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }
-        }
+        }*/
 
-        if ($entity->getTransactionMethod()->getId() != 4 ) {
+        if ($data['process'] != 'in-progress' ) {
 
-            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
@@ -1188,8 +1177,8 @@ class SalesOnlineController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory,'invoice' => $invoice));
             $em = $this->getDoctrine()->getManager();
-            $em->getRepository('InventoryBundle:Item')->itemReverse($entity);
             $em->getRepository('InventoryBundle:StockItem')->itemStockReverse($entity);
+            $em->getRepository('InventoryBundle:Item')->itemReverse($entity);
             $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
             $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
             $em = $this->getDoctrine()->getManager();

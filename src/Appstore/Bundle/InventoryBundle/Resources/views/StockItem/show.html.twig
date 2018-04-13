@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Purchase
+                    Stock Item: {{ entity.name }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,8 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('purchase') }}">Purchase</a>
-                        <span class="icon-angle-right"></span>
+                        <a href="{{ path('inventory_stockitem') }}">Stock Item</a>
                     </li>
-                    <li><a href="#">Add/Edit purchase</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -34,17 +32,11 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Stock Item Details Information</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_stockitem') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('inventory_stockitem') }}"><i class="icon-th-list"></i>&nbsp;Stock Details</a>
                             </div>
                         </div>
 
@@ -63,6 +55,7 @@
                                         {% if entity.brand is defined and entity.brand is not empty %}<li><strong>Brand</strong>: {{ entity.brand.name }}</li>{% endif %}
                                         {% if entity.size is defined and entity.size is not empty %}<li><strong>Size/Dimension</strong>: {{ entity.size.name }}</li>{% endif %}
                                         {% if entity.color is defined and entity.color is not empty %}<li><strong>Color</strong>: {{ entity.color.name }}</li>{% endif %}
+                                        {% if entity.vendor is defined and entity.vendor is not empty %}<li><strong>Vendor</strong>: {{ entity.vendor.name }}</li>{% endif %}
                                     </ul>
                                 </div>
                                 <div class="span6">
@@ -118,11 +111,11 @@
                                                                         {{ stockItem.salesReturnItem.salesReturn.invoice }}
                                                                     {% endif %}
                                                                 </td>
-                                                                <td class="numeric" > {% if(stockItem.process == 'purchase') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                                <td class="numeric" > {% if(stockItem.process == 'purchaseRetrun') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                                <td class="numeric" > {% if(stockItem.process == 'purchaseReplace') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                                <td class="numeric" > {% if(stockItem.process == 'sales') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                                <td class="numeric" > {% if(stockItem.process == 'salesRetrun') %}  {{ stockItem.quantity }} {% endif %}</td>
+                                                                <td class="numeric" > {% if(stockItem.process == 'purchase') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
+                                                                <td class="numeric" > {% if(stockItem.process == 'purchaseRetrun') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
+                                                                <td class="numeric" > {% if(stockItem.process == 'purchaseReplace') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
+                                                                <td class="numeric" > {% if(stockItem.process == 'sales') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
+                                                                <td class="numeric" > {% if(stockItem.process == 'salesRetrun') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
                                                                 <td class="numeric" >{{ stockItem.createdBy }}</td>
                                                             </tr>
                                                         {% endfor %}

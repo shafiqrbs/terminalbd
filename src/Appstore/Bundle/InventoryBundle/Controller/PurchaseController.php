@@ -537,7 +537,6 @@ class PurchaseController extends Controller
 
         set_time_limit(0);
         $em = $this->getDoctrine()->getManager();
-
         $this->getDoctrine()->getRepository('InventoryBundle:Item')->purchaseItemReverseUpdateQnt($purchase);
         $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->purchaseItemStockRemoveQnt($purchase);
         $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedPurchaseJournal($purchase);

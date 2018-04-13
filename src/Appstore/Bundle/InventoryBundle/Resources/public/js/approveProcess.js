@@ -424,7 +424,7 @@ function ApproveProcess(){
         formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
         initSelection: function (element, callback) {
             var id = $(element).val();
-            $.ajax(Routing.generate('inventory_unit_name', { vendor : id}), {
+            $.ajax(Routing.generate('inventory_unit_name', { unit : id}), {
                 dataType: "json"
             }).done(function (data) {
                 return  callback(data);

@@ -36,6 +36,11 @@ class InventoryConfig
      */
     protected $products;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PrePurchaseItem", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $prePurchaseItem;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
@@ -1300,6 +1305,14 @@ class InventoryConfig
     public function setBarcodePriceHide($barcodePriceHide)
     {
         $this->barcodePriceHide = $barcodePriceHide;
+    }
+
+    /**
+     * @return PrePurchaseItem
+     */
+    public function getPrePurchaseItem()
+    {
+        return $this->prePurchaseItem;
     }
 
 

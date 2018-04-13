@@ -122,7 +122,7 @@ var InventorySales = function(sales) {
                 $('#salesItem').html(obj['salesItems']);
                 $('#dueAmount').val(obj['netTotal']);
                 $('#addItem').attr("disabled", true);
-                $("#appstore_bundle_inventorybundle_salesitem_item").select2().select2("val", "");
+                $("#salesitem_item").select2().select2("val", "");
                 $('#salesPrice').val('');
                 $('#quantity').val('1');
             },

@@ -78,6 +78,10 @@ inventory_itemsize:
     resource: "@InventoryBundle/Resources/config/routing/itemsize.yml"
     prefix:    /item-size
 
+inventory_prepurchaseitem:
+    resource: "@InventoryBundle/Resources/config/routing/prepurchaseitem.yml"
+    prefix:    /pre-purchase-item
+
 inventory_itemunit:
     resource: "@InventoryBundle/Resources/config/routing/itemunit.yml"
     prefix:    /item-unit

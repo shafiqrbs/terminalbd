@@ -43,7 +43,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $vendor;
 
         /**
-         * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
          * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $purchase;

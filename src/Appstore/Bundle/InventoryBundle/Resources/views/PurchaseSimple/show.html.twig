@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Purchase
+                    Purchase: {{ entity.grn }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -121,7 +121,6 @@
                                     </thead>
                                     <tbody>
                                     {% for purchaseItem in entity.purchaseItems %}
-
                                         <tr>
                                             <td class="numeric" >{{ purchaseItem.barcode }}</td>
                                             <td class="numeric" >{{ purchaseItem.item.name }}</td>
@@ -155,6 +154,8 @@
                                         {% if entity.purchaseVendorItems is empty %}
                                             <a href="{{ path('inventory_purchasesimple_edit', { 'id': entity.id }) }}" class="btn green" ><i class="icon-edit"></i></a>
                                         {% endif %}
+                                    {% elseif entity.process == 'approved' and entity.revised != 1 %}
+                                        <a href="{{ path('inventory_purchasesimple_reverse', { 'id': entity.id }) }}" class="btn purple" ><i class="icon-retweet"></i> Reverse</a>
                                     {% endif %}
                                     {% if ((app.user.granted("ROLE_DOMAIN")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY_APPR  OVAL")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'complete') )  %}
                                         <a class="btn purple approve"  data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('inventory_purchasesimple_approve', { 'id': entity.id,'reject':'reject'  }) }}" ><i class="icon-refresh"></i>&nbsp;Reject</a>
@@ -162,6 +163,7 @@
                                     {% elseif entity.process == 'approved'  %}
                                         <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
                                     {% endif %}
+
                                 </div>
                             </div>
                         </div>

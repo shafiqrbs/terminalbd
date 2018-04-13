@@ -33,6 +33,12 @@ class Reverse
      */
     protected $sales;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="reverse")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $purchase;
+
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -217,6 +223,22 @@ class Reverse
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return Purchase
+     */
+    public function getPurchase()
+    {
+        return $this->purchase;
+    }
+
+    /**
+     * @param Purchase $purchase
+     */
+    public function setPurchase($purchase)
+    {
+        $this->purchase = $purchase;
     }
 
 

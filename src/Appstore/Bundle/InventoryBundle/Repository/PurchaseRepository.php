@@ -139,7 +139,6 @@ class PurchaseRepository extends EntityRepository
         $qb->where("p.id = :purchaseId");
         $qb->setParameter('purchaseId', $purchase);
         $row = $qb->getQuery()->getOneOrNullResult();
-
         $purchase->setTotalQnt($row['quantity']);
         $purchase->setTotalItem($row['item']);
         $purchase->setTotalAmount($row['total']);

@@ -38,6 +38,11 @@ class Product implements CodeAwareEntity
     protected $items;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PrePurchaseItem", mappedBy="masterItem")
+     */
+    protected $prePurchaseItem;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="product")
      */
     protected $stockItems;
@@ -516,6 +521,13 @@ class Product implements CodeAwareEntity
         return $this->name.$unit;
     }
 
+    /**
+     * @return PrePurchaseItem
+     */
+    public function getPrePurchaseItem()
+    {
+        return $this->prePurchaseItem;
+    }
 
 
 }

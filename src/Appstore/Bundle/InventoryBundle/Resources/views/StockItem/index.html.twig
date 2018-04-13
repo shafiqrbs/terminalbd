@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Stock Items
+                    Stock Items Details
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Stock Items</a></li>
+                    <li><a href="#">Stock Items Details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -79,7 +79,7 @@
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="grn" name="grn" class="span11 m-wrap" value="" autocomplete="off" placeholder="Enter grn no">
+                                                <input type="text" id="skuId" name="sku" class="span11 m-wrap" value="{% if searchForm.sku is defined %}{{ searchForm.sku }}{% endif %}" autocomplete="off" placeholder="Enter sku code">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -94,19 +94,19 @@
                             <div class="span3">
                                 <ul class="unstyled">
                                     <li><strong>Purchase:</strong>&nbsp;{{ stockOverview.purchase }}</li>
-                                    <li><strong>Sales:</strong>&nbsp;{{ stockOverview.sales }}</li>
+                                    <li><strong>Sales:</strong>&nbsp;{{ stockOverview.sales|abs  }}</li>
                                 </ul>
                             </div>
                             <div class="span3">
                                 <ul class="unstyled">
                                     <li><strong>Purchase Return:</strong> &nbsp;{{ stockOverview.purchaseReturn }}</li>
-                                    <li><strong>Sales Return:</strong>&nbsp;{{ stockOverview.salesReturn }}</li>
+                                    <li><strong>Sales Return:</strong>&nbsp;{{ stockOverview.salesReturn|abs }}</li>
                                 </ul>
                             </div>
                             <div class="span3">
                                 <ul class="unstyled">
-                                    <li><strong>Purchase Replace:</strong> &nbsp;{{ stockOverview.purchaseReplace }}</li>
-                                    <li><strong>Damage:</strong>&nbsp;{{ stockOverview.damage }}</li>
+                                    <li><strong>Purchase Replace:</strong> &nbsp;{{ stockOverview.purchaseReplace|abs }}</li>
+                                    <li><strong>Damage:</strong>&nbsp;{{ stockOverview.damage|abs }}</li>
                                 </ul>
                             </div>
                             <div class="span3">
@@ -121,6 +121,7 @@
                             <thead class="flip-content ">
                             <tr class="head-grey">
                                 <th class="numeric" >List</th>
+                                <th class="numeric" >SKU</th>
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Unit</th>
                                 <th class="numeric" >Purchase</th>
@@ -138,13 +139,14 @@
 
                                 <tr>
                                     <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
+                                    <td class="numeric" >{{ entity.sku }}</td>
                                     <td class="numeric" >{{ entity.name }}</td>
                                     <td class="numeric" >{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.purchaseQuantity }}</td>
-                                    <td class="numeric" >{{ entity.purchaseQuantityReturn }}</td>
-                                    <td class="numeric" >{{ entity.salesQuantity }}</td>
-                                    <td class="numeric" >{{ entity.salesQuantityReturn }}</td>
-                                    <td class="numeric" >{{ entity.damageQuantity }}</td>
+                                    <td class="numeric" >{{ entity.purchaseQuantityReturn|abs }}</td>
+                                    <td class="numeric" >{{ entity.salesQuantity|abs }}</td>
+                                    <td class="numeric" >{{ entity.salesQuantityReturn|abs }}</td>
+                                    <td class="numeric" >{{ entity.damageQuantity|abs }}</td>
                                     <td class="numeric" >{{ entity.purchaseQuantity - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity - entity.salesQuantityReturn)  }}</td>
                                     <th class="numeric" >
                                         <a href="{{ path('inventory_stockitem_show', { 'item': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
@@ -187,11 +189,11 @@
                                                                 {{ stockItem.salesReturnItem.salesReturn.invoice }}
                                                             {% elseif (stockItem.process == 'damage') %}Damage{% endif %}
                                                         </td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'purchase') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'purchaseReturn') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'sales') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'salesReturn') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                         <td class="numeric" > {% if(stockItem.process == 'damage') %}  {{ stockItem.quantity }} {% endif %}</td>
+                                                        <td class="numeric" > {% if(stockItem.process == 'purchase') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
+                                                        <td class="numeric" > {% if(stockItem.process == 'purchaseReturn') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
+                                                        <td class="numeric" > {% if(stockItem.process == 'sales') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
+                                                        <td class="numeric" > {% if(stockItem.process == 'salesReturn') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
+                                                         <td class="numeric" > {% if(stockItem.process == 'damage') %}  {{ stockItem.quantity|abs }} {% endif %}</td>
 
                                                     </tr>
                                                 {% endfor %}

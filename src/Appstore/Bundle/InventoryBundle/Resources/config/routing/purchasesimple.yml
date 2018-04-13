@@ -14,6 +14,9 @@ inventory_purchasesimple_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:PurchaseSimple:edit" }
 
+inventory_purchasesimple_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "InventoryBundle:PurchaseSimple:reverse" }
 
 inventory_purchasesimple_update:
     path:     /{id}/update

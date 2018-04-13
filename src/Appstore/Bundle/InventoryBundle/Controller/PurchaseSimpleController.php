@@ -206,8 +206,8 @@ class PurchaseSimpleController extends Controller
         $em->persist($purchase);
         $em->flush();
         $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
-        $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($purchase);
         $em->getRepository('InventoryBundle:StockItem')->insertPurchaseStockItem($purchase);
+        $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($purchase);
         if($purchase->getAsInvestment() == 1){
             $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountPurchaseJournal($purchase);
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
@@ -491,5 +491,42 @@ class PurchaseSimpleController extends Controller
         exit;
 
     }
+
+    public function reverseAction(Purchase $purchase)
+    {
+
+        /*
+         * Item Remove Total quantity
+         * Stock Details
+         * Purchase Item
+         * Purchase Vendor Item
+         * Purchase
+         * Account Purchase
+         * Account Journal
+         * Transaction
+         * Delete Journal & Account Purchase
+         *
+         * */
+
+        set_time_limit(0);
+        $em = $this->getDoctrine()->getManager();
+        $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->purchaseItemStockRemoveQnt($purchase);
+        $this->getDoctrine()->getRepository('InventoryBundle:Item')->purchaseItemReverseUpdateQnt($purchase);
+        if($purchase->getAsInvestment() == 1 ) {
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedPurchaseJournal($purchase);
+        }
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseReverse($purchase);
+      // $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
+        $purchase->setRevised(true);
+        $purchase->setProcess('created');
+        $em->flush();
+        $template = $this->get('twig')->render('InventoryBundle:Reverse:purchaseReverse.html.twig', array(
+            'entity' => $purchase,
+            'inventoryConfig' => $purchase->getInventoryConfig(),
+        ));
+        $em->getRepository('InventoryBundle:Reverse')->insertPurchase($purchase, $template);
+        return $this->redirect($this->generateUrl('inventory_purchasesimple_edit',array('id' => $purchase->getId())));
+    }
+
 
 }

@@ -14,12 +14,9 @@ class ProductUnitRepository extends EntityRepository
     public function searchAutoComplete($inventory,$q)
     {
         $query = $this->createQueryBuilder('e');
-        $query->join('e.masterProducts','m');
         $query->select('e.name as id');
         $query->addSelect('e.name as text');
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
-        $query->andWhere("m.inventoryConfig = :inventory");
-        $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('e.id');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '10' );

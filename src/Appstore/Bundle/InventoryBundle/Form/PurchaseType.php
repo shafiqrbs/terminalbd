@@ -32,7 +32,7 @@ class PurchaseType extends AbstractType
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
                 'empty_value' => '---Choose a vendor ---',
-                'property' => 'companyName',
+                'property' => 'vendorWithCode',
                 'attr'=>array('class'=>'span12 m-wrap purchaseInput'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){

@@ -401,5 +401,11 @@ class Vendor implements CodeAwareEntity
     {
         return $this->stockItems;
     }
+
+    public function getVendorWithCode(){
+
+        $vendorWithCode = $this->companyName.'-'.$this->vendorCode;
+        return $vendorWithCode;
+    }
 }
 

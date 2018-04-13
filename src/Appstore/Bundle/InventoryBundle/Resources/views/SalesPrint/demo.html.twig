@@ -70,21 +70,21 @@
         <tr><td colspan="5" class="border-left-right-top-bottom" style="text-align:right"><strong>In word TK.</strong>({{ inWard|raw }} only).</td></tr>
         <tr>
             <td colspan="5" style="border: #ffffff!important;">
-                <div class="approve-box span6" style="font-size: 14px!important; padding-top:10px!important">
-                    Received with good condition by
+                <div class="approve-box span6" style="font-size: 14px!important;text-align: left!important;">
+                    <span style="display:inline-block;border-top:2px solid #000">Received with good condition by</span>
                 </div>
-                <div class="approve-box span6" style="text-align: left; font-size: 14px!important; padding-top:10px!important">
-                    Authorized signature
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5" style="border: #ffffff!important;">
-                <div class="approve-box span12 text-center">
-                    In Warranty Period Customer will bear carrying Cost. Warranty will be void if seal broken, physical damage/burn or improper use.
+                <div class="approve-box span6" style="text-align: right; font-size: 14px!important;">
+                    <span style="display:inline-block;border-top:2px solid #000">Authorized signature</span>
                 </div>
             </td>
         </tr>
+        {# <tr>
+             <td colspan="5" style="border: #ffffff!important;">
+                 <div class="span12 text-center">
+                     In Warranty Period Customer will bear carrying Cost. Warranty will be void if seal broken, physical damage/burn or improper use.
+                 </div>
+             </td>
+         </tr>#}
         {% if inventory.isPrintFooter == 1 %}
         <tr><td colspan="5" style="text-align:center">{{ portal_power }}</td></tr>
         {% endif %}

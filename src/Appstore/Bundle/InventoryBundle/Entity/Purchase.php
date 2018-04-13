@@ -34,6 +34,10 @@ class Purchase
      **/
     private  $inventoryConfig;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Reverse", mappedBy="purchase" )
+     **/
+    private $reverse;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ExcelImporter", inversedBy="purchase" , cascade={"detach","merge"} )
@@ -55,7 +59,7 @@ class Purchase
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="purchase" , cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="purchase" , cascade={"remove"})
      **/
     private  $accountPurchase;
 
@@ -104,7 +108,7 @@ class Purchase
      *
      * @ORM\Column(name="purchaseTo", type="string", length=50, nullable=true)
      */
-    private $purchaseTo;
+    private $purchaseTo='National';
 
 
     /**
@@ -232,6 +236,13 @@ class Purchase
     private $paymentMethod;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="revised", type="boolean")
+     */
+    private $revised=false;
+
+     /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
@@ -970,6 +981,30 @@ class Purchase
             $quantity += $item->getQuantity(); //$recipecost now $this->recipecost.
         }
         return $quantity ;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRevised()
+    {
+        return $this->revised;
+    }
+
+    /**
+     * @param bool $revised
+     */
+    public function setRevised($revised)
+    {
+        $this->revised = $revised;
+    }
+
+    /**
+     * @return Reverse
+     */
+    public function getReverse()
+    {
+        return $this->reverse;
     }
 
 }

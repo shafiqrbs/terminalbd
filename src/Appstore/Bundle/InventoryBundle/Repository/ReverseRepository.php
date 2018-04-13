@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Reverse;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\EntityRepository;
@@ -26,6 +27,23 @@ class ReverseRepository extends EntityRepository
         $reverse->setProcess('Sales');
         $reverse->setContent($data);
         $reverse->setSales($entity);
+        $this->_em->persist($reverse);
+        $this->_em->flush($reverse);
+
+    }
+
+    public function insertPurchase(Purchase $entity,$data)
+    {
+        if(empty($entity->getReverse())){
+            $reverse = New Reverse();
+        }else{
+            $reverse = $entity->getReverse();
+        }
+        $reverse->setName('Purchase');
+        $reverse->setInventoryConfig($entity->getInventoryConfig());
+        $reverse->setProcess('Purchase');
+        $reverse->setContent($data);
+        $reverse->setPurchase($entity);
         $this->_em->persist($reverse);
         $this->_em->flush($reverse);
 

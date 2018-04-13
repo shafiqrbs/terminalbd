@@ -6,6 +6,8 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
@@ -152,12 +154,18 @@ class ItemRepository extends EntityRepository
         $size = isset($data['size'])? $data['size'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $brand = isset($data['brand'])? $data['brand'] :'';
+        $sku = isset($data['sku'])? $data['sku'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+        $unit = isset($data['unit'])? $data['unit'] :'';
 
         $qb = $this->createQueryBuilder('item');
         $qb->join('item.masterItem', 'm');
         $qb->where("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
 
+        if (!empty($sku)) {
+            $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
+        }
         if (!empty($item)) {
 
             $qb->andWhere("m.name = :name");
@@ -187,8 +195,20 @@ class ItemRepository extends EntityRepository
             $qb->join('item.brand', 'b');
             $qb->andWhere("b.name = :brand");
             $qb->setParameter('brand', $brand);
-
         }
+         if (!empty($category)) {
+
+            $qb->leftJoin('m.category', 'c');
+            $qb->andWhere("c.name = :category");
+            $qb->setParameter('category', $category);
+        }
+
+        if (!empty($unit)) {
+            $qb->leftJoin('m.productUnit', 'u');
+            $qb->andWhere("u.name = :unit");
+            $qb->setParameter('unit', $unit);
+        }
+
         $qb->orderBy('m.name','ASC');
         $qb->getQuery();
         return  $qb;
@@ -258,12 +278,9 @@ class ItemRepository extends EntityRepository
 
         $em = $this->_em;
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
-
             $entity = $purchaseItem->getItem();
-
             /** @var Item $entity */
-
-            $qnt = ($entity->getPurchaseQuantity() + $purchaseItem->getQuantity());
+            $qnt = $this->_em->getRepository('InventoryBundle:StockItem')->getItemQuantity($entity,'purchase');
             $entity->setPurchaseQuantity($qnt);
             $entity->setUpdated($purchase->getCreated());
             $em->persist($entity);
@@ -271,20 +288,20 @@ class ItemRepository extends EntityRepository
         }
     }
 
-    public function purchaseItemReverseUpdateQnt($purchase){
+    public function purchaseItemReverseUpdateQnt(Purchase $purchase){
 
         $em = $this->_em;
+        /** @var $purchaseItem PurchaseItem  */
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
             $entity = $purchaseItem->getItem();
-
             /** @var Item $entity */
-
-            $qnt = ($entity->getPurchaseQuantity() - $purchaseItem->getQuantity());
-            $entity->setPurchaseQuantity($qnt);
+            $qnt = $this->_em->getRepository('InventoryBundle:StockItem')->getItemQuantity($entity,'purchase');
+            $entity->setPurchaseQuantity(abs($qnt));
             $entity->setUpdated($purchase->getCreated());
             $em->persist($entity);
             $em->flush();
+
         }
     }
 
@@ -319,11 +336,12 @@ class ItemRepository extends EntityRepository
     public function getItemSalesUpdate(Sales $sales){
 
         $em = $this->_em;
+        /** @var $salesItem SalesItem */
         foreach($sales->getSalesItems() as $salesItem ){
-
+            /** @var  $entity Item */
             $entity = $salesItem->getItem();
-            $qnt = ($entity->getSalesQuantity() + $salesItem->getQuantity());
-            $entity->setSalesQuantity($qnt);
+            $qnt = $this->_em->getRepository('InventoryBundle:StockItem')->getItemQuantity($entity,'sales');
+            $entity->setSalesQuantity(abs($qnt));
             $em->persist($entity);
             $em->flush($entity);
 
@@ -334,7 +352,11 @@ class ItemRepository extends EntityRepository
     public function getItemSalesReturnUpdate(SalesReturn $sales){
 
         $em = $this->_em;
+
+        /** @var $salesItem SalesItem */
         foreach($sales->getSalesReturnItems() as $salesItem ){
+
+            /** @var Item $entity */
 
             $entity = $salesItem->getSalesItem()->getItem();
             $qnt = ($entity->getSalesQuantityReturn() + $salesItem->getQuantity());
@@ -452,16 +474,16 @@ class ItemRepository extends EntityRepository
 
         $em = $this->_em;
 
-        /* @var SalesItem $item */
+        /* @var  $salesItem SalesItem */
 
-        foreach ($sales->getSalesItems() as $item ){
+        foreach ($sales->getSalesItems() as $salesItem ){
 
-            /* @var Item $itemEntity */
-            $itemEntity = $item->getItem();
-            $current = ( $itemEntity->getSalesQuantity() - $item->getQuantity() );
-            $itemEntity->setSalesQuantity($current);
-            $em->persist($itemEntity);
-            $em->flush($itemEntity);
+            /* @var Item $entity */
+            $entity = $salesItem->getItem();
+            $qnt = $this->_em->getRepository('InventoryBundle:StockItem')->getItemQuantity($entity,'sales');
+            $entity->setSalesQuantity(abs($qnt));
+            $em->persist($entity);
+            $em->flush($entity);
 
         }
 

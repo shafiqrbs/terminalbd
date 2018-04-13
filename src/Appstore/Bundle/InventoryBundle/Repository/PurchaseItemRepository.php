@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
@@ -394,17 +395,20 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
-    public function findItemWithPurchaseQuantity(InventoryConfig $inventory )
+    public function itemPurchaseQuantitySum(InventoryConfig $inventory,Item $entity )
     {
+
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.purchase', 'p');
-        $qb->select('sum(e.quantity)  as quantity','e.item AS item');
-        $qb->where("p.inventoryConfig = :purchase");
+        $qb->select('sum(e.quantity)  as quantity');
+        $qb->where("e.item = :item");
+        $qb->setParameter('item', $entity->getId());
+        $qb->andWhere("p.process = 'approved'");
+        $qb->andWhere("p.inventoryConfig = :purchase");
         $qb->setParameter('purchase', $inventory->getId());
-        $qb->groupBy('e.item');
-        $qb->orderBy('e.item','ASC');
-        $qb = $qb->getQuery()->getArrayResult();
-        return $qb;
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $quantity = $result['quantity'] > 0 ? $result['quantity']:0;
+        return $quantity;
 
     }
 

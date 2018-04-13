@@ -209,23 +209,25 @@ class AccountJournalRepository extends EntityRepository
 
     public function removeApprovedPurchaseJournal(Purchase $purchase)
     {
-        $journal = $this->_em->getRepository('AccountingBundle:AccountJournal')->findOneBy(array('approvedBy' => $purchase->getApprovedBy(),'globalOption'=> $purchase->getInventoryConfig()->getGlobalOption(),'amount'=> $purchase->getPaymentAmount(),'journalSource'=>'purchase' ));
-
-        $accountCash = $this->_em->getRepository('AccountingBundle:AccountCash')->findOneBy(array('processHead'=>'Journal','globalOption' => $journal->getGlobalOption() ,'accountRefNo' => $journal->getAccountRefNo()));
-        if($accountCash){
-            $this->_em->remove($accountCash);
-            $this->_em->flush();
-        }
-
-        $transactions = $this->_em->getRepository('AccountingBundle:Transaction')->findBy(array('processHead'=>'Journal','globalOption' => $journal->getGlobalOption() ,'accountRefNo' => $journal->getAccountRefNo()));
-        foreach ($transactions as $transaction){
-            if($transaction){
-                $this->_em->remove($transaction);
+        $option =  $purchase->getInventoryConfig()->getGlobalOption()->getId();
+        $journal = $this->_em->getRepository('AccountingBundle:AccountJournal')->findOneBy(array('approvedBy' => $purchase->getApprovedBy(),'globalOption'=> $option ,'amount'=> $purchase->getPaymentAmount(),'journalSource'=>'purchase' ));
+        if(!empty($journal)) {
+            $accountCash = $this->_em->getRepository('AccountingBundle:AccountCash')->findOneBy(array('processHead' => 'Journal', 'globalOption' => $option, 'accountRefNo' => $journal->getAccountRefNo()));
+            if ($accountCash) {
+                $this->_em->remove($accountCash);
                 $this->_em->flush();
             }
+
+            $transactions = $this->_em->getRepository('AccountingBundle:Transaction')->findBy(array('processHead' => 'Journal', 'globalOption' => $journal->getGlobalOption(), 'accountRefNo' => $journal->getAccountRefNo()));
+            foreach ($transactions as $transaction) {
+                if ($transaction) {
+                    $this->_em->remove($transaction);
+                    $this->_em->flush();
+                }
+            }
+            $this->_em->remove($journal);
+            $this->_em->flush();
         }
-        $this->_em->remove($journal);
-        $this->_em->flush();
 
 
     }
