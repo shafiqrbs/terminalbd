@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
@@ -635,5 +636,7 @@ class AccountSales
     {
         $this->dpsInvoice = $dpsInvoice;
     }
+
+
 }
 

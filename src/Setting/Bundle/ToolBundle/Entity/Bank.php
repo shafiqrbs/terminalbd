@@ -4,6 +4,7 @@ namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -25,11 +26,6 @@ class Bank
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\PortalBankAccount", mappedBy="bank")
-     */
-    protected $portalBankAccount;
 
     /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="bank")
@@ -96,7 +92,10 @@ class Bank
      */
     protected $dmsTreatmentPlans;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="bank" )
+     */
+    protected $dpsTreatmentPlans;
 
 
     /**
@@ -197,6 +196,14 @@ class Bank
     public function getMedicineSales()
     {
         return $this->medicineSales;
+    }
+
+    /**
+     * @return DpsTreatmentPlan
+     */
+    public function getDpsTreatmentPlans()
+    {
+        return $this->dpsTreatmentPlans;
     }
 }
 

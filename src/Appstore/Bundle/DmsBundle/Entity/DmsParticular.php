@@ -64,10 +64,6 @@ class DmsParticular
      **/
     private $invoiceParticular;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="investigations" )
-     **/
-    private $dmsInvoiceInvestigation;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchaseItem", mappedBy="dmsParticular" )

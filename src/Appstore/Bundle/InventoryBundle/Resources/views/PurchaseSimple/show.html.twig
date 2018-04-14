@@ -112,6 +112,7 @@
                                         <th class="numeric" >Serial No</th>
                                         {% endif %}
                                         <th class="numeric" >Qnt</th>
+                                        <th class="numeric" >Process Qnt</th>
                                         <th class="numeric" >Purchase price</th>
                                         <th class="numeric" >Sub total</th>
                                         <th class="numeric" >Sales price</th>
@@ -128,6 +129,7 @@
                                             <td class="numeric" >{{ purchaseItem.serialNo|raw }}</td>
                                             {% endif %}
                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
+                                            <td class="numeric" >{% if processItem[purchaseItem.id] is defined %}{{ processItem[purchaseItem.id] }}{% endif %}</td>
                                             <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
                                             <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
                                             <td class="numeric" >{{ purchaseItem.salesPrice }}</td>

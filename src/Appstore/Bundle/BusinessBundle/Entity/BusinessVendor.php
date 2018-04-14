@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 /**
@@ -359,6 +360,14 @@ class BusinessVendor
     public function getBusinessPurchases()
     {
         return $this->businessPurchases;
+    }
+
+    /**
+     * @return AccountPurchase
+     */
+    public function getAccountPurchases()
+    {
+        return $this->accountPurchases;
     }
 
 

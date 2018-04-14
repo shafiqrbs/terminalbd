@@ -26,13 +26,13 @@ class PrePurchaseItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="prePurchase" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="prePurchaseItem" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $inventoryConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="prePurchase" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="prePurchaseItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $masterItem;

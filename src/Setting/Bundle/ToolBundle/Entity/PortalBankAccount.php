@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PortalBankAccount
  *
- * @ORM\Table()
+ * @ORM\Table(name="portal_bank_account")
  * @ORM\Entity(repositoryClass="Setting\Bundle\ToolBundle\Repository\PortalBankAccountRepository")
  */
 class PortalBankAccount
@@ -22,19 +22,10 @@ class PortalBankAccount
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="portalBankAccount" )
-     **/
-    private  $bank;
-
-    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="portalBankAccount" )
      **/
     private  $invoiceSmsEmails;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", mappedBy="portalBankAccount" )
-     **/
-    private  $invoiceModules;
 
     /**
      * @var string

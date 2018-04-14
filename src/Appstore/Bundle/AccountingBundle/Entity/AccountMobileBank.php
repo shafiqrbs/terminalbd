@@ -2,7 +2,11 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
@@ -142,6 +146,11 @@ class AccountMobileBank
      */
     protected $dmsInvoices;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="accountMobileBank" )
+     */
+    protected $dpsInvoices;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="accountMobileBank" )
@@ -152,6 +161,11 @@ class AccountMobileBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="accountMobileBank" )
      */
     protected $dmsPurchases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="accountMobileBank" )
+     */
+    protected $businessPurchases;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="accountMobileBank" )
@@ -172,6 +186,11 @@ class AccountMobileBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="accountMobileBank" )
      */
     protected $dmsTreatmentPlans;
+
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="accountMobileBank" )
+     */
+    protected $dpsTreatmentPlans;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="accountMobileBank" )
@@ -536,6 +555,30 @@ class AccountMobileBank
     public function getMedicineSales()
     {
         return $this->medicineSales;
+    }
+
+    /**
+     * @return DpsInvoice
+     */
+    public function getDpsInvoices()
+    {
+        return $this->dpsInvoices;
+    }
+
+    /**
+     * @return BusinessPurchase
+     */
+    public function getBusinessPurchases()
+    {
+        return $this->businessPurchases;
+    }
+
+    /**
+     * @return DpsTreatmentPlan
+     */
+    public function getDpsTreatmentPlans()
+    {
+        return $this->dpsTreatmentPlans;
     }
 
 

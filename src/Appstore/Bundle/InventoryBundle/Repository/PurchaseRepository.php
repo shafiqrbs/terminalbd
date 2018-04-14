@@ -130,6 +130,7 @@ class PurchaseRepository extends EntityRepository
 
     public  function purchaseSimpleUpdate(Purchase $purchase){
 
+
         $qb = $this->createQueryBuilder('p');
         $qb->join('p.purchaseItems', 'pvi');
         $qb->select('p.id as id');
@@ -142,7 +143,7 @@ class PurchaseRepository extends EntityRepository
         $purchase->setTotalQnt($row['quantity']);
         $purchase->setTotalItem($row['item']);
         $purchase->setTotalAmount($row['total']);
-        $purchase->setPaymentAmount($row['total']);
+        $purchase->setDueAmount($row['total'] - $purchase->getPaymentAmount());
         $this->_em->persist($purchase);
         $this->_em->flush($purchase);
 

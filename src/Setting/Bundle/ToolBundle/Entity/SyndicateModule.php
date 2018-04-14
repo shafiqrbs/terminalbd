@@ -128,8 +128,8 @@ class SyndicateModule
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModuleItem", mappedBy="syndicateModule")
      **/
-
     private $invoiceModuleItems;
+
 
     public function __construct(){
         $this->syndicates = new ArrayCollection();

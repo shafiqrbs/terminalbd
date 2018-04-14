@@ -2,6 +2,8 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
@@ -47,6 +49,11 @@ class PaymentCard
     protected $dmsInvoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="paymentCard")
+     */
+    protected $dpsInvoices;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="paymentCard")
      */
     protected $restaurantInvoices;
@@ -60,6 +67,11 @@ class PaymentCard
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="paymentCard")
      */
     protected $dmsTreatmentPlans;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="paymentCard")
+     */
+    protected $dpsTreatmentPlans;
 
     /**
      * @var string
@@ -157,6 +169,22 @@ class PaymentCard
     public function getMedicineSales()
     {
         return $this->medicineSales;
+    }
+
+    /**
+     * @return DpsInvoice
+     */
+    public function getDpsInvoices()
+    {
+        return $this->dpsInvoices;
+    }
+
+    /**
+     * @return DpsTreatmentPlan
+     */
+    public function getDpsTreatmentPlans()
+    {
+        return $this->dpsTreatmentPlans;
     }
 
 }

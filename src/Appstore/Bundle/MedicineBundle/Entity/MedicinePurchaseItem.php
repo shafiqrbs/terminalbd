@@ -38,6 +38,12 @@ class MedicinePurchaseItem
      **/
     private  $medicinePurchase;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="medicinePurchaseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $medicineSalesItems;
+
     /**
      * @var integer
      *
@@ -415,6 +421,14 @@ class MedicinePurchaseItem
     public function setRemainingQuantity($remainingQuantity)
     {
         $this->remainingQuantity = $remainingQuantity;
+    }
+
+    /**
+     * @return MedicineSalesItem
+     */
+    public function getMedicineSalesItems()
+    {
+        return $this->medicineSalesItems;
     }
 
 

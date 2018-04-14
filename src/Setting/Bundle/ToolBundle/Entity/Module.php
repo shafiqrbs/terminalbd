@@ -156,15 +156,6 @@ class Module
 
     protected  $nav;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModuleItem", mappedBy="module")
-     **/
-
-    private $invoiceModuleItems;
-
-
-
     public function __construct() {
 
         if(!$this->getId()){

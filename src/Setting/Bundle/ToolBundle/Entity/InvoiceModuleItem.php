@@ -32,6 +32,11 @@ class InvoiceModuleItem
     protected $appModule = null;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SyndicateModule", inversedBy="invoiceModuleItems")
+     **/
+    protected $syndicateModule = null;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

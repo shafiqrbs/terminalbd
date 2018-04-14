@@ -136,6 +136,22 @@ class BusinessInvoiceParticular
         $this->metaStatus = $metaStatus;
     }
 
+    /**
+     * @return BusinessParticular
+     */
+    public function getBusinessParticular()
+    {
+        return $this->businessParticular;
+    }
+
+    /**
+     * @param BusinessParticular $businessParticular
+     */
+    public function setBusinessParticular($businessParticular)
+    {
+        $this->businessParticular = $businessParticular;
+    }
+
 
 }
 

@@ -3,6 +3,7 @@
 namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
@@ -10,6 +11,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
+use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
@@ -20,6 +22,7 @@ use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
 use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -231,6 +234,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ExcelImporter", mappedBy="createdBy" , cascade={"persist", "remove"})
      */
     protected $excelImporters;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Reverse", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $reverse;
 
 
     /**
@@ -717,6 +725,16 @@ class User extends BaseUser
      */
     protected $dpsInvoiceCreatedBy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular", mappedBy="assignOperator" , cascade={"persist", "remove"})
+     */
+    protected $dpsParticularOperator;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular", mappedBy="assignDoctor" , cascade={"persist", "remove"})
+     */
+    protected $dpsParticularDoctor;
+
     /*=========================== MEDICINE BUNDLE ====================================*/
 
 
@@ -746,6 +764,12 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="salesBy" , cascade={"persist", "remove"})
      */
     protected $medicineSalesBy;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineReverse", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $medicineReverse;
 
 
     /*=========================== BUSINESS BUNDLE ====================================*/
@@ -1516,6 +1540,22 @@ class User extends BaseUser
     public function getHmsInvoiceTemporaryParticulars()
     {
         return $this->hmsInvoiceTemporaryParticulars;
+    }
+
+    /**
+     * @return MedicineReverse
+     */
+    public function getMedicineReverse()
+    {
+        return $this->medicineReverse;
+    }
+
+    /**
+     * @return DpsParticular
+     */
+    public function getDpsParticularOperator()
+    {
+        return $this->dpsParticularOperator;
     }
 
 

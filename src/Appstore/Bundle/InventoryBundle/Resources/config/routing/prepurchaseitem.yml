@@ -19,6 +19,10 @@ prepurchaseitem_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:PrePurchaseItem:edit" }
 
+prepurchaseitem_status:
+    path:     /{id}/status
+    defaults: { _controller: "InventoryBundle:PrePurchaseItem:status" }
+
 prepurchaseitem_update:
     path:     /{id}/update
     defaults: { _controller: "InventoryBundle:PrePurchaseItem:update" }
@@ -27,5 +31,3 @@ prepurchaseitem_update:
 prepurchaseitem_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:PrePurchaseItem:delete" }
-    methods:  [POST, DELETE]
-

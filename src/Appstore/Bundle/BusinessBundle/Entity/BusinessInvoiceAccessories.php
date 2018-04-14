@@ -26,17 +26,17 @@ class BusinessInvoiceAccessories
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="dmsInvoiceAccessories")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessInvoiceAccessories")
      **/
     private $businessConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="dmsInvoiceAccessories" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="businessInvoiceAccessories" )
      **/
     private $businessParticular;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="dmsInvoiceAccessories" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="businessInvoiceAccessories" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $businessInvoice;
@@ -94,6 +94,150 @@ class BusinessInvoiceAccessories
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return BusinessConfig
+     */
+    public function getBusinessConfig()
+    {
+        return $this->businessConfig;
+    }
+
+    /**
+     * @param BusinessConfig $businessConfig
+     */
+    public function setBusinessConfig($businessConfig)
+    {
+        $this->businessConfig = $businessConfig;
+    }
+
+    /**
+     * @return BusinessParticular
+     */
+    public function getBusinessParticular()
+    {
+        return $this->businessParticular;
+    }
+
+    /**
+     * @param BusinessParticular $businessParticular
+     */
+    public function setBusinessParticular($businessParticular)
+    {
+        $this->businessParticular = $businessParticular;
+    }
+
+    /**
+     * @return BusinessInvoice
+     */
+    public function getBusinessInvoice()
+    {
+        return $this->businessInvoice;
+    }
+
+    /**
+     * @param BusinessInvoice $businessInvoice
+     */
+    public function setBusinessInvoice($businessInvoice)
+    {
+        $this->businessInvoice = $businessInvoice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @param float $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
     }
 
 

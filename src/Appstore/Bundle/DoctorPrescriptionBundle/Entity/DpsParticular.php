@@ -32,11 +32,6 @@ class DpsParticular
     private $dpsConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="referredDoctor")
-     **/
-    private $dpsInvoice;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="assignDoctor")
      **/
     private $assignDoctorInvoices;

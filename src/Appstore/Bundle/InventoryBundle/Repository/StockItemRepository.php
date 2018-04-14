@@ -1459,6 +1459,35 @@ class StockItemRepository extends EntityRepository
         $qb->where('e.item='.$item->getId());
         $qb->andWhere("e.process =:process")->setParameter('process',$process);
         $quantity = $qb->getQuery()->getOneOrNullResult()['quantity'];
-        return $quantity;
+        return abs($quantity);
     }
+
+    public function getPurchaseItemQuantity(PurchaseItem $item,$process = '')
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.purchaseItem='.$item->getId());
+        $qb->andWhere("e.process IN (:process)")->setParameter('process',$process);
+        $quantity = $qb->getQuery()->getOneOrNullResult()['quantity'];
+        return abs($quantity);
+    }
+
+    public function getPurchaseItemSalesQuantity(Purchase $purchase , $process = '')
+    {
+        $data = array();
+        foreach ($purchase->getPurchaseItems() as $purchaseItem){
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.purchaseItem='.$purchaseItem->getId());
+        $qb->andWhere("e.process IN (:process)")->setParameter('process',$process);
+        $quantity = $qb->getQuery()->getOneOrNullResult()['quantity'];
+            $data[$purchaseItem->getId()] = abs($quantity);
+        }
+        return $data;
+
+    }
+
+
+
+
 }

@@ -48,14 +48,6 @@ class DmsInvoice
     private $dmsDoctorInvoices;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe", mappedBy="dmsInvoice" , cascade={"remove"} )
-     * @ORM\OrderBy({"updated" = "DESC"})
-     **/
-    private  $medicineDoctorPrescribes;
-
-
-
-    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="dmsInvoices")
      **/
     private $service;
@@ -72,6 +64,13 @@ class DmsInvoice
     private  $invoiceMedicines;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe", mappedBy="dmsInvoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    private  $medicineDoctorPrescribes;
+
+
+   /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories", mappedBy="dmsInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
@@ -1044,6 +1043,13 @@ class DmsInvoice
         return $this->medicineDoctorPrescribes;
     }
 
+    /**
+     * @param MedicineDoctorPrescribe $medicineDoctorPrescribes
+     */
+    public function setMedicineDoctorPrescribes($medicineDoctorPrescribes)
+    {
+        $this->medicineDoctorPrescribes = $medicineDoctorPrescribes;
+    }
 
 }
 

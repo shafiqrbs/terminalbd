@@ -40,7 +40,7 @@ class Product implements CodeAwareEntity
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PrePurchaseItem", mappedBy="masterItem")
      */
-    protected $prePurchaseItem;
+    protected $prePurchaseItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="product")
@@ -62,7 +62,6 @@ class Product implements CodeAwareEntity
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="masterProducts" )
      **/
     private  $productUnit;
-
 
     /**
      * @Gedmo\Slug(fields={"name"}, updatable=false, separator="-")
@@ -524,9 +523,9 @@ class Product implements CodeAwareEntity
     /**
      * @return PrePurchaseItem
      */
-    public function getPrePurchaseItem()
+    public function getPrePurchaseItems()
     {
-        return $this->prePurchaseItem;
+        return $this->prePurchaseItems;
     }
 
 

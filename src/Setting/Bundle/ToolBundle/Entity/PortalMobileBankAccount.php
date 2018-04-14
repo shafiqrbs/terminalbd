@@ -26,10 +26,6 @@ class PortalMobileBankAccount
      **/
     private  $invoiceSmsEmails;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", mappedBy="portalMobileBankAccount" )
-     **/
-    private  $invoiceModules;
 
     /**
      * @var string

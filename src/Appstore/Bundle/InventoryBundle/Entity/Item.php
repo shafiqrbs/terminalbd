@@ -864,6 +864,15 @@ class Item
         $this->isWeb = $isWeb;
     }
 
+
+    /**
+     * @return boolean $isWeb
+     */
+    public function getIsWeb()
+    {
+        return $this->isWeb;
+    }
+
     public function  getAvgPurchasePrice()
     {
         $purchasePrice = 0;

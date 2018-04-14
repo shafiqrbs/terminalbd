@@ -200,12 +200,8 @@ class PurchaseItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:PurchaseItem:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -279,8 +275,8 @@ class PurchaseItemController extends Controller
      */
     public function deleteAction(PurchaseItem $purchaseItem)
     {
-
-        if($purchaseItem){
+        $salesQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getPurchaseItemQuantity($purchaseItem, array('sales','damage','purchaseReturn'));
+        if($purchaseItem and $salesQnt == 0 ){
             $em = $this->getDoctrine()->getManager();
             $em->remove($purchaseItem);
             $em->flush();
@@ -289,23 +285,6 @@ class PurchaseItemController extends Controller
             return new Response('failed');
         }
 
-       }
-
-    /**
-     * Creates a form to delete a PurchaseItem entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inventory_purchaseitem_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
     }
 
     public function searchAutoCompleteAction(Request $request)
@@ -326,11 +305,28 @@ class PurchaseItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-        if($data['name'] == 'SalesPrice' and $entity->getPurchasePrice() < (float)$data['value']){
+        if($data['name'] == 'SalesPrice' and 0 < (float)$data['value']){
             $process = 'set'.$data['name'];
             $entity->$process((float)$data['value']);
+            $entity->setSalesSubTotal((float)$data['value'] * $entity->getQuantity());
             $em->flush();
         }
+
+        if($data['name'] == 'PurchasePrice' and 0 < (float)$data['value']){
+            $entity->setPurchasePrice((float)$data['value']);
+            $entity->setPurchaseSubTotal((float)$data['value'] * $entity->getQuantity());
+            $em->flush();
+            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($entity->getPurchase());
+        }
+        $salesQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getPurchaseItemQuantity($entity,array('sales','damage','purchaseReturn'));
+        if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
+            $entity->setQuantity((int)$data['value']);
+            $entity->setPurchaseSubTotal((int)$data['value'] * $entity->getPurchasePrice());
+            $entity->setSalesSubTotal((int)$data['value'] * $entity->getSalesPrice());
+            $em->flush();
+            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($entity->getPurchase());
+        }
+
         if($data['name'] == 'Barcode'){
             $existBarcode = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findBy(array('barcode' => $data['value']));
             if(empty($existBarcode)){

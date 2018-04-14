@@ -27,40 +27,34 @@ class BusinessParticular
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="dmsParticulars")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessParticulars")
      **/
     private $businessConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="referredDoctor")
-     **/
-    private $businessInvoice;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories", mappedBy="assignDoctor")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories", mappedBy="businessParticular")
      **/
     private $businessInvoiceAccessories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="dmsParticular" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessParticular" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private $invoiceParticular;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem", mappedBy="dmsParticular" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem", mappedBy="businessParticular" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $businessPurchaseItems;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="dmsParticulars")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="businessParticulars")
      **/
     protected $location;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="dmsParticulars" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="businessParticulars" )
      **/
     private  $unit;
 
@@ -221,7 +215,7 @@ class BusinessParticular
     /**
      * @var string
      *
-     * @ORM\Column(name="dmsParticularCode", type="string", length=10, nullable=true)
+     * @ORM\Column(name="businessParticularCode", type="string", length=10, nullable=true)
      */
     private $businessParticularCode;
 
@@ -332,12 +326,12 @@ class BusinessParticular
     public function getReferred()
     {
 
-        return $this->dmsParticularCode . ' - ' . $this->name . ' (' . $this->mobile . ')/' . $this->getService()->getName();
+        return $this->businessParticularCode . ' - ' . $this->name . ' (' . $this->mobile . ')/' . $this->getService()->getName();
     }
 
     public function getDoctor()
     {
-        return $this->dmsParticularCode . ' - ' . $this->name;
+        return $this->businessParticularCode . ' - ' . $this->name;
     }
 
     /**
@@ -458,7 +452,7 @@ class BusinessParticular
      */
     public function getBusinessParticularCode()
     {
-        return $this->dmsParticularCode;
+        return $this->businessParticularCode;
     }
 
     /**
@@ -466,7 +460,7 @@ class BusinessParticular
      */
     public function setBusinessParticularCode($businessParticularCode)
     {
-        $this->dmsParticularCode = $businessParticularCode;
+        $this->businessParticularCode = $businessParticularCode;
     }
 
     /**
@@ -841,7 +835,7 @@ class BusinessParticular
      */
     public function getBusinessInvoice()
     {
-        return $this->dmsInvoice;
+        return $this->businessInvoice;
     }
 
     /**
@@ -849,7 +843,7 @@ class BusinessParticular
      */
     public function getBusinessConfig()
     {
-        return $this->dmsConfig;
+        return $this->businessConfig;
     }
 
     /**
@@ -857,7 +851,7 @@ class BusinessParticular
      */
     public function setBusinessConfig($businessConfig)
     {
-        $this->dmsConfig = $businessConfig;
+        $this->businessConfig = $businessConfig;
     }
 
     /**
@@ -897,7 +891,7 @@ class BusinessParticular
      */
     public function getBusinessPurchaseItems()
     {
-        return $this->dmsPurchaseItems;
+        return $this->businessPurchaseItems;
     }
 
     /**
@@ -905,7 +899,7 @@ class BusinessParticular
      */
     public function getBusinessTreatmentPlans()
     {
-        return $this->dmsTreatmentPlans;
+        return $this->businessTreatmentPlans;
     }
 
     /**
@@ -1025,7 +1019,7 @@ class BusinessParticular
      */
     public function getBusinessInvoiceAccessories()
     {
-        return $this->dmsInvoiceAccessories;
+        return $this->businessInvoiceAccessories;
     }
 
     /**

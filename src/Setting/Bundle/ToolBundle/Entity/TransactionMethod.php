@@ -9,6 +9,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
+use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
@@ -18,6 +19,7 @@ use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -157,6 +159,11 @@ class TransactionMethod
     protected $dmsPurchase;
 
      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="transactionMethod" )
+     */
+    protected $medicinePurchase;
+
+     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="transactionMethod" )
      */
     protected $dmsDoctorInvoices;
@@ -172,6 +179,11 @@ class TransactionMethod
     protected $restaurantPurchase;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="transactionMethod" )
+     */
+    protected $businessPurchase;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="transactionMethod" )
      */
     protected $customerInvoice;
@@ -182,14 +194,15 @@ class TransactionMethod
     protected $dmsTreatmentPlans;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="transactionMethod" )
+     */
+    protected $dpsTreatmentPlans;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="transactionMethod" )
      */
     protected $businessTransactions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="transactionMethod" )
-     */
-    protected $medicinePurchases;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="transactionMethod" )
@@ -473,6 +486,22 @@ class TransactionMethod
     public function getMedicineSales()
     {
         return $this->medicineSales;
+    }
+
+    /**
+     * @return DmsPurchase
+     */
+    public function getDmsPurchase()
+    {
+        return $this->dmsPurchase;
+    }
+
+    /**
+     * @return MedicinePurchase
+     */
+    public function getMedicinePurchase()
+    {
+        return $this->medicinePurchase;
     }
 }
 

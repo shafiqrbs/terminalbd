@@ -39,6 +39,11 @@ class MedicineBrand
     private $invoiceMedicine;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="medicineBrand")
+     **/
+    private $medicineStock;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -423,6 +428,14 @@ class MedicineBrand
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return MedicineStock
+     */
+    public function getMedicineStock()
+    {
+        return $this->medicineStock;
     }
 
 

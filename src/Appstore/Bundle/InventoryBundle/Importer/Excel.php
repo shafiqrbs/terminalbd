@@ -95,7 +95,9 @@ class Excel
             $purchaseItem->setPurchase($this->getPurchase($item));
             $purchaseItem->setQuantity($item['Quantity']);
             $purchaseItem->setPurchasePrice($item['PurchasePrice']);
+            $purchaseItem->setPurchaseSubTotal((float)$item['PurchasePrice'] * (int)$item['Quantity']);
             $purchaseItem->setSalesPrice($item['SalesPrice']);
+            $purchaseItem->setSalesSubTotal((float)$item['SalesPrice'] * (int)$item['Quantity']);
             $purchaseItem->setPurchaseVendorItem($this->getPurchaseVendorItem($item));
             $this->persist($purchaseItem);
 

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
@@ -63,6 +64,12 @@ class Customer
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $dpsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="customer")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $businessInvoices;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="customer")
@@ -983,6 +990,14 @@ class Customer
     public function getDpsInvoices()
     {
         return $this->dpsInvoices;
+    }
+
+    /**
+     * @return BusinessInvoice
+     */
+    public function getBusinessInvoices()
+    {
+        return $this->businessInvoices;
     }
 
 }

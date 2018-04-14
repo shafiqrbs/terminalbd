@@ -173,6 +173,7 @@
                                     <th class="numeric" >Barcode</th>
                                     <th class="numeric" >Item</th>
                                     <th class="numeric" >Qnt</th>
+                                    <th class="numeric" >Process Qnt</th>
                                     <th class="numeric" >Unit</th>
                                     <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Sub-total</th>
@@ -187,13 +188,18 @@
                                         <td class="numeric" >{{ loop.index }}.</td>
                                         <td class="numeric" >{{ purchaseItem.barcode }}</td>
                                         <td class="numeric" >{{ purchaseItem.item.name }}</td>
-                                        <td class="numeric" >{{ purchaseItem.quantity }}</td>
+                                        <td class="numeric" ><a class="editable" data-name="Quantity" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Change purchase quantity"> {{ purchaseItem.quantity }}</a></td>
+                                        <td class="numeric" >{% if processItem[purchaseItem.id] is defined %}{{ processItem[purchaseItem.id] }}{% endif %}</td>
                                         <td class="numeric" >{% if purchaseItem.item.masterItem.productUnit is not empty %}{{  purchaseItem.item.masterItem.productUnit.name }}{% endif %}</td>
-                                        <td class="numeric" >{{purchaseItem.purchasePrice}}</td>
+                                        <td class="numeric" ><a class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Change purchase price"> {{ purchaseItem.purchasePrice }}</a></td>
                                         <td class="numeric" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>
                                         <td class="numeric" >{{purchaseItem.salesPrice}}</td>
                                         <td class="numeric" >{{ purchaseItem.salesSubTotal|number_format() }}</td>
-                                        <td><a href="javascript:" data-url="{{ path('inventory_purchasesimple_item_delete',{'purchase':entity.id ,'id':purchaseItem.id }) }}" class="btn red mini remove"><i class="icon-trash"></i> Delete</a> </td>
+                                        <td class="numeric">
+                                            {% if processItem[purchaseItem.id] is defined and processItem[purchaseItem.id] == 0 %}
+                                            <a href="javascript:" data-url="{{ path('inventory_purchasesimple_item_delete',{'purchase':entity.id ,'id':purchaseItem.id }) }}" class="btn red mini remove"><i class="icon-trash"></i> Delete</a>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

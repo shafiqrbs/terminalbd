@@ -2,7 +2,9 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
@@ -63,6 +65,19 @@ class ProductUnit
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $medicineStocks;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $businessParticulars;
+
+/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $dpsParticulars;
+
+
 
 
     /**
@@ -209,6 +224,22 @@ class ProductUnit
     public function getMedicineStocks()
     {
         return $this->medicineStocks;
+    }
+
+    /**
+     * @return BusinessParticular
+     */
+    public function getBusinessParticulars()
+    {
+        return $this->businessParticulars;
+    }
+
+    /**
+     * @return DpsParticular
+     */
+    public function getDpsParticulars()
+    {
+        return $this->dpsParticulars;
     }
 
 

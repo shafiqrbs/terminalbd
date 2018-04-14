@@ -42,19 +42,17 @@ class BusinessInvoice
      **/
     private  $invoiceParticulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="businessInvoice" , cascade={"remove"} )
+     **/
+    private  $businessTransactions;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories", mappedBy="businessInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $businessInvoiceAccessories;
-
-
-   /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="businessInvoices" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $accountSales;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="businessInvoices" ,cascade={"persist"} )
@@ -574,6 +572,30 @@ class BusinessInvoice
     public function setCommission($commission)
     {
         $this->commission = $commission;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBusinessInvoiceAccessories()
+    {
+        return $this->businessInvoiceAccessories;
+    }
+
+    /**
+     * @param mixed $businessInvoiceAccessories
+     */
+    public function setBusinessInvoiceAccessories($businessInvoiceAccessories)
+    {
+        $this->businessInvoiceAccessories = $businessInvoiceAccessories;
+    }
+
+    /**
+     * @return BusinessTransaction
+     */
+    public function getBusinessTransactions()
+    {
+        return $this->businessTransactions;
     }
 
 

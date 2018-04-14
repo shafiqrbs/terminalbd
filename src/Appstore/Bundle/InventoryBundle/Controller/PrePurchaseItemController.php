@@ -83,13 +83,12 @@ class PrePurchaseItemController extends Controller
 
     /**
      * Displays a form to create a new PrePurchaseItem entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
     public function newAction()
     {
         $entity = new PrePurchaseItem();
         $form   = $this->createCreateForm($entity);
-
         return $this->render('InventoryBundle:PrePurchaseItem:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -109,18 +108,15 @@ class PrePurchaseItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PrePurchaseItem entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:PrePurchaseItem:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+
         ));
     }
 
     /**
      * Displays a form to edit an existing PrePurchaseItem entity.
-     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
     public function editAction($id)
     {
@@ -133,12 +129,10 @@ class PrePurchaseItemController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:PrePurchaseItem:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+
         ));
     }
 
@@ -164,7 +158,7 @@ class PrePurchaseItemController extends Controller
     }
     /**
      * Edits an existing PrePurchaseItem entity.
-     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
     public function updateAction(Request $request, $id)
     {
@@ -175,8 +169,6 @@ class PrePurchaseItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PrePurchaseItem entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -191,12 +183,30 @@ class PrePurchaseItemController extends Controller
         return $this->render('InventoryBundle:PrePurchaseItem:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+
         ));
     }
+
+    public function statusAction(PrePurchaseItem $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $status = $entity->isStatus();
+        if($status == 1){
+            $entity->setStatus(0);
+        } else{
+            $entity->setStatus(1);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Status has been changed successfully"
+        );
+        return $this->redirect($this->generateUrl('prepurchaseitem'));
+    }
+
+
     /**
      * Deletes a PrePurchaseItem entity.
-     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
     public function deleteAction(PrePurchaseItem $entity)
     {
@@ -223,23 +233,6 @@ class PrePurchaseItemController extends Controller
             );
         }
         return $this->redirect($this->generateUrl('prepurchaseitem'));
-    }
-
-    /**
-     * Creates a form to delete a PrePurchaseItem entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('prepurchaseitem_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
     }
 
     public function autoSearchAction(Request $request)

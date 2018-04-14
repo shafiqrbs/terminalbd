@@ -35,6 +35,11 @@ class MedicineStock
     private $medicinePurchaseItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="medicineStock")
+     **/
+    private $medicineSalesItems;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", inversedBy="medicineStock")
      **/
     private $medicineConfig;
@@ -45,7 +50,7 @@ class MedicineStock
     private $unit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticular", inversedBy="medicineStockRocks")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticular", inversedBy="medicineStockRacks")
      **/
     private $rackNo;
 
@@ -509,6 +514,14 @@ class MedicineStock
     public function setRackNo($rackNo)
     {
         $this->rackNo = $rackNo;
+    }
+
+    /**
+     * @return MedicineSalesItem
+     */
+    public function getMedicineSalesItems()
+    {
+        return $this->medicineSalesItems;
     }
 
 

@@ -224,7 +224,7 @@ class MedicineParticular
     }
 
     /**
-     * @return MedicineStock
+     * @return MedicineParticular
      */
     public function getMedicineStockRacks()
     {

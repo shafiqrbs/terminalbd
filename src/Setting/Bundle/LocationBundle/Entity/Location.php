@@ -2,6 +2,8 @@
 
 namespace Setting\Bundle\LocationBundle\Entity;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
@@ -117,6 +119,16 @@ class Location
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="location")
      */
     protected $dmsParticulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", mappedBy="location")
+     */
+    protected $businessParticulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular", mappedBy="location")
+     */
+    protected $dpsParticulars;
 
 
     /**
@@ -333,6 +345,22 @@ class Location
     public function getParticulars()
     {
         return $this->particulars;
+    }
+
+    /**
+     * @return BusinessParticular
+     */
+    public function getBusinessParticulars()
+    {
+        return $this->businessParticulars;
+    }
+
+    /**
+     * @return DpsParticular
+     */
+    public function getDpsParticulars()
+    {
+        return $this->dpsParticulars;
     }
 
 }

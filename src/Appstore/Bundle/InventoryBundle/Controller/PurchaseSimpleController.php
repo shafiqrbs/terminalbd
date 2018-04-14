@@ -83,11 +83,13 @@ class PurchaseSimpleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('InventoryBundle:Purchase')->find($id);
+        $processItem = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getPurchaseItemSalesQuantity($entity,array('sales','damage','purchaseReturn'));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Purchase entity.');
         }
         return $this->render('InventoryBundle:PurchaseSimple:show.html.twig', array(
             'entity'      => $entity,
+            'processItem'      => $processItem,
         ));
     }
 
@@ -100,16 +102,17 @@ class PurchaseSimpleController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $purchase = $em->getRepository('InventoryBundle:Purchase')->find($id);
-
+        $processItem = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getPurchaseItemSalesQuantity($purchase,array('sales','damage','purchaseReturn'));
         if (!$purchase) {
             throw $this->createNotFoundException('Unable to find Purchase entity.');
         }
         $purchaseItem = new PurchaseItem();
         $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
         $editForm = $this->createEditForm($purchase);
-
+        $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
         return $this->render('InventoryBundle:PurchaseSimple:new.html.twig', array(
             'entity'      => $purchase,
+            'processItem'      => $processItem,
             'purchaseItemForm'   => $purchaseItemForm->createView(),
             'form'   => $editForm->createView(),
         ));
@@ -419,19 +422,19 @@ class PurchaseSimpleController extends Controller
 
     }
 
-
-
     public function purchaseItemDeleteAction(Purchase $purchase, PurchaseItem $purchaseItem)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $em->remove($purchaseItem);
-        $em->flush();
-        $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
-        $em->getRepository('InventoryBundle:Purchase')->purchaseModifyUpdate($purchase);
-        $this->get('session')->getFlashBag()->add(
-            'error', "Data has been deleted successfully"
-        );
+        $salesQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getPurchaseItemQuantity($purchaseItem, array('sales','damage','purchaseReturn'));
+        if($purchaseItem and $salesQnt == 0 ) {
+            $em->remove($purchaseItem);
+            $em->flush();
+            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
+            $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
+            $this->get('session')->getFlashBag()->add(
+                'error', "Data has been deleted successfully"
+            );
+        }
         exit;
 
     }

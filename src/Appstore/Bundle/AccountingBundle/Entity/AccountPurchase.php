@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessVendor;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\DmsBundle\Entity\DmsVendor;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
@@ -70,6 +72,16 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Vendor", inversedBy="accountPurchase" )
          **/
         private  $restaurantVendor;
+
+         /**
+         * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", inversedBy="accountPurchase" )
+         **/
+        private  $businessPurchase;
+
+         /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendor", inversedBy="accountPurchases" )
+         **/
+        private  $businessVendor;
 
         /**
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", inversedBy="accountPurchase" )
@@ -764,6 +776,38 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setMedicineVendor($medicineVendor)
         {
             $this->medicineVendor = $medicineVendor;
+        }
+
+        /**
+         * @return BusinessPurchase
+         */
+        public function getBusinessPurchase()
+        {
+            return $this->businessPurchase;
+        }
+
+        /**
+         * @param BusinessPurchase $businessPurchase
+         */
+        public function setBusinessPurchase($businessPurchase)
+        {
+            $this->businessPurchase = $businessPurchase;
+        }
+
+        /**
+         * @return BusinessVendor
+         */
+        public function getBusinessVendor()
+        {
+            return $this->businessVendor;
+        }
+
+        /**
+         * @param BusinessVendor $businessVendor
+         */
+        public function setBusinessVendor($businessVendor)
+        {
+            $this->businessVendor = $businessVendor;
         }
 
     }
