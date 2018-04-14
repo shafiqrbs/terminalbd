@@ -95,9 +95,9 @@
                                     </div>
                                 </div>
                                 <br/>#}
-                                {#<div class="row-fluid">
-
-                                    <div class="span4">
+                                {% if inventory.isBranch == 1 %}
+                                <div class="row-fluid">
+                                    <div class="span12">
                                        <select name="branch" id="branch" class="span12 m-wrap">
                                            <option value=""> ---Select Branch --- </option>
                                            {% for bran in branches %}
@@ -105,8 +105,8 @@
                                            {% endfor %}
                                        </select>
                                     </div>
-
-                                </div>#}
+                                </div>
+                                {% endif %}
                             </form>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content">
