@@ -535,6 +535,15 @@ class Builder extends ContainerAware
 
             }
             $menu['Sales']->addChild('Pre-purchase', array('route' => 'prepurchaseitem'))->setAttribute('icon', 'icon icon-archive');
+            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {
+                $menu['Sales']->addChild('Reports')
+                    ->setAttribute('icon', 'icon-bar-chart')
+                    ->setAttribute('dropdown', true);
+                $menu['Sales']['Reports']->addChild('Sales Overview', array('route' => 'inventory_report_sales_overview'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Periodic Sales Item', array('route' => 'inventory_report_sales_item'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
+            }
+
 
         }
         return $menu;
@@ -561,6 +570,12 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', ' icon-reply');
             $menu['Inventory']['Manage Purchase']->addChild('Purchase Import', array('route' => 'inventory_excelimproter'))
                 ->setAttribute('icon', 'icon-upload');
+            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {
+            $menu['Inventory']['Manage Purchase']->addChild('Reports')
+                ->setAttribute('icon', 'icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Inventory']['Manage Purchase']['Reports']->addChild('Purchase with price', array('route' => 'inventory_report_purchase'))->setAttribute('icon', 'icon-bar-chart');
+            }
         }
 /*
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
@@ -632,10 +647,6 @@ class Builder extends ContainerAware
             $menu['Inventory']['Reports']->addChild('Operational Stock', array('route' => 'inventory_report_operational_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Group Stock', array('route' => 'inventory_report_group_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Purchase with price', array('route' => 'inventory_report_purchase'))->setAttribute('icon', 'icon-bar-chart');
-            $menu['Inventory']['Reports']->addChild('Sales Overview', array('route' => 'inventory_report_sales_overview'))->setAttribute('icon', 'icon-bar-chart');
-            $menu['Inventory']['Reports']->addChild('Periodic Sales Item', array('route' => 'inventory_report_sales_item'))->setAttribute('icon', 'icon-bar-chart');
-            $menu['Inventory']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
-
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER')) {
             if ($inventory->getIsBranch() == 1) {

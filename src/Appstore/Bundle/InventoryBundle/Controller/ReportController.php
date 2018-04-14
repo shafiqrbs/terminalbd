@@ -187,11 +187,12 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $salesItemOverview = $em->getRepository('InventoryBundle:StockItem')->getSalesItemOverview($inventory,$data);
         $entities = $em->getRepository('InventoryBundle:StockItem')->getSalesItem($inventory,$data);
         $pagination = $this->paginate($entities);
-
         return $this->render('InventoryBundle:Report:salesStock.html.twig', array(
             'entities' => $pagination,
+            'overview' => $salesItemOverview,
             'branches' => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm' => $data,
         ));
@@ -227,6 +228,7 @@ class ReportController extends Controller
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:Report:sales.html.twig', array(
             'entities'      => $pagination ,
+            'inventory'      => $inventory ,
             'transactionMethods'      => $transactionMethods ,
             'branches' => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm'    => $data ,

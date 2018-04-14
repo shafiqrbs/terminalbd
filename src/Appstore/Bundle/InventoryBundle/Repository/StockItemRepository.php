@@ -1318,6 +1318,46 @@ class StockItemRepository extends EntityRepository
 
     }
 
+    public  function getSalesItemOverview($inventory, $data=''){
+
+        $branch = isset($data['branch']) ? $data['branch'] :'';
+        $mode = isset($data['mode']) ? $data['mode'] :'';
+        $process = isset($data['process']) ? $data['process'] :'';
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesItem','stock');
+        $qb->join('stock.item','item');
+        $qb->join('stock.sales','e');
+        $qb->select('SUM(stock.quantity) AS quantity');
+        $qb->addSelect('SUM(stock.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(stock.salesPrice) AS salesPrice');
+        $qb->addSelect('item.name AS name');
+        $qb->where("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        if($process){
+            $qb->andWhere('e.process =:process');
+            $qb->setParameter('process',$process);
+        }
+        if($mode){
+            $qb->andWhere("e.salesMode = :mode");
+            $qb->setParameter('mode', $mode);
+        }
+        if($branch){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $startDate = !empty($data['startDate']) ? date('Y-m-d',strtotime($data['startDate'])) : date('Y-m-d');
+        $endDate = !empty($data['endDate']) ? date('Y-m-d',strtotime($data['endDate'])) : date('Y-m-d');
+        if (!empty($startDate) and !empty($endDate) ) {
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $startDate.' 00:00:00');
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $endDate.' 23:59:59');
+        }
+        $qb->orderBy('e.created','DESC');
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
     public  function getSalesItem($inventory, $data=''){
 
         $branch = isset($data['branch']) ? $data['branch'] :'';
@@ -1360,10 +1400,9 @@ class StockItemRepository extends EntityRepository
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $endDate.' 23:59:59');
         }
-        //$this->handleWithSearch($qb,$data);
         $qb->groupBy('stock.'.$group);
         $qb->orderBy('e.created','DESC');
-        $result = $qb->getQuery()->getArrayResult();
+        $result = $qb->getQuery();
         return $result;
     }
 

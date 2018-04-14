@@ -408,7 +408,7 @@
                                                 <a href="{{ path('inventory_sales_print_invoice',{'invoice':dailySales.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
                                             {% endif %}
                                             {% endif %}
-                                        {% if entity.paymentStatus == "Pending" or entity.process == "In-progress" or entity.process == "Courier" %}
+                                        {% if dailySales.paymentStatus == "Pending" or dailySales.process == "In-progress" or dailySales.process == "Courier" %}
                                             <a href="{{ path('inventory_salesonline_edit', { 'code': dailySales.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
                                             {% if dailySales.id != entity.id  %}
                                                 <a title="Are you sure went to delete ?" data-id="{{ dailySales.id }}" data-url="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
