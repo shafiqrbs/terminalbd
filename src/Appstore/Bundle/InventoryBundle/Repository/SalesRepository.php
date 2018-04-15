@@ -175,7 +175,6 @@ class SalesRepository extends EntityRepository
         }
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('salesBy');
-        $qb->orderBy('s.salesBy','ASC');
         $qb->orderBy('s.total','DESC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
