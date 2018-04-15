@@ -237,6 +237,20 @@ class ReportController extends Controller
         ));
     }
 
+    public function salesUserAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesUserReport($inventory,$data);
+        return $this->render('InventoryBundle:Report:salesUser.html.twig', array(
+            'inventory'      => $inventory ,
+            'entities'      => $entities ,
+            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm'    => $data ,
+        ));
+    }
+
 
 
 

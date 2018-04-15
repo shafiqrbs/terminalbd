@@ -43,3 +43,7 @@ inventory_report_sales_overview:
     path:     /sales-transaction-overview
     defaults: { _controller: "InventoryBundle:Report:salesTransactionOverview" }
 
+inventory_report_sales_user:
+    path:     /sales-user-overview
+    defaults: { _controller: "InventoryBundle:Report:salesUser" }
+

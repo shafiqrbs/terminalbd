@@ -542,6 +542,7 @@ class Builder extends ContainerAware
                 $menu['Sales']['Reports']->addChild('Sales Overview', array('route' => 'inventory_report_sales_overview'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('Periodic Sales Item', array('route' => 'inventory_report_sales_item'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Sales by User', array('route' => 'inventory_report_sales_user'))->setAttribute('icon', 'icon-bar-chart');
             }
 
 

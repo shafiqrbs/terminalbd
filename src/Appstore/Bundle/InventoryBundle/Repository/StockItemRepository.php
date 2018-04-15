@@ -609,9 +609,10 @@ class StockItemRepository extends EntityRepository
 
         $em = $this->_em;
         /* @var $purchaseItem PurchaseItem */
+
         foreach($purchase->getPurchaseItems() as $purchaseItem ) {
 
-            if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('purchaseItem' => $purchaseItem->getId())))) {
+            if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('purchaseItem' => $purchaseItem->getId(),'process'=>'purchase')))) {
 
                 $entity = new StockItem();
                 $entity->setInventoryConfig($purchase->getInventoryConfig());

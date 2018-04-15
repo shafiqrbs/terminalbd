@@ -154,6 +154,33 @@ class SalesRepository extends EntityRepository
 
     }
 
+    public function salesUserReport( InventoryConfig $inventory , $data)
+    {
+
+        $branch =    isset($data['branch'])? $data['branch'] :'';
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('SUM(s.due) as due');
+        $qb->addSelect('SUM(s.subTotal) as subTotal');
+        $qb->addSelect('SUM(s.total) as total');
+        $qb->addSelect('SUM(s.payment) as payment');
+        $qb->addSelect('SUM(s.totalItem) totalItem');
+        $qb->addSelect('SUM(s.discount) as discount');
+        $qb->addSelect('SUM(s.vat) as vat');
+        $qb->leftJoin('s.salesBy', 'u');
+        $qb->where("s.inventoryConfig = :config");
+        $qb->setParameter('config', $inventory);
+        if(!empty($branch)){
+            $qb->andWhere("s.branches =".$branch);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('s.salesBy','ASC');
+        $qb->orderBy('s.total','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
     public function getSalesLastId($inventory)
     {
         $qb = $this->_em->createQueryBuilder();
