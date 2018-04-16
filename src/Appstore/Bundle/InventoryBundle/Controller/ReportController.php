@@ -227,13 +227,15 @@ class ReportController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entities = $em->getRepository('InventoryBundle:Sales')->salesReport($inventory,$data);
         $pagination = $this->paginate($entities);
+        $salesPurchasePrice = $em->getRepository('InventoryBundle:Sales')->salesPurchasePriceReport($inventory,$data,$pagination);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:Report:sales.html.twig', array(
-            'entities'      => $pagination ,
-            'inventory'      => $inventory ,
-            'transactionMethods'      => $transactionMethods ,
-            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
-            'searchForm'    => $data ,
+            'entities'              => $pagination ,
+            'purchasePrice'         => $salesPurchasePrice ,
+            'inventory'             => $inventory ,
+            'transactionMethods'    => $transactionMethods ,
+            'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm'            => $data,
         ));
     }
 
@@ -242,10 +244,12 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $salesPurchasePrice = $em->getRepository('InventoryBundle:Sales')->salesUserPurchasePriceReport($inventory,$data);
         $entities = $em->getRepository('InventoryBundle:Sales')->salesUserReport($inventory,$data);
         return $this->render('InventoryBundle:Report:salesUser.html.twig', array(
             'inventory'      => $inventory ,
             'entities'      => $entities ,
+            'salesPurchasePrice'      => $salesPurchasePrice ,
             'branches' => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm'    => $data ,
         ));

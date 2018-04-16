@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Periodic Sales Report
+                    User Base Sales Report
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Periodic Sales Report</a></li>
+                    <li><a href="#">User Base Sales Report</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,7 +29,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Periodic Sales Report</div>
+                        <div class="caption"><i class="icon-reorder"></i>User Base Sales Report</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('inventory_report_sales_overview') }}"><i class="icon-bar-chart"></i>&nbsp;Sales Overview</a>
@@ -77,6 +77,8 @@
                                 <th class="numeric" >Net Total</th>
                                 <th class="numeric" >Payment</th>
                                 <th class="numeric" >Due</th>
+                                <th class="numeric" >PurchasePrice</th>
+                                <th class="numeric" >Profit/Loss</th>
                             </tr>
                             </thead>
                             <tbody id="sales">
@@ -85,7 +87,8 @@
                             {% set vat=0 %}
                             {% set total=0 %}
                             {% set payment=0 %}
-                            {% set due=0 %}
+                            {% set due = 0 %}
+                            {% set purchasePrice = 0 %}
 
                             {% for entity in entities %}
                                 {% set subTotal = subTotal+entity.subTotal %}
@@ -94,6 +97,7 @@
                                 {% set total = total+entity.total %}
                                 {% set payment = payment+entity.payment %}
                                 {% set due = due+entity.due %}
+                                {% set purchasePrice = purchasePrice+salesPurchasePrice[entity.salesBy] %}
                                 <tr>
                                     <td class="numeric" >{{ entity.salesBy }}</td>
                                     <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
@@ -102,10 +106,12 @@
                                     <th class="numeric" >{{ entity.total|number_format  }}</th>
                                     <th class="numeric" >{{ entity.payment|number_format }}</th>
                                     <th class="numeric" >{{ entity.due|number_format }}</th>
+                                    <th class="numeric" >{% if salesPurchasePrice[entity.salesBy] is defined %}{{ salesPurchasePrice[entity.salesBy]|number_format }}{% endif %}</th>
+                                    <th class="numeric" >{% if salesPurchasePrice[entity.salesBy] is defined %}{{ (entity.total-salesPurchasePrice[entity.salesBy])|number_format }}{% endif %}</th>
                                 </tr>
                             {% endfor %}
                             </tbody>
-                            <tfoot><tr><th></th><th>{{ subTotal }}</th><th>{{ discount }}</th><th>{{ vat }}</th><th>{{ total }}</th><th>{{ payment }}</th><th>{{ due }}</th></tr></tfoot>
+                            <tfoot><tr><th>Grand</th><th>{{ subTotal|number_format }}</th><th>{{ discount|number_format }}</th><th>{{ vat|number_format }}</th><th>{{ total|number_format }}</th><th>{{ payment|number_format }}</th><th>{{ due|number_format }}</th><th>{{ purchasePrice|number_format }}</th><th>{{ (total-purchasePrice)|number_format }}</th></tr></tfoot>
                         </table>
 
                     </div>

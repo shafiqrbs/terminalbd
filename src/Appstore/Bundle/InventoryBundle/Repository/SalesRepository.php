@@ -140,8 +140,21 @@ class SalesRepository extends EntityRepository
 
         $branch =    isset($data['branch'])? $data['branch'] :'';
         $qb = $this->createQueryBuilder('s');
-        $qb->leftJoin('s.customer', 'c');
         $qb->leftJoin('s.salesBy', 'u');
+        $qb->leftJoin('s.transactionMethod', 't');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('t.name as transactionMethod');
+        $qb->addSelect('s.id as id');
+        $qb->addSelect('s.created as created');
+        $qb->addSelect('s.process as process');
+        $qb->addSelect('s.invoice as invoice');
+        $qb->addSelect('(s.due) as due');
+        $qb->addSelect('(s.subTotal) as subTotal');
+        $qb->addSelect('(s.total) as total');
+        $qb->addSelect('(s.payment) as payment');
+        $qb->addSelect('(s.totalItem) totalItem');
+        $qb->addSelect('(s.discount) as discount');
+        $qb->addSelect('(s.vat) as vat');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $inventory);
         if(!empty($branch)){
@@ -158,8 +171,11 @@ class SalesRepository extends EntityRepository
     {
 
         $branch =    isset($data['branch'])? $data['branch'] :'';
+
         $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.salesBy', 'u');
         $qb->select('u.username as salesBy');
+        $qb->addSelect('u.id as userId');
         $qb->addSelect('SUM(s.due) as due');
         $qb->addSelect('SUM(s.subTotal) as subTotal');
         $qb->addSelect('SUM(s.total) as total');
@@ -167,7 +183,6 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('SUM(s.totalItem) totalItem');
         $qb->addSelect('SUM(s.discount) as discount');
         $qb->addSelect('SUM(s.vat) as vat');
-        $qb->leftJoin('s.salesBy', 'u');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $inventory);
         if(!empty($branch)){
@@ -175,10 +190,56 @@ class SalesRepository extends EntityRepository
         }
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('salesBy');
-        $qb->orderBy('s.total','DESC');
+        $qb->orderBy('total','DESC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
+    }
+
+    public function salesUserPurchasePriceReport($inventory,$data)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.salesBy', 'u');
+        $qb->join('s.salesItems','si');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
+        $qb->where("s.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('totalPurchaseAmount','DESC');
+        $qb->groupBy('salesBy');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= array();
+        foreach ($result as $row ){
+            $array[$row['salesBy']]= $row['totalPurchaseAmount'];
+        }
+        return $array;
+    }
+
+    public function salesPurchasePriceReport($inventory,$data,$x)
+    {
+        $ids = array();
+        foreach ($x as $y){
+            $ids[]=$y['id'];
+        }
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.salesItems','si');
+        $qb->select('s.id as salesId');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
+        $qb->where("s.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        $qb->andWhere("s.id IN (:salesId)");
+        $qb->setParameter('salesId', $ids);
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('totalPurchaseAmount','DESC');
+        $qb->groupBy('salesId');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= array();
+        foreach ($result as $row ){
+            $array[$row['salesId']]= $row['totalPurchaseAmount'];
+        }
+        return $array;
     }
 
     public function getSalesLastId($inventory)

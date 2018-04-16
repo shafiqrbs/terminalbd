@@ -121,7 +121,6 @@
                             <tr class="head-green">
                                 <th class="numeric" >Created</th>
                                 <th class="numeric" >Invoice</th>
-                                <th class="numeric" >Customer</th>
                                 <th class="numeric" >SalesBy</th>
                                 <th class="numeric" >Transaction</th>
                                 <th class="numeric" >Process</th>
@@ -131,6 +130,8 @@
                                 <th class="numeric" >Net Total</th>
                                 <th class="numeric" >Payment</th>
                                 <th class="numeric" >Due</th>
+                                <th class="numeric" >Purchase</th>
+                                <th class="numeric" >Profit/Loss</th>
                             </tr>
                             </thead>
                             <tbody id="sales">
@@ -138,9 +139,8 @@
                                 <tr id="salesRemove-{{ entity.id }}">
                                     <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ entity.invoice }}</td>
-                                    <td class="numeric" >{% if entity.customer.name != 'Default' %}{{ entity.customer.name }}/{{ entity.customer.mobile }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.salesBy }}</td>
-                                    <td class="numeric" >{{ entity.transactionMethod.name }}</td>
+                                    <td class="numeric" >{{ entity.transactionMethod }}</td>
                                     <td class="numeric" >{{ entity.process }}</td>
                                     <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
                                     <td class="numeric" >{{ entity.discount|number_format  }}</td>
@@ -148,6 +148,8 @@
                                     <th class="numeric" >{{ entity.total|number_format  }}</th>
                                     <th class="numeric" >{{ entity.payment|number_format }}</th>
                                     <td class="numeric" >{{ entity.due|number_format }}</td>
+                                    <td class="numeric" >{{ purchasePrice[entity.id]|number_format }}</td>
+                                    <th class="numeric" >{{ (entity.total - purchasePrice[entity.id])|number_format }}</th>
                                 </tr>
                             {% endfor %}
                             </tbody>

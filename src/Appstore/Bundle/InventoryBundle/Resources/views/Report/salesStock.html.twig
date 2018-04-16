@@ -157,7 +157,7 @@
                                     <td class="numeric" >{{ entity.quantity }}</td>
                                     <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
                                     <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
-                                    <td class="numeric" >{{ (entity.salesPrice-entity.purchasePrice)|number_format }}</td>
+                                    <td class="numeric" >{{ (entity.salesPrice - entity.purchasePrice)|number_format }}</td>
                                 </tr>
                             {% endfor %}
 
