@@ -208,10 +208,12 @@ class ReportController extends Controller
         $transactionCash = $em->getRepository('InventoryBundle:Sales')->salesTransactionOverview($inventory,$data);
         $salesMode = $em->getRepository('InventoryBundle:Sales')->salesModeOverview($inventory,$data);
         $salesProcess = $em->getRepository('InventoryBundle:Sales')->salesProcessOverview($inventory,$data);
+        $purchasePrice = $em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($this->getUser(),$data);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:Report:salesOverview.html.twig', array(
             'inventory' => $inventory,
             'cashOverview'              => $cashOverview ,
+            'purchasePrice'             => $purchasePrice ,
             'transactionCash'           => $transactionCash ,
             'salesMode'                 => $salesMode ,
             'salesProcess'              => $salesProcess ,

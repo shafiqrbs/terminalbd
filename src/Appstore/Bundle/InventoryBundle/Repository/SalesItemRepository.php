@@ -374,14 +374,14 @@ class SalesItemRepository extends EntityRepository
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
 
             if (!empty($data['startDate']) ) {
-
+                $startDate = date('Y-m-d 00:00:00',strtotime($data['startDate']));
                 $qb->andWhere("sales.created >= :startDate");
-                $qb->setParameter('startDate', $startDate.' 00:00:00');
+                $qb->setParameter('startDate',$startDate);
             }
             if (!empty($data['endDate'])) {
-
+                $endDate = date('Y-m-d 00:00:00',strtotime($data['endDate']));
                 $qb->andWhere("sales.created <= :endDate");
-                $qb->setParameter('endDate', $endDate.' 23:59:59');
+                $qb->setParameter('endDate', $endDate);
             }
     }
 
@@ -411,6 +411,7 @@ class SalesItemRepository extends EntityRepository
 
     public function reportPurchasePrice(User $user,$data)
     {
+
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('si');

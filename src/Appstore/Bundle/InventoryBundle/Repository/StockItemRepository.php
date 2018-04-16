@@ -1381,6 +1381,9 @@ class StockItemRepository extends EntityRepository
 
         $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('e.paymentStatus IN(:paymentStatus)');
+        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
+
         if($process){
             $qb->andWhere('e.process =:process');
             $qb->setParameter('process',$process);

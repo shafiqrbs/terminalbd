@@ -157,6 +157,9 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('(s.vat) as vat');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $inventory);
+        $qb->andWhere('s.paymentStatus IN(:paymentStatus)');
+        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
+
         if(!empty($branch)){
             $qb->andWhere("s.branches =".$branch);
         }
@@ -185,6 +188,9 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('SUM(s.vat) as vat');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $inventory);
+        $qb->andWhere('s.paymentStatus IN(:paymentStatus)');
+        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
+
         if(!empty($branch)){
             $qb->andWhere("s.branches =".$branch);
         }
@@ -205,6 +211,8 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
         $qb->where("s.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
+        $qb->andWhere('s.paymentStatus IN(:paymentStatus)');
+        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('totalPurchaseAmount','DESC');
         $qb->groupBy('salesBy');
@@ -229,6 +237,8 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
         $qb->where("s.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
+        $qb->andWhere('s.paymentStatus IN(:paymentStatus)');
+        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
         $qb->andWhere("s.id IN (:salesId)");
         $qb->setParameter('salesId', $ids);
         $this->handleSearchBetween($qb,$data);
