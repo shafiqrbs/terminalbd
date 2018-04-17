@@ -113,18 +113,19 @@
                                 <tr class="head-red">
                                     <th class="numeric" ><strong>Total Quantity</strong></th>
                                     <th class="numeric" ><strong>Sales Amount</strong></th>
+                                    <th class="numeric" ><strong>Vat Amount</strong></th>
                                     <th class="numeric" ><strong>Purchase Amount</strong></th>
                                     <th class="numeric" ><strong>Profit/Loss</strong></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class="numeric" ><strong>{{ overview.quantity }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.salesPrice|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.purchasePrice|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ (overview.salesPrice - overview.purchasePrice)|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ purchaseSalesItem.quantity }}</strong></td>
+                                    <td class="numeric" ><strong>{{ cashOverview.total|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ cashOverview.totalVat|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ purchaseSalesItem.purchasePrice|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + purchaseSalesItem.purchasePrice))|number_format }}</strong></td>
                                 </tr>
-
                                 </tbody>
                             </table>
                         </div>
@@ -132,7 +133,7 @@
                         <table class="table table-bordered table-striped table-condensed flip-content ">
 
                             <thead class="flip-content ">
-                            <tr class="head-grey">
+                            <tr class="head-blue">
                                 <th class="numeric" ><i class="icon-reorder"></i></th>
                                 {% if searchForm.group is defined and  searchForm.group =='purchaseItem' %}
                                 <th class="numeric" >Barcode</th>

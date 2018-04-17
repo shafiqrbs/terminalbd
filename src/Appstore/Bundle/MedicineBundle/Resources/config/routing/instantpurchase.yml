@@ -1,0 +1,67 @@
+medicine_purchase:
+    path:     /
+    defaults: { _controller: "MedicineBundle:Purchase:index" }
+
+medicine_purchase_show:
+    path:     /{id}/show
+    defaults: { _controller: "MedicineBundle:Purchase:show" }
+
+medicine_purchase_new:
+    path:     /new
+    defaults: { _controller: "MedicineBundle:Purchase:new" }
+
+medicine_purchase_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "MedicineBundle:Purchase:edit" }
+
+medicine_purchase_update:
+    path:     /{id}/update
+    defaults: { _controller: "MedicineBundle:Purchase:update" }
+    methods:  [POST, PUT]
+
+medicine_purchase_status:
+    path:     /{id}/status
+    defaults: { _controller: "MedicineBundle:Purchase:edit" }
+
+
+medicine_purchase_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "MedicineBundle:Purchase:approve" }
+
+medicine_purchase_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "MedicineBundle:Purchase:delete" }
+
+medicine_purchase_particular_search:
+    path:     /{id}/medicine-stock-search
+    defaults: { _controller: "MedicineBundle:Purchase:particularSearch" }
+    options:
+            expose: true
+
+
+medicine_purchase_particular_add:
+    path:     /{invoice}/particular-add
+    defaults: { _controller: "MedicineBundle:Purchase:addParticular" }
+    methods:  POST
+    options:
+            expose: true
+
+medicine_purchase_discount_update:
+    path:     /purchase/dicount-update
+    defaults: { _controller: "MedicineBundle:Purchase:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+medicine_purchase_approved:
+    path:     /{id}/invoice-approved
+    defaults: { _controller: "MedicineBundle:Purchase:approved" }
+
+
+medicine_purchase_particular_delete:
+    path:     /{invoice}/{id}/particular-delete
+    defaults: { _controller: "MedicineBundle:Purchase:invoiceParticularDelete" }
+
+medicine_purchase_print_invoice:
+    path:     /{id}/print
+    defaults: { _controller: "MedicineBundle:Purchase:invoicePrint" }

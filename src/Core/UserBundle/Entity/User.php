@@ -22,6 +22,7 @@ use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
 use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -764,6 +765,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="salesBy" , cascade={"persist", "remove"})
      */
     protected $medicineSalesBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase", mappedBy="salesBy" , cascade={"persist", "remove"})
+     */
+    protected $medicineInstantPurchases;
 
 
     /**
@@ -1556,6 +1562,14 @@ class User extends BaseUser
     public function getDpsParticularOperator()
     {
         return $this->dpsParticularOperator;
+    }
+
+    /**
+     * @return MedicineInstantPurchase
+     */
+    public function getMedicineInstantPurchases()
+    {
+        return $this->medicineInstantPurchases;
     }
 
 

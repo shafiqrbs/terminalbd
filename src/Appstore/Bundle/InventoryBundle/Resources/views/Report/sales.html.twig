@@ -100,12 +100,12 @@
                                     </div>
 #}
                                     <div class="span3">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -114,11 +114,31 @@
                                     </div>
                                 </div>
                             </form>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content">
+                                <tr class="head-red">
+                                    <th class="numeric" ><strong>Total Quantity</strong></th>
+                                    <th class="numeric" ><strong>Sales Amount</strong></th>
+                                    <th class="numeric" ><strong>Vat Amount</strong></th>
+                                    <th class="numeric" ><strong>Purchase Amount</strong></th>
+                                    <th class="numeric" ><strong>Profit/Loss</strong></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="numeric" ><strong>{{ purchaseSalesItem.quantity }}</strong></td>
+                                    <td class="numeric" ><strong>{{ cashOverview.total|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ cashOverview.totalVat|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ purchaseSalesItem.purchasePrice|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + purchaseSalesItem.purchasePrice))|number_format }}</strong></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         <table class="table table-bordered table-striped table-condensed flip-content ">
                             <thead class="flip-content ">
-                            <tr class="head-green">
+                            <tr class="head-blue">
                                 <th class="numeric" >Created</th>
                                 <th class="numeric" >Invoice</th>
                                 <th class="numeric" >SalesBy</th>

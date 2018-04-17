@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Form;
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +11,17 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class MedicineStockType extends AbstractType
 {
+
+
+    /** @var  MedicineConfig */
+
+    private $medicineConfig;
+
+    function __construct(MedicineConfig $medicineConfig)
+    {
+        $this->medicineConfig = $medicineConfig;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -57,14 +69,16 @@ class MedicineStockType extends AbstractType
             ->add('rackNo', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
-                'empty_value' => '---Choose a rack no ---',
+                'empty_value' => '---Choose a rack position ---',
                 'property' => 'name',
                 'attr'=>array('class'=>'m-wrap span12 inputs'),
-                'constraints' =>array( new NotBlank(array('message'=>'Select rack no')) ),
+                'constraints' =>array( new NotBlank(array('message'=>'Select rack position')) ),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->andWhere("wt.particularType = '")
-                        ->where("wt.status = 1");
+                    return $er->createQueryBuilder('e')
+                        ->join("e.particularType","pt")
+                        ->where("e.status = 1")
+                        ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
+                        ->andWhere("pt.slug = 'medicine-rack'");
                 },
             ))
             ->add('noDiscount')
@@ -86,6 +100,6 @@ class MedicineStockType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_medicine_stock';
+        return 'medicineStock';
     }
 }

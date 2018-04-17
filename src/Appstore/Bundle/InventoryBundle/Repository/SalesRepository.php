@@ -356,30 +356,17 @@ class SalesRepository extends EntityRepository
     public function SalesOverview(InventoryConfig $inventory,$data)
     {
 
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
-        $branch = isset($data['branch'])  ? $data['branch'] : '';
 
+        $branch = isset($data['branch'])  ? $data['branch'] : '';
         $qb = $this->_em->createQueryBuilder();
 
         $qb->from('InventoryBundle:Sales','s');
-        $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, count(s.totalItem) as totalItem, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
         $qb->where('s.inventoryConfig = :inventory');
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
-        if (!empty($startDate)) {
-            $start = date('Y-m-d',strtotime($data['startDate']));
-            $qb->andWhere("s.updated >= :startDate");
-            $qb->setParameter('startDate',$start);
-        }
-
-        if (!empty($endDate)) {
-            $end = date('Y-m-d',strtotime($data['endDate']));
-            $qb->andWhere("s.updated <= :endDate");
-            $qb->setParameter('endDate',$end);
-        }
-
+        $this->handleSearchBetween($qb,$data);
         if ($branch){
             $qb->andWhere("s.branches = :branch");
             $qb->setParameter('branch', $branch);
@@ -389,10 +376,8 @@ class SalesRepository extends EntityRepository
 
     public function salesTransactionOverview(InventoryConfig $inventory,$data)
     {
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
-        $branch = isset($data['branch'])  ? $data['branch'] : '';
 
+        $branch = isset($data['branch'])  ? $data['branch'] : '';
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.transactionMethod','t');
         $qb->select('t.name as transactionName , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
@@ -400,18 +385,7 @@ class SalesRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
-        if (!empty($startDate)) {
-            $start = date('Y-m-d',strtotime($data['startDate']));
-            $qb->andWhere("s.updated >= :startDate");
-            $qb->setParameter('startDate',$start);
-        }
-
-        if (!empty($endDate)) {
-            $end = date('Y-m-d',strtotime($data['endDate']));
-            $qb->andWhere("s.updated <= :endDate");
-            $qb->setParameter('endDate',$end);
-        }
-
+        $this->handleSearchBetween($qb,$data);
         if ($branch){
             $qb->andWhere("s.branches = :branch");
             $qb->setParameter('branch', $branch);
@@ -423,8 +397,6 @@ class SalesRepository extends EntityRepository
 
     public function salesModeOverview(InventoryConfig $inventory,$data)
     {
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
         $branch = isset($data['branch'])  ? $data['branch'] : '';
 
         $qb = $this->createQueryBuilder('s');
@@ -433,18 +405,7 @@ class SalesRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
-        if (!empty($startDate)) {
-            $start = date('Y-m-d',strtotime($data['startDate']));
-            $qb->andWhere("s.updated >= :startDate");
-            $qb->setParameter('startDate',$start);
-        }
-
-        if (!empty($endDate)) {
-            $end = date('Y-m-d',strtotime($data['endDate']));
-            $qb->andWhere("s.updated <= :endDate");
-            $qb->setParameter('endDate',$end);
-        }
-
+        $this->handleSearchBetween($qb,$data);
         if ($branch){
             $qb->andWhere("s.branches = :branch");
             $qb->setParameter('branch', $branch);
@@ -456,27 +417,13 @@ class SalesRepository extends EntityRepository
 
     public function salesProcessOverview(InventoryConfig $inventory,$data)
     {
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
-        $branch = isset($data['branch'])  ? $data['branch'] : '';
 
+        $branch = isset($data['branch'])  ? $data['branch'] : '';
         $qb = $this->createQueryBuilder('s');
         $qb->select('s.process as name , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
         $qb->where('s.inventoryConfig = :inventory');
         $qb->setParameter('inventory', $inventory);
-        if (!empty($startDate)) {
-            $start = date('Y-m-d',strtotime($data['startDate']));
-            $qb->andWhere("s.updated >= :startDate");
-            $qb->setParameter('startDate',$start);
-        }
-
-        if (!empty($endDate)) {
-            $end = date('Y-m-d',strtotime($data['endDate']));
-            $qb->andWhere("s.updated <= :endDate");
-            $qb->setParameter('endDate',$end);
-        }
-
-        if ($branch){
+        $this->handleSearchBetween($qb,$data);if ($branch){
             $qb->andWhere("s.branches = :branch");
             $qb->setParameter('branch', $branch);
         }

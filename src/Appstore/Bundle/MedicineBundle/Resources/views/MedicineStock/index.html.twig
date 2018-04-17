@@ -69,7 +69,7 @@
                                     <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
                                         <td class="numeric" >{{ entity.sku }}</td>
                                         <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >{{ entity.rackNo }}</td>
+                                        <td class="numeric" >{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.purchasePrice }}</a>
@@ -96,13 +96,12 @@
                                         <td class="numeric" >{{ entity.unit.name }}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
-                                                <a class="btn mini blue btn-action" href="{{ path('medicine_stock_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
+                                                <a class="btn mini yellow btn-action" href="{{ path('medicine_stock_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
                                             {% else %}
                                                 <a class="btn mini red btn-action" href="{{ path('medicine_stock_status', { 'id': entity.id}) }}">x</a>
                                             {% endif %}
+                                            <a href="{{ path('medicine_stock_edit', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-edit"></i></a>
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER" and entity.remainingQuantity == 0 ) or app.user.granted("ROLE_DOMAIN") and entity.remainingQuantity == 0 )  %}
-                                            {#    <a href="{{ path('medicine_stock_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            #}
                                              <a title="Are you sure went to delete ?" href="{{ path('medicine_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             <a title="" href="{{ path('medicine_stock_details', { 'sku': entity.sku }) }}" class="btn green mini" ><i class=" icon-eye-open"></i> View</a>

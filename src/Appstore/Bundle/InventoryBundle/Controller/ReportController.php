@@ -186,14 +186,19 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $salesItemOverview = $em->getRepository('InventoryBundle:StockItem')->getSalesItemOverview($inventory,$data);
+        $user =$this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $purchaseSalesItem = $em->getRepository('InventoryBundle:StockItem')->getSalesItemOverview($inventory,$data);
+        $cashOverview = $em->getRepository('InventoryBundle:Sales')->salesOverview($inventory,$data);
         $entities = $em->getRepository('InventoryBundle:StockItem')->getSalesItem($inventory,$data);
         $pagination = $this->paginate($entities);
+
         return $this->render('InventoryBundle:Report:salesStock.html.twig', array(
             'inventory' => $inventory,
             'entities' => $pagination,
-            'overview' => $salesItemOverview,
+            'cashOverview' => $cashOverview,
+            'purchaseSalesItem' => $purchaseSalesItem,
             'branches' => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm' => $data,
         ));
@@ -231,9 +236,13 @@ class ReportController extends Controller
         $pagination = $this->paginate($entities);
         $salesPurchasePrice = $em->getRepository('InventoryBundle:Sales')->salesPurchasePriceReport($inventory,$data,$pagination);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+        $purchaseSalesItem = $em->getRepository('InventoryBundle:StockItem')->getSalesItemOverview($inventory,$data);
+        $cashOverview = $em->getRepository('InventoryBundle:Sales')->salesOverview($inventory,$data);
         return $this->render('InventoryBundle:Report:sales.html.twig', array(
             'entities'              => $pagination ,
             'purchasePrice'         => $salesPurchasePrice ,
+            'cashOverview'          => $cashOverview,
+            'purchaseSalesItem'     => $purchaseSalesItem,
             'inventory'             => $inventory ,
             'transactionMethods'    => $transactionMethods ,
             'branches'              => $this->getUser()->getGlobalOption()->getBranches(),

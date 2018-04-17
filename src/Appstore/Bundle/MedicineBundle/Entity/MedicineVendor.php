@@ -33,6 +33,11 @@ class MedicineVendor
     protected $medicinePurchases;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase", mappedBy="medicineVendor")
+     */
+    protected $medicineInstantPurchases;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="medicineVendor")
      */
     protected $accountPurchases;
@@ -342,6 +347,14 @@ class MedicineVendor
     public function getMedicinePurchases()
     {
         return $this->medicinePurchases;
+    }
+
+    /**
+     * @return MedicineInstantPurchase
+     */
+    public function getMedicineInstantPurchases()
+    {
+        return $this->medicineInstantPurchases;
     }
 
 

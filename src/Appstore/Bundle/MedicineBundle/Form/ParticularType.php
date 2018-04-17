@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Form;
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ParticularType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options

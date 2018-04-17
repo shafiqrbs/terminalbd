@@ -35,6 +35,11 @@ class MedicineStock
     private $medicinePurchaseItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase", mappedBy="medicineStock")
+     **/
+    private $medicineInstantPurchases;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="medicineStock")
      **/
     private $medicineSalesItems;
@@ -110,6 +115,13 @@ class MedicineStock
      * @ORM\Column(name="purchaseQuantity", type="integer", nullable=true)
      */
     private $purchaseQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="instantPurchaseQuantity", type="integer", nullable=true)
+     */
+    private $instantPurchaseQuantity;
 
     /**
      * @var integer
@@ -495,7 +507,7 @@ class MedicineStock
 
     public function getMedicineStockSkuQuantity(){
 
-        $medicineStockSkuQuantity = $this->getSku().'-'.$this->getName().'-'.$this->getRackNo().'('.$this->getRemainingQuantity().')';
+        $medicineStockSkuQuantity = $this->getSku().'-'.$this->getName().'-'.$this->getRackNo()->getName().'('.$this->getRemainingQuantity().')';
             return $medicineStockSkuQuantity;
 
     }
@@ -522,6 +534,30 @@ class MedicineStock
     public function getMedicineSalesItems()
     {
         return $this->medicineSalesItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInstantPurchaseQuantity()
+    {
+        return $this->instantPurchaseQuantity;
+    }
+
+    /**
+     * @param int $instantPurchaseQuantity
+     */
+    public function setInstantPurchaseQuantity($instantPurchaseQuantity)
+    {
+        $this->instantPurchaseQuantity = $instantPurchaseQuantity;
+    }
+
+    /**
+     * @return MedicineInstantPurchase
+     */
+    public function getMedicineInstantPurchases()
+    {
+        return $this->medicineInstantPurchases;
     }
 
 

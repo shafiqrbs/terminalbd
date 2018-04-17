@@ -38,6 +38,7 @@
                 <div class="btn-group">
                     <a class="btn red" href="{{ path('medicine_sales_new') }}"><i class="icon-plus-sign"></i> Medicine Sales</a>
                     <a class="btn" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine</a>
+                    <a class="btn black" href="javascript:"><i class="icon-plus-sign"></i> Instant Purchase</a>
                 </div>
             </div>
         </div>
@@ -45,6 +46,62 @@
         <div class="portlet-body form">
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
+            <div class="clearfix">&nbsp;</div>
+            <form name="instantPurchase" method="post" action="" class="form-horizontal" id="instantPurchase" novalidate="novalidate">
+                <div class="row-fluid particular-info">
+                    <div class="span6">
+                        <input type="text" id="medicineName" name="medicineName" required="required" class="m-wrap span12 input select2StockMedicine" placeholder="Search medicine name" aria-required="true">
+                    </div>
+                    <div class="span4">
+                        <input type="text" id="vendor" name="vendor" required="required" class="m-wrap span12 input select2Vendor" placeholder="Search vendor name" aria-required="true">
+                    </div>
+                    <div class="span2">
+                        <input type="text" id="receiveUser" name="receiveUser" required="required" class="m-wrap span12 input select2User" placeholder="Search received user name" aria-required="true">
+                    </div>
+                </div>
+                <div class="row-fluid particular-info">
+                    <div class="span6">&nbsp;</div>
+                    <div class="span4">
+                        <input type="text" id="purchasePrice" name="purchasePrice" required="required" class="m-wrap span4 input" placeholder="Purchase price" aria-required="true">
+                        <input type="text" id="salesPrice" name="salesPrice" required="required" class="m-wrap span4 input" placeholder="Sales price" aria-required="true">
+                        <input type="text" id="expirationDate" name="expirationDate" required="required" class="m-wrap span4 dateCalendar input hasDatepicker" placeholder="Expiration date" aria-required="true">
+                    </div>
+                    <div class="span2">
+                        <div class="input-append">
+                            <div class="input-group">
+                                <input type="text" id="quantity" name="quantity" required="required" class="m-wrap span5 form-control input-number input" placeholder="quantity" aria-required="true">
+                                <button type="submit" class="btn blue" id="addInstantPurchase" data-url="{{ path('medicine_instantpurchase_particular_add') }}"> <span class="fa fa-save"></span> Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="clearfix">&nbsp;</div>
+            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                <thead class="flip-content ">
+                <tr class="head-blue">
+                    <th class="numeric" >Created</th>
+                    <th class="numeric" >Medicine</th>
+                    <th class="numeric" >Vendor</th>
+                    <th class="numeric" >Received By</th>
+                    <th class="numeric" >Purchase</th>
+                    <th class="numeric" >Sales</th>
+                    <th class="numeric" >Qnt</th>
+                    <th class="numeric" >Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <td class="numeric" >Created</td>
+                    <td class="numeric" >Medicine</td>
+                    <td class="numeric" >Vendor</td>
+                    <td class="numeric" >Received By</td>
+                    <td class="numeric" >Purchase</td>
+                    <td class="numeric" >Sales</td>
+                    <td class="numeric" >Qnt</td>
+                    <td class="numeric" >Action</td>
+                </tbody>
+            </table>
             <div class="clearfix">&nbsp;</div>
             {{ form_start(salesItem) }}
             {{ form_row(salesItem._token) }}
@@ -401,6 +458,7 @@
     {{ parent() }}
     {% javascripts
     '@MedicineBundle/Resources/public/js/sales.js'
+    '@MedicineBundle/Resources/public/js/instant-purchase.js'
     '@MedicineBundle/Resources/public/js/approveProcess.js'
     '@MedicineBundle/Resources/public/js/datetimepicker_css.js'
     %}

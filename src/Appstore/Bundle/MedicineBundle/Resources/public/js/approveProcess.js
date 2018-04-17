@@ -399,11 +399,11 @@ $( ".select2mobile" ).autocomplete({
 });
 
 
-$(".select2Vendor").select2({
+$(".select2StockMedicine").select2({
 
     placeholder: "Search vendor name",
     ajax: {
-        url: Routing.generate('inventory_vendor_search'),
+        url: Routing.generate('medicine_stock_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -426,7 +426,45 @@ $(".select2Vendor").select2({
     formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
     initSelection: function (element, callback) {
         var id = $(element).val();
-        $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
+        $.ajax(Routing.generate('medicine_stock_name', { vendor : id}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+
+});
+
+$(".select2Vendor").select2({
+
+    placeholder: "Search vendor name",
+    ajax: {
+        url: Routing.generate('medicine_vendor_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
+    formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var id = $(element).val();
+        $.ajax(Routing.generate('medicine_vendor_name', { vendor : id}), {
             dataType: "json"
         }).done(function (data) {
             return  callback(data);

@@ -40,3 +40,14 @@ medicine_stock_details:
     path:     /{sku}/stock-details
     defaults: { _controller: "MedicineBundle:MedicineStock:inlineUpdate" }
 
+medicine_stock_search:
+    path:     /search
+    defaults: { _controller: "MedicineBundle:MedicineStock:autoSearch" }
+    options:
+            expose: true
+
+medicine_stock_name:
+    path:      /{vendor}/vendor-name
+    defaults: { _controller: "MedicineBundle:MedicineStock:searchVendorName" }
+    options:
+            expose: true

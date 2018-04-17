@@ -127,10 +127,10 @@ class MedicinePurchaseItem
 
 
     /**
- * @var string
- *
- * @ORM\Column(name="barcode", type="string",  nullable = true)
- */
+     * @var string
+     *
+     * @ORM\Column(name="barcode", type="string",  nullable = true)
+     */
     private $barcode;
 
     /**

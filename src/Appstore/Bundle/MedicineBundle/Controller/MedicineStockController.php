@@ -5,6 +5,7 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -106,7 +107,8 @@ class MedicineStockController extends Controller
     private function createCreateForm(MedicineStock $entity)
     {
 
-        $form = $this->createForm(new MedicineStockType(), $entity, array(
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $form = $this->createForm(new MedicineStockType($config), $entity, array(
             'action' => $this->generateUrl('medicine_stock_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -146,7 +148,8 @@ class MedicineStockController extends Controller
      */
     private function createEditForm(MedicineStock $entity)
     {
-        $form = $this->createForm(new MedicineStockType(), $entity, array(
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $form = $this->createForm(new MedicineStockType($config), $entity, array(
             'action' => $this->generateUrl('medicine_stock_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -249,10 +252,36 @@ class MedicineStockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find particular entity.');
         }
-        $setField = 'set'.$data['name'];
-        $entity->$setField(abs($data['value']));
+        if('openingQuantity' == $data['name']){
+            $setField = 'set'.$data['name'];
+            $quantity =abs($data['value']);
+            $entity->$setField($quantity);
+            $remainingQuantity = $entity->getRemainingQuantity()+$quantity;
+            $entity->setRemainingQuantity($remainingQuantity);
+        }else{
+            $setField = 'set' . $data['name'];
+            $entity->$setField(abs($data['value']));
+        }
         $em->flush();
         exit;
 
+    }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchVendorNameAction($vendor)
+    {
+        return new JsonResponse(array(
+            'id'=>$vendor,
+            'text'=>$vendor
+        ));
     }
 }

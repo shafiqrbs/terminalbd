@@ -370,19 +370,23 @@ class SalesItemRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
-            $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-            $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+       // $startDate = !empty($data['startDate']) ? $data['startDate'] : date('Y-m-d');
+       // $endDate = !empty($data['endDate']) ? $data['endDate']: date('Y-m-d');
 
-            if (!empty($data['startDate']) ) {
-                $startDate = date('Y-m-d 00:00:00',strtotime($data['startDate']));
-                $qb->andWhere("sales.created >= :startDate");
-                $qb->setParameter('startDate',$startDate);
-            }
-            if (!empty($data['endDate'])) {
-                $endDate = date('Y-m-d 00:00:00',strtotime($data['endDate']));
-                $qb->andWhere("sales.created <= :endDate");
-                $qb->setParameter('endDate', $endDate);
-            }
+        if (!empty($startDate)) {
+            $start = date('Y-m-d 00:00:00',strtotime($startDate));
+            $qb->andWhere("sales.created >= :startDate");
+            $qb->setParameter('startDate',$start);
+        }
+
+        if (!empty($endDate)) {
+            $end = date('Y-m-d 23:59:59',strtotime($startDate));
+            $qb->andWhere("sales.created <= :endDate");
+            $qb->setParameter('endDate',$end);
+        }
+
     }
 
     public function reportSalesPrice(User $user ,$data)
