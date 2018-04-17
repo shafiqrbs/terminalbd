@@ -181,7 +181,6 @@ class DomainUserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find DomainUser entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -189,7 +188,6 @@ class DomainUserController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('domain_edit', array('id' => $id)));
         }
-
         return $this->render('DomainUserBundle:DomainUser:edit.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),

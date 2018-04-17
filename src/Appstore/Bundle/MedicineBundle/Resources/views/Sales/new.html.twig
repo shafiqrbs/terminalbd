@@ -467,6 +467,25 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('#appstore_bundle_dmspurchase_medicineStock').focus();
+    $('#medicineStock').focus();
+    $( ".select2Vendor" ).autocomplete({
+    source: function( request, response ) {
+    $.ajax( {
+    url: Routing.generate('medicine_vendor_search'),
+    data: {
+    q: request.term
+    },
+    success: function( data ) {
+        response(data);
+    }
+    });
+    },
+    minLength: 1,
+    select: function( event, ui ) {
+    $("#vendor").val(ui.item.id); // save selected id to hidden input
+
+    }
+    });
+
 {% endblock %}
 

@@ -398,7 +398,6 @@ $( ".select2mobile" ).autocomplete({
 
 });
 
-
 $(".select2StockMedicine").select2({
 
     placeholder: "Search vendor name",
@@ -437,7 +436,7 @@ $(".select2StockMedicine").select2({
 
 });
 
-$(".select2Vendor").select2({
+$(".select2Vendorx").select2({
 
     placeholder: "Search vendor name",
     ajax: {
@@ -474,6 +473,7 @@ $(".select2Vendor").select2({
     minimumInputLength: 1
 
 });
+
 
 
 $(".select2User").select2({

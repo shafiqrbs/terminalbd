@@ -243,7 +243,7 @@ class ItemRepository extends EntityRepository
         $query->addSelect('i.skuSlug as text');
         $query->addSelect('i.sku as sku');
         $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
-        $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
+        $query->where($query->expr()->like("i.name", "'%$search%'"  ));
         $query->andWhere("i.purchaseQuantity > 0 ");
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());
@@ -264,7 +264,7 @@ class ItemRepository extends EntityRepository
         $query->addSelect('i.name as name');
         $query->addSelect('i.skuSlug as text');
         $query->addSelect('i.sku as sku');
-        $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
+        $query->where($query->expr()->like("i.name", "'%$search%'"  ));
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('i.id');

@@ -84,12 +84,12 @@
                                             <td class="numeric" >{{ entity.barcode }}</td>
                                             <td class="numeric" >{{ entity.itemStock }}</td>
                                             <td class="numeric" >
-                                                <input type="text" name="barcodeQnt[]" class="span4 numeric" id="" value="{{ entity.itemStock }}" >
+                                                <input type="text" name="barcodeQnt[]" class="span4 numeric barcodeQnt" id="" value="{{ entity.itemStock }}" >
                                                 <input type="hidden" name="item[]" value="{{ entity.id }}">
                                             </td>
                                         </tr>
                                     {% endfor %}
-                                    <tr><td colspan="6"><strong class="pull-right" >Total Barcode Print Quantity</strong></td><td><strong>{{ quantity }}</strong></td><td></td></tr>
+                                    <tr><td colspan="6"><strong class="pull-right" >Total Barcode Print Quantity</strong></td><td><strong>{{ quantity }}</strong></td><th id="total">{{ quantity }}</th></tr>
                                 </tbody>
                             </table>
                             <!--/span-->
@@ -107,4 +107,15 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    $(document).on('keyup', ".barcodeQnt", function() {
+        var sum = 0;
+        $(".barcodeQnt").each(function(){
+        sum += +parseFloat($(this).val());
+        });
+        $("#total").html(sum);
+    });
+
 {% endblock %}
