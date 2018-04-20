@@ -45,6 +45,13 @@ class MedicineSalesItem
     private $medicinePurchaseItem;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="stockName", type="string", nullable=true)
+     */
+    private $stockName;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="barcode", type="integer", nullable=true)
@@ -288,6 +295,23 @@ class MedicineSalesItem
     public function setBarcode($barcode)
     {
         $this->barcode = $barcode;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getStockName()
+    {
+        return $this->stockName;
+    }
+
+    /**
+     * @param string $stockName
+     */
+    public function setStockName($stockName)
+    {
+        $this->stockName = $stockName;
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -13,13 +14,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class MedicineVendorRepository extends EntityRepository
 {
-    public function searchAutoComplete($q, MedicineConfig $config)
+    public function searchAutoComplete(MedicineConfig $config,$q)
     {
         $query = $this->createQueryBuilder('e');
         $query->join('e.medicineConfig', 'ic');
-        $query->select('e.companyName as id');
+        $query->select('e.id as id');
         $query->addSelect('e.companyName as text');
-        $query->where($query->expr()->like("e.companyName", "'$q%'"  ));
+        $query->where($query->expr()->like("e.companyName", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.id');
@@ -27,6 +28,20 @@ class MedicineVendorRepository extends EntityRepository
         $query->setMaxResults( '30' );
         return $query->getQuery()->getResult();
 
+    }
+
+    public function checkInInsert(MedicineConfig $config , $vendor)
+    {
+        $entity = $this->findOneBy(array('medicineConfig' => $config,'companyName' => $vendor));
+        if(empty($entity)){
+            $entity = new MedicineVendor();
+            $entity->setMedicineConfig($config);
+            $entity->setCompanyName($vendor);
+            $entity->setName($vendor);
+            $this->_em->persist($entity);
+            $this->_em->flush();
+        }
+        return $entity;
     }
 
 }

@@ -111,6 +111,7 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content">
                                 <tr class="head-red">
+                                    <th class="numeric" ><strong>Total Item</strong></th>
                                     <th class="numeric" ><strong>Total Quantity</strong></th>
                                     <th class="numeric" ><strong>Sales Amount</strong></th>
                                     <th class="numeric" ><strong>Vat Amount</strong></th>
@@ -120,6 +121,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
+                                    <td class="numeric" ><strong>{{ purchaseSalesItem.totalItem }}</strong></td>
                                     <td class="numeric" ><strong>{{ purchaseSalesItem.quantity }}</strong></td>
                                     <td class="numeric" ><strong>{{ cashOverview.total|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ cashOverview.totalVat|number_format }}</strong></td>
@@ -140,8 +142,10 @@
                                 {% endif %}
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Quantity</th>
-                                <th class="numeric" >Purchase Price</th>
                                 <th class="numeric" >Sales Price</th>
+                                <th class="numeric" >Sub-Sales Price</th>
+                                <th class="numeric" >Purchase Price</th>
+                                <th class="numeric" >Sub-Purchase Price</th>
                                 <th class="numeric" >Profit/Loss</th>
                             </tr>
                             </thead>
@@ -156,9 +160,11 @@
                                     {% endif %}
                                     <td class="numeric" >{{ entity.name }}</td>
                                     <td class="numeric" >{{ entity.quantity }}</td>
-                                    <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
                                     <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
-                                    <td class="numeric" >{{ (entity.salesPrice - entity.purchasePrice)|number_format }}</td>
+                                    <td class="numeric" >{{ (entity.quantity * entity.salesPrice)|number_format }}</td>
+                                    <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
+                                    <td class="numeric" >{{ (entity.quantity * entity.purchasePrice)|number_format }}</td>
+                                    <td class="numeric" >{{ ((entity.quantity * entity.salesPrice) - (entity.quantity * entity.purchasePrice))|number_format }}</td>
                                 </tr>
                             {% endfor %}
 

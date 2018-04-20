@@ -29,23 +29,12 @@ class PurchaseItemType extends AbstractType
     {
         $builder
 
+            ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')))
             ->add('expirationDate','text', array('attr'=>array('class'=>'m-wrap span4 dateCalendar input','placeholder'=>'Expiration date')))
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'Purchase price')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'Sales price')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span5 form-control input-number input','placeholder'=>'quantity')))
-            ->add('medicineStock', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineStock',
-                'empty_value' => '---Choose a medicine ---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2 input'),
-                'constraints' =>array( new NotBlank(array('message'=>'Please select your medicine name')) ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.medicineConfig =".$this->option->getMedicineConfig()->getId());
-                },
-            ));
+            ;
     }
     
     /**
@@ -63,6 +52,6 @@ class PurchaseItemType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_dmspurchase';
+        return 'purchaseItem';
     }
 }

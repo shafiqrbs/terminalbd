@@ -58,10 +58,14 @@ class MedicinePurchase
      **/
     private  $approvedBy;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="medicinePurchasesBy" )
+     **/
+    private  $purchaseBy;
+
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem", mappedBy="medicinePurchase" , cascade={"remove"})
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem", mappedBy="medicinePurchase")
      **/
     private  $medicinePurchaseItems;
 
@@ -175,9 +179,9 @@ class MedicinePurchase
     /**
      * @var boolean
      *
-     * @ORM\Column(name="asInvestment", type="boolean")
+     * @ORM\Column(name="instantPurchase", type="boolean")
      */
-    private $asInvestment = false;
+    private $instantPurchase = false;
 
     /**
      * @var string
@@ -331,9 +335,8 @@ class MedicinePurchase
         $this->status = $status;
     }
 
-
     /**
-     * @return mixed
+     * @return User
      */
     public function getCreatedBy()
     {
@@ -341,7 +344,7 @@ class MedicinePurchase
     }
 
     /**
-     * @param mixed $createdBy
+     * @param User $createdBy
      */
     public function setCreatedBy($createdBy)
     {
@@ -364,9 +367,7 @@ class MedicinePurchase
         $this->approvedBy = $approvedBy;
     }
 
-   
-
-    /**
+     /**
      * @return string
      */
     public function getProcess()
@@ -484,41 +485,12 @@ class MedicinePurchase
         $this->accountMobileBank = $accountMobileBank;
     }
 
-
-    /**
-     * @return bool
-     */
-    public function getAsInvestment()
-    {
-        return $this->asInvestment;
-    }
-
-    /**
-     * @param bool $asInvestment
-     */
-    public function setAsInvestment($asInvestment)
-    {
-        $this->asInvestment = $asInvestment;
-    }
-
-
-
     /**
      * @return AccountPurchase
      */
     public function getAccountPurchase()
     {
         return $this->accountPurchase;
-    }
-
-
-
-    /**
-     * @return MedicinePurchaseItem
-     */
-    public function getPurchaseItems()
-    {
-        return $this->medicinePurchaseItems;
     }
 
     /**
@@ -671,6 +643,38 @@ class MedicinePurchase
     public function getMedicinePurchaseItems()
     {
         return $this->medicinePurchaseItems;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInstantPurchase()
+    {
+        return $this->instantPurchase;
+    }
+
+    /**
+     * @param bool $instantPurchase
+     */
+    public function setInstantPurchase($instantPurchase)
+    {
+        $this->instantPurchase = $instantPurchase;
+    }
+
+    /**
+     * @return User
+     */
+    public function getPurchaseBy()
+    {
+        return $this->purchaseBy;
+    }
+
+    /**
+     * @param User $purchaseBy
+     */
+    public function setPurchaseBy($purchaseBy)
+    {
+        $this->purchaseBy = $purchaseBy;
     }
 
 

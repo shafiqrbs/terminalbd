@@ -54,12 +54,6 @@ class MedicineConfig
      **/
     private $medicinePurchases;
 
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase", mappedBy="medicineConfig")
-     **/
-    private $medicineInstantPurchases;
-
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", mappedBy="medicineConfig")
      **/
@@ -442,14 +436,6 @@ class MedicineConfig
     public function getMedicineReverses()
     {
         return $this->medicineReverses;
-    }
-
-    /**
-     * @return MedicineInstantPurchase
-     */
-    public function getMedicineInstantPurchases()
-    {
-        return $this->medicineInstantPurchases;
     }
 
 }

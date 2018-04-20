@@ -92,8 +92,8 @@
                                         <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{% if entity.dmsVendor is defined and entity.dmsVendor is not empty %}{{ entity.dmsVendor.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
+                                        <td class="numeric" >{{ entity.due|number_format }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'created' or entity.process == 'pending' %}
                                             <a href="{{ path('medicine_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>

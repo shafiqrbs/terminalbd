@@ -372,9 +372,6 @@ class SalesItemRepository extends EntityRepository
 
         $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
         $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-       // $startDate = !empty($data['startDate']) ? $data['startDate'] : date('Y-m-d');
-       // $endDate = !empty($data['endDate']) ? $data['endDate']: date('Y-m-d');
-
         if (!empty($startDate)) {
             $start = date('Y-m-d 00:00:00',strtotime($startDate));
             $qb->andWhere("sales.created >= :startDate");
@@ -387,29 +384,6 @@ class SalesItemRepository extends EntityRepository
             $qb->setParameter('endDate',$end);
         }
 
-    }
-
-    public function reportSalesPrice(User $user ,$data)
-    {
-
-        $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
-
-        $qb = $this->_em->createQueryBuilder();
-        $qb->from('InventoryBundle:Sales','sales');
-        $qb->select('SUM(sales.total) AS salesAmount');
-        $qb->where("sales.globalOption = :globalOption");
-        $qb->where("sales.inventoryConfig = :inventoryConfig");
-        $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
-        if (!empty($branch)){
-            $qb->andWhere("sales.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
-        $qb->andWhere('sales.paymentStatus IN(:paymentStatus)');
-        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
-        $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getSingleResult();
-        return $data = $result['salesAmount'] ;
     }
 
 

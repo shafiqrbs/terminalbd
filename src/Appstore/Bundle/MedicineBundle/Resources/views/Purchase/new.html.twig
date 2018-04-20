@@ -50,8 +50,8 @@
             {{ form_row(purchaseItem._token) }}
             <div class="row-fluid particular-info" >
                 <div class="span5">
-                    {{ form_widget(purchaseItem.medicineStock) }}
-                    {{ form_errors(purchaseItem.medicineStock) }}
+                    {{ form_widget(purchaseItem.stockName) }}
+                    {{ form_errors(purchaseItem.stockName) }}
                 </div>
                 <div class="span4">
                     {{ form_widget(purchaseItem.purchasePrice) }}
@@ -102,8 +102,8 @@
                         </tr>
                         </thead>
                         <tbody id="invoiceParticulars">
-                        {% if entity.purchaseItems is not empty %}
-                            {% for item in entity.purchaseItems %}
+                        {% if entity.medicinePurchaseItems is not empty %}
+                            {% for item in entity.medicinePurchaseItems %}
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                     <td class="span3">{{ item.medicineStock.name }}</td>

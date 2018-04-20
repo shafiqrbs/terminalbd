@@ -34,10 +34,6 @@ class MedicineStock
      **/
     private $medicinePurchaseItems;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase", mappedBy="medicineStock")
-     **/
-    private $medicineInstantPurchases;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="medicineStock")
@@ -107,49 +103,42 @@ class MedicineStock
      *
      * @ORM\Column(name="remainingQuantity", type="integer", nullable=true)
      */
-    private $remainingQuantity;
+    private $remainingQuantity=0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="purchaseQuantity", type="integer", nullable=true)
      */
-    private $purchaseQuantity;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="instantPurchaseQuantity", type="integer", nullable=true)
-     */
-    private $instantPurchaseQuantity;
+    private $purchaseQuantity=0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="purchaseReturnQuantity", type="integer", nullable=true)
      */
-    private $purchaseReturnQuantity;
+    private $purchaseReturnQuantity=0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="salesQuantity", type="integer", nullable=true)
      */
-    private $salesQuantity;
+    private $salesQuantity=0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="salesReturnQuantity", type="integer", nullable=true)
      */
-    private $salesReturnQuantity;
+    private $salesReturnQuantity=0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="damageQuantity", type="integer", nullable=true)
      */
-    private $damageQuantity;
+    private $damageQuantity=0;
 
     /**
      * @var float
@@ -535,31 +524,6 @@ class MedicineStock
     {
         return $this->medicineSalesItems;
     }
-
-    /**
-     * @return int
-     */
-    public function getInstantPurchaseQuantity()
-    {
-        return $this->instantPurchaseQuantity;
-    }
-
-    /**
-     * @param int $instantPurchaseQuantity
-     */
-    public function setInstantPurchaseQuantity($instantPurchaseQuantity)
-    {
-        $this->instantPurchaseQuantity = $instantPurchaseQuantity;
-    }
-
-    /**
-     * @return MedicineInstantPurchase
-     */
-    public function getMedicineInstantPurchases()
-    {
-        return $this->medicineInstantPurchases;
-    }
-
 
 }
 

@@ -40,9 +40,10 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
-$(document).on('change', '#salesitem_medicineStock', function() {
+$(document).on('change', '#salesitem_stockName', function() {
 
-    var medicine = $('#salesitem_medicineStock').val();
+    var medicine = $('#salesitem_stockName').val();
+    alert(medicine);
     $.ajax({
         url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
         type: 'GET',
@@ -55,9 +56,9 @@ $(document).on('change', '#salesitem_medicineStock', function() {
 
 });
 
-$('#salesitem_medicineStock').on("select2-selecting", function (e) {
+$('#salesitem_stockName').on("select2-selecting", function (e) {
     setTimeout(function () {
-        $('#salesitem_barcode').focus();
+        $('#salesitem_stockName').focus();
     }, 2000)
 });
 
@@ -89,7 +90,7 @@ var form = $("#salesItemForm").validate({
 
     rules: {
 
-        "salesitem[medicineStock]": {required: true},
+        "salesitem[stockName]": {required: true},
         "salesitem[barcode]": {required: true},
         "salesitem[salesPrice]": {required: true},
         "salesitem[quantity]": {required: true},

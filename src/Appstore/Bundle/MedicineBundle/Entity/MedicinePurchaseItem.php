@@ -45,6 +45,13 @@ class MedicinePurchaseItem
     private  $medicineSalesItems;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="stockName", type="string", nullable=true)
+     */
+    private $stockName;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="quantity", type="integer",nullable=true)
@@ -431,6 +438,21 @@ class MedicinePurchaseItem
         return $this->medicineSalesItems;
     }
 
+    /**
+     * @return string
+     */
+    public function getStockName()
+    {
+        return $this->stockName;
+    }
+
+    /**
+     * @param string $stockName
+     */
+    public function setStockName($stockName)
+    {
+        $this->stockName = $stockName;
+    }
 
 }
 

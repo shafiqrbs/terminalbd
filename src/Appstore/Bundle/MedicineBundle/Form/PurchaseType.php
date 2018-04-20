@@ -108,6 +108,6 @@ class PurchaseType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_medicinepurchase';
+        return 'medicinepurchase';
     }
 }

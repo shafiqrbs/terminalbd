@@ -23,46 +23,74 @@ $(".addCustomer").click(function(){
     $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
 });
 
-$(document).on('change', '.transactionMethod', function() {
+$(document).on("click", "#instantPopup", function() {
 
-    var paymentMethod = $(this).val();
-
-    if( paymentMethod == 2){
-        $('#cartMethod').show();
-        $('#bkashMethod').hide();
-    }else if( paymentMethod == 3){
-        $('#bkashMethod').show();
-        $('#cartMethod').hide();
-    }else{
-        $('#cartMethod').hide();
-        $('#bkashMethod').hide();
-    }
+    var url = $(this).attr('data-url');
+    $.ajax({
+        url : url,
+        beforeSend: function(){
+            $('.loader-double').fadeIn(1000).addClass('is-active');
+        },
+        complete: function(){
+            $('.loader-double').fadeIn(1000).removeClass('is-active');
+        },
+        success:  function (data) {
+            $("#instantPurchaseLoad").html(data);
+            jqueryLoad();
+        }
+    });
 
 });
 
-$(document).on('change', '#salesitem_medicineStock', function() {
+$(document).on('click', '#instantPopupx', function() {
 
-    var medicine = $('#salesitem_medicineStock').val();
+    $('.dialogModal_header').html('Instant Purchase Information');
+    $('.dialog_content').dialogModal({
+        topOffset: 0,
+        top: 0,
+        type: '',
+        onOkBut: function(event, el, current) {},
+        onCancelBut: function(event, el, current) {},
+        onLoad: function(el, current) {
+            $.ajax({
+                url: Routing.generate('medicine_instant_purchase_load'),
+                async: true,
+                success: function (response) {
+                    el.find('.dialogModal_content').html(response);
+                    jqueryLoad();
+                }
+            });
+        },
+        onClose: function(el, current) {},
+        onChange: function(el, current) {}
+    });
+
+});
+
+
+$(document).on('change', '#medicineName', function() {
+
+    var medicine = $('#medicineName').val();
     $.ajax({
-        url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
+        url: Routing.generate('medicine_purchase_particular_search',{'id':medicine}),
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#salesitem_barcode').html(obj['purchaseItems']);
-            $('#salesitem_salesPrice').val(obj['salesPrice']);
+            $('#salesPrice').val(obj['salesPrice']);
+            $('#purchasePrice').val(obj['purchasePrice']);
         }
     })
 
 });
 
-$('#salesitem_medicineStock').on("select2-selecting", function (e) {
+$('#medicineName').on("select2-selecting", function (e) {
     setTimeout(function () {
-        $('#salesitem_barcode').focus();
+        $('#medicineName').focus();
     }, 2000)
 });
 
 
-$('form#salesItemForm').on('keypress', '.input', function (e) {
+$('form#instantPurchase').on('keypress', '.input', function (e) {
 
     if (e.which === 13) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
@@ -74,7 +102,7 @@ $('form#salesItemForm').on('keypress', '.input', function (e) {
         }
         switch (this.id) {
 
-            case 'salesitem_quantity':
+            case 'quantity':
                 $('#addParticular').focus();
                 break;
             case 'addParticular':
@@ -85,154 +113,77 @@ $('form#salesItemForm').on('keypress', '.input', function (e) {
     }
 });
 
-var form = $("#salesItemForm").validate({
+$(document).on('click', '#addInstantPurchase', function() {
 
-    rules: {
+    var form = $("#instantPurchase").validate({
 
-        "salesitem[medicineStock]": {required: true},
-        "salesitem[barcode]": {required: true},
-        "salesitem[salesPrice]": {required: true},
-        "salesitem[quantity]": {required: true},
-    },
+        rules: {
 
-    messages: {
+            "medicineName": {required: true},
+            "vendor": {required: true},
+            "receiveUser": {required: true},
+            "purchasePrice": {required: true},
+            "salesPrice": {required: true},
+            "expirationDate": {required: false},
+            "quantity": {required: true}
+        },
 
-        "salesitem[medicineStock]":"Enter medicine name",
-        "salesitem[barcode]":"Select barcode",
-        "salesitem[salesPrice]":"Enter sales price",
-        "salesitem[quantity]":"Enter medicine quantity",
-    },
-    tooltip_options: {
-        "salesitem[medicineStock]": {placement:'top',html:true},
-        "salesitem[barcode]": {placement:'top',html:true},
-        "salesitem[salesPrice]": {placement:'top',html:true},
-        "salesitem[quantity]": {placement:'top',html:true},
-    },
+        messages: {
 
-    submitHandler: function(form) {
+            "medicineName": "Enter medicine name",
+            "vendor": "Select vendor",
+            "purchasePrice": "Enter sales price",
+            "salesPrice": "Enter sales price",
+            "quantity": "Enter medicine quantity",
+        },
+        tooltip_options: {
+            "medicineName": {placement: 'top', html: true},
+            "vendor": {placement: 'top', html: true},
+            "receiveUser": {placement: 'top', html: true},
+            "purchasePrice": {placement: 'top', html: true},
+            "salesPrice": {placement: 'top', html: true},
+            "quantity": {placement: 'top', html: true},
+        },
 
-        $.ajax({
-            url         : $('form#salesItemForm').attr( 'action' ),
-            type        : $('form#salesItemForm').attr( 'method' ),
-            data        : new FormData($('form#salesItemForm')[0]),
-            processData : false,
-            contentType : false,
-            beforeSend: function() {
-                $('#savePatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
-                $('.btn-ajax-loading').attr("disabled", true);
-            },
-            complete: function(){
-                $('.btn-ajax-loading').attr("disabled", false);
-                $('#savePatientButton').removeClass('btn-ajax-loading');
-            },
-            success: function(response){
-                obj = JSON.parse(response);
-                $('#invoiceParticulars').html(obj['salesItems']);
-                $('#subTotal').html(obj['subTotal']);
-                $('#vat').val(obj['vat']);
-                $('.grandTotal').html(obj['netTotal']);
-                $('#paymentTotal').val(obj['netTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('#msg').html(obj['msg']);
-                $('#salesitem_salesPrice').val('');
-                $('#salesitem_quantity').val('');
-                $('#salesItemForm')[0].reset();
-            }
-        });
-    }
-});
-
-$('#invoiceParticulars').on("click", ".delete", function() {
-
-    var url = $(this).attr("data-url");
-    var id = $(this).attr("id");
-    $('#remove-'+id).hide();
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#subTotal').html(obj['subTotal']);
-            $('.grandTotal').html(obj['netTotal']);
-            $('#paymentTotal').val(obj['netTotal']);
-            $('#due').val(obj['due']);
-            $('.dueAmount').html(obj['due']);
-            $('#msg').html(obj['msg']);
+        submitHandler: function (form) {
+            $.ajax({
+                url: $('form#instantPurchase').attr('action'),
+                type: $('form#instantPurchase').attr('method'),
+                data: new FormData($('form#instantPurchase')[0]),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    obj = JSON.parse(response);
+                    $('#instantPurchaseItem').html(obj['instantPurchaseItem']);
+                    $('#instantPurchase')[0].reset();
+                }
+            });
         }
-    })
+    });
 });
 
-$(document).on('change', '#sales_discount', function() {
+$(document).on('click', '.instantSales', function() {
 
-    var discountType = $('#discountType').val();
-    var discount = parseInt($('#sales_discount').val());
-    var invoice = parseInt($('#invoiceId').val());
-    var total =  parseInt($('#dueAmount').val());
-    if( discount >= total ){
-        $('#sales_discount').val(0)
-        return false;
-    }
+    var url = $(this).attr('data-url');
+    var id = $(this).attr('data-id');
+    var quantity = parseInt($('#quantity-'+id).val());
     $.ajax({
-        url: Routing.generate('medicine_sales_discount_update'),
+        url:url,
         type: 'POST',
-        data:'discount=' + discount+'&discountType='+discountType+'&invoice='+invoice,
-        success: function(response) {
+        data:'quantity='+ quantity,
+        success: function(response){
             obj = JSON.parse(response);
+            $('#invoiceParticulars').html(obj['salesItems']);
             $('#subTotal').html(obj['subTotal']);
+            $('#vat').val(obj['vat']);
             $('.grandTotal').html(obj['netTotal']);
             $('#paymentTotal').val(obj['netTotal']);
-            $('#sales_discount').val(obj['discount']);
-            $('.discount').html(obj['discount']);
             $('#due').val(obj['due']);
             $('.dueAmount').html(obj['due']);
         }
-
     })
 
 });
 
-$(document).on('change', '#sales_payment , #sales_discount', function() {
 
-    var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
-    var discount     = parseInt($('#sales_discount').val()  != '' ? $('#sales_discount').val() : 0 );
-    var due =  parseInt($('#due').val());
-    var dueAmount = (due-discount-payment);
-    if(dueAmount > 0){
-        $('#balance').html('Due Tk.');
-        $('.dueAmount').html(dueAmount);
-    }else{
-        var balance =  payment - due ;
-        $('#balance').html('Return Tk.');
-        $('.dueAmount').html(balance);
-    }
-});
-
-
-
-$('form#salesForm').on('keypress', '.salesInput', function (e) {
-
-    if (e.which === 13) {
-        var inputs = $(this).parents("form").eq(0).find("input,select");
-        var idx = inputs.index(this);
-
-        if (idx == inputs.length - 1) {
-            inputs[0].select()
-        } else {
-            inputs[idx + 1].focus(); //  handles submit buttons
-        }
-        switch (this.id) {
-            case 'sales_transactionMethod':
-                $('#sales_salesBy').focus();
-                break;
-            case 'sales_salesBy':
-                $('#sales_received').focus();
-                break;
-            case 'sales_received':
-                $('#receiveBtn').focus();
-                break;
-        }
-        return false;
-    }
-});
 

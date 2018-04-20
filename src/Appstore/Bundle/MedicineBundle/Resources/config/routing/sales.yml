@@ -46,6 +46,13 @@ medicine_sales_item_add:
     options:
             expose: true
 
+medicine_sales_instant_item:
+    path:     /{sales}/{item}/medicine-instant-sales
+    defaults: { _controller: "MedicineBundle:Sales:instantPurchaseSales" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_sales_discount_update:
     path:     /sales/dicount-update
     defaults: { _controller: "MedicineBundle:Sales:invoiceDiscountUpdate" }
@@ -65,3 +72,4 @@ medicine_sales_item_delete:
 medicine_sales_print_invoice:
     path:     /{id}/print
     defaults: { _controller: "MedicineBundle:Sales:invoicePrint" }
+

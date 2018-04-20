@@ -1319,7 +1319,26 @@ class StockItemRepository extends EntityRepository
 
     }
 
-    public  function getSalesItemOverview($inventory, $data=''){
+    protected function handleSearchDateBetween($qb,$data)
+    {
+
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+        if (!empty($startDate)) {
+            $start = date('Y-m-d 00:00:00',strtotime($startDate));
+            $qb->andWhere("sales.created >= :startDate");
+            $qb->setParameter('startDate',$start);
+        }
+
+        if (!empty($endDate)) {
+            $end = date('Y-m-d 23:59:59',strtotime($startDate));
+            $qb->andWhere("sales.created <= :endDate");
+            $qb->setParameter('endDate',$end);
+        }
+
+    }
+
+    public  function getSalesItemOverview($inventory, $data = array()){
 
         $branch = isset($data['branch']) ? $data['branch'] :'';
         $mode = isset($data['mode']) ? $data['mode'] :'';
@@ -1329,8 +1348,9 @@ class StockItemRepository extends EntityRepository
         $qb->join('stock.item','item');
         $qb->join('stock.sales','e');
         $qb->select('SUM(stock.quantity) AS quantity');
-        $qb->addSelect('SUM(stock.purchasePrice) AS purchasePrice');
-        $qb->addSelect('SUM(stock.salesPrice) AS salesPrice');
+        $qb->addSelect('COUNT(stock.id) AS totalItem');
+        $qb->addSelect('SUM(stock.quantity * stock.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(stock.quantity * stock.salesPrice) AS salesPrice');
         $qb->addSelect('item.name AS name');
         $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
@@ -1359,31 +1379,23 @@ class StockItemRepository extends EntityRepository
         return $result;
     }
 
-    public  function getSalesItem($inventory, $data=''){
+    public  function reportStockItemPurchaseSales($user, $data = array()){
 
         $branch = isset($data['branch']) ? $data['branch'] :'';
         $mode = isset($data['mode']) ? $data['mode'] :'';
         $process = isset($data['process']) ? $data['process'] :'';
-        $group = isset($data['group']) ? $data['group'] :'item';
 
         $qb = $this->_em->createQueryBuilder();
         $qb->from('InventoryBundle:SalesItem','stock');
         $qb->join('stock.item','item');
         $qb->join('stock.sales','e');
         $qb->select('SUM(stock.quantity) AS quantity');
-        $qb->addSelect('SUM(stock.purchasePrice) AS purchasePrice');
-        $qb->addSelect('SUM(stock.salesPrice) AS salesPrice');
+        $qb->addSelect('COUNT(stock.id) AS totalItem');
+        $qb->addSelect('SUM(stock.quantity * stock.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(stock.quantity * stock.salesPrice) AS salesPrice');
         $qb->addSelect('item.name AS name');
-        if($group == 'purchaseItem') {
-            $qb->join('stock.purchaseItem','pi');
-            $qb->addSelect('pi.barcode AS barcode');
-        }
-
         $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
-        $qb->andWhere('e.paymentStatus IN(:paymentStatus)');
-        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
-
         if($process){
             $qb->andWhere('e.process =:process');
             $qb->setParameter('process',$process);
@@ -1404,9 +1416,8 @@ class StockItemRepository extends EntityRepository
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $endDate.' 23:59:59');
         }
-        $qb->groupBy('stock.'.$group);
         $qb->orderBy('e.created','DESC');
-        $result = $qb->getQuery();
+        $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
     }
 

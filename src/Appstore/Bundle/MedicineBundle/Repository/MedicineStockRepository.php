@@ -1,8 +1,12 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
@@ -54,20 +58,63 @@ class MedicineStockRepository extends EntityRepository
 
     public function getPurchaseUpdateQnt(MedicinePurchase $purchase){
 
-        $em = $this->_em;
-        /** @var MedicinePurchaseItem $purchaseItem */
+        /** @var  $purchaseItem MedicinePurchaseItem */
 
-        foreach($purchase->getMedicinePurchaseItems() as $purchaseItem ){
-
-            /** @var  $particular MedicineStock */
-            $particular = $purchaseItem->getMedicineStock();
-            $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
-            $particular->setPurchaseQuantity($qnt);
-            $em->persist($particular);
-            $em->flush();
-
+        if(!empty($purchase->getMedicinePurchaseItems())) {
+            foreach ($purchase->getMedicinePurchaseItems() as $purchaseItem) {
+                 $stockItem = $purchaseItem->getMedicineStock();
+                 $this->updateRemovePurchaseQuantity($stockItem);
+            }
         }
     }
+
+    public function updateRemovePurchaseQuantity(MedicineStock $stock){
+        $em = $this->_em;
+        $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseStockItemUpdate($stock);
+        $stock->setPurchaseQuantity($qnt);
+        $em->persist($stock);
+        $em->flush();
+        $this->remainingQnt($stock);
+    }
+
+    public function remainingQnt(MedicineStock $stock)
+    {
+        $em = $this->_em;
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity()) - ($stock->getPurchaseReturnQuantity()+$stock->getSalesQuantity()+$stock->getDamageQuantity());
+        $stock->setRemainingQuantity($qnt);
+        $em->persist($stock);
+        $em->flush();
+    }
+
+    public function getSalesUpdateQnt(Sales $invoice){
+
+        $em = $this->_em;
+
+        /** @var $item MedicineSalesItem */
+
+        foreach($invoice->getSalesItems() as $item ){
+
+            /** @var  $stock MedicineStock */
+
+            $stock = $item->getMedicineStock();
+            $qnt = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
+            $stock->setSalesQuantity($qnt);
+            $em->persist($stock);
+            $em->flush();
+            $this->remainingQnt($stock);
+        }
+    }
+
+    public function updateRemoveSalesQuantity(MedicineStock $stock){
+        $em = $this->_em;
+        $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->purchaseStockItemUpdate($stock);
+        $stock->setPurchaseQuantity($qnt);
+        $em->persist($stock);
+        $em->flush();
+        $this->remainingQnt($stock);
+    }
+
+
 
 
     public function findMedicineExistingCustomer($hospital, $mobile,$data)
@@ -127,22 +174,7 @@ class MedicineStockRepository extends EntityRepository
         }
     }
 
-    public function getSalesUpdateQnt(Invoice $invoice){
 
-        $em = $this->_em;
-
-        /** @var InvoiceParticular $item */
-
-        foreach($invoice->getInvoiceParticulars() as $item ){
-
-            /** @var Particular  $particular */
-
-            $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-            $particular->setSalesQuantity($qnt);
-            $em->persist($particular);
-            $em->flush();
-        }
-    }
 
     public function admittedPatientAccessories(InvoiceTransaction $transaction){
 
@@ -170,10 +202,13 @@ class MedicineStockRepository extends EntityRepository
 
     public function searchAutoComplete($q, MedicineConfig $config)
     {
+
         $query = $this->createQueryBuilder('e');
         $query->join('e.medicineConfig', 'ic');
-        $query->select('e.name as id');
-        $query->addSelect('e.name as text');
+        $query->join('e.rackNo', 'rack');
+        $query->join('e.unit', 'unit');
+        $query->select('e.id as id');
+        $query->addSelect('CONCAT(e.sku, \' - \', e.name, \' - \', rack.name, \' - \', e.remainingQuantity, \' \', unit.name) AS text');
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());

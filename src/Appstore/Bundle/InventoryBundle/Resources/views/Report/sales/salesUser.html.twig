@@ -96,8 +96,8 @@
                                 {% set vat = vat+entity.vat %}
                                 {% set total = total+entity.total %}
                                 {% set payment = payment+entity.payment %}
-                                {% set due = due+entity.due %}
-                                {% set purchasePrice = purchasePrice+salesPurchasePrice[entity.salesBy] %}
+                                {% set due = due + entity.due %}
+                                {% set purchasePrice = purchasePrice + salesPurchasePrice[entity.salesBy] %}
                                 <tr>
                                     <td class="numeric" >{{ entity.salesBy }}</td>
                                     <td class="numeric" >{{ entity.subTotal|number_format  }}</td>

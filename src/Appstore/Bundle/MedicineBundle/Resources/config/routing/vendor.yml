@@ -4,7 +4,7 @@ medicine_vendor:
 
 medicine_vendor_search:
     path:     /search
-    defaults: { _controller: "MedicineBundle:Vendor:autoSearch" }
+    defaults: { _controller: "MedicineBundle:Vendor:autoSearchAutoComplete" }
     options:
             expose: true
 

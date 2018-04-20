@@ -234,6 +234,20 @@ class VendorController extends Controller
         return new JsonResponse($item);
     }
 
+    public function autoSearchAutoCompleteAction(Request $request)
+    {
+        $item = $_REQUEST['term'];
+        $items = array();
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->searchAutoComplete($inventory,$item);
+            foreach ($entities as $entity):
+                $items[] = array('id' => $entity['id'], 'value' => $entity['text']);
+            endforeach;
+        }
+        return new JsonResponse($items);
+    }
+
     public function searchVendorNameAction($vendor)
     {
         return new JsonResponse(array(

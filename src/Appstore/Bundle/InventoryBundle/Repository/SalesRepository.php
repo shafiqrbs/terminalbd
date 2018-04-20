@@ -36,17 +36,18 @@ class SalesRepository extends EntityRepository
             $customer =    isset($data['customer'])? $data['customer'] :'';
             $paymentStatus =    isset($data['paymentStatus'])? $data['paymentStatus'] :'';
             $mode =    isset($data['mode'])? $data['mode'] :'';
+            $branch =    isset($data['branch'])? $data['branch'] :'';
 
             if (!empty($startDate)) {
-                $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
-                $qb->andWhere("s.created >= :startDate");
-                $qb->setParameter('startDate',$start);
+                $datetime = new \DateTime($startDate);
+                $start = $datetime->format('Y-m-d 00:00:00');
+                $qb->andWhere("s.created >= :startDate")->setParameter('startDate',$start);
             }
 
             if (!empty($endDate)) {
-                $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
-                $qb->andWhere("s.created <= :endDate");
-                $qb->setParameter('endDate',$end);
+                $datetime = new \DateTime($endDate);
+                $end = $datetime->format('Y-m-d 23:59:59');
+                $qb->andWhere("s.created <= :endDate")->setParameter('endDate',$end);
             }
 
             if (!empty($invoice)) {
@@ -95,6 +96,10 @@ class SalesRepository extends EntityRepository
                 $qb->andWhere("s.salesMode = :mode");
                 $qb->setParameter('mode', $mode);
             }
+            if(!empty($branch)){
+                $qb->andWhere("s.branches = :branch");
+                $qb->setParameter('branch', $branch);
+            }
         }
 
     }
@@ -135,10 +140,13 @@ class SalesRepository extends EntityRepository
 
     }
 
-    public function salesReport( InventoryConfig $inventory , $data)
+    public function salesReport( User $user , $data)
     {
 
-        $branch =    isset($data['branch'])? $data['branch'] :'';
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+
+
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.salesBy', 'u');
         $qb->leftJoin('s.transactionMethod', 't');
@@ -157,11 +165,10 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('(s.vat) as vat');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $inventory);
-        $qb->andWhere('s.paymentStatus IN(:paymentStatus)');
-        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
-
-        if(!empty($branch)){
-            $qb->andWhere("s.branches =".$branch);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if(!empty($userBranch)){
+            $qb->andWhere("s.branches =".$userBranch);
         }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.updated','DESC');
@@ -170,10 +177,11 @@ class SalesRepository extends EntityRepository
 
     }
 
-    public function salesUserReport( InventoryConfig $inventory , $data)
+    public function salesUserReport( User $user , $data)
     {
 
-        $branch =    isset($data['branch'])? $data['branch'] :'';
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.salesBy', 'u');
@@ -188,11 +196,10 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('SUM(s.vat) as vat');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $inventory);
-        $qb->andWhere('s.paymentStatus IN(:paymentStatus)');
-        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
-
-        if(!empty($branch)){
-            $qb->andWhere("s.branches =".$branch);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if(!empty($userBranch)){
+            $qb->andWhere("s.branches =".$userBranch);
         }
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('salesBy');
@@ -202,17 +209,23 @@ class SalesRepository extends EntityRepository
 
     }
 
-    public function salesUserPurchasePriceReport($inventory,$data)
+    public function salesUserPurchasePriceReport(User $user,$data)
     {
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.salesBy', 'u');
         $qb->join('s.salesItems','si');
         $qb->select('u.username as salesBy');
         $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
         $qb->where("s.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory->getId());
-        $qb->andWhere('s.paymentStatus IN(:paymentStatus)');
-        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if(!empty($userBranch)){
+            $qb->andWhere("s.branches =".$userBranch);
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('totalPurchaseAmount','DESC');
         $qb->groupBy('salesBy');
@@ -224,8 +237,12 @@ class SalesRepository extends EntityRepository
         return $array;
     }
 
-    public function salesPurchasePriceReport($inventory,$data,$x)
+    public function salesPurchasePriceReport(User $user,$data,$x)
     {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+
         $ids = array();
         foreach ($x as $y){
             $ids[]=$y['id'];
@@ -236,11 +253,13 @@ class SalesRepository extends EntityRepository
         $qb->select('s.id as salesId');
         $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
         $qb->where("s.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory->getId());
-        $qb->andWhere('s.paymentStatus IN(:paymentStatus)');
-        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
-        $qb->andWhere("s.id IN (:salesId)");
-        $qb->setParameter('salesId', $ids);
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $qb->andWhere("s.id IN (:salesId)")->setParameter('salesId', $ids);
+        if(!empty($userBranch)){
+            $qb->andWhere("s.branches =".$userBranch);
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('totalPurchaseAmount','DESC');
         $qb->groupBy('salesId');
@@ -353,31 +372,56 @@ class SalesRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function SalesOverview(InventoryConfig $inventory,$data)
+    public function reportSalesOverview(User $user ,$data)
     {
 
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
-        $branch = isset($data['branch'])  ? $data['branch'] : '';
-        $qb = $this->_em->createQueryBuilder();
-
-        $qb->from('InventoryBundle:Sales','s');
+        $qb = $this->createQueryBuilder('s');
         $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, count(s.totalItem) as totalItem, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
         $qb->where('s.inventoryConfig = :inventory');
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($branch){
+        if ($userBranch){
             $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $branch);
+            $qb->setParameter('branch', $userBranch);
         }
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function salesTransactionOverview(InventoryConfig $inventory,$data)
+    public  function reportSalesItemPurchaseSalesOverview(User $user, $data = array()){
+
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.salesItems','si');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->addSelect('COUNT(si.id) AS totalItem');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(si.quantity * si.salesPrice) AS salesPrice');
+        $qb->where('s.inventoryConfig = :inventory');
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
+    public function reportSalesTransactionOverview(User $user , $data = array())
     {
 
-        $branch = isset($data['branch'])  ? $data['branch'] : '';
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.transactionMethod','t');
         $qb->select('t.name as transactionName , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
@@ -386,18 +430,19 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($branch){
+        if ($userBranch){
             $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $branch);
+            $qb->setParameter('branch', $userBranch);
         }
         $qb->groupBy("s.transactionMethod");
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
     }
 
-    public function salesModeOverview(InventoryConfig $inventory,$data)
+    public function reportSalesModeOverview(User $user,$data)
     {
-        $branch = isset($data['branch'])  ? $data['branch'] : '';
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
         $qb->select('s.salesMode as name , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
@@ -406,30 +451,64 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($branch){
+        if ($userBranch){
             $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $branch);
+            $qb->setParameter('branch', $userBranch);
         }
         $qb->groupBy("s.salesMode");
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
     }
 
-    public function salesProcessOverview(InventoryConfig $inventory,$data)
+    public function reportSalesProcessOverview(User $user,$data)
     {
 
-        $branch = isset($data['branch'])  ? $data['branch'] : '';
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+
         $qb = $this->createQueryBuilder('s');
         $qb->select('s.process as name , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
         $qb->where('s.inventoryConfig = :inventory');
         $qb->setParameter('inventory', $inventory);
-        $this->handleSearchBetween($qb,$data);if ($branch){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $branch);
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch")->setParameter('branch', $userBranch);
         }
         $qb->groupBy("s.process");
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
+    }
+
+    public  function reportSalesItem(User $user, $data=''){
+
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $group = isset($data['group']) ? $data['group'] :'item';
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.salesItems','si');
+        $qb->join('si.item','item');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->addSelect('SUM(si.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(si.salesPrice) AS salesPrice');
+        $qb->addSelect('item.name AS name');
+        if($group == 'purchaseItem') {
+            $qb->join('stock.purchaseItem','pi');
+            $qb->addSelect('pi.barcode AS barcode');
+        }
+        $qb->where("s.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+        $qb->groupBy('si.'.$group);
+        $qb->orderBy('s.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
     }
 
     public function todaySales(User $user , $mode = '')

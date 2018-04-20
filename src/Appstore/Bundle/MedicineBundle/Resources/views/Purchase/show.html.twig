@@ -83,7 +83,7 @@
                             </div>
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid box green">
-                                {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}
+                                {% if entity.medicinePurchaseItems is defined and  entity.medicinePurchaseItems is not empty  %}
                                     <table class="table table-bordered table-striped table-condensed flip-content ">
                                         <thead class="flip-content ">
                                         <tr class="head-blue">
@@ -97,8 +97,8 @@
                                          </tr>
                                         </thead>
                                         <tbody id="invoiceParticulars">
-                                        {% if entity.purchaseItems is not empty %}
-                                            {% for item in entity.purchaseItems %}
+                                        {% if entity.medicinePurchaseItems is not empty %}
+                                            {% for item in entity.medicinePurchaseItems %}
                                                 <tr id="remove-{{ item.id }}">
                                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                                     <td class="span3">{{ item.medicineStock.name }}</td>

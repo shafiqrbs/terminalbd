@@ -114,11 +114,11 @@
                                 </tr>
                                 <tr>
                                     <th class="numeric" >Purchase Price</th>
-                                    <td class="numeric" >{{ purchasePrice|number_format }}</td>
+                                    <td class="numeric" >{{ purchaseSalesPrice.purchasePrice|number_format }}</td>
                                 </tr>
                                 <tr>
                                     <th class="numeric" >Profit/Loss</th>
-                                    <td class="numeric" >{{ (cashOverview.total- (cashOverview.totalVat + purchasePrice))|number_format }}</td>
+                                    <td class="numeric" >{{ (cashOverview.total- (cashOverview.totalVat + purchaseSalesPrice.purchasePrice))|number_format }}</td>
                                 </tr>
                             </table>
                             <div class="form-actions portlet box purple">

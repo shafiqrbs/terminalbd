@@ -8,9 +8,11 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
 
 /**
  * Vendor controller.
@@ -161,17 +163,20 @@ class PurchaseController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-        $expirationDate = ($data['appstore_bundle_dmspurchase']['expirationDate']);
+
+        $expirationDate = ($data['purchaseItem']['expirationDate']);
         $entity = new MedicinePurchaseItem();
         $form = $this->createPurchaseItemForm($entity,$invoice);
         $form->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
         $entity->setMedicinePurchase($invoice);
+        $stockItem = ($data['purchaseItem']['stockName']);
+        $entity->setMedicineStock($this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem));
         $entity->setPurchaseSubTotal($entity->getPurchasePrice() * $entity->getQuantity());
         $expirationDate = (new \DateTime($expirationDate));
         $entity->setExpirationDate($expirationDate);
         $em->persist($entity);
         $em->flush();
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock());
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($invoice);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -187,6 +192,7 @@ class PurchaseController extends Controller
         }
         $em->remove($particular);
         $em->flush();
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($particular->getMedicineStock());
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($invoice);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -234,18 +240,17 @@ class PurchaseController extends Controller
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $data = $request->request->all();
-            $deliveryDateTime = $data['appstore_bundle_medicinepurchase']['receiveDate'];
+            $deliveryDateTime = $data['medicinepurchase']['receiveDate'];
             $receiveDate = (new \DateTime($deliveryDateTime));
             $entity->setReceiveDate($receiveDate);
             $entity->setProcess('Done');
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
             return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('MedicineBundle:Particular')->getMedicineParticular($entity->getMedicineConfig());
         return $this->render('MedicineBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
-            'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
     }
@@ -277,7 +282,7 @@ class PurchaseController extends Controller
             $purchase->setProcess('Approved');
             $purchase->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->getPurchaseUpdateQnt($purchase);
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
             return new Response('success');
@@ -313,10 +318,8 @@ class PurchaseController extends Controller
      */
     public function statusAction(Request $request, $id)
     {
-
-
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('MedicineBundle:HmsVendor')->find($id);
+        $entity = $em->getRepository('MedicineBundle:MedicineVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');

@@ -23,6 +23,7 @@ use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -749,6 +750,11 @@ class User extends BaseUser
      */
     protected $medicinePurchasesApprovedBy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="purchaseBy" , cascade={"persist", "remove"})
+     */
+    protected $medicinePurchasesBy;
+
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="createdBy" , cascade={"persist", "remove"})
@@ -765,12 +771,6 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="salesBy" , cascade={"persist", "remove"})
      */
     protected $medicineSalesBy;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase", mappedBy="salesBy" , cascade={"persist", "remove"})
-     */
-    protected $medicineInstantPurchases;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineReverse", mappedBy="createdBy" , cascade={"persist", "remove"})
@@ -1565,11 +1565,11 @@ class User extends BaseUser
     }
 
     /**
-     * @return MedicineInstantPurchase
+     * @return MedicinePurchase
      */
-    public function getMedicineInstantPurchases()
+    public function getMedicinePurchasesBy()
     {
-        return $this->medicineInstantPurchases;
+        return $this->medicinePurchasesBy;
     }
 
 

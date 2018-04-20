@@ -182,43 +182,22 @@ class ReportController extends Controller
         ));
     }
 
-    public function salesStockItemAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user =$this->getUser();
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
-
-        $purchaseSalesItem = $em->getRepository('InventoryBundle:StockItem')->getSalesItemOverview($inventory,$data);
-        $cashOverview = $em->getRepository('InventoryBundle:Sales')->salesOverview($inventory,$data);
-        $entities = $em->getRepository('InventoryBundle:StockItem')->getSalesItem($inventory,$data);
-        $pagination = $this->paginate($entities);
-
-        return $this->render('InventoryBundle:Report:salesStock.html.twig', array(
-            'inventory' => $inventory,
-            'entities' => $pagination,
-            'cashOverview' => $cashOverview,
-            'purchaseSalesItem' => $purchaseSalesItem,
-            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
-            'searchForm' => $data,
-        ));
-    }
-
     public function salesTransactionOverviewAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $cashOverview = $em->getRepository('InventoryBundle:Sales')->salesOverview($inventory,$data);
-        $transactionCash = $em->getRepository('InventoryBundle:Sales')->salesTransactionOverview($inventory,$data);
-        $salesMode = $em->getRepository('InventoryBundle:Sales')->salesModeOverview($inventory,$data);
-        $salesProcess = $em->getRepository('InventoryBundle:Sales')->salesProcessOverview($inventory,$data);
-        $purchasePrice = $em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($this->getUser(),$data);
+        $user = $this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $cashOverview = $em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
+        $purchaseSalesPrice = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
+        $transactionCash = $em->getRepository('InventoryBundle:Sales')->reportSalesTransactionOverview($user,$data);
+        $salesMode = $em->getRepository('InventoryBundle:Sales')->reportSalesModeOverview($user,$data);
+        $salesProcess = $em->getRepository('InventoryBundle:Sales')->reportSalesProcessOverview($user,$data);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-        return $this->render('InventoryBundle:Report:salesOverview.html.twig', array(
+        return $this->render('InventoryBundle:Report:sales/salesOverview.html.twig', array(
             'inventory' => $inventory,
             'cashOverview'              => $cashOverview ,
-            'purchasePrice'             => $purchasePrice ,
+            'purchaseSalesPrice'        => $purchaseSalesPrice ,
             'transactionCash'           => $transactionCash ,
             'salesMode'                 => $salesMode ,
             'salesProcess'              => $salesProcess ,
@@ -231,33 +210,54 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesReport($inventory,$data);
+        $user = $this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesReport($user,$data);
         $pagination = $this->paginate($entities);
-        $salesPurchasePrice = $em->getRepository('InventoryBundle:Sales')->salesPurchasePriceReport($inventory,$data,$pagination);
+        $salesPurchasePrice = $em->getRepository('InventoryBundle:Sales')->salesPurchasePriceReport($user,$data,$pagination);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-        $purchaseSalesItem = $em->getRepository('InventoryBundle:StockItem')->getSalesItemOverview($inventory,$data);
-        $cashOverview = $em->getRepository('InventoryBundle:Sales')->salesOverview($inventory,$data);
-        return $this->render('InventoryBundle:Report:sales.html.twig', array(
+        $purchaseSalesPrice = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
+        $cashOverview = $em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
+        return $this->render('InventoryBundle:Report:sales/sales.html.twig', array(
+            'inventory'             => $inventory ,
             'entities'              => $pagination ,
             'purchasePrice'         => $salesPurchasePrice ,
             'cashOverview'          => $cashOverview,
-            'purchaseSalesItem'     => $purchaseSalesItem,
-            'inventory'             => $inventory ,
+            'purchaseSalesItem'     => $purchaseSalesPrice,
             'transactionMethods'    => $transactionMethods ,
             'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm'            => $data,
         ));
     }
+    public function salesStockItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $purchaseSalesPrice = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
+        $cashOverview = $em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->reportSalesItem($user,$data);
+        $pagination = $this->paginate($entities);
 
+        return $this->render('InventoryBundle:Report:sales/salesStock.html.twig', array(
+            'inventory' => $inventory,
+            'entities' => $pagination,
+            'cashOverview' => $cashOverview,
+            'purchaseSalesItem' => $purchaseSalesPrice,
+            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm' => $data,
+        ));
+    }
     public function salesUserAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $salesPurchasePrice = $em->getRepository('InventoryBundle:Sales')->salesUserPurchasePriceReport($inventory,$data);
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesUserReport($inventory,$data);
-        return $this->render('InventoryBundle:Report:salesUser.html.twig', array(
+        $user = $this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $salesPurchasePrice = $em->getRepository('InventoryBundle:Sales')->salesUserPurchasePriceReport($user,$data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesUserReport($user,$data);
+        return $this->render('InventoryBundle:Report:sales/salesUser.html.twig', array(
             'inventory'      => $inventory ,
             'entities'      => $entities ,
             'salesPurchasePrice'      => $salesPurchasePrice ,

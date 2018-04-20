@@ -27,6 +27,7 @@ class SalesItemType extends AbstractType
     {
         $builder
 
+            ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')))
             ->add('barcode', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span8 input'),
                 'expanded'      =>false,
@@ -37,7 +38,7 @@ class SalesItemType extends AbstractType
 
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'Sales price')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span5 form-control input-number input','placeholder'=>'quantity')))
-            ->add('medicineStock', 'entity', array(
+           /* ->add('medicineStock', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineStock',
                 'empty_value' => '---Choose a medicine ---',
@@ -49,7 +50,7 @@ class SalesItemType extends AbstractType
                         ->where("wt.status = 1")
                         ->andWhere("wt.medicineConfig =".$this->option->getMedicineConfig()->getId());
                 },
-            ));
+            ))*/;
     }
 
     /**

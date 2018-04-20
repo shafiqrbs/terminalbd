@@ -1,67 +1,62 @@
-medicine_instantpurchase:
+medicine_purchase:
     path:     /
-    defaults: { _controller: "MedicineBundle:InstantPurchase:index" }
+    defaults: { _controller: "MedicineBundle:Purchase:index" }
 
-medicine_instantpurchase_show:
+medicine_purchase_show:
     path:     /{id}/show
-    defaults: { _controller: "MedicineBundle:InstantPurchase:show" }
+    defaults: { _controller: "MedicineBundle:Purchase:show" }
 
-medicine_instantpurchase_new:
+medicine_purchase_new:
     path:     /new
-    defaults: { _controller: "MedicineBundle:InstantPurchase:new" }
+    defaults: { _controller: "MedicineBundle:Purchase:new" }
 
-medicine_instantpurchase_edit:
+medicine_purchase_edit:
     path:     /{id}/edit
-    defaults: { _controller: "MedicineBundle:InstantPurchase:edit" }
+    defaults: { _controller: "MedicineBundle:Purchase:edit" }
 
-medicine_instantpurchase_update:
+medicine_purchase_update:
     path:     /{id}/update
-    defaults: { _controller: "MedicineBundle:InstantPurchase:update" }
+    defaults: { _controller: "MedicineBundle:Purchase:update" }
     methods:  [POST, PUT]
 
-medicine_instantpurchase_status:
+medicine_purchase_status:
     path:     /{id}/status
-    defaults: { _controller: "MedicineBundle:InstantPurchase:edit" }
+    defaults: { _controller: "MedicineBundle:Purchase:edit" }
 
 
-medicine_instantpurchase_approve:
+medicine_purchase_approve:
     path:     /{id}/approve
-    defaults: { _controller: "MedicineBundle:InstantPurchase:approve" }
+    defaults: { _controller: "MedicineBundle:Purchase:approve" }
 
-medicine_instantpurchase_delete:
+medicine_purchase_delete:
     path:     /{id}/delete
-    defaults: { _controller: "MedicineBundle:InstantPurchase:delete" }
+    defaults: { _controller: "MedicineBundle:Purchase:delete" }
 
-medicine_instantpurchase_particular_search:
+medicine_purchase_particular_search:
     path:     /{id}/medicine-stock-search
-    defaults: { _controller: "MedicineBundle:InstantPurchase:particularSearch" }
+    defaults: { _controller: "MedicineBundle:Purchase:particularSearch" }
     options:
             expose: true
 
-
-medicine_instantpurchase_particular_add:
-    path:     /particular-add
-    defaults: { _controller: "MedicineBundle:InstantPurchase:addParticular" }
+medicine_purchase_particular_add:
+    path:     /{invoice}/particular-add
+    defaults: { _controller: "MedicineBundle:Purchase:addParticular" }
     methods:  POST
     options:
             expose: true
 
-medicine_instantpurchase_discount_update:
-    path:     /instantpurchase/dicount-update
-    defaults: { _controller: "MedicineBundle:InstantPurchase:invoiceDiscountUpdate" }
+medicine_purchase_discount_update:
+    path:     /purchase/dicount-update
+    defaults: { _controller: "MedicineBundle:Purchase:invoiceDiscountUpdate" }
     methods:  POST
     options:
             expose: true
 
-medicine_instantpurchase_approved:
+medicine_purchase_approved:
     path:     /{id}/invoice-approved
-    defaults: { _controller: "MedicineBundle:InstantPurchase:approved" }
+    defaults: { _controller: "MedicineBundle:Purchase:approved" }
 
 
-medicine_instantpurchase_particular_delete:
+medicine_purchase_particular_delete:
     path:     /{invoice}/{id}/particular-delete
-    defaults: { _controller: "MedicineBundle:InstantPurchase:invoiceParticularDelete" }
-
-medicine_instantpurchase_print_invoice:
-    path:     /{id}/print
-    defaults: { _controller: "MedicineBundle:InstantPurchase:invoicePrint" }
+    defaults: { _controller: "MedicineBundle:Purchase:invoiceParticularDelete" }

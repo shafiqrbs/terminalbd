@@ -1,9 +1,11 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -15,6 +17,38 @@ use Doctrine\ORM\EntityRepository;
  */
 class MedicinePurchaseItemRepository extends EntityRepository
 {
+
+    public function handleDateRangeFind($qb,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+    }
+
+
+    public function purchaseStockItemUpdate(MedicineStock $stockItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.medicinePurchase', 'mp');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $stockItem->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
 
     public function getPurchaseAveragePrice(MedicineParticular $particular)
     {
@@ -31,26 +65,38 @@ class MedicinePurchaseItemRepository extends EntityRepository
         }
     }
 
-    public function insertPurchaseItems($invoice, $data)
+    public function insertPurchaseItems(MedicinePurchase $purchase, $data)
     {
-        $particular = $this->_em->getRepository('MedicineBundle:MedicineParticular')->find($data['particularId']);
+
+        $item = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['medicineName']);
         $em = $this->_em;
         $entity = new MedicinePurchaseItem();
-        $entity->setMedicinePurchase($invoice);
-        $entity->setMedicineParticular($particular);
-        $entity->setSalesPrice($particular->getPrice());
-        $entity->setPurchasePrice($particular->getPurchasePrice());
+        $entity->setMedicinePurchase($purchase);
+        $entity->setMedicineStock($item);
+        $expirationDate = (new \DateTime($data['expirationDate']));
+        $entity->setExpirationDate($expirationDate);
+        $entity->setSalesPrice($data['salesPrice']);
+        $entity->setPurchasePrice($data['purchasePrice']);
         $entity->setQuantity($data['quantity']);
-        $entity->setPurchaseSubTotal($data['quantity'] * $particular->getPurchasePrice());
+        $entity->setPurchaseSubTotal($data['quantity'] * $entity->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
-        $this->getPurchaseAveragePrice($particular);
+    }
 
+    public function getInstantPurchaseItem(MedicineConfig $config,$data = array()){
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.medicinePurchase','e');
+        $qb->where('e.medicineConfig = :config')->setParameter('config',$config->getId());
+        $qb->andWhere('e.instantPurchase = 1');
+        $this->handleDateRangeFind($qb,$data);
+        $result = $qb->getQuery()->getResult();
+        return $result;
     }
 
     public function getPurchaseItems(MedicinePurchase $sales)
     {
-        $entities = $sales->getPurchaseItems();
+        $entities = $sales->getMedicinePurchaseItems();
         $data = '';
         $i = 1;
         /* @var $entity MedicinePurchaseItem */

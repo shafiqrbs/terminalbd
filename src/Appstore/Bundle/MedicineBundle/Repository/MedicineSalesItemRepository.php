@@ -2,8 +2,10 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -17,6 +19,28 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class MedicineSalesItemRepository extends EntityRepository
 {
+
+    public function salesStockItemUpdate(MedicineStock $stockItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.medicineSales', 'mp');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.medicineStock = :stock')->setParameter('stock', $stockItem->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
+    public function salesPurchaseStockItemUpdate(MedicinePurchaseItem $item)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.medicineSales', 'mp');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.medicinePurchaseItem = :purchaseItem')->setParameter('purchaseItem', $item->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
+
 
     public function handleDateRangeFind($qb,$data)
     {
