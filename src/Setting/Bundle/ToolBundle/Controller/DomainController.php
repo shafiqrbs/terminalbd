@@ -190,6 +190,9 @@ class DomainController extends Controller
         if($option->getRestaurantConfig()) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->reset($option);
         }
+        if(!empty($option->getMedicineConfig()) and $option->getMedicineConfig()) {
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineConfig')->medicineReset($option);
+        }
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
         $a = new Filesystem();
         $a->remove($dir);
@@ -217,7 +220,9 @@ class DomainController extends Controller
         if(!empty($option->getHospitalConfig()) and $option->getHospitalConfig()) {
             $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalReset($option);
         }
-
+        if(!empty($option->getMedicineConfig()) and $option->getMedicineConfig()) {
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineConfig')->medicineReset($option);
+        }
         $em->remove($option);
         $em->flush();
 

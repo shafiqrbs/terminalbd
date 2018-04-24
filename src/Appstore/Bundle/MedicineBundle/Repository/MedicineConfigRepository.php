@@ -17,5 +17,21 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class MedicineConfigRepository extends EntityRepository
 {
+    public function medicineReset(GlobalOption $option)
+    {
 
+        $em = $this->_em;
+        $config = $option->getMedicineConfig()->getId();
+
+        $sales = $em->createQuery('DELETE MedicineBundle:MedicineSales e WHERE e.medicineConfig = '.$config);
+        $sales->execute();
+
+        $purchase = $em->createQuery('DELETE MedicineBundle:MedicinePurchase e WHERE e.medicineConfig = '.$config);
+        $purchase->execute();
+
+        $stock = $em->createQuery('DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = '.$config);
+        $stock->execute();
+
+
+    }
 }

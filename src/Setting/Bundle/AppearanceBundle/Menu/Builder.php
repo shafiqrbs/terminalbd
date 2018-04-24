@@ -1037,33 +1037,41 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-list');
         $menu['Medicine']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
         if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
-            $menu['Medicine']->addChild('Master Data')
-                ->setAttribute('icon', 'icon icon-cog')
-                ->setAttribute('dropdown', true);
-            $menu['Medicine']['Master Data']->addChild('Particular', array('route' => 'medicine_particular'))
-                ->setAttribute('icon', 'icon-cog');
-            $menu['Medicine']['Master Data']->addChild('Configuration', array('route' => 'medicine_config_manage'))
-                ->setAttribute('icon', 'icon-cog');
             $menu['Medicine']->addChild('Manage Stock')
                 ->setAttribute('icon', 'icon icon-truck')
                 ->setAttribute('dropdown', true);
             $menu['Medicine']['Manage Stock']->addChild('Stock Medicine', array('route' => 'medicine_stock'))
                 ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Manage Stock']->addChild('Medicine Expiration', array('route' => 'medicine_purchase_item'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Manage Stock']->addChild('Purchase', array('route' => 'medicine_purchase'))
                 ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Manage Stock']->addChild('Instant Purchase', array('route' => 'medicine_instantpurchase'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Manage Stock']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
-            $menu['Medicine']->addChild('Reports')
+            $menu['Medicine']->addChild('Master Data')
                 ->setAttribute('icon', 'icon icon-cog')
                 ->setAttribute('dropdown', true);
-            $menu['Medicine']['Reports']->addChild('Sales Summary', array('route' => 'restaurant_report_sales_summary'))
+            $menu['Medicine']['Master Data']->addChild('Particular', array('route' => 'medicine_particular'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Sales Details', array('route' => 'restaurant_report_sales_details'))
+            $menu['Medicine']['Master Data']->addChild('Configuration', array('route' => 'medicine_config_manage'))
+                ->setAttribute('icon', 'icon icon-cog');
+            $menu['Medicine']->addChild('Reports')
+                ->setAttribute('icon', 'icon icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Medicine']['Reports']->addChild('Sales Summary', array('route' => 'medicine_report_sales_summary'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Product Wise Sales', array('route' => 'restaurant_report_sales_service'))
+            $menu['Medicine']['Reports']->addChild('Sales Details', array('route' => 'medicine_report_sales_details'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Stock Wise Sales', array('route' => 'restaurant_report_sales_service'))
+            $menu['Medicine']['Reports']->addChild('Product Wise Sales', array('route' => 'medicine_report_sales_stock'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Stock Summary', array('route' => 'restaurant_report_stock'))
+            $menu['Medicine']['Reports']->addChild('Stock Wise Sales', array('route' => 'medicine_report_sales_user'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Purchase Details', array('route' => 'medicine_report_purchase_details'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))
                 ->setAttribute('icon', 'icon-th-list');
         }
         return $menu;
@@ -1179,15 +1187,19 @@ class Builder extends ContainerAware
     public function PayrollMenu($menu)
     {
         $securityContext = $this->container->get('security.context');
+        $global = $securityContext->getToken()->getUser()->getGlobalOption();
         $menu
             ->addChild('HR & Payroll')
             ->setAttribute('icon', 'fa fa-group')
             ->setAttribute('dropdown', true);
+        if($global->getIsBranch() == 1) {
+            $menu['HR & Payroll']->addChild('Branch', array('route' => 'domain_branches'))->setAttribute('icon', 'icon-th-list');
+        }
         if ($securityContext->isGranted('ROLE_HR_EMPLOYEE')) {
-
             $menu['HR & Payroll']->addChild('Human Resource')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Human Resource']->addChild('Employee', array('route' => 'domain_user'))->setAttribute('icon', 'icon-user');
         }
+
         if ($securityContext->isGranted('ROLE_HR_ATTENDANCE')) {
             $menu['HR & Payroll']->addChild('Attendance')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Attendance']->addChild('Employee', array('route' => 'attendance'))->setAttribute('icon', 'icon-user');
@@ -1202,8 +1214,6 @@ class Builder extends ContainerAware
             $menu['HR & Payroll']['Payroll']->addChild('Payment Salary', array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
             $menu['HR & Payroll']['Payroll']->addChild('Salary Invoice', array('route' => 'account_salarysetting'))->setAttribute('icon', 'icon-th-list');
         }
-
-
 
         if ($securityContext->isGranted('ROLE_ADMIN')) {
 

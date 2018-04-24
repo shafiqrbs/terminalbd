@@ -23,7 +23,6 @@ class MedicineSalesItemRepository extends EntityRepository
     public function salesStockItemUpdate(MedicineStock $stockItem)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.medicineSales', 'mp');
         $qb->select('SUM(e.quantity) AS quantity');
         $qb->where('e.medicineStock = :stock')->setParameter('stock', $stockItem->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
@@ -39,8 +38,6 @@ class MedicineSalesItemRepository extends EntityRepository
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
     }
-
-
 
     public function handleDateRangeFind($qb,$data)
     {
@@ -63,247 +60,6 @@ class MedicineSalesItemRepository extends EntityRepository
         }
     }
 
-    public function invoicePathologicalReportLists(User $user , $mode , $data)
-    {
-        $hospital = $user->getGlobalOption()->getMedicineConfig()->getId();
-        $qb = $this->createQueryBuilder('ip');
-        $qb->join('ip.medicineInvoice','e');
-        $qb->join('ip.particular','p');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
-       // $this->handleSearchBetween($qb,$data);
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
-        $qb->orderBy('e.created','DESC');
-        $qb->getQuery();
-        return  $qb;
-    }
-
-    public function fileUpload(MedicineSales $invoice,$data,$file)
-    {
-        $em = $this->_em;
-        if(isset($file['file'])){
-            $particular = new MedicineSalesItem();
-            $medicineService = $this->_em->getRepository('MedicineBundle:MedicineService')->find($data['medicineService']);
-            $particular->setMedicineSales($invoice);
-            $particular->setMedicineService($medicineService);
-            $img = $file['file'];
-            $fileName = $img->getClientOriginalName();
-            $imgName =  uniqid(). '.' .$fileName;
-            $img->move($particular->getUploadDir(), $imgName);
-            $particular->setMetaValue($data['investigation']);
-            $particular->setPath($imgName);
-            $em->persist($particular);
-            $em->flush();
-        }
-    }
-
-    public function insertInvoiceParticularSingle(MedicineSales $invoice, $data)
-    {
-        $em = $this->_em;
-        $service = $this->_em->getRepository('MedicineBundle:MedicineService')->findOneBy(array('slug'=>$data['service']));
-        $teethNo = !empty($data['teethNo']) ? $data['teethNo'] : '' ;
-        $explode = explode(',',$teethNo);
-        $entity = new MedicineSalesItem();
-        $entity->setMedicineService($service);
-        $entity->setMetaValue($data['procedure']);
-        $entity->setDiseases($data['diseases']);
-        $entity->setTeethNo($explode);
-        $entity->setMedicineSales($invoice);
-        $em->persist($entity);
-        $em->flush();
-
-    }
-
-    public function insertInvoiceParticularReturn(MedicineSales $invoice, $data)
-    {
-        $em = $this->_em;
-        $service = $this->_em->getRepository('MedicineBundle:MedicineService')->findOneBy(array('slug' => $data['service']));
-        $invoiceParticulars = $this->findBy(array('medicineInvoice'=>$invoice,'medicineService'=>$service ));
-        $data ='';
-        foreach ($invoiceParticulars as $invoiceParticular ):
-        $colSpan = empty($invoiceParticular->getTeethNo()[0]) ? 'colspan="2"':'';
-        $data .='<tr id="remove-'.$invoiceParticular->getId().'">';
-        $data .='<td  class="numeric"'.$colSpan.'>'.$invoiceParticular->getMetaValue().'</td>';
-        if (!empty($invoiceParticular->getMetaValue()) and !empty($invoiceParticular->getTeethNo()[0])) {
-            $data .= '<td class="numeric">';
-            if($invoice->getCustomer()->getAgeGroup() == 'Adult'){
-                $data .='<table class="medicine-table">';
-                $leftTeeths = [8,7,6,5,4,3,2,1];
-                $upperRightTeeths = array(9 =>1,10 =>2,11=>3,12=>4,13=>5,14=>6,15=>7,16=>8);
-                $lowerLeftTeeths = array(24=>8,23=>7,22=>6,21=>5,20=>4,19=>3,18=>2,17=>1);
-                $lowerRightTeeths = array(25 =>1,26 =>2,27=>3,28=>4,29=>5,30=>6,31=>7,32=>8);
-                $data .='<tr>';
-                $data .='<td class="medicine-td medicine-td-border-none medicine-td-border-bottom">';
-                $data .='<ul class="leftTeeth">';
-                foreach ($leftTeeths as $left) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$left.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .='<td class="medicine-td medicine-td-border-bottom">';
-                $data .='<ul class="rightTeeth">';
-                foreach ($upperRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .= '</tr>';
-                $data .='<tr>';
-                $data .='<td class="medicine-td medicine-td-border-none">';
-                $data .='<ul class="leftTeeth">';
-                foreach ($lowerLeftTeeths as $key=>$left) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$left.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .='<td class="medicine-td">';
-                $data .='<ul class="rightTeeth">';
-                foreach ($lowerRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .= '</tr>';
-                $data .= '</table>';
-            }else{
-                $data .='<table class="medicine-table">';
-                $upperLeftTeeths = array(37=>'E',36=>'D',35=>'C',34=>'B',33=>'A');
-                $upperRightTeeths = array(38=>'A',39=>'B',40=>'C',41=>'D',42=>'E');
-                $lowerLeftTeeths = array(47=>'E',46=>'D',45=>'C',44=>'B',43=>'A');
-                $lowerRightTeeths = array(48=>'A',49=>'B',50=>'C',51=>'D',52=>'E');
-                $data .='<tr>';
-                $data .='<td class="medicine-td medicine-td-border-none medicine-td-border-bottom">';
-                $data .='<ul class="leftTeeth">';
-                foreach ($upperLeftTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .='<td class="medicine-td medicine-td-border-bottom">';
-                $data .='<ul class="rightTeeth">';
-                foreach ($upperRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .= '</tr>';
-                $data .='<tr>';
-                $data .='<td class="medicine-td medicine-td-border-none">';
-                $data .='<ul class="leftTeeth">';
-                foreach ($lowerLeftTeeths as $key=>$left) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$left.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .='<td class="medicine-td">';
-                $data .='<ul class="rightTeeth">';
-                foreach ($lowerRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .= '</tr>';
-                $data .= '</table>';
-            }
-
-            $data .= '</td>';
-        }
-        $data .='<td  class="numeric">'.$invoiceParticular->getDiseases().'</td>';
-        $data .='<td class="numeric">';
-        $data .='<a href="javascript:" class="btn red mini particularDelete" data-tab="'.$service->getSlug().'" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/medicine/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
-        $data .='</td>';
-        $data .='</tr>';
-
-        endforeach;
-
-        return $data;
-    }
-
-
-    public function insertInvoiceInvestigationUpload(MedicineSales $invoice, $data)
-    {
-        $em = $this->_em;
-
-        $service = $this->_em->getRepository('MedicineBundle:MedicineService')->find($data['medicineService']);
-        $invoiceParticulars = $this->findBy(array('medicineInvoice'=> $invoice,'medicineService' => $service ));
-        $data ='';
-        /* @var $invoiceParticular MedicineSalesItem */
-        foreach ($invoiceParticulars as $invoiceParticular ):
-
-            $date = $invoiceParticular->getCreated()->format('d-m-Y');
-            $data .='<tr id="remove-'.$invoiceParticular->getId().'">';
-            $data .='<td>'.$date.'</td>';
-            $data .='<td>'.$invoiceParticular->getMetaValue().'</td>';
-            $data .='<td><a target="_blank" href="/'.$invoiceParticular->getWebPath().'">View Image</a></td>';
-            $data .='<td class="numeric">';
-            $data .='<a href="javascript:" class="btn red mini particularDelete" data-tab="'.$service->getSlug().'" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/medicine/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
-            $data .='</td>';
-            $data .='</tr>';
-
-        endforeach;
-
-        return $data;
-    }
-    public function insertInvoiceItems(MedicineSales $invoice, $data)
-    {
-        $em = $this->_em;
-        if(!empty($data['metaKey'])) {
-            $this->removeInvoiceParticularPreviousCheck($invoice);
-            foreach ($data['metaKey'] as $key => $val) {
-                $particular = $this->_em->getRepository('MedicineBundle:MedicineParticular')->find($val);
-                $entity = new MedicineSalesItem();
-                $invoiceMedicineParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->findOneBy(array('medicineInvoice' => $invoice, 'medicineParticular' => $particular));
-                if (!empty($invoiceMedicineParticular)) {
-                    $entity = $invoiceMedicineParticular ;
-                    $entity->setMetaValue(trim($data['metaValue'][$key]));
-                } else {
-                    $entity->setMedicineParticular($particular);
-                    $entity->setMetaValue(trim($data['metaValue'][$key]));
-                }
-                $entity->setMedicineSales($invoice);
-                $em->persist($entity);
-                $em->flush();
-            }
-            $this->updateMetaCheckValue($invoice,$data);
-        }
-    }
-
-    public function updateMetaCheckValue($invoice,$data)
-    {
-        $em = $this->_em;
-        foreach ($data['metaKey'] as $key => $val) {
-            if(isset($data['metaCheck'][$key]) and $data['metaCheck'][$key] > 0) {
-                $particular = $data['metaCheck'][$key];
-                $invoiceMedicineParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->findOneBy(array('medicineInvoice' => $invoice, 'medicineParticular' => $particular));
-                $invoiceMedicineParticular->setMetaCheck($data['metaCheck'][$key]);
-                $em->flush();
-            }
-        }
-
-    }
-
-    public function removeInvoiceParticularPreviousCheck(MedicineSales $invoice)
-    {
-        $em = $this->_em;
-        $update = $em->createQuery("UPDATE MedicineBundle:MedicineSalesItem e SET e.metaCheck = 0 WHERE e.medicineService IS NULL and  e.medicineInvoice = ".$invoice->getId());
-        $update->execute();
-    }
-
-    public function removeInvoiceParticularCheckItem(MedicineSales $invoice)
-    {
-        $em = $this->_em;
-        $remove = $em->createQuery("DELETE MedicineBundle:MedicineSalesItem e WHERE e.medicineService IS NULL and  e.medicineInvoice = ".$invoice->getId());
-        $remove->execute();
-    }
 
     public function getSalesItems(MedicineSales $sales)
     {
@@ -319,7 +75,7 @@ class MedicineSalesItemRepository extends EntityRepository
             $data .= '<td class="span1" >' . $entity->getQuantity() .'</td>';
             $data .= '<td class="span2" >' . $entity->getSubTotal() .'</td>';
             $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/medicine/sales/' . $sales->getId() . '/' . $entity->getId() . '/sales-item-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/medicine/sales/' . $sales->getId() . '/' . $entity->getId() . '/sales-item-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;
@@ -327,10 +83,6 @@ class MedicineSalesItemRepository extends EntityRepository
         return $data;
     }
 
-    public function invoiceMedicineParticularLists($user){
-
-
-    }
 
     public function medicineInvoiceParticularReverse(Invoice $invoice)
     {

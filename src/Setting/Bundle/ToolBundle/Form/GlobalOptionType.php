@@ -103,6 +103,7 @@ class GlobalOptionType extends AbstractType
                 ->add('promotion')
                 ->add('googleAds')*/
                 ->add('primaryNumber')
+                ->add('isBranch')
                 ->add('status', 'choice', array(
                     'attr'=>array('class'=>'selectbox span12'),
                     'choices' => array(1 => 'Active','2' => 'In-active'),

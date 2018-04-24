@@ -366,12 +366,21 @@ class GlobalOption
      * @ORM\Column(name="subDomain", type="string", length=255 , unique=true, nullable=true)
      */
     private $subDomain;
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="isMobile", type="boolean" , nullable=true)
      */
     private $isMobile;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isBranch", type="boolean" , nullable=true)
+     */
+    private $isBranch = false;
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="globalOption")
      **/
@@ -749,6 +758,23 @@ class GlobalOption
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function getIsBranch()
+    {
+        return $this->isBranch;
+    }
+
+    /**
+     * @param bool $isBranch
+     */
+    public function setIsBranch($isBranch)
+    {
+        $this->isBranch = $isBranch;
+    }
+
 
 
 
@@ -1728,6 +1754,7 @@ class GlobalOption
     {
         return $this->medicineConfig;
     }
+
 
 
 }

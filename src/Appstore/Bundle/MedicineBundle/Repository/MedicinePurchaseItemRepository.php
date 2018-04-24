@@ -18,6 +18,51 @@ use Doctrine\ORM\EntityRepository;
 class MedicinePurchaseItemRepository extends EntityRepository
 {
 
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        $grn = isset($data['grn'])? $data['grn'] :'';
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
+        $name = isset($data['name'])? $data['name'] :'';
+        $rackNo = isset($data['rackNo'])? $data['rackNo'] :'';
+        $mode = isset($data['mode'])? $data['mode'] :'';
+        $sku = isset($data['sku'])? $data['sku'] :'';
+
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+        }
+        if (!empty($sku)) {
+            $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
+        }
+        if(!empty($rackNo)){
+            $qb->andWhere("e.rackNo = :rack")->setParameter('rack', $rackNo);
+        }
+        if(!empty($mode)){
+            $qb->andWhere("e.mode = :mode")->setParameter('mode', $mode);
+        }
+        if (!empty($grn)) {
+            $qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
+        }
+        if(!empty($vendor)){
+            $qb->andWhere("e.medicineVendor = :vendor")->setParameter('vendor', $vendor);
+        }
+        if (!empty($startDate) ) {
+            $datetime = new \DateTime($data['startDate']);
+            $start = $datetime->format('Y-m-d 00:00:00');
+            $qb->andWhere("mpi.expirationDate >= :startDate");
+            $qb->setParameter('startDate', $start);
+        }
+
+        if (!empty($endDate)) {
+            $datetime = new \DateTime($data['endDate']);
+            $end = $datetime->format('Y-m-d 00:00:00');
+            $qb->andWhere("mpi.expirationDate >= :endDate");
+            $qb->setParameter('endDate', $end);
+        }
+    }
+
     public function handleDateRangeFind($qb,$data)
     {
         if(empty($data)){
@@ -39,6 +84,40 @@ class MedicinePurchaseItemRepository extends EntityRepository
         }
     }
 
+    public function findWithSearch($config,$data = array(),$instant = ''){
+
+        $qb = $this->createQueryBuilder('mpi');
+        $qb->join('mpi.medicinePurchase','e');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        if($instant == 1 ) {
+            $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('mpi.expirationDate','ASC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+
+    public function medicinePurchaseItemUpdate(MedicinePurchaseItem $item,$fieldName)
+    {
+        $qb = $this->createQueryBuilder('e');
+        if($fieldName == 'sales'){
+            $qb->select('e.salesQuantity AS quantity');
+        }elseif($fieldName == 'sales-return'){
+            $qb->select('e.quantity AS quantity');
+        }elseif($fieldName == 'sales-return'){
+            $qb->select('e.quantity AS quantity');
+        }elseif($fieldName == 'sales-return'){
+            $qb->select('e.quantity AS quantity');
+        }else{
+            $qb->select('SUM(e.quantity) AS quantity');
+        }
+        $qb->addSelect('e.remainingQuantity AS remainingQuantity');
+        $qb->where('e.id = :item')->setParameter('item', $item->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt;
+    }
 
     public function purchaseStockItemUpdate(MedicineStock $stockItem)
     {
@@ -49,6 +128,54 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
     }
+
+    public function salesMedicinePurchaseItemUpdate(MedicinePurchaseItem $item,$fieldName='')
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        if($fieldName == 'sales'){
+            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($item);
+            $qb->select('e.salesQuantity AS quantity');
+        }elseif($fieldName == 'sales-return'){
+            $qb->select('e.quantity AS quantity');
+        }elseif($fieldName == 'sales-return'){
+            $qb->select('e.quantity AS quantity');
+        }elseif($fieldName == 'sales-return'){
+            $qb->select('e.quantity AS quantity');
+        }else{
+            $qb->select('SUM(e.quantity) AS quantity');
+        }
+        $qb->addSelect('e.remainingQuantity AS remainingQuantity');
+
+        $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $stockItem->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
+    public function updateRemovePurchaseItemQuantity(MedicinePurchaseItem $item,$fieldName=''){
+        $em = $this->_em;
+
+        if($fieldName == 'sales'){
+            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($item);
+            $item->setSalesQuantity($quantity);
+        }elseif($fieldName == 'sales-return'){
+
+        }
+        $em->persist($item);
+        $em->flush();
+        $this->remainingQnt($item);
+    }
+
+    public function remainingQnt(MedicinePurchaseItem $item)
+    {
+        $em = $this->_em;
+        $qnt = ($item->getQuantity()  + $item->getSalesReturnQuantity()) - ($item->getPurchaseReturnQuantity()+$item->getSalesQuantity()+$item->getDamageQuantity());
+        $item->setRemainingQuantity($qnt);
+        $em->persist($item);
+        $em->flush();
+    }
+
+
 
     public function getPurchaseAveragePrice(MedicineParticular $particular)
     {
@@ -73,11 +200,18 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $entity = new MedicinePurchaseItem();
         $entity->setMedicinePurchase($purchase);
         $entity->setMedicineStock($item);
-        $expirationDate = (new \DateTime($data['expirationDate']));
-        $entity->setExpirationDate($expirationDate);
+        if(!empty($data['expirationStartDate'])){
+            $expirationStartDate = (new \DateTime($data['expirationStartDate']));
+            $entity->setExpirationStartDate($expirationStartDate);
+        }
+        if(!empty($data['expirationEndDate'])){
+            $expirationEndDate = (new \DateTime($data['expirationEndDate']));
+            $entity->setExpirationEndDate($expirationEndDate);
+        }
         $entity->setSalesPrice($data['salesPrice']);
         $entity->setPurchasePrice($data['purchasePrice']);
         $entity->setQuantity($data['quantity']);
+        $entity->setRemainingQuantity($data['quantity']);
         $entity->setPurchaseSubTotal($data['quantity'] * $entity->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
@@ -102,13 +236,22 @@ class MedicinePurchaseItemRepository extends EntityRepository
         /* @var $entity MedicinePurchaseItem */
 
         foreach ($entities as $entity) {
+
+            if(!empty($entity->getExpirationEndDate()) and !empty($entity->getExpirationStartDate())){
+                $expirationStartDate = $entity->getExpirationStartDate()->format('M y');
+                $expirationEndDate = $entity->getExpirationEndDate()->format('M y');
+                $expiration = $expirationStartDate.' To '.$expirationEndDate;
+            }else{
+                $expiration='';
+            }
             $data .= '<tr id="remove-'. $entity->getId().'">';
             $data .= '<td class="span1" >' . $i.'. '.$entity->getBarcode().'</td>';
             $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getExpirationDate()->format('d-m-Y') . '</td>';
-            $data .= '<td class="span1" >' . $entity->getSalesPrice() . '</td>';
+            $data .= '<th class="span1" >' .$expiration. '</th>';
             $data .= '<td class="span1" >' . $entity->getPurchasePrice() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getSalesQuantity(). '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
                      <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/medicine/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>

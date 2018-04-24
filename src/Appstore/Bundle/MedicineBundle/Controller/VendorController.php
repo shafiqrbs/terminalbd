@@ -224,15 +224,7 @@ class VendorController extends Controller
         return $this->redirect($this->generateUrl('medicine_vendor'));
     }
 
-    public function autoSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->searchAutoComplete($item,$inventory);
-        }
-        return new JsonResponse($item);
-    }
+
 
     public function autoSearchAutoCompleteAction(Request $request)
     {
@@ -246,6 +238,16 @@ class VendorController extends Controller
             endforeach;
         }
         return new JsonResponse($items);
+    }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->searchVendor($inventory,$item);
+        }
+        return new JsonResponse($item);
     }
 
     public function searchVendorNameAction($vendor)

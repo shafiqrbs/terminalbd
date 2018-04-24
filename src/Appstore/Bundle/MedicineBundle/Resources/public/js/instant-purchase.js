@@ -15,13 +15,17 @@ $(document).on("click", ".approve", function() {
     });
 });
 
-$(".addCustomer").click(function(){
-    $( ".customer" ).slideToggle( "slow" );
-}).toggle( function() {
-    $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
-}, function() {
-    $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+
+$(document).on("click", ".instantDelete", function() {
+
+    var url = $(this).attr("data-url");
+    var id = $(this).attr("id");
+    $.get(url, function(data, status){
+        $('#removeInstantItem-'+id).hide();
+    });
+
 });
+
 
 $(document).on("click", "#instantPopup", function() {
 
@@ -39,8 +43,9 @@ $(document).on("click", "#instantPopup", function() {
             jqueryLoad();
         }
     });
-
 });
+
+
 
 $(document).on('click', '#instantPopupx', function() {
 
@@ -103,10 +108,10 @@ $('form#instantPurchase').on('keypress', '.input', function (e) {
         switch (this.id) {
 
             case 'quantity':
-                $('#addParticular').focus();
+                $('#addInstantPurchase').focus();
                 break;
-            case 'addParticular':
-                $('#salesitem_medicineStock').select2('open');
+            case 'addInstantPurchase':
+                $('#vendor').select2('open');
                 break;
         }
         return false;
@@ -121,28 +126,30 @@ $(document).on('click', '#addInstantPurchase', function() {
 
             "medicineName": {required: true},
             "vendor": {required: true},
-            "receiveUser": {required: true},
+            "purchasesBy": {required: true},
             "purchasePrice": {required: true},
             "salesPrice": {required: true},
-            "expirationDate": {required: false},
+            "expirationStartDate": {required: false},
+            "expirationEndDate": {required: false},
             "quantity": {required: true}
         },
 
         messages: {
 
             "medicineName": "Enter medicine name",
-            "vendor": "Select vendor",
-            "purchasePrice": "Enter sales price",
+            "vendor": "Select vendor name",
+            "purchasesBy": "Enter purchase by medicine",
+            "purchasePrice": "Enter purchase price",
             "salesPrice": "Enter sales price",
-            "quantity": "Enter medicine quantity",
+            "quantity": "Enter medicine quantity"
         },
         tooltip_options: {
             "medicineName": {placement: 'top', html: true},
             "vendor": {placement: 'top', html: true},
-            "receiveUser": {placement: 'top', html: true},
+            "purchasesBy": {placement: 'top', html: true},
             "purchasePrice": {placement: 'top', html: true},
             "salesPrice": {placement: 'top', html: true},
-            "quantity": {placement: 'top', html: true},
+            "quantity": {placement: 'top', html: true}
         },
 
         submitHandler: function (form) {
@@ -156,6 +163,8 @@ $(document).on('click', '#addInstantPurchase', function() {
                     obj = JSON.parse(response);
                     $('#instantPurchaseItem').html(obj['instantPurchaseItem']);
                     $('#instantPurchase')[0].reset();
+                    $("#medicineName").select2("val", "");
+                    $("#purchasesBy").select2("val", "");
                 }
             });
         }
@@ -167,6 +176,17 @@ $(document).on('click', '.instantSales', function() {
     var url = $(this).attr('data-url');
     var id = $(this).attr('data-id');
     var quantity = parseInt($('#quantity-'+id).val());
+    var remainingQnt = parseInt($('#remainingQnt-'+id).val());
+    if(isNaN(quantity) === true){
+        alert('Please add medicine/accessories quantity');
+        $('#quantity-'+id).focus();
+        return false;
+    }
+    if(quantity >= remainingQnt ){
+        alert('Medicine/accessories quantity is not enough.');
+        $('#quantity-'+id).focus();
+        return false;
+    }
     $.ajax({
         url:url,
         type: 'POST',
@@ -180,10 +200,127 @@ $(document).on('click', '.instantSales', function() {
             $('#paymentTotal').val(obj['netTotal']);
             $('#due').val(obj['due']);
             $('.dueAmount').html(obj['due']);
+            $('#quantity-'+id).val('');
         }
     })
 
 });
+
+function jqueryLoad(){
+
+    $(".select2StockMedicine").select2({
+
+        placeholder: "Search vendor name",
+        ajax: {
+            url: Routing.generate('medicine_stock_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
+        formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            $.ajax(Routing.generate('medicine_stock_name', { vendor : id}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength: 1
+
+    });
+
+    $( ".select2Vendor" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax( {
+                url: Routing.generate('medicine_vendor_search'),
+                data: {
+                    term: request.term
+                },
+                success: function( data ) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 1,
+        select: function( event, ui ) {
+            $("#vendor").val(ui.item.id); // save selected id to hidden input
+
+        }
+    });
+
+    $(".select2User").select2({
+
+        ajax: {
+            url: Routing.generate('domain_user_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            $.ajax(Routing.generate('domain_user_name', { user : id}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength: 1
+    });
+
+
+    $( "#expirationStartDate" ).datepicker({
+        dateFormat: "dd-mm-yy",
+        changeMonth: true,
+        changeYear: true,
+    });
+
+    $( "#expirationEndDate" ).datepicker({
+        dateFormat: "dd-mm-yy",
+        changeMonth: true,
+        changeYear: true,
+    });
+
+
+}
+
 
 
 

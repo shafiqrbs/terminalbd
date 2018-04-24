@@ -12,6 +12,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Delivery;
 use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -57,6 +58,11 @@ class Branches
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="branch" )
      **/
     private  $deliveryReturns;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="branch" )
+     **/
+    private  $medicineSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\profile", mappedBy="branches" )
@@ -438,6 +444,14 @@ class Branches
     public function getAccountSalesReturn()
     {
         return $this->accountSalesReturn;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
     }
 
 

@@ -147,6 +147,20 @@ class MedicinePurchaseItem
      */
     private $expirationDate;
 
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="expirationStartDate", type="datetime", nullable=true)
+     */
+    private $expirationStartDate;
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="expirationEndDate", type="datetime", nullable=true)
+     */
+    private $expirationEndDate;
+
 
 
     /**
@@ -301,9 +315,8 @@ class MedicinePurchaseItem
     }
 
 
-
     /**
-     * @return mixed
+     * @return MedicineStock
      */
     public function getMedicineStock()
     {
@@ -311,7 +324,7 @@ class MedicinePurchaseItem
     }
 
     /**
-     * @param mixed $medicineStock
+     * @param MedicineStock $medicineStock
      */
     public function setMedicineStock($medicineStock)
     {
@@ -452,6 +465,38 @@ class MedicinePurchaseItem
     public function setStockName($stockName)
     {
         $this->stockName = $stockName;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getExpirationStartDate()
+    {
+        return $this->expirationStartDate;
+    }
+
+    /**
+     * @param DateTime $expirationStartDate
+     */
+    public function setExpirationStartDate($expirationStartDate)
+    {
+        $this->expirationStartDate = $expirationStartDate;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getExpirationEndDate()
+    {
+        return $this->expirationEndDate;
+    }
+
+    /**
+     * @param DateTime $expirationEndDate
+     */
+    public function setExpirationEndDate($expirationEndDate)
+    {
+        $this->expirationEndDate = $expirationEndDate;
     }
 
 }

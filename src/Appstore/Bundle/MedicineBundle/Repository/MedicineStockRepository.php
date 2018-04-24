@@ -20,15 +20,36 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
  */
 class MedicineStockRepository extends EntityRepository
 {
-    public function findWithSearch($config,$data){
+
+
+    protected function handleSearchBetween($qb,$data)
+    {
 
         $name = isset($data['name'])? $data['name'] :'';
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $rackNo = isset($data['rackNo'])? $data['rackNo'] :'';
+        $mode = isset($data['mode'])? $data['mode'] :'';
+        $sku = isset($data['sku'])? $data['sku'] :'';
+
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }
-        $qb->orderBy('e.name','ASC');
+        if (!empty($sku)) {
+            $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
+        }
+        if(!empty($rackNo)){
+            $qb->andWhere("e.rackNo = :rack")->setParameter('rack', $rackNo);
+        }
+        if(!empty($mode)){
+            $qb->andWhere("e.mode = :mode")->setParameter('mode', $mode);
+        }
+    }
+
+    public function findWithSearch($config,$data){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.sku','ASC');
         $qb->getQuery();
         return  $qb;
     }
@@ -68,10 +89,15 @@ class MedicineStockRepository extends EntityRepository
         }
     }
 
-    public function updateRemovePurchaseQuantity(MedicineStock $stock){
+    public function updateRemovePurchaseQuantity(MedicineStock $stock,$fieldName=''){
         $em = $this->_em;
-        $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseStockItemUpdate($stock);
-        $stock->setPurchaseQuantity($qnt);
+        if($fieldName == 'sales'){
+            $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
+            $stock->setSalesQuantity($qnt);
+        }else{
+            $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseStockItemUpdate($stock);
+            $stock->setPurchaseQuantity($qnt);
+        }
         $em->persist($stock);
         $em->flush();
         $this->remainingQnt($stock);
@@ -86,16 +112,15 @@ class MedicineStockRepository extends EntityRepository
         $em->flush();
     }
 
-    public function getSalesUpdateQnt(Sales $invoice){
+    public function getSalesUpdateQnt(MedicineSales $invoice){
 
         $em = $this->_em;
 
         /** @var $item MedicineSalesItem */
 
-        foreach($invoice->getSalesItems() as $item ){
+        foreach($invoice->getMedicineSalesItems() as $item ){
 
             /** @var  $stock MedicineStock */
-
             $stock = $item->getMedicineStock();
             $qnt = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
             $stock->setSalesQuantity($qnt);
@@ -106,16 +131,14 @@ class MedicineStockRepository extends EntityRepository
     }
 
     public function updateRemoveSalesQuantity(MedicineStock $stock){
+
         $em = $this->_em;
-        $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->purchaseStockItemUpdate($stock);
+        $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
         $stock->setPurchaseQuantity($qnt);
         $em->persist($stock);
         $em->flush();
         $this->remainingQnt($stock);
     }
-
-
-
 
     public function findMedicineExistingCustomer($hospital, $mobile,$data)
     {
@@ -208,7 +231,7 @@ class MedicineStockRepository extends EntityRepository
         $query->join('e.rackNo', 'rack');
         $query->join('e.unit', 'unit');
         $query->select('e.id as id');
-        $query->addSelect('CONCAT(e.sku, \' - \', e.name, \' - \', rack.name, \' - \', e.remainingQuantity, \' \', unit.name) AS text');
+        $query->addSelect('CONCAT(e.sku, \' - \', e.name,  \' [\', e.remainingQuantity, \'] \', unit.name,\' => \', rack.name) AS text');
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());

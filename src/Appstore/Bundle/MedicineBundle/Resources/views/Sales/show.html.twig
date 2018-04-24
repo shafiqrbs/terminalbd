@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Purchase GRN # {{ entity.invoice }}
+                    Sales Invoice # {{ entity.invoice }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -120,10 +120,15 @@
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                         <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong></td>
                                     </tr>
-                                     <tr>
+                                    <tr>
+                                        <td colspan="4" class="span9"><span class="pull-right"><strong>Net-Total TK.</strong> =</span></td>
+                                        <td class="span2"><strong id="subTotal">{{ entity.netTotal|number_format }}</strong></td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
                                         <td class="span2"><strong id="subTotal">{{ entity.received|number_format }}</strong></td>
                                      </tr>
+
                                      <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
                                         <td class="span2"><strong id="subTotal">{{ entity.due|number_format }}</strong></td>
@@ -134,10 +139,9 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if ( entity.process == 'Done') %}
-                                    <a  href="javascript:"  data-url="{{ path('medicine_sales_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
-                                    {% endif %}
-                                    <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
+
+                                    <span  href="javascript:" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;{{ entity.process }}</span>
+                                   <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>
                            </div>
                         </div>

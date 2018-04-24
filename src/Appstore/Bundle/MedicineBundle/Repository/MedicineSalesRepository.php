@@ -318,4 +318,254 @@ class MedicineSalesRepository extends EntityRepository
     }
 
 
+    public function reportSalesOverview(User $user ,$data)
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('sum(s.subTotal) as subTotal , sum(s.netTotal) as total ,sum(s.received) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branch = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+
+    public  function reportSalesItemPurchaseSalesOverview(User $user, $data = array()){
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.medicineSalesItems','si');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->addSelect('COUNT(si.id) AS totalItem');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(si.quantity * si.salesPrice) AS salesPrice');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
+    public function reportSalesTransactionOverview(User $user , $data = array())
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.transactionMethod','t');
+        $qb->select('t.name as transactionName , sum(s.subTotal) as subTotal , sum(s.netTotal) as total ,sum(s.received) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+        $qb->groupBy("s.transactionMethod");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+    }
+
+    public function reportSalesProcessOverview(User $user,$data)
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('s.process as name , sum(s.subTotal) as subTotal , sum(s.netTotal) as total ,sum(s.received) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch")->setParameter('branch', $userBranch);
+        }
+        $qb->groupBy("s.process");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+    }
+
+    public function salesReport( User $user , $data)
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.salesBy', 'u');
+        $qb->leftJoin('s.transactionMethod', 't');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('t.name as transactionMethod');
+        $qb->addSelect('s.id as id');
+        $qb->addSelect('s.created as created');
+        $qb->addSelect('s.process as process');
+        $qb->addSelect('s.invoice as invoice');
+        $qb->addSelect('(s.due) as due');
+        $qb->addSelect('(s.subTotal) as subTotal');
+        $qb->addSelect('(s.netTotal) as total');
+        $qb->addSelect('(s.received) as payment');
+        $qb->addSelect('(s.discount) as discount');
+        $qb->addSelect('(s.vat) as vat');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if(!empty($userBranch)){
+            $qb->andWhere("s.branches =".$userBranch);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('s.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+    public function salesUserReport( User $user , $data)
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.salesBy', 'u');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('u.id as userId');
+        $qb->addSelect('SUM(s.due) as due');
+        $qb->addSelect('SUM(s.subTotal) as subTotal');
+        $qb->addSelect('SUM(s.netTotal) as total');
+        $qb->addSelect('SUM(s.received) as payment');
+        $qb->addSelect('SUM(s.discount) as discount');
+        $qb->addSelect('SUM(s.vat) as vat');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if(!empty($userBranch)){
+            $qb->andWhere("s.branches =".$userBranch);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('salesBy');
+        $qb->orderBy('total','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+
+    public function salesPurchasePriceReport(User $user,$data,$x)
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $ids = array();
+        foreach ($x as $y){
+            $ids[]=$y['id'];
+        }
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.medicineSalesItems','si');
+        $qb->select('s.id as salesId');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $qb->andWhere("s.id IN (:salesId)")->setParameter('salesId', $ids);
+        if(!empty($userBranch)){
+            $qb->andWhere("s.branches =".$userBranch);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('totalPurchaseAmount','DESC');
+        $qb->groupBy('salesId');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= array();
+        foreach ($result as $row ){
+            $array[$row['salesId']]= $row['totalPurchaseAmount'];
+        }
+        return $array;
+    }
+
+    public  function reportSalesItem(User $user, $data=''){
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $group = isset($data['group']) ? $data['group'] :'medicineStock';
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.medicineSalesItems','si');
+        $qb->join('si.medicinePurchaseItem','item');
+        $qb->join('si.medicineStock','m');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->addSelect('SUM(si.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(si.salesPrice) AS salesPrice');
+        $qb->addSelect('m.name AS name');
+        if($group == 'purchaseItem') {
+            $qb->join('stock.purchaseItem','pi');
+            $qb->addSelect('pi.barcode AS barcode');
+        }
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+        $qb->groupBy('si.'.$group);
+        $qb->orderBy('s.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+    }
+
+    public function salesUserPurchasePriceReport(User $user,$data)
+    {
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.salesBy', 'u');
+        $qb->join('s.medicineSalesItems','si');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if(!empty($userBranch)){
+            $qb->andWhere("s.branches =".$userBranch);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('totalPurchaseAmount','DESC');
+        $qb->groupBy('salesBy');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= array();
+        foreach ($result as $row ){
+            $array[$row['salesBy']]= $row['totalPurchaseAmount'];
+        }
+        return $array;
+    }
+
+
 }

@@ -43,13 +43,12 @@ $(document).on('change', '.transactionMethod', function() {
 $(document).on('change', '#salesitem_stockName', function() {
 
     var medicine = $('#salesitem_stockName').val();
-    alert(medicine);
     $.ajax({
         url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#salesitem_barcode').html(obj['purchaseItems']);
+            $('#salesitem_barcode').html(obj['purchaseItems']).focus();
             $('#salesitem_salesPrice').val(obj['salesPrice']);
         }
     })
@@ -79,7 +78,7 @@ $('form#salesItemForm').on('keypress', '.input', function (e) {
                 $('#addParticular').focus();
                 break;
             case 'addParticular':
-                $('#salesitem_medicineStock').select2('open');
+                $('#salesitem_stockName').select2('open');
                 break;
         }
         return false;
@@ -136,8 +135,7 @@ var form = $("#salesItemForm").validate({
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);
                 $('#msg').html(obj['msg']);
-                $('#salesitem_salesPrice').val('');
-                $('#salesitem_quantity').val('');
+                $("#salesitem_stockName").select2("val", "");
                 $('#salesItemForm')[0].reset();
             }
         });
@@ -164,7 +162,7 @@ $('#invoiceParticulars').on("click", ".delete", function() {
     })
 });
 
-$(document).on('change', '#sales_discount', function() {
+$(document).on('keyup', '#sales_discount', function() {
 
     var discountType = $('#discountType').val();
     var discount = parseInt($('#sales_discount').val());
@@ -193,9 +191,9 @@ $(document).on('change', '#sales_discount', function() {
 
 });
 
-$(document).on('change', '#sales_payment , #sales_discount', function() {
+$(document).on('keyup', '#sales_received , #sales_discount', function() {
 
-    var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
+    var payment     = parseInt($('#sales_received').val()  != '' ? $('#sales_received').val() : 0 );
     var discount     = parseInt($('#sales_discount').val()  != '' ? $('#sales_discount').val() : 0 );
     var due =  parseInt($('#due').val());
     var dueAmount = (due-discount-payment);

@@ -229,6 +229,7 @@ class ReportController extends Controller
             'searchForm'            => $data,
         ));
     }
+
     public function salesStockItemAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -249,6 +250,7 @@ class ReportController extends Controller
             'searchForm' => $data,
         ));
     }
+
     public function salesUserAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -265,10 +267,6 @@ class ReportController extends Controller
             'searchForm'    => $data ,
         ));
     }
-
-
-
-
 
     public function categoryAction()
     {

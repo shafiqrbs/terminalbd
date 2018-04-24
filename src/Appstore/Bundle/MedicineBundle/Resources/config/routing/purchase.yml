@@ -2,6 +2,10 @@ medicine_purchase:
     path:     /
     defaults: { _controller: "MedicineBundle:Purchase:index" }
 
+medicine_purchase_item:
+    path:     /mediicne-expiration-item
+    defaults: { _controller: "MedicineBundle:Purchase:purchaseItem" }
+
 medicine_purchase_show:
     path:     /{id}/show
     defaults: { _controller: "MedicineBundle:Purchase:show" }
@@ -60,3 +64,10 @@ medicine_purchase_approved:
 medicine_purchase_particular_delete:
     path:     /{invoice}/{id}/particular-delete
     defaults: { _controller: "MedicineBundle:Purchase:invoiceParticularDelete" }
+
+medicine_purchaseitem_inline_update:
+    path:     /purchase-item-inline-update
+    defaults: { _controller: "MedicineBundle:Purchase:inlineUpdate" }
+    methods:  POST
+    options:
+            expose: true

@@ -35,11 +35,46 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Medicine Stock</div>
                         <div class="actions">
-                            <a href="{{ path('medicine_stock_new') }}"  class=" btn red"><i class="icon-plus-sign"></i> Add Medicine Stock</a>
+                            <a href="{{ path('medicine_stock_new') }}"  class=" btn red"><i class="icon-plus-sign"></i> Add Medicine</a>
+                            <a href="{{ path('medicine_stock_accesories_new') }}"  class=" btn black"><i class="icon-plus-sign"></i> Add Accessories</a>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
+                        <div class="row-fluid">
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid">
+                                    <div class="span3">
+                                        <input type="text" id="name" name="name"  class="span12 m-wrap" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine/accessories name ">
+                                    </div>
+                                    <div class="span3">
+                                        <select name="rackNo" id="rackNo" class="span12 m-wrap">
+                                            <option value="">Rack no</option>
+                                            {% for rack in racks %}
+                                                <option {% if searchForm.rack is defined and searchForm.rack == method.id %} selected="selected" {% endif %} value="{{ rack.id }}" >{{ rack.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span3">
+                                        <select name="process" id="process" class="span12 m-wrap">
+                                            <option  value="">Item Type</option>
+                                            <option {% if searchForm.mode is defined and searchForm.mode == 'mediicne' %} selected="selected" {% endif %} value="mediicne">Mediicne</option>
+                                            <option {% if searchForm.mode is defined and searchForm.mode == 'accessories' %} selected="selected" {% endif %} value="accessories">Accessories</option>
+                                        </select>
+                                    </div>
+                                    <div class="span3">
+                                        <div class="controls">
+                                            <div class="input-append span10">
+                                                <input type="text" id="sku"  name="sku"  class="span12 m-wrap" value="{% if searchForm.sku is defined %}{{ searchForm.sku }}{% endif %}"  autocomplete="off"  placeholder="Enter mediicne/accessories sku">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <!-- BEGIN FORM-->
                          <!-- END FORM-->
                         <div class="clearfix"><br/></div>
@@ -68,7 +103,11 @@
 
                                     <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
                                         <td class="numeric" >{{ entity.sku }}</td>
+                                        {% if entity.mode == 'accessories' %}
+                                        <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.accessoriesBrand.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        {% else %}
                                         <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        {% endif %}
                                         <td class="numeric" >{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}

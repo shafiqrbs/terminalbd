@@ -36,47 +36,55 @@ class InstantPurchaseController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineInstantPurchase')->findBy(array('medicineConfig' => $config,'mode'=>'medicine'),array('created'=>'DESC'));
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->findWithSearch($config,$data,1);
         $pagination = $this->paginate($entities);
-
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
         return $this->render('MedicineBundle:InstantPurchase:index.html.twig', array(
             'entities' => $pagination,
+            'racks' => $racks,
+            'searchForm' => $data,
         ));
     }
 
-    public function returnInstantPurchaseData(){
+    public function returnInstantPurchaseData($salesId){
 
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->getInstantPurchaseItem($config);
         $data = '';
+        /* @var $instant MedicinePurchaseItem */
         foreach ($invoiceParticulars as $instant){
             $quantity = $instant->getQuantity();
+            $remainingQnt = $instant->getRemainingQuantity();
             $purchasePrice = $instant->getPurchasePrice();
             $salesPrice = $instant->getSalesPrice();
+            $purchaseSubTotal = $instant->getPurchasePrice()* $instant->getQuantity();
             $subTotal = $instant->getSalesPrice()* $instant->getQuantity();
 
-            $data .='<tr id="remove-{ $instant->getMedicinePurchase()->getId() }">';
+            $data .="<tr id='removeInstantItem-{$instant->getId()}'>";
             $data .="<td class='numeric'>{$instant->getMedicinePurchase()->getMedicineVendor()->getCompanyName()}</td>";
             $data .="<td class='numeric' >{$instant->getMedicinePurchase()->getCreatedBy()}</td>";
             $data .="<td class='numeric' >{$instant->getMedicinePurchase()->getGrn()}</td>";
             $data .="<td class='numeric' >{$instant->getMedicineStock()->getName()}</td>";
             $data .="<td class='numeric' >{$purchasePrice}</td>";
+            $data .="<td class='numeric' >{$purchaseSubTotal}</td>";
             $data .="<td class='numeric' >{$salesPrice}</td>";
             $data .="<td class='numeric' >{$subTotal}</td>";
             $data .="<td class='numeric' >{$quantity}</td>";
+            $data .="<td class='numeric' >{$remainingQnt}</td>";
             $data .="<td class='numeric' >";
             $data .='<div class="input-append">';
-            $data .='<input type="number" id="quantity-{$instant->getId()}"  style="height: 20px!important;" name="quantity" max="{ $instant->getQuantity() }" required="required" class="span5 td-input input-number input" placeholder="quantity" aria-required="true">';
-            $data .='<button type="button" class="btn blue mini $instantSales" style="height: 25px" data-id="{$instant->getId()}"  data-url="/medicine/sales/{$instant->getId()}/{$instant->getId()}/medicine-instant-sales"> <span class="fa fa-save"></span> Add</button>';
-            $data .='<button type="button" class="btn red mini $instantDelete" style="height: 25px" id="{ $instant->getMedicinePurchase()->getId()}" data-url="/medicine/instant-purchase/{$instant->getMedicinePurchase()->getId()}/medicine-instant-purchase-delete"> <span class="fa fa-trash"></span></button>';
+            $data .="<input type='number' id='quantity-{$instant->getId()}'  style='height: 20px!important;' name='quantity' max='{$instant->getQuantity()}' required='required' class='span5 td-input input-number input' placeholder='quantity'>";
+            $data .="<input type='hidden' id='remainingQnt-{$instant->getId()}' name='remainingQnt-{$instant->getId()}' value='{$remainingQnt}'>";
+            $data .="<button type='button' class='btn blue mini instantSales' style='height: 25px' data-id='{$instant->getId()}'  data-url='/medicine/sales/{$salesId}/{$instant->getId()}/medicine-instant-sales'> <span class='fa fa-save'></span> Add</button>";
+            $data .="<button type='button' class='btn red mini instantDelete' style='height: 25px' id='{$instant->getId()}' data-url='/medicine/instant-purchase/{$instant->getId()}/medicine-instant-purchase-delete'> <span class='fa fa-trash'></span></button>";
             $data .='</div>';
             $data .='</td>';
             $data .='</tr>';
         }
         $data = array(
-            'invoiceParticulars' => $invoiceParticulars ,
+            'instantPurchaseItem' => $data ,
             'success' => 'success'
         );
 
@@ -100,12 +108,12 @@ class InstantPurchaseController extends Controller
         $entity->setDue($entity->getSubTotal());
         $purchaseBy = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username'=>$data['purchasesBy']));
         $entity->setPurchaseBy($purchaseBy);
-        $entity->setProcess('Done');
+        $entity->setProcess('In-progress');
+        $entity->setMode('instant');
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($entity,$data);
-        $msg = 'Medicine added successfully';
-        $result = $this->returnInstantPurchaseData($entity);
+        $result = $this->returnInstantPurchaseData($data['salesId']);
         return new Response(json_encode($result));
         exit;
     }
@@ -127,15 +135,13 @@ class InstantPurchaseController extends Controller
     public function instantPurchaseDeleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $purchase = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->find($id);
+        $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($id);
         /* @var $item MedicinePurchaseItem */
-        foreach ($purchase->getMedicinePurchaseItems() as $item ){
-          if(empty($item->getSalesQuantity())) {
-              $this->removeInstantPurchaseItem($item);
-              $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock());
-          }
+        if(empty($item->getSalesQuantity())) {
+            $this->removeInstantPurchaseItem($item);
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock());
         }
-        $em->remove($purchase);
+        $em->remove($item->getMedicinePurchase());
         $em->flush();
         exit;
     }

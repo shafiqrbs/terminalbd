@@ -39,6 +39,12 @@ class MedicineParticular
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="accessoriesBrand")
+     */
+    protected $accessoriesStockBrand;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)

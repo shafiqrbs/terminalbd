@@ -15,11 +15,25 @@ medicine_stock_create:
     defaults: { _controller: "MedicineBundle:MedicineStock:create" }
     methods:  POST
 
+medicine_stock_accesories_new:
+    path:     /new-accessories
+    defaults: { _controller: "MedicineBundle:MedicineStock:accessories" }
+
+medicine_stock_accessories_create:
+    path:     /create-accessories
+    defaults: { _controller: "MedicineBundle:MedicineStock:accessoriesCreate" }
+    methods:  POST
+
 medicine_stock_edit:
     path:     /{id}/edit
     defaults: { _controller: "MedicineBundle:MedicineStock:edit" }
 
 medicine_stock_update:
+    path:     /{id}/update
+    defaults: { _controller: "MedicineBundle:MedicineStock:update" }
+    methods:  [POST, PUT]
+
+medicine_stock_accessories_update:
     path:     /{id}/update
     defaults: { _controller: "MedicineBundle:MedicineStock:update" }
     methods:  [POST, PUT]

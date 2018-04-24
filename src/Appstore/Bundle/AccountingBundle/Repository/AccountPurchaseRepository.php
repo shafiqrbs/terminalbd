@@ -8,6 +8,8 @@ use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Doctrine\ORM\EntityRepository;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+
 
 /**
  * AccountPurchaseRepository
@@ -200,6 +202,36 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setGlobalOption($entity->getDmsConfig()->getGlobalOption());
         $accountPurchase->setDmsPurchase($entity);
         $accountPurchase->setDmsVendor($entity->getDmsVendor());
+        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
+        $accountPurchase->setPurchaseAmount($entity->getNetTotal());
+        $accountPurchase->setPayment($entity->getPayment());
+        $accountPurchase->setProcessHead('Purchase');
+        $accountPurchase->setReceiveDate($entity->getReceiveDate());
+        $accountPurchase->setBalance(($balance + $entity->getNetTotal()) - $accountPurchase->getPayment() );
+        $accountPurchase->setProcess('approved');
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $em->persist($accountPurchase);
+        $em->flush();
+        if($accountPurchase->getPayment() > 0 ){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        }
+        return $accountPurchase;
+
+    }
+
+    public function insertMedicineAccountPurchase(MedicinePurchase $entity)
+    {
+
+        $data = array('medicineVendor' => $entity->getMedicineVendor()->getCompanyName());
+        $global = $entity->getMedicineConfig()->getGlobalOption();
+        $result = $this->accountPurchaseOverview($global,$data);
+        $balance = ( $result['purchaseAmount'] - $result['payment']);
+
+        $em = $this->_em;
+        $accountPurchase = new AccountPurchase();
+        $accountPurchase->setGlobalOption($global);
+        $accountPurchase->setMedicinePurchase($entity);
+        $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());

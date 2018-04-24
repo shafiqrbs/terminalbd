@@ -1,0 +1,28 @@
+medicine_report_purchase_summary:
+    path:     /purchase-overview
+    defaults: { _controller: "MedicineBundle:Report:purchaseOverview" }
+
+medicine_report_purchase_details:
+    path:     /purchase-details
+    defaults: { _controller: "MedicineBundle:Report:purchaseDetails" }
+
+medicine_report_purchase_stock:
+    path:     /purchase-stock
+    defaults: { _controller: "MedicineBundle:Report:purchaseStockItem" }
+
+medicine_report_sales_summary:
+    path:     /sales-overview
+    defaults: { _controller: "MedicineBundle:Report:salesOverview" }
+
+medicine_report_sales_details:
+    path:     /sales-details
+    defaults: { _controller: "MedicineBundle:Report:salesDetails" }
+
+medicine_report_sales_stock:
+    path:     /sales-stock
+    defaults: { _controller: "MedicineBundle:Report:salesStockItem" }
+
+medicine_report_sales_user:
+    path:     /sales-user
+    defaults: { _controller: "MedicineBundle:Report:salesUser" }
+

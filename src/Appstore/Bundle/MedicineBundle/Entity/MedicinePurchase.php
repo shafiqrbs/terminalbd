@@ -105,7 +105,7 @@ class MedicinePurchase
      *
      * @ORM\Column(name="mode", type="string", length=30, nullable=true)
      */
-    private $mode ='medicine';
+     private $mode ='general';
 
 
     /**

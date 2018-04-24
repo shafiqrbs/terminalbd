@@ -6,7 +6,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3 class="category-title">
-                Purchase no #  <strong>{{ entity.invoice }}</strong>
+                Sales Invoice no #  <strong>{{ entity.invoice }}</strong>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -38,7 +38,7 @@
                 <div class="btn-group">
                     <a class="btn red" href="{{ path('medicine_sales_new') }}"><i class="icon-plus-sign"></i> Medicine Sales</a>
                     <a class="btn" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine</a>
-                    <a class="btn black" href="javascript:" data-url="{{ path('medicine_instant_purchase_load',{'sales':entity.id}) }}" id="instantPopup" ><i class="icon-plus-sign"></i> Instant Purchase</a>
+                    <a class="btn black" href="javascript:" data-url="{{ path('medicine_instant_purchase_load',{'sales':entity.id}) }}" id="instantPopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
                 </div>
             </div>
         </div>
@@ -361,7 +361,7 @@
                                 <select name="process" id="process" class="span12 m-wrap">
                                     <option value="save">Save & Continue</option>
                                     <option value="print">Save & Print</option>
-                                    <option value="Hold">Hold</option>
+                                    <option value="hold">Hold</option>
                                 </select>
                             </div>
                         </div>
@@ -380,7 +380,7 @@
                         <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.netTotal }}">
                         <div class="pull-right">
-                            <button type="submit" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Payment</button>
+                            <button type="button" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Payment</button>
                         </div>
                     </div>
                 </div>
@@ -422,6 +422,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('#medicineStock').focus();
+    jqueryLoad();
+    $('#salesitem_stockName').focus();
  {% endblock %}
 

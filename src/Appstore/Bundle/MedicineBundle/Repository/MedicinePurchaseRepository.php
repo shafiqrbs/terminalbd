@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -13,6 +14,46 @@ use Doctrine\ORM\EntityRepository;
  */
 class MedicinePurchaseRepository extends EntityRepository
 {
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        $grn = isset($data['grn'])? $data['grn'] :'';
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
+
+        if (!empty($grn)) {
+            $qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
+        }
+        if(!empty($vendor)){
+            $qb->andWhere("e.medicineVendor = :vendor")->setParameter('vendor', $vendor);
+        }
+        if (!empty($startDate) ) {
+            $datetime = new \DateTime($data['startDate']);
+            $start = $datetime->format('Y-m-d 00:00:00');
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $start);
+        }
+
+        if (!empty($endDate)) {
+            $datetime = new \DateTime($data['endDate']);
+            $end = $datetime->format('Y-m-d 23:59:59');
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $end);
+        }
+    }
+
+    public function findWithSearch($config,$data = array(),$instant = ''){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','ASC');
+        $qb->getQuery();
+        return  $qb;
+    }
 
     public function updatePurchaseTotalPrice(MedicinePurchase $entity)
     {
@@ -44,5 +85,102 @@ class MedicinePurchaseRepository extends EntityRepository
         return $entity;
 
     }
+
+    public function reportPurchaseOverview(User $user ,$data)
+    {
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.subTotal) as subTotal , sum(e.netTotal) as total ,sum(e.payment) as totalPayment ,  sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process = :process');
+        $qb->setParameter('process', 'Approved');
+        $this->handleSearchBetween($qb,$data);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function reportPurchaseTransactionOverview(User $user , $data = array())
+    {
+
+
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('e.transactionMethod','t');
+        $qb->select('t.name as transactionName , sum(e.subTotal) as subTotal , sum(e.netTotal) as total ,sum(e.payment) as totalPayment , count(e.id) as totalVoucher, sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process = :process');
+        $qb->setParameter('process', 'Approved');
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy("e.transactionMethod");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+    }
+
+    public function reportPurchaseProcessOverview(User $user,$data)
+    {
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('e.process as name , sum(e.subTotal) as subTotal , sum(e.netTotal) as total ,sum(e.payment) as totalPayment , count(e.id) as totalVoucher, sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy("e.process");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+    }
+
+
+    public function reportPurchaseModeOverview(User $user,$data)
+    {
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('e.mode as name , sum(e.subTotal) as subTotal , sum(e.netTotal) as total ,sum(e.payment) as totalPayment , count(e.id) as totalVoucher, sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process = :process');
+        $qb->setParameter('process', 'Approved');
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy("e.mode");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+    }
+
+    public function purchaseReport( User $user , $data)
+    {
+
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.purchaseBy', 'u');
+        $qb->leftJoin('e.transactionMethod', 't');
+        $qb->select('u.username as purchaseBy');
+        $qb->addSelect('t.name as transactionMethod');
+        $qb->addSelect('e.id as id');
+        $qb->addSelect('e.grn as grn');
+        $qb->addSelect('e.created as created');
+        $qb->addSelect('e.receiveDate as receiveDate');
+        $qb->addSelect('e.process as process');
+        $qb->addSelect('e.mode as mode');
+        $qb->addSelect('e.invoice as invoice');
+        $qb->addSelect('e.due as due');
+        $qb->addSelect('e.subTotal as subTotal');
+        $qb->addSelect('e.netTotal as total');
+        $qb->addSelect('e.payment as payment');
+        $qb->addSelect('e.discount as discount');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+
+
+
 
 }

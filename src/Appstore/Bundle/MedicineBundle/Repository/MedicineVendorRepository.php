@@ -30,6 +30,23 @@ class MedicineVendorRepository extends EntityRepository
 
     }
 
+    public function searchVendor(MedicineConfig $config,$q)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->select('e.companyName as id');
+        $query->addSelect('e.companyName as text');
+        $query->where($query->expr()->like("e.companyName", "'%$q%'"  ));
+        $query->andWhere("ic.id = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.id');
+        $query->orderBy('e.companyName', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
+
     public function checkInInsert(MedicineConfig $config , $vendor)
     {
         $entity = $this->findOneBy(array('medicineConfig' => $config,'companyName' => $vendor));

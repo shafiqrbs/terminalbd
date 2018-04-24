@@ -82,7 +82,8 @@ class BranchesController extends Controller
     private function createCreateForm(Branches $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new BranchesType($globalOption), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new BranchesType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('domain_branches_create'),
             'method' => 'POST',
             'attr' => array(
@@ -160,7 +161,8 @@ class BranchesController extends Controller
     private function createEditForm(Branches $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new BranchesType($globalOption), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new BranchesType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('domain_branches_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

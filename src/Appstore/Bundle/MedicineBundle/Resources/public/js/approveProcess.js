@@ -437,11 +437,11 @@ $(".select2StockMedicine").select2({
 
 });
 
-$(".select2Vendorx").select2({
+$(".select2VendorCompany").select2({
 
     placeholder: "Search vendor name",
     ajax: {
-        url: Routing.generate('medicine_vendor_search'),
+        url: Routing.generate('medicine_vendor_company_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -676,119 +676,3 @@ $(document).on( "click", ".btn-number-day", function(e){
         input.val(0);
     }
 });
-
-
-
-
-function jqueryLoad(){
-
-    $(".select2StockMedicine").select2({
-
-        placeholder: "Search vendor name",
-        ajax: {
-            url: Routing.generate('medicine_stock_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
-        formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('medicine_stock_name', { vendor : id}), {
-                dataType: "json"
-            }).done(function (data) {
-                return  callback(data);
-            });
-        },
-        allowClear: true,
-        minimumInputLength: 1
-
-    });
-
-    $( ".select2Vendor" ).autocomplete({
-        source: function( request, response ) {
-            $.ajax( {
-                url: Routing.generate('medicine_vendor_search'),
-                data: {
-                    term: request.term
-                },
-                success: function( data ) {
-                    response(data);
-                }
-            });
-        },
-        minLength: 1,
-        select: function( event, ui ) {
-            $("#vendor").val(ui.item.id); // save selected id to hidden input
-
-        }
-    });
-
-    $(".select2User").select2({
-
-        ajax: {
-
-            url: Routing.generate('domain_user_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('domain_user_name', { user : id}), {
-                dataType: "json"
-            }).done(function (data) {
-                return  callback(data);
-            });
-        },
-        allowClear: true,
-        minimumInputLength: 1
-    });
-
-    $('#instantPurchases').on("click", ".instantDelete", function() {
-
-        var url = $(this).attr("data-url");
-        var id = $(this).attr("id");
-        $.get(url, function(data, status){
-            $('#remove-'+id).hide();
-        });
-
-    });
-
-}
-

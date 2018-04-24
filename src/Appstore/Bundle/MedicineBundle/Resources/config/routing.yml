@@ -42,6 +42,10 @@ medicine_medicine_particular:
     resource: "@MedicineBundle/Resources/config/routing/particular.yml"
     prefix:   /particular
 
+medicine_medicine_report:
+    resource: "@MedicineBundle/Resources/config/routing/report.yml"
+    prefix:   /report
+
 medicine_homepage:
     path:     /
     defaults: { _controller: MedicineBundle:Default:index }

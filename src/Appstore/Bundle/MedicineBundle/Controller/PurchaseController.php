@@ -41,13 +41,31 @@ class PurchaseController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findBy(array('medicineConfig' => $config,'mode'=>'medicine'),array('created'=>'DESC'));
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
-
         return $this->render('MedicineBundle:Purchase:index.html.twig', array(
             'entities' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+    /**
+     * Lists all Vendor entities.
+     *
+     */
+    public function purchaseItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->findWithSearch($config,$data);
+        $pagination = $this->paginate($entities);
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        return $this->render('MedicineBundle:Purchase:purchaseItem.html.twig', array(
+            'entities' => $pagination,
+            'racks' => $racks,
+            'searchForm' => $data,
         ));
     }
     /**
@@ -164,7 +182,8 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
 
-        $expirationDate = ($data['purchaseItem']['expirationDate']);
+        $expirationStartDate = ($data['purchaseItem']['expirationStartDate']);
+        $expirationEndDate = ($data['purchaseItem']['expirationEndDate']);
         $entity = new MedicinePurchaseItem();
         $form = $this->createPurchaseItemForm($entity,$invoice);
         $form->handleRequest($request);
@@ -172,8 +191,15 @@ class PurchaseController extends Controller
         $stockItem = ($data['purchaseItem']['stockName']);
         $entity->setMedicineStock($this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem));
         $entity->setPurchaseSubTotal($entity->getPurchasePrice() * $entity->getQuantity());
-        $expirationDate = (new \DateTime($expirationDate));
-        $entity->setExpirationDate($expirationDate);
+        $entity->setRemainingQuantity($entity->getQuantity());
+        if(!empty($expirationStartDate)){
+            $expirationStartDate = (new \DateTime($expirationStartDate));
+            $entity->setExpirationStartDate($expirationStartDate);
+        }
+        if(!empty($expirationEndDate)) {
+            $expirationEndDate = (new \DateTime($expirationEndDate));
+            $entity->setExpirationEndDate($expirationEndDate);
+        }
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock());
@@ -219,12 +245,8 @@ class PurchaseController extends Controller
             $em->persist($purchase);
             $em->flush();
         }
-
-        $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseItems($purchase);
-        $subTotal = $purchase->getSubTotal() > 0 ? $purchase->getSubTotal() : 0;
-        $grandTotal = $purchase->getNetTotal() > 0 ? $purchase->getNetTotal() : 0;
-        $dueAmount = $purchase->getDue() > 0 ? $purchase->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        $result = $this->returnResultData($purchase);
+        return new Response(json_encode($result));
         exit;
     }
 
@@ -243,14 +265,17 @@ class PurchaseController extends Controller
             $deliveryDateTime = $data['medicinepurchase']['receiveDate'];
             $receiveDate = (new \DateTime($deliveryDateTime));
             $entity->setReceiveDate($receiveDate);
-            $entity->setProcess('Done');
+            $entity->setProcess('Complete');
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
             return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
         }
+        $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
+
         return $this->render('MedicineBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
+            'purchaseItem' => $purchaseItemForm->createView(),
             'form' => $editForm->createView(),
         ));
     }
@@ -336,6 +361,37 @@ class PurchaseController extends Controller
             'success',"Status has been changed successfully"
         );
         return $this->redirect($this->generateUrl('medicine_vendor'));
+    }
+
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        if($data['name'] == 'SalesPrice' and 0 < (float)$data['value']){
+            $process = 'set'.$data['name'];
+            $entity->$process((float)$data['value']);
+            $em->flush();
+        }
+
+        if($data['name'] == 'PurchasePrice' and 0 < (float)$data['value']){
+            $entity->setPurchasePrice((float)$data['value']);
+            $entity->setPurchaseSubTotal((float)$data['value'] * $entity->getQuantity());
+            $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($entity->getMedicinePurchase());
+        }
+        $salesQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($entity);
+        if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
+            $entity->setQuantity((int)$data['value']);
+            $entity->setPurchaseSubTotal((int)$data['value'] * $entity->getPurchasePrice());
+            $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock());
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($entity->getMedicinePurchase());
+        }
+        exit;
     }
 
     public function autoSearchAction(Request $request)

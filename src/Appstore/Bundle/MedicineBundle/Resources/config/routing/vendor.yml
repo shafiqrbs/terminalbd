@@ -3,8 +3,14 @@ medicine_vendor:
     defaults: { _controller: "MedicineBundle:Vendor:index" }
 
 medicine_vendor_search:
-    path:     /search
+    path:     /autocomplete-search
     defaults: { _controller: "MedicineBundle:Vendor:autoSearchAutoComplete" }
+    options:
+            expose: true
+
+medicine_vendor_company_search:
+    path:     /search
+    defaults: { _controller: "MedicineBundle:Vendor:autoSearch" }
     options:
             expose: true
 

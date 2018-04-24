@@ -5,6 +5,7 @@ namespace Appstore\Bundle\MedicineBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,6 +37,11 @@ class MedicineSales
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", inversedBy="medicineSales")
      **/
     private $medicineConfig;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="medicineSales")
+     **/
+    private $branch;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="medicineSales" , cascade={"remove"} )
@@ -922,6 +928,22 @@ class MedicineSales
     public function setSalesBy($salesBy)
     {
         $this->salesBy = $salesBy;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getBranch()
+    {
+        return $this->branch;
+    }
+
+    /**
+     * @param Branches $branch
+     */
+    public function setBranch($branch)
+    {
+        $this->branch = $branch;
     }
 
 

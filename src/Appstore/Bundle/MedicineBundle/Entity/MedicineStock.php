@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
@@ -31,6 +32,7 @@ class MedicineStock
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem", mappedBy="medicineStock")
+     * @ORM\OrderBy({"expirationDate" = "ASC"})
      **/
     private $medicinePurchaseItems;
 
@@ -56,11 +58,23 @@ class MedicineStock
     private $rackNo;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticular", inversedBy="accessoriesStockBrand")
+     **/
+    private $accessoriesBrand;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255,nullable = true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=20,nullable = true)
+     */
+    private $mode = 'medicine';
 
     /**
      * @var integer
@@ -523,6 +537,38 @@ class MedicineStock
     public function getMedicineSalesItems()
     {
         return $this->medicineSalesItems;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getAccessoriesBrand()
+    {
+        return $this->accessoriesBrand;
+    }
+
+    /**
+     * @param Particular $accessoriesBrand
+     */
+    public function setAccessoriesBrand($accessoriesBrand)
+    {
+        $this->accessoriesBrand = $accessoriesBrand;
     }
 
 }

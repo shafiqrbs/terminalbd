@@ -90,10 +90,11 @@
                                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
                                             <th class="span3">Name</th>
                                             <th class="span1">Expiration Date</th>
-                                            <th class="span1">Sales Price</th>
                                             <th class="span1">Purchase Price</th>
+                                            <th class="span1">Sales Price</th>
                                             <th class="span1">Qnt</th>
-                                            <th class="span1">Purchase Sub-total</th>
+                                            <th class="span1">Remin. Qnt</th>
+                                            <th class="span1">Sub-total</th>
                                          </tr>
                                         </thead>
                                         <tbody id="invoiceParticulars">
@@ -102,10 +103,11 @@
                                                 <tr id="remove-{{ item.id }}">
                                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
-                                                    <td class="span1">{{ item.expirationDate|date('d-m-Y') }}</td>
-                                                    <td class="span1">{{ item.salesPrice }}</td>
+                                                    <td class="span1">{% if item.expirationStartDate is not empty and item.expirationEndDate is not empty %}{{ item.expirationStartDate|date('M y') }} To {{ item.expirationEndDate|date('M y') }}{% endif %}</td>
                                                     <td class="span1">{{ item.purchasePrice }}</td>
+                                                    <td class="span1">{{ item.salesPrice }}</td>
                                                     <td class="span1">{{ item.quantity }}</td>
+                                                    <td class="span1">{{ item.remainingQuantity }}</td>
                                                     <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                                  </tr>
                                             {% endfor %}
@@ -140,7 +142,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if ( entity.process == 'Done') %}
+                                    {% if ( entity.process == 'Complete') %}
                                     <a  href="javascript:"  data-url="{{ path('medicine_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>

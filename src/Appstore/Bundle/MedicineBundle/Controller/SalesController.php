@@ -69,6 +69,7 @@ class SalesController extends Controller
         return $this->redirect($this->generateUrl('medicine_sales_edit', array('id' => $entity->getId())));
 
     }
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -131,8 +132,17 @@ class SalesController extends Controller
         $purchaseItems .='<option value="">--Select the Barcode--</option>';
         /* @var $item MedicinePurchaseItem */
         foreach ($stock->getMedicinePurchaseItems() as $item){
-            $date = $item->getExpirationDate()->format('Y-m-d');
-            $purchaseItems .= '<option value="'.$item->getId().'">'.$item->getBarcode().' - '.$date.'['.$item->getRemainingQuantity().']</option>';
+            if($item->getRemainingQuantity() > 0) {
+
+                if(!empty($item->getExpirationEndDate()) and !empty($item->getExpirationStartDate())){
+                    $expirationStartDate = $item->getExpirationStartDate()->format('M y');
+                    $expirationEndDate = $item->getExpirationEndDate()->format('M y');
+                    $expiration = $expirationStartDate.' To '.$expirationEndDate;
+                }else{
+                    $expiration='Expiry empty';
+                }
+                $purchaseItems .= '<option value="' . $item->getId() . '">' . $item->getBarcode() . ' - ' . $expiration . '[' . $item->getRemainingQuantity() . ']</option>';
+            }
         }
         return new Response(json_encode(array('purchaseItems' => $purchaseItems,'salesPrice'=> $stock->getSalesPrice())));
     }
@@ -163,7 +173,6 @@ class SalesController extends Controller
     public function addMedicineAction(Request $request, MedicineSales $invoice)
     {
 
-
         $data = $request->request->all();
         $entity = new MedicineSalesItem();
         $form = $this->createMedicineSalesItemForm($entity,$invoice);
@@ -171,13 +180,17 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity->setMedicineSales($invoice);
         $stockItem = ($data['salesitem']['stockName']);
-        $entity->setMedicineStock($this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem));
+        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
+        $entity->setMedicineStock($stock);
         $barcode = $data['salesitem']['barcode'];
         $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($barcode);
         $entity->setMedicinePurchaseItem($purchaseItem);
         $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
+        $entity->setPurchasePrice($stock->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'sales');
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -199,10 +212,11 @@ class SalesController extends Controller
         $salesItem->setQuantity($quantity);
         $salesItem->setSalesPrice($item->getSalesPrice());
         $salesItem->setSubTotal($salesItem->getSalesPrice() * $salesItem->getQuantity());
+        $salesItem->setPurchasePrice($item->getMedicineStock()->getPurchasePrice());
         $em->persist($salesItem);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseQuantity($item);
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock());
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock(),'sales');
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($sales);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -215,11 +229,15 @@ class SalesController extends Controller
     public function salesItemDeleteAction(MedicineSales $invoice, MedicineSalesItem $particular){
 
         $em = $this->getDoctrine()->getManager();
+        $item = $particular->getMedicinePurchaseItem();
+        $stock = $particular->getMedicineStock();
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
         $em->remove($particular);
         $em->flush();
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -274,27 +292,31 @@ class SalesController extends Controller
                 $entity->setCustomer($customer);
 
             } elseif(!empty($data['mobile'])) {
-
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
                 $entity->setCustomer($customer);
             }
-            if($data['process'] == 'Hold'){
+            if($data['process'] == 'hold'){
                 $entity->setProcess('Hold');
             }else{
+                $entity->setApprovedBy($this->getUser());
                 $entity->setProcess('Done');
             }
-            $entity->setDue($entity->getNetTotal() - $entity->getReceived());
-            if($entity->getDue() > 0){
-                $entity->setPaymentStatus('Due');
-            }else{
-                $entity->setPayment($entity->getNetTotal());
+
+            if ($entity->getNetTotal() <= $entity->getReceived()) {
+                $entity->setReceived($entity->getNetTotal());
                 $entity->setDue(0);
                 $entity->setPaymentStatus('Paid');
+            }else{
+                $entity->setPaymentStatus('Due');
+                $entity->setDue($entity->getNetTotal() - $entity->getReceived());
             }
             $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($entity);
-            return $this->redirect($this->generateUrl('medicine_sales_show', array('id' => $entity->getId())));
+            if($data['process'] == 'save' or $data['process'] == 'hold' ){
+                return $this->redirect($this->generateUrl('medicine_sales_new'));
+            }else{
+                return $this->redirect($this->generateUrl('medicine_sales_print_invoice', array('id' => $entity->getId())));
+            }
         }
         return $this->render('MedicineBundle:Sales:new.html.twig', array(
             'entity' => $entity,

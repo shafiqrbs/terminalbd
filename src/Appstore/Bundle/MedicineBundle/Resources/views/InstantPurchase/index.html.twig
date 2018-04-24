@@ -48,20 +48,42 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span4">
-                                            <div class="controls">
-
-                                            </div>
+                                        <div class="span3">
+                                            <input type="text" id="name" name="name"  class="span12 m-wrap" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine/accessories name ">
                                         </div>
-                                        <div class="span4">
-                                            <div class="controls">
-
-                                            </div>
+                                        <div class="span3">
+                                            <select name="rackNo" id="rackNo" class="span12 m-wrap">
+                                                <option value="">Rack no</option>
+                                                {% for rack in racks %}
+                                                    <option {% if searchForm.rack is defined and searchForm.rack == method.id %} selected="selected" {% endif %} value="{{ rack.id }}" >{{ rack.name }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
-                                        <div class="span4">
+                                        <div class="span3">
+                                            <select name="process" id="process" class="span12 m-wrap">
+                                                <option  value="">Item Type</option>
+                                                <option {% if searchForm.mode is defined and searchForm.mode == 'mediicne' %} selected="selected" {% endif %} value="mediicne">Mediicne</option>
+                                                <option {% if searchForm.mode is defined and searchForm.mode == 'accessories' %} selected="selected" {% endif %} value="accessories">Accessories</option>
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="sku"  name="sku"  class="span12 m-wrap" value="{% if searchForm.sku is defined %}{{ searchForm.sku }}{% endif %}"  autocomplete="off"  placeholder="Enter mediicne/accessories sku">
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <input type="text" id="vendor" name="vendor"  class="span12 m-wrap select2VendorCompany" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="endDate"  name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                        </div>
+                                        <div class="span3">
                                             <div class="controls">
-                                                <div class="input-append span11">
-                                                    <input type="text" id="name" name="name"  class="span11 m-wrap" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
+                                                <div class="input-append span10">
+                                                    <input type="text" id="grn"  name="grn"  class="span12 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off"  placeholder="Enter purchase grn no">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
@@ -70,12 +92,19 @@
                                         </div>
                                     </div>
                                 </form>
+
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Expiration</th>
+                                    <th class="numeric" >Barcode</th>
+                                    <th class="numeric" >Rack</th>
+                                    <th class="numeric" >Medicine Name</th>
+                                    <th class="numeric" >Qnt</th>
+                                    <th class="numeric" >Rmin. Qnt</th>
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Vendor Name</th>
                                     <th class="numeric" >Total</th>
@@ -88,16 +117,24 @@
 
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
-                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.grn }}</td>
-                                        <td class="numeric" >{% if entity.dmsVendor is defined and entity.dmsVendor is not empty %}{{ entity.dmsVendor.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.netTotal|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
-                                        <td class="numeric" >{{ entity.payment|number_format }}</td>
+                                        <td class="numeric" >{{ entity.medicinePurchase.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{% if entity.expirationStartDate is not empty and entity.expirationEndDate is not empty %}{{ entity.expirationStartDate|date('M y') }} To {{ entity.expirationEndDate|date('M y') }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.barcode }}</td>
+                                        <td class="numeric" >{{ entity.medicineStock.rackNo.name }}</td>
+                                        <td class="numeric" >{{ entity.medicineStock.name }}</td>
+                                        <td class="numeric" >{{ entity.quantity }}</td>
+                                        <td class="numeric" >{{ entity.remainingQuantity }}</td>
+                                        <td class="numeric" >{{ entity.medicinePurchase.grn }}</td>
+                                        <td class="numeric" >{% if entity.medicinePurchase.medicineVendor is defined and entity.medicinePurchase.medicineVendor is not empty %}{{ entity.medicinePurchase.medicineVendor.companyName }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.medicinePurchase.netTotal|number_format }}</td>
+                                        <td class="numeric" >{{ entity.medicinePurchase.payment|number_format }}</td>
+                                        <td class="numeric" >{{ (entity.medicinePurchase.netTotal - entity.medicinePurchase.payment)|number_format }}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'created' or entity.process == 'pending' %}
-                                            <a href="{{ path('medicine_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
-                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                            {% if entity.medicinePurchase.process == 'In-progress' %}
+                                            <a href="{{ path('medicine_purchase_edit', { 'id': entity.medicinePurchase.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
+                                            {% if entity.salesQuantity == 0 %}
+                                                <a title="Are you sure went to delete ?" id="{{ entity.medicinePurchase.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                            {% endif %}
                                             {% endif %}
                                             <a href="{{ path('medicine_purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                         </td>

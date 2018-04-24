@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Appstore\Bundle\MedicineBundle\Form\AccessoriesStockType;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,14 +41,12 @@ class MedicineStockController extends Controller
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($config,$data);
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
         $pagination = $this->paginate($entities);
-        $entity = new MedicineStock();
-        $form = $this->createCreateForm($entity);
         return $this->render('MedicineBundle:MedicineStock:index.html.twig', array(
-            'pagination' => $pagination,
-            'entity' => $entity,
-            'formShow'            => 'hide',
-            'form'   => $form->createView(),
+            'pagination'    => $pagination,
+            'racks' => $racks,
+            'searchForm' => $data,
         ));
 
     }
@@ -56,7 +55,17 @@ class MedicineStockController extends Controller
     {
         $entity = new MedicineStock();
         $form = $this->createCreateForm($entity);
-        return $this->render('MedicineBundle:MedicineStock:new.html.twig', array(
+        return $this->render('MedicineBundle:MedicineStock:medicine.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    public function accessoriesAction()
+    {
+        $entity = new MedicineStock();
+        $form = $this->createCreateAccessoriesForm($entity);
+        return $this->render('MedicineBundle:MedicineStock:accessories.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -91,7 +100,34 @@ class MedicineStockController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Required field does not input"
         );
-        return $this->render('MedicineBundle:MedicineStock:index.html.twig', array(
+        return $this->render('MedicineBundle:MedicineStock:medicine.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    public function accessoriesCreateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = new MedicineStock();
+        $form = $this->createCreateAccessoriesForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $entity->setMedicineConfig($config);
+            $entity->setMode('accessories');
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('medicine_stock'));
+        }
+        $this->get('session')->getFlashBag()->add(
+            'error',"Required field does not input"
+        );
+        return $this->render('MedicineBundle:MedicineStock:accessories.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -119,6 +155,21 @@ class MedicineStockController extends Controller
         return $form;
     }
 
+    private function createCreateAccessoriesForm(MedicineStock $entity)
+    {
+
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $form = $this->createForm(new AccessoriesStockType($config), $entity, array(
+            'action' => $this->generateUrl('medicine_stock_accessories_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
 
     /**
      * Displays a form to edit an existing MedicineStock entity.
@@ -131,10 +182,16 @@ class MedicineStockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find MedicineStock entity.');
         }
-        $editForm = $this->createEditForm($entity);
-        return $this->render('MedicineBundle:MedicineStock:new.html.twig', array(
+        if($entity->getMode() =='accessories'){
+            $editForm = $this->createEditAccessoriesForm($entity);
+            $template = 'accessories';
+        }else{
+            $editForm = $this->createEditForm($entity);
+            $template = 'medicine';
+        }
+        return $this->render('MedicineBundle:MedicineStock:'.$template.'.html.twig', array(
             'entity'            => $entity,
-            'formShow'            => 'show',
+            'formShow'          => 'show',
             'form'              => $editForm->createView(),
         ));
     }
@@ -159,6 +216,19 @@ class MedicineStockController extends Controller
         ));
         return $form;
     }
+     private function createEditAccessoriesForm(MedicineStock $entity)
+    {
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $form = $this->createForm(new AccessoriesStockType($config), $entity, array(
+            'action' => $this->generateUrl('medicine_stock_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
     /**
      * Edits an existing MedicineStock entity.
      *
@@ -173,7 +243,13 @@ class MedicineStockController extends Controller
             throw $this->createNotFoundException('Unable to find MedicineStock entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        if($entity->getMode() =='accessories'){
+            $editForm = $this->createEditAccessoriesForm($entity);
+            $template = 'accessories';
+        }else{
+            $editForm = $this->createEditForm($entity);
+            $template = 'medicine';
+        }
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -183,9 +259,10 @@ class MedicineStockController extends Controller
             );
             return $this->redirect($this->generateUrl('medicine_stock'));
         }
-        return $this->render('MedicineBundle:MedicineStock:new.html.twig', array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
+
+        return $this->render('MedicineBundle:MedicineStock:'.$template.'.html.twig', array(
+            'entity'            => $entity,
+            'form'              => $editForm->createView(),
         ));
     }
     /**

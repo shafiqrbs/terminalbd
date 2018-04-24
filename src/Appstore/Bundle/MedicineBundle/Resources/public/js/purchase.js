@@ -42,6 +42,7 @@ $(document).on('change', '#purchaseItem_stockName', function() {
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
+            $('#purchaseItem_expirationStartDate').focus();
             $('#purchaseItem_salesPrice').val(obj['salesPrice']);
             $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
         }
@@ -87,7 +88,8 @@ var form = $("#purchaseItemForm").validate({
         "purchaseItem[purchasePrice]": {required: true},
         "purchaseItem[salesPrice]": {required: true},
         "purchaseItem[quantity]": {required: true},
-        "purchaseItem[expirationDate]": {required: true},
+        "purchaseItem[expirationStartDate]": {required: false},
+        "purchaseItem[expirationEndDate]": {required: false},
     },
 
     messages: {
@@ -124,11 +126,7 @@ var form = $("#purchaseItemForm").validate({
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);
                 $('#msg').html(obj['msg']);
-                $('#purchaseItem_salesPrice').val('');
-                $('#purchaseItem_purchasePrice').val('');
-                $('#purchaseItem_expirationDate').val('');
-                $('#purchaseItem_quantity').val('');
-                $("#purchaseItem_medicineStock").select2().select2("val","");
+                $("#purchaseItem_stockName").select2("val", "");
                 $('#purchaseItemForm')[0].reset();
             }
         });
@@ -150,33 +148,38 @@ $('#invoiceParticulars').on("click", ".delete", function() {
             $('#paymentTotal').val(obj['netTotal']);
             $('#due').val(obj['due']);
             $('.dueAmount').html(obj['due']);
+            $('#discount').html(obj['discount']);
             $('#msg').html(obj['msg']);
         }
     })
 });
 
 
-$(document).on('change', '#medicinepurchase_discount', function() {
+$(document).on('keyup', '#medicinepurchase_discount', function() {
 
-    var discountType = $('#discountType').val();
+    var purchaseId = $('#purchaseId').val();
     var discount = parseInt($('#medicinepurchase_discount').val());
     $.ajax({
-        url: Routing.generate('hms_invoice_temporary_discount_update'),
+        url: Routing.generate('medicine_purchase_discount_update'),
         type: 'POST',
-        data:'discount=' + discount+'&discountType='+discountType,
+        data:'discount=' + discount+'&invoice='+purchaseId,
         success: function(response) {
             obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.initialGrandTotal').html(obj['initialGrandTotal']);
-            $('.initialDiscount').html(obj['initialDiscount']);
-            $('#initialDiscount').val(obj['initialDiscount']);
+            $('#subTotal').html(obj['subTotal']);
+            $('.grandTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#due').val(obj['due']);
+            $('.dueAmount').html(obj['due']);
+            $('#msg').html(obj['msg']);
+            $('#discount').html(obj['discount']);
+
         }
 
     })
 
 });
 
-$(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
+$(document).on('keyup', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
 
     var payment     = parseInt($('#medicinepurchase_payment').val()  != '' ? $('#medicinepurchase_payment').val() : 0 );
     var discount     = parseInt($('#medicinepurchase_discount').val()  != '' ? $('#medicinepurchase_discount').val() : 0 );

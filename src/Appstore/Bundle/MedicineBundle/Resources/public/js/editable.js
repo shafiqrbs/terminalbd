@@ -12,12 +12,12 @@ var EditableInit = function () {
 }
 
 
-/*$(document).on("click", ".editable-submit", function() {
+$(document).on("click", ".editable-submit", function() {
     setTimeout(pageReload, 3000);
 });
 function pageReload() {
     location.reload();
-}*/
+}
 
 $(document).on("click", ".confirm", function() {
     var url = $(this).attr('data-url');
