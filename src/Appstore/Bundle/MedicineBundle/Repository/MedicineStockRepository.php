@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -29,6 +30,7 @@ class MedicineStockRepository extends EntityRepository
         $rackNo = isset($data['rackNo'])? $data['rackNo'] :'';
         $mode = isset($data['mode'])? $data['mode'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
+        $brandName = isset($data['brandName'])? $data['brandName'] :'';
 
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
@@ -36,12 +38,21 @@ class MedicineStockRepository extends EntityRepository
         if (!empty($sku)) {
             $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
         }
+         if (!empty($brandName)) {
+            $qb->andWhere($qb->expr()->like("e.brandName", "'%$brandName%'"  ));
+        }
         if(!empty($rackNo)){
             $qb->andWhere("e.rackNo = :rack")->setParameter('rack', $rackNo);
         }
         if(!empty($mode)){
             $qb->andWhere("e.mode = :mode")->setParameter('mode', $mode);
         }
+    }
+
+    public function checkDuplicateStockMedicine(MedicineConfig $config,MedicineBrand $brand)
+    {
+      $stock =  $this->findOneBy(array('medicineConfig'=>$config,'medicineBrand'=>$brand));
+      return $stock;
     }
 
     public function findWithSearch($config,$data){
@@ -94,6 +105,15 @@ class MedicineStockRepository extends EntityRepository
         if($fieldName == 'sales'){
             $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
             $stock->setSalesQuantity($qnt);
+        }elseif($fieldName == 'sales-return'){
+            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockUpdate($stock);
+            $item->setSalesReturnQuantity($quantity);
+        }elseif($fieldName == 'purchase-return'){
+            $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->purchaseReturnStockUpdate($stock);
+            $stock->setPurchaseReturnQuantity($qnt);
+        }elseif($fieldName == 'damage'){
+            $quantity = $em->getRepository('MedicineBundle:MedicineDamage')->damageStockItemUpdate($stock);
+            $stock->setDamageQuantity($quantity);
         }else{
             $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseStockItemUpdate($stock);
             $stock->setPurchaseQuantity($qnt);
@@ -235,7 +255,24 @@ class MedicineStockRepository extends EntityRepository
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());
-        $query->groupBy('e.id');
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchAutoCompleteBrandName($q, MedicineConfig $config)
+    {
+
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->select('e.brandName as id');
+        $query->addSelect('e.brandName as text');
+        $query->where($query->expr()->like("e.brandName", "'%$q%'"  ));
+        $query->andWhere("ic.id = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.brandName');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '30' );
         return $query->getQuery()->getResult();

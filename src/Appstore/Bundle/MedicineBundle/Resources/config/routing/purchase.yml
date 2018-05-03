@@ -49,6 +49,14 @@ medicine_purchase_particular_add:
     options:
             expose: true
 
+
+medicine_stock_item_create:
+    path:     /{id}/stock-item-create
+    defaults: { _controller: "MedicineBundle:Purchase:stockItemCreate" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_purchase_discount_update:
     path:     /purchase/dicount-update
     defaults: { _controller: "MedicineBundle:Purchase:invoiceDiscountUpdate" }

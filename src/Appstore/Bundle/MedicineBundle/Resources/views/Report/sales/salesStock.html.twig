@@ -42,15 +42,15 @@
                                 <div class="row-fluid">
                                     <div class="span3">
                                         <select name="group" id="group" class="span12 m-wrap">
-                                            <option value="item" {% if searchForm.group is defined and searchForm.group == 'medicineStock' %} selected="selected" {% endif %} >Group by Item</option>
-                                            <option value="purchaseItem" {% if searchForm.group is defined and searchForm.group == 'purchaseItem' %} selected="selected" {% endif %} >Group by Barcode</option>
+                                            <option value="medicineStock" {% if searchForm.group is defined and searchForm.group == 'medicineStock' %} selected="selected" {% endif %} >Group by Item</option>
+                                            <option value="medicinePurchaseItem" {% if searchForm.group is defined and searchForm.group == 'medicinePurchaseItem' %} selected="selected" {% endif %} >Group by Barcode</option>
                                         </select>
                                     </div>
                                     <div class="span3">
                                         <select name="process" id="process" class="span12 m-wrap">
                                             <option value=""> ---Process--- </option>
                                             <option value="Pending" {% if searchForm.process is defined and searchForm.process == 'Pending' %} selected="selected" {% endif %} >Pending</option>
-                                            <option value="In-progress" {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} >In-progress</option>
+                                            <option value="Hold" {% if searchForm.process is defined and searchForm.process == 'Hold' %} selected="selected" {% endif %} >Hold</option>
                                             <option value="Done" {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %}>Done</option>
                                             <option value="Returned" {% if searchForm.process is defined and searchForm.process == 'Returned' %} selected="selected" {% endif %}>Returned</option>
                                         </select>
@@ -70,30 +70,6 @@
                                     </div>
 
                                 </div>
-                                {#<div class="row-fluid">
-                                    <div class="span4">
-                                        <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
-                                    </div>
-                                    <div class="span4">
-                                        <input type="text" id="size" name="size"  class="span12 select2Size" value="{% if searchForm.size is defined %}{{ searchForm.size }}{% endif %}"  autocomplete="off" placeholder="Enter size name ">
-                                    </div>
-                                    <div class="span4">
-                                        <input type="text" id="color" name="color"  class="span12 select2Size" value="{% if searchForm.size is defined %}{{ searchForm.size }}{% endif %}"  autocomplete="off" placeholder="Enter size name ">
-                                    </div>
-                                </div>
-                                <br/>
-                                <div class="row-fluid">
-                                    <div class="span4">
-                                        <input type="text" id="brand" name="brand"  class="span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Enter brand name ">
-                                    </div>
-                                    <div class="span4">
-                                        <input type="text" id="" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
-                                    </div>
-                                    <div class="span4">
-                                        <input type="text" id="category" name="category"  class="span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Enter category name">
-                                    </div>
-                                </div>
-                                <br/>#}
                                 {% if option.isBranch == 1 %}
                                 <div class="row-fluid">
                                     <div class="span12">
@@ -136,7 +112,7 @@
                             <thead class="flip-content ">
                             <tr class="head-blue">
                                 <th class="numeric" ><i class="icon-reorder"></i></th>
-                                {% if searchForm.group is defined and  searchForm.group =='purchaseItem' %}
+                                {% if searchForm.group is defined and  searchForm.group =='medicinePurchaseItem' %}
                                 <th class="numeric" >Barcode</th>
                                 {% endif %}
                                 <th class="numeric" >Name</th>
@@ -154,7 +130,7 @@
                             {% for entity in entities %}
                                 <tr>
                                     <td>{{ loop.index }}</td>
-                                    {% if searchForm.group is defined and  searchForm.group =='purchaseItem' %}
+                                    {% if searchForm.group is defined and  searchForm.group =='medicinePurchaseItem' %}
                                     <td class="numeric" >{{ entity.barcode }}</td>
                                     {% endif %}
                                     <td class="numeric" >{{ entity.name }}</td>

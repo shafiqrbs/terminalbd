@@ -1,0 +1,10 @@
+inventory_sales_user:
+    path:     /
+    defaults: { _controller: "InventoryBundle:SalesUser:index" }
+
+inventory_sales_user_create:
+    path:     /create
+    defaults: { _controller: "InventoryBundle:SalesUser:create" }
+
+
+

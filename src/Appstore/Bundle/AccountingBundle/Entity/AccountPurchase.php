@@ -95,12 +95,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $dmsVendor;
 
         /**
-         * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", inversedBy="accountPurchase" )
-         * @ORM\JoinColumn(name="medicinePurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-         **/
-        private  $medicinePurchase;
-
-        /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="accountPurchases" )
          **/
         private  $medicineVendor;
@@ -173,6 +167,13 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\Column(name="accountRefNo", type="string", length=50, nullable=true)
          */
         private $accountRefNo;
+
+        /**
+         * @var string
+         *
+         * @ORM\Column(name="sourceInvoice", type="string", length=50, nullable=true)
+         */
+        private $sourceInvoice;
 
         /**
          * @var integer
@@ -746,21 +747,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->dmsVendor = $dmsVendor;
         }
 
-        /**
-         * @return MedicinePurchase
-         */
-        public function getMedicinePurchase()
-        {
-            return $this->medicinePurchase;
-        }
-
-        /**
-         * @param MedicinePurchase $medicinePurchase
-         */
-        public function setMedicinePurchase($medicinePurchase)
-        {
-            $this->medicinePurchase = $medicinePurchase;
-        }
 
         /**
          * @return MedicineVendor
@@ -808,6 +794,22 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setBusinessVendor($businessVendor)
         {
             $this->businessVendor = $businessVendor;
+        }
+
+        /**
+         * @return string
+         */
+        public function getSourceInvoice()
+        {
+            return $this->sourceInvoice;
+        }
+
+        /**
+         * @param string $sourceInvoice
+         */
+        public function setSourceInvoice($sourceInvoice)
+        {
+            $this->sourceInvoice = $sourceInvoice;
         }
 
     }

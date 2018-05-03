@@ -82,14 +82,16 @@ class MedicineStockController extends Controller
         $entity = new MedicineStock();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
-        if ($form->isValid()) {
+        $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config,$medicine);
+        if ($form->isValid() and empty($checkStockMedicine)){
             $em = $this->getDoctrine()->getManager();
             $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($entity->getName());
             $entity->setMedicineConfig($config);
             $entity->setMedicineBrand($medicine);
             $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
             $entity->setName($name);
+            $entity->setBrandName($medicine->getMedicineCompany()->getName());
+            $entity->setMode('medicine');
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -98,7 +100,7 @@ class MedicineStockController extends Controller
             return $this->redirect($this->generateUrl('medicine_stock'));
         }
         $this->get('session')->getFlashBag()->add(
-            'error',"Required field does not input"
+            'error',"Required or Duplicate has been exist"
         );
         return $this->render('MedicineBundle:MedicineStock:medicine.html.twig', array(
             'entity' => $entity,
@@ -116,7 +118,13 @@ class MedicineStockController extends Controller
 
         if ($form->isValid()) {
             $entity->setMedicineConfig($config);
-            $entity->setMode('accessories');
+            $brand = $entity->getAccessoriesBrand();
+            $entity->setBrandName($brand->getName());
+            if($brand->getParticularType()->getSlug() == 'accessories'){
+                $entity->setMode('accessories');
+            }elseif($brand->getParticularType()->getSlug() == 'herbal'){
+                $entity->setMode('herbal');
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -359,6 +367,23 @@ class MedicineStockController extends Controller
         return new JsonResponse(array(
             'id'=>$vendor,
             'text'=>$vendor
+        ));
+    }
+    public function autoSearchBrandAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoCompleteBrandName($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchBrandNameAction($brand)
+    {
+        return new JsonResponse(array(
+            'id' => $brand,
+            'text' => $brand
         ));
     }
 }

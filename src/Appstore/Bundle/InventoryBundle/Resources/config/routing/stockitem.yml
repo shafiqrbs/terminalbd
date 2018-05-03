@@ -4,6 +4,11 @@ inventory_stockitem:
     options:
         expose: true
 
+inventory_stockitem_short_list:
+    path:     /item-short-list
+    defaults: { _controller: "InventoryBundle:StockItem:itemShortList" }
+
+
 inventory_stockitem_show:
     path:     /{item}/show
     defaults: { _controller: "InventoryBundle:StockItem:show" }

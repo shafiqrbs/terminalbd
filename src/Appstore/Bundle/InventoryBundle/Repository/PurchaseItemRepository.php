@@ -412,6 +412,23 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
+    public function findItemWithPurchaseQuantity(InventoryConfig $inventory)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchase', 'p');
+        $qb->join('e.item', 'item');
+        $qb->select('sum(e.quantity)  as quantity');
+        $qb->addSelect('item.id  as itemId');
+        $qb->where("p.process = 'approved'");
+        $qb->andWhere("p.inventoryConfig = :purchase");
+        $qb->setParameter('purchase', $inventory->getId());
+        $qb->groupBy('item.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
 
 
 }

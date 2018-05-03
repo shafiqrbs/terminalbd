@@ -5,6 +5,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
+use Core\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,7 +113,8 @@ class InstantPurchaseController extends Controller
         $entity->setMode('instant');
         $em->persist($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($entity,$data);
+        $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($entity,$data);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->insertInstantSalesItem($data['salesId'],$purchaseItem,$data);
         $result = $this->returnInstantPurchaseData($data['salesId']);
         return new Response(json_encode($result));
         exit;
@@ -130,6 +132,57 @@ class InstantPurchaseController extends Controller
             )
         );
         return New Response($html);
+    }
+
+    public function instantPurchaseAddAction()
+    {
+        $html = $this->renderView('MedicineBundle:Sales:instantPurchaseItem.html.twig');
+        return New Response($html);
+    }
+
+    public function returnTemporaryResultData(User $user,$msg=''){
+
+        $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
+        $subTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
+        $data = array(
+            'subTotal' => $subTotal,
+            'initialGrandTotal' => $subTotal,
+            'salesItems' => $salesItems ,
+            'msg' => $msg ,
+            'success' => 'success'
+        );
+        return $data;
+
+    }
+
+
+    public function addInstantPurchaseItemAction(Request $request)
+    {
+
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $entity = new MedicinePurchase();
+        $vendor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->checkInInsert($config,$data['vendor']);
+        $entity->setMedicineConfig($config);
+        $entity->setMedicineVendor($vendor);
+        $entity->setInstantPurchase(1);
+        $entity->setSubTotal($data['purchasePrice'] * $data['purchaseQuantity']);
+        $entity->setNetTotal($entity->getSubTotal());
+        $entity->setApprovedBy($this->getUser());
+        $entity->setDue($entity->getSubTotal());
+        $purchaseBy = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username' => $data['purchasesBy']));
+        $entity->setPurchaseBy($purchaseBy);
+        $entity->setProcess('In-progress');
+        $entity->setMode('instant');
+        $em->persist($entity);
+        $em->flush();
+        $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($entity,$data);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertInstantSalesTemporaryItem($this->getUser(),$purchaseItem,$data);
+        $result = $this->returnTemporaryResultData($this->getUser());
+        return new Response(json_encode($result));
+        exit;
+
     }
 
     public function instantPurchaseDeleteAction($id)

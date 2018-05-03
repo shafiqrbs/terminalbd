@@ -30,10 +30,9 @@ class PurchaseItemType extends AbstractType
         $builder
 
             ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')))
-            ->add('expirationStartDate','text', array('attr'=>array('class'=>'m-wrap span3 dateCalendar input','placeholder'=>'Expiry start date')))
-            ->add('expirationEndDate','text', array('attr'=>array('class'=>'m-wrap span3 dateCalendar input','placeholder'=>'Expiry end date')))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span3 input','placeholder'=>'Purchase price')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span3 input','placeholder'=>'Sales price')))
+            ->add('expirationStartDate','text', array('attr'=>array('class'=>'m-wrap span4 dateCalendar input','placeholder'=>'Expiry start date')))
+            ->add('expirationEndDate','text', array('attr'=>array('class'=>'m-wrap span4 dateCalendar input','placeholder'=>'Expiry end date')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'Purchase price')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span5 form-control input-number input','placeholder'=>'quantity')))
             ;
     }

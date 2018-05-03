@@ -37,7 +37,7 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('medicine_sales_new') }}"><i class="icon-plus-sign"></i> Medicine Sales</a>
+                                <a class="btn red" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Point of Sales</a>
                                 <a class="btn" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine</a>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                                         <th class="span1">Sub-total</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="invoiceParticulars">
+                                    <tbody id="">
                                     {% if entity.medicineSalesItems is not empty %}
                                         {% for item in entity.medicineSalesItems %}
                                             <tr id="remove-{{ item.id }}">
@@ -114,33 +114,31 @@
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                                        <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                        <td class="span2"><strong id="">{{ entity.subTotal|number_format }}</strong></td>
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
-                                        <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong></td>
+                                        <td class="span2"><strong id="">{{ entity.discount|number_format }}</strong></td>
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Net-Total TK.</strong> =</span></td>
-                                        <td class="span2"><strong id="subTotal">{{ entity.netTotal|number_format }}</strong></td>
+                                        <td class="span2"><strong id="">{{ entity.netTotal|number_format }}</strong></td>
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
-                                        <td class="span2"><strong id="subTotal">{{ entity.received|number_format }}</strong></td>
+                                        <td class="span2"><strong id="">{{ entity.received|number_format }}</strong></td>
                                      </tr>
 
                                      <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
-                                        <td class="span2"><strong id="subTotal">{{ entity.due|number_format }}</strong></td>
+                                        <td class="span2"><strong id="">{{ entity.due|number_format }}</strong></td>
                                     </tr>
                                     </tfoot>
                                 </table>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
-                                <div class="pull-right" id="action-{{ entity.id }}">
-
-                                    <span  href="javascript:" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;{{ entity.process }}</span>
+                                <div class="pull-right">
                                    <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>
                            </div>
@@ -152,15 +150,25 @@
         </div>
     </div>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@MedicineBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@DmsBundle/Resources/public/js/purchase.js'
+    '@MedicineBundle/Resources/public/js/temporary-sales.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    jqueryTemporaryLoad();
+    jqueryInstantTemporaryLoad();
+    $('#salesTemporaryItem_stockName').focus();
 {% endblock %}
 

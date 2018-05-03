@@ -4,6 +4,7 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Form\ConfigType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -80,6 +81,24 @@ class MedicineConfigController extends Controller
         return $this->render('MedicineBundle:Config:manage.html.twig', array(
             'entity'        => $entity,
             'form'          => $editForm->createView(),
+        ));
+    }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $go = $this->getUser()->getGlobalOption();
+            $item = $this->getDoctrine()->getRepository('UserBundle:User')->searchAutoComplete($item,$go);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchUserNameAction($user)
+    {
+        return new JsonResponse(array(
+            'id'=>$user,
+            'text'=>$user
         ));
     }
 }

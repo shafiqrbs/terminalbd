@@ -34,13 +34,6 @@ class MedicinePurchase
      **/
     private  $medicineConfig;
 
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="medicinePurchase" , cascade={"remove"})
-     **/
-    private  $accountPurchase;
-
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="medicinePurchases" , cascade={"detach","merge"} )
      **/

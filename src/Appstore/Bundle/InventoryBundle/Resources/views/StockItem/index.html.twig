@@ -147,7 +147,7 @@
                                     <td class="numeric" >{{ entity.salesQuantity|abs }}</td>
                                     <td class="numeric" >{{ entity.salesQuantityReturn|abs }}</td>
                                     <td class="numeric" >{{ entity.damageQuantity|abs }}</td>
-                                    <td class="numeric" >{{ entity.purchaseQuantity - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity - entity.salesQuantityReturn)  }}</td>
+                                    <td class="numeric" >{{ entity.remainingQnt }}</td>
                                     <th class="numeric" >
                                         <a href="{{ path('inventory_stockitem_show', { 'item': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                     </th>

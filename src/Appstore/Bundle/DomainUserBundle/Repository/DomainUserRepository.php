@@ -1,7 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\DomainUserBundle\Repository;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * DomainUserRepository
@@ -26,5 +28,27 @@ class DomainUserRepository extends EntityRepository
         $profile->setDomainUser($entity);
         $em->flush();
 
+    }
+
+    public function updateSalesTarget( User $user,$value = 0)
+    {
+        $em = $this->_em;
+        $entity = $this->findOneBy(array('user' => $user));
+        $entity->setSales($value);
+        $em->persist($entity);
+        $em->flush();
+    }
+
+
+    public function getSalesUser(GlobalOption $option)
+    {
+       $qb = $this->createQueryBuilder('e');
+       $qb->join('e.user','u');
+       $qb->select('e.sales');
+       $qb->addSelect('u.id as id');
+       $qb->addSelect('u.username as username');
+       $qb->where('e.globalOption='.$option->getId());
+       $result = $qb->getQuery()->getArrayResult();
+       return $result;
     }
 }

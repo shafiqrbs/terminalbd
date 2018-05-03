@@ -1,3 +1,6 @@
+#hide{
+    display: none;
+}
 .customer{
     display: none;
 }
@@ -12,10 +15,12 @@
     display: none;
 }
 .particular-info{
-    background: #ddd;
+    background: #333333;
     padding: 10px;
     padding-left:0;
     padding-right: 4px;
+    border-bottom: 2px solid #9e9521fc;
+    border-top: 2px solid #9e9521fc;
 }
 
 div.checker {
@@ -248,84 +253,16 @@ li.active > a {
     margin: 0;
     padding: 0;
 }
-.dms-table {
-
-}
-.dms-table tr{
-    height:15px!important;
-    line-height: 15px!important;
-}
-.dms-table .dms-td{
-    height: 15px!important;
-    line-height: 15px;
-    padding: 1px!important;
-    width: 180px;
-
-}
-.dms-table .dms-td-border-none{
-    border: none!important;
-    text-align:right!important;
-}
-.dms-table .dms-td-border-bottom{
-    border-bottom:2px solid #4b8df8!important;
-}
-
-.dms-table .dms-td ul.rightTeeth , .dms-table .dms-td ul.leftTeeth{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.dms-table .dms-td ul.rightTeeth{
-    float:right;
-}
-.dms-table .dms-td ul.leftTeeth{
-
-}
-.dms-table .dms-td ul.leftTeeth li, .dms-table .dms-td ul.rightTeeth li {
-    float: left;
-    border: 1px solid #000;
-    margin: 1px;
-    height: 15px;
-    line-height: 15px;
-    padding: 5px;
-    padding-bottom: 1px;
-    padding-top: 1px;
-}
-.dms-table .dms-td ul.leftTeeth li.active , .dms-table .dms-td ul.rightTeeth li.active{
-    color: #d12610 !important;
-    border: 1px solid #d12610!important;
-}
-.dms-teeth-plan{
-    margin-top: -18px;
-}
-
-.dms-teeth-plan .dms-plan-td{
-    padding: 1px!important;
-    width: 275px;
-
-}
-.dms-teeth-plan .dms-plan-td-border-none{
-    border: none!important;
-    text-align:right!important;
-}
-.dms-teeth-plan .dms-plan-td-border-bottom{
-    border-bottom:red 1px solid !important;
-}
-.dms-teeth-plan ul.leftFormatTeeth ,.dms-teeth-plan ul.rightFormatTeeth{
-    list-style:none;
-}
-.dms-teeth-plan .leftFormatTeeth li, .dms-teeth-plan .rightFormatTeeth li {
-    float: left;
-    padding: 3px;
-}
-.dms-teeth-plan .dms-td ul.rightFormatTeeth{
-    float:right;
-}
 
 .checkbox-custom.focus{
     border:red 1px solid ;
 }
 .preview-print{
     float: right;
+}
+
+.sales-right .discount-type {
+    height: 20px!important;
+    border: 2px solid red !important;
+    margin-top: -4px!important;
 }

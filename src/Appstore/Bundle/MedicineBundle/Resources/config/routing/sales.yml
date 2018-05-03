@@ -2,6 +2,10 @@ medicine_sales:
     path:     /
     defaults: { _controller: "MedicineBundle:Sales:index" }
 
+medicine_sales_item:
+    path:     /sales-item
+    defaults: { _controller: "MedicineBundle:Sales:salesItem" }
+
 medicine_sales_show:
     path:     /{id}/show
     defaults: { _controller: "MedicineBundle:Sales:show" }

@@ -152,8 +152,8 @@ class SalesReturnController extends Controller
             $entity->setProcess('complete');
             $em->flush();
             $this->getDoctrine()->getRepository('InventoryBundle:SalesReturn')->updateSalesReturn($entity);
-            $em->getRepository('InventoryBundle:Item')->getItemSalesReturnUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesReturnStockItem($entity);
+            $em->getRepository('InventoryBundle:Item')->getItemSalesReturnUpdate($entity);
             $em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesReturnItem($entity);
             $accountSalesReturn = $em->getRepository('AccountingBundle:AccountSalesReturn')->insertAccountSalesReturn($entity);
             $em->getRepository('AccountingBundle:AccountCash')->insertSalesCashReturn($accountSalesReturn);

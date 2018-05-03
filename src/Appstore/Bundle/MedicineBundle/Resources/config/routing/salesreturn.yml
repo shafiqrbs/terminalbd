@@ -1,0 +1,21 @@
+medicine_sales_return:
+    path:     /
+    defaults: { _controller: "MedicineBundle:SalesReturn:index" }
+
+medicine_sales_return_create:
+    path:     /create
+    defaults: { _controller: "MedicineBundle:SalesReturn:create" }
+    methods:  POST
+
+medicine_sales_return_new:
+    path:     /{id}/new
+    defaults: { _controller: "MedicineBundle:SalesReturn:new" }
+
+
+medicine_sales_return_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "MedicineBundle:SalesReturn:delete" }
+
+medicine_sales_return_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "MedicineBundle:MedicinePurchaseReturn:approve" }

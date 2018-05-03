@@ -140,6 +140,13 @@ class AccountSales
      */
     private $amount;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="vat", type="float" , nullable=true)
+     */
+    private $vat;
+
 
     /**
      * @var float
@@ -148,6 +155,13 @@ class AccountSales
      */
     private $balance = 0;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sourceInvoice", type="string", length=50, nullable=true)
+     */
+    private $sourceInvoice;
 
     /**
      * @var string
@@ -635,6 +649,38 @@ class AccountSales
     public function setDpsInvoice($dpsInvoice)
     {
         $this->dpsInvoice = $dpsInvoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSourceInvoice()
+    {
+        return $this->sourceInvoice;
+    }
+
+    /**
+     * @param string $sourceInvoice
+     */
+    public function setSourceInvoice($sourceInvoice)
+    {
+        $this->sourceInvoice = $sourceInvoice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @param float $vat
+     */
+    public function setVat($vat)
+    {
+        $this->vat = $vat;
     }
 
 

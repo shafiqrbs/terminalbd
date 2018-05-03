@@ -50,7 +50,7 @@ class MedicinePurchaseRepository extends EntityRepository
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant) ;
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.created','ASC');
+        $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;
     }

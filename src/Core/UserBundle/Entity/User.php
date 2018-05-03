@@ -6,6 +6,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
 use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
@@ -25,6 +26,7 @@ use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -66,11 +68,11 @@ class User extends BaseUser
     private $isDelete = 0;
 
     /**
-     * @var boolean
+     * @var int
      *
-     * @ORM\Column(name="domainOwner", type="boolean", nullable=true)
+     * @ORM\Column(name="domainOwner", type="smallint", nullable=true)
      */
-    private $domainOwner = false;
+    private $domainOwner = 0;
 
     /**
      * @var boolean
@@ -210,6 +212,11 @@ class User extends BaseUser
      **/
 
     protected $emailBox;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\DomainUser", mappedBy="user" , cascade={"persist", "remove"})
+     **/
+    protected $domainUser;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", mappedBy="replyUser" , cascade={"persist", "remove"})
@@ -761,6 +768,11 @@ class User extends BaseUser
      */
     protected $medicineSalesCreatedBy;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary", mappedBy="user" , cascade={"persist", "remove"})
+     */
+    protected $medicineSalesTemporary;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="approvedBy" , cascade={"persist", "remove"})
      */
@@ -986,7 +998,7 @@ class User extends BaseUser
 
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -994,7 +1006,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -1327,21 +1339,6 @@ class User extends BaseUser
         return $this->orderApproved;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isDomainOwner()
-    {
-        return $this->domainOwner;
-    }
-
-    /**
-     * @param boolean $domainOwner
-     */
-    public function setDomainOwner($domainOwner)
-    {
-        $this->domainOwner = $domainOwner;
-    }
 
     /**
      * @return ServiceSales
@@ -1570,6 +1567,38 @@ class User extends BaseUser
     public function getMedicinePurchasesBy()
     {
         return $this->medicinePurchasesBy;
+    }
+
+    /**
+     * @return MedicineSalesTemporary
+     */
+    public function getMedicineSalesTemporary()
+    {
+        return $this->medicineSalesTemporary;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDomainOwner()
+    {
+        return $this->domainOwner;
+    }
+
+    /**
+     * @param int $domainOwner
+     */
+    public function setDomainOwner($domainOwner)
+    {
+        $this->domainOwner = $domainOwner;
+    }
+
+    /**
+     * @return DomainUser
+     */
+    public function getDomainUser()
+    {
+        return $this->domainUser;
     }
 
 

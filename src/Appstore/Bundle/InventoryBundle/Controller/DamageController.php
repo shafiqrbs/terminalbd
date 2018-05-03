@@ -292,8 +292,8 @@ class DamageController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDamageUpdate($entity);
             $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->insertDamageItem($entity);
+            $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDamageUpdate($entity);
             $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventoryDamageItem($entity);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertDamageTransaction($entity);
 

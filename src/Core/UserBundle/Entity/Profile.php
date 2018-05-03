@@ -54,11 +54,6 @@ class Profile
      **/
     protected $designation;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\DomainUser", inversedBy="profile" )
-     */
-    protected $domainUser;
-
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="profiles" )
      */
@@ -547,22 +542,6 @@ class Profile
     public function setPermanentAddress($permanentAddress)
     {
         $this->permanentAddress = $permanentAddress;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDomainUser()
-    {
-        return $this->domainUser;
-    }
-
-    /**
-     * @param mixed $domainUser
-     */
-    public function setDomainUser($domainUser)
-    {
-        $this->domainUser = $domainUser;
     }
 
 

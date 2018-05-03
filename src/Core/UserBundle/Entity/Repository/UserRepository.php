@@ -215,8 +215,8 @@ class UserRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.profile','p');
         $qb->andWhere("e.globalOption =".$option->getId());
-        $qb->andWhere('e.roles NOT LIKE :roles');
-        $qb->setParameter('roles', '%"ROLE_DOMAIN"%');
+        $qb->andWhere('e.domainOwner = 2');
+        $qb->andWhere('e.isDelete != 1');
         $qb->orderBy("p.name","ASC");
         $result = $qb->getQuery()->getResult();
         return $result;

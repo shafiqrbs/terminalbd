@@ -2,13 +2,15 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * DomainUser
  *
- * @ORM\Table()
+ * @ORM\Table("domain_user")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\DomainUserRepository")
  */
 class DomainUser
@@ -27,19 +29,17 @@ class DomainUser
      **/
     protected $globalOption;
 
-
     /**
-     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="domainUser" , cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="domainUser")
      **/
-    protected $profile;
-
+    protected $user;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="role", type="string", length=255)
+     * @ORM\Column(name="sales", type="float", nullable = true)
      */
-    private $role;
+    private $sales;
 
     /**
      * @var \DateTime
@@ -65,30 +65,6 @@ class DomainUser
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set role
-     *
-     * @param string $role
-     *
-     * @return DomainUser
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**
@@ -141,7 +117,7 @@ class DomainUser
 
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -149,7 +125,7 @@ class DomainUser
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -157,23 +133,7 @@ class DomainUser
     }
 
     /**
-     * @return mixed
-     */
-    public function getProfile()
-    {
-        return $this->profile;
-    }
-
-    /**
-     * @param mixed $profile
-     */
-    public function setProfile($profile)
-    {
-        $this->profile = $profile;
-    }
-
-    /**
-     * @param mixed $user
+     * @param User $user
      */
     public function setUser($user)
     {
@@ -189,15 +149,7 @@ class DomainUser
     }
 
     /**
-     * @return mixed
-     */
-    public function getStockItems()
-    {
-        return $this->stockItems;
-    }
-
-    /**
-     * @return mixed
+     * @return float
      */
     public function getSales()
     {
@@ -205,19 +157,11 @@ class DomainUser
     }
 
     /**
-     * @return mixed
+     * @param float $sales
      */
-    public function getPurchases()
+    public function setSales($sales)
     {
-        return $this->purchases;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
+        $this->sales = $sales;
     }
 
 

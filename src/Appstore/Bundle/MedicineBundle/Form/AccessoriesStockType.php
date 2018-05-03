@@ -34,16 +34,8 @@ class AccessoriesStockType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Purchase price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'MRP price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Purchase price')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'MRP price')))
             ->add('minQuantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Minimum')))
             ->add('maxQuantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Maximum')))
             ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Rack no'),
@@ -81,20 +73,22 @@ class AccessoriesStockType extends AbstractType
                         ->andWhere("pt.slug = 'medicine-rack'");
                 },
             ))
-            ->add('accessoriesBrand', 'entity', array(
+            ->add('accessoriesBrand', 'entity', [
                 'required'    => true,
+                'group_by'  => 'particularType.name',
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
-                'empty_value' => '---Select accessories brand ---',
+                'empty_value' => '---Select herbal/accessories brand ---',
                 'property' => 'name',
+                'choice_translation_domain' => true,
                 'attr'=>array('class'=>'m-wrap span12 inputs'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.particularType","pt")
                         ->where("e.status = 1")
                         ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
-                        ->andWhere("pt.slug = 'accessories-brand'");
+                        ->andWhere('pt.slug IN (:slugs)')->setParameter('slugs',array('herbal','accessories'));
                 },
-            ))
+            ])
             ->add('noDiscount')
         ;
     }

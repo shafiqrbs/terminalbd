@@ -49,6 +49,21 @@ class MedicineConfig
      **/
     private $medicineSales;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineConfig")
+     **/
+    private $medicineSalesReturns;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDamage", mappedBy="medicineConfig")
+     **/
+    private $medicineDamages;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary", mappedBy="medicineConfig")
+     **/
+    private $medicineSalesTemporary;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="medicineConfig")
      **/
@@ -436,6 +451,30 @@ class MedicineConfig
     public function getMedicineReverses()
     {
         return $this->medicineReverses;
+    }
+
+    /**
+     * @return MedicineSalesTemporary
+     */
+    public function getMedicineSalesTemporary()
+    {
+        return $this->medicineSalesTemporary;
+    }
+
+    /**
+     * @return MedicineDamage
+     */
+    public function getMedicineDamages()
+    {
+        return $this->medicineDamages;
+    }
+
+    /**
+     * @return MedicineSalesReturn
+     */
+    public function getMedicineSalesReturns()
+    {
+        return $this->medicineSalesReturns;
     }
 
 }

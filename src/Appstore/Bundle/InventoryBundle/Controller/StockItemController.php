@@ -45,6 +45,19 @@ class StockItemController extends Controller
         ));
     }
 
+    public function itemShortListAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:Item')->findWithShortListSearch($inventory,$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('InventoryBundle:StockItem:shortList.html.twig', array(
+            'entities' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
     public function barcodeStockAction()
     {
 

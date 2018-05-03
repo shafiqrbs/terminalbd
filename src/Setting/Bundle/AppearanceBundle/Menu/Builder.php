@@ -449,11 +449,19 @@ class Builder extends ContainerAware
             $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_hospital'))->setAttribute('icon', 'icon-th-list');
 
         }
+        $medicine = array('miss');
+        $result = array_intersect($arrSlugs, $medicine);
+        if (!empty($result)) {
+            $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_medicine'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_medicine'))->setAttribute('icon', 'icon-th-list');
+
+        }
         $restaurant = array('restaurant');
         $result = array_intersect($arrSlugs, $restaurant);
         if (!empty($result)) {
-            $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_restaurant'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_restaurant'))->setAttribute('icon', 'icon-th-list');
+          /*  $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_restaurant'))->setAttribute('icon', 'icon-th-list');
+          */
+          $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_restaurant'))->setAttribute('icon', 'icon-th-list');
 
         }
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
@@ -541,8 +549,10 @@ class Builder extends ContainerAware
                     ->setAttribute('dropdown', true);
                 $menu['Sales']['Reports']->addChild('Sales Overview', array('route' => 'inventory_report_sales_overview'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('Periodic Sales Item', array('route' => 'inventory_report_sales_item'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Sales Item Details', array('route' => 'inventory_report_sales_item_details'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('Sales by User', array('route' => 'inventory_report_sales_user'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('User Sales Target', array('route' => 'inventory_report_sales_user_target'))->setAttribute('icon', 'icon-bar-chart');
             }
 
 
@@ -589,11 +599,11 @@ class Builder extends ContainerAware
             $menu['Inventory']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
             $menu['Inventory']['Manage Stock']->addChild('Stock Item', array('route' => 'inventory_item'))
                 ->setAttribute('icon', 'icon-hdd');
-            $menu['Inventory']['Manage Stock']->addChild('Purcahse Item', array('route' => 'inventory_purchaseitem'))->setAttribute('icon', 'icon-hdd');
+            $menu['Inventory']['Manage Stock']->addChild('Purchase Item', array('route' => 'inventory_purchaseitem'))->setAttribute('icon', 'icon-hdd');
             $menu['Inventory']['Manage Stock']->addChild('Barcode wise Stock', array('route' => 'inventory_barcode_branch_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Manage Stock']->addChild('Barcode Stock Details', array('route' => 'inventory_barcode_stock'))->setAttribute('icon', 'icon-bar-chart');
-            $menu['Inventory']['Manage Stock']->addChild('Stock Item Details', array('route' => 'inventory_stockitem'))
-                ->setAttribute('icon', 'icon-hdd');
+            $menu['Inventory']['Manage Stock']->addChild('Stock Item Details', array('route' => 'inventory_stockitem'))->setAttribute('icon', 'icon-hdd');
+            $menu['Inventory']['Manage Stock']->addChild('Stock Short List', array('route' => 'inventory_stockitem_short_list'))->setAttribute('icon', 'icon-hdd');
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
             if ($inventory->getBarcodePrint() == 1) {
@@ -635,6 +645,8 @@ class Builder extends ContainerAware
 
             $menu['Inventory']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
                 ->setAttribute('icon', 'icon icon-cogs');
+            $menu['Inventory']->addChild('Target Sales', array('route' => 'inventory_sales_user'))
+                ->setAttribute('icon', 'fa fa-group');
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {
 
@@ -1035,6 +1047,8 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-th-large');
         $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
             ->setAttribute('icon', 'icon-list');
+        $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
+            ->setAttribute('icon', 'icon-list');
         $menu['Medicine']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
         if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
             $menu['Medicine']->addChild('Manage Stock')
@@ -1047,6 +1061,10 @@ class Builder extends ContainerAware
             $menu['Medicine']['Manage Stock']->addChild('Purchase', array('route' => 'medicine_purchase'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Manage Stock']->addChild('Instant Purchase', array('route' => 'medicine_instantpurchase'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Manage Stock']->addChild('Purchase Return', array('route' => 'medicine_purchase_return'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Manage Stock']->addChild('Damage', array('route' => 'medicine_damage'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Manage Stock']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
             $menu['Medicine']->addChild('Master Data')
@@ -1065,7 +1083,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Reports']->addChild('Product Wise Sales', array('route' => 'medicine_report_sales_stock'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Stock Wise Sales', array('route' => 'medicine_report_sales_user'))
+            $menu['Medicine']['Reports']->addChild('Customer Wise Sales', array('route' => 'medicine_report_sales_user'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Reports']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
                 ->setAttribute('icon', 'icon-th-list');

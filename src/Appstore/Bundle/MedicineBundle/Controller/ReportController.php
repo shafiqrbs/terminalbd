@@ -43,6 +43,7 @@ class ReportController extends Controller
         $transactionCash = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesTransactionOverview($user,$data);
         $salesProcess = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesProcessOverview($user,$data);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+
         return $this->render('MedicineBundle:Report:sales/salesOverview.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'cashOverview'              => $cashOverview ,
@@ -72,7 +73,7 @@ class ReportController extends Controller
             'entities'              => $pagination ,
             'purchasePrice'         => $salesPurchasePrice ,
             'cashOverview'          => $cashOverview,
-            'purchaseSalesItem'     => $purchaseSalesPrice,
+            'purchaseSalesPrice'    => $purchaseSalesPrice,
             'transactionMethods'    => $transactionMethods ,
             'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm'            => $data,

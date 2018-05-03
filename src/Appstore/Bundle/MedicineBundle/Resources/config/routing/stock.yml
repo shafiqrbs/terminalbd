@@ -65,3 +65,15 @@ medicine_stock_name:
     defaults: { _controller: "MedicineBundle:MedicineStock:searchVendorName" }
     options:
             expose: true
+
+medicine_stock_brand_search:
+    path:     /search-brand
+    defaults: { _controller: "MedicineBundle:MedicineStock:autoSearchBrand" }
+    options:
+            expose: true
+
+medicine_stock_brand_name:
+    path:      /{brand}/brand-name
+    defaults: { _controller: "MedicineBundle:MedicineStock:searchBrandName" }
+    options:
+            expose: true

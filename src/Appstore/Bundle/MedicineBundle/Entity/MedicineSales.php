@@ -140,6 +140,13 @@ class MedicineSales
     /**
      * @var string
      *
+     * @ORM\Column(name="discountType", type="string", length=20, nullable=true)
+     */
+    private $discountType ='percentage';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="transactionId", type="string", length=100, nullable=true)
      */
     private $transactionId;
@@ -181,12 +188,13 @@ class MedicineSales
      */
     private $discount;
 
+
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="percentage", type="smallint" , length=3 , nullable=true)
+     * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
      */
-    private $percentage;
+    private $discountCalculation;
 
 
     /**
@@ -749,23 +757,6 @@ class MedicineSales
         $this->due = $due;
     }
 
-     /**
-     * @return int
-     */
-    public function getPercentage()
-    {
-        return $this->percentage;
-    }
-
-    /**
-     * @param int $percentage
-     */
-    public function setPercentage($percentage)
-    {
-        $this->percentage = $percentage;
-    }
-
-
 
     /**
      * @return boolean
@@ -944,6 +935,38 @@ class MedicineSales
     public function setBranch($branch)
     {
         $this->branch = $branch;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountCalculation()
+    {
+        return $this->discountCalculation;
+    }
+
+    /**
+     * @param float $discountCalculation
+     */
+    public function setDiscountCalculation($discountCalculation)
+    {
+        $this->discountCalculation = $discountCalculation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountType()
+    {
+        return $this->discountType;
+    }
+
+    /**
+     * @param string $discountType
+     */
+    public function setDiscountType($discountType)
+    {
+        $this->discountType = $discountType;
     }
 
 

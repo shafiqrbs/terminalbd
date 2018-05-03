@@ -7,6 +7,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesType;
@@ -52,6 +53,26 @@ class SalesController extends Controller
         ));
     }
 
+    /**
+     * Lists all Vendor entities.
+     *
+     */
+    public function salesItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->salesItemLists($this->getUser(),$data);
+        $pagination = $this->paginate($entities);
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+        return $this->render('MedicineBundle:Sales:salesItem.html.twig', array(
+            'entities' => $pagination,
+            'transactionMethods' => $transactionMethods,
+            'searchForm' => $data,
+        ));
+    }
+
+
+
     public function newAction()
     {
 
@@ -86,6 +107,23 @@ class SalesController extends Controller
             'salesItem' => $salesItemForm->createView(),
             'form' => $editForm->createView(),
         ));
+    }
+
+
+    private function createMedicineSalesTemporaryForm(MedicineSalesTemporary $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new SalesType($globalOption,$location), $entity, array(
+            'action' => $this->generateUrl('medicine_sales_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'salesForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
     }
 
     /**
@@ -251,18 +289,21 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
-        $discount = $request->request->get('discount');
+        $discountCal = $request->request->get('discount');
         $invoice = $request->request->get('invoice');
         $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($invoice);
         $subTotal = $entity->getSubTotal();
         if($discountType == 'flat'){
-            $total = ($subTotal  - $discount);
+            $total = ($subTotal  - $discountCal);
+            $discount = $discountCal;
         }else{
-            $discount = ($subTotal*$discount)/100;
+            $discount = ($subTotal*$discountCal)/100;
             $total = ($subTotal  - $discount);
         }
         $vat = 0;
         if($total > $discount ){
+            $entity->setDiscountType($discountType);
+            $entity->setDiscountCalculation($discountCal);
             $entity->setDiscount(round($discount));
             $entity->setNetTotal(round($total + $vat));
             $entity->setDue(round($total + $vat));
@@ -312,6 +353,8 @@ class SalesController extends Controller
                 $entity->setDue($entity->getNetTotal() - $entity->getReceived());
             }
             $em->flush();
+            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             if($data['process'] == 'save' or $data['process'] == 'hold' ){
                 return $this->redirect($this->generateUrl('medicine_sales_new'));
             }else{

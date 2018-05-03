@@ -237,6 +237,30 @@ class SalesRepository extends EntityRepository
         return $array;
     }
 
+    public function monthlySales(User $user , $data =array())
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+
+        $compare = new \DateTime();
+        $year =  $compare->format('Y');
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT sales.salesBy_id as salesBy, MONTH (sales.created) as month,SUM(sales.total) AS total
+                FROM Sales as sales
+                WHERE sales.inventoryConfig_id = :inventoryConfig AND sales.process = :process  AND YEAR(sales.created) =:year
+                GROUP BY month , salesBy ORDER BY salesBy ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('inventoryConfig', $inventory);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+
+
+    }
+
     public function salesPurchasePriceReport(User $user,$data,$x)
     {
 
@@ -506,6 +530,45 @@ class SalesRepository extends EntityRepository
             $qb->setParameter('branch', $userBranch);
         }
         $qb->groupBy('si.'.$group);
+        $qb->orderBy('s.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+    }
+
+    public  function reportSalesItemDetails(User $user, $data=''){
+
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesItem','si');
+        $qb->join('si.sales','s');
+        $qb->leftJoin('s.customer','customer');
+        $qb->join('si.item','item');
+        $qb->join('si.purchaseItem','pi');
+        $qb->join('pi.purchase','purchase');
+        $qb->leftJoin('purchase.vendor','vendor');
+        $qb->select('s.created AS salesCreated');
+        $qb->addSelect('customer.name AS customerName');
+        $qb->addSelect('s.invoice AS salesInvoice');
+        $qb->addSelect('pi.barcode AS barcode');
+        $qb->addSelect('pi.expiredDate AS purchaseExpiredDate');
+        $qb->addSelect('purchase.grn AS purchaseGrn');
+        $qb->addSelect('vendor.vendorCode AS vendorCode');
+        $qb->addSelect('si.assuranceType AS assuranceType');
+        $qb->addSelect('si.assuranceToCustomer AS assuranceToCustomer');
+        $qb->addSelect('si.serialNo AS serialNo');
+        $qb->addSelect('si.quantity AS quantity');
+        $qb->addSelect('si.salesPrice AS salesPrice');
+        $qb->addSelect('item.sku AS name');
+        $qb->where("s.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
         $qb->orderBy('s.created','DESC');
         $result = $qb->getQuery();
         return $result;

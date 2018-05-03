@@ -162,10 +162,10 @@ $('#invoiceParticulars').on("click", ".delete", function() {
     })
 });
 
-$(document).on('keyup', '#sales_discount', function() {
+$(document).on('keyup', '#sales_discountCalculation', function() {
 
-    var discountType = $('#discountType').val();
-    var discount = parseInt($('#sales_discount').val());
+    var discountType = $('#sales_discountType').val();
+    var discount = parseInt($('#sales_discountCalculation').val());
     var invoice = parseInt($('#invoiceId').val());
     var total =  parseInt($('#dueAmount').val());
     if( discount >= total ){
@@ -191,10 +191,10 @@ $(document).on('keyup', '#sales_discount', function() {
 
 });
 
-$(document).on('keyup', '#sales_received , #sales_discount', function() {
+$(document).on('keyup', '#sales_received , #discount', function() {
 
     var payment     = parseInt($('#sales_received').val()  != '' ? $('#sales_received').val() : 0 );
-    var discount     = parseInt($('#sales_discount').val()  != '' ? $('#sales_discount').val() : 0 );
+    var discount     = parseInt($('#discount').val()  != '' ? $('#discount').val() : 0 );
     var due =  parseInt($('#due').val());
     var dueAmount = (due-discount-payment);
     if(dueAmount > 0){

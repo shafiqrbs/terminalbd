@@ -57,7 +57,6 @@ class PurchaseItemType extends AbstractType
                     '5 Year 6 Month' => '5 Year 6 Month',
                     'Product Life Time' => 'Product Life Time',
                     'No Warranty' => 'No Warranty',
-
                 ),
             ))
             ->add('assuranceToCustomer', 'choice', array(

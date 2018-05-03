@@ -177,3 +177,7 @@ stockitem_results:
 inventory_reverse:
     resource: "@InventoryBundle/Resources/config/routing/reverse.yml"
     prefix:   /reverse
+
+inventory_sales_user:
+    resource: "@InventoryBundle/Resources/config/routing/salesuser.yml"
+    prefix:   /sales-user

@@ -7,6 +7,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn;
 use Doctrine\ORM\EntityRepository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 
@@ -45,6 +46,9 @@ class AccountPurchaseRepository extends EntityRepository
         }elseif(!empty($accountPurchase->getHmsVendor())){
             $vendor = $accountPurchase->getHmsVendor()->getId();
             $qb->andWhere("e.hmsVendor = :vendor")->setParameter('vendor', $vendor);
+        }elseif(!empty($accountPurchase->getMedicineVendor())){
+            $vendor = $accountPurchase->getMedicineVendor()->getId();
+            $qb->andWhere("e.medicineVendor = :vendor")->setParameter('vendor', $vendor);
         }
         $result = $qb->getQuery()->getSingleResult();
         $balance = ($result['purchaseAmount'] -  $result['payment']);
@@ -97,6 +101,7 @@ class AccountPurchaseRepository extends EntityRepository
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $inventoryVendor =    isset($data['vendor'])? $data['vendor'] :'';
                 $hmsVendor =    isset($data['hmsVendor'])? $data['hmsVendor'] :'';
+                $medicineVendor =    isset($data['medicineVendor'])? $data['medicineVendor'] :'';
                 $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
 
                 if (!empty($data['startDate']) and !empty($data['endDate']) ) {
@@ -118,6 +123,12 @@ class AccountPurchaseRepository extends EntityRepository
                     $qb->leftJoin('e.hmsVendor','v');
                     $qb->andWhere("v.companyName = :vendor");
                     $qb->setParameter('vendor', $hmsVendor);
+                }
+
+                if (!empty($medicineVendor)) {
+                    $qb->leftJoin('e.medicineVendor','v');
+                    $qb->andWhere("v.companyName = :vendor");
+                    $qb->setParameter('vendor', $medicineVendor);
                 }
 
                 if (!empty($transactionMethod)) {
@@ -162,29 +173,25 @@ class AccountPurchaseRepository extends EntityRepository
         return $entity->getBalance();
     }
 
-
     public function insertAccountPurchase(Purchase $entity)
     {
 
-        $data = array('vendor' => $entity->getVendor()->getCompanyName());
-        $result = $this->accountPurchaseOverview($entity->getInventoryConfig()->getGlobalOption(),$data);
-        $balance = ( $result['purchaseAmount'] - $result['payment']);
         $em = $this->_em;
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
         $accountPurchase->setPurchase($entity);
         $accountPurchase->setVendor($entity->getVendor());
-        $accountPurchase->setVendor($entity->getVendor());
+        $accountPurchase->setSourceInvoice('P-'.$entity->getGrn());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getTotalAmount());
         $accountPurchase->setPayment($entity->getPaymentAmount());
-        $accountPurchase->setBalance(($balance + $entity->getTotalAmount()) - $accountPurchase->getPayment() );
-        $accountPurchase->setProcessHead('Purchase');
+         $accountPurchase->setProcessHead('Purchase');
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
         $accountPurchase->setProcess('approved');
         $accountPurchase->setApprovedBy($entity->getApprovedBy());
         $em->persist($accountPurchase);
         $em->flush();
+        $this->updateVendorBalance($accountPurchase);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
         return $accountPurchase;
 
@@ -222,29 +229,44 @@ class AccountPurchaseRepository extends EntityRepository
     public function insertMedicineAccountPurchase(MedicinePurchase $entity)
     {
 
-        $data = array('medicineVendor' => $entity->getMedicineVendor()->getCompanyName());
         $global = $entity->getMedicineConfig()->getGlobalOption();
-        $result = $this->accountPurchaseOverview($global,$data);
-        $balance = ( $result['purchaseAmount'] - $result['payment']);
-
         $em = $this->_em;
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($global);
-        $accountPurchase->setMedicinePurchase($entity);
+        $accountPurchase->setSourceInvoice('P-'.$entity->getGrn());
         $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
         $accountPurchase->setProcessHead('Purchase');
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
-        $accountPurchase->setBalance(($balance + $entity->getNetTotal()) - $accountPurchase->getPayment() );
         $accountPurchase->setProcess('approved');
         $accountPurchase->setApprovedBy($entity->getApprovedBy());
         $em->persist($accountPurchase);
         $em->flush();
+        $this->updateVendorBalance($accountPurchase);
         if($accountPurchase->getPayment() > 0 ){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
         }
+        return $accountPurchase;
+
+    }
+
+    public function insertMedicineAccountPurchaseReturn(MedicinePurchaseReturn $entity)
+    {
+        $global = $entity->getMedicineConfig()->getGlobalOption();
+        $em = $this->_em;
+        $accountPurchase = new AccountPurchase();
+        $accountPurchase->setGlobalOption($global);
+        $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
+        $accountPurchase->setPayment($entity->getSubTotal());
+        $accountPurchase->setSourceInvoice('Pr-'.$entity->getInvoice());
+        $accountPurchase->setProcessHead('Purchase-return');
+        $accountPurchase->setProcess('approved');
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $em->persist($accountPurchase);
+        $em->flush();
+        $this->updateVendorBalance($accountPurchase);
         return $accountPurchase;
 
     }

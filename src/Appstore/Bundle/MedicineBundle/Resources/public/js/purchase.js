@@ -80,13 +80,67 @@ $('form#purchaseItemForm').on('keypress', '.input', function (e) {
     }
 });
 
-var form = $("#purchaseItemForm").validate({
+var formStock = $("#stockItemForm").validate({
+    rules: {
 
+        "stockItemForm[name]": {required: true},
+        "stockItemForm[rackNo]": {required: true},
+        "stockItemForm[unit]": {required: true},
+        "stockItemForm[purchasePrice]": {required: true},
+        "stockItemForm[salesPrice]": {required: true},
+        "stockItemForm[purchaseQuantity]": {required: false}
+    },
+
+    messages: {
+
+        "stockItemForm[name]":"Enter medicine name",
+        "stockItemForm[rackNo]":"Enter medicine rack no",
+        "stockItemForm[unit]":"Enter medicine unit",
+        "stockItemForm[purchasePrice]":"Enter purchase price",
+        "stockItemForm[salesPrice]":"Enter sales price",
+        "stockItemForm[purchaseQuantity]":"Enter purchase quantity",
+
+    },
+    tooltip_options: {
+        "stockItemForm[name]": {placement:'top',html:true},
+        "stockItemForm[rackNo]": {placement:'top',html:true},
+        "stockItemForm[unit]": {placement:'top',html:true},
+        "stockItemForm[purchasePrice]": {placement:'top',html:true},
+        "stockItemForm[salesPrice]": {placement:'top',html:true},
+        "stockItemForm[purchaseQuantity]": {placement:'top',html:true},
+    },
+
+    submitHandler: function(formStock) {
+
+        $.ajax({
+            url         : $('form#stockItemForm').attr( 'action' ),
+            type        : $('form#stockItemForm').attr( 'method' ),
+            data        : new FormData($('form#stockItemForm')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#vat').val(obj['vat']);
+                $('.grandTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
+                $('#msg').html(obj['msg']);
+                $("#medicineStock_name").select2("val", "");
+                $('#stockItemForm')[0].reset();
+                EditableInit();
+            }
+        });
+    }
+});
+
+var form = $("#purchaseItemForm").validate({
     rules: {
 
         "purchaseItem[stockName]": {required: true},
         "purchaseItem[purchasePrice]": {required: true},
-        "purchaseItem[salesPrice]": {required: true},
         "purchaseItem[quantity]": {required: true},
         "purchaseItem[expirationStartDate]": {required: false},
         "purchaseItem[expirationEndDate]": {required: false},
@@ -96,16 +150,13 @@ var form = $("#purchaseItemForm").validate({
 
         "purchaseItem[stockName]":"Enter medicine name",
         "purchaseItem[purchasePrice]":"Enter purchase price",
-        "purchaseItem[salesPrice]":"Enter sales price",
         "purchaseItem[quantity]":"Enter medicine quantity",
-        "purchaseItem[expirationDate]": "Enter medicine expiration date",
     },
     tooltip_options: {
         "purchaseItem[stockName]": {placement:'top',html:true},
         "purchaseItem[purchasePrice]": {placement:'top',html:true},
-        "purchaseItem[salesPrice]": {placement:'top',html:true},
         "purchaseItem[quantity]": {placement:'top',html:true},
-        "purchaseItem[expirationDate]": {placement:'top',html:true},
+
     },
 
     submitHandler: function(form) {
@@ -128,10 +179,12 @@ var form = $("#purchaseItemForm").validate({
                 $('#msg').html(obj['msg']);
                 $("#purchaseItem_stockName").select2("val", "");
                 $('#purchaseItemForm')[0].reset();
+                EditableInit();
             }
         });
     }
 });
+
 
 $('#invoiceParticulars').on("click", ".delete", function() {
 

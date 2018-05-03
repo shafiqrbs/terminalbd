@@ -29,14 +29,12 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-
                 <div class="portlet box green ">
-
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Medicine Stock</div>
                         <div class="actions">
                             <a href="{{ path('medicine_stock_new') }}"  class=" btn red"><i class="icon-plus-sign"></i> Add Medicine</a>
-                            <a href="{{ path('medicine_stock_accesories_new') }}"  class=" btn black"><i class="icon-plus-sign"></i> Add Accessories</a>
+                            <a href="{{ path('medicine_stock_accesories_new') }}"  class=" btn black"><i class="icon-plus-sign"></i> Herbal & Accessories</a>
                         </div>
                     </div>
                     <div class="portlet-body form">
@@ -45,9 +43,12 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span3">
-                                        <input type="text" id="name" name="name"  class="span12 m-wrap" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine/accessories name ">
+                                        <input type="text" id="name" name="name"  class="span12 m-wrap select2StockMedicine" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine/accessories name ">
                                     </div>
                                     <div class="span3">
+                                        <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap select2BrandName" value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
+                                    </div>
+                                    <div class="span2">
                                         <select name="rackNo" id="rackNo" class="span12 m-wrap">
                                             <option value="">Rack no</option>
                                             {% for rack in racks %}
@@ -55,17 +56,18 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
                                         <select name="process" id="process" class="span12 m-wrap">
-                                            <option  value="">Item Type</option>
-                                            <option {% if searchForm.mode is defined and searchForm.mode == 'mediicne' %} selected="selected" {% endif %} value="mediicne">Mediicne</option>
+                                            <option  value="">Product Type</option>
+                                            <option {% if searchForm.mode is defined and searchForm.mode == 'mediicne' %} selected="selected" {% endif %} value="mediicne">Medicine</option>
+                                            <option {% if searchForm.mode is defined and searchForm.mode == 'herbal' %} selected="selected" {% endif %} value="herbal">Herbal</option>
                                             <option {% if searchForm.mode is defined and searchForm.mode == 'accessories' %} selected="selected" {% endif %} value="accessories">Accessories</option>
                                         </select>
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="sku"  name="sku"  class="span12 m-wrap" value="{% if searchForm.sku is defined %}{{ searchForm.sku }}{% endif %}"  autocomplete="off"  placeholder="Enter mediicne/accessories sku">
+                                                <input type="text" id="sku"  name="sku"  class="span10 m-wrap" value="{% if searchForm.sku is defined %}{{ searchForm.sku }}{% endif %}"  autocomplete="off"  placeholder="Product sku">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -80,14 +82,13 @@
                         <div class="clearfix"><br/></div>
                         <div class="portlet-body flip-scroll">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Rack</th>
-                                    <th class="numeric" >Receive Tk.</th>
-                                    <th class="numeric" >MRP</th>
+                                    <th class="numeric" >Purchase Tk.</th>
+                                    <th class="numeric" >Sales Tk.</th>
                                     <th class="numeric" >Opening</th>
                                     <th class="numeric" >Receive Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
@@ -103,10 +104,10 @@
 
                                     <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
                                         <td class="numeric" >{{ entity.sku }}</td>
-                                        {% if entity.mode == 'accessories' %}
-                                        <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.accessoriesBrand.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        {% if entity.mode == 'medicine' %}
+                                            <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% else %}
-                                        <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                            <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.accessoriesBrand.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% endif %}
                                         <td class="numeric" >{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</td>
                                         <td class="numeric">
@@ -167,8 +168,8 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/editable.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@MedicineBundle/Resources/public/js/editable.js'
+    '@MedicineBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

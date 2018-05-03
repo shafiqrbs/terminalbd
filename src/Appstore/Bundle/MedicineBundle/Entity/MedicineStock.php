@@ -43,6 +43,28 @@ class MedicineStock
     private $medicineSalesItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineStock")
+     **/
+    private $medicineSalesReturns;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDamage", mappedBy="medicineStock" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $medicineDamages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturnItem", mappedBy="medicineStock" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $medicinePurchaseReturnItems;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary", mappedBy="medicineStock")
+     **/
+    private $medicineSalesTemporary;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", inversedBy="medicineStock")
      **/
     private $medicineConfig;
@@ -68,6 +90,13 @@ class MedicineStock
      * @ORM\Column(name="name", type="string", length=255,nullable = true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="brandName", type="string", length=255,nullable = true)
+     */
+    private $brandName;
 
     /**
      * @var string
@@ -570,6 +599,63 @@ class MedicineStock
     {
         $this->accessoriesBrand = $accessoriesBrand;
     }
+
+    /**
+     * @return string
+     */
+    public function getBrandName()
+    {
+        return $this->brandName;
+    }
+
+    /**
+     * @param string $brandName
+     */
+    public function setBrandName($brandName)
+    {
+        $this->brandName = $brandName;
+    }
+
+    /**
+     * @return MedicineSalesTemporary
+     */
+    public function getMedicineSalesTemporary()
+    {
+        return $this->medicineSalesTemporary;
+    }
+
+    /**
+     * @return MedicineDamage
+     */
+    public function getMedicineDamages()
+    {
+        return $this->medicineDamages;
+    }
+
+    /**
+     * @param mixed $medicineDamages
+     */
+    public function setMedicineDamages($medicineDamages)
+    {
+        $this->medicineDamages = $medicineDamages;
+    }
+
+    /**
+     * @return MedicinePurchaseReturnItem
+     */
+    public function getMedicinePurchaseReturnItems()
+    {
+        return $this->medicinePurchaseReturnItems;
+    }
+
+    /**
+     * @return MedicineSalesReturn
+     */
+    public function getMedicineSalesReturns()
+    {
+        return $this->medicineSalesReturns;
+    }
+
 
 }
 

@@ -44,6 +44,24 @@ class MedicinePurchaseItem
      **/
     private  $medicineSalesItems;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicinePurchaseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $medicineSalesReturns;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDamage", mappedBy="medicinePurchaseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $medicineDamages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary", mappedBy="medicinePurchaseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $medicineSalesTemporary;
+
     /**
      * @var string
      *
@@ -497,6 +515,30 @@ class MedicinePurchaseItem
     public function setExpirationEndDate($expirationEndDate)
     {
         $this->expirationEndDate = $expirationEndDate;
+    }
+
+    /**
+     * @return MedicineSalesTemporary
+     */
+    public function getMedicineSalesTemporary()
+    {
+        return $this->medicineSalesTemporary;
+    }
+
+    /**
+     * @return MedicineDamage
+     */
+    public function getMedicineDamages()
+    {
+        return $this->medicineDamages;
+    }
+
+    /**
+     * @return MedicineSalesReturn
+     */
+    public function getMedicineSalesReturns()
+    {
+        return $this->medicineSalesReturns;
     }
 
 }

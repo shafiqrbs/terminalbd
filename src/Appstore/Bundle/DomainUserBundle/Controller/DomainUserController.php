@@ -53,6 +53,7 @@ class DomainUserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($globalOption);
             $entity->getProfile()->upload();
+            $entity->setDomainOwner(2);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

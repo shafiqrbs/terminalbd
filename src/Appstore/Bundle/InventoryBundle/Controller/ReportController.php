@@ -251,6 +251,23 @@ class ReportController extends Controller
         ));
     }
 
+    public function salesItemDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:Sales')->reportSalesItemDetails($user,$data);
+        $pagination = $this->paginate($entities);
+
+        return $this->render('InventoryBundle:Report:sales/salesItemDetails.html.twig', array(
+            'inventory' => $inventory,
+            'entities' => $pagination,
+            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm' => $data,
+        ));
+    }
+
     public function salesUserAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -266,6 +283,29 @@ class ReportController extends Controller
             'branches' => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm'    => $data ,
         ));
+    }
+
+    public function monthlyUserSalesAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $employees = $em->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
+        $entities = $em->getRepository('InventoryBundle:Sales')->monthlySales($user,$data);
+        $salesAmount = array();
+        foreach($entities as $row) {
+            $salesAmount[$row['salesBy'].$row['month']] = $row['total'];
+        }
+
+        return $this->render('InventoryBundle:Report:sales/salesMonthlyUser.html.twig', array(
+            'inventory'      => $inventory ,
+            'salesAmount'      => $salesAmount ,
+            'employees'      => $employees ,
+            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm'    => $data ,
+        ));
+
     }
 
     public function categoryAction()

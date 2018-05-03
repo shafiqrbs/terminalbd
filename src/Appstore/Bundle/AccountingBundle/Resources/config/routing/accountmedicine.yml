@@ -1,0 +1,16 @@
+account_sales_medicine:
+    path:     /sales
+    defaults: { _controller: "AccountingBundle:AccountMedicine:sales" }
+
+account_purchase_medicine:
+    path:     /purchase
+    defaults: { _controller: "AccountingBundle:AccountMedicine:purchase" }
+
+account_purchase_medicine_new:
+    path:     /purchase-new
+    defaults: { _controller: "AccountingBundle:AccountMedicine:purchaseNew" }
+
+account_purchase_medicine_create:
+    path:     /purchase-create
+    defaults: { _controller: "AccountingBundle:AccountMedicine:purchaseCreate" }
+

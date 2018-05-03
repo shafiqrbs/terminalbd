@@ -5,6 +5,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -39,6 +40,47 @@ class MedicineSalesItemRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
+    public function temporarySalesInsert(User $user, MedicineSales $sales)
+    {
+        $em = $this->_em;
+        $entities = $user->getMedicineSalesTemporary();
+
+        foreach ($entities as $item){
+
+            /* @var  $item MedicineSalesTemporary */
+            $entity = new MedicineSalesItem();
+            $entity->setMedicineSales($sales);
+            $entity->setMedicineStock($item->getMedicineStock());
+            $entity->setMedicinePurchaseItem($item->getMedicinePurchaseItem());
+            $entity->setQuantity($item->getQuantity());
+            $entity->setSalesPrice($item->getSalesPrice());
+            $entity->setSubTotal($item->getSubTotal());
+            $entity->setPurchasePrice($item->getMedicinePurchaseItem()->getPurchasePrice());
+            $em->persist($entity);
+            $em->flush();
+            $em->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item->getMedicinePurchaseItem(),'sales');
+            $em->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock(),'sales');
+        }
+    }
+
+    public function insertInstantSalesItem(MedicineSales $sales,MedicinePurchaseItem $item,$data){
+
+        $em = $this->_em;
+        $entity = new MedicineSalesItem();
+        $entity->setMedicineSales($sales);
+        $entity->setMedicineStock($item->getMedicineStock());
+        $entity->setMedicinePurchaseItem($item);
+        $entity->setQuantity($data['salesQuantity']);
+        $entity->setSalesPrice($item->getSalesPrice());
+        $entity->setSubTotal($item->getSalesPrice() * $data['salesQuantity']);
+        $entity->setPurchasePrice($item->getPurchasePrice());
+        $em->persist($entity);
+        $em->flush();
+        $em->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item->getMedicinePurchaseItem(),'sales');
+        $em->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock(),'sales');
+
+    }
+
     public function handleDateRangeFind($qb,$data)
     {
         if(empty($data)){
@@ -59,6 +101,25 @@ class MedicineSalesItemRepository extends EntityRepository
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
     }
+
+    public function salesItemLists(User $user, $data)
+    {
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('si');
+        $qb->join('si.medicineSales','s');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        if ($userBranch){
+            $qb->andWhere("s.branch = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+      //  $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('s.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
 
 
     public function getSalesItems(MedicineSales $sales)

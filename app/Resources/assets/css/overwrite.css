@@ -26,6 +26,11 @@ ul.page-sidebar-menu > li > a {
 
 .search-form select[class*="span"].m-wrap, .search-form textarea[class*="span"].m-wrap ,.search-form input[class*="span"].m-wrap{
     border: 2px solid #4d90fe!important;
+    height: 38px!important;
+
+}
+.search-form .btn{
+    padding: 9px 14px!important;
 }
 .search-form .select2-container, .search-form .select2-search, .search-form .select2-search input{
     border: 2px solid #4d90fe!important;

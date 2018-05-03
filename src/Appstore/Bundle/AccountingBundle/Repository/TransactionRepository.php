@@ -64,7 +64,6 @@ class TransactionRepository extends EntityRepository
         }
     }
 
-
     public function transactionOverview($globalOption,$accountHead = 0)
     {
 
@@ -80,6 +79,7 @@ class TransactionRepository extends EntityRepository
         $res = $result->getOneOrNullResult();
         return $res;
     }
+
     public function getGroupByAccountHead($globalOption){
 
         $qb = $this->createQueryBuilder('e');
@@ -175,7 +175,6 @@ class TransactionRepository extends EntityRepository
 
     }
 
-
     public function reportTransactionVat($globalOption,$accountHeads,$data){
 
         $qb = $this->createQueryBuilder('ex');
@@ -194,7 +193,6 @@ class TransactionRepository extends EntityRepository
         return 0;
 
     }
-
 
     public function insertAccountJournalTransaction(AccountJournal $journal)
     {
@@ -360,8 +358,6 @@ class TransactionRepository extends EntityRepository
         $this->insertPurchaseLiabilityDebitTransaction($entity);
     }
 
-
-
     public function insertPurchaseCashCreditTransaction(AccountPurchase $entity)
     {
 
@@ -462,8 +458,6 @@ class TransactionRepository extends EntityRepository
 
     private function insertSalesItem(Sales $entity , AccountSales $accountSales)
     {
-
-
         $amount =  $entity->getTotal() - $entity->getVat();
         $transaction = new Transaction();
         $transaction->setGlobalOption($accountSales->getGlobalOption());
@@ -1037,7 +1031,6 @@ class TransactionRepository extends EntityRepository
     /** =========================== HOSPITAL MANAGEMENT SYSTEM    =========================== */
 
 
-
     public function hmsSalesTransaction(InvoiceTransaction $entity,$accountSales)
     {
         $this->insertHmsCashDebit($entity,$accountSales);
@@ -1099,7 +1092,6 @@ class TransactionRepository extends EntityRepository
 
     }
 
-
     private function insertHmsSalesVatAccountPayable(InvoiceTransaction $entity, AccountSales $accountSales)
     {
 
@@ -1126,8 +1118,6 @@ class TransactionRepository extends EntityRepository
     }
 
     /** =========================== HOSPITAL MANAGEMENT SYSTEM    =========================== */
-
-
 
     public function restaurantSalesTransaction(\Appstore\Bundle\RestaurantBundle\Entity\Invoice $entity , $accountSales)
     {
@@ -1213,6 +1203,127 @@ class TransactionRepository extends EntityRepository
 
     }
 
+
+    /* ==================== GLOBAL SALES & PURCHASE =======================================*/
+
+
+    public function salesGlobalTransaction(AccountSales $accountSales)
+    {
+        $this->insertGlobalCashDebit($accountSales);
+        $this->insertGlobalGoodsCredit($accountSales);
+        $this->insertGlobalSalesAccountReceivable($accountSales);
+        if($accountSales->getVat() > 0){
+            $this->insertGlobalSalesVatAccountPayable($accountSales);
+        }
+    }
+
+    private function insertGlobalCashDebit(AccountSales $accountSales)
+    {
+        $amount = $accountSales->getAmount();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setUpdated($accountSales->getUpdated());
+
+            /* Cash - Cash various */
+            if($accountSales->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $transaction->setProcess('Current Assets');
+            }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+                $transaction->setProcess('Cash');
+            }
+
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+
+    public function insertGlobalGoodsCredit(AccountSales $accountSales)
+    {
+
+        $amount = $accountSales->getAmount();
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($accountSales->getGlobalOption());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
+        }
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+        $transaction->setProcessHead('Sales');
+        $transaction->setProcess('Goods');
+        /* Sales Revenue - Sales goods account */
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+        $transaction->setAmount('-'.$amount);
+        $transaction->setCredit($amount);
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+
+    }
+
+    private function insertGlobalSalesAccountReceivable(AccountSales $accountSales)
+    {
+
+        $amount = ($accountSales->getTotalAmount() - $accountSales->getAmount());
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setProcess('AccountReceivable');
+            /* Assets Account - Account Receivable */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
+    private function insertGlobalSalesVatAccountPayable(AccountSales $accountSales)
+    {
+
+        $amount = $accountSales->getVat();
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setProcess('AccountPayable');
+            /* Current Liabilities - Sales Vat & Tax */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(16));
+            $transaction->setAmount('-'.$amount);
+            $transaction->setCredit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
+
     public function purchaseGlobalTransaction($accountPurchase,$source='')
     {
         $this->insertGlobalInventoryAsset($accountPurchase);
@@ -1297,6 +1408,51 @@ class TransactionRepository extends EntityRepository
         }
     }
 
+    public function purchaseReturnGlobalTransaction($accountPurchase,$source='')
+    {
+        $this->insertGlobalInventoryReturnAsset($accountPurchase);
+        $this->insertGlobalPurchaseAccountReceivable($accountPurchase);
+    }
+
+    private function insertGlobalInventoryReturnAsset(AccountPurchase $accountPurchase)
+    {
+
+        $amount =  $accountPurchase->getPayment();
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($accountPurchase->getGlobalOption());
+        $transaction->setAccountRefNo($accountPurchase->getAccountRefNo());
+        $transaction->setProcessHead('Purchase Return');
+        $transaction->setProcess('InventoryAssets');
+        /* Sales Revenue - Purchase Return account */
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+        $transaction->setAmount('-'.$amount);
+        $transaction->setCredit($amount);
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+
+
+    }
+
+    private function insertGlobalPurchaseAccountReceivable(AccountPurchase $accountPurchase)
+    {
+
+        $amount = $accountPurchase->getPayment();
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountPurchase->getGlobalOption());
+            $transaction->setAccountRefNo($accountPurchase->getAccountRefNo());
+            $transaction->setProcessHead('Purchase Return');
+            $transaction->setProcess('AccountReceivable');
+            /* Assets Account - Account Receivable */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+    }
 
 
     /** =========================== HOSPITAL MANAGEMENT SYSTEM  =========================== */

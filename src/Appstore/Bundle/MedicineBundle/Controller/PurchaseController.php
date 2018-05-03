@@ -6,6 +6,7 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -102,11 +103,13 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
+        $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
         $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
         $editForm = $this->createEditForm($entity);
         return $this->render('MedicineBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
             'purchaseItem' => $purchaseItemForm->createView(),
+            'stockItemForm' => $stockItemForm->createView(),
             'form' => $editForm->createView(),
         ));
     }
@@ -147,6 +150,51 @@ class PurchaseController extends Controller
         ));
         return $form;
     }
+
+    private function createStockItemForm(MedicineStock $entity, MedicinePurchase $purchase )
+    {
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $form = $this->createForm(new MedicineStockItemType($config), $entity, array(
+            'action' => $this->generateUrl('medicine_stock_item_create', array('id' => $purchase->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'id' => 'stockItemForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
+    public function stockItemCreateAction(Request $request,MedicinePurchase $purchase)
+    {
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $medicineId = $data['medicineStock']['name'];
+        $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($medicineId);
+        $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config,$medicine);
+        if(empty($checkStockMedicine)){
+            $entity = new MedicineStock();
+            $form = $this->createStockItemForm($entity, $purchase);
+            $form->handleRequest($request);
+            $entity->setMedicineConfig($config);
+            $name = $medicine->getMedicineForm() . ' ' . $medicine->getName() . ' ' . $medicine->getStrength();
+            $entity->setName($name);
+            $entity->setBrandName($medicine->getMedicineCompany()->getName());
+            $entity->setMode('medicine');
+            $em->persist($entity);
+            $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertStockPurchaseItems($purchase, $entity, $data);
+            $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($purchase);
+            $msg = 'Medicine added successfully';
+            $result = $this->returnResultData($invoice, $msg);
+            return new Response(json_encode($result));
+        }
+        exit;
+    }
+
 
     public function particularSearchAction(MedicineStock $particular)
     {

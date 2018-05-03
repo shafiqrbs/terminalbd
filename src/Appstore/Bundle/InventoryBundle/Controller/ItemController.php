@@ -507,4 +507,30 @@ class ItemController extends Controller
         return $this->redirect($this->generateUrl('item'));
     }
 
+    public function updateStockQuantityAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $items = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findItemWithPurchaseQuantity($inventory);
+        foreach ($items as $row){
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($row['itemId']);
+            $salesQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'sales');
+            $salesReturnQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'salesReturn');
+            $purchaseReturnQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'purchaseReturn');
+            $damageQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'damage');
+            $item->setPurchaseQuantity($row['quantity']);
+            $item->setSalesQuantity($salesQnt);
+            $item->setSalesQuantityReturn($salesReturnQnt);
+            $item->setPurchaseQuantityReturn($purchaseReturnQnt);
+            $item->setPurchaseQuantityReturn($damageQnt);
+            $remainingQnt = ($item->getPurchaseQuantity() + $item->getSalesQuantityReturn()) - ($item->getSalesQuantity() + $item->getPurchaseQuantityReturn()+$item->getDamageQuantity());
+            $item->setRemainingQnt($remainingQnt);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('item'));
+    }
+
+
 }

@@ -35,6 +35,14 @@ inventory_report_sales_item:
     path:     /sales-item
     defaults: { _controller: "InventoryBundle:Report:salesStockItem" }
 
+inventory_report_sales_item_details:
+    path:     /sales-item-details
+    defaults: { _controller: "InventoryBundle:Report:salesItemDetails" }
+
+inventory_report_sales_user_target:
+    path:     /user-sales-mothly-target
+    defaults: { _controller: "InventoryBundle:Report:monthlyUserSales" }
+
 inventory_report_sales:
     path:     /sales-transaction
     defaults: { _controller: "InventoryBundle:Report:salesTransaction" }

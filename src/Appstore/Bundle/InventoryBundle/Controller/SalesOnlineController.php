@@ -1177,8 +1177,8 @@ class SalesOnlineController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory,'invoice' => $invoice));
             $em = $this->getDoctrine()->getManager();
-            $em->getRepository('InventoryBundle:StockItem')->itemStockReverse($entity);
-            $em->getRepository('InventoryBundle:Item')->itemReverse($entity);
+            $em->getRepository('InventoryBundle:StockItem')->saleaItemStockReverse($entity);
+            $em->getRepository('InventoryBundle:Item')->getSalesItemReverse($entity);
             $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
             $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
             $em = $this->getDoctrine()->getManager();

@@ -185,6 +185,10 @@ security:
                 always_use_default_target_path: true
             logout:       true
             anonymous:    true
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 31536000 # 1 week in seconds
+                path:     /home
 
     access_control:
         - { path: ^/login$,             role: IS_AUTHENTICATED_ANONYMOUSLY }

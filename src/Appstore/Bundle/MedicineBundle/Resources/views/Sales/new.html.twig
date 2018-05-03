@@ -33,12 +33,12 @@
 
     <div class="portlet box green tabbable">
         <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Medicine Information</div>
+            <div class="caption"><i class="icon-reorder"></i>Add Medicine/Accessories</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn red" href="{{ path('medicine_sales_new') }}"><i class="icon-plus-sign"></i> Medicine Sales</a>
+                    <a class="btn red" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Point of Sales</a>
                     <a class="btn" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine</a>
-                    <a class="btn black" href="javascript:" data-url="{{ path('medicine_instant_purchase_load',{'sales':entity.id}) }}" id="instantPopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
+       {#             <a class="btn yellow" href="javascript:" data-url="{{ path('medicine_instant_purchase_load',{'sales':entity.id}) }}" id="instantPopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>#}
                 </div>
             </div>
         </div>
@@ -49,13 +49,7 @@
             <div class="clearfix">&nbsp;</div>
             <div class="loader loader-double" ></div>
             <div id="instantPurchaseLoad"></div>
-            <style>
-                .td-input{
-                    height: 25px!important;
-                    padding: 0!important;
-                    min-height: 25px!important;
-                }
-            </style>
+
             <div class="clearfix">&nbsp;</div>
             {{ form_start(salesItem) }}
             {{ form_row(salesItem._token) }}
@@ -188,11 +182,8 @@
                                 <label class="control-label" for="firstName">
                                     <span class="label" >Discount Type</span>
                                     <span class="pull-right sales-right">
-                                <select class="span12 discount-type" id="discountType" name="discountType">
-                                    <option value="percentage">Percentage</option>
-                                    <option value="flat">Flat</option>
-                                </select>
-                            </span>
+                                        {{ form_widget(form.discountType) }}
+                                    </span>
                                 </label>
                             </div>
                         </div>
@@ -201,7 +192,11 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="firstName"><span class="label">Discount TK.</span> <span class="pull-right sales-right">{{ form_widget(form.discount) }}</span></label>
+                                <label class="control-label" for="firstName"><span class="label">Discount TK.</span> <span class="pull-right sales-right">
+                                        {{ form_widget(form.discountCalculation) }}
+                                        {{ form_widget(form.discount) }}
+                                    </span>
+                                </label>
                             </div>
                         </div>
                         <!--/span-->
@@ -404,7 +399,7 @@
 
 {% block cssBlock %}
 {% stylesheets filter='cssrewrite'
-    '@DmsBundle/Resources/public/css/invoice.css'
+    '@MedicineBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -412,8 +407,8 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@MedicineBundle/Resources/public/js/temporary-sales.js'
     '@MedicineBundle/Resources/public/js/sales.js'
-    '@MedicineBundle/Resources/public/js/instant-purchase.js'
     '@MedicineBundle/Resources/public/js/approveProcess.js'
     '@MedicineBundle/Resources/public/js/datetimepicker_css.js'
     %}
@@ -422,7 +417,8 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    jqueryLoad();
+    jqueryTemporaryLoad();
+    jqueryInstantTemporaryLoad();
     $('#salesitem_stockName').focus();
  {% endblock %}
 

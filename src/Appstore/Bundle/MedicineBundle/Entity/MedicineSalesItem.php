@@ -45,6 +45,12 @@ class MedicineSalesItem
     private $medicinePurchaseItem;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineSalesItems", cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $medicineSalesReturn;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="stockName", type="string", nullable=true)
@@ -312,6 +318,14 @@ class MedicineSalesItem
     public function setStockName($stockName)
     {
         $this->stockName = $stockName;
+    }
+
+    /**
+     * @return MedicineSalesReturn
+     */
+    public function getMedicineSalesReturn()
+    {
+        return $this->medicineSalesReturn;
     }
 
 

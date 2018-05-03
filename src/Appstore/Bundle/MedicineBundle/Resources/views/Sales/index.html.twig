@@ -33,11 +33,11 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Medicine Sales Invoice</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Medicine Sales</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('medicine_sales_new') }}"><i class="icon-plus-sign"></i> Add Sales</a>
-                             </div>
+                                <a class="btn red" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Point of Sales</a>
+                            </div>
                         </div>
                     </div>
 
@@ -131,7 +131,7 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination" >
+                            <div class="pagination pull-center" >
                                 {{ knp_pagination_render(entities) }}
                             </div>
                         </div>
@@ -142,12 +142,26 @@
         </div>
     </div>
 {% endblock %}
+
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@MedicineBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@MedicineBundle/Resources/public/js/approveProcess.js'
+    '@MedicineBundle/Resources/public/js/temporary-sales.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+    jqueryTemporaryLoad();
+    jqueryInstantTemporaryLoad();
+    $('#salesTemporaryItem_stockName').focus();
+{% endblock %}
 

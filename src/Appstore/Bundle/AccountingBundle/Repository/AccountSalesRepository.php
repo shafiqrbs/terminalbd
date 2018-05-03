@@ -5,6 +5,8 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -305,7 +307,6 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
-
     public function insertRestaurantAccountInvoice(Invoice $entity)
     {
         $em = $this->_em;
@@ -324,6 +325,51 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+
+    }
+
+    public function insertMedicineAccountInvoice(MedicineSales $entity)
+    {
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setAccountBank($entity->getAccountBank());
+        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
+        $accountSales->setGlobalOption($entity->getMedicineConfig()->getGlobalOption());
+        $accountSales->setCustomer($entity->getCustomer());
+        $accountSales->setTransactionMethod($entity->getTransactionMethod());
+        $accountSales->setTotalAmount($entity->getNetTotal());
+        $accountSales->setAmount($entity->getReceived());
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setSourceInvoice('S-'.$entity->getInvoice());
+        $accountSales->setProcessHead('Sales');
+        $accountSales->setProcess('approved');
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+
+    }
+
+    public function insertMedicineAccountPurchaseReturn(MedicineSalesReturn $entity)
+    {
+        $global = $entity->getMedicineConfig()->getGlobalOption();
+        $sales = $entity->getMedicineSalesItem()->getMedicineSales();
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setGlobalOption($global);
+        $accountSales->setCustomer($sales->getCustomer());
+        $accountSales->setAmount($entity->getSubTotal());
+        $accountSales->setSourceInvoice('Sr-'.$sales->getInvoice());
+        $accountSales->setProcessHead('Sales-return');
+        $accountSales->setProcess('approved');
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
 
