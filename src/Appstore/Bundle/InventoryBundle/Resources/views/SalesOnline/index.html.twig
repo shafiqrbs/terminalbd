@@ -72,7 +72,14 @@
                                         <input type="text" id="invoice" name="invoice"  class="span12 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="courierInvoice" name="courierInvoice"  class="span12 m-wrap" value="{% if searchForm.courierInvoice is defined %}{{ searchForm.courierInvoice }}{% endif %}"  autocomplete="off" placeholder="Enter courier invoice no ">
+                                        {% set pStatus = ['Paid','Due','Pending'] %}
+                                        <select name="paymentStatus" id="paymentStatus" class="span12 m-wrap">
+                                            <option value="">Payment Status</option>
+                                            {% for pStatus in pStatus %}
+                                            <option {% if searchForm.paymentStatus is defined and searchForm.paymentStatus == pStatus %} selected="selected" {% endif %} value="{{ pStatus }}">{{ pStatus }}</option>
+                                            {% endfor %}
+
+                                        </select>
                                     </div>
                                     <div class="span3">
                                         <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
