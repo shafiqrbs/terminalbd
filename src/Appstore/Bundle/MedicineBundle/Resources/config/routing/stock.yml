@@ -2,6 +2,10 @@ medicine_stock:
     path:     /
     defaults: { _controller: "MedicineBundle:MedicineStock:index" }
 
+medicine_stock_short_item:
+    path:     /item-short-list
+    defaults: { _controller: "MedicineBundle:MedicineStock:itemShortList" }
+
 medicine_stock_show:
     path:     /{id}/show
     defaults: { _controller: "MedicineBundle:MedicineStock:show" }

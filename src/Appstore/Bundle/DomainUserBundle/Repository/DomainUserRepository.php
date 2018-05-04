@@ -30,11 +30,12 @@ class DomainUserRepository extends EntityRepository
 
     }
 
-    public function updateSalesTarget( User $user,$value = 0)
+    public function updateSalesTarget( User $user,$month = 0 , $year =0)
     {
         $em = $this->_em;
         $entity = $this->findOneBy(array('user' => $user));
-        $entity->setSales($value);
+        $entity->setMonthlySales($month);
+        $entity->setYearlySales($year);
         $em->persist($entity);
         $em->flush();
     }
@@ -45,6 +46,8 @@ class DomainUserRepository extends EntityRepository
        $qb = $this->createQueryBuilder('e');
        $qb->join('e.user','u');
        $qb->select('e.sales');
+       $qb->addSelect('e.monthlySales');
+       $qb->addSelect('e.yearlySales');
        $qb->addSelect('u.id as id');
        $qb->addSelect('u.username as username');
        $qb->where('e.globalOption='.$option->getId());

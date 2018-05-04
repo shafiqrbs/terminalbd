@@ -139,7 +139,7 @@ function jqueryTemporaryLoad() {
         }
     });
 
-    $(document).on('keyup', '#salesTemporary_discountCalculation , #salesTemporary_discountType', function() {
+    $(document).on('change', '#salesTemporary_discountCalculation , #salesTemporary_discountType', function() {
 
         var discountType = $('#salesTemporary_discountType').val();
         var discount = parseInt($('#salesTemporary_discountCalculation').val());
@@ -184,7 +184,7 @@ function jqueryTemporaryLoad() {
     });
 
 
-    $(document).on('keyup', '#salesTemporary_received', function() {
+    $(document).on('change', '#salesTemporary_received', function() {
 
         var payment     = parseInt($('#salesTemporary_received').val()  != '' ? $('#salesTemporary_received').val() : 0 );
         var discount     = parseInt($('#salesTemporary_discount').val()  != '' ? $('#salesTemporary_discount').val() : 0 );
@@ -505,7 +505,6 @@ function jqueryInstantTemporaryLoad(){
         allowClear: true,
         minimumInputLength: 1
     });
-
 
     $( "#expirationStartDate" ).datepicker({
         dateFormat: "dd-mm-yy",

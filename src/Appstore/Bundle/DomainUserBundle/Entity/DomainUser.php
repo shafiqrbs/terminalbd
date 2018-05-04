@@ -42,6 +42,20 @@ class DomainUser
     private $sales;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="monthlySales", type="float", nullable = true)
+     */
+    private $monthlySales;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="yearlySales", type="float", nullable = true)
+     */
+    private $yearlySales;
+
+    /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created", type="datetime")
@@ -162,6 +176,38 @@ class DomainUser
     public function setSales($sales)
     {
         $this->sales = $sales;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMonthlySales()
+    {
+        return $this->monthlySales;
+    }
+
+    /**
+     * @param float $monthlySales
+     */
+    public function setMonthlySales($monthlySales)
+    {
+        $this->monthlySales = $monthlySales;
+    }
+
+    /**
+     * @return float
+     */
+    public function getYearlySales()
+    {
+        return $this->yearlySales;
+    }
+
+    /**
+     * @param float $yearlySales
+     */
+    public function setYearlySales($yearlySales)
+    {
+        $this->yearlySales = $yearlySales;
     }
 
 

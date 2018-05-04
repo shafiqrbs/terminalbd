@@ -189,6 +189,19 @@ class UserRepository extends EntityRepository
             );
         }
 
+        $miss = array('miss');
+        $result = array_intersect($arrSlugs, $miss);
+        if (!empty($result)) {
+            $array['Medicine Sales & Inventory'] = array(
+                'ROLE_MEDICINE'                                  => 'Medicine',
+                'ROLE_MEDICINE_SALES'                            => 'Medicine Sales',
+                'ROLE_MEDICINE_PURCHASE'                         => 'Medicine Purchase',
+                'ROLE_MEDICINE_STOCK'                            => 'Medicine Stock',
+                'ROLE_MEDICINE_MANAGER'                          => 'Medicine Manager',
+                'ROLE_MEDICINE_ADMIN'                            => 'Medicine Admin',
+            );
+        }
+
         $dms = array('dps');
         $result = array_intersect($arrSlugs, $dms);
         if (!empty($result)) {
@@ -198,6 +211,8 @@ class UserRepository extends EntityRepository
                 'ROLE_DPS_ADMIN'                            => 'Doctor Admin',
             );
         }
+
+
 
         $array['SMS'] = array(
             'ROLE_SMS'                                  => 'Sms/E-mail',

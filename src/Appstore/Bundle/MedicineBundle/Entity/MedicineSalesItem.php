@@ -45,10 +45,10 @@ class MedicineSalesItem
     private $medicinePurchaseItem;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineSalesItems", cascade={"persist"} )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineSalesItem", cascade={"persist"} )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private $medicineSalesReturn;
+    private $medicineSalesReturns;
 
     /**
      * @var string
@@ -320,12 +320,13 @@ class MedicineSalesItem
         $this->stockName = $stockName;
     }
 
+
     /**
      * @return MedicineSalesReturn
      */
-    public function getMedicineSalesReturn()
+    public function getMedicineSalesReturns()
     {
-        return $this->medicineSalesReturn;
+        return $this->medicineSalesReturns;
     }
 
 

@@ -51,6 +51,23 @@ class MedicineStockController extends Controller
 
     }
 
+    public function itemShortListAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entities = $em->getRepository('MedicineBundle:MedicineStock')->findWithShortListSearch($config,$data);
+        $pagination = $this->paginate($entities);
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+
+        return $this->render('MedicineBundle:MedicineStock:shortList.html.twig', array(
+            'pagination' => $pagination,
+            'racks' => $racks,
+            'searchForm' => $data,
+        ));
+    }
+
+
     public function newAction()
     {
         $entity = new MedicineStock();

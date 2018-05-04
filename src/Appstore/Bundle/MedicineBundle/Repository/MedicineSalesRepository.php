@@ -389,6 +389,30 @@ class MedicineSalesRepository extends EntityRepository
         return $result;
     }
 
+    public function monthlySales(User $user , $data =array())
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $compare = new \DateTime();
+        $year =  $compare->format('Y');
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT sales.salesBy_id as salesBy, MONTH (sales.created) as month,SUM(sales.netTotal) AS total
+                FROM medicine_sales as sales
+                WHERE sales.medicineConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year
+                GROUP BY month , salesBy ORDER BY salesBy ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+
+
+    }
+
     public function salesUserPurchasePriceReport(User $user,$data)
     {
         $userBranch = $user->getProfile()->getBranches();

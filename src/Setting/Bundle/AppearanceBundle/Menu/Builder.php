@@ -1042,56 +1042,75 @@ class Builder extends ContainerAware
             ->addChild('Medicine')
             ->setAttribute('icon', 'icon icon-th-large')
             ->setAttribute('dropdown', true);
-
-        $menu['Medicine']->addChild('Point of Sales ', array('route' => 'medicine_sales_new'))
-            ->setAttribute('icon', 'icon-th-large');
-        $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
-            ->setAttribute('icon', 'icon-list');
-        $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
-            ->setAttribute('icon', 'icon-list');
-        $menu['Medicine']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
-        if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
+            if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
+            $menu['Medicine']->addChild('Point of Sales ', array('route' => 'medicine_sales_new'))
+                ->setAttribute('icon', 'icon-th-large');
+            $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
+                ->setAttribute('icon', 'icon-list');
+            $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
+                ->setAttribute('icon', 'icon-list');
+    /*        $menu['Medicine']->addChild('Customer', array('route' => 'medicine_customer'))->setAttribute('icon', 'icon icon-user');*/
+            }
             $menu['Medicine']->addChild('Manage Stock')
                 ->setAttribute('icon', 'icon icon-truck')
                 ->setAttribute('dropdown', true);
-            $menu['Medicine']['Manage Stock']->addChild('Stock Medicine', array('route' => 'medicine_stock'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Stock']->addChild('Medicine Expiration', array('route' => 'medicine_purchase_item'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Stock']->addChild('Purchase', array('route' => 'medicine_purchase'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Stock']->addChild('Instant Purchase', array('route' => 'medicine_instantpurchase'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Stock']->addChild('Purchase Return', array('route' => 'medicine_purchase_return'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Stock']->addChild('Damage', array('route' => 'medicine_damage'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Stock']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
-            $menu['Medicine']->addChild('Master Data')
-                ->setAttribute('icon', 'icon icon-cog')
-                ->setAttribute('dropdown', true);
-            $menu['Medicine']['Master Data']->addChild('Particular', array('route' => 'medicine_particular'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Master Data']->addChild('Configuration', array('route' => 'medicine_config_manage'))
-                ->setAttribute('icon', 'icon icon-cog');
-            $menu['Medicine']->addChild('Reports')
-                ->setAttribute('icon', 'icon icon-bar-chart')
-                ->setAttribute('dropdown', true);
-            $menu['Medicine']['Reports']->addChild('Sales Summary', array('route' => 'medicine_report_sales_summary'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Sales Details', array('route' => 'medicine_report_sales_details'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Product Wise Sales', array('route' => 'medicine_report_sales_stock'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Customer Wise Sales', array('route' => 'medicine_report_sales_user'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Purchase Details', array('route' => 'medicine_report_purchase_details'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Reports']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))
-                ->setAttribute('icon', 'icon-th-list');
-        }
+            if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
+
+                $menu['Medicine']['Manage Stock']->addChild('Stock Medicine', array('route' => 'medicine_stock'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Manage Stock']->addChild('Medicine Expiration', array('route' => 'medicine_purchase_item'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Manage Stock']->addChild('Medicine Short List', array('route' => 'medicine_stock_short_item'))
+                    ->setAttribute('icon', 'icon-th-list');
+            }
+            if ($securityContext->isGranted('ROLE_MEDICINE_PURCHASE')) {
+
+                $menu['Medicine']['Manage Stock']->addChild('Purchase', array('route' => 'medicine_purchase'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Manage Stock']->addChild('Instant Purchase', array('route' => 'medicine_instantpurchase'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Manage Stock']->addChild('Purchase Return', array('route' => 'medicine_purchase_return'))
+                    ->setAttribute('icon', 'icon-th-list');
+            }
+            if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER') or $securityContext->isGranted('ROLE_MEDICINE_ADMIN')  ) {
+                $menu['Medicine']['Manage Stock']->addChild('Damage', array('route' => 'medicine_damage'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Manage Stock']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
+            }
+            if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
+                $menu['Medicine']->addChild('Master Data')
+                    ->setAttribute('icon', 'icon icon-cog')
+                    ->setAttribute('dropdown', true);
+                $menu['Medicine']['Master Data']->addChild('Particular', array('route' => 'medicine_particular'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Master Data']->addChild('User Sales Setup', array('route' => 'medicine_sales_user', 'routeParameters' => array('source' => 'medicine')))
+                    ->setAttribute('icon', 'icon icon-cog');
+                $menu['Medicine']['Master Data']->addChild('Configuration', array('route' => 'medicine_config_manage'))
+                    ->setAttribute('icon', 'icon icon-cog');
+            }
+            if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
+
+                $menu['Medicine']->addChild('Reports')
+                    ->setAttribute('icon', 'icon icon-bar-chart')
+                    ->setAttribute('dropdown', true);
+                $menu['Medicine']['Reports']->addChild('Sales Summary', array('route' => 'medicine_report_sales_summary'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']->addChild('Sales Details', array('route' => 'medicine_report_sales_details'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']->addChild('Product Wise Sales', array('route' => 'medicine_report_sales_stock'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']->addChild('User Wise Sales', array('route' => 'medicine_report_sales_user'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']->addChild('User Monthly Sales', array('route' => 'medicine_report_sales_user_monthly'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']->addChild('Purchase Details', array('route' => 'medicine_report_purchase_details'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))
+                    ->setAttribute('icon', 'icon-th-list');
+            }
+
         return $menu;
 
     }

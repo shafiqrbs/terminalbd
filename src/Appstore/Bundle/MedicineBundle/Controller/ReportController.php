@@ -117,6 +117,29 @@ class ReportController extends Controller
         ));
     }
 
+    public function monthlyUserSalesAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $employees = $em->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
+        $entities = $em->getRepository('MedicineBundle:MedicineSales')->monthlySales($user,$data);
+        $salesAmount = array();
+        foreach($entities as $row) {
+            $salesAmount[$row['salesBy'].$row['month']] = $row['total'];
+        }
+        return $this->render('MedicineBundle:Report:sales/salesMonthlyUser.html.twig', array(
+            'inventory'      => $inventory ,
+            'salesAmount'      => $salesAmount ,
+            'employees'      => $employees ,
+            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm'    => $data ,
+        ));
+
+    }
+
+
     public function purchaseOverviewAction(){
 
         $em = $this->getDoctrine()->getManager();

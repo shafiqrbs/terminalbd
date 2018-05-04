@@ -65,6 +65,40 @@ class MedicineStockRepository extends EntityRepository
         return  $qb;
     }
 
+    public function findWithShortListSearch($config,$data)
+    {
+
+        $item = isset($data['item'])? $data['item'] :'';
+        $brand = isset($data['brand'])? $data['brand'] :'';
+        $sku = isset($data['sku'])? $data['sku'] :'';
+        $minQnt = isset($data['minQnt'])? $data['minQnt'] :'';
+
+        $qb = $this->createQueryBuilder('item');
+        $qb->where("item.medicineConfig = :config");
+        $qb->setParameter('config', $config);
+        $qb->andWhere("item.minQuantity > 0");
+        if($minQnt == 'minimum') {
+            $qb->andWhere("item.minQuantity >= item.remainingQuantity");
+        }
+        if (!empty($sku)) {
+            $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
+        }
+        if (!empty($item)) {
+
+            $qb->andWhere("item.name = :name");
+            $qb->setParameter('name', $item);
+        }
+        if (!empty($brand)) {
+            $qb->join('item.medicineBrand', 'b');
+            $qb->andWhere("b.name = :brand");
+            $qb->setParameter('brand', $brand);
+        }
+        $qb->orderBy('item.name','ASC');
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
     public function getFindWithParticular($hospital,$services){
 
         $qb = $this->createQueryBuilder('e')

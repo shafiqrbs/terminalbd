@@ -182,6 +182,7 @@ class PurchaseController extends Controller
             $entity->setMedicineConfig($config);
             $name = $medicine->getMedicineForm() . ' ' . $medicine->getName() . ' ' . $medicine->getStrength();
             $entity->setName($name);
+            $entity->setMedicineBrand($medicine);
             $entity->setBrandName($medicine->getMedicineCompany()->getName());
             $entity->setMode('medicine');
             $em->persist($entity);
