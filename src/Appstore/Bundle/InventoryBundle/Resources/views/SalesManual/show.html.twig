@@ -152,17 +152,21 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                            <div class="form-actions portlet box grey">
-                                <div class="span8" id="message"></div>
+                                <div class="span6" id="message"></div>
 
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    <a target="_blank"  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print Bill</a>
-                                    <a target="_blank"  href="{{ path('inventory_sales_print_chalan',{'invoice':entity.invoice}) }}" class="btn purple"><i class="icon-print"></i>&nbsp;Print Chalan</a>
+                                    {% set process = ['In-progress','Courier'] %}
+                                    {% if entity.process in process  %}
+                                        <a data-type="select" class="editable btn red" id="process" data-name="Process" href="#" data-source="{{ path('inventory_salesmanual_inline_status_select') }}"  data-url="{{ path('inventory_salesmanual_inline_process_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.process }}" data-original-title="Select change process">{{ entity.process }}</a>
+                                    {% else %}
+                                      <span class="btn blue">{{  entity.process }}</span>
+                                    {% endif %}
                                     {% if entity.due > 0 %}
                                         <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn yellow"><i class="icon-money"></i> Receive Amount</a>
                                     {% endif %}
+                                    <a target="_blank"  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print Bill</a>
+                                    <a target="_blank"  href="{{ path('inventory_sales_print_chalan',{'invoice':entity.invoice}) }}" class="btn purple"><i class="icon-print"></i>&nbsp;Print Chalan</a>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -171,5 +175,23 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/editable.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    EditableInit();
+    $(document).on("click", ".editable-submit", function() {
+    setTimeout(pageReload, 1000);
+    });
+    function pageReload() {
+    location.reload();
+    }
 {% endblock %}
 

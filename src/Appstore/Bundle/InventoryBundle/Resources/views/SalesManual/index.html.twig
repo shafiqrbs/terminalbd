@@ -35,12 +35,7 @@
                             <div class="caption"><i class="icon-reorder"></i>Sales lists</div>
                             <div class="actions">
                                 <div class="btn-group">
-                                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                        Tools&nbsp;<i class="icon-tasks"></i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="{{ path('inventory_salesmanual_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Sales</a></li>
-                                    </ul>
+                                    <a class="btn red" href="{{ path('inventory_salesmanual_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Sales</a>
                                 </div>
                             </div>
                         </div>
@@ -94,9 +89,8 @@
                                 </form>
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
                                     <thead class="flip-content ">
-                                    <tr class="head-green">
-                                        <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                        <th class="numeric" >Invoice</th>
+                                    <tr class="head-blue">
+                                        <td>&nbsp;&nbsp;<i class="icon-list"></i> Invoice</td>
                                         <th class="numeric" >Date</th>
                                         <th class="numeric" >Sub-Total</th>
                                         <th class="numeric" >Vat</th>
@@ -113,9 +107,9 @@
                                     <tbody id="sales">
                                         {% for entity in entities %}
                                             <tr id="salesRemove-{{ entity.id }}">
-                                                <td> {% if entity.salesItems is defined and  entity.salesItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
+                                                {#<td> {% if entity.salesItems is defined and  entity.salesItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>#}
                                                 <td class="numeric" >{{ entity.invoice }}</td>
-                                                <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                                <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                                 <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
                                                 <td class="numeric" >{{ entity.vat|number_format  }}</td>
                                                 <td class="numeric" >{{ entity.discount|number_format  }}</td>
@@ -124,7 +118,14 @@
                                                 <td class="numeric" >{{ entity.due|number_format }}</td>
                                                 <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                                 <td class="numeric" >{% if entity.salesBy %}{{ entity.salesBy }}{% endif %}</td>
-                                                <td class="numeric" >{{ entity.process|capitalize }}</td>
+                                                <td class="numeric" >
+                                                    {% set process = ['In-progress','Courier'] %}
+                                                    {% if entity.process in process  %}
+                                                    <a data-type="select" class="editable btn red mini" id="process" data-name="Process" href="#" data-source="{{ path('inventory_salesmanual_inline_status_select') }}"  data-url="{{ path('inventory_salesmanual_inline_process_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.process }}" data-original-title="Select change process">{{ entity.process }}</a>
+                                                    {% else %}
+                                                        {{  entity.process }}
+                                                    {% endif %}
+                                                </td>
                                                 <td class="numeric" >
                                                     {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                                         <a href="{{ path('inventory_salesmanual_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
@@ -139,7 +140,7 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            <tr id="show-{{ entity.id }}" class="showing-overview">
+                                           {# <tr id="show-{{ entity.id }}" class="showing-overview">
                                                 <td colspan="11">
                                                     {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                                         <table class="table table-bordered table-striped table-condensed flip-content ">
@@ -169,7 +170,7 @@
                                                         </table>
                                                     {% endif %}
                                                 </td>
-                                            </tr>
+                                            </tr>#}
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -186,49 +187,18 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    '@InventoryBundle/Resources/public/js/editable.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    ApproveProcess();
-    $('#sales').on("click", ".delete", function() {
-
-        var url = $(this).attr("rel");
-        var id = $(this).attr("id");
-        $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-        obj = JSON.parse(response);
-        if ('success' == obj['success']) {
-        $('#salesRemove-' + id).hide();
-        }
-        }
-        })
-    })
-
-    $('#sales').on("click", ".print", function() {
-        var url = $(this).attr("rel");
-        $.ajax({
-            crossDomain: true,
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                $.ajax({
-                    crossDomain: true,
-                    url: 'http://127.0.0.1/posprint/test.php',
-                    type: 'POST',
-                    data: {data:response},
-                    success: function (response) {
-                        console.log(response);
-                    }
-                })
-            }
-        })
-    })
-
-
+    EditableInit();
+    $(document).on("click", ".editable-submit", function() {
+    setTimeout(pageReload, 1000);
+    });
+    function pageReload() {
+    location.reload();
+    }
 {% endblock %}

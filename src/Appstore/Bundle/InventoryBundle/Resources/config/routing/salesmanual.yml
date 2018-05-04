@@ -62,3 +62,16 @@ inventory_salesmanual_item_inline_update:
     options:
            expose: true
 
+
+inventory_salesmanual_inline_process_update:
+    path:     /manual-sales/inline-process-update
+    defaults: { _controller: "InventoryBundle:SalesManual:salesInlineProcessUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_salesmanual_inline_status_select:
+    path:     /manual-sales/inline-status-select
+    defaults: { _controller: "InventoryBundle:SalesManual:salesSelect" }
+    options:
+           expose: true

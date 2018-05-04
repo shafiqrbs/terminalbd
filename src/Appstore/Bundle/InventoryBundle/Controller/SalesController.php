@@ -582,14 +582,14 @@ class SalesController extends Controller
                 $dispatcher->dispatch('setting_tool.post.courier_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }
         }
-        if($entity->getProcess() == 'Done'){
+        if($entity->getProcess() == 'Done' or $entity->getProcess() == 'Delivered' ){
             $this->approvedOrder($entity);
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }
         }elseif($entity->getProcess() == 'Returned'){
-            $this->returnCancelOrder($entity);
+         //   $this->returnCancelOrder($entity);
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 
                 $dispatcher = $this->container->get('event_dispatcher');
@@ -614,8 +614,8 @@ class SalesController extends Controller
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
@@ -662,10 +662,12 @@ class SalesController extends Controller
     public function salesSelectAction()
     {
         $items  = array();
-        $items[]= array('value' => 'Done','text'=>'Done');
         $items[]= array('value' => 'In-progress','text'=>'In-progress');
         $items[]= array('value' => 'Courier','text'=>'Courier');
+        $items[]= array('value' => 'Delivered','text'=>'Delivered');
+        $items[]= array('value' => 'Done','text'=>'Done');
         $items[]= array('value' => 'Returned','text'=>'Returned');
+        $items[]= array('value' => 'Canceled','text'=>'Canceled');
         return new JsonResponse($items);
     }
 
@@ -684,15 +686,17 @@ class SalesController extends Controller
         }
         return $this->render('InventoryBundle:SalesPrint:'.$print.'.html.twig', array(
             'entity'      => $entity,
-            'inventory'      => $inventory,
+            'inventory'   => $inventory,
             'barcode'     => $barcode,
-            'inWard'     => $inWard,
+            'inWard'      => $inWard,
         ));
     }
 
-    public function chalanPrintAction(Sales $entity)
+    public function chalanPrintAction($invoice)
     {
 
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $config,'invoice' => $invoice));
         $barcode = $this->getBarcode($entity->getInvoice());
         $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
         $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);

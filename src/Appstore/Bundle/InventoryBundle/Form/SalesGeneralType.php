@@ -104,7 +104,8 @@ class SalesGeneralType extends AbstractType
                 'choices' => array(
                     'Created' => 'Created',
                     'In-progress' => 'In-progress',
-                    'Courier' => 'Courier/Delivered',
+                    'Courier' => 'Courier',
+                    'Delivered' => 'Delivered',
                     'Cancel' => 'Cancel',
                     'Returned' => 'Returned',
                     'Done' => 'Done',

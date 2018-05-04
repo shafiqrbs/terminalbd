@@ -645,7 +645,7 @@ class Builder extends ContainerAware
 
             $menu['Inventory']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
                 ->setAttribute('icon', 'icon icon-cogs');
-            $menu['Inventory']->addChild('Target Sales', array('route' => 'inventory_sales_user'))
+            $menu['Inventory']->addChild('User Sales Setup', array('route' => 'inventory_sales_user'))
                 ->setAttribute('icon', 'fa fa-group');
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {

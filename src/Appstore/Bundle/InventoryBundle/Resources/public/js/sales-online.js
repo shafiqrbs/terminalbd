@@ -84,6 +84,9 @@ $('form#salesForm').on('keypress', '.inputs', function (e) {
             inputs[idx + 1].focus(); //  handles submit buttons
         }
         switch (this.id) {
+            case 'sales_discount':
+                $('#sales_payment').focus();
+                break;
             case 'mobile':
                 $('#onlineSalesPos').focus();
                 break;
@@ -247,8 +250,6 @@ var InventorySales = function(sales) {
         })
     });
 
-
-
     $(document).on("click", ".customPrice", function() {
 
         var rel = $(this).attr('rel');
@@ -284,8 +285,6 @@ var InventorySales = function(sales) {
             })
         }
     });
-
-
 
     $(document).on('change', '.quantity , .salesPrice', function() {
 
@@ -363,62 +362,60 @@ var InventorySales = function(sales) {
 
     });
 
+    var delay = (function(){
+        var timer = 0;
+        return function(callback, ms){
+            clearTimeout (timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+
     $(document).on('change', '#sales_discount', function() {
 
         var discount = parseInt($('#sales_discount').val());
-        var total =  parseInt($('#paymentTotal').val());
-        if(discount >= total ){
+        var total = parseInt($('#paymentTotal').val());
+        if (discount >= total) {
             $('#sales_discount').val(0);
+            alert ('Discount amount less then total amount');
             return false;
         }
-        $.ajax({
-            url: Routing.generate('inventory_sales_discount_update'),
-            type: 'POST',
-            data:'discount=' + discount+'&sales='+ sales,
-            success: function(response) {
-                obj = JSON.parse(response);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#vatHtml').html(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('#dueHtml').html(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-            },
+        if (discount > 0){
+            $.ajax({
+                url: Routing.generate('inventory_sales_discount_update'),
+                type: 'POST',
+                data: 'discount=' + discount + '&sales=' + sales,
+                success: function (response) {
+                    obj = JSON.parse(response);
+                    $('.salesTotal').html(obj['salesTotal']);
+                    $('#subTotal').val(obj['salesSubTotal']);
+                    $('#vat').val(obj['salesVat']);
+                    $('#vatHtml').html(obj['salesVat']);
+                    $('#paymentTotal').val(obj['salesTotal']);
+                    $('#paymentSubTotal').val(obj['salesTotal']);
+                    $('#dueAmount').val(obj['salesTotal']);
+                    $('#dueHtml').html(obj['salesTotal']);
+                    $('#wrongBarcode').html(obj['msg']);
+                },
 
-        })
+            })
+        }
+
+
     });
 
-    $(document).on('change', '#sales_payment', function() {
+    $(document).on('keyup', '#sales_payment', function() {
 
         var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
         var total =  parseInt($('#paymentTotal').val());
-        if( payment >= total ){
-            var returnAmount = ( payment - total );
-            $('#returnAmount').val(returnAmount).addClass('payment-yellow');
-            $('.returnAmount').html(returnAmount).addClass('payment-yellow');
-            $('#dueAmount').val('').removeClass('payment-red');
-            $('.dueAmount').html('').removeClass('payment-red');
 
+        var dueAmount = (total-payment);
+        if(dueAmount > 0){
+            $('#balance').html('Due Tk.');
+            $('.dueAmount').val(dueAmount);
         }else{
-
-            var dueAmount = (total-payment);
-            if(dueAmount > 0){
-                $('#returnAmount').val('').removeClass('payment-yellow');
-                $('.returnAmount').html('').removeClass('payment-yellow');
-                $('#dueAmount').val(dueAmount).addClass('payment-red');
-                $('.dueAmount').html(dueAmount).addClass('payment-red');
-            }
-        }
-
-        if(payment > 0  ){
-            $(".paymentBtn").attr("disabled", false);
-            $('#receiveChange').removeClass('receive-empty').addClass('receive-value');
-        }else{
-            $('#receiveChange').removeClass('receive-value').addClass('receive-empty');
-            $(".paymentBtn").attr("disabled", true);
+            var balance =  payment - total ;
+            $('#balance').html('Return TK.');
+            $('.dueAmount').val(balance);
         }
 
     });

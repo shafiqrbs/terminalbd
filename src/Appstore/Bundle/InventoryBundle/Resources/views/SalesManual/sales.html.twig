@@ -135,7 +135,11 @@
                                        <div class="row-fluid">
                                             <span class="add-on add-on-custom span5"><strong>NET TOTAL TK.</strong></span><input class="m-wrap span7 numeric disabled-field salesTotal" readonly="readonly" name="netTotal" id="netTotal" type="text" value="{{ entity.total }}">
                                        </div>
-                                       <div class="row-fluid">
+                                        <div class="row-fluid">
+                                            <span class="add-on add-on-custom span5"><strong>DISCOUNT TK.</strong></span> {{ form_widget(form.discount) }}
+
+                                        </div>
+                                        <div class="row-fluid">
                                             <div class="span12 input-append-border">
                                                 {{ form_widget(form.transactionMethod) }}
                                                 {{ form_errors(form.transactionMethod) }}
@@ -169,25 +173,17 @@
                                                 {{ form_errors(form.transactionId) }}
                                             </div>
                                         </div>
+                                       <div class="row-fluid">
+                                            <span class="add-on add-on-custom span5"><strong>RECEIVE TK.</strong></span>{{ form_widget(form.payment) }}
+                                        </div>
+                                        <div class="row-fluid">
+                                            <span class="add-on add-on-custom span5"><strong id="balance">DUE TK.</strong></span><input class="m-wrap span7  numeric disabled-field dueAmount" readonly="readonly" type="text" id="dueAmount" name="dueAmount" value="{{ entity.total }}">
+                                        </div>
+
                                         <div class="row-fluid">
                                             <div class="span12 input-append-border">
                                                 {{ form_widget(form.salesBy) }}
-                                                {{ form_errors(form.salesBy) }}
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong>DISCOUNT TK.</strong></span> {{ form_widget(form.discount) }}
-                                            {{ form_errors(form.discount) }}
-                                        </div>
-                                        <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong>RECEIVE TK.</strong></span>{{ form_widget(form.payment) }}
-                                            {{ form_errors(form.payment) }}
-                                        </div>
-                                        <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong>DUE TK.</strong></span><input class="m-wrap span7 numeric disabled-field" type="text" name="dueAmount" readonly="readonly" id="dueAmount" value="{{ entity.due }}">
-                                        </div>
-                                        <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong>RETURN TK.</strong></span><input class="m-wrap span7  numeric disabled-field" readonly="readonly" type="text" id="returnAmount" name="returnAmount">
+                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="input-append span12">
@@ -254,6 +250,12 @@
             padding:15px;
             background-color:#E5E7E7;
             border:1px solid #B7B9B9;
+        }
+        #sales_discount{
+            border: 2px solid #eca22e!important;
+        }
+        #sales_payment{
+            border: 2px solid red!important;
         }
         .customer{
             display: none;

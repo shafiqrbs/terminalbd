@@ -275,6 +275,7 @@ class SalesManualController extends Controller
         /* @var $sales Sales */
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $total = ($sales->getSubTotal() - $discount);
+        $vat =0;
         if($total > 0 ){
             if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
@@ -407,22 +408,25 @@ class SalesManualController extends Controller
                 $entity->setApprovedBy($this->getUser());
             }
             $em->flush();
+
             /*
             if (in_array('CustomerSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
-
                 if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                     $dispatcher = $this->container->get('event_dispatcher');
                     $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
                 }
             }*/
-            if($entity->getProcess() =='Done'){
-                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+
+            if($entity->getProcess() =='Done' or $entity->getProcess() == 'Delivered'){
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesManualStockItem($entity);
+                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
                 return $this->redirect($this->generateUrl('inventory_salesmanual_show', array('id' => $entity->getId())));
             }elseif($entity->getProcess() =='Created' or $entity->getProcess() =='In-progress' ){
                 return $this->redirect($this->generateUrl('inventory_salesmanual_edit', array('code' => $entity->getInvoice())));
+            }elseif($entity->getProcess() =='Courier' or $entity->getProcess() =='Returned'or $entity->getProcess() =='Cancel' ){
+                return $this->redirect($this->generateUrl('inventory_salesmanual'));
             }
         }
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
@@ -433,13 +437,14 @@ class SalesManualController extends Controller
             $items[] = $value->getId();
         }
         $ongoingItem = $em->getRepository('InventoryBundle:SalesItem')->ongoingSalesManuelQuantity($inventory,$items);
-        $editForm = $this->createEditForm($entity);
+        $createItemForm = $this->createItemForm(New SalesItem(),$entity);
         return $this->render('InventoryBundle:SalesManual:sales.html.twig', array(
             'entities' => $pagination,
             'entity' => $entity,
             'ongoingItem' => $ongoingItem,
             'searchForm' => $data,
             'form' => $editForm->createView(),
+            'itemForm' => $createItemForm->createView(),
         ));
 
     }
@@ -457,8 +462,8 @@ class SalesManualController extends Controller
             $entity->setPaymentStatus('Paid');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');
@@ -575,7 +580,7 @@ class SalesManualController extends Controller
                 $dispatcher->dispatch('setting_tool.post.courier_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }
         }
-        if($entity->getProcess() == 'Done'){
+        if($entity->getProcess() == 'Done' or $entity->getProcess() == 'Delivered'){
             $this->approvedOrder($entity);
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                 $dispatcher = $this->container->get('event_dispatcher');
@@ -603,9 +608,9 @@ class SalesManualController extends Controller
             $entity->setDue($entity->getTotal() - $entity->getPayment());
             $entity->setApprovedBy($this->getUser());
             $em->flush();
+            $em->getRepository('InventoryBundle:StockItem')->insertSalesManualStockItem($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-            $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+        //  $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');
@@ -632,18 +637,19 @@ class SalesManualController extends Controller
     public function salesSelectAction()
     {
         $items  = array();
-        $items[]= array('value' => 'Done','text'=>'Done');
         $items[]= array('value' => 'In-progress','text'=>'In-progress');
         $items[]= array('value' => 'Courier','text'=>'Courier');
+        $items[]= array('value' => 'Delivered','text'=>'Delivered');
+        $items[]= array('value' => 'Done','text'=>'Done');
         $items[]= array('value' => 'Returned','text'=>'Returned');
+        $items[]= array('value' => 'Canceled','text'=>'Canceled');
         return new JsonResponse($items);
     }
 
     public function invoicePrintAction(Sales $entity)
     {
         $barcode = $this->getBarcode($entity->getInvoice());
-        echo $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-        exit;
+        $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
         return $this->render('InventoryBundle:SalesManual:invoice.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,

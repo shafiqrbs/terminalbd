@@ -115,18 +115,18 @@ inventory_sales_inline_process_update:
     options:
             expose: true
 
+inventory_sales_inline_status_select:
+    path:     /inline-status-select
+    defaults: { _controller: "InventoryBundle:Sales:salesSelect" }
+    options:
+           expose: true
+
 inventory_sales_mobile_update:
     path:     /sales/mobile-update
     defaults: { _controller: "InventoryBundle:Sales:salesInlineMobileUpdate" }
     methods:  POST
     options:
             expose: true
-
-inventory_sales_inline_status_select:
-    path:     /inline-status-select
-    defaults: { _controller: "InventoryBundle:Sales:salesSelect" }
-    options:
-           expose: true
 
 inventory_sales_invoice_search:
     path:     /sales-invoice-sesrch

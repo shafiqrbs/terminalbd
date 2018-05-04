@@ -595,9 +595,9 @@ class SalesOnlineController extends Controller
             $entity->setPayment($entity->getPayment() + $entity->getDue());
             $entity->setDue($entity->getTotal() - $entity->getPayment());
             $em->flush();
-            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-            $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+          //  $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');
@@ -1165,7 +1165,7 @@ class SalesOnlineController extends Controller
 
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-            $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+         //   $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return $this->redirect($this->generateUrl('inventory_salesonline_new'));

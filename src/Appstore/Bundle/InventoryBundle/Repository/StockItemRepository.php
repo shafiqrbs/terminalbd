@@ -147,6 +147,24 @@ class StockItemRepository extends EntityRepository
 
     }
 
+    protected function handleSearchDateBetween($qb,$data)
+    {
+
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+        if (!empty($startDate)) {
+            $start = date('Y-m-d 00:00:00',strtotime($startDate));
+            $qb->andWhere("sales.created >= :startDate");
+            $qb->setParameter('startDate',$start);
+        }
+
+        if (!empty($endDate)) {
+            $end = date('Y-m-d 23:59:59',strtotime($startDate));
+            $qb->andWhere("sales.created <= :endDate");
+            $qb->setParameter('endDate',$end);
+        }
+
+    }
 
 
     public function getStockPriceOverview($inventory,$data)
@@ -756,36 +774,39 @@ class StockItemRepository extends EntityRepository
                 $entity->setQuantity($quantity);
                 $entity->setCreatedBy($sales->getCreatedBy());
 
+                $item = $row->getItem();
                 $purchaseItem = $row->getPurchaseItem();
 
-                $entity->setProduct($purchaseItem->getItem()->getMasterItem());
-                $entity->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
-                $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-                $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
+                $entity->setProduct($item->getMasterItem());
+                $entity->setProductName($item->getMasterItem()->getName());
+                if(!empty($purchaseItem)){
+                    $entity->setVendor($purchaseItem->getPurchase()->getVendor());
+                    $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
 
-                if (!empty($purchaseItem->getItem()->getMasterItem()->getCategory())) {
-                    $entity->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
-                    $entity->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());
+                }
+                if (!empty($item->getMasterItem()->getCategory())) {
+                    $entity->setCategory($item->getMasterItem()->getCategory());
+                    $entity->setCategoryName($item->getMasterItem()->getCategory()->getName());
                 }
 
-                if (!empty($purchaseItem->getItem()->getMasterItem()->getProductUnit())) {
-                    $entity->setUnit($purchaseItem->getItem()->getMasterItem()->getProductUnit());
-                    $entity->setUnitName($purchaseItem->getItem()->getMasterItem()->getProductUnit()->getName());
+                if (!empty($item->getMasterItem()->getProductUnit())) {
+                    $entity->setUnit($item->getMasterItem()->getProductUnit());
+                    $entity->setUnitName($item->getMasterItem()->getProductUnit()->getName());
                 }
 
-                if (!empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
+                if (!empty($purchaseItem) and !empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
                     $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
                     $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
                 }
 
-                if (!empty($purchaseItem->getItem()->getSize())) {
-                    $entity->setSize($purchaseItem->getItem()->getSize());
-                    $entity->setSizeName($purchaseItem->getItem()->getSize()->getName());
+                if (!empty($item->getSize())) {
+                    $entity->setSize($item->getSize());
+                    $entity->setSizeName($item->getSize()->getName());
                 }
 
-                if (!empty($purchaseItem->getItem()->getColor())) {
-                    $entity->setColor($purchaseItem->getItem()->getColor());
-                    $entity->setColorName($purchaseItem->getItem()->getColor()->getName());
+                if (!empty($item->getColor())) {
+                    $entity->setColor($item->getColor());
+                    $entity->setColorName($item->getColor()->getName());
                 }
                 $entity->setProcess('sales');
                 $em->persist($entity);
@@ -825,7 +846,6 @@ class StockItemRepository extends EntityRepository
                 $entity->setUnit($row->getItem()->getMasterItem()->getProductUnit());
                 $entity->setUnitName($row->getItem()->getMasterItem()->getProductUnit()->getName());
             }
-
 
             if(!empty($row->getItem()->getSize())){
                 $entity->setSize($row->getItem()->getSize());
@@ -1336,25 +1356,6 @@ class StockItemRepository extends EntityRepository
 
     }
 
-    protected function handleSearchDateBetween($qb,$data)
-    {
-
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-        if (!empty($startDate)) {
-            $start = date('Y-m-d 00:00:00',strtotime($startDate));
-            $qb->andWhere("sales.created >= :startDate");
-            $qb->setParameter('startDate',$start);
-        }
-
-        if (!empty($endDate)) {
-            $end = date('Y-m-d 23:59:59',strtotime($startDate));
-            $qb->andWhere("sales.created <= :endDate");
-            $qb->setParameter('endDate',$end);
-        }
-
-    }
-
     public  function getSalesItemOverview($inventory, $data = array()){
 
         $branch = isset($data['branch']) ? $data['branch'] :'';
@@ -1557,8 +1558,5 @@ class StockItemRepository extends EntityRepository
         return $data;
 
     }
-
-
-
 
 }

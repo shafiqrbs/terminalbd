@@ -131,7 +131,7 @@ var InventorySales = function(sales) {
 
     });
 
-    $(document).on('change', '#sales_discount', function () {
+    $(document).on('change', '#sales_discountxx', function () {
 
         var discount = parseInt($('#sales_discount').val());
         var total = parseInt($('#netTotal').val());
@@ -155,33 +155,72 @@ var InventorySales = function(sales) {
         })
     });
 
-    $(document).on('change', '#sales_payment', function () {
+    $(document).on('keyup', '#sales_discount', function() {
 
-        var payment = parseInt($('#sales_payment').val() != '' ? $('#sales_payment').val() : 0);
-        var total = parseInt($('#netTotal').val());
-        if (payment >= total) {
+        var discount = parseInt($('#sales_discount').val());
+        var total =  parseInt($('#paymentTotal').val());
+        if(discount >= total ){
+            $('#sales_discount').val(0);
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_salesmanual_discount_update'),
+            type: 'POST',
+            data:'discount=' + discount+'&sales='+ sales,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#subTotal').val(obj['subTotal']);
+                $('#netTotal').val(obj['netTotal']);
+                $('#vat').val(obj['vat']);
+                $('#dueAmount').val(obj['netTotal']);
+            },
 
+        })
+    });
+
+
+    $(document).on('keyup', '#sales_payment', function () {
+
+        var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
+        var total =  parseInt($('#paymentTotal').val());
+
+        var dueAmount = (total-payment);
+        if(dueAmount > 0){
+            $('#balance').html('DUE TK.');
+            $('.dueAmount').val(dueAmount);
+        }else{
+            var balance =  payment - total ;
+            $('#balance').html('RETURN TK.');
+            $('.dueAmount').val(balance);
+        }
+
+/*
+
+        if( payment >= total ){
             var returnAmount = ( payment - total );
             $('#returnAmount').val(returnAmount).addClass('payment-yellow');
             $('.returnAmount').html(returnAmount).addClass('payment-yellow');
             $('#dueAmount').val('').removeClass('payment-red');
             $('.dueAmount').html('').removeClass('payment-red');
 
-        } else {
+        }else{
 
-            var dueAmount = (total - payment);
-            if (dueAmount > 0) {
+            var dueAmount = (total-payment);
+            if(dueAmount > 0){
                 $('#returnAmount').val('').removeClass('payment-yellow');
                 $('.returnAmount').html('').removeClass('payment-yellow');
                 $('#dueAmount').val(dueAmount).addClass('payment-red');
                 $('.dueAmount').html(dueAmount).addClass('payment-red');
             }
         }
-        if (payment > 0 && total > 0) {
+
+        if(payment > 0  ){
             $(".paymentBtn").attr("disabled", false);
-        } else {
+            $('#receiveChange').removeClass('receive-empty').addClass('receive-value');
+        }else{
+            $('#receiveChange').removeClass('receive-value').addClass('receive-empty');
             $(".paymentBtn").attr("disabled", true);
-        }
+        }*/
 
     });
 

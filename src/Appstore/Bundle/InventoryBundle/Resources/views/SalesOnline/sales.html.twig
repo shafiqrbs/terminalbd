@@ -207,19 +207,14 @@
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="span12 input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span7 numeric disabled-field" name="dueAmount" id="dueAmount" type="text"  readonly="readonly" value="{{ entity.due }}">
+                                    <div class="span12 ">
+                                        <div class="span12 input-prepend input-append input-append-border">
+                                            <span class="add-on add-on-custom span3">Discount TK.</span>  {{ form_widget(form.discount) }}
+                                            {{ form_errors(form.discount) }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Return TK.</span><input class="m-wrap span7  numeric disabled-field" readonly="readonly" type="text" id="returnAmount" name="returnAmount">
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="row-fluid">
                                     <div class="span12 input-append-border">
                                         {{ form_widget(form.transactionMethod) }}
@@ -273,20 +268,6 @@
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <div class="span12 input-append-border">
-                                        {{ form_widget(form.salesBy) }}
-                                        {{ form_errors(form.salesBy) }}
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 ">
-                                        <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">Discount TK.</span>  {{ form_widget(form.discount) }}
-                                            {{ form_errors(form.discount) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
                                     <div class="span12 receive-empty" id="receiveChange">
                                         <div class="input-prepend input-append input-append-border span12">
                                             <span class="add-on add-on-custom span3">Receive TK.</span>{{ form_widget(form.payment) }}
@@ -294,6 +275,20 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="span12 input-prepend input-append input-append-border span12">
+                                            <span class="add-on add-on-custom span3" id="balance">Due TK.</span><input class="m-wrap span7 numeric disabled-field dueAmount" name="dueAmount" id="dueAmount" type="text"  readonly="readonly" value="{{ entity.due }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 input-append-border">
+                                        {{ form_widget(form.salesBy) }}
+                                        {{ form_errors(form.salesBy) }}
+                                    </div>
+                                </div>
+
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="input-prepend input-append input-append-border span12">
