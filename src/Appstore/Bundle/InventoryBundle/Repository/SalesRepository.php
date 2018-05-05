@@ -37,6 +37,10 @@ class SalesRepository extends EntityRepository
             $paymentStatus =    isset($data['paymentStatus'])? $data['paymentStatus'] :'';
             $mode =    isset($data['mode'])? $data['mode'] :'';
             $branch =    isset($data['branch'])? $data['branch'] :'';
+            $item =    isset($data['item'])? $data['item'] :'';
+            $barcode =    isset($data['barcode'])? $data['barcode'] :'';
+            $serialNo =    isset($data['serialNo'])? $data['serialNo'] :'';
+            $vendor =    isset($data['vendor'])? $data['vendor'] :'';
 
             if (!empty($startDate)) {
                 $datetime = new \DateTime($startDate);
@@ -100,6 +104,29 @@ class SalesRepository extends EntityRepository
                 $qb->andWhere("s.branches = :branch");
                 $qb->setParameter('branch', $branch);
             }
+
+            if (!empty($item)) {
+                $qb->join('si.item','item');
+                $qb->andWhere("item.name = :name");
+                $qb->setParameter('name', $item);
+            }
+
+            if (!empty($vendor)) {
+                $qb->andWhere("vendor.companyName = :vendorName");
+                $qb->setParameter('vendorName', $vendor);
+            }
+
+            if (!empty($barcode)) {
+                $qb->leftJoin('si.purchaseItem','purchaseItem');
+                $qb->andWhere("purchaseItem.barcode = :barcode");
+                $qb->setParameter('barcode', $barcode);
+            }
+
+            if (!empty($serialNo)) {
+                $qb->andWhere("si.serialNo LIKE :serialNo");
+                $qb->setParameter('serialNo','%'. $serialNo.'%');
+            }
+
         }
 
     }
@@ -545,7 +572,7 @@ class SalesRepository extends EntityRepository
         $qb->leftJoin('s.customer','customer');
         $qb->join('si.item','item');
         $qb->join('si.purchaseItem','pi');
-        $qb->join('pi.purchase','purchase');
+        $qb->leftJoin('pi.purchase','purchase');
         $qb->leftJoin('purchase.vendor','vendor');
         $qb->select('s.created AS salesCreated');
         $qb->addSelect('customer.name AS customerName');
