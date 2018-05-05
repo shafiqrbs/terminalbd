@@ -35,6 +35,7 @@ class MedicineSalesRepository extends EntityRepository
     {
 
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
+        $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
@@ -53,6 +54,7 @@ class MedicineSalesRepository extends EntityRepository
             $qb->join('s.customer','m');
             $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
         }
+
         if (!empty($createdStart)) {
             $compareTo = new \DateTime($createdStart);
             $created =  $compareTo->format('Y-m-d 00:00:00');
@@ -68,13 +70,18 @@ class MedicineSalesRepository extends EntityRepository
         }
 
         if(!empty($salesBy)){
-            $qb->andWhere("e.salesBy = :salesBy");
-            $qb->setParameter('salesBy', $salesBy);
+            $qb->join("e.salesBy",'u');
+            $qb->andWhere("u.username = :username");
+            $qb->setParameter('username', $salesBy);
         }
 
         if(!empty($process)){
-            $qb->andWhere("s.process = :process");
+            $qb->andWhere("e.process = :process");
             $qb->setParameter('process', $process);
+        }
+        if(!empty($transactionMethod)){
+            $qb->andWhere("e.transactionMethod = :method");
+            $qb->setParameter('method', $transactionMethod);
         }
 
 

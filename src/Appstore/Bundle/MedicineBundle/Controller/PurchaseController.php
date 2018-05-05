@@ -321,10 +321,11 @@ class PurchaseController extends Controller
             return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
         }
         $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
-
+        $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
         return $this->render('MedicineBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
             'purchaseItem' => $purchaseItemForm->createView(),
+            'stockItemForm' => $stockItemForm->createView(),
             'form' => $editForm->createView(),
         ));
     }

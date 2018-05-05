@@ -208,7 +208,7 @@ $('#invoiceParticulars').on("click", ".delete", function() {
 });
 
 
-$(document).on('keyup', '#medicinepurchase_discount', function() {
+$(document).on('change', '#medicinepurchase_discount', function() {
 
     var purchaseId = $('#purchaseId').val();
     var discount = parseInt($('#medicinepurchase_discount').val());
@@ -232,7 +232,7 @@ $(document).on('keyup', '#medicinepurchase_discount', function() {
 
 });
 
-$(document).on('keyup', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
+$(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
 
     var payment     = parseInt($('#medicinepurchase_payment').val()  != '' ? $('#medicinepurchase_payment').val() : 0 );
     var discount     = parseInt($('#medicinepurchase_discount').val()  != '' ? $('#medicinepurchase_discount').val() : 0 );
@@ -262,9 +262,14 @@ $('form#purchaseForm').on('keypress', '.inputs', function (e) {
             inputs[idx + 1].focus(); //  handles submit buttons
         }
         switch (this.id) {
-                case 'medicinepurchase_payment':
-                $('#receiveBtn').focus();
-                break;
+
+            case 'medicinepurchase_discount':
+            $('#medicinepurchase_payment').focus();
+            break;
+
+            case 'medicinepurchase_payment':
+            $('#receiveBtn').focus();
+            break;
         }
         return false;
     }

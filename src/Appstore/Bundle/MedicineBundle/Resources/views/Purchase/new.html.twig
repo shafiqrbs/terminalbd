@@ -37,7 +37,7 @@
             <div class="actions">
                 <div class="btn-group">
                     <a href="javascript:" id="show"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
-                    <a class="btn" href="{{ path('medicine_purchase') }}"><i class="icon-th-list"></i> Medicine</a>
+                    <a class="btn" href="{{ path('medicine_purchase') }}"><i class="icon-th-list"></i> Purchase </a>
                 </div>
             </div>
         </div>
@@ -137,7 +137,7 @@
                                               <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
                                                       <span class="fa fa-plus"></span>
                                               </button>
-                                                <button type="button" class="btn blue" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                                                <button type="submit" class="btn blue" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
                                          </span>
                             <input type="hidden" id="particularId" name="particularId" value="">
 
@@ -229,15 +229,7 @@
                     </div>
                 </div>
                 <div class="span4 payment-info">
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="control-label" for="firstName"><span class="label">Discount TK.</span> <span class="pull-right sales-right">{{ form_widget(form.discount) }}</span></label>
-                            </div>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <div class="clearfix"></div>
+
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
@@ -264,6 +256,15 @@
                                 {{ form_errors(form.receiveDate) }}
                             </div>
                         </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
+                                <label class="control-label" for="firstName"><span class="label">Discount TK.</span> <span class="pull-right sales-right">{{ form_widget(form.discount) }}</span></label>
+                            </div>
+                        </div>
+                        <!--/span-->
                     </div>
                     <div class="clearfix"></div>
                     <div class="row-fluid">

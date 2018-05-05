@@ -48,11 +48,8 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span3">
+                                        <div class="span6">
                                             <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
-                                        </div>
-                                        <div class="span3">
-                                            <input type="text" id="toUser" name="toUser"  class="span12 m-wrap select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Enter sales user">
                                         </div>
                                         <div class="span3">
                                             <select name="process" id="process" class="span12 m-wrap">
@@ -78,12 +75,12 @@
                                             <input type="text" id="salesBy" name="salesBy"  class="span12 m-wrap select2User" value="{% if searchForm.select2User is defined %}{{ searchForm.select2User }}{% endif %}"  autocomplete="off" placeholder="Enter sales by ">
                                         </div>
                                         <div class="span3">
-                                            <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                            <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="Start date">
                                         </div>
                                         <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span10">
-                                                    <input type="text" id="endDate"  name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                    <input type="text" id="endDate"  name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="End date">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
@@ -154,12 +151,14 @@
     {{ parent() }}
     {% javascripts
     '@MedicineBundle/Resources/public/js/temporary-sales.js'
+    '@MedicineBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    jqueryTemporaryLoad();
     jqueryTemporaryLoad();
     jqueryInstantTemporaryLoad();
     $('#salesTemporaryItem_stockName').focus();
