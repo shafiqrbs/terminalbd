@@ -99,10 +99,10 @@ class MedicineStockController extends Controller
         $entity = new MedicineStock();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($entity->getName());
         $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config,$medicine);
         if ($form->isValid() and empty($checkStockMedicine)){
             $em = $this->getDoctrine()->getManager();
-            $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($entity->getName());
             $entity->setMedicineConfig($config);
             $entity->setMedicineBrand($medicine);
             $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();

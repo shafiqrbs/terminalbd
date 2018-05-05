@@ -10,21 +10,21 @@
                 <div class="row-fluid pull-center" >
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat blue">
-                            <a class="visual addPatient" href="javascript:">
+                            <a class="visual addPatient"  data-url="{{ path('medicine_sales_temporary_new') }}" href="javascript:">
                                 <i class="icon icon-medkit"></i>
                             </a>
-                            <a class="more addPatient" href="javascript:">
-                                Add New Patient <i class="m-icon-swapright m-icon-white"></i>
+                            <a class="more addPatient"  data-url="{{ path('medicine_sales_temporary_new') }}" id="temporarySales" href="javascript:">
+                                Add Sales <i class="m-icon-swapright m-icon-white"></i>
                             </a>
                         </div>
                     </div>
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat purple">
-                            <a class="visual" href="{{ path('dps_invoice') }}">
+                            <a class="visual" href="{{ path('medicine_sales') }}">
                                 <i class="fa fa-users"></i>
                             </a>
-                            <a class="more" href="{{ path('dps_invoice') }}">
-                                Patients <i class="m-icon-swapright m-icon-white"></i>
+                            <a class="more" href="{{ path('medicine_sales') }}">
+                                Sales <i class="m-icon-swapright m-icon-white"></i>
                             </a>
                         </div>
                     </div>
@@ -34,43 +34,35 @@
         <div class="form-actions portlet box green">
             <div class="portlet-title">
                 <div class="caption"><i class="icon-money"></i>Toady Sales Overview</div>
-                <div class="actions">
-                    <a target="_blank" href="{{ path('dps_report_today_sales_summary_pdf') }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
-                </div>
             </div>
 
             <div class="portlet-body">
                 <div class="clearfix">&nbsp;</div>
                 <table class="table table-bordered table-striped table-condensed flip-content ">
-                    <tbody class="">
                     <tr>
-                        <th class="numeric span11">Sub-total</th>
-                        <th class="numeric">{{ (salesOverview.subTotal)|number_format }}</th>
+                        <th class="numeric" >Sub-total Amount</th>
+                        <td class="numeric" >{{ cashOverview.subTotal|number_format }}</td>
                     </tr>
                     <tr>
-                        <th class="numeric span11">Discount</th>
-                        <th class="numeric">{{ (salesOverview.discount)|number_format }}</th>
+                        <th class="numeric" >Discount</th>
+                        <td class="numeric" >{{ cashOverview.totalDiscount|number_format }}</td>
                     </tr>
                     <tr>
-                        <th class="numeric span11">Net Total</th>
-                        <th class="numeric">{{ (salesOverview.subTotal - salesOverview.discount)|number_format }}</th>
-
+                        <th class="numeric" >Net Total</th>
+                        <td class="numeric" >{{ cashOverview.total|number_format }}</td>
                     </tr>
                     <tr>
-                        <th class="numeric span11">Received</th>
-                        <th class="numeric">{{ (salesOverview.payment)|number_format }}</th>
-
+                        <th class="numeric" >Payment</th>
+                        <td class="numeric" >{{ cashOverview.totalPayment|number_format }}</td>
                     </tr>
                     <tr>
-                        <th class="numeric span11">Due</th>
-                        <th class="numeric">{{ (salesOverview.subTotal - salesOverview.discount - salesOverview.payment)|number_format }}</th>
+                        <th class="numeric" >Due</th>
+                        <td class="numeric" >{{ cashOverview.totalDue|number_format }}</td>
                     </tr>
-                    </tbody>
                 </table>
             </div>
         </div>
 
-    </div>
     </div>
     <style>
         .dashboard-stat .visual{
@@ -98,7 +90,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@DoctorPrescriptionBundle/Resources/public/css/invoice.css'
+    '@MedicineBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -106,8 +98,14 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@DoctorPrescriptionBundle/Resources/public/js/patient.js'
+    '@MedicineBundle/Resources/public/js/temporary-sales.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+    jqueryTemporaryLoad();
+    jqueryInstantTemporaryLoad();
+    $('#salesTemporaryItem_stockName').focus();
+{% endblock %}

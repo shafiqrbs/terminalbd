@@ -44,9 +44,7 @@ class Builder extends ContainerAware
             $menu = $this->manageSystemAccountMenu($menu);
             $menu = $this->PayrollMenu($menu);
             $menu = $this->manageCustomerOrderMenu($menu);
-            $menu = $this->BusinessMenu($menu);
-
-
+            $menu = $this->businessMenu($menu);
         }
 
             $modules = $globalOption->getSiteSetting()->getAppModules();
@@ -148,7 +146,6 @@ class Builder extends ContainerAware
 
             if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_SMS')) {
                 $menu = $this->manageDomainInvoiceMenu($menu);
-                //$menu = $this->manageCustomerOrderMenu($menu);
             }
 
             if ($securityContext->isGranted('ROLE_CUSTOMER')) {
@@ -182,14 +179,14 @@ class Builder extends ContainerAware
     }
 
 
-    public function BusinessMenu($menu)
+    public function businessMenu($menu)
     {
 
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         $menu
             ->addChild('Business Management')
-            ->setAttribute('icon', 'fa fa-hospital-o')
+            ->setAttribute('icon', 'fa fa-building-o')
             ->setAttribute('dropdown', true);
 
         $menu['Business Management']->addChild('Client', array('route' => 'business_invoice'))
@@ -204,7 +201,7 @@ class Builder extends ContainerAware
         $menu['Business Management']['Expense']->addChild('Expense Category', array('route' => 'business_expensecategory'))
             ->setAttribute('icon', 'icon-tags');
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_BUSINESS_MANAGER')) {
 
             $menu['Business Management']->addChild('Master Data')
                 ->setAttribute('icon', 'icon icon-cog')
