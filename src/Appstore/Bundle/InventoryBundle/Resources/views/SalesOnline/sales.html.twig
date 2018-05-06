@@ -138,7 +138,7 @@
                                                 <th  class="numeric span1">Quantity</th>
                                                 <th class="numeric span2">Price</th>
                                                 <th>Total</th>
-                                                <th><i class="icon-trash"></i></th>
+                                                <th></th>
                                             </tr>
                                             </thead>
                                             <tbody id="salesItem" >
@@ -152,10 +152,11 @@
                                                     {% if entity.inventoryConfig.isAttribute == 1 %}
                                                     <td class="span2" >
                                                         {% if salesitem.purchaseItem.serialNo is not empty %}
-                                                            <select class="m-wrap span12 inputs" name="serialNo" id="serialNo" >
+                                                            <select class="m-wrap span12 inputs" name="serialNo" id="serialNo-{{ salesitem.id }}" multiple="multiple" >
                                                                 <option>--Serial no--</option>
+                                                                {% set serials = salesitem.serialNo|split(',') %}
                                                                 {% for serial in  salesitem.purchaseItem.serialNo|split(',') %}
-                                                                    <option {% if salesitem.serialNo == serial %} selected="selected" {% endif %} value="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id,'serial':serial}) }}" >{{ serial }}</option>
+                                                                    <option {% if serial in serials %} selected="selected" {% endif %} value="{{ serial }}" >{{ serial }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         {% endif %}
@@ -175,6 +176,9 @@
                                                     </td>
                                                     <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
                                                     <td>
+                                                        {% if entity.inventoryConfig.isAttribute == 1 %}
+                                                        <a title="Save" id="{{ salesitem.id }}" data-url="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id}) }}" href="javascript:" class="btn blue mini serialSave" ><i class="icon-save"></i></a>
+                                                        {% endif %}
                                                         <a title="Are you sure went to delete ?" id="{{ salesitem.id }}" rel="{{ path('inventory_salesitem_delete',{'sales':entity.id,'salesItem':salesitem.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                     </td>
                                                 </tr>

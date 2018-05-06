@@ -43,6 +43,13 @@ class BusinessInvoiceParticular
     /**
      * @var string
      *
+     * @ORM\Column(name="unit", type="string", length=225, nullable=true)
+     */
+    private $unit;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="metaKey", type="string", length=225, nullable=true)
      */
     private $metaKey;
@@ -62,20 +69,6 @@ class BusinessInvoiceParticular
     private $metaStatus;
 
 
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime")
-     */
-    private $created;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime")
-     */
-    private $updated;
 
     /**
      * Get id
@@ -150,6 +143,38 @@ class BusinessInvoiceParticular
     public function setBusinessParticular($businessParticular)
     {
         $this->businessParticular = $businessParticular;
+    }
+
+    /**
+     * @return BusinessInvoice
+     */
+    public function getBusinessInvoice()
+    {
+        return $this->businessInvoice;
+    }
+
+    /**
+     * @param BusinessInvoice $businessInvoice
+     */
+    public function setBusinessInvoice($businessInvoice)
+    {
+        $this->businessInvoice = $businessInvoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param string $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
     }
 
 

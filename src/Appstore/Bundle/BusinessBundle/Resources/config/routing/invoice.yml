@@ -17,13 +17,16 @@ business_invoice_edit:
 business_invoice_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "BusinessBundle:Invoice:particularSearch" }
+    options:
+           expose: true
 
-business_invoice_particular_procedure:
-    path:     /{invoice}/{service}/particular-procedure
-    defaults: { _controller: "BusinessBundle:Invoice:particularProcedure" }
-    methods:  POST
+
+business_item_unit_search:
+    path:     /item-unit-search
+    defaults: { _controller: "BusinessBundle:Invoice:autoUnitSearch" }
     options:
             expose: true
+
 
 business_invoice_particular_add:
     path:     /{invoice}/particular-add
@@ -50,17 +53,6 @@ business_invoice_medicine_delete:
     path:     /{id}/medicine-delete
     defaults: { _controller: "BusinessBundle:Invoice:deleteMedicine" }
 
-business_invoice_prescription_preview:
-    path:     /{id}/prescription-preview
-    defaults: { _controller: "BusinessBundle:Invoice:invoicePrintPreview" }
-
-business_invoice_treatment_approved:
-    path:     /{id}/treatment-approved
-    defaults: { _controller: "BusinessBundle:Invoice:treatmentApproved" }
-
-business_invoice_treatment_delete:
-    path:     /{invoice}/{id}/treatment-delete
-    defaults: { _controller: "BusinessBundle:Invoice:treatmentDelete" }
 
 business_invoice_appointment_datetime_check:
     path:     /treatment-appointment-datetime-check

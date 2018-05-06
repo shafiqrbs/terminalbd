@@ -40,7 +40,6 @@ class DefaultController extends Controller
                 }
             }
         }
-
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
@@ -53,7 +52,7 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('dps_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOSPITAL') && $enable == 1 && in_array('hms',$apps) ) {
             return $this->redirect($this->generateUrl('hospital_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') && $enable == 1 && in_array('hms',$apps) ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') && $enable == 1 && in_array('miss',$apps) ) {
             return $this->redirect($this->generateUrl('medicine_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1) {
             return $this->redirect($this->generateUrl('website'));

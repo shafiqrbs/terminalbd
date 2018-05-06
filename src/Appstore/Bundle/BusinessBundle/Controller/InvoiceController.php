@@ -105,6 +105,9 @@ class InvoiceController extends Controller
         return $form;
     }
 
+
+
+
     /**
      * @Secure(roles="ROLE_DMS")
      */
@@ -119,9 +122,6 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-
-
-
         if (in_array($entity->getProcess(), array('Done','Canceled'))) {
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
@@ -363,14 +363,10 @@ class InvoiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $medicine = $request->request->get('medicine');
-        $medicineId = $request->request->get('medicineId');
-        $generic = $request->request->get('generic');
-        $medicineQuantity = $request->request->get('medicineQuantity');
-        $medicineDose = $request->request->get('medicineDose');
-        $medicineDoseTime = $request->request->get('medicineDoseTime');
-        $medicineDuration = $request->request->get('medicineDuration');
-        $medicineDurationType = $request->request->get('medicineDurationType');
+        $particular = $request->request->get('particular');
+        $quantity = $request->request->get('quantity');
+        $price = $request->request->get('price');
+        $unit = $request->request->get('unit');
         if(!empty($medicine)  OR $medicineId > 0){
             $invoiceItems = array('medicine' => $medicine ,'medicineId' => $medicineId , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceMedicine')->insertInvoiceMedicine($invoice, $invoiceItems);
@@ -381,14 +377,14 @@ class InvoiceController extends Controller
 
     }
 
-    public function deleteMedicineAction(BusinessInvoiceMedicine $medicine){
+    public function deleteMedicineAction(BusinessInvoice $invoice){
 
 
         $em = $this->getDoctrine()->getManager();
-        if (!$medicine) {
+        if (!$invoice) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
-        $em->remove($medicine);
+        $em->remove($invoice);
         $em->flush();
         exit;
     }
@@ -423,41 +419,6 @@ class InvoiceController extends Controller
             return new Response('failed');
         }
         exit;
-    }
-
-
-    public function patientLoadAction(BusinessInvoice $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
-
-            /** @var  $invoiceParticularArr */
-            $invoiceParticularArr = array();
-
-            /** @var BusinessInvoiceParticular $row */
-            if (!empty($entity->getInvoiceParticulars())) {
-                foreach ($entity->getInvoiceParticulars() as $row):
-                    if (!empty($row->getBusinessParticular())) {
-                        $invoiceParticularArr[$row->getBusinessParticular()->getId()] = $row;
-                    }
-                endforeach;
-            }
-
-            $services = $em->getRepository('BusinessBundle:BusinessService')->getServiceLists($businessConfig);
-            $treatmentPlans = $em->getRepository('BusinessBundle:BusinessParticular')->getServices($businessConfig, array('treatment-plan', 'other-service'));
-            $treatmentSchedule = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->findTodaySchedule($businessConfig);
-            $html = $this->renderView('BusinessBundle:Invoice:patient-overview.html.twig',
-                array(
-                    'entity' => $entity,
-                    'invoiceParticularArr' => $invoiceParticularArr,
-                    'particularService' => $treatmentPlans,
-                    'services' => $services,
-                    'treatmentSchedule' => $treatmentSchedule,
-                )
-            );
-            return New Response($html);
-        }
     }
 
     public function confirmAction(BusinessInvoice $entity)
@@ -557,15 +518,6 @@ class InvoiceController extends Controller
         $em->flush();
         exit;
 
-    }
-
-    public function addPatientAction(Request $request,BusinessInvoice $invoice)
-    {
-        $data = $request->request->all();
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->patientInsertUpdate($data,$invoice);
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->patientAdmissionUpdate($data,$invoice);
-        return new Response(json_encode(array('patient' => $customer->getId())));
-        exit;
     }
 
     public function getBarcode($value)
@@ -715,46 +667,6 @@ class InvoiceController extends Controller
         }
     }
 
-    public function appointmentTimeAction()
-    {
-        $user = $this->getUser();
-        $data = $_REQUEST;
-        $businessConfig = $user->getGlobalOption()->getBusinessConfig();
-        $appointments = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->findFreeAppointmentTime($businessConfig,$data);
-        $arrays = ['12.00 PM','12.15 PM',
-            '12.30 PM','12.45 PM','1.00 PM','1.15 PM','1.30 PM','1.45 PM','2.00 PM','2.15 PM',
-            '2.30 PM','2.45 PM','3.00 PM','4.15 PM','4.30 PM','4.45 PM','5.00 PM','5.15 PM',
-            '5.30 PM','5.45 PM','6.00 PM','6.15 PM','6.30 PM','6.45 PM','7.00 PM','7.15 PM',
-            '7.30 PM','7.45 PM','8.00 PM','8.15 PM','8.30 PM','8.45 PM','9.00 PM','9.15 PM','9.30 PM','9.45 PM','10.00 PM','10.15 PM','10.30 PM','10.45 PM','11.00 PM',
-            '8.00 AM','8.15 AM','8.30 AM','8.45 AM','9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
-            '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM',
-            ];
-        $array = array_diff($arrays,$appointments);
-        $items  = array();
-        foreach ($array as $value):
-            $items[]= array('value' => $value ,'text'=> $value);
-        endforeach;
-        return new JsonResponse($items);
-    }
-
-    public function typeaheadAction()
-    {
-        $array = ['12.00 PM','12.15 PM',
-            '12.30 PM','12.45 PM','1.00 PM','1.15 PM','1.30 PM','1.45 PM','2.00 PM','2.15 PM',
-            '2.30 PM','2.45 PM','3.00 PM','4.15 PM','4.30 PM','4.45 PM','5.00 PM','5.15 PM',
-            '5.30 PM','5.45 PM','6.00 PM','6.15 PM','6.30 PM','6.45 PM','7.00 PM','7.15 PM',
-            '7.30 PM','7.45 PM','8.00 PM','8.15 PM','8.30 PM','8.45 PM','9.00 PM','9.15 PM','9.30 PM','9.45 PM','10.00 PM','10.15 PM','10.30 PM','10.45 PM','11.00 PM',
-            '8.00 AM','8.15 AM','8.30 AM','8.45 AM','9.00 AM','9.15 AM','9.30 AM','9.45 AM','10.00 AM','10.15 AM','10.30 AM',
-            '10.45 AM','11.00 AM','11.15 AM','11.30 AM','11.45 AM',
-        ];
-
-        $items  = array();
-        foreach ($array as $value):
-            $items[]= array('value' => $value ,'text'=> $value);
-        endforeach;
-        return new JsonResponse($array);
-    }
-
     public function procedureSearchAction()
     {
         $q = $_REQUEST['term'];
@@ -781,30 +693,17 @@ class InvoiceController extends Controller
 
     }
 
-    public function autoInvestigationSearchAction()
+    public function autoUnitSearchAction()
     {
         $q = $_REQUEST['term'];
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->searchAutoComplete($config,$q);
+        $entities = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->searchAutoComplete($config,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('value' => $entity['id']);
         endforeach;
         return new JsonResponse($items);
 
-    }
-
-    public function investigationProcedureAction(Request $request, BusinessInvoiceParticular $particular)
-    {
-        $file = $request->request->all();
-        if(isset($file['file'])){
-            $img = $file['file'];
-            $fileName = $img->getClientOriginalName();
-            $imgName =  uniqid(). '.' .$fileName;
-            $img->move($particular->getUploadDir(), $imgName);
-            $particular->setFile($imgName);
-        }
-       exit;
     }
 
     public function addAccessoriesAction(Request $request, BusinessInvoice $invoice)

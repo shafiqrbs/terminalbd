@@ -10,10 +10,10 @@
                 <div class="row-fluid pull-center" >
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat blue">
-                            <a class="visual addPatient"  data-url="{{ path('medicine_sales_temporary_new') }}" href="javascript:">
+                            <a class="visual" id="temporarySales"  data-url="{{ path('medicine_sales_temporary_new') }}" href="javascript:">
                                 <i class="icon icon-medkit"></i>
                             </a>
-                            <a class="more addPatient"  data-url="{{ path('medicine_sales_temporary_new') }}" id="temporarySales" href="javascript:">
+                            <a class="more" id="temporarySales"  data-url="{{ path('medicine_sales_temporary_new') }}" id="temporarySales" href="javascript:">
                                 Add Sales <i class="m-icon-swapright m-icon-white"></i>
                             </a>
                         </div>
@@ -31,7 +31,74 @@
                 </div>
             </div>
         </div>
-        <div class="form-actions portlet box green">
+        {#<div class="portlet box">
+            <div class="portlet-body">
+                <div class="row-fluid pull-center" >
+
+                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="portlet box grey">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-comments"></i>Inline Tree</div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="styled text-left">
+                                    <li>
+                                        <a href="#" data-role="branch" class="tree-toggle" data-toggle="branch" data-value="Bootstrap_Tree">
+                                            Bootstrap Tree
+                                        </a>
+                                    </li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-suitcase"></i> Sale Revenue</a></li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-signal"></i> Promotions</a></li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-sitemap"></i> IPO</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-comments"></i>Inline Tree</div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="styled text-left">
+                                    <li>
+                                        <a href="#" data-role="branch" class="tree-toggle" data-toggle="branch" data-value="Bootstrap_Tree">
+                                            Bootstrap Tree
+                                        </a>
+                                    </li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-suitcase"></i> Sale Revenue</a></li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-signal"></i> Promotions</a></li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-sitemap"></i> IPO</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="portlet box green">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-comments"></i>Inline Tree</div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="styled text-left">
+                                    <li>
+                                        <a href="#" data-role="branch" class="tree-toggle" data-toggle="branch" data-value="Bootstrap_Tree">
+                                            Bootstrap Tree
+                                        </a>
+                                    </li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-suitcase"></i> Sale Revenue</a></li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-signal"></i> Promotions</a></li>
+                                    <li><a href="#" data-role="leaf"><i class="icon-sitemap"></i> IPO</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>#}
+        <div class="form-actions portlet box yellow">
             <div class="portlet-title">
                 <div class="caption"><i class="icon-money"></i>Toady Sales Overview</div>
             </div>
@@ -99,6 +166,7 @@
     {{ parent() }}
     {% javascripts
     '@MedicineBundle/Resources/public/js/temporary-sales.js'
+    '@MedicineBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

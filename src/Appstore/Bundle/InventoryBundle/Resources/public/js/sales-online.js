@@ -320,9 +320,13 @@ var InventorySales = function(sales) {
         })
     });
 
-    $(document).on('change', '#serialNo', function() {
-        if($(this).val() !='') {
-            $.get($(this).val());
+    $(document).on('click', '.serialSave', function() {
+        var id =$(this).attr('id');
+        var url =$(this).attr('data-url');
+        var serial = $('#serialNo-'+id).val();
+        alert(serial);
+        if(serial !='') {
+            $.get(url,{'serial':serial});
         }
         return false;
     });

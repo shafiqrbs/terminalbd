@@ -57,9 +57,8 @@ class InvoiceType extends AbstractType
                     'Canceled' => 'Canceled',
                 ),
             ));
-           $builder->add('customer', new CustomerForBusinessType( $this->location ));
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -75,7 +74,7 @@ class InvoiceType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_business_invoice';
+        return 'businessInvoice';
     }
 
 }

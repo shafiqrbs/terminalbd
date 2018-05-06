@@ -43,12 +43,6 @@ class BusinessInvoice
     private  $invoiceParticulars;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="businessInvoice" , cascade={"remove"} )
-     **/
-    private  $businessTransactions;
-
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories", mappedBy="businessInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
@@ -181,6 +175,13 @@ class BusinessInvoice
      * @ORM\Column(name="mobile", type="text", nullable=true)
      */
     private $mobile;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="revised", type="boolean", nullable=true)
+     */
+    private $revised;
 
     /**
      * @var \DateTime
@@ -596,6 +597,22 @@ class BusinessInvoice
     public function getBusinessTransactions()
     {
         return $this->businessTransactions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRevised()
+    {
+        return $this->revised;
+    }
+
+    /**
+     * @param bool $revised
+     */
+    public function setRevised($revised)
+    {
+        $this->revised = $revised;
     }
 
 

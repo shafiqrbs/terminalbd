@@ -7,6 +7,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
+use function GuzzleHttp\Psr7\str;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
@@ -466,10 +467,12 @@ class SalesController extends Controller
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
 
-    public function itemSerialNoUpdateAction(SalesItem  $salesItem, $serial)
+    public function itemSerialNoUpdateAction(SalesItem  $salesItem)
     {
+        $serial = $_REQUEST['serial'];
+        $ser = implode(",",$serial);
         $em = $this->getDoctrine()->getManager();
-        $salesItem->setSerialNo($serial);
+        $salesItem->setSerialNo($ser);
         $salesItem->setAssuranceType($salesItem->getPurchaseItem()->getAssuranceType());
         $salesItem->setAssuranceFromVendor($salesItem->getPurchaseItem()->getAssuranceFromVendor());
         $salesItem->setAssuranceToCustomer($salesItem->getPurchaseItem()->getAssuranceToCustomer());

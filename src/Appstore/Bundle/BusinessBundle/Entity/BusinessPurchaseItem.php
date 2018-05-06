@@ -5,6 +5,7 @@ namespace Appstore\Bundle\BusinessBundle\Entity;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
@@ -36,6 +37,11 @@ class BusinessPurchaseItem
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessPurchase;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="businessPurchaseItems" )
+     **/
+    private  $unit;
 
 
     /**
@@ -249,6 +255,22 @@ class BusinessPurchaseItem
     public function setBusinessParticular($businessParticular)
     {
         $this->businessParticular = $businessParticular;
+    }
+
+    /**
+     * @return ProductUnit
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param ProductUnit $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
     }
 
 

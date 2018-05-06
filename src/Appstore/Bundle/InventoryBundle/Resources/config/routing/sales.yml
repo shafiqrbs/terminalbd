@@ -98,7 +98,7 @@ inventory_salesitem_delete:
     defaults: { _controller: "InventoryBundle:Sales:itemDelete" }
 
 inventory_sales_item_serial_update:
-    path:     /{salesItem}/{serial}/update-serial-no
+    path:     /{salesItem}/update-serial-no
     defaults: { _controller: "InventoryBundle:Sales:itemSerialNoUpdate" }
 
 inventory_sales_inline_update:

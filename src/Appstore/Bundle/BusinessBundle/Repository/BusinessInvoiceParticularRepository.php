@@ -421,7 +421,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
     public function searchAutoComplete(BusinessConfig $config,$q)
     {
         $query = $this->createQueryBuilder('e');
-        $query->join('e.dmsInvoice', 'i');
+        $query->join('e.businessInvoice', 'i');
         $query->select('e.metaValue as id');
         $query->where($query->expr()->like("e.metaValue", "'$q%'"  ));
         $query->andWhere("i.dmsConfig = :config");
