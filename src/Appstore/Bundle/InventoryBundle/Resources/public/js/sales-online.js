@@ -324,11 +324,13 @@ var InventorySales = function(sales) {
         var id =$(this).attr('id');
         var url =$(this).attr('data-url');
         var serial = $('#serialNo-'+id).val();
-        alert(serial);
-        if(serial !='') {
+        if(serial ==='undefined') {
+            alert('Please select serial no.');
+            return false;
+        }else{
             $.get(url,{'serial':serial});
         }
-        return false;
+
     });
 
 

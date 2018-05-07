@@ -495,7 +495,7 @@ class SalesController extends Controller
         $em->remove($entity);
         $em->flush();
         $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-        $data = $this->returnResultData($sales,$msg);
+        $data = $this->returnResultData($sales);
         return new Response(json_encode($data));
         exit;
 

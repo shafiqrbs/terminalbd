@@ -32,16 +32,16 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $brandName = isset($data['brandName'])? $data['brandName'] :'';
 
         if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+            $qb->andWhere($qb->expr()->like("s.name", "'%$name%'"  ));
         }
         if (!empty($sku)) {
-            $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
+            $qb->andWhere($qb->expr()->like("s.sku", "'%$sku%'"  ));
         }
         if (!empty($brandName)) {
-            $qb->andWhere($qb->expr()->like("e.brandName", "'%$brandName%'"  ));
+            $qb->andWhere($qb->expr()->like("s.brandName", "'%$brandName%'"  ));
         }
         if(!empty($rackNo)){
-            $qb->andWhere("e.rackNo = :rack")->setParameter('rack', $rackNo);
+            $qb->andWhere("s.rackNo = :rack")->setParameter('rack', $rackNo);
         }
         if(!empty($mode)){
             $qb->andWhere("e.mode = :mode")->setParameter('mode', $mode);
@@ -61,7 +61,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
         if (!empty($endDate)) {
             $datetime = new \DateTime($data['endDate']);
-            $end = $datetime->format('Y-m-d 00:00:00');
+            $end = $datetime->format('Y-m-d 23:59:59');
             $qb->andWhere("mpi.expirationEndDate >= :endDate");
             $qb->setParameter('endDate', $end);
         }
@@ -92,6 +92,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('mpi');
         $qb->join('mpi.medicinePurchase','e');
+        $qb->join('mpi.medicineStock','s');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         if($instant == 1 ) {
             $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant);

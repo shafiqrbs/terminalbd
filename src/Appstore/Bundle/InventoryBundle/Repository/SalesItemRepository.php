@@ -227,12 +227,14 @@ class SalesItemRepository extends EntityRepository
 
             $option = '';
             if(!empty($entity->getPurchaseItem()->getSerialNo())){
+
+                $salesSerials = explode(",",$entity->getSerialNo());
                 $serials = explode(",",$entity->getPurchaseItem()->getSerialNo());
-                $option .="<select class='serial-no' id='serialNo' name='serialNo'>";
+                $option .="<select class='serial-no' id='serialNo-{$entity->getId()}' name='serialNo' multiple='multiple'>";
                 $option .="<option>--Serial no--</option>";
                 foreach ($serials as $serial){
-                    $selected = $serial == $entity->getSerialNo() ? 'selected=selected':'';
-                    $option.="<option ".$selected." value='/inventory/sales/".$entity->getId().'/'.$serial."/update-serial-no'>{$serial}</option>";
+                    $selected = in_array($serial,$salesSerials) ? 'selected=selected':'';
+                    $option.="<option {$selected} value='{$serial}'>{$serial}</option>";
                 }
                 $option .="</select>";
             }
@@ -293,9 +295,12 @@ class SalesItemRepository extends EntityRepository
                 $data .='<input class="m-wrap span6 salesPrice"  '.$readonly.' rel="'.$entity->getId().'" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
                 $data .='</div></td>';
                 $data .='<td class="numeric" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
-                $data .='<td class="numeric" >
-                     <a id="'.$entity->getId().'" title="Are you sure went to delete ?" rel="/inventory/sales/'.$entity->getSales()->getId().'/'.$entity->getId().'/delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                     </td>';
+                $data .="<td class='numeric' >";
+                if ($isAttribute == 1 and !empty($entity->getSerialNo())) {
+                    $data .= "<a id='{$entity->getId()}'  data-url='/inventory/sales/{$entity->getId()}/update-serial-no' href='javascript:' class='btn blue mini serialSave' ><i class='icon-save'></i></a>";
+                }
+                $data .="<a id='{$entity->getId()}'  rel='/inventory/sales/{$entity->getSales()->getId()}/{$entity->getId()}/delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";
+                $data .="</td>";
                 $data .='</tr>';
             }
 

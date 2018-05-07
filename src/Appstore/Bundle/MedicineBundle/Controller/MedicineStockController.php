@@ -379,11 +379,21 @@ class MedicineStockController extends Controller
         return new JsonResponse($item);
     }
 
-    public function searchVendorNameAction($vendor)
+    public function autoNameSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchNameAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchNameAction($stock)
     {
         return new JsonResponse(array(
-            'id'=>$vendor,
-            'text'=>$vendor
+            'id'=>$stock,
+            'text'=>$stock
         ));
     }
     public function autoSearchBrandAction(Request $request)
