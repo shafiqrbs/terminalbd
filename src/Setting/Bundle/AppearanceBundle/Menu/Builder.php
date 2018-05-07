@@ -1039,8 +1039,8 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon icon-th-large')
             ->setAttribute('dropdown', true);
             if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
-            $menu['Medicine']->addChild('Point of Sales ', array('route' => 'medicine_sales_new'))
-                ->setAttribute('icon', 'icon-th-large');
+            /*$menu['Medicine']->addChild('Point of Sales ', array('route' => 'medicine_sales_new'))
+                ->setAttribute('icon', 'icon-th-large');*/
             $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
                 ->setAttribute('icon', 'icon-list');
             $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
