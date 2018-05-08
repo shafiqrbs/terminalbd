@@ -113,7 +113,7 @@ class InstantPurchaseController extends Controller
         $entity->setMode('instant');
         $em->persist($entity);
         $em->flush();
-        $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($entity,$data);
+        $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($config,$entity,$data);
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->insertInstantSalesItem($data['salesId'],$purchaseItem,$data);
         $result = $this->returnInstantPurchaseData($data['salesId']);
         return new Response(json_encode($result));
@@ -136,7 +136,10 @@ class InstantPurchaseController extends Controller
 
     public function instantPurchaseAddAction()
     {
-        $html = $this->renderView('MedicineBundle:Sales:instantPurchaseItem.html.twig');
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $html = $this->renderView('MedicineBundle:Sales:instantPurchaseItem.html.twig',
+            array( 'racks' => $racks));
         return New Response($html);
     }
 
@@ -177,7 +180,7 @@ class InstantPurchaseController extends Controller
         $entity->setMode('instant');
         $em->persist($entity);
         $em->flush();
-        $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($entity,$data);
+        $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($config,$entity,$data);
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertInstantSalesTemporaryItem($this->getUser(),$purchaseItem,$data);
         $result = $this->returnTemporaryResultData($this->getUser());
         return new Response(json_encode($result));

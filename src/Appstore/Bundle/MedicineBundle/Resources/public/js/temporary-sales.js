@@ -139,6 +139,58 @@ function jqueryTemporaryLoad() {
         }
     });
 
+    $(document).on('change', '.quantity , .salesPrice', function() {
+
+        var id = $(this).attr('data-id');
+
+        var quantity = parseFloat($('#quantity-'+id).val());
+        var price = parseFloat($('#salesPrice-'+id).val());
+        var subTotal  = (quantity * price);
+        $("#subTotal-"+id).html(subTotal);
+        $.ajax({
+            url: Routing.generate('medicine_sales_temporary_item_update'),
+            type: 'POST',
+            data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#subTotal').html(obj['subTotal']);
+                $('#grandTotal').html(obj['initialGrandTotal']);
+                $('.discount').html(obj['initialDiscount']);
+                $('.dueAmount').html(obj['initialGrandTotal']);
+                $('#salesNetTotal').val(obj['initialGrandTotal']);
+                $('#salesTemporary_discount').val(obj['initialDiscount']);
+                $('#salesTemporary_due').val(obj['initialGrandTotal']);
+            },
+
+        })
+    });
+
+    $(document).on('click', '.itemUpdate', function() {
+
+        var id = $(this).attr('data-id');
+        var quantity = parseFloat($('#quantity-'+id).val());
+        var price = parseFloat($('#salesPrice-'+id).val());
+        var subTotal  = (quantity * price);
+        $("#subTotal-"+id).html(subTotal);
+        $.ajax({
+            url: Routing.generate('medicine_sales_temporary_item_update'),
+            type: 'POST',
+            data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#subTotal').html(obj['subTotal']);
+                $('#grandTotal').html(obj['initialGrandTotal']);
+                $('.discount').html(obj['initialDiscount']);
+                $('.dueAmount').html(obj['initialGrandTotal']);
+                $('#salesNetTotal').val(obj['initialGrandTotal']);
+                $('#salesTemporary_discount').val(obj['initialDiscount']);
+                $('#salesTemporary_due').val(obj['initialGrandTotal']);
+            },
+
+        })
+    });
+
+
     $(document).on('change', '#salesTemporary_discountCalculation , #salesTemporary_discountType', function() {
 
         var discountType = $('#salesTemporary_discountType').val();
@@ -413,6 +465,44 @@ function jqueryInstantTemporaryLoad(){
             $('#removeInstantItem-'+id).hide();
         });
 
+    });
+
+    $(".select2InstantMedicine").select2({
+
+        placeholder: "Search medicine name",
+        ajax: {
+
+            url: Routing.generate('medicine_select_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+
+        },
+        allowClear: true,
+        minimumInputLength: 2
     });
 
     $(".select2StockMedicine").select2({

@@ -6,6 +6,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Appstore\Bundle\RestaurantBundle\Form\StockType;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -229,10 +230,37 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $em->flush();
     }
 
-    public function insertPurchaseItems(MedicinePurchase $purchase, $data)
+    public function checkInsertStockItem($config,$data){
+
+        $medicine = $this->_em->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineBrand']);
+        $checkStockMedicine = $this->_em->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config,$medicine);
+        if (empty($checkStockMedicine)){
+            $em = $this->_em;
+            $entity = new MedicineStock();
+            $entity->setMedicineConfig($config);
+            $entity->setMedicineBrand($medicine);
+            $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
+            $entity->setName($name);
+            if(!empty($data['rackNo'])){
+                $entity->setRackNo($this->_em->getRepository('MedicineBundle:MedicineParticular')->find($data['rackNo']));
+            }
+            $entity->setSalesPrice($data['salesPrice']);
+            $entity->setPurchasePrice($data['purchasePrice']);
+            $entity->setBrandName($medicine->getMedicineCompany()->getName());
+            $entity->setMode('medicine');
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }else{
+            return $checkStockMedicine;
+        }
+    }
+
+    public function insertPurchaseItems($config,MedicinePurchase $purchase, $data)
     {
 
-        $item = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['medicineName']);
+        $item = $this->checkInsertStockItem($config,$data);
+
         $em = $this->_em;
         $entity = new MedicinePurchaseItem();
         $entity->setMedicinePurchase($purchase);

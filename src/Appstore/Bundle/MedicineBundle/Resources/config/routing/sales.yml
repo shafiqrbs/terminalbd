@@ -57,6 +57,13 @@ medicine_sales_instant_item:
     options:
             expose: true
 
+medicine_sales_stock_item_update:
+    path:     /sales/dicount-update
+    defaults: { _controller: "MedicineBundle:Sales:invoiceItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_sales_discount_update:
     path:     /sales/dicount-update
     defaults: { _controller: "MedicineBundle:Sales:invoiceDiscountUpdate" }

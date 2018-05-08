@@ -129,6 +129,7 @@ class MedicineSalesTemporaryController extends Controller
 
     }
 
+
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $user = $this->getUser();
@@ -180,6 +181,18 @@ class MedicineSalesTemporaryController extends Controller
         exit;
 
     }
+
+    public function invoiceItemUpdateAction(Request $request)
+    {
+        $user = $this->getUser();
+        $data = $request->request->all();
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->updateInvoiceItems($user, $data);
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($user,$msg);
+        return new Response(json_encode($result));
+        exit;
+    }
+
 
     public function invoiceParticularDeleteAction(MedicineSalesTemporary $particular){
         $user = $this->getUser();

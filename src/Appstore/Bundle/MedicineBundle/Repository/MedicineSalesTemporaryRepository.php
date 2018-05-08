@@ -45,6 +45,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $entity->setSubTotal($data['salesPrice'] * $entity->getQuantity());
 
         }else{
+
             $entity->setQuantity($data['quantity']);
             $entity->setSalesPrice($data['salesPrice']);
             $entity->setSubTotal($data['salesPrice'] * $data['quantity']);
@@ -58,6 +59,24 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         $em->flush();
 
     }
+
+    public function updateInvoiceItems(User $user, $data)
+    {
+
+        $em = $this->_em;
+        $entity = new MedicineSalesTemporary();
+        $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->find($data['salesItemId']);
+        if(!empty($invoiceParticular)) {
+            $entity = $invoiceParticular;
+            $entity->setQuantity($data['quantity']);
+            $entity->setSalesPrice($data['salesPrice']);
+            $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
+        }
+        $em->persist($entity);
+        $em->flush();
+
+    }
+
 
     public function insertInstantSalesTemporaryItem(User $user , MedicinePurchaseItem $item,$data){
 
@@ -86,11 +105,16 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="span1" >' . $entity->getMedicinePurchaseItem()->getBarcode() . '</td>';
             $data .= '<td class="span4" >' . $entity->getMedicineStock()->getName() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getSalesPrice() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
+            $data .= "<td class='span1' >";
+            $data .= "<input type='number' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
+            $data .= "</td>";
+            $data .= "<td class='span1' >";
+            $data .= "<input type='number' class='numeric td-inline-input quantity' data-id='{$entity->getid()}' autocomplete='off' id='quantity-{$entity->getId()}' name='quantity' value='{$entity->getQuantity()}'>";
+            $data .= "</td>";
+            $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$entity->getSubTotal()}</td>";
             $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/medicine/sales-temporary/' . $entity->getId() . '/item-delete" href="javascript:" class="btn red mini temporaryDelete" ><i class="icon-trash"></i></a>
+            <a data-id="'.$entity->getid().'" title="" data-url="/medicine/sales-temporary/sales-item-update" href="javascript:" class="btn blue mini itemUpdate"><i class="icon-save"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" data-url="/medicine/sales-temporary/' . $entity->getId() . '/item-delete" href="javascript:" class="btn red mini temporaryDelete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;

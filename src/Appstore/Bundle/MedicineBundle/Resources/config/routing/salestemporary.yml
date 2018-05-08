@@ -25,6 +25,13 @@ medicine_sales_temporary_discount_update:
     options:
             expose: true
 
+medicine_sales_temporary_item_update:
+    path:     /sales-item-update
+    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:invoiceItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_sales_temporary_item_delete:
     path:     /{id}/item-delete
     defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:invoiceParticularDelete" }

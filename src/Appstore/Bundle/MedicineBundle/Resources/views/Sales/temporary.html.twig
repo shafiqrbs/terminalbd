@@ -18,11 +18,11 @@
     {{ form_start(salesItem) }}
     {{ form_row(salesItem._token) }}
     <div class="row-fluid particular-info" >
-        <div class="span5">
+        <div class="span6">
             {{ form_widget(salesItem.stockName) }}
             {{ form_errors(salesItem.stockName) }}
         </div>
-        <div class="span5">
+        <div class="span4">
             {{ form_widget(salesItem.barcode) }}
             {{ form_errors(salesItem.barcode) }}
             {{ form_widget(salesItem.salesPrice) }}
@@ -61,10 +61,18 @@
                         <tr id="remove-{{ item.id }}">
                             <td  class="span1">{{ item.getMedicinePurchaseItem.barcode }}</td>
                             <td class="span3">{{ item.medicineStock.name }}</td>
-                            <td class="span1">{{ item.salesPrice }}</td>
-                            <td class="span1">{{ item.quantity }}</td>
-                            <td class="span1">{{ item.subTotal|number_format }}</td>
-                            <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_sales_temporary_item_delete',{'id': item.id }) }}" href="javascript:" class="btn red mini temporaryDelete" ><i class="icon-trash"></i></a></td>
+                            <td class="span1">
+                                <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
+                                <input type="number" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" >
+                            </td>
+                            <td class="span1">
+                                <input type="number" class=" numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="1" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
+                            </td>
+                            <td class="span1" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
+                            <td class="span1">
+                                <a data-id="{{ item.id }}" title="" data-url="{{ path('medicine_sales_temporary_item_update') }}" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
+                                <a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_sales_temporary_item_delete',{'id': item.id }) }}" href="javascript:" class="btn red mini temporaryDelete" ><i class="icon-trash"></i></a>
+                            </td>
                         </tr>
                     {% endfor %}
                 {% endif %}
@@ -294,5 +302,31 @@
         margin: 0!important;
         width: 100%;
         font-size: 14px;
+    }
+
+     .numeric input {
+         margin-bottom: 0;
+         min-height: 15px!important;
+         width: 70px;
+         height: 15px!important;
+         border: 1px solid #999;
+         font-size: 13px!important;
+         line-height: 15px!important;
+     }
+
+    .td-inline-input{
+        height: 25px!important;
+        line-height: 13px!important;
+        font-size: 13px!important;
+        border: 2px solid #4d90fe!important;
+        width: 100px;
+        margin-bottom:0!important;
+    }
+
+    .td-inline-label{
+        height: 15px!important;
+        line-height: 20px!important;
+        min-height: 15px!important;
+        font-size: 13px!important;
     }
 </style>
