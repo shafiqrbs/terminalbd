@@ -42,11 +42,10 @@ $(document).on("click", ".sms-confirm", function() {
     });
 });
 
-$( "#name" ).autocomplete({
-
+$( ".select2Particular" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('domain_customer_auto_name_search'),
+            url: Routing.generate('business_invoice_auto_particular_search'),
             data: {
                 term: request.term
             },
@@ -56,57 +55,6 @@ $( "#name" ).autocomplete({
         } );
     },
     minLength: 2,
-    select: function( event, ui ) {}
-
-});
-
-$( ".autoProcedure" ).autocomplete({
-    source: function( request, response ) {
-        $.ajax( {
-            url: Routing.generate('dms_invoice_procedure_search'),
-            data: {
-                term: request.term
-            },
-            success: function( data ) {
-                response( data );
-            }
-        } );
-    },
-    minLength: 1,
-    select: function( event, ui ) {
-    }
-});
-
-$( ".investigation" ).autocomplete({
-    source: function( request, response ) {
-        $.ajax( {
-            url: Routing.generate('dms_invoice_investigation_search'),
-            data: {
-                term: request.term
-            },
-            success: function( data ) {
-                response( data );
-            }
-        } );
-    },
-    minLength: 1,
-    select: function( event, ui ) {
-    }
-});
-
-$( ".autoMetaValue" ).autocomplete({
-    source: function( request, response ) {
-        $.ajax( {
-            url: Routing.generate('dms_invoice_auto_particular_search'),
-            data: {
-                term: request.term
-            },
-            success: function( data ) {
-                response( data );
-            }
-        } );
-    },
-    minLength: 1,
     select: function( event, ui ) {
     }
 });

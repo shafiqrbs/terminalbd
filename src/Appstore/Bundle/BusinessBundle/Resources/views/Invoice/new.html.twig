@@ -54,13 +54,13 @@
                                     <div class="row-fluid particular-info">
                                         <div class="span8">
                                             <div class="form-control">
-                                                <input type="text" id="particular" name="particular"  class="span12 m-wrap select2Particular" value=""  autocomplete="off" placeholder="Search particular name">
+                                                <input type="text" id="invoiceParticular" name="invoiceParticular"  class="span12 m-wrap select2Particular" value=""  autocomplete="off" placeholder="Search particular name">
                                             </div>
                                         </div>
                                         <div class="span4">
                                             <div class="input-group input-append input-group">
                                                     <span class="input-group-btn">
-                                                       <input type="number" style="text-align: center; font-weight: bold" class="m-wrap span3 form-control input-number" id="quantity" name="quantity" value="" min="" >
+                                                       <input type="text" style="text-align: center; font-weight: bold" class="m-wrap span3 form-control input-number" id="quantity" name="quantity" value="" min="" >
                                                        <input type="text" class="m-wrap span4 con select2Unit" name="unit" id="unit" placeholder="Item unit">
                                                         <input type="text" class="m-wrap span3 con" name="price" id="price" placeholder="price">
                                                     </span>
@@ -160,7 +160,40 @@
                                                 <!--/span-->
                                             </div>
                                             <div class="clearfix"></div>
-
+                                            <div class="row-fluid">
+                                                <div class="span12 input-append-border">
+                                                    <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
+                                                    <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid customer" id="">
+                                                <div class="span12 input-append-border">
+                                                    <div class="row-fluid">
+                                                        <div class="input-icon left input-height">
+                                                            <i class="icon-user"></i>
+                                                            <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid customer">
+                                                <div class="span12 input-append-border">
+                                                    <div class="row-fluid">
+                                                        <div class="input-icon left input-height">
+                                                            <i class="icon-phone"></i>
+                                                            <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid customer">
+                                                <div class="span12 input-append-border">
+                                                    <div class="row-fluid">
+                                                        <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
                                         </div>
                                     </div>
                                     <div class="clearfix">&nbsp;</div>
@@ -194,26 +227,10 @@
             </div>
         </div>
     </div>
-    <div id="dialog_content" class="dialog_content" style="display:none">
-        <div class="dialogModal_header"></div>
-        <div class="dialogModal_content"></div>
-    </div>
-
- <style>
-     .checkbox-custom{
-         color:red;
-         border:1px solid #FFF;
-         background-image:url("{{ asset('assets/img/tooth.png') }}");
-         background-size: 24px 24px;
-         background-repeat: no-repeat;
-     }
- </style>
-
 {% endblock %}
-
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@DmsBundle/Resources/public/css/invoice.css'
+    '@BusinessBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}

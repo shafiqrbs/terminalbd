@@ -424,11 +424,11 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $query->join('e.businessInvoice', 'i');
         $query->select('e.metaValue as id');
         $query->where($query->expr()->like("e.metaValue", "'$q%'"  ));
-        $query->andWhere("i.dmsConfig = :config");
+        $query->andWhere("i.businessConfig = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.metaValue');
         $query->orderBy('e.metaValue', 'ASC');
         $query->setMaxResults( '10' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
     }
 }

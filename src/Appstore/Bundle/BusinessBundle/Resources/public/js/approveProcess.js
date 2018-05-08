@@ -93,25 +93,6 @@ $(document).on("click", ".approve", function() {
 });
 */
 
-
-
-$( ".select2Particular" ).autocomplete({
-    source: function( request, response ) {
-        $.ajax( {
-            url: Routing.generate('business_invoice_particular_search'),
-            data: {
-                term: request.term
-            },
-            success: function( data ) {
-                response( data );
-            }
-        } );
-    },
-    minLength: 1,
-    select: function( event, ui ) {
-     }
-});
-
 $( ".select2Unit" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {

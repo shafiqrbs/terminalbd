@@ -296,7 +296,7 @@ class SalesItemRepository extends EntityRepository
                 $data .='</div></td>';
                 $data .='<td class="numeric" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
                 $data .="<td class='numeric' >";
-                if ($isAttribute == 1 and !empty($entity->getSerialNo())) {
+                if ($isAttribute == 1 and !empty($entity->getPurchaseItem()->getSerialNo())) {
                     $data .= "<a id='{$entity->getId()}'  data-url='/inventory/sales/{$entity->getId()}/update-serial-no' href='javascript:' class='btn blue mini serialSave' ><i class='icon-save'></i></a>";
                 }
                 $data .="<a id='{$entity->getId()}'  rel='/inventory/sales/{$entity->getSales()->getId()}/{$entity->getId()}/delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";
