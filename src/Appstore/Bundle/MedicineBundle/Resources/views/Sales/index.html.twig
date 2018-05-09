@@ -118,7 +118,7 @@
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'Created' or entity.process == 'Pending' %}
+                                            {% if entity.process == 'Created' or entity.process == 'Pending'or entity.process == 'Hold' %}
                                             <a href="{{ path('medicine_sales_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
