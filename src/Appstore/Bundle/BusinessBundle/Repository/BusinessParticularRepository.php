@@ -25,7 +25,7 @@ class BusinessParticularRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.service','service');
-        $qb->where('e.dmsConfig = :config');
+        $qb->where('e.businessConfig = :config');
         $qb->setParameter('config',$config);
         $qb->andWhere('service.dentalService is null');
         $qb->orderBy('service.name , e.name','ASC');
@@ -38,7 +38,7 @@ class BusinessParticularRepository extends EntityRepository
         $query = $this->createQueryBuilder('e');
         $query->select('e.name as id');
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
-        $query->andWhere("e.dmsConfig = :config");
+        $query->andWhere("e.businessConfig = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
@@ -46,25 +46,18 @@ class BusinessParticularRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function findWithSearch($config,$service, $data){
+    public function findWithSearch($config, $data){
 
         $name = isset($data['name'])? $data['name'] :'';
         $category = isset($data['category'])? $data['category'] :'';
-        $department = isset($data['department'])? $data['department'] :'';
-
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.service = :service')->setParameter('service', $service) ;
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }
         if(!empty($category)){
             $qb->andWhere("e.category = :category");
             $qb->setParameter('category', $category);
-        }
-        if(!empty($department)){
-            $qb->andWhere("e.department = :department");
-            $qb->setParameter('department', $department);
         }
         $qb->orderBy('e.name','ASC');
         $qb->getQuery();
@@ -75,7 +68,7 @@ class BusinessParticularRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
-            ->where('e.dmsConfig = :config')->setParameter('config', $config)
+            ->where('e.businessConfig = :config')->setParameter('config', $config)
             ->andWhere('e.status = :status')->setParameter('status', 1)
             ->andWhere('s.serviceFormat is null')
             ->andWhere('s.slug IN(:slugs)')
@@ -90,7 +83,7 @@ class BusinessParticularRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
-            ->where('e.dmsConfig = :config')->setParameter('config', $config)
+            ->where('e.businessConfig = :config')->setParameter('config', $config)
          /*   ->andWhere('e.status = :status')->setParameter('status', 1)*/
             ->andWhere('s.serviceFormat IN(:slugs)')
             ->setParameter('slugs',array_values($services))
@@ -142,7 +135,7 @@ class BusinessParticularRepository extends EntityRepository
             ->addSelect('e.quantity')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
-            ->where('e.dmsConfig = :config')->setParameter('config', $config)
+            ->where('e.businessConfig = :config')->setParameter('config', $config)
             ->andWhere('s.slug IN(:slugs)')
             ->setParameter('slugs',array_values($services))
             ->orderBy('e.service','ASC')
@@ -171,7 +164,7 @@ class BusinessParticularRepository extends EntityRepository
             $qb->addSelect('s.code as serviceCode');
             $qb->addSelect('e.purchasePrice');
             $qb->addSelect('e.purchaseQuantity');
-            $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+            $qb->where('e.businessConfig = :config')->setParameter('config', $config);
             $qb->andWhere('s.serviceFormat IN(:process)');
             $qb->setParameter('process',$services);
             if(!empty($data['particular'])) {
@@ -196,7 +189,7 @@ class BusinessParticularRepository extends EntityRepository
             ->addSelect('e.openingQuantity')
             ->addSelect('u.name as unit')
             ->addSelect('e.purchaseQuantity')
-            ->where('e.dmsConfig = :config')->setParameter('config', $config)
+            ->where('e.businessConfig = :config')->setParameter('config', $config)
             ->andWhere('s.serviceFormat IN(:process)')
             ->setParameter('process',$services)
             ->orderBy('e.name','ASC')
@@ -241,7 +234,7 @@ class BusinessParticularRepository extends EntityRepository
 
         $pass2 = array();
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', 1) ;
+        $qb->where('e.businessConfig = :config')->setParameter('config', 1) ;
         $qb->andWhere('e.service IN(:service)')
             ->setParameter('service',array_values(array(1,2,3,4)));
         $qb->orderBy('e.name','ASC');

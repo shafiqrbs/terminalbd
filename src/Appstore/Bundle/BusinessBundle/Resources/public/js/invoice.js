@@ -42,22 +42,6 @@ $(document).on("click", ".sms-confirm", function() {
     });
 });
 
-$( ".select2Particular" ).autocomplete({
-    source: function( request, response ) {
-        $.ajax( {
-            url: Routing.generate('business_invoice_auto_particular_search'),
-            data: {
-                term: request.term
-            },
-            success: function( data ) {
-                response( data );
-            }
-        } );
-    },
-    minLength: 2,
-    select: function( event, ui ) {
-    }
-});
 
 $('.checkboxes').checkradios({
     checkbox: {
@@ -136,114 +120,50 @@ $(document).on( "change", "#invoiceParticular", function(e){
     $('#appstore_bundle_dmsbundle_invoice_payment').val(price);
 });
 
-$(document).on('click', '.addProcedure', function() {
 
-    var dataTab    = $(this).attr('data-tab');
-    var procedure =  $('#'+dataTab).find('#procedure').val();
-    if(procedure == ''){
-        alert('You have to add procedure text');
-        $('#'+dataTab).find('#procedure').focus();
-        return false;
-    }
-    var checked = []
-    $('#'+dataTab).find("input[name='teethNo[]']:checked").each(function ()
-    {
-       checked.push(parseInt($(this).val()));
-    });
+$(document).on('click', '#addParticular', function() {
 
-    var url     = $(this).attr('data-url');
-    var showDiv    = $(this).attr('data-id');
+
+    var particular = $('#particular').val();
+    var price = $('#price').val();
+    var quantity = $('#quantity').val();
+    var unit = $('#unit').val();
+    var url = $(this).attr('data-url');
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'procedure='+procedure+'&teethNo='+checked,
+        data: 'particular='+particular+'&price='+price+'&quantity='+quantity+'&unit='+unit,
         success: function (response) {
-            $('#'+dataTab).find('#procedure-'+showDiv).html(response);
-            $('#'+dataTab).find('#procedure').val('');
-            $('#'+dataTab).find('.checkradios-checkbox').prop('checked', false);
-            $('#'+dataTab).find('.checked').removeClass('fa fa-window-close');
-           }
-    });
-});
-
-$(document).on('click', '.addInvestigation', function() {
-
-    var dataTab    = $(this).attr('data-tab');
-    var procedure =  $('#'+dataTab).find('#investigation').val();
-    if(procedure == ''){
-        alert('You have to add procedure text');
-        $('#'+dataTab).find('#investigation').focus();
-        return false;
-    }
-
-    var file =  $('#'+dataTab).find('#file').val();
-    if(file == ''){
-        alert('You have to add file');
-        $('#'+dataTab).find('#file').focus();
-        return false;
-    }
-
-    var url = $('form#invoiceForm').attr('action');
-    var showDiv    = $(this).attr('data-id');
-    var formData = new FormData($('form#invoiceForm')[0]);
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        beforeSend: function() {
-            $('.addInvestigation').show().addClass('btn-ajax-loading').fadeIn(3000);
-            $('.btn-ajax-loading').attr("disabled", true);
-        },
-        processData: false,
-        contentType: false,
-        data:formData,
-        success: function(response){
-            $('#'+dataTab).find('#procedure-'+showDiv).html(response);
-            $('#'+dataTab).find('#investigation').val('');
-            $('#'+dataTab).find('#file').val('');
-            $('.btn-ajax-loading').attr("disabled", false);
-            $('.addInvestigation').removeClass('btn-ajax-loading');
+            obj = JSON.parse(response);
+            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('.due').html(obj['due']);
+            $('.payment').html(obj['payment']);
+            $('.discount').html(obj['discount']);
         }
-    });
+    })
 });
 
 $(document).on("click", ".particularDelete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
-    var dataTab    = $(this).attr('data-tab');
-    $('#confirm-content').confirmModal({
+       $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                $('#procedure-'+dataTab).find('tr#remove-'+id).remove();
+            $.get(url, function( response ) {
+                obj = JSON.parse(response);
+                $('#remove-'+id).remove();
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.payment').html(obj['payment']);
+                $('.discount').html(obj['discount']);
+
             });
         }
     });
-});
-
-$(document).on('click', '#addPrescriptionParticular', function() {
-
-
-    var medicine = $('#medicine').val();
-    var medicineId = $('#medicineId').val();
-    var generic = $('#generic').val();
-    var medicineQuantity = parseInt($('#medicineQuantity').val());
-    var medicineDose = $('#medicineDose').val();
-    var medicineDoseTime = $('#medicineDoseTime').val();
-    var medicineDuration = $('#medicineDuration').val();
-    var medicineDurationType = $('#medicineDurationType').val();
-    var url = $('#addPrescriptionParticular').attr('data-url');
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'medicine='+medicine+'&medicineId='+medicineId+'&medicineQuantity='+medicineQuantity+'&medicineDose='+medicineDose+'&medicineDoseTime='+medicineDoseTime+'&medicineDuration='+medicineDuration+'&medicineDurationType='+medicineDurationType,
-        success: function (response) {
-            $('#invoiceMedicine').html(response);
-            $('#medicine').val('');
-            $('#generic').val('');
-            $('#medicineId').val('');
-        }
-    })
 });
 
 $(document).on("click", ".deleteMedicine", function() {
@@ -256,135 +176,6 @@ $(document).on("click", ".deleteMedicine", function() {
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
                 $('#medicine-'+id).hide();
-            });
-        }
-    });
-});
-
-$(document).on('click', '.prescription', function() {
-
-    var url = $(this).attr('data-url');
-    var dataTitle = $(this).attr('data-title');
-    $('.dialogModal_header').html(dataTitle);
-    $('.dialog_content').dialogModal({
-        topOffset: 0,
-        top: 0,
-        type: '',
-        onOkBut: function(event, el, current) {},
-        onCancelBut: function(event, el, current) {},
-        onLoad: function(el, current) {
-            $.ajax({
-                url: url,
-                async: true,
-                success: function (response) {
-                    el.find('.dialogModal_content').html(response);
-                }
-            });
-        },
-        onClose: function(el, current) {},
-        onChange: function(el, current) {}
-    });
-
-});
-
-
-
-$(document).on('change', '#particular', function() {
-
-    var url = $(this).val();
-    if(url == ''){
-        alert('You have to add particulars from drop down and this not service item');
-        return false;
-    }
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#particularId').val(obj['particularId']);
-            $('#price').val(obj['price']);
-            $('#instruction').html(obj['instruction']);
-            $('#addParticular').attr("disabled", false);
-        }
-    })
-});
-
-$(document).on('change', '#appointmentDate', function() {
-
-    var appointmentDate = $('#appointmentDate').val();
-    if(appointmentDate == ''){
-        return false;
-    }
-    var assignDoctor = $('#appstore_bundle_dmsbundle_invoice_assignDoctor').val();
-    $.get(Routing.generate('dms_invoice_appointment_schedule_time',{assignDoctor:assignDoctor,appointmentDate:appointmentDate}),
-            function(data){
-               $('#appointmentTime').html(data);
-            }
-        );
-});
-
-$(document).on('click', '#addParticular', function() {
-
-    var particularId = $('#particularId').val();
-    if (particularId == '') {
-
-        $('#particularId').addClass('input-error');
-        $('#particularId').focus();
-        alert('Please select treatment particular');
-        return false;
-    }
-
-    var appointmentDate = $('#appointmentDate').val();
-    if (appointmentDate == '') {
-
-        $('#appointmentDate').addClass('input-error');
-        $('#appointmentDate').focus();
-        alert('Please select appointment date');
-        return false;
-    }
-
-    var price = $('#price').val();
-    var appointmentTime = $('#appointmentTime').val();
-
-    var url = $('#addParticular').attr('data-url');
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'particularId='+particularId+'&price='+price+'&appointmentDate='+appointmentDate+'&appointmentTime='+appointmentTime,
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('.due').html(obj['due']);
-            $('.payment').html(obj['payment']);
-            $('.discount').html(obj['discount']);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $("#particular").select2().select2("val","");
-            $('#price').val('');
-            $('#addParticular').attr("disabled", true);
-            $('#addPatientParticular').attr("disabled", true);
-            $(".editable").editable();
-
-        }
-    })
-});
-
-$(document).on("click", ".treatmentDelete", function() {
-
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( response ) {
-                obj = JSON.parse(response);
-                $('#remove-'+id).hide();
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('.due').html(obj['due']);
-                $('.payment').html(obj['payment']);
-                $('.discount').html(obj['discount']);
             });
         }
     });

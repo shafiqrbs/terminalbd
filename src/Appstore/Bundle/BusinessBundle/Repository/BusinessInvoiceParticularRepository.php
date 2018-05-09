@@ -41,22 +41,6 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         }
     }
 
-    public function invoicePathologicalReportLists(User $user , $mode , $data)
-    {
-        $hospital = $user->getGlobalOption()->getBusinessConfig()->getId();
-        $qb = $this->createQueryBuilder('ip');
-        $qb->join('ip.dmsInvoice','e');
-        $qb->join('ip.particular','p');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
-       // $this->handleSearchBetween($qb,$data);
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
-        $qb->orderBy('e.created','DESC');
-        $qb->getQuery();
-        return  $qb;
-    }
-
     public function fileUpload(BusinessInvoice $invoice,$data,$file)
     {
         $em = $this->_em;
@@ -76,182 +60,30 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         }
     }
 
-    public function insertInvoiceParticularSingle(BusinessInvoice $invoice, $data)
+    public function insertInvoiceParticular(BusinessInvoice $invoice, $data)
     {
         $em = $this->_em;
-        $service = $this->_em->getRepository('BusinessBundle:BusinessService')->findOneBy(array('slug'=>$data['service']));
-        $teethNo = !empty($data['teethNo']) ? $data['teethNo'] : '' ;
-        $explode = explode(',',$teethNo);
         $entity = new BusinessInvoiceParticular();
-        $entity->setBusinessService($service);
-        $entity->setMetaValue($data['procedure']);
-        $entity->setTeethNo($explode);
         $entity->setBusinessInvoice($invoice);
+        $entity->setParticular($data['particular']);
+        $entity->setPrice($data['price']);
+        $entity->setQuantity($data['quantity']);
+        if(!empty($data['quantity'])){
+            $entity->setSubTotal($data['price']*$data['quantity']);
+        }else{
+            $entity->setSubTotal($data['price']);
+        }
+        if($data['unit']) {
+            $unit = $this->_em->getRepository('SettingToolBundle:ProductUnit')->find($data['unit']);
+            $entity->setUnit($unit);
+        }
         $em->persist($entity);
         $em->flush();
 
     }
 
-    public function insertInvoiceParticularReturn(BusinessInvoice $invoice, $data)
-    {
-        $em = $this->_em;
-        $service = $this->_em->getRepository('BusinessBundle:BusinessService')->findOneBy(array('slug' => $data['service']));
-        $invoiceParticulars = $this->findBy(array('dmsInvoice'=>$invoice,'dmsService'=>$service ));
-        $data ='';
-        foreach ($invoiceParticulars as $invoiceParticular ):
-        $colSpan = empty($invoiceParticular->getTeethNo()[0]) ? 'colspan="2"':'';
-        $data .='<tr id="remove-'.$invoiceParticular->getId().'">';
-        $data .='<td  class="numeric"'.$colSpan.'>'.$invoiceParticular->getMetaValue().'</td>';
-        if (!empty($invoiceParticular->getMetaValue()) and !empty($invoiceParticular->getTeethNo()[0])) {
-            $data .= '<td class="numeric">';
-            if($invoice->getCustomer()->getAgeGroup() == 'Adult'){
-                $data .='<table class="dms-table">';
-                $leftTeeths = [8,7,6,5,4,3,2,1];
-                $upperRightTeeths = array(9 =>1,10 =>2,11=>3,12=>4,13=>5,14=>6,15=>7,16=>8);
-                $lowerLeftTeeths = array(24=>8,23=>7,12=>6,21=>5,20=>4,19=>3,18=>2,17=>1);
-                $lowerRightTeeths = array(25 =>1,26 =>2,27=>3,28=>4,29=>5,30=>6,31=>7,32=>8);
-                $data .='<tr>';
-                $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
-                $data .='<ul class="leftTeeth">';
-                foreach ($leftTeeths as $left) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($left,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$left.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .='<td class="dms-td dms-td-border-bottom">';
-                $data .='<ul class="rightTeeth">';
-                foreach ($upperRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .= '</tr>';
-                $data .='<tr>';
-                $data .='<td class="dms-td dms-td-border-none">';
-                $data .='<ul class="leftTeeth">';
-                foreach ($lowerLeftTeeths as $key=>$left) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$left.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .='<td class="dms-td">';
-                $data .='<ul class="rightTeeth">';
-                foreach ($lowerRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .= '</tr>';
-                $data .= '</table>';
-            }else{
-                $data .='<table class="dms-table">';
-                $leftTeeths = array(37=>'E',36=>'D',35=>'C',34=>'B',33=>'A');
-                $upperRightTeeths = array(38=>'A',39=>'B',40=>'C',41=>'D',42=>'E');
-                $lowerLeftTeeths = array(47=>'E',46=>'D',45=>'C',44=>'B',43=>'A');
-                $lowerRightTeeths = array(38=>'A',49=>'B',50=>'C',51=>'D',52=>'E');
-                $data .='<tr>';
-                $data .='<td class="dms-td dms-td-border-none dms-td-border-bottom">';
-                $data .='<ul class="leftTeeth">';
-                foreach ($upperRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .='<td class="dms-td dms-td-border-bottom">';
-                $data .='<ul class="rightTeeth">';
-                foreach ($upperRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .= '</tr>';
-                $data .='<tr>';
-                $data .='<td class="dms-td dms-td-border-none">';
-                $data .='<ul class="leftTeeth">';
-                foreach ($lowerLeftTeeths as $key=>$left) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$left.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .='<td class="dms-td">';
-                $data .='<ul class="rightTeeth">';
-                foreach ($lowerRightTeeths as $key=>$right) :
-                    $selected = (!empty($invoiceParticular->getTeethNo()) and in_array($key,$invoiceParticular->getTeethNo())) ? 'class="active"' : '';
-                    $data .='<li '.$selected.'>'.$right.'</li>';
-                endforeach;
-                $data .='</ul>';
-                $data .='</td>';
-                $data .= '</tr>';
-                $data .= '</table>';
-            }
-
-            $data .= '</td>';
-        }
-        $data .='<td class="numeric">';
-        $data .='<a href="javascript:" class="btn red mini particularDelete" data-tab="'.$service->getSlug().'" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/dms/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
-        $data .='</td>';
-        $data .='</tr>';
-
-        endforeach;
-
-        return $data;
-    }
 
 
-    public function insertInvoiceInvestigationUpload(BusinessInvoice $invoice, $data)
-    {
-        $em = $this->_em;
-
-        $service = $this->_em->getRepository('BusinessBundle:BusinessService')->find($data['dmsService']);
-        $invoiceParticulars = $this->findBy(array('dmsInvoice'=> $invoice,'dmsService' => $service ));
-        $data ='';
-        /* @var $invoiceParticular BusinessInvoiceParticular */
-        foreach ($invoiceParticulars as $invoiceParticular ):
-
-            $date = $invoiceParticular->getCreated()->format('d-m-Y');
-            $data .='<tr id="remove-'.$invoiceParticular->getId().'">';
-            $data .='<td>'.$date.'</td>';
-            $data .='<td>'.$invoiceParticular->getMetaValue().'</td>';
-            $data .='<td><a target="_blank" href="/'.$invoiceParticular->getWebPath().'">View Image</a></td>';
-            $data .='<td class="numeric">';
-            $data .='<a href="javascript:" class="btn red mini particularDelete" data-tab="'.$service->getSlug().'" data-id="'. $invoiceParticular->getId().'" id="'. $invoiceParticular->getId().'" data-url="/dms/invoice/'.$invoice->getInvoice().'/'.$invoiceParticular->getId().'/particular-delete" ><i class="icon-trash"></i></a>';
-            $data .='</td>';
-            $data .='</tr>';
-
-        endforeach;
-
-        return $data;
-    }
-    public function insertInvoiceItems(BusinessInvoice $invoice, $data)
-    {
-        $em = $this->_em;
-        if(!empty($data['metaKey'])) {
-            $this->removeInvoiceParticularPreviousCheck($invoice);
-            foreach ($data['metaKey'] as $key => $val) {
-                $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($val);
-                $entity = new BusinessInvoiceParticular();
-                $invoiceBusinessParticular = $this->_em->getRepository('BusinessBundle:BusinessInvoiceParticular')->findOneBy(array('dmsInvoice' => $invoice, 'dmsParticular' => $particular));
-                if (!empty($invoiceBusinessParticular)) {
-                    $entity = $invoiceBusinessParticular ;
-                    $entity->setMetaValue(trim($data['metaValue'][$key]));
-                } else {
-                    $entity->setBusinessParticular($particular);
-                    $entity->setMetaValue(trim($data['metaValue'][$key]));
-                }
-                $entity->setBusinessInvoice($invoice);
-                $em->persist($entity);
-                $em->flush();
-            }
-            $this->updateMetaCheckValue($invoice,$data);
-        }
-    }
 
     public function updateMetaCheckValue($invoice,$data)
     {
@@ -286,28 +118,23 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $entities = $sales->getBusinessInvoiceParticulars();
         $data = '';
         $i = 1;
+        /* @var $entity BusinessInvoiceParticular */
+
         foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class="span1"><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
-            $data .= '<td class="span1" >' . $i . '</td>';
-            $data .= '<td class="span1" >' . $entity->getBusinessParticular()->getBusinessParticularCode() . '</td>';
-            $data .= '<td class="span4" >' . $entity->getBusinessParticular()->getName() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getBusinessParticular()->getService()->getName() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getSalesPrice() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
-            $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
-            </td>';
+
+            $data .= "<tr id='remove-{$entity->getId()}>";
+            $data .= "<td class='span1' >{$i}</td>";
+            $data .= "<td class='span1' >{$entity->getParticular()}</td>";
+            $data .= "<td class='span4' >{$entity->getPrice()}</td>";
+            $data .= "<td class='span2' >{$entity->getQuantity()}</td>";
+            $data .= "<td class='span2' >{$entity->getSubTotal()}</td>";
+            $data .= "<td class='span1' >";
+            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/dms/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
+            $data .= "</td>";
             $data .= '</tr>';
             $i++;
         }
         return $data;
-    }
-
-    public function invoiceBusinessParticularLists($user){
-
-
     }
 
     public function dmsInvoiceParticularReverse(Invoice $invoice)
@@ -357,7 +184,6 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
         return $lastCode;
     }
-
 
     public function reportSalesAccessories(GlobalOption $option ,$data)
     {
@@ -417,17 +243,16 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
-
     public function searchAutoComplete(BusinessConfig $config,$q)
     {
         $query = $this->createQueryBuilder('e');
         $query->join('e.businessInvoice', 'i');
-        $query->select('e.metaValue as id');
-        $query->where($query->expr()->like("e.metaValue", "'$q%'"  ));
+        $query->select('e.particular as id');
+        $query->where($query->expr()->like("e.particular", "'$q%'"  ));
         $query->andWhere("i.businessConfig = :config");
         $query->setParameter('config', $config->getId());
-        $query->groupBy('e.metaValue');
-        $query->orderBy('e.metaValue', 'ASC');
+        $query->groupBy('e.particular');
+        $query->orderBy('e.particular', 'ASC');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getArrayResult();
     }

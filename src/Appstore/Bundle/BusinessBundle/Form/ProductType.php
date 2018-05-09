@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class AccessoriesType extends AbstractType
+class ProductType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -70,7 +70,7 @@ class AccessoriesType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_dms_particular';
+        return 'businessParticular';
     }
 
 

@@ -8,6 +8,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
@@ -208,6 +209,11 @@ class TransactionMethod
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="transactionMethod" )
      */
     protected $medicineSales;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="transactionMethod" )
+     */
+    protected $businessInvoice;
 
     /**
      * @var string
@@ -502,6 +508,14 @@ class TransactionMethod
     public function getMedicinePurchase()
     {
         return $this->medicinePurchase;
+    }
+
+    /**
+     * @return BusinessInvoice
+     */
+    public function getBusinessInvoice()
+    {
+        return $this->businessInvoice;
     }
 }
 

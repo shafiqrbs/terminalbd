@@ -22,7 +22,7 @@ class BusinessInvoiceRepository extends EntityRepository
     public function getLastInvoice(BusinessConfig $config)
     {
         $entity = $this->findOneBy(
-            array('dmsConfig' => $config),
+            array('businessConfig' => $config),
             array('id' => 'DESC')
         );
         return $entity;
@@ -113,7 +113,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(it.total) as netTotal , sum(it.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -141,7 +141,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -171,7 +171,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->leftJoin('p.service','s');
         $qb->select('sum(ip.subTotal) as subTotal');
         $qb->addSelect('s.name as serviceName');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -191,7 +191,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->leftJoin('ip.transactionMethod','p');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('p.name as transName');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -221,7 +221,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->leftJoin('ip.assignDoctor','d');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('d.name as referredName');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $config);
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
         $qb->andWhere('ip.process = :mode')->setParameter('mode', 'Paid');
         if (!empty($data['startDate']) ) {
             $qb->andWhere("ip.updated >= :startDate");
@@ -254,7 +254,7 @@ class BusinessInvoiceRepository extends EntityRepository
     {
         $config = $user->getGlobalOption()->getBusinessConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $config) ;
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
@@ -269,7 +269,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $config = $user->getGlobalOption()->getBusinessConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $config) ;
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
@@ -281,9 +281,9 @@ class BusinessInvoiceRepository extends EntityRepository
     {
         $em = $this->_em;
         $total = $em->createQueryBuilder()
-            ->from('BusinessBundle:BusinessTreatmentPlan','si')
+            ->from('BusinessBundle:BusinessInvoiceParticular','si')
             ->select('sum(si.subTotal) as subTotal')
-            ->where('si.dmsInvoice = :invoice')
+            ->where('si.businessInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
 
@@ -303,7 +303,6 @@ class BusinessInvoiceRepository extends EntityRepository
         }else{
 
             $invoice->setSubTotal(0);
-            $invoice->setEstimateCommission(0);
             $invoice->setTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
@@ -323,7 +322,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $res = $em->createQueryBuilder()
             ->from('BusinessBundle:BusinessTreatmentPlan','si')
             ->select('sum(si.payment) as payment ,sum(si.discount) as discount')
-            ->where('si.dmsInvoice = :invoice')
+            ->where('si.businessInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->andWhere('si.status = :status')
             ->setParameter('status', 1)
@@ -344,7 +343,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $res = $em->createQueryBuilder()
             ->from('BusinessBundle:BusinessDoctorInvoice','si')
             ->select('sum(si.payment) as payment')
-            ->where('si.dmsInvoice = :invoice')
+            ->where('si.businessInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->andWhere('si.process = :process')
             ->setParameter('process', 'Paid')
@@ -369,7 +368,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb = $em->createQueryBuilder();
         $qb->from('BusinessBundle:InvoiceParticular','ip');
         $qb->innerJoin('ip.particular','particular');
-        $qb->where('si.dmsInvoice = :invoice');
+        $qb->where('si.businessInvoice = :invoice');
         $qb->setParameter('invoice', $invoice ->getId());
         $qb->groupBy('particular.service');
 
@@ -419,7 +418,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $cabin = $this->_em->getRepository('BusinessBundle:Particular')->find($cabin);
         $qb = $this->createQueryBuilder('e');
         $qb->select('COUNT(e.cabin) AS cabinCount');
-        $qb->where('e.dmsConfig = :config')->setParameter('config', $invoice ->getBusinessConfig()->getId());
+        $qb->where('e.businessConfig = :config')->setParameter('config', $invoice ->getBusinessConfig()->getId());
         $qb->andWhere('e.cabin = :cabin')->setParameter('cabin', $cabin ->getId());
         $qb->andWhere('e.process = :process')->setParameter('process', 'Admitted');
         $res = $qb->getQuery()->getOneOrNullResult();

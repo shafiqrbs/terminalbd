@@ -28,11 +28,6 @@ business_product:
     prefix:   /product
 
 
-business_medicine:
-    resource: "@BusinessBundle/Resources/config/routing/medicine.yml"
-    prefix:   /accessories
-
-
 business_config:
     resource: "@BusinessBundle/Resources/config/routing/config.yml"
     prefix:   /config

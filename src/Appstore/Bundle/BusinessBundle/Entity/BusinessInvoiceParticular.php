@@ -50,24 +50,32 @@ class BusinessInvoiceParticular
     /**
      * @var string
      *
-     * @ORM\Column(name="metaKey", type="string", length=225, nullable=true)
+     * @ORM\Column(name="particular", type="text", nullable=true)
      */
-    private $metaKey;
+    private $particular;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="metaValue", type="text", nullable=true)
+     * @ORM\Column(name="quantity", type="smallint", length = 5, nullable=true)
      */
-    private $metaValue;
+    private $quantity = 0;
+
 
     /**
-     * @var boolean
+     * @var float
      *
-     * @ORM\Column(name="metaStatus", type="boolean", nullable=true)
+     * @ORM\Column(name="price", type="float", nullable=true)
      */
-    private $metaStatus;
+    private $price;
 
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float", nullable=true)
+     */
+    private $subTotal;
 
 
     /**
@@ -80,54 +88,6 @@ class BusinessInvoiceParticular
         return $this->id;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getMetaKey()
-    {
-        return $this->metaKey;
-    }
-
-    /**
-     * @param string $metaKey
-     */
-    public function setMetaKey($metaKey)
-    {
-        $this->metaKey = $metaKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaValue()
-    {
-        return $this->metaValue;
-    }
-
-    /**
-     * @param string $metaValue
-     */
-    public function setMetaValue($metaValue)
-    {
-        $this->metaValue = $metaValue;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getMetaStatus()
-    {
-        return $this->metaStatus;
-    }
-
-    /**
-     * @param bool $metaStatus
-     */
-    public function setMetaStatus($metaStatus)
-    {
-        $this->metaStatus = $metaStatus;
-    }
 
     /**
      * @return BusinessParticular
@@ -175,6 +135,70 @@ class BusinessInvoiceParticular
     public function setUnit($unit)
     {
         $this->unit = $unit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticular()
+    {
+        return $this->particular;
+    }
+
+    /**
+     * @param string $particular
+     */
+    public function setParticular($particular)
+    {
+        $this->particular = $particular;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @param float $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
     }
 
 

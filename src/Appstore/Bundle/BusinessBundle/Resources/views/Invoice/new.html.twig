@@ -54,7 +54,7 @@
                                     <div class="row-fluid particular-info">
                                         <div class="span8">
                                             <div class="form-control">
-                                                <input type="text" id="invoiceParticular" name="invoiceParticular"  class="span12 m-wrap select2Particular" value=""  autocomplete="off" placeholder="Search particular name">
+                                                <input type="text" id="particular" name="particular"  class="span12 m-wrap select2Particular" value=""  autocomplete="off" placeholder="Search particular name">
                                             </div>
                                         </div>
                                         <div class="span4">
@@ -64,7 +64,7 @@
                                                        <input type="text" class="m-wrap span4 con select2Unit" name="unit" id="unit" placeholder="Item unit">
                                                         <input type="text" class="m-wrap span3 con" name="price" id="price" placeholder="price">
                                                     </span>
-                                                <button type="button" class="btn blue"  id="addPrescriptionParticular" data-url="{{ path('business_invoice_medicine_add',{'invoice':entity.id}) }}" ><i class="icon-shopping-cart"></i> Add </button>
+                                                <button type="button" class="btn blue"  id="addParticular" data-url="{{ path('business_invoice_particular_add',{'invoice':entity.id}) }}" ><i class="icon-shopping-cart"></i> Add </button>
                                             </div>
                                         </div>
                                     </div>
@@ -76,7 +76,7 @@
                                                 <table class="table table-bordered table-striped table-condensed table-fixed">
                                                     <thead>
                                                     <tr>
-                                                        <th class="">&nbsp;&nbsp;<i class="icon-list"></i> Si/No</th>
+                                                        <th class=""> Si/No</th>
                                                         <th class="span3">Particular</th>
                                                         <th class="span2">Unit</th>
                                                         <th class="span2">Qnt</th>
@@ -87,12 +87,12 @@
                                                     <tbody id="invoiceParticulars">
                                                     {% for item in entity.invoiceParticulars %}
                                                         <tr id="remove-{{ item.id }}">
-                                                            <td  class="span1">{{ loop.index }}</td>
-                                                            <td class="span3">{{ item.particular.name }}</td>
-                                                            <td class="span2">{{ item.salesPrice }}</td>
+                                                            <td  class="span1">{{ loop.index }}.</td>
+                                                            <td class="span3">{{ item.particular }}</td>
+                                                            <td class="span2">{{ item.price }}</td>
                                                             <td class="span2">{{ item.quantity }}</td>
                                                             <td class="span1">{{ item.subTotal|number_format }}</td>
-                                                            <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
+                                                            <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('business_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>
@@ -112,14 +112,14 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
-                                                        <td class="span2"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
+                                                        <td class="span2"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
                                                         <td class="span1">
                                                             <a href="javascript:" id=""  data-trigger="hover" data-original-title="Delete discount amount" data-url="{{ path('hms_invoice_discount_delete',{'id':entity.id}) }}" class=" btn red mini removeDiscount tooltips"><i class="icon-trash"></i></a>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
-                                                        <td class="span2"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                                                        <td class="span2"><strong class="netTotal">{{ entity.payment|number_format }}</strong></td>
                                                         <td class="span1"></td>
                                                     </tr>
                                                     </tfoot>
@@ -171,7 +171,7 @@
                                                     <div class="row-fluid">
                                                         <div class="input-icon left input-height">
                                                             <i class="icon-user"></i>
-                                                            <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
+                                                            <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name/company" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -189,7 +189,7 @@
                                             <div class="row-fluid customer">
                                                 <div class="span12 input-append-border">
                                                     <div class="row-fluid">
-                                                        <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
+                                                        <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer details"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,19 +198,16 @@
                                     </div>
                                     <div class="clearfix">&nbsp;</div>
                                     <div class="clearfix">&nbsp;</div>
-                                    <div class="form-actions portlet box grey">
+                                    <div class="form-actions portlet box yellow">
                                         <div class="pull-right">
                                             <input type="hidden" id="patient" name="patient" value="{% if entity.customer is not empty %}{{ entity.customer.id }}{% endif %}">
                                             <input type="hidden" id="invoice" name="invoice" data-action="{{ path('hms_invoice_print_for',{'id': entity.id}) }}" value="{{ entity.id }}">
                                             <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
-                                            <div class="action">
+                                            <div class="action"> <strong>Invoice For: </strong>
                                                 {{ form_widget(form.process) }}
                                                 {{ form_errors(form.process) }}
                                                 <div class="btn-group">
-                                                    {% if entity.process in ['Appointment','Visit','Done'] %}
-                                                        <a target="_blank" href="{{ path('business_invoice_print_invoice',{'id':entity.id}) }}" class="btn purple"><i class="icon-print"></i>&nbsp; Print</a>
-                                                    {% endif %}
-
+                                                    <button type="submit" class="btn blue"><i class="icon-print"></i>&nbsp; Save & Print</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -246,5 +243,4 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-     $('#addParticular').attr("disabled", true);
 {% endblock %}

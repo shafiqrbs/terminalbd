@@ -144,7 +144,7 @@
                                             <tbody id="salesItem" >
                                             {% for salesitem in entity.salesItems %}
                                                 <tr id="remove-{{ salesitem.id }}">
-                                                    <td class="numeric" > {{ loop.index }}</td>
+                                                    <td class="numeric" style="width:20px!important;" > {{ loop.index }}</td>
                                                     <td  class="numeric">
                                                         {{ salesitem.purchaseItem.barcode }}<br/>
                                                         <span>{{ salesitem.item.name }}</span>

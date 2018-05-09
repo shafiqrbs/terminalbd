@@ -39,20 +39,14 @@ class BusinessInvoice
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessInvoice" , cascade={"remove"} )
-     **/
-    private  $invoiceParticulars;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories", mappedBy="businessInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
-    private  $businessInvoiceAccessories;
+    private  $businessInvoiceParticulars;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="businessInvoices" ,cascade={"persist"} )
      **/
     private  $customer;
-
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -209,22 +203,6 @@ class BusinessInvoice
         return $this->id;
     }
 
-
-    /**
-     * @return InvoiceParticular
-     */
-    public function getInvoiceParticulars()
-    {
-        return $this->invoiceParticulars;
-    }
-
-    /**
-     * @param InvoiceParticular $invoiceParticulars
-     */
-    public function setInvoiceParticulars($invoiceParticulars)
-    {
-        $this->invoiceParticulars = $invoiceParticulars;
-    }
 
     /**
      * @return string
@@ -576,30 +554,6 @@ class BusinessInvoice
     }
 
     /**
-     * @return mixed
-     */
-    public function getBusinessInvoiceAccessories()
-    {
-        return $this->businessInvoiceAccessories;
-    }
-
-    /**
-     * @param mixed $businessInvoiceAccessories
-     */
-    public function setBusinessInvoiceAccessories($businessInvoiceAccessories)
-    {
-        $this->businessInvoiceAccessories = $businessInvoiceAccessories;
-    }
-
-    /**
-     * @return BusinessTransaction
-     */
-    public function getBusinessTransactions()
-    {
-        return $this->businessTransactions;
-    }
-
-    /**
      * @return bool
      */
     public function isRevised()
@@ -613,6 +567,22 @@ class BusinessInvoice
     public function setRevised($revised)
     {
         $this->revised = $revised;
+    }
+
+    /**
+     * @return BusinessInvoiceParticular
+     */
+    public function getBusinessInvoiceParticulars()
+    {
+        return $this->businessInvoiceParticulars;
+    }
+
+    /**
+     * @param BusinessInvoiceParticular $businessInvoiceParticulars
+     */
+    public function setBusinessInvoiceParticulars($businessInvoiceParticulars)
+    {
+        $this->businessInvoiceParticulars = $businessInvoiceParticulars;
     }
 
 

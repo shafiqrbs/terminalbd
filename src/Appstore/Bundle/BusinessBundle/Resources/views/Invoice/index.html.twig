@@ -150,9 +150,7 @@
                                                 {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
                                                 <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('business_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
-                                                {% if entity.process !='Created' %}
                                                 <a target="_blank"  href="{{ path('business_invoice_print_invoice',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
-                                                {% endif %}
                                                 <a href="{{ path('business_invoice_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
                                                 {% if entity.revised == 1 %}
                                                 <a href="{{ path('business_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
