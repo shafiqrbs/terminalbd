@@ -1,18 +1,96 @@
-medicine_user:
+medicine:
     path:     /
-    defaults: { _controller: "MedicineBundle:Medicine:index" }
+    defaults: { _controller: "MedicineBundle:MedicineBrand:index" }
 
-medicine_user_create:
+medicine_show:
+    path:     /{id}/show
+    defaults: { _controller: "MedicineBundle:MedicineBrand:show" }
+
+medicine_new:
+    path:     /new
+    defaults: { _controller: "MedicineBundle:MedicineBrand:new" }
+
+medicine_create:
     path:     /create
-    defaults: { _controller: "MedicineBundle:Medicine:create" }
+    defaults: { _controller: "MedicineBundle:MedicineBrand:create" }
     methods:  POST
 
-medicine_user_edit:
+medicine_edit:
     path:     /{id}/edit
-    defaults: { _controller: "MedicineBundle:Medicine:edit" }
+    defaults: { _controller: "MedicineBundle:MedicineBrand:edit" }
 
-medicine_user_update:
+medicine_update:
     path:     /{id}/update
-    defaults: { _controller: "MedicineBundle:Medicine:update" }
+    defaults: { _controller: "MedicineBundle:MedicineBrand:update" }
     methods:  [POST, PUT]
+
+medicine_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "MedicineBundle:MedicineBrand:delete" }
+    methods:  [POST, DELETE]
+
+medicine_select_search:
+    path:     /select-medicine-search
+    defaults: { _controller: "MedicineBundle:MedicineBrand:selectSearchMedicine" }
+    options:
+            expose: true
+
+medicine_search:
+    path:     /medicine-search
+    defaults: { _controller: "MedicineBundle:MedicineBrand:autoSearchMedicine" }
+    options:
+            expose: true
+
+generic_search:
+    path:     /generic-search
+    defaults: { _controller: "MedicineBundle:MedicineBrand:autoSearchGeneric" }
+    options:
+            expose: true
+
+medicine_name:
+    path:      /{medicine}/medicine-name
+    defaults: { _controller: "MedicineBundle:MedicineBrand:searchProductName" }
+    options:
+            expose: true
+
+medicine_user:
+    path:     /medicine-user
+    defaults: { _controller: "MedicineBundle:Medicine:index" }
+
+medicine_search_brand_name_complete:
+    path:     /search-brand-name-auto-complete
+    defaults: { _controller: "MedicineBundle:MedicineBrand:searchBrandNameAutoComplete" }
+    options:
+            expose: true
+
+medicine_search_company_name_complete:
+    path:     /search-company-name-auto-complete
+    defaults: { _controller: "MedicineBundle:MedicineBrand:searchCompanyNameAutoComplete" }
+    options:
+            expose: true
+
+medicine_search_generic_name_complete:
+    path:     /search-generic-name-auto-complete
+    defaults: { _controller: "MedicineBundle:MedicineBrand:searchGenericNameAutoComplete" }
+    options:
+            expose: true
+
+medicine_search_pack_size_name_complete:
+    path:     /search-pack-size-name-auto-complete
+    defaults: { _controller: "MedicineBundle:MedicineBrand:searchPackSizeAutoComplete" }
+    options:
+            expose: true
+
+medicine_search_strength_name_complete:
+    path:     /search-strength-name-auto-complete
+    defaults: { _controller: "MedicineBundle:MedicineBrand:searchStrengthAutoComplete" }
+    options:
+            expose: true
+
+medicine_search_form_name_complete:
+    path:     /search-form-name-auto-complete
+    defaults: { _controller: "MedicineBundle:MedicineBrand:searchMedicineFormAutoComplete" }
+    options:
+            expose: true
+
 

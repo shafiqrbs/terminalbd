@@ -95,8 +95,23 @@ class MedicineSalesTemporaryController extends Controller
         $editForm = $this->createCreateForm($entity);
         $editForm->handleRequest($request);
         $entity->setMedicineConfig($config);
+
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($user->getGlobalOption());
         $entity->setCustomer($customer);
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (!empty($data['customerMobile'])) {
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
+            $entity->setCustomer($customer);
+
+        } elseif(!empty($data['mobile'])) {
+
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
+            $entity->setCustomer($customer);
+
+        }
+
         $entity->setSubTotal($data['salesSubTotal']);
         $entity->setNetTotal($data['salesNetTotal']);
         if ($entity->getNetTotal() <= $entity->getReceived()) {

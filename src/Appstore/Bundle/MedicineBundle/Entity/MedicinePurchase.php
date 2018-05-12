@@ -100,6 +100,19 @@ class MedicinePurchase
      */
      private $mode ='general';
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountType", type="string", length=20, nullable=true)
+     */
+    private $discountType ='percentage';
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
+     */
+    private $discountCalculation;
 
     /**
      * @var datetime
@@ -668,6 +681,38 @@ class MedicinePurchase
     public function setPurchaseBy($purchaseBy)
     {
         $this->purchaseBy = $purchaseBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountType()
+    {
+        return $this->discountType;
+    }
+
+    /**
+     * @param string $discountType
+     */
+    public function setDiscountType($discountType)
+    {
+        $this->discountType = $discountType;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountCalculation()
+    {
+        return $this->discountCalculation;
+    }
+
+    /**
+     * @param float $discountCalculation
+     */
+    public function setDiscountCalculation($discountCalculation)
+    {
+        $this->discountCalculation = $discountCalculation;
     }
 
 

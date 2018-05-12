@@ -106,10 +106,10 @@ class PurchaseSimpleController extends Controller
         if (!$purchase) {
             throw $this->createNotFoundException('Unable to find Purchase entity.');
         }
+        $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
         $purchaseItem = new PurchaseItem();
         $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
         $editForm = $this->createEditForm($purchase);
-        $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
         return $this->render('InventoryBundle:PurchaseSimple:new.html.twig', array(
             'entity'      => $purchase,
             'processItem'      => $processItem,

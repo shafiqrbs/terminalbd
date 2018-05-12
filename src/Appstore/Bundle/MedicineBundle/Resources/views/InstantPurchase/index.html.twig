@@ -114,13 +114,12 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.medicinePurchase.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.expirationStartDate is not empty and entity.expirationEndDate is not empty %}{{ entity.expirationStartDate|date('M y') }} To {{ entity.expirationEndDate|date('M y') }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.barcode }}</td>
-                                        <td class="numeric" >{{ entity.medicineStock.rackNo.name }}</td>
+                                        <td class="numeric" >{% if entity.medicineStock.rackNo is not empty %}{{ entity.medicineStock.rackNo.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.medicineStock.name }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>

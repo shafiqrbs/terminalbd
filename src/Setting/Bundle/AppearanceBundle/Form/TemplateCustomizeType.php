@@ -25,7 +25,6 @@ class TemplateCustomizeType extends AbstractType
             ->add('showSidebar')
             ->add('sidebarTooltip')
             ->add('menuBold')
-
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
             ->add('sidebarPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
@@ -323,7 +322,10 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 numeric',
                 'placeholder'=>'')
             ))
-            ;
+            ->add('metaDescription','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'placeholder'=>'Enter meta description')))
+            ->add('metaKeyword','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>5,'placeholder'=>'Enter meta keywords')))
+
+        ;
     }
     
     /**

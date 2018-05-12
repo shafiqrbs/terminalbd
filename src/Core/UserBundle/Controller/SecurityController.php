@@ -47,8 +47,6 @@ class SecurityController extends Controller
         } else {
             $error = null;
         }
-
-
         if (!$error instanceof AuthenticationException) {
             $error = null; // The value does not come from the security component.
         }

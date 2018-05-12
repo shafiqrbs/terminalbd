@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Purchase GRN # {{ entity.grn }}
+                    Instant Purchase GRN # {{ entity.grn }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('medicine_purchase') }}">Purchase</a>
+                        <a href="{{ path('medicine_instantpurchase') }}">Instant Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Purchase</a></li>
@@ -34,12 +34,11 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Instant Purchase Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('medicine_purchase_new') }}"><i class="icon-plus-sign"></i> Medicine Purchase</a>
-                                <a class="btn" href="{{ path('medicine_purchase') }}"><i class="icon-th-list"></i> Medicine</a>
+                                <a class="btn" href="{{ path('medicine_instantpurchase') }}"><i class="icon-th-list"></i> Medicine</a>
                             </div>
                         </div>
 

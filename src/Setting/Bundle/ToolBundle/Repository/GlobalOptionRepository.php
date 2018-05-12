@@ -383,7 +383,6 @@ class GlobalOptionRepository extends EntityRepository
         $menu = new Menu();
         $menu->setGlobalOption($globalOption);
         $menu->setPage($about);
-        $menu->setModule($module);
         $menu->setMenu($about->getName());
         $menu->setSlug($about->getSlug());
         $em->persist($menu);

@@ -24,7 +24,7 @@ class MedicineController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('MedicineBundle:MedicineBrand')->findBy(array('globalOption' => $option->getSlug()));
+        $entities = $em->getRepository('MedicineBundle:MedicineBrand')->findBy(array('globalOption' => $option));
         $entity = new MedicineBrand();
         $form   = $this->createCreateForm($entity);
         return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
@@ -42,22 +42,23 @@ class MedicineController extends Controller
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $option = $this->getUser()->getGlobalOption();
         $entity = new MedicineBrand();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-        $entities = $em->getRepository('MedicineBundle:MedicineBrand')->findBy(array('globalOption' => $option->getSlug()));
+        $em = $this->getDoctrine()->getManager();
+        $entity->setGlobalOption($option);
+        $entity->setStrength($data['strength']);
+        $entity->setMedicineForm($data['medicineForm']);
+        $entity->setPackSize($data['packSize']);
+        $entity->setName($data['brand']);
+        $generic = $this->getDoctrine()->getRepository('MedicineBundle:MedicineGeneric')->checkGenericName($data['generic']);
+        $entity->setMedicineGeneric($generic);
+        $company = $this->getDoctrine()->getRepository('MedicineBundle:MedicineCompany')->checkCompanyName($data['companyName']);
+        $entity->setMedicineCompany($company);
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('medicine_user'));
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-            return $this->redirect($this->generateUrl('medicine_user'));
-        }
-        return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
-            'entities' => $entities,
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
     }
 
     /**
@@ -75,6 +76,7 @@ class MedicineController extends Controller
             'attr' => array(
                 'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
+                'id' => 'medicine',
             )
         ));
         return $form;

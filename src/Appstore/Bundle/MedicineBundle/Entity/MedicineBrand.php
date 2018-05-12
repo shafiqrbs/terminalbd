@@ -24,6 +24,11 @@ class MedicineBrand
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="medicineBrands")
+     **/
+    private $globalOption;
+
+     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineGeneric", inversedBy="medicineBrands")
      **/
     private $medicineGeneric;
@@ -46,36 +51,28 @@ class MedicineBrand
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255), nullable=true
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="globalOption", type="string", length=150)
-     */
-    private $globalOption;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="brand_id", type="string", length=255)
+     * @ORM\Column(name="brand_id", type="string", length=255, nullable=true)
      */
     private $brandId;
 
 /**
      * @var string
      *
-     * @ORM\Column(name="generic_id", type="string", length=255)
+     * @ORM\Column(name="generic_id", type="string", length=255, nullable=true)
      */
     private $genericId;
 
 /**
      * @var string
      *
-     * @ORM\Column(name="company_id", type="string", length=255)
+     * @ORM\Column(name="company_id", type="string", length=255, nullable=true)
      */
     private $companyId;
 
@@ -83,7 +80,7 @@ class MedicineBrand
     /**
      * @var string
      *
-     * @ORM\Column(name="medicineForm", type="string", length=255)
+     * @ORM\Column(name="medicineForm", type="string", length=255, nullable=true)
      */
     private $medicineForm;
 
@@ -91,7 +88,7 @@ class MedicineBrand
     /**
      * @var string
      *
-     * @ORM\Column(name="strength", type="string", length=100)
+     * @ORM\Column(name="strength", type="string", length=100, nullable=true)
      */
     private $strength;
 
@@ -99,7 +96,7 @@ class MedicineBrand
     /**
      * @var float
      *
-     * @ORM\Column(name="price", type="float", length=255)
+     * @ORM\Column(name="price", type="float", length=255, nullable=true)
      */
     private $price;
 
@@ -107,7 +104,7 @@ class MedicineBrand
     /**
      * @var string
      *
-     * @ORM\Column(name="packSize", type="string", length=100)
+     * @ORM\Column(name="packSize", type="string", length=100, nullable=true)
      */
     private $packSize;
 
@@ -414,21 +411,6 @@ class MedicineBrand
         return $this->invoiceMedicine;
     }
 
-    /**
-     * @return string
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
-
-    /**
-     * @param string $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
-    }
 
     /**
      * @return MedicineStock
@@ -436,6 +418,22 @@ class MedicineBrand
     public function getMedicineStock()
     {
         return $this->medicineStock;
+    }
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param GlobalOption $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
     }
 
 

@@ -279,22 +279,31 @@ class PurchaseController extends Controller
 
     public function invoiceDiscountUpdateAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
-        $purchase = $request->request->get('invoice');
 
-        $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->find($purchase);
-        $total = ($purchase->getSubTotal() - $discount);
+        $em = $this->getDoctrine()->getManager();
+        $discountType = $request->request->get('discountType');
+        $discountCal = $request->request->get('discount');
+        $invoice = $request->request->get('purchase');
+        $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->find($invoice);
+        $subTotal = $entity->getSubTotal();
+        if($discountType == 'flat'){
+            $total = ($subTotal  - $discountCal);
+            $discount = $discountCal;
+        }else{
+            $discount = ($subTotal * $discountCal)/100;
+            $total = ($subTotal  - $discount);
+        }
         $vat = 0;
         if($total > $discount ){
-
-            $purchase->setDiscount($discount);
-            $purchase->setNetTotal($total + $vat);
-            $purchase->setDue($total + $vat);
-            $em->persist($purchase);
+            $entity->setDiscountType($discountType);
+            $entity->setDiscountCalculation($discountCal);
+            $entity->setDiscount(round($discount));
+            $entity->setNetTotal(round($total + $vat));
+            $entity->setDue(round($total + $vat));
             $em->flush();
         }
-        $result = $this->returnResultData($purchase);
+
+        $result = $this->returnResultData($entity);
         return new Response(json_encode($result));
         exit;
     }

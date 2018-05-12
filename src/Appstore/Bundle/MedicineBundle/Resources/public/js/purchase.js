@@ -208,14 +208,17 @@ $('#invoiceParticulars').on("click", ".delete", function() {
 });
 
 
-$(document).on('change', '#medicinepurchase_discount', function() {
 
-    var purchaseId = $('#purchaseId').val();
-    var discount = parseInt($('#medicinepurchase_discount').val());
+
+$(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurchase_discountType', function() {
+
+    var discountType = $('#medicinepurchase_discountType').val();
+    var discount = parseInt($('#medicinepurchase_discountCalculation').val());
+    var purchase = parseInt($('#purchaseId').val());
     $.ajax({
         url: Routing.generate('medicine_purchase_discount_update'),
         type: 'POST',
-        data:'discount=' + discount+'&invoice='+purchaseId,
+        data:'discount=' + discount+'&discountType='+discountType+'&purchase='+purchase,
         success: function(response) {
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);
@@ -225,12 +228,12 @@ $(document).on('change', '#medicinepurchase_discount', function() {
             $('.dueAmount').html(obj['due']);
             $('#msg').html(obj['msg']);
             $('#discount').html(obj['discount']);
-
         }
 
     })
 
 });
+
 
 $(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
 
@@ -263,7 +266,7 @@ $('form#purchaseForm').on('keypress', '.inputs', function (e) {
         }
         switch (this.id) {
 
-            case 'medicinepurchase_discount':
+            case 'medicinepurchase_discountCalculation':
             $('#medicinepurchase_payment').focus();
             break;
 

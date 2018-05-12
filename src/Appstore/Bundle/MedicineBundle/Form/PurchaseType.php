@@ -89,8 +89,17 @@ class PurchaseType extends AbstractType
             ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12  resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark')))
             ->add('receiveDate','text', array('attr'=>array('class'=>'m-wrap span12 inputs dateCalendar','placeholder'=>'Enter receive date')))
             ->add('payment','text', array('attr'=>array('class'=>'numeric span12 inputs m-wrap','placeholder'=>'Payment amount')))
-            ->add('discount','text', array('attr'=>array('class'=>'numeric span12 inputs m-wrap','placeholder'=>'Discount amount')
-            ));
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
+            ->add('discountType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap discount-type span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'percentage' => 'Percentage',
+                    'flat' => 'Flat',
+                ),
+            ))
+            ->add('discount','hidden');
     }
     
     /**

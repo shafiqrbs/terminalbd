@@ -663,6 +663,21 @@ class TemplateCustomize
 
 
     /**
+     * @var text
+     *
+     * @ORM\Column(name="metaKeyword", type="text", nullable=true)
+     */
+    private $metaKeyword;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="metaDescription", type="text", nullable=true)
+     */
+    private $metaDescription;
+
+
+    /**
      * @Assert\File(maxSize="8388608")
      */
     protected $file;
@@ -2208,6 +2223,38 @@ class TemplateCustomize
     public function setMenuBold($menuBold)
     {
         $this->menuBold = $menuBold;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaKeyword()
+    {
+        return $this->metaKeyword;
+    }
+
+    /**
+     * @param string $metaKeyword
+     */
+    public function setMetaKeyword($metaKeyword)
+    {
+        $this->metaKeyword = $metaKeyword;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * @param string $metaDescription
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        $this->metaDescription = $metaDescription;
     }
 
 

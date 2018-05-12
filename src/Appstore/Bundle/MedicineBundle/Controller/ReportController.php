@@ -105,7 +105,6 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
         $salesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data);
         $entities = $em->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data);
         return $this->render('MedicineBundle:Report:sales/salesUser.html.twig', array(
@@ -145,19 +144,98 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $cashOverview = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
-        $transactionCash = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseTransactionOverview($user,$data);
-        $salesProcess = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseProcessOverview($user,$data);
-        $purchaseMode = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseModeOverview($user,$data);
-        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+
+        $purchaseCashOverview   = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
+        $transactionCash        = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseTransactionOverview($user,$data);
+        $purchaseMode           = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseModeOverview($user,$data);
+        $stockMode              = $em->getRepository('MedicineBundle:MedicinePurchase')->reportStockModeOverview($user,$data);
         return $this->render('MedicineBundle:Report:purchase/overview.html.twig', array(
-            'option'                    => $user->getGlobalOption() ,
-            'cashOverview'              => $cashOverview ,
-            'transactionCash'           => $transactionCash ,
-            'salesProcess'              => $salesProcess ,
-            'purchaseMode'              => $purchaseMode ,
-            'transactionMethods'        => $transactionMethods ,
-            'searchForm'                => $data ,
+
+            'option'                            => $user->getGlobalOption() ,
+            'purchaseCashOverview'              => $purchaseCashOverview ,
+            'transactionCash'                   => $transactionCash ,
+            'purchaseMode'                      => $purchaseMode ,
+            'stockMode'                         => $stockMode ,
+            'searchForm'                        => $data,
+
+        ));
+    }
+
+
+    public function purchaseVendorAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user,$data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseVendor.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'entities'              => $entities ,
+            'searchForm'            => $data,
+        ));
+    }
+
+    public function purchaseVendorDetailsAction()
+    {
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($globalOption,$data);
+        $pagination = $this->paginate($entities);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($globalOption,$data);
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(5));
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        return $this->render('MedicineBundle:Report:purchase/purchase.html.twig', array(
+            'globalOption' => $globalOption,
+            'entities' => $pagination,
+            'accountHead' => $accountHead,
+            'transactionMethods' => $transactionMethods,
+            'searchForm' => $data,
+            'overview' => $overview,
+        ));
+    }
+
+    public function purchaseVendorSalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $purchasePrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getPurchaseVendorPrice($user,$data);
+        $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesVendorPrice($user,$data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseSalesVendor.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'vendors'                => $user->getGlobalOption()->getMedicineConfig()->getMedicineVendors() ,
+            'purchasePrice'         => $purchasePrice ,
+            'salesPrice'            => $salesPrice ,
+            'searchForm'            => $data,
+        ));
+    }
+
+    public function purchaseBrandAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user,$data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseBrand.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'entities'              => $entities ,
+            'searchForm'            => $data,
+        ));
+    }
+
+    public function purchaseBrandSalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $purchasePrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getPurchaseBrandReport($user,$data);
+        $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesBrandReport($user,$data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseSalesBrand.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'vendors'                => $user->getGlobalOption()->getMedicineConfig()->getMedicineVendors() ,
+            'purchasePrice'         => $purchasePrice ,
+            'salesPrice'            => $salesPrice ,
+            'searchForm'            => $data,
         ));
     }
 

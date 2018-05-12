@@ -27,7 +27,7 @@ $(document).on('click', '#temporarySales', function() {
 
 });
 
-$(document).on("click", "#instantPopup", function() {
+$(document).on("click", ".instantPopup", function() {
 
     var url = $(this).attr('data-url');
     $.ajax({
@@ -39,13 +39,26 @@ $(document).on("click", "#instantPopup", function() {
             $('.loader-double').fadeIn(1000).removeClass('is-active');
         },
         success:  function (data) {
-            $("#instantPurchaseLoad").html(data);
+            $("#instantPurchaseLoad").html(data).show();
+            $('#instantPurchasePopup').removeClass("instantPopup").addClass("removePopup");
             jqueryInstantTemporaryLoad();
         }
     });
 });
+$(document).on("click", ".removePopup", function() {
+    $("#instantPurchaseLoad").slideToggle();
+    $('#instantPurchasePopup').removeClass("removePopup").addClass("instantPopup");
+});
 
 function jqueryTemporaryLoad() {
+
+    $(".addTemporaryCustomer").click(function(){
+        $( ".customer" ).slideToggle( "slow" );
+    }).toggle( function() {
+        $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+    }, function() {
+        $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+    });
 
     $(document).on('change', '#salesTemporaryItem_stockName', function() {
 
@@ -351,10 +364,50 @@ function jqueryTemporaryLoad() {
         minimumInputLength:2
 
     });
+
+    $(".select2TemporaryCustomer").select2({
+
+        ajax: {
+
+            url: Routing.generate('domain_customer_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var customer = $(element).val();
+            $.ajax(Routing.generate('domain_customer_name', { customer : customer}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength: 1
+    });
 }
 
 function jqueryInstantTemporaryLoad(){
-
 
     $(document).on('change', '#medicineName', function() {
 
@@ -467,6 +520,26 @@ function jqueryInstantTemporaryLoad(){
 
     });
 
+/*    $( ".select2InstantMedicine" ).autocomplete({
+
+        source: function( request, response ) {
+            $.ajax( {
+                url: Routing.generate('medicine_search'),
+                data: {
+                    term: request.term
+                },
+                success: function( data ) {
+                    response( data );
+                }
+            } );
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+            $("#medicineId").val(ui.item.id); // save selected id to hidden input
+
+        }
+    });*/
+
     $(".select2InstantMedicine").select2({
 
         placeholder: "Search medicine name",
@@ -505,43 +578,7 @@ function jqueryInstantTemporaryLoad(){
         minimumInputLength: 2
     });
 
-    $(".select2StockMedicine").select2({
 
-        placeholder: "Search medicine stock name",
-        ajax: {
-            url: Routing.generate('medicine_stock_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
-        formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('medicine_stock_name', { vendor : id}), {
-                dataType: "json"
-            }).done(function (data) {
-                return  callback(data);
-            });
-        },
-        allowClear: true,
-        minimumInputLength: 1
-
-    });
 
     $( ".select2Vendor" ).autocomplete({
         source: function( request, response ) {

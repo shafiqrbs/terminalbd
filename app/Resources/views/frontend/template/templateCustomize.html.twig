@@ -84,6 +84,9 @@
         #menu{
             margin-top:{{ globalOption.templateCustomize.menuTopMargin }}px!important;
         }
+        .fixed-top #menu {
+            margin-top: {{ globalOption.templateCustomize.stickyMenuTopMargin }}px!important;
+        }
     {% endif %}
 
     {% if globalOption.templateCustomize.logoWidth is not empty or globalOption.templateCustomize.logoHeight is not empty %}

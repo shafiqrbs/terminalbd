@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Repository;
 
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineGeneric;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,4 +14,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class MedicineGenericRepository extends EntityRepository
 {
+    public function checkGenericName($name){
+
+        $generic = $this->findOneBy(array('name'=>$name));
+        $em = $this->_em;
+        if(empty($generic)){
+            $entity = new MedicineGeneric();
+            $entity->setName($name);
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }else{
+          return $generic;
+        }
+    }
 }

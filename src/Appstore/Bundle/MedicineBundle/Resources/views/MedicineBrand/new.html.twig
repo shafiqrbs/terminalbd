@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage New Medicine
+                   Manage Particulars
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">New Medicine</a></li>
+                     <li><a href="#">Particulars</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,7 +28,7 @@
 
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage New Medicine</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Particulars</div>
                     </div>
                     <div class="portlet-body form">
                         <div class="portlet-body ">
@@ -42,7 +42,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="name">Brand Name<span class="required">*</span></label>
                                         <div class="controls">
-                                            <input type="text" id="brand" name="brand" required="required" class="m-wrap span12 input" autocomplete="off" placeholder="Enter medicine brand name">
+                                            <input type="text" id="brand" name="brand" required="required" class="m-wrap span12" autocomplete="off" placeholder="Enter medicine brand name">
                                         </div>
                                     </div>
                                 </div>
@@ -50,7 +50,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="name">Generic<span class="required">*</span></label>
                                         <div class="controls">
-                                            <input type="text" id="generic" name="generic" required="required" class="m-wrap span12 input" autocomplete="off" placeholder="Enter medicine generic name">
+                                            <input type="text" id="generic" name="generic" required="required" class="m-wrap span12" autocomplete="off" placeholder="Enter medicine brand name">
                                         </div>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="name">Medicine Form<span class="required">*</span></label>
                                         <div class="controls">
-                                            <input type="text" id="medicineForm" name="medicineForm" required="required" class="m-wrap span12 input" autocomplete="off" placeholder="Enter medicine form name">
+                                            <input type="text" id="medicineForm" name="medicineForm" required="required" class="m-wrap span12 select2MedicineForm" autocomplete="off" placeholder="Enter medicine brand name">
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="name">Company Name<span class="required">*</span></label>
                                         <div class="controls">
-                                            <input type="text" id="companyName" name="companyName" required="required" class="m-wrap span12 input" autocomplete="off" placeholder="Enter medicine company name">
+                                            <input type="text" id="companyName" name="companyName" required="required" class="m-wrap span12 select2MedicineCompany" autocomplete="off" placeholder="Enter medicine company name">
                                         </div>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="name">Pack Size<span class="required">*</span></label>
                                         <div class="controls">
-                                            <input type="text" id="packSize" name="packSize" required="required" class="m-wrap span12 input" autocomplete="off" placeholder="Enter medicine pack size">
+                                            <input type="text" id="packSize" name="packSize" required="required" class="m-wrap span12 select2PackSize" autocomplete="off" placeholder="Enter medicine pack size">
                                         </div>
                                     </div>
                                 </div>
@@ -85,14 +85,14 @@
                                     <div class="control-group">
                                         <label class="control-label" for="name">Strength<span class="required">*</span></label>
                                         <div class="controls">
-                                            <input type="text" id="strength" name="strength" required="required" class="m-wrap span12 input" autocomplete="off" placeholder="Enter medicine strength">
+                                            <input type="text" id="strength" name="strength" required="required" class="m-wrap span12 select2Strength" autocomplete="off" placeholder="Enter medicine strength">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
-                                    <button type="submit" class="btn green" id="submitBtn" ><i class="icon-save"></i> Save</button>
+                                    <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
                                 </div>
                             </div>
                             {{ form_end(form) }}

@@ -46,6 +46,14 @@
                                             <div class="span4">
                                                 <h4>BILL TO:</h4>
                                                 <ul class="unstyled">
+                                                    <li><h3>Safa Top Tech Ltd.</h3></li>
+                                                    <li>
+                                                        House# 04 (Fourth Floor),Block # C<br/>
+                                                        Main Road,Banashree,Rampura<br/>
+                                                        Dhaka-1219<br/>
+                                                        Mobile. <strong>01619241314</strong>
+
+                                                    </li>
                                                     {% if entity.customer %}
                                                         {% if  entity.customer.name  %}
                                                             <li><strong><i class="icon-home"></i>&nbsp;</strong>&nbsp;{{ entity.customer.name }}</li>
@@ -67,10 +75,10 @@
                                                 <ul class="unstyled">
                                                     <li><strong><i class="icon-file"></i>&nbsp;</strong>{{ entity.invoice }}</li>
                                                     <li><strong><i class="icon-calendar"></i>&nbsp;</strong>{{ entity.created|date('d-m-Y') }}</li>
-                                                    {% if entity.transactionMethod is not empty %}<li><strong><i class="icon-money"></i>&nbsp;</strong>{{ entity.transactionMethod.name }}</li>{% endif %}
+                                               {#     {% if entity.transactionMethod is not empty %}<li><strong><i class="icon-money"></i>&nbsp;</strong>{{ entity.transactionMethod.name }}</li>{% endif %}
                                                     {% if entity.paymentMobile is not empty %}<li><strong><i class="icon-money"></i></strong>&nbsp;{{ entity.paymentMobile }}/{{ entity.transactionId }}</li>{% endif %}
                                                     {% if entity.cardNo is not empty %}<li><strong><i class="icon-money"></i>&nbsp;</strong>&nbsp;{{ entity.bank.name  }}/{{ entity.cardNo }}</li>{% endif %}
-                                                    <li></li>
+                                              #}      <li></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -100,11 +108,9 @@
                                         </tbody>
                                         <tfoot>
                                         <tr><td colspan="2"><span class="pull-right" >SUB TOTAL</span></td><td>{{ entity.total|number_format() }}</td></tr>
-                                        <tr><td colspan="2"><span class="pull-right" >DISCOUNT</span></td><td>{{ entity.total|number_format() }}</td></tr>
                                         <tr><td colspan="2"><strong class="pull-right" >TOTAL</strong></td><td>{{ entity.total|number_format() }}</td></tr>
-                                        <tr><td colspan="2"><span class="pull-right" >PAID</span></td><td>{{ entity.total|number_format() }}</td></tr>
                                         <tr><td colspan="3" style="border-bottom:5px solid #000!important">&nbsp;</td></tr>
-                                        <tr><td colspan="2"><strong class="pull-right" >DUE</strong></td><td>{{ entity.total|number_format() }}</td></tr>
+                                        <tr><td colspan="2"><strong class="pull-right" >PAID</strong></td><td>{{ entity.total|number_format() }}</td></tr>
                                         </tfoot>
                                     </table>
                                 {% endif %}
@@ -151,6 +157,8 @@
      }
      .table-header th{
          line-height: 35px;
+         color:#fff;
+         font-size:15px!important;
      }
  </style>
 {% endblock %}

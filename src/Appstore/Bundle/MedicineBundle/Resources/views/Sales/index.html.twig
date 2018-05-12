@@ -106,7 +106,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% set proceses = ['Created','Pending','Hold'] %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
@@ -118,7 +118,7 @@
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'Created' or entity.process == 'Pending'or entity.process == 'Hold' %}
+                                            {% if entity.process in proceses %}
                                             <a href="{{ path('medicine_sales_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}

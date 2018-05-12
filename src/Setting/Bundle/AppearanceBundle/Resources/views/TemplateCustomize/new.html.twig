@@ -434,7 +434,7 @@
                             <!--/row-->
                             <div class="form-actions portlet box grey">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Header/Body/Footer/Border</div>
+                                    <div class="caption"><i class="icon-reorder"></i>Header/Body/Border</div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
@@ -509,6 +509,40 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Border Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.borderColor) }}
+                                                {{ form_errors(form.borderColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Border Color Hover</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.borderColorHover) }}
+                                                {{ form_errors(form.borderColorHover) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="form-actions portlet box green">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Manage Header Menu</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                 <div class="span3">
                                     <div class="control-group">
@@ -642,7 +676,16 @@
                                    </div>
                                </div>
                            </div>
-                           <div class="row-fluid">
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="form-actions portlet box yellow">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Manage Footer Menu</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+
+                            <div class="row-fluid">
                                <div class="span3">
                                    <div class="control-group">
                                        <label class="control-label" for="firstName">Footer Bg Color</label>
@@ -694,32 +737,7 @@
                                </div>
 
                             </div>
-                            <div class="row-fluid">
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Border Color</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-magic"></i>
-                                                {{ form_widget(form.borderColor) }}
-                                                {{ form_errors(form.borderColor) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Border Color Hover</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-magic"></i>
-                                                {{ form_widget(form.borderColorHover) }}
-                                                {{ form_errors(form.borderColorHover) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                             <!--/row-->
                             <div class="clearfix">&nbsp;</div>
                             <!--/row-->
@@ -939,7 +957,41 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="form-actions portlet box red">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Meta Tags & Keywords</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Meta Tags</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.metaKeyword) }}
+                                            {{ form_errors(form.metaKeyword) }}
+                                            <span class="label label-important">NOTE!</span>
+                                            <span>Every meta key word use must be comma separator</span>
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Meta Description</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.metaDescription) }}
+                                            {{ form_errors(form.metaDescription) }}
+                                            <span class="label label-important">NOTE!</span>
+                                            <span>Meta description using the website summary</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Logo & Favicon</div>

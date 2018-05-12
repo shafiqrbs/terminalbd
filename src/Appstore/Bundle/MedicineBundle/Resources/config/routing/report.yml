@@ -2,11 +2,45 @@ medicine_report_purchase_summary:
     path:     /purchase-overview
     defaults: { _controller: "MedicineBundle:Report:purchaseOverview" }
 
+medicine_report_purchase_vendor:
+    path:     /purchase-vendor-summary
+    defaults: { _controller: "MedicineBundle:Report:purchaseVendor" }
+
+medicine_report_purchase_vendor_details:
+    path:     /purchase-vendor-details
+    defaults: { _controller: "MedicineBundle:Report:purchaseVendorDetails" }
+
+medicine_report_purchase_sales_vendor:
+    path:     /purchase-vendor-sales
+    defaults: { _controller: "MedicineBundle:Report:purchaseVendorSales" }
+
+medicine_report_purchase_brand:
+    path:     /purchase-brand-summary
+    defaults: { _controller: "MedicineBundle:Report:purchaseBrand" }
+
+medicine_report_purchase_brand_sales:
+    path:     /purchase-brand-sales
+    defaults: { _controller: "MedicineBundle:Report:purchaseBrandSales" }
+
 medicine_report_purchase_details:
-    path:     /purchase-details
-    defaults: { _controller: "MedicineBundle:Report:purchaseDetails" }
+    path:     /purchase-vendor
+    defaults: { _controller: "MedicineBundle:Report:purchaseVendor" }
 
 medicine_report_purchase_stock:
+    path:     /purchase-vendor-
+    defaults: { _controller: "MedicineBundle:Report:purchaseVendor" }
+
+
+
+medicine_report_purchase_mode:
+    path:     /purchase-mode
+    defaults: { _controller: "MedicineBundle:Report:purchaseMode" }
+
+medicine_report_purchase_vendor_stock:
+    path:     /purchase-stock
+    defaults: { _controller: "MedicineBundle:Report:purchaseStockItem" }
+
+medicine_report_purchase_brand_stock:
     path:     /purchase-stock
     defaults: { _controller: "MedicineBundle:Report:purchaseStockItem" }
 

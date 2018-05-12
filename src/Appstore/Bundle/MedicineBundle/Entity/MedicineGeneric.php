@@ -31,7 +31,7 @@ class MedicineGeneric
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
@@ -39,7 +39,7 @@ class MedicineGeneric
     /**
      * @var string
      *
-     * @ORM\Column(name="generic_id", type="string", length=255)
+     * @ORM\Column(name="generic_id", type="string", length=255, nullable=true)
      */
     private $genericId;
 
@@ -47,7 +47,7 @@ class MedicineGeneric
     /**
      * @var string
      *
-     * @ORM\Column(name="precaution", type="string", length=255)
+     * @ORM\Column(name="precaution", type="string", length=255, nullable=true)
      */
     private $precaution;
 
@@ -55,7 +55,7 @@ class MedicineGeneric
     /**
      * @var string
      *
-     * @ORM\Column(name="indication", type="string", length=255)
+     * @ORM\Column(name="indication", type="string", length=255, nullable=true)
      */
     private $indication;
 
@@ -63,7 +63,7 @@ class MedicineGeneric
     /**
      * @var string
      *
-     * @ORM\Column(name="contraIndication", type="string", length=255)
+     * @ORM\Column(name="contraIndication", type="string", length=255, nullable=true)
      */
     private $contraIndication;
 
@@ -71,7 +71,7 @@ class MedicineGeneric
     /**
      * @var string
      *
-     * @ORM\Column(name="dose", type="string", length=255)
+     * @ORM\Column(name="dose", type="string", length=255, nullable=true)
      */
     private $dose;
 
@@ -79,7 +79,7 @@ class MedicineGeneric
     /**
      * @var string
      *
-     * @ORM\Column(name="sideEffect", type="string", length=255)
+     * @ORM\Column(name="sideEffect", type="string", length=255, nullable=true)
      */
     private $sideEffect;
 
@@ -87,14 +87,14 @@ class MedicineGeneric
     /**
      * @var string
      *
-     * @ORM\Column(name="modeOfAction", type="string", length=255)
+     * @ORM\Column(name="modeOfAction", type="string", length=255, nullable=true)
      */
     private $modeOfAction;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="interaction", type="string", length=255)
+     * @ORM\Column(name="interaction", type="string", length=255, nullable=true)
      */
     private $interaction;
 

@@ -32,6 +32,6 @@ class MedicineType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_medicinebundle_medicinecompany';
+        return 'medicine';
     }
 }

@@ -85,7 +85,7 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody id="invoiceParticulars">
-                                                    {% for item in entity.invoiceParticulars %}
+                                                    {% for item in entity.businessInvoiceParticulars %}
                                                         <tr id="remove-{{ item.id }}">
                                                             <td  class="span1">{{ loop.index }}.</td>
                                                             <td class="span3">{{ item.particular }}</td>

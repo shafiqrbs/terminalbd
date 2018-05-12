@@ -1019,6 +1019,7 @@ class Builder extends ContainerAware
             ->addChild('Drug')
             ->setAttribute('icon', 'fa fa-stethoscope')
             ->setAttribute('dropdown', true);
+        $menu['Drug']->addChild('Add Drug', array('route' => 'medicinebrand_new'))->setAttribute('icon', 'icon-medkit');
         $menu['Drug']->addChild('Add Drug', array('route' => 'medicine_user'))->setAttribute('icon', 'icon-medkit');
         if ($securityContext->isGranted('ROLE_ADMIN') OR $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
         $menu['Drug']->addChild('Drug', array('route' => 'medicine'))->setAttribute('icon', 'icon-medkit');
@@ -1082,6 +1083,8 @@ class Builder extends ContainerAware
             $menu['Medicine']['Master Data']->addChild('User Sales Setup', array('route' => 'medicine_sales_user', 'routeParameters' => array('source' => 'medicine')))
                 ->setAttribute('icon', 'icon icon-cog');
             $menu['Medicine']['Master Data']->addChild('Configuration', array('route' => 'medicine_config_manage'))
+                ->setAttribute('icon', 'icon icon-cog');
+            $menu['Medicine']['Master Data']->addChild('New Medicine', array('route' => 'medicine_user'))
                 ->setAttribute('icon', 'icon icon-cog');
         }
             if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {

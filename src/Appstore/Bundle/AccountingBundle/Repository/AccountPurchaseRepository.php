@@ -347,8 +347,7 @@ class AccountPurchaseRepository extends EntityRepository
                     $this->_em->flush();
                 }
             }
-            //  $this->_em->remove($accountPurchase);
-            //  $this->_em->flush();
+
         }
 
     }

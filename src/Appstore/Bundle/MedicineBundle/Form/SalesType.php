@@ -38,10 +38,20 @@ class SalesType extends AbstractType
 
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('received','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
-            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
-            ->add('discount','hidden')
+
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
+            ->add('discountType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap discount-type span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'percentage' => 'Percentage',
+                    'flat' => 'Flat',
+                ),
+            ))
+            ->add('discount','hidden')
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
@@ -109,15 +119,7 @@ class SalesType extends AbstractType
             ->add('doctor','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor name','data-original-title'=>'Enter prescribe doctor name','autocomplete'=>'off')))
             ->add('doctorMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Enter doctor mobile no','data-original-title'=>'Enter doctor mobile no','autocomplete'=>'off')))
             ->add('doctorAddress','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor address','data-original-title'=>'Enter prescribe doctor address','autocomplete'=>'off')))
-            ->add('discountType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap discount-type span12'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'percentage' => 'Percentage',
-                    'flat' => 'Flat',
-                ),
-            ))
+
         ;
       //  $builder->add('customer', new CustomerForMedicineType());
     }
