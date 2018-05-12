@@ -374,6 +374,10 @@ class SalesOnlineController extends Controller
             if ($data['process'] == 'In-progress') {
                 $entity->setProcess('In-progress');
             }
+            if($entity->getProcess() =="Done"){
+                $datetime = new \DateTime("now");
+                $entity->setCreated($datetime);
+            }
             $em->flush();
             if ($data['process'] != 'In-progress'){
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
