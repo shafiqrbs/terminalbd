@@ -90,7 +90,7 @@
                                     <th class="numeric" >Purchase Tk.</th>
                                     <th class="numeric" >Sales Tk.</th>
                                     <th class="numeric" >Opening</th>
-                                    <th class="numeric" >Receive Qnt</th>
+                                    <th class="numeric" >Purchase Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
                                     <th class="numeric" >Stock Qnt</th>
                                     <th class="numeric" >Min. Qnt</th>
@@ -100,9 +100,7 @@
                                 </thead>
                                 <tbody>
                                 {% for entity in pagination %}
-                                    {% set stockQnt = (entity.purchaseQuantity + entity.openingQuantity) - entity.salesQuantity %}
-
-                                    <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
+                                    <tr {% if entity.minQuantity > 0 and entity.remainingQuantity <= entity.minQuantity %} class="min" {% endif %}>
                                         <td class="numeric" >{{ entity.sku }}</td>
                                         {% if entity.mode == 'medicine' %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
@@ -133,7 +131,7 @@
                                                 <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                             {% endif %}
                                         </td>
-                                        <td class="numeric" >{{ entity.unit.name }}</td>
+                                        <td class="numeric" >{% if entity.unit is not empty %}{{ entity.unit.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini yellow btn-action" href="{{ path('medicine_stock_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>

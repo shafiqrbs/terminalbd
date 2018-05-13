@@ -188,6 +188,35 @@ class MedicinePurchaseRepository extends EntityRepository
 
     }
 
+    public function purchaseVendorStockReport(User $user , $data = array())
+    {
+        if(!empty($data['vendor'])){
+            $vendor = $data['vendor'];
+            $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+            $qb = $this->createQueryBuilder('e');
+            $qb->join('e.medicinePurchaseItems','mpi');
+            $qb->select('sum(mpi.quantity) as quantity , sum(mpi.remainingQuantity) as remainingQuantity');
+            $qb->where('e.medicineConfig = :config');
+            $qb->setParameter('config', $config);
+            $qb->andWhere('e.process = :process');
+            $qb->setParameter('process', 'approved');
+            $qb->andWhere('e.medicineVendor = :vendor');
+            $qb->setParameter('vendor', $vendor);
+            $this->handleSearchBetween($qb,$data);
+            $qb->groupBy("e.medicineStock");
+            $res = $qb->getQuery();
+            $results = $res->getArrayResult();
+            $purchaseVendors = array();
+            foreach ($results as $row){
+                $purchaseVendors[$row['id']] = $row;
+            }
+            return $purchaseVendors;
+        }else{
+            return false;
+        }
+
+    }
+
 
 
     public function getPurchaseVendorPrice(User $user , $data = array())
@@ -319,9 +348,5 @@ class MedicinePurchaseRepository extends EntityRepository
         return $result;
 
     }
-
-
-
-
 
 }

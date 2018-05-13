@@ -107,7 +107,7 @@ class WebsiteWidgetType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
                 'empty_value' => '---Select page module---',
                 'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join('e.nav' ,'n')
@@ -125,7 +125,7 @@ class WebsiteWidgetType extends AbstractType
                 'class' => 'Setting\Bundle\AppearanceBundle\Entity\JsFeature',
                 'empty_value' => '---Select Any Feature---',
                 'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
+                'attr'=>array('class'=>'m-wrap span12 '),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")

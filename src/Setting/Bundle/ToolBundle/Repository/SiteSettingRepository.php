@@ -150,10 +150,10 @@ class SiteSettingRepository extends EntityRepository
             if(!empty($modules)){
                 $this->createModuleMenu($reEntity->getSiteSetting());
             }
-            $syndicateModules = $reEntity->getSiteSetting()->getSyndicateModules();
+           /* $syndicateModules = $reEntity->getSiteSetting()->getSyndicateModules();
             if(!empty($syndicateModules)){
                 $this->createSyndicateModuleMenu($reEntity->getSiteSetting());
-            }
+            }*/
 
         }
 

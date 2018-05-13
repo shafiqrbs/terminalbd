@@ -211,7 +211,7 @@ class GlobalOptionController extends Controller
             $em->flush();
             //$this->getDoctrine()->getRepository('SettingContentBundle:HomePage')->globalOptionHome($user);
             //$this->getDoctrine()->getRepository('SettingContentBundle:ContactPage')->globalOptionContact($user);
-           // $this->getDoctrine()->getRepository('SettingToolBundle:SiteSetting')->updateSettingMenu($entity);
+            $this->getDoctrine()->getRepository('SettingToolBundle:SiteSetting')->updateSettingMenu($entity);
             $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->systemConfigUpdate($entity);
             $this->get('session')->getFlashBag()->add('success',"Data has been updated successfully");
 

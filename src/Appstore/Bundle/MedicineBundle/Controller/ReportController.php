@@ -161,6 +161,20 @@ class ReportController extends Controller
         ));
     }
 
+    public function purchaseVendorStockSalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorStockReport($user,$data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'entities'              => $entities ,
+            'searchForm'            => $data,
+        ));
+    }
+
+
 
     public function purchaseVendorAction()
     {
@@ -238,6 +252,8 @@ class ReportController extends Controller
             'searchForm'            => $data,
         ));
     }
+
+
 
     public function purchaseDetailsAction()
     {

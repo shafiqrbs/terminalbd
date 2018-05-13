@@ -8,10 +8,10 @@
             </div>
             <div class="portlet-body">
                 <div class="row-fluid" >
-                    <a class="btn purple big span3 btn-block">Sales <i class="m-icon-big-swapright m-icon-white"></i></a>
-                    <a class="btn blue big span3 btn-block">Purchase <i class="m-icon-big-swapright m-icon-white"></i></a>
-                    <a class="btn red big span3 btn-block">Purchase Account <i class="m-icon-big-swapright m-icon-white"></i></a>
-                    <a class="btn yellow big span3 btn-block">Expenditure <i class="m-icon-big-swapright m-icon-white"></i></a>
+                    <a href="{{ path('medicine_sales') }}" class="btn purple big span3 btn-block">Sales <i class="m-icon-big-swapright m-icon-white"></i></a>
+                    <a href="{{ path('medicine_purchase') }}" class="btn blue big span3 btn-block">Purchase <i class="m-icon-big-swapright m-icon-white"></i></a>
+                    <a href="{{ path('account_purchase_medicine') }}" class="btn red big span3 btn-block">Purchase Account <i class="m-icon-big-swapright m-icon-white"></i></a>
+                    <a href="{{ path('account_expenditure') }}" class="btn yellow big span3 btn-block">Expenditure <i class="m-icon-big-swapright m-icon-white"></i></a>
                 </div>
             </div>
             <div class="portlet-body form">
@@ -63,14 +63,6 @@
                 </div>
                 <div class="clearfix">&nbsp;</div>
                 <table class="table table-bordered table-striped table-condensed flip-content ">
-            {#        <tr>
-                        <th class="numeric" >Sub-total Amount</th>
-                        <td class="numeric" >{{ purchaseCashOverview.subTotal|number_format }}</td>
-                    </tr>
-                    <tr>
-                        <th class="numeric" >Discount</th>
-                        <td class="numeric" >{{ purchaseCashOverview.totalDiscount|number_format }}</td>
-                    </tr>#}
                     <tr>
                         <th class="numeric" >Total Amount</th>
                         <td class="numeric" >{{ purchaseCashOverview.total|number_format }}</td>
@@ -81,7 +73,7 @@
                     </tr>
                     <tr>
                         {% set due = (purchaseCashOverview.total - purchaseCashOverview.totalPayment) %}
-                        <th class="numeric" >{% if due > 0 %}Payable {% else %}Receivable{% endif %}</th>
+                        <th class="numeric" >{% if due >= 0 %}Payable {% else %}Receivable{% endif %}</th>
                         <th class="numeric" >{{ due|number_format }}</th>
                     </tr>
                 </table>
@@ -200,7 +192,6 @@
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor') }}">Vendor Summary</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor_details') }}">Vendor Purchase Details</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_sales_vendor') }}">Vendor Stock & Sales</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_brand') }}">Brand Summary</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_brand_sales') }}">Brand Stock & Sales</a></li>
                                 </ul>
                             </div>
