@@ -30,7 +30,7 @@ class SalesTemporaryItemType extends AbstractType
                 'choices' => array(),
             ))
 
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'Sales price')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'MRP')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span5 form-control input-number input','placeholder'=>'quantity')))
            /* ->add('medicineStock', 'entity', array(
                 'required'    => true,

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -206,6 +207,38 @@ class AccountJournalRepository extends EntityRepository
         return $entity;
     }
 
+    public function   insertAccountMedicinePurchaseJournal(MedicinePurchase $purchase)
+    {
+
+        $entity = new AccountJournal();
+        $accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(49);
+        $accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
+        $accountBankHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(38);
+        $accountMobileHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(45);
+
+        $entity->setGlobalOption($purchase->getMedicineConfig()->getGlobalOption());
+        $entity->setTransactionType('Debit');
+        $entity->setAmount($purchase->getPayment());
+        $entity->setTransactionMethod($purchase->getTransactionMethod());
+        $entity->setAccountBank($purchase->getAccountBank());
+        $entity->setAccountMobileBank($purchase->getAccountMobileBank());
+        $entity->setApprovedBy($purchase->getApprovedBy());
+        $entity->setCreatedBy($purchase->getApprovedBy());
+        $entity->setAccountHeadCredit($accountHeadCredit);
+        if ($purchase->getTransactionMethod()->getId() == 2){
+            $entity->setAccountHeadDebit($accountBankHead);
+        }elseif ($purchase->getTransactionMethod()->getId() == 3){
+            $entity->setAccountHeadDebit($accountMobileHead);
+        }else{
+            $entity->setAccountHeadDebit($accountCashHead);
+        }
+        $entity->setToUser($purchase->getApprovedBy());
+        $entity->setJournalSource('purchase');
+        $entity->setProcess('approved');
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        return $entity;
+    }
 
     public function removeApprovedPurchaseJournal(Purchase $purchase)
     {

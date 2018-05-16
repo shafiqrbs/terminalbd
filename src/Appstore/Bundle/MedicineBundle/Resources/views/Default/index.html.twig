@@ -8,12 +8,108 @@
             </div>
             <div class="portlet-body">
                 <div class="row-fluid" >
-                    <a href="{{ path('medicine_sales') }}" class="btn purple big span3 btn-block">Sales <i class="m-icon-big-swapright m-icon-white"></i></a>
-                    <a href="{{ path('medicine_purchase') }}" class="btn blue big span3 btn-block">Purchase <i class="m-icon-big-swapright m-icon-white"></i></a>
-                    <a href="{{ path('account_purchase_medicine') }}" class="btn red big span3 btn-block">Purchase Account <i class="m-icon-big-swapright m-icon-white"></i></a>
-                    <a href="{{ path('account_expenditure') }}" class="btn yellow big span3 btn-block">Expenditure <i class="m-icon-big-swapright m-icon-white"></i></a>
+                    <div class="span4">
+                        <div class="btn-group">
+                            <a class="btn red big" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Add Sales</a>
+                            <a href="{{ path('medicine_sales') }}" class="btn blue big"><i class="icon-th-large"></i> Sales </a>
+                            <a href="{{ path('account_sales_medicine_new') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="btn-group">
+                            <a href="{{ path('medicine_purchase_new') }}" class="btn red big"><i class="icon-plus-sign"></i> Add Purchase</a>
+                            <a href="{{ path('medicine_purchase') }}" class="btn green big"><i class="icon-th-large"></i> Purchase</a>
+                            <a href="{{ path('medicine_stock_short_item') }}" class="btn black big"><i class="icon-sort-by-order"></i> Short List</a>
+                            <a href="{{ path('account_purchase_medicine_new') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="btn-group">
+                            <a href="{{ path('account_expenditure_new') }}" class="btn purple big"><i class="icon-plus-sign"></i> Expenditure</a>
+                            <a href="{{ path('account_journal_new') }}" class="btn blue big"><i class="icon-money"></i> Journal</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="portlet-body form">
+                <div class="form-actions portlet box grey">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon icon-money"></i> Today Cash Overview</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn red" href="{{ path('account_transaction_cash_overview') }}"><i class="icon-bar-chart"></i> Cash Summary</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <thead class="flip-content ">
+                    <tr class="head-blue">
+                        <th class="numeric">Cash Account</th>
+                        <th class="numeric" >Opening Balance</th>
+                        <th class="numeric" >Receive</th>
+                        <th class="numeric" >Payment</th>
+                        <th class="numeric" >Closing Balance</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {#{{ dump(transactionCashOverviews.transactionBalances[1][0]['debit']) }}#}
+                    {% set totalOpen = 0 %}
+                    {% set totalDebit = 0 %}
+                    {% set totalCredit = 0 %}
+                    {% for mode in transactionCashOverviews.result %}
+                        {% set open = transactionCashOverviews.openingBalance[mode.transactionId]|default(0) %}
+                        {% set debit = transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].debit|default(0)  %}
+                        {% set credit = transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].credit|default(0)  %}
+                        {% set totalOpen = totalOpen + open %}
+                        {% set totalDebit = totalDebit + debit %}
+                        {% set totalCredit = totalCredit + credit %}
+
+                        <tr>
+                            <th class="numeric">{{ mode.transactionName }}</th>
+                            <th class="numeric">{{ open|number_format }}</th>
+                            <th class="numeric">{{ debit|number_format }}</th>
+                            <th class="numeric">{{ credit|number_format }}</th>
+                            <th class="numeric" >{{ ((open + debit)-credit)|number_format }}</th>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th class="numeric">Total Amount</th>
+                        <th class="numeric">{{ totalOpen|number_format }}</th>
+                        <th class="numeric">{{ totalDebit|number_format }}</th>
+                        <th class="numeric">{{ totalCredit|number_format }}</th>
+                        <th class="numeric" >{{ ((totalOpen + totalDebit)-totalCredit)|number_format }}</th>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="clearfix"></div>
+            <div class="portlet-body form">
+                <div class="form-actions portlet box red">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon icon-medkit"></i> Today Expenditure Overview</div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    {% if expenditureOverview is not empty %}
+                        {% set total = 0 %}
+                        {% for expenditure in expenditureOverview %}
+                            {% set total = total+expenditure.amount %}
+                        <tr>
+                            <th class="numeric" >{{ expenditure.categoryName }}</th>
+                            <td class="numeric" >{{ expenditure.amount|number_format }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tfoot>
+                        <tr><th>Grand Total</th><th>{{ total|number_format }}</th></tr>
+                        </tfoot>
+                    {% endif %}
+                </table>
+            </div>
+            <div class="clearfix"></div>
             <div class="portlet-body form">
                 <div class="form-actions portlet box blue">
                     <div class="portlet-title">
@@ -113,8 +209,9 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-shopping-cart"></i> <a href="{{ path('medicine_purchase') }}">Purchase</a></li>
-                                    <li><i class="icon-shopping-cart"></i> <a href="{{ path('medicine_instantpurchase') }}">Instant Purchase</a></li>
+                                    <li><i class="icon-th-large"></i> <a href="{{ path('medicine_purchase') }}">Manage Purchase</a></li>
+                                    <li><i class="icon-shopping-cart"></i> <a href="{{ path('medicine_purchase_new') }}">Add Purchase</a></li>
+                                    <li><i class="icon-th-list"></i> <a href="{{ path('medicine_instantpurchase') }}">Instant Purchase</a></li>
                                     <li><i class="icon-retweet"></i> <a href="{{ path('medicine_purchase_return') }}">Purchase Return</a></li>
                                     <li><i class="icon-user"></i> <a href="{{ path('medicine_vendor') }}">Vendor</a></li>
                                 </ul>
@@ -224,7 +321,7 @@
             font-weight: bold;
         }
         .unstyled{
-            height: 80px;
+            height: 100px;
         }
     </style>
 {% endblock %}

@@ -2,6 +2,14 @@ account_sales_medicine:
     path:     /sales
     defaults: { _controller: "AccountingBundle:AccountMedicine:sales" }
 
+account_sales_medicine_new:
+    path:     /sales-receive
+    defaults: { _controller: "AccountingBundle:AccountMedicine:salesNew" }
+
+account_sales_medicine_due:
+    path:     /{sales}/sales-receive
+    defaults: { _controller: "AccountingBundle:AccountMedicine:duePayment" }
+
 account_purchase_medicine:
     path:     /purchase
     defaults: { _controller: "AccountingBundle:AccountMedicine:purchase" }

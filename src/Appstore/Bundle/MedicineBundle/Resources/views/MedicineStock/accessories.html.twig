@@ -52,6 +52,7 @@
                                         <div class="controls">
                                             {{ form_widget(form.name) }}
                                             {{ form_errors(form.name) }}
+                                            <input type="hidden" id="medicineId" name="medicineId" value="">
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +75,7 @@
                                 <div class="span9">&nbsp;</div>
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Accessories Brand</label>
+                                        <label class="control-label" for="name">Item Brand</label>
                                         <div class="controls">
                                             {{ form_widget(form.accessoriesBrand) }}
                                             {{ form_errors(form.accessoriesBrand) }}
@@ -87,7 +88,7 @@
                                 <div class="span9">&nbsp;</div>
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Accessories Unit<span class="required">*</span></label>
+                                        <label class="control-label" for="name">Item Unit<span class="required">*</span></label>
                                         <div class="controls">
                                             {{ form_widget(form.unit) }}
                                             {{ form_errors(form.unit) }}
@@ -111,7 +112,7 @@
                                 <div class="span9">&nbsp;</div>
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Sales Price</label>
+                                        <label class="control-label" for="name">MRP</label>
                                         <div class="controls">
                                             {{ form_widget(form.salesPrice) }}
                                             {{ form_errors(form.salesPrice) }}

@@ -540,42 +540,25 @@ function jqueryInstantTemporaryLoad(){
         }
     });*/
 
-    $(".select2InstantMedicine").select2({
+    $(".select2InstantMedicine").autocomplete({
 
-        placeholder: "Search medicine name",
-        ajax: {
+        source: function( request, response ) {
+            $.ajax( {
+                url: Routing.generate('medicine_search'),
+                data: {
+                    term: request.term
+                },
+                success: function( data ) {
+                    response( data );
+                }
+            } );
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+            $("#medicineId").val(ui.item.id); // save selected id to hidden input
 
-            url: Routing.generate('medicine_select_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-            var id = $(element).val();
+        }
 
-        },
-        allowClear: true,
-        minimumInputLength: 2
     });
 
 

@@ -63,9 +63,11 @@ class PurchaseController extends Controller
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
         return $this->render('MedicineBundle:Purchase:purchaseItem.html.twig', array(
             'entities' => $pagination,
             'racks' => $racks,
+            'modeFor' => $modeFor,
             'searchForm' => $data,
         ));
     }
@@ -367,6 +369,11 @@ class PurchaseController extends Controller
             $purchase->setApprovedBy($this->getUser());
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
+            if($purchase->getAsInvestment() == 1){
+                $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountPurchaseJournal($purchase);
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
+            }
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
             return new Response('success');

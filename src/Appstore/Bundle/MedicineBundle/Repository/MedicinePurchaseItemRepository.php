@@ -95,11 +95,12 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->join('mpi.medicinePurchase','e');
         $qb->join('mpi.medicineStock','s');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('mpi.expirationStartDate IS NOT NULL');
         if($instant == 1 ) {
             $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('mpi.expirationDate','ASC');
+        $qb->orderBy('mpi.expirationStartDate','ASC');
         $qb->getQuery();
         return  $qb;
     }
@@ -232,22 +233,32 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
     public function checkInsertStockItem($config,$data){
 
-        $medicine = $this->_em->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineBrand']);
-        $checkStockMedicine = $this->_em->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config,$medicine);
+        if(empty($data['medicineId'])) {
+            $checkStockMedicine = $this->_em->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockNonMedicine($config, $data['brandName']);
+        }else{
+            $medicine =  $this->_em->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineId']);
+            $checkStockMedicine =  $this->_em->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config, $medicine);
+        }
+
         if (empty($checkStockMedicine)){
             $em = $this->_em;
             $entity = new MedicineStock();
             $entity->setMedicineConfig($config);
-            $entity->setMedicineBrand($medicine);
-            $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
-            $entity->setName($name);
+            if(empty($data['medicineId'])){
+                $entity->setMode($data['mode']);
+                $entity->setName($data['brandName']);
+            }else{
+                $entity->setMedicineBrand($medicine);
+                $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
+                $entity->setName($name);
+                $entity->setBrandName($medicine->getMedicineCompany()->getName());
+                $entity->setMode('medicine');
+            }
             if(!empty($data['rackNo'])){
                 $entity->setRackNo($this->_em->getRepository('MedicineBundle:MedicineParticular')->find($data['rackNo']));
             }
             $entity->setSalesPrice($data['salesPrice']);
             $entity->setPurchasePrice($data['purchasePrice']);
-            $entity->setBrandName($medicine->getMedicineCompany()->getName());
-            $entity->setMode('medicine');
             $em->persist($entity);
             $em->flush();
             return $entity;

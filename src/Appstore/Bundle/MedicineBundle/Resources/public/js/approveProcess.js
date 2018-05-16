@@ -147,48 +147,6 @@ $(".select2Grn").select2({
     minimumInputLength: 1
 });
 
-$(".select2Product").select2({
-
-    placeholder: "Search product name",
-    ajax: {
-
-        url: Routing.generate('inventory_product_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('inventory_product_name', { product : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-    },
-    allowClear: true,
-    minimumInputLength: 1
-});
-
 $(".select2Medicine").select2({
 
     placeholder: "Search medicine name",
@@ -269,6 +227,10 @@ $(".select2BrandName").select2({
     minimumInputLength: 2
 });
 
+$(document).on('keypress', '.autoComplete2Medicine', function (e) {
+
+   // $("#medicineId").val(''); // save selected id to hidden input
+});
 
 $( ".autoComplete2Medicine" ).autocomplete({
 
@@ -283,7 +245,7 @@ $( ".autoComplete2Medicine" ).autocomplete({
             }
         } );
     },
-    minLength: 1,
+    minLength: 2,
     select: function( event, ui ) {
         $("#medicineId").val(ui.item.id); // save selected id to hidden input
 

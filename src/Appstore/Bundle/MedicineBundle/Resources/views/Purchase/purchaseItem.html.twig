@@ -4,18 +4,14 @@
         <!-- BEGIN PAGE HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="page-title">Medicine Purchase Item</h3>
+                <h3 class="page-title">Medicine Expiration</h3>
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('medicine_purchase') }}">Medicine Purchase Item</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="#">View Lists</a></li>
+                    <li><a href="#">Medicine Expiration</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,12 +25,7 @@
             <div class="span12">
                 <div class="portlet box green">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Medicine Purchase Item</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn red" href="{{ path('medicine_purchase_new') }}"><i class="icon-plus-sign"></i> Add Medicine Purchase</a>
-                             </div>
-                        </div>
+                        <div class="caption"><i class="icon-reorder"></i>Medicine Expiration Item</div>
                     </div>
                     <div class="portlet-body flip-scroll">
                         {% include('flash-message.html.twig')  %}
@@ -55,10 +46,11 @@
                                         </select>
                                     </div>
                                     <div class="span3">
-                                        <select name="process" id="process" class="span12 m-wrap">
-                                            <option  value="">Item Type</option>
-                                            <option {% if searchForm.mode is defined and searchForm.mode == 'mediicne' %} selected="selected" {% endif %} value="mediicne">Mediicne</option>
-                                            <option {% if searchForm.mode is defined and searchForm.mode == 'accessories' %} selected="selected" {% endif %} value="accessories">Accessories</option>
+                                        <select name="mode" id="mode" class="span12 m-wrap">
+                                            <option  value="">Product Mode</option>
+                                            {% for mode in modeFor %}
+                                                <option {% if searchForm.mode is defined and searchForm.mode == mode.slug %} selected="selected" {% endif %} value="{{ mode.slug }}">{{ mode.name }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="span3">
@@ -67,7 +59,7 @@
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span3">
-                                        <input type="text" id="name" name="name"  class="span12 m-wrap select2StockMedicineName" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine/accessories name ">
+                                        <input type="text" id="name" name="name"  class="span12 m-wrap select2StockMedicineName" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine & others name ">
                                     </div>
                                     <div class="span3">
                                         <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap select2BrandName" value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">

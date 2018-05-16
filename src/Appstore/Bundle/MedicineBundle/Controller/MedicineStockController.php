@@ -42,10 +42,12 @@ class MedicineStockController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($config,$data);
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
         $pagination = $this->paginate($entities);
         return $this->render('MedicineBundle:MedicineStock:index.html.twig', array(
             'pagination'    => $pagination,
             'racks' => $racks,
+            'modeFor' => $modeFor,
             'searchForm' => $data,
         ));
 
@@ -59,10 +61,11 @@ class MedicineStockController extends Controller
         $entities = $em->getRepository('MedicineBundle:MedicineStock')->findWithShortListSearch($config,$data);
         $pagination = $this->paginate($entities);
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
-
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
         return $this->render('MedicineBundle:MedicineStock:shortList.html.twig', array(
             'pagination' => $pagination,
             'racks' => $racks,
+            'modeFor' => $modeFor,
             'searchForm' => $data,
         ));
     }
@@ -99,22 +102,34 @@ class MedicineStockController extends Controller
         $entity = new MedicineStock();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($entity->getName());
-        $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config,$medicine);
+        $data = $request->request->all();
+        if(empty($data['medicineId'])) {
+            $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockNonMedicine($config, $entity->getName());
+        }else{
+            $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineId']);
+            $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config, $medicine);
+        }
         if ($form->isValid() and empty($checkStockMedicine)){
-            $em = $this->getDoctrine()->getManager();
             $entity->setMedicineConfig($config);
-            $entity->setMedicineBrand($medicine);
-            $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
-            $entity->setName($name);
-            $entity->setBrandName($medicine->getMedicineCompany()->getName());
-            $entity->setMode('medicine');
+            if(empty($data['medicineId'])){
+                if($entity->getAccessoriesBrand()) {
+                    $brand = $entity->getAccessoriesBrand();
+                    $entity->setBrandName($brand->getName());
+                }
+                $entity->setMode($brand->getParticularType()->getSlug());
+            }else{
+                $entity->setMedicineBrand($medicine);
+                $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
+                $entity->setName($name);
+                $entity->setBrandName($medicine->getMedicineCompany()->getName());
+                $entity->setMode('medicine');
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('medicine_stock'));
+            return $this->redirect($this->generateUrl('medicine_stock_new'));
         }
         $this->get('session')->getFlashBag()->add(
             'error',"Required or Duplicate has been exist"
@@ -132,16 +147,13 @@ class MedicineStockController extends Controller
         $entity = new MedicineStock();
         $form = $this->createCreateAccessoriesForm($entity);
         $form->handleRequest($request);
-
+        $data = $request->request->all();
         if ($form->isValid()) {
+
             $entity->setMedicineConfig($config);
             $brand = $entity->getAccessoriesBrand();
             $entity->setBrandName($brand->getName());
-            if($brand->getParticularType()->getSlug() == 'accessories'){
-                $entity->setMode('accessories');
-            }elseif($brand->getParticularType()->getSlug() == 'herbal'){
-                $entity->setMode('herbal');
-            }
+            $entity->setMode($brand->getParticularType()->getSlug());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

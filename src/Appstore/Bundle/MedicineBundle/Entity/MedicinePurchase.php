@@ -174,6 +174,12 @@ class MedicinePurchase
      */
     private $discount;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="asInvestment", type="boolean")
+     */
+    private $asInvestment = false;
 
     /**
      * @var boolean
@@ -713,6 +719,22 @@ class MedicinePurchase
     public function setDiscountCalculation($discountCalculation)
     {
         $this->discountCalculation = $discountCalculation;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAsInvestment()
+    {
+        return $this->asInvestment;
+    }
+
+    /**
+     * @param bool $asInvestment
+     */
+    public function setAsInvestment($asInvestment)
+    {
+        $this->asInvestment = $asInvestment;
     }
 
 

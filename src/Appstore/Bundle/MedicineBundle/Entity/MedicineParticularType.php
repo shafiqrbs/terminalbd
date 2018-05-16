@@ -35,6 +35,13 @@ class MedicineParticularType
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="modeFor", type="string", length=50, nullable=true)
+     */
+    private $modeFor;
+
+    /**
      * @Gedmo\Slug(fields={"name"})
      * @Doctrine\ORM\Mapping\Column(length=255)
      */
@@ -122,6 +129,22 @@ class MedicineParticularType
     public function getParticulars()
     {
         return $this->particulars;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModeFor()
+    {
+        return $this->modeFor;
+    }
+
+    /**
+     * @param string $modeFor
+     */
+    public function setModeFor($modeFor)
+    {
+        $this->modeFor = $modeFor;
     }
 
 }

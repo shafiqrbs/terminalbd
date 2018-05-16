@@ -159,7 +159,7 @@
     }
     });
 
-    $( "ol.sortable" ).on( "sortupdate", function( event, ui ) {
+    $( "ul.sortable" ).on( "sortupdate", function( event, ui ) {
 
         var serialized = $(".sortable").sortable("serialize");
         $.ajax({

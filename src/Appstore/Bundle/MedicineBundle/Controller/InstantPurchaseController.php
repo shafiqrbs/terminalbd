@@ -138,8 +138,10 @@ class InstantPurchaseController extends Controller
     {
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+
         $html = $this->renderView('MedicineBundle:Sales:instantPurchaseItem.html.twig',
-            array( 'racks' => $racks));
+            array( 'racks' => $racks , 'modeFor' => $modeFor));
         return New Response($html);
     }
 

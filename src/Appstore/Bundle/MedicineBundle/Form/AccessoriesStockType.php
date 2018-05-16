@@ -29,7 +29,7 @@ class AccessoriesStockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter accessories name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 autoComplete2Medicine','placeholder'=>'Enter medicine,herbal,non-medicine,surgery etc'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )

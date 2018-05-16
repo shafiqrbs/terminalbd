@@ -29,21 +29,13 @@ class MedicineStockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 select2Medicine','placeholder'=>'Enter medicine name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 autoComplete2Medicine','placeholder'=>'Enter medicine,herbal,non-medicine,surgery & medical device etc'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Purchase price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'MRP price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Purchase price')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'MRP price')))
             ->add('minQuantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Minimum')))
             ->add('maxQuantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Maximum')))
             ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Rack no'),
@@ -81,6 +73,22 @@ class MedicineStockType extends AbstractType
                         ->andWhere("pt.slug = 'medicine-rack'");
                 },
             ))
+            ->add('accessoriesBrand', 'entity', [
+                'required'    => false,
+                'group_by'  => 'particularType.name',
+                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
+                'empty_value' => '---Select medicine & others brand ---',
+                'property' => 'name',
+                'choice_translation_domain' => true,
+                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.particularType","pt")
+                        ->where("e.status = 1")
+                        ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
+                        ->andWhere('pt.slug IN (:slugs)')->setParameter('slugs',array('herbal','accessories','medicine','non-medicine','surgery','medical-device'));
+                },
+            ])
             ->add('noDiscount')
         ;
     }

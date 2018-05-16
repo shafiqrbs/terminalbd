@@ -86,11 +86,17 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         $entity->setMedicineConfig($user->getGlobalOption()->getMedicineConfig());
         $entity->setMedicineStock($item->getMedicineStock());
         $entity->setMedicinePurchaseItem($item);
-        $entity->setQuantity($data['salesQuantity']);
+        if($data['salesQuantity']) {
+            $entity->setQuantity($data['salesQuantity']);
+            $entity->setSubTotal($item->getSalesPrice() * $data['salesQuantity']);
+        }else{
+            $entity->setQuantity($data['purchaseQuantity']);
+            $entity->setSubTotal($item->getSalesPrice() * $data['purchaseQuantity']);
+        }
         $entity->setSalesPrice($item->getSalesPrice());
-        $entity->setSubTotal($item->getSalesPrice() * $data['salesQuantity']);
         $em->persist($entity);
         $em->flush();
+
     }
 
 
