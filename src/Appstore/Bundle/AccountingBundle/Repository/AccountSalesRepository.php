@@ -76,9 +76,11 @@ class AccountSalesRepository extends EntityRepository
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
             $invoice =    isset($data['invoice'])? $data['invoice'] :'';
+            $medicineInvoice =    isset($data['medicineInvoice'])? $data['medicineInvoice'] :'';
             $transaction =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
             $account =    isset($data['accountHead'])? $data['accountHead'] :'';
             $sales =    isset($data['sales'])? $data['sales'] :'';
+            $processHead =    isset($data['processHead'])? $data['processHead'] :'';
 
             if (!empty($startDate) ) {
                 $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
@@ -105,10 +107,22 @@ class AccountSalesRepository extends EntityRepository
                 $qb->andWhere("s.invoice = :invoice");
                 $qb->setParameter('invoice', $invoice);
             }
+            if (!empty($medicineInvoice)) {
+                $qb->join('e.medicineSales','ms');
+                $qb->andWhere("ms.invoice = :invoice");
+                $qb->setParameter('invoice', $medicineInvoice);
+            }
+
             if (!empty($sales)) {
                 $qb->andWhere("e.sales = :sales");
                 $qb->setParameter('sales', $sales);
             }
+
+            if (!empty($processHead)) {
+                $qb->andWhere("e.processHead = :process");
+                $qb->setParameter('process', $processHead);
+            }
+
             if (!empty($account)) {
                 $qb->join('e.accountHead','a');
                 $qb->andWhere("a.id = :account");
@@ -342,6 +356,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setTotalAmount($entity->getNetTotal());
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setMedicineSales($entity);
         $accountSales->setSourceInvoice('S-'.$entity->getInvoice());
         $accountSales->setProcessHead('Sales');
         $accountSales->setProcess('approved');

@@ -233,6 +233,7 @@ class AccountPurchaseRepository extends EntityRepository
         $em = $this->_em;
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($global);
+        $accountPurchase->setMedicinePurchase($entity);
         $accountPurchase->setSourceInvoice('P-'.$entity->getGrn());
         $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());

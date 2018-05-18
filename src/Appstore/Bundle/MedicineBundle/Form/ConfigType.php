@@ -22,19 +22,9 @@ class ConfigType extends AbstractType
         $builder
 
             ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span5 ','maxlength'=> 4,'placeholder'=>'max 4 char')))
-            /*->add('invoiceProcess',
-                'choice', array(
-                    'attr'=>array('class'=>'check-list  span12'),
-                    'choices' => array(
-                        'diagnostic'    => 'Diagnostic',
-                        'admission'   => 'Admission',
-                        'doctor'  => 'Doctor',
-                    ),
-                    'required'    => true,
-                    'multiple'    => true,
-                    'expanded'  => true,
-                    'empty_data'  => null,
-            ))*/
+            ->add('instantVendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8 ','maxlength'=> 4,'placeholder'=>'Instant vendor item percentage')))
+            ->add('vendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8','maxlength'=> 4,'placeholder'=>'Vendor item percentage')))
+            ->add('customPrint')
             ->add('customPrint')
             ->add('invoicePrintLogo')
             ->add('isPrintHeader')

@@ -48,8 +48,15 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span6">
+                                        <div class="span3">
                                             <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
+                                        </div>
+                                        <div class="span3">
+                                            <select name="paymentStatus" id="paymentStatus" class="span12 m-wrap">
+                                                <option  value="">Payment Status</option>
+                                                <option {% if searchForm.paymentStatus is defined and searchForm.paymentStatus == 'Paid' %} selected="selected" {% endif %} value="Paid">Paid</option>
+                                                <option {% if searchForm.paymentStatus is defined and searchForm.paymentStatus == 'Due' %} selected="selected" {% endif %} value="Due">Due</option>
+                                            </select>
                                         </div>
                                         <div class="span3">
                                             <select name="process" id="process" class="span12 m-wrap">
@@ -123,6 +130,9 @@
                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             <a href="{{ path('medicine_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                            {% if entity.process == 'Done' and entity.paymentStatus == 'Due' %}
+                                                <a href="{{ path('account_sales_medicine_due', { 'sales': entity.id }) }}" class="btn yellow mini" ><i class="icon-money"></i> Receive</a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

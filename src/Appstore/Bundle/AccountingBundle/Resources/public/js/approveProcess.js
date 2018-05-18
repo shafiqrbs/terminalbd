@@ -51,10 +51,7 @@ function AccountingApproveProcess(){}
             top: '25%',
             onOkBut: function(event, el) {
                 $.get(url, function( data ) {
-                    $('#approve-'+id).hide();
-                    $('.delete-'+id).hide();
-                    $('#remove-'+id).hide();
-                    location.reload();
+                     location.reload();
                 });
             }
         });

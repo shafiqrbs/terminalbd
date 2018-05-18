@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class AccountSalesType extends AbstractType
+class AccountSalesMedicineType extends AbstractType
 {
 
     public  $globalOption;
@@ -28,9 +28,9 @@ class AccountSalesType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add Received Amount BDT'),
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add receive amount'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Add payment amount'))
+                    new NotBlank(array('message'=>'Add receive amount'))
                 )))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add Remark')))
             ->add('transactionMethod', 'entity', array(
@@ -72,6 +72,15 @@ class AccountSalesType extends AbstractType
                        ->orderBy("b.name", "ASC");
                },
            ))
+            ->add('processHead', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'Due' => 'Due',
+                    'Advance' => 'Advance',
+                ),
+            ))
             ->add('accountMobileBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',

@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -108,6 +109,21 @@ class MedicineSalesRepository extends EntityRepository
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
     }
+
+    public function updateSalesPaymentReceive(AccountSales $accountSales)
+    {
+        /* @var MedicineSales $sales **/
+
+        $sales = $accountSales->getMedicineSales();
+        $received = $sales->getReceived() + $accountSales->getAmount();
+        $sales->setReceived($received);
+        $sales->setDue($sales->getDue() - $accountSales->getAmount());
+        if($sales->getDue() == 0 ){
+            $sales->setPaymentStatus('Paid');
+        }
+        $this->_em->flush();
+    }
+
 
     public function invoiceLists(User $user, $data)
     {

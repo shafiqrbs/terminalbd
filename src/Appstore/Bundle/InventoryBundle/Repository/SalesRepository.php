@@ -544,7 +544,7 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('SUM(si.salesPrice) AS salesPrice');
         $qb->addSelect('item.name AS name');
         if($group == 'purchaseItem') {
-            $qb->join('stock.purchaseItem','pi');
+            $qb->join('si.purchaseItem','pi');
             $qb->addSelect('pi.barcode AS barcode');
         }
         $qb->where("s.inventoryConfig = :inventory");

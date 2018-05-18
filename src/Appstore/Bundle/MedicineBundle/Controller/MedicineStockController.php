@@ -115,8 +115,8 @@ class MedicineStockController extends Controller
                 if($entity->getAccessoriesBrand()) {
                     $brand = $entity->getAccessoriesBrand();
                     $entity->setBrandName($brand->getName());
+                    $entity->setMode($brand->getParticularType()->getSlug());
                 }
-                $entity->setMode($brand->getParticularType()->getSlug());
             }else{
                 $entity->setMedicineBrand($medicine);
                 $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();

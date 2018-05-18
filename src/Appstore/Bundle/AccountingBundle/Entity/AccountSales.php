@@ -125,7 +125,6 @@ class AccountSales
      */
     private $processHead;
 
-
     /**
      * @var float
      *

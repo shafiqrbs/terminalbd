@@ -130,6 +130,21 @@ class MedicineConfig
      */
     private $vatPercentage;
 
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="instantVendorPercentage", type = "smallint",  nullable=true)
+     */
+    private $instantVendorPercentage;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="vendorPercentage", type = "smallint",  nullable=true)
+     */
+    private $vendorPercentage;
+
+
 
     /**
      * @var boolean
@@ -475,6 +490,38 @@ class MedicineConfig
     public function getMedicineSalesReturns()
     {
         return $this->medicineSalesReturns;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getInstantVendorPercentage()
+    {
+        return $this->instantVendorPercentage;
+    }
+
+    /**
+     * @param smallint $instantVendorPercentage
+     */
+    public function setInstantVendorPercentage($instantVendorPercentage)
+    {
+        $this->instantVendorPercentage = $instantVendorPercentage;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getVendorPercentage()
+    {
+        return $this->vendorPercentage;
+    }
+
+    /**
+     * @param smallint $vendorPercentage
+     */
+    public function setVendorPercentage($vendorPercentage)
+    {
+        $this->vendorPercentage = $vendorPercentage;
     }
 
 }

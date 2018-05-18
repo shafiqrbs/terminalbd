@@ -203,6 +203,7 @@ class ReportController extends Controller
             'salesProcess'              => $salesProcess ,
             'transactionMethods'        => $transactionMethods ,
             'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
+            'option'                    => $this->getUser()->getGlobalOption(),
             'searchForm'                => $data ,
         ));
     }
@@ -219,6 +220,7 @@ class ReportController extends Controller
         $purchaseSalesPrice = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
         $cashOverview = $em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
         return $this->render('InventoryBundle:Report:sales/sales.html.twig', array(
+            'option'                    => $this->getUser()->getGlobalOption(),
             'inventory'             => $inventory ,
             'entities'              => $pagination ,
             'purchasePrice'         => $salesPurchasePrice ,
@@ -242,6 +244,7 @@ class ReportController extends Controller
         $pagination = $this->paginate($entities);
 
         return $this->render('InventoryBundle:Report:sales/salesStock.html.twig', array(
+            'option'                    => $this->getUser()->getGlobalOption(),
             'inventory' => $inventory,
             'entities' => $pagination,
             'cashOverview' => $cashOverview,
@@ -261,6 +264,7 @@ class ReportController extends Controller
         $pagination = $this->paginate($entities);
 
         return $this->render('InventoryBundle:Report:sales/salesItemDetails.html.twig', array(
+            'option'                    => $this->getUser()->getGlobalOption(),
             'inventory' => $inventory,
             'entities' => $pagination,
             'branches' => $this->getUser()->getGlobalOption()->getBranches(),

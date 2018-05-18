@@ -504,6 +504,7 @@ function jqueryInstantTemporaryLoad(){
                         $('#instantPurchase')[0].reset();
                         $("#medicineName").select2("val", "");
                         $("#purchasesBy").select2("val", "");
+                        $("#medicineId").val('');
                     }
                 });
             }

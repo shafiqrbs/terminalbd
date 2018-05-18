@@ -152,7 +152,7 @@ class AccountSalesController extends Controller
         $entity->setSales($sales);
         $entity->setCustomer($sales->getCustomer());
         $entity->setTransactionMethod($this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1));
-        $entity->setProcessHead('Account Sales');
+        $entity->setProcessHead('Due');
         if(!empty($this->getUser()->getProfile()->getBranches())){
             $entity->setBranches($this->getUser()->getProfile()->getBranches());
         }
@@ -174,10 +174,9 @@ class AccountSalesController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AccountingBundle:AccountSales')->find($id);
-       if (!$entity) {
+        if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountSales entity.');
         }
-
         return $this->render('AccountingBundle:AccountSales:show.html.twig', array(
             'entity'      => $entity,
         ));
@@ -231,16 +230,12 @@ class AccountSalesController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('AccountingBundle:AccountSales')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountSales entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
 
             if ($entity->getSales()->getDue() < $entity->getAmount() ){

@@ -39,7 +39,7 @@ class InstantPurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->findWithSearch($config,$data,1);
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->findWithInstantItemSearch($config,$data,1);
         $pagination = $this->paginate($entities);
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
         return $this->render('MedicineBundle:InstantPurchase:index.html.twig', array(
@@ -172,7 +172,7 @@ class InstantPurchaseController extends Controller
         $entity->setMedicineConfig($config);
         $entity->setMedicineVendor($vendor);
         $entity->setInstantPurchase(1);
-        $entity->setSubTotal($data['purchasePrice'] * $data['purchaseQuantity']);
+        $entity->setSubTotal($data['salesPrice'] * $data['salesQuantity']);
         $entity->setNetTotal($entity->getSubTotal());
         $entity->setApprovedBy($this->getUser());
         $entity->setDue($entity->getSubTotal());

@@ -99,6 +99,10 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          **/
         private  $medicineVendor;
 
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", inversedBy="accountPurchases" )
+         **/
+        private  $medicinePurchase;
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountPurchases" )
@@ -119,7 +123,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountPurchase" )
          **/
         private  $accountCash;
-
 
         /**
          * @Gedmo\Blameable(on="create")
@@ -810,6 +813,22 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setSourceInvoice($sourceInvoice)
         {
             $this->sourceInvoice = $sourceInvoice;
+        }
+
+        /**
+         * @return MedicinePurchase
+         */
+        public function getMedicinePurchase()
+        {
+            return $this->medicinePurchase;
+        }
+
+        /**
+         * @param MedicinePurchase $medicinePurchase
+         */
+        public function setMedicinePurchase($medicinePurchase)
+        {
+            $this->medicinePurchase = $medicinePurchase;
         }
 
     }

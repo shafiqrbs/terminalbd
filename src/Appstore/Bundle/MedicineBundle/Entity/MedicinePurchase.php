@@ -68,6 +68,11 @@ class MedicinePurchase
     private  $transactionMethod;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="medicinePurchase" )
+     **/
+    private  $accountPurchases;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="medicinePurchases" )
      **/
     private  $accountBank;
@@ -735,6 +740,14 @@ class MedicinePurchase
     public function setAsInvestment($asInvestment)
     {
         $this->asInvestment = $asInvestment;
+    }
+
+    /**
+     * @return AccountPurchase
+     */
+    public function getAccountPurchases()
+    {
+        return $this->accountPurchases;
     }
 
 

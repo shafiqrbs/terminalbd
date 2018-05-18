@@ -38,7 +38,7 @@ class AccountSalesInvoiceType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'empty_value' => '---Choose a Transaction Method---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 transactionMethod m-wrap '),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -54,7 +54,7 @@ class AccountSalesInvoiceType extends AbstractType
                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                'empty_value' => '---Choose a bank---',
                'property' => 'name',
-               'attr'=>array('class'=>'span12 select2'),
+               'attr'=>array('class'=>'span12 m-wrap'),
                'query_builder' => function(EntityRepository $er){
                    return $er->createQueryBuilder('b')
                        ->where("b.globalOption =".$this->globalOption->getId())
@@ -66,7 +66,7 @@ class AccountSalesInvoiceType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.globalOption =".$this->globalOption->getId())

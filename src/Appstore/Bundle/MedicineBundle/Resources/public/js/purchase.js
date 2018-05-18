@@ -80,13 +80,44 @@ $('form#purchaseItemForm').on('keypress', '.input', function (e) {
     }
 });
 
+
+$('form#stockItemForm').on('keypress', '.stockInput', function (e) {
+
+    if (e.which === 13) {
+        var inputs = $(this).parents("form").eq(0).find("input,select");
+        var idx = inputs.index(this);
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        switch (this.id) {
+
+            case 'medicineStock_rackNo':
+                $('#medicineStock_unit').focus();
+                break;
+            case 'medicineStock_unit':
+                $('#medicineStock_salesPrice').focus();
+                break;
+            case 'medicineStock_salesPrice':
+                $('#medicineStock_purchaseQuantity').focus();
+                break;
+            case 'medicineStock_purchaseQuantity':
+                $('#stockItemCreate').focus();
+                break;
+        }
+        return false;
+    }
+});
+
+
+
 var formStock = $("#stockItemForm").validate({
     rules: {
 
         "stockItemForm[name]": {required: true},
         "stockItemForm[rackNo]": {required: true},
         "stockItemForm[unit]": {required: true},
-        "stockItemForm[purchasePrice]": {required: true},
         "stockItemForm[salesPrice]": {required: true},
         "stockItemForm[purchaseQuantity]": {required: false}
     },
@@ -96,7 +127,6 @@ var formStock = $("#stockItemForm").validate({
         "stockItemForm[name]":"Enter medicine name",
         "stockItemForm[rackNo]":"Enter medicine rack no",
         "stockItemForm[unit]":"Enter medicine unit",
-        "stockItemForm[purchasePrice]":"Enter purchase price",
         "stockItemForm[salesPrice]":"Enter sales price",
         "stockItemForm[purchaseQuantity]":"Enter purchase quantity",
 
@@ -105,7 +135,6 @@ var formStock = $("#stockItemForm").validate({
         "stockItemForm[name]": {placement:'top',html:true},
         "stockItemForm[rackNo]": {placement:'top',html:true},
         "stockItemForm[unit]": {placement:'top',html:true},
-        "stockItemForm[purchasePrice]": {placement:'top',html:true},
         "stockItemForm[salesPrice]": {placement:'top',html:true},
         "stockItemForm[purchaseQuantity]": {placement:'top',html:true},
     },
@@ -120,6 +149,10 @@ var formStock = $("#stockItemForm").validate({
             contentType : false,
             success: function(response){
                 obj = JSON.parse(response);
+                if(obj['success'] === 'invalid'){
+                    alert('This item already exist in stock item');
+                    return false;
+                }
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#vat').val(obj['vat']);
@@ -129,6 +162,7 @@ var formStock = $("#stockItemForm").validate({
                 $('.dueAmount').html(obj['due']);
                 $('#msg').html(obj['msg']);
                 $("#medicineStock_name").select2("val", "");
+                $("#medicineId").val();
                 $('#stockItemForm')[0].reset();
                 EditableInit();
             }
@@ -228,6 +262,7 @@ $(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurch
             $('.dueAmount').html(obj['due']);
             $('#msg').html(obj['msg']);
             $('#discount').html(obj['discount']);
+            $('#medicinepurchase_discount').val(obj['discount']);
         }
 
     })
