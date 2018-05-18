@@ -213,14 +213,17 @@ class MedicinePurchaseItemRepository extends EntityRepository
         foreach ($purchase->getMedicinePurchaseItems() as $item){
 
             $em = $this->_em;
-            $percentage = $purchase->getMedicineConfig()->getInstantVendorPercentage();
+            if($purchase->isInstantPurchase() == 1){
+                $percentage = $purchase->getMedicineConfig()->getInstantVendorPercentage();
+            }else{
+                $percentage = $purchase->getMedicineConfig()->getVendorPercentage();
+            }
             $purchasePrice = $this->stockInstantPurchaseItemPrice($percentage,$item->getSalesPrice());
             $item->setPurchasePrice($purchasePrice);
             $em->persist($item);
             $em->flush();
 
         }
-        exit;
     }
 
     public function getPurchaseAveragePrice(MedicineParticular $particular)

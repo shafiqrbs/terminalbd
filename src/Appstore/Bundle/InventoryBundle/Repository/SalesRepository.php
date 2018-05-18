@@ -534,19 +534,16 @@ class SalesRepository extends EntityRepository
 
         $userBranch = $user->getProfile()->getBranches();
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
-        $group = isset($data['group']) ? $data['group'] :'item';
-
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.salesItems','si');
         $qb->join('si.item','item');
-        $qb->select('SUM(si.quantity) AS quantity');
-        $qb->addSelect('SUM(si.purchasePrice) AS purchasePrice');
-        $qb->addSelect('SUM(si.salesPrice) AS salesPrice');
+        $qb->leftJoin('si.purchaseItem','pi');
+        $qb->select('s.invoice AS invoice');
+        $qb->addSelect('si.quantity AS quantity');
+        $qb->addSelect('si.purchasePrice');
+        $qb->addSelect('si.salesPrice');
         $qb->addSelect('item.name AS name');
-        if($group == 'purchaseItem') {
-            $qb->join('si.purchaseItem','pi');
-            $qb->addSelect('pi.barcode AS barcode');
-        }
+        $qb->addSelect('pi.barcode AS barcode');
         $qb->where("s.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
@@ -556,7 +553,6 @@ class SalesRepository extends EntityRepository
             $qb->andWhere("s.branches = :branch");
             $qb->setParameter('branch', $userBranch);
         }
-        $qb->groupBy('si.'.$group);
         $qb->orderBy('s.created','DESC');
         $result = $qb->getQuery();
         return $result;
