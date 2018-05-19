@@ -31,10 +31,18 @@
             <div class="col-sm-4 text-center">
                 <h6 class="text-uppercase bottom-line">KEEP IN TOUCH</h6>
                 <div class="social-tooltip">
+                    {% if globalOption.facebookPageUrl is not empty   %}
                     <a data-toggle="tooltip" id="facebook" title="Follow on Facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook fa-fw  "></i></a>
+                    {% endif %}
+                    {% if globalOption.twitterUrl is not empty   %}
                     <a data-toggle="tooltip" id="twitter" title="Follow on Twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter fa-fw  "></i></a>
+                    {% endif %}
+                    {% if globalOption.instagramPageUrl is not empty   %}
                     <a data-toggle="tooltip" id="instagram" title="Follow on Instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram fa-fw  "></i></a>
+                    {% endif %}
+                    {% if globalOption.email is not empty   %}
                     <a data-toggle="tooltip" id="email" title="Send as an email" target="_blank"  href="mailto:{{ globalOption.email }}"><i class="fa fa-envelope fa-fw  "></i></a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -60,8 +68,7 @@
                 <h6 class="text-uppercase bottom-line">Contact Us</h6>
                 <address>
                     {% if globalOption.contactPage.address1 is not empty %}
-
-                        <p style="font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>
+                        <p style="font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1|raw }}<br>
                             {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
                                 {{ globalOption.contactPage.location.name }}, {{ globalOption.contactPage.location.parent.name }}
                             {% endif %}

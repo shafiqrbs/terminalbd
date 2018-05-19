@@ -16,6 +16,7 @@ class TemplateCustomizeType extends AbstractType
     {
         $builder
 
+            ->add('showSocialIcon')
             ->add('topBar')
             ->add('footerBlock')
             ->add('showCalendar')

@@ -52,10 +52,10 @@
                     <div id="menu" class="header-inner-menu" >
                         <div class="row" id="menu-bar" style="position: relative">
                             <nav id="header-menu">{{ menuTree|raw }}</nav>
-                            <div class="searchBtn pull-right searchBtnSelector">
-                                <span class="glyphicon glyphicon-search search-btn"></span>
-                            </div>
                             {% if globalOption.templateCustomize.showSearch == 1 %}
+                                <div class="searchBtn pull-right searchBtnSelector">
+                                    <span class="glyphicon glyphicon-search search-btn"></span>
+                                </div>
                                 <div id="search-area" style="position: absolute; top: 58px; width: 100%; display:none; ">
                                     <form action="{{ path(globalOption.subDomain ~ '_webservice_search') }}" style="width: 100%" class="" method="get">
                                         <div class="input-group">

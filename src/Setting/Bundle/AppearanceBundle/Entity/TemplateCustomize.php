@@ -113,6 +113,14 @@ class TemplateCustomize
     /**
      * @var boolean
      *
+     * @ORM\Column(name="showSocialIcon", type="boolean", nullable=true)
+     */
+    private $showSocialIcon = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="logoDisplayWebsite", type="boolean")
      */
     private $logoDisplayWebsite=true;
@@ -2255,6 +2263,22 @@ class TemplateCustomize
     public function setMetaDescription($metaDescription)
     {
         $this->metaDescription = $metaDescription;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowSocialIcon()
+    {
+        return $this->showSocialIcon;
+    }
+
+    /**
+     * @param bool $showSocialIcon
+     */
+    public function setShowSocialIcon($showSocialIcon)
+    {
+        $this->showSocialIcon = $showSocialIcon;
     }
 
 

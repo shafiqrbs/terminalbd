@@ -592,6 +592,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    $('#barcode').focus();
     InventorySales({{ entity.id ? entity.id : 0 }});
     EditableInit();
     if($('#sales_discount').val() == 0 ){
