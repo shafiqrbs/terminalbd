@@ -102,9 +102,9 @@
                                     {% endif %}
                                     <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>
                                     <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ globalOption.email }}" class="contact-email">{{ globalOption.email }}</a></br>
-                                    <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a>{% endif %}
-                                {% if(page.additionalPhone) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ page.additionalPhone|raw }}</a></br>{% endif %}
-                                {% if(page.additionalEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.additionalEmail|raw }}</a></br>{% endif %}
+                                    <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a></br>{% endif %}
+                                {% if(page.additionalPhone) %}<strong><i class="fa fa-phone"></i></strong>&nbsp;<a href="javascript:" >{{ page.additionalPhone|raw }}</a></br>{% endif %}
+                                {% if(page.additionalEmail) %}<strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="javascript:" >{{ page.additionalEmail|raw }}</a></br>{% endif %}
                             </div>
                          </div>
                         <hr>
