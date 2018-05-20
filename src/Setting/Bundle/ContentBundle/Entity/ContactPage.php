@@ -127,6 +127,20 @@ class ContactPage
     /**
      * @var string
      *
+     * @ORM\Column(name="contactMobile", type="string", length=255, nullable=true)
+     */
+    private $contactMobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contactEmail", type="string", length=255, nullable=true)
+     */
+    private $contactEmail;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="startHour", type="string", length=10, nullable=true)
      */
     private $startHour;
@@ -733,5 +747,37 @@ class ContactPage
     public function setLocation($location)
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactEmail()
+    {
+        return $this->contactEmail;
+    }
+
+    /**
+     * @param string $contactEmail
+     */
+    public function setContactEmail($contactEmail)
+    {
+        $this->contactEmail = $contactEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactMobile()
+    {
+        return $this->contactMobile;
+    }
+
+    /**
+     * @param string $contactMobile
+     */
+    public function setContactMobile($contactMobile)
+    {
+        $this->contactMobile = $contactMobile;
     }
 }

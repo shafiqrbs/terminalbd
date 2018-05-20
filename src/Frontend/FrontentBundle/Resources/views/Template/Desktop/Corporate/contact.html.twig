@@ -86,6 +86,7 @@
                                 {% endif %}
                                 {% if page.location is defined and page.location %}
                                    ,{{ page.location.parent.name }} {% endif %}-{{ page.postalCode }}<br>
+
                             </div>
                         </div>
                         <hr>
@@ -102,26 +103,26 @@
                                     <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>
                                     <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ globalOption.email }}" class="contact-email">{{ globalOption.email }}</a></br>
                                     <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a>{% endif %}
-
+                                {% if(page.additionalPhone) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ page.additionalPhone|raw }}</a></br>{% endif %}
+                                {% if(page.additionalEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.additionalEmail|raw }}</a></br>{% endif %}
                             </div>
                          </div>
                         <hr>
                         {% if page.address2 is not empty %}
-                        <div class="row">
-                            <div class="col-md-12">{{ page.address2|raw }}</div>
-                        </div>
+                        {{ page.address2|raw }}
                         {% endif %}
-                        {% if(page.isContactForm == false) %}
-                            <div class="row">
+                        {% if(page.contactPerson is not empty) %}
+                        <div class="row">
                             <div class="col-md-12">
                                 <strong><i class="fa fa-user"></i>&nbsp;Contact Information</strong><br>
                                 <em>{{ page.contactPerson|raw }}</em><br/>
                                 {% if page.designation %}{{ page.designation }}{% endif %}</br>
-                                {% if(page.additionalPhone) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ page.additionalPhone|raw }}</a></br>{% endif %}
-                                {% if(page.additionalEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.additionalEmail|raw }}</a></br>{% endif %}
+                                {% if(page.contactMobile) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ page.contactMobile|raw }}</a></br>{% endif %}
+                                {% if(page.contactEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.contactEmail|raw }}</a></br>{% endif %}
                             </div>
                         </div>
-                        {% else %}
+                        {% endif %}
+                        {% if(page.isContactForm == 1) %}
                             <div class="row">
                             <div class="col-md-12">
                                 <div class="well well-sm">

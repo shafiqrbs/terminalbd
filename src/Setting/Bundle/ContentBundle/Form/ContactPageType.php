@@ -44,6 +44,8 @@ class ContactPageType extends AbstractType
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
             ))
+            ->add('contactMobile','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter contact mobile')))
+            ->add('contactEmail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter contact email')))
             ->add('latitude','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter latitude')))
             ->add('longitude','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter longitude')))
             ->add('address2','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter additional information ')))
