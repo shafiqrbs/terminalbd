@@ -363,7 +363,6 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
 
             $menu['Accounting']['Transaction & Report']->addChild('Transaction Overview', array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');
-
             $accounting = array('inventory');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
@@ -384,6 +383,18 @@ class Builder extends ContainerAware
                 $menu['Accounting']['Transaction & Report']->addChild('Expenditure Summary',        array('route' => 'hms_report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Expenditure Details',        array('route' => 'hms_report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
             }
+            $accounting = array('miss');
+            $result = array_intersect($arrSlugs, $accounting);
+            if (!empty($result)) {
+                $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'account_medicine_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'account_medicine_income_monthly'))->setAttribute('icon', 'icon-th-list');
+
+            }
+            $menu['Accounting']['Transaction & Report']->addChild('Expenditure Summary',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Transaction & Report']->addChild('Expenditure Category',        array('route' => 'report_expenditure_category'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Transaction & Report']->addChild('Expenditure Details',        array('route' => 'report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
+
+
 
         }
 

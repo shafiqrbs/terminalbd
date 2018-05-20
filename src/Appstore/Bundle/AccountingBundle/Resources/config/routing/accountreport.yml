@@ -41,3 +41,16 @@ report_journal_account_head_summary:
 report_journal_transaction_summary:
     path:     /income-print
     defaults: { _controller: "AccountingBundle:Report:printIncome" }
+
+
+report_expenditure_summary:
+    path:     /expenditure-summary
+    defaults: { _controller: "AccountingBundle:HmsReport:expenditureSummary" }
+
+report_expenditure_category:
+    path:     /income-print
+    defaults: { _controller: "AccountingBundle:HmsReport:expenditureDetails" }
+
+report_expenditure_details:
+    path:     /income-print
+    defaults: { _controller: "AccountingBundle:HmsReport:expenditureDetails" }

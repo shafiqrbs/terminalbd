@@ -53,15 +53,15 @@
                                         </select>
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="medicineVendor" name="medicineVendor"  class="leftMargin span12 select2HmsVendor" value="{% if searchForm.medicineVendor is defined %}{{ searchForm.medicineVendor }}{% endif %}"  autocomplete="off" >
+                                        <input type="text" id="medicineVendor" name="medicineVendor"  class="leftMargin span12 select2MedicineVendor" value="{% if searchForm.medicineVendor is defined %}{{ searchForm.medicineVendor }}{% endif %}"  autocomplete="off" >
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input  datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="endDate" name="endDate"  class="span10 search-input  m-ctrl-medium datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <input type="text" id="endDate" name="endDate"  class="span10 search-input m-wrap  m-ctrl-medium datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>

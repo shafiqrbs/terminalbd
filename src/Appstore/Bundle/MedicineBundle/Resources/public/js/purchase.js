@@ -273,9 +273,8 @@ $(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurch
 $(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
 
     var payment     = parseInt($('#medicinepurchase_payment').val()  != '' ? $('#medicinepurchase_payment').val() : 0 );
-    var discount     = parseInt($('#medicinepurchase_discount').val()  != '' ? $('#medicinepurchase_discount').val() : 0 );
     var due =  parseInt($('#due').val());
-    var dueAmount = (due-discount-payment);
+    var dueAmount = (due-payment);
     if(dueAmount > 0){
         $('#balance').html('Due Tk.');
         $('.dueAmount').html(dueAmount);
