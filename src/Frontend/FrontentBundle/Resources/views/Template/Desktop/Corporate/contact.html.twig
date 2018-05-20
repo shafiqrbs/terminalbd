@@ -108,7 +108,7 @@
                         <hr>
                         {% if page.address2 is not empty %}
                         <div class="row">
-                            <div class="col-md-12">{{ page.address2 }}</div>
+                            <div class="col-md-12">{{ page.address2|raw }}</div>
                         </div>
                         {% endif %}
                         {% if(page.isContactForm == false) %}
@@ -191,12 +191,11 @@
                                     <div class="infoWindow">
                                         <span>{% if page.address1 is not empty %}
                                                 <i class="fa fa-home"></i>&nbsp;{{ page.address1|raw }}<br>
-                                                {% if page.thana is defined and page.thana %}
-                                                    {{ page.thana.name }},
-                                                {% endif %}
-                                                {% if page.district is defined and page.district %}
-                                                    {{ page.district.name }} {% endif %}-{{ page.postalCode }}
+                                            {% if page.location is defined and page.location %}
+                                                ,{{ page.location.name }}
                                             {% endif %}
+                                            {% if page.location is defined and page.location %}
+                                            ,{{ page.location.parent.name }} {% endif %}-{{ page.postalCode }}
                                             {% if page.startHour %}
                                                 <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
                                             {% endif %}
