@@ -108,7 +108,7 @@
                         <hr>
                         {% if page.address2 is not empty %}
                         <div class="row">
-                            <div class="col-md-12">{{ page.address2 }}</div>
+                            <div class="col-md-12">{{ page.address2|raw }}</div>
                         </div>
                         {% endif %}
                         {% if(page.isContactForm == false) %}
