@@ -74,3 +74,7 @@ accounting_account_online_order:
     resource: "@AccountingBundle/Resources/config/routing/accountonlineorder.yml"
     prefix:   /finance/online-order
 
+
+accounting_account_report:
+    resource: "@AccountingBundle/Resources/config/routing/report.yml"
+    prefix:   /finance/report

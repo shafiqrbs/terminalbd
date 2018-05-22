@@ -76,4 +76,46 @@ class ReportController extends Controller
         ));
     }
 
+
+    public function expenditureSummaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+        $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
+        return $this->render('AccountingBundle:Report/Expenditure:expenditureSummary.html.twig', array(
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function expenditureCategoryAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+        return $this->render('AccountingBundle:Report/Expenditure:category.html.twig', array(
+            'overview' => $overview,
+            'expenditureOverview' => $expenditureOverview,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function expenditureDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview( $this->getUser(),$data);
+        return $this->render('AccountingBundle:Report/Expenditure:expenditure.html.twig', array(
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
+    }
+
+
 }
