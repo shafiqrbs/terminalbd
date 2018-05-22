@@ -5,7 +5,6 @@ namespace Setting\Bundle\ContentBundle\Controller;
 use Knp\Snappy\Pdf;
 use Setting\Bundle\ContentBundle\Entity\PageMeta;
 use Setting\Bundle\ContentBundle\Entity\PageModule;
-use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Setting\Bundle\ContentBundle\Entity\Page;
@@ -193,10 +192,11 @@ class PageController extends Controller
         $data = $request->request->all();
         if ($editForm->isValid()) {
 
-            if($entity->upload() && !empty($entity->getFile())){
+            if($entity->isRemoveImage() == 1 ){
                 $entity->removeUpload();
+            }elseif($entity->isRemoveImage() != 1) {
+                $entity->upload();
             }
-            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

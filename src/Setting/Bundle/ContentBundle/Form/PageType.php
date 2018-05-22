@@ -42,6 +42,7 @@ class PageType extends AbstractType
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows'=>15)))
+            ->add('shortDescription','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows'=>5)))
 
             ->add('parent', 'entity', array(
                 'required'    => false,
@@ -83,7 +84,8 @@ class PageType extends AbstractType
                     },
             ))
             ->add('status')
-            
+            ->add('removeImage')
+
         ;
     }
 

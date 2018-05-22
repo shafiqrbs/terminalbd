@@ -77,6 +77,13 @@ class Page
     private $content;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="shortDescription", type="text" , nullable = true)
+     */
+    private $shortDescription;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
@@ -89,6 +96,14 @@ class Page
      * @ORM\Column(name="isSubPage", type="boolean", nullable = true )
      */
     private $isSubPage = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="removeImage", type="boolean", nullable = true )
+     */
+    private $removeImage = false;
 
     /**
      * @var \DateTime
@@ -595,6 +610,7 @@ class Page
     {
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
+            $this->path = null ;
         }
     }
 
@@ -1273,6 +1289,38 @@ class Page
     public function setFeature($feature)
     {
         $this->feature = $feature;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortDescription()
+    {
+        return $this->shortDescription;
+    }
+
+    /**
+     * @param string $shortDescription
+     */
+    public function setShortDescription($shortDescription)
+    {
+        $this->shortDescription = $shortDescription;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRemoveImage()
+    {
+        return $this->removeImage;
+    }
+
+    /**
+     * @param bool $removeImage
+     */
+    public function setRemoveImage($removeImage)
+    {
+        $this->removeImage = $removeImage;
     }
 
 }

@@ -49,6 +49,7 @@
                 <tr>
                     <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
                     <th class="span3">Name</th>
+                    <th class="span1">PP</th>
                     <th class="span1">MRP</th>
                     <th class="span1">Quantity</th>
                     <th class="span1">Sub-total</th>
@@ -59,8 +60,9 @@
                 {% if user.medicineSalesTemporary is not empty %}
                     {% for item in user.medicineSalesTemporary %}
                         <tr id="remove-{{ item.id }}">
-                            <td  class="span1">{{ item.getMedicinePurchaseItem.barcode }}</td>
+                            <td  class="span1">{{ item.medicinePurchaseItem.barcode }}</td>
                             <td class="span5">{{ item.medicineStock.name }}</td>
+                            <td class="span1">{{ item.medicinePurchaseItem.purchasePrice }}</td>
                             <td class="span1">
                                 <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
                                 <input type="number" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" >
@@ -79,20 +81,20 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td colspan="6" class="span12" style="border: 1px double #000"></td>
+                    <td colspan="7" class="span12" style="border: 1px double #000"></td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                    <td colspan="5" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                     <td class=""><strong id="subTotal">{{ subTotal|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                    <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                     <td class=""><strong class="discount"></strong></td>
                     <td class="span1"></td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
+                    <td colspan="5" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
                     <td class=""><strong id="grandTotal">{{ subTotal|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>

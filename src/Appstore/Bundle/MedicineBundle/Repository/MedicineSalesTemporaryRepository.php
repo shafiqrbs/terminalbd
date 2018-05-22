@@ -106,6 +106,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="span1" >' . $entity->getMedicinePurchaseItem()->getBarcode() . '</td>';
             $data .= '<td class="span4" >' . $entity->getMedicineStock()->getName() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getMedicinePurchaseItem()->getPurchasePrice() . '</td>';
             $data .= "<td class='span1' >";
             $data .= "<input type='number' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
             $data .= "</td>";
