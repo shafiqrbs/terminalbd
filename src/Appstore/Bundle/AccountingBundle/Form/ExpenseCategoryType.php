@@ -60,7 +60,7 @@ class ExpenseCategoryType extends AbstractType
             ->add('parent', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select parent expense category---',
-                'attr'=>array('class'=>'ExpenseCategory m-wrap span12 select2'),
+                'attr'=>array('class'=>'ExpenseCategory m-wrap span12'),
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->ExpenseCategoryChoiceList()

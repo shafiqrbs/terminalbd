@@ -94,6 +94,22 @@ class TransactionRepository extends EntityRepository
         return $result;
     }
 
+    public function parentsAccountHead($globalOption,$parent,$data){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('sum(ex.amount) as amount, accountHead.name as name , accountHead.id, accountHead.toIncrease, accountHead.code');
+        $qb->from('AccountingBundle:Transaction','ex');
+        $qb->innerJoin('ex.accountHead','accountHead');
+        $qb->where('ex.globalOption = :globalOption')->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("accountHead.parent IN(:parent)")->setParameter('parent', $parent);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('ex.accountHead');
+        $qb->orderBy('ex.accountHead','ASC');
+        $result = $qb->getQuery()->getResult();
+        return $result;
+    }
+
+
     public function specificParentAccountHead($globalOption,$parent){
 
         $datetime = new \DateTime("now");

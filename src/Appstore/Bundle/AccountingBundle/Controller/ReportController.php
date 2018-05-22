@@ -83,9 +83,11 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-        $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
-        return $this->render('AccountingBundle:Report/Expenditure:expenditureSummary.html.twig', array(
+        $parent = array(23,37);
+        $expenditureHead = $em->getRepository('AccountingBundle:Transaction')->parentsAccountHead($user->getGlobalOption(),$parent,$data);
+        return $this->render('AccountingBundle:Report/Expenditure:accountHead.html.twig', array(
             'overview' => $overview,
+            'expenditureHead' => $expenditureHead,
             'searchForm' => $data,
         ));
     }
@@ -97,9 +99,7 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
         return $this->render('AccountingBundle:Report/Expenditure:category.html.twig', array(
-            'overview' => $overview,
             'expenditureOverview' => $expenditureOverview,
             'searchForm' => $data,
         ));
@@ -109,10 +109,12 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $user = $this->getUser();
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview( $this->getUser(),$data);
+        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch($user,$data);
+        $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:Report/Expenditure:expenditure.html.twig', array(
             'overview' => $overview,
+            'entities' => $pagination,
             'searchForm' => $data,
         ));
     }

@@ -5,14 +5,14 @@
         <!-- BEGIN PAGE HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="page-title">Category Base Expenditure</h3>
+                <h3 class="page-title">Account Head Base Expenditure</h3>
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="javascript:">Category Base Expenditure</a></li>
+                    <li><a href="javascript:">Account Head Base Expenditure</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -27,12 +27,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Category Base Expenditure</div>
+                        <div class="caption"><i class="icon-reorder"></i>Account Head Base Expenditure</div>
                         <div class="spn5" id="message"></div>
                         <div class="actions">
                             <div class="btn-group">
                                <a class="btn yellow" href="{{ path('report_expenditure_summary') }}"><i class="icon-th-list"></i>&nbsp; Summary</a>
-                                <a class="btn blue" href="{{ path('report_expenditure_category') }}"><i class="icon-th-list"></i>&nbsp;Category</a>
+                                <a class="btn blue" href="{{ path('report_expenditure_category') }}"><i class="icon-th-list"></i>&nbsp;Account Head</a>
                                 <a class="btn black" href="{{ path('report_expenditure_details') }}"><i class="icon-th-list"></i>&nbsp;Details</a>
                             </div>
                         </div>
@@ -69,17 +69,17 @@
                         <div class="portlet-body form">
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon icon-money"></i> Category Base Expenditure</div>
+                                    <div class="caption"><i class="icon icon-money"></i> Account Head Base Expenditure</div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-                                {% if expenditureOverview is not empty %}
+                                {% if expenditureHead is not empty %}
                                     {% set total = 0 %}
-                                    {% for expenditure in expenditureOverview %}
+                                    {% for expenditure in expenditureHead %}
                                         {% set total = total+expenditure.amount %}
                                         <tr>
-                                            <th class="numeric" >{{ expenditure.categoryName }}</th>
+                                            <th class="numeric" >{{ expenditure.name }}</th>
                                             <td class="numeric" >{{ expenditure.amount|number_format }}</td>
                                         </tr>
                                     {% endfor %}
