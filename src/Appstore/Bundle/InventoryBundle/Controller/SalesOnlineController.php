@@ -120,8 +120,7 @@ class SalesOnlineController extends Controller
         $editForm = $this->createEditForm($entity);
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'general-sales');
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'general-sales');
-
-        if ($entity->getProcess() != "In-progress") {
+        if(!in_array($entity->getProcess(),array('In-progress','Created'))) {
             return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
         }
 
