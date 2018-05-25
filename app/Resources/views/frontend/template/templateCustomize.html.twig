@@ -130,8 +130,8 @@
         border-color: {{ globalOption.templateCustomize.menuBgColorHover }} !important;
     }
     #header-menu  ul ul li{
-        {% if globalOption.templateCustomize.subMenuWith > 0 %}
-            min-width:{{ globalOption.templateCustomize.subMenuWith }}px !important;
+        {% if globalOption.templateCustomize.subMenuWidth > 0 %}
+            min-width:{{ globalOption.templateCustomize.subMenuWidth }}px !important;
         {% endif %}
         {% if globalOption.templateCustomize.subMenuBgColor is not empty %}
             background-color: {{ globalOption.templateCustomize.subMenuBgColor }} !important;

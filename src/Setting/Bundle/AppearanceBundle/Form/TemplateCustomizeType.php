@@ -241,7 +241,7 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
-            ->add('subMenuWidth','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sub menu with')))
+            ->add('subMenuWidth','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Enter sub menu with')))
             ->add('menuLiAColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
