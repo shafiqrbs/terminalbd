@@ -2,6 +2,10 @@ account_purchase:
     path:     /
     defaults: { _controller: "AccountingBundle:AccountPurchase:index" }
 
+account_purchase_outstanding:
+    path:     /vendor-outstanding
+    defaults: { _controller: "AccountingBundle:AccountPurchase:vendorOutstanding" }
+
 account_purchase_return:
     path:     /purchase-return
     defaults: { _controller: "AccountingBundle:AccountPurchase:purchaseReturn" }

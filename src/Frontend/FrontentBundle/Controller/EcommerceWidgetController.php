@@ -39,7 +39,7 @@ class EcommerceWidgetController extends Controller
 
     public function mobileMenuAction(GlobalOption $globalOption)
     {
-        return $this->render('@Frontend/Template/Mobile/menu.html.twig', array(
+        return $this->render('@Frontend/Template/Mobile/Widget/ecommerceMenu.html.twig', array(
             'globalOption'          => $globalOption,
         ));
     }

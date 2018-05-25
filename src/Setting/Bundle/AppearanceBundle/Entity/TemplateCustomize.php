@@ -140,6 +140,13 @@ class TemplateCustomize
     private $breadcrumb = true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mobileLogin", type="boolean")
+     */
+    private $mobileLogin = true;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="breadcrumbHome", type="string", length=20, nullable=true)
@@ -593,14 +600,47 @@ class TemplateCustomize
      */
     private $menuLiAColor;
 
-
-
     /**
      * @var string
      *
      * @ORM\Column(name="menuLiHoverAColor", type="string", length=50, nullable=true)
      */
     private $menuLiAHoverColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileHeaderBgColor", type="string", length=20, nullable=true)
+     */
+    private $mobileHeaderBgColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileMenuBgColor", type="string", length=20, nullable=true)
+     */
+    private $mobileMenuBgColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileMenuBgColorHover", type="string", length=20, nullable=true)
+     */
+    private $mobileMenuBgColorHover;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileMenuLiAColor", type="string", length=20, nullable=true)
+     */
+    private $mobileMenuLiAColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileMenuLiAHoverColor", type="string", length=20, nullable=true)
+     */
+    private $mobileMenuLiAHoverColor;
 
 
     /**
@@ -2279,6 +2319,102 @@ class TemplateCustomize
     public function setShowSocialIcon($showSocialIcon)
     {
         $this->showSocialIcon = $showSocialIcon;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileHeaderBgColor()
+    {
+        return $this->mobileHeaderBgColor;
+    }
+
+    /**
+     * @param string $mobileHeaderBgColor
+     */
+    public function setMobileHeaderBgColor($mobileHeaderBgColor)
+    {
+        $this->mobileHeaderBgColor = $mobileHeaderBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileMenuBgColor()
+    {
+        return $this->mobileMenuBgColor;
+    }
+
+    /**
+     * @param string $mobileMenuBgColor
+     */
+    public function setMobileMenuBgColor($mobileMenuBgColor)
+    {
+        $this->mobileMenuBgColor = $mobileMenuBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileMenuBgColorHover()
+    {
+        return $this->mobileMenuBgColorHover;
+    }
+
+    /**
+     * @param string $mobileMenuBgColorHover
+     */
+    public function setMobileMenuBgColorHover($mobileMenuBgColorHover)
+    {
+        $this->mobileMenuBgColorHover = $mobileMenuBgColorHover;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileMenuLiAColor()
+    {
+        return $this->mobileMenuLiAColor;
+    }
+
+    /**
+     * @param string $mobileMenuLiAColor
+     */
+    public function setMobileMenuLiAColor($mobileMenuLiAColor)
+    {
+        $this->mobileMenuLiAColor = $mobileMenuLiAColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileMenuLiAHoverColor()
+    {
+        return $this->mobileMenuLiAHoverColor;
+    }
+
+    /**
+     * @param string $mobileMenuLiAHoverColor
+     */
+    public function setMobileMenuLiAHoverColor($mobileMenuLiAHoverColor)
+    {
+        $this->mobileMenuLiAHoverColor = $mobileMenuLiAHoverColor;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMobileLogin()
+    {
+        return $this->mobileLogin;
+    }
+
+    /**
+     * @param bool $mobileLogin
+     */
+    public function setMobileLogin($mobileLogin)
+    {
+        $this->mobileLogin = $mobileLogin;
     }
 
 

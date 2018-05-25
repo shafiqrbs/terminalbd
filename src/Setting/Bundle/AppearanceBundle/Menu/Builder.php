@@ -1091,6 +1091,8 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
             $menu['Medicine']['Master Data']->addChild('Particular', array('route' => 'medicine_particular'))
                 ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Master Data']->addChild('Minimum Stock Setup', array('route' => 'medicine_minimum'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Master Data']->addChild('User Sales Setup', array('route' => 'medicine_sales_user', 'routeParameters' => array('source' => 'medicine')))
                 ->setAttribute('icon', 'icon icon-cog');
             $menu['Medicine']['Master Data']->addChild('Configuration', array('route' => 'medicine_config_manage'))

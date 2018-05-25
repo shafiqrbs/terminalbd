@@ -1,0 +1,106 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Customer Outstanding
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('account_purchase_medicine') }}">Customer Outstanding</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="javascript:">Customer Outstanding lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Customer Outstanding</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn red" href="{{ path('account_sales_medicine_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Payment</a>
+                                <a class="btn black" href="{{ path('account_sales_medicine') }}"><i class="icon-th-list"></i>&nbsp; Sales</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content ">
+                                <tr class="head-blue">
+                                    <th class="numeric" >Customer Name</th>
+                                    <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Total Amount</th>
+                                    <th class="numeric" >Received</th>
+                                    <th class="numeric" >Outstanding</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for entity in entities %}
+                                    {% set balanch = entity.totalAmount - entity.receiveAmount %}
+                                    <tr>
+                                        <td class="numeric" >{{ entity.customerName }}</td>
+                                        <td class="numeric" >{{ entity.mobileNo }}</td>
+                                        <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
+                                        <td class="numeric" >{{ entity.receiveAmount|number_format }}</td>
+                                        <th class="numeric" >{% if balanch > 0 %}{{ balanch |number_format }} {% else %}({{ balanch|abs|number_format }}){% endif %}</th>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <style>
+        .leftMargin {
+            margin-left: 0!important;
+        }
+    </style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@AccountingBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/editable.js'
+    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    EditableInit();
+    AccountingApproveProcess();
+{% endblock %}
+
+

@@ -147,7 +147,7 @@ class MedicineStockRepository extends EntityRepository
             $stock->setSalesQuantity($qnt);
         }elseif($fieldName == 'sales-return'){
             $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockUpdate($stock);
-            $item->setSalesReturnQuantity($quantity);
+            $stock->setSalesReturnQuantity($quantity);
         }elseif($fieldName == 'purchase-return'){
             $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->purchaseReturnStockUpdate($stock);
             $stock->setPurchaseReturnQuantity($qnt);

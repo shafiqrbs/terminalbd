@@ -28,7 +28,6 @@ class MedicinePurchase
      */
     private $id;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", inversedBy="medicinePurchases" , cascade={"detach","merge"} )
      **/
@@ -38,6 +37,11 @@ class MedicinePurchase
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="medicinePurchases" , cascade={"detach","merge"} )
      **/
     private  $medicineVendor;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineReverse", mappedBy="medicinePurchase" , cascade={"detach","merge"} )
+     **/
+    private  $medicineReverse;
 
 
     /**
@@ -118,6 +122,13 @@ class MedicinePurchase
      * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
      */
     private $discountCalculation;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="revised", type="boolean", nullable=true)
+     */
+    private $revised;
 
     /**
      * @var datetime
@@ -748,6 +759,30 @@ class MedicinePurchase
     public function getAccountPurchases()
     {
         return $this->accountPurchases;
+    }
+
+    /**
+     * @return MedicineReverse
+     */
+    public function getMedicineReverse()
+    {
+        return $this->medicineReverse;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRevised()
+    {
+        return $this->revised;
+    }
+
+    /**
+     * @param bool $revised
+     */
+    public function setRevised($revised)
+    {
+        $this->revised = $revised;
     }
 
 

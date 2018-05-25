@@ -55,6 +55,22 @@ class AccountSalesController extends Controller
     }
 
     /**
+     * Lists all AccountSales entities.
+     *
+     */
+    public function customerOutstandingAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption);
+        $pagination = $this->paginate($entities);
+        return $this->render('AccountingBundle:AccountSales:customerOutstanding.html.twig', array(
+            'entities' => $pagination,
+        ));
+    }
+
+
+    /**
      * Lists all AccountSalesReturn entities.
      *
      */

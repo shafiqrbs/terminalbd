@@ -69,7 +69,6 @@
                     <th class="numeric" >Sub total</th>
                     <th class="numeric" >Sales price</th>
                     <th class="numeric" >Sub total</th>
-                    <th class="numeric" ></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,14 +85,7 @@
                         <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
                         <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
                         <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity }}</td>
-                        <td class=" numeric" >
-                            {% if entity.process != 'approved' %}
-                                <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
-                            {% endif %}
-                            {% if entity.inventoryConfig.isAttribute == 1 %}
-                                <a href="{{ path('inventory_purchaseitem_edit', { 'id': purchaseItem.id }) }}" rel="" id="{{  purchaseItem.id }}"  class="btn blue mini" ><i class="icon-plus"></i> Add Attribute</a>
-                            {% endif %}
-                        </td>
+
 
                     </tr>
                 {% endfor %}
@@ -102,20 +94,5 @@
             </table>
         </div>
         <div class="clearfix">&nbsp;</div>
-        <div class="form-actions portlet box grey">
-            <div class="pull-right" id="action-{{ entity.id }}">
-                {% if entity.process != 'approved' %}
-                    {% if entity.purchaseVendorItems is empty %}
-                        <a href="{{ path('inventory_purchasesimple_edit', { 'id': entity.id }) }}" class="btn green" ><i class="icon-edit"></i></a>
-                    {% endif %}
-                {% endif %}
-                {% if ((app.user.granted("ROLE_DOMAIN")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY_APPR  OVAL")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'complete') )  %}
-                    <a class="btn purple approve"  data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('inventory_purchasesimple_approve', { 'id': entity.id,'reject':'reject'  }) }}" ><i class="icon-refresh"></i>&nbsp;Reject</a>
-                    <a class="btn green approve approved-{{ entity.id }}" data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('inventory_purchasesimple_approve', { 'id': entity.id }) }}"><i class="icon-ok"></i>&nbsp;Approve</a>
-                {% elseif entity.process == 'approved'  %}
-                    <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
-                {% endif %}
-            </div>
-        </div>
     </div>
 </div>

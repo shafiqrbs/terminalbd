@@ -43,6 +43,8 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+
+
     public function findWithSearch(User $user,$data = '')
     {
         $globalOption = $user->getGlobalOption();
@@ -160,6 +162,24 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setBalance($balance);
         $this->_em->flush();
         return $accountSales;
+
+    }
+
+    public function customerOutstanding($globalOption)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','customer');
+        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount');
+        $qb->addSelect('customer.name as customerName');
+        $qb->addSelect('customer.mobile as mobileNo');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = :process");
+        $qb->setParameter('process', 'approved');
+        $qb->groupBy('customer.name,customer.mobile');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
 
     }
 

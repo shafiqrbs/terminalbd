@@ -22,7 +22,7 @@
         <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
     {% endif %}
     <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCgg9f-HbB1zWmQY_zsz-vPpYtQd6cA6JA"></script>
     <script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
@@ -63,7 +63,7 @@
             <!-- banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
-            {% if globalOption.templateCustomize.topBar is not empty %}
+            {% if globalOption.templateCustomize.mobileLogin == 1 %}
             <div id="side-bar-panel" class="left-shadow-overlay" >
                 <div class="handle">
                     <span class="glyphicon glyphicon-chevron-right"></span>

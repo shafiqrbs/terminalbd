@@ -34,6 +34,11 @@ class MedicineConfig
      **/
     private $medicineStock;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineMinimumStock", mappedBy="medicineConfig")
+     **/
+    private $medicineMinimumStock;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineReverse", mappedBy="medicineConfig")
      **/
@@ -522,6 +527,14 @@ class MedicineConfig
     public function setVendorPercentage($vendorPercentage)
     {
         $this->vendorPercentage = $vendorPercentage;
+    }
+
+    /**
+     * @return MedicineMinimumStock
+     */
+    public function getMedicineMinimumStock()
+    {
+        return $this->medicineMinimumStock;
     }
 
 }

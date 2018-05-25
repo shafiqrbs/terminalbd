@@ -117,7 +117,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.expirationStartDate','ASC');
+        $qb->orderBy('mpi.expirationStartDate','ASC');
         $qb->getQuery();
         return  $qb;
     }
@@ -149,6 +149,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->join('e.medicinePurchase', 'mp');
         $qb->select('SUM(e.quantity) AS quantity');
         $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $stockItem->getId());
+        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
     }
@@ -213,11 +214,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         foreach ($purchase->getMedicinePurchaseItems() as $item){
 
             $em = $this->_em;
-            if($purchase->isInstantPurchase() == 1){
-                $percentage = $purchase->getMedicineConfig()->getInstantVendorPercentage();
-            }else{
-                $percentage = $purchase->getMedicineConfig()->getVendorPercentage();
-            }
+            $percentage = $purchase->getDiscountCalculation();
             $purchasePrice = $this->stockInstantPurchaseItemPrice($percentage,$item->getSalesPrice());
             $item->setPurchasePrice($purchasePrice);
             $em->persist($item);
@@ -226,25 +223,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
         }
     }
 
-    public function getPurchaseAveragePrice(MedicineParticular $particular)
-    {
-
-        $qb = $this->_em->createQueryBuilder();
-        $qb->from('MedicineBundle:MedicinePurchaseItem','e');
-        $qb->select('AVG(e.purchasePrice) AS avgPurchasePrice');
-        $qb->where('e.dmsParticular = :particular')->setParameter('particular', $particular) ;
-        $res = $qb->getQuery()->getOneOrNullResult();
-        if(!empty($res)){
-            $particular->setPurchaseAverage($res['avgPurchasePrice']);
-            $this->_em->persist($particular);
-            $this->_em->flush($particular);
-        }
-    }
-
     public function insertStockPurchaseItems(MedicinePurchase $purchase,MedicineStock $item, $data)
     {
-
-
         $em = $this->_em;
         $entity = new MedicinePurchaseItem();
         $entity->setMedicinePurchase($purchase);

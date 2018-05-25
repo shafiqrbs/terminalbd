@@ -418,4 +418,5 @@ class InvoiceTransactionRepository extends EntityRepository
         }
         return $lastCode;
     }
+
 }

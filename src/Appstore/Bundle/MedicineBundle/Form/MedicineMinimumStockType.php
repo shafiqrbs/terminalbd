@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class ParticularType extends AbstractType
+class MedicineMinimumStockType extends AbstractType
 {
 
     /**
@@ -20,18 +20,23 @@ class ParticularType extends AbstractType
     {
 
         $builder
-
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter particular name')))
-            ->add('particularType', 'entity', array(
+            ->add('minQuantity','text', array('attr'=>array('class'=>'m-wrap span3 inputs ','required' => true ,'label' => 'form.name','placeholder'=>'Enter min qnt'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please enter min qnt'))
+                )))
+            ->add('unit', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticularType',
-                'empty_value' => '---Choose a particular type ---',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 inputs'),
-                'constraints' =>array( new NotBlank(array('message'=>'Select particular type')) ),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select required'))
+                ),
+                'empty_value' => '---Choose a unit ---',
+                'attr'=>array('class'=>'span12 stockInput'),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1");
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->orderBy("p.name","ASC");
                 },
             ))
 
@@ -44,7 +49,7 @@ class ParticularType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular'
+            'data_class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineMinimumStock'
         ));
     }
 
@@ -53,6 +58,6 @@ class ParticularType extends AbstractType
      */
     public function getName()
     {
-        return 'particular';
+        return 'medicineMinimumStock';
     }
 }

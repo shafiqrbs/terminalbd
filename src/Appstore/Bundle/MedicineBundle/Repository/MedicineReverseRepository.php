@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesParticular;
@@ -24,14 +25,14 @@ class MedicineReverseRepository extends EntityRepository
             $reverse = $entity->getMedicineReverse();
         }
         $reverse->setMedicineConfig($entity->getMedicineConfig());
-        $reverse->setProcess('Pathological MedicineSales');
+        $reverse->setProcess('Sales');
         $reverse->setContent($data);
         $reverse->setMedicineSales($entity);
         $this->_em->persist($reverse);
         $this->_em->flush($reverse);
 
     }
-    public function insertAdmissionMedicineSales(MedicineSales $entity,$data)
+    public function purchase(MedicinePurchase $entity,$data)
     {
 
         if(empty($entity->getMedicineReverse())){
@@ -40,9 +41,9 @@ class MedicineReverseRepository extends EntityRepository
             $reverse = $entity->getMedicineReverse();
         }
         $reverse->setMedicineConfig($entity->getMedicineConfig());
-        $reverse->setProcess('Admitted MedicineSales');
+        $reverse->setProcess('Purchase');
         $reverse->setContent($data);
-        $reverse->setMedicineSales($entity);
+        $reverse->setMedicinePurchase($entity);
         $this->_em->persist($reverse);
         $this->_em->flush($reverse);
 

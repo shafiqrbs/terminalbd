@@ -14,11 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('templatecustomize') }}">Template Customize</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="#">Template Components</a></li>
+                    <li><a href="#">Template Customize</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -688,13 +684,95 @@
                            </div>
                             <div class="clearfix">&nbsp;</div>
                             <!--/row-->
+                            <div class="form-actions portlet box purple">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Manage Mobile Menu</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                               <div class="span3">
+                                   <div class="control-group">
+                                       <label class="control-label" for="firstName"></label>
+                                       <div class="controls">
+                                         Mobile Login  {{ form_widget(form.mobileLogin) }}
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="span2">
+                                   <div class="control-group">
+                                       <label class="control-label" for="firstName">Header Bg</label>
+                                       <div class="controls">
+                                           <div class="input-icon left">
+                                               <i class="icon-magic"></i>
+                                               {{ form_widget(form.mobileHeaderBgColor) }}
+                                               {{ form_errors(form.mobileHeaderBgColor) }}
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Menu Bg</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.mobileMenuBgColor) }}
+                                                {{ form_errors(form.mobileMenuBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Menu Bg Hover</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.mobileMenuBgColorHover) }}
+                                                {{ form_errors(form.mobileMenuBgColorHover) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               <div class="span2">
+                                   <div class="control-group">
+                                       <label class="control-label" for="firstName">Menu Anchor</label>
+                                       <div class="controls">
+                                           <div class="input-icon left">
+                                               <i class="icon-magic"></i>
+                                               {{ form_widget(form.mobileMenuLiAColor) }}
+                                               {{ form_errors(form.mobileMenuLiAColor) }}
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="span2">
+                                   <div class="control-group">
+                                       <label class="control-label" for="firstName">Menu Anchor Hover</label>
+                                       <div class="controls">
+                                           <div class="input-icon left">
+                                               <i class="icon-magic"></i>
+                                               {{ form_widget(form.mobileMenuLiAHoverColor) }}
+                                               {{ form_errors(form.mobileMenuLiAHoverColor) }}
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+
+                            </div>
+
+                            <!--/row-->
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
                             <div class="form-actions portlet box yellow">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Manage Footer Menu</div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
-
                             <div class="row-fluid">
                                <div class="span3">
                                    <div class="control-group">

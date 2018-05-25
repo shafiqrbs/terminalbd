@@ -1,0 +1,8 @@
+medicine_reverse:
+    path:     /
+    defaults: { _controller: "MedicineBundle:MedicineReverse:index" }
+
+medicine_reverse_show:
+    path:     /{id}/show
+    defaults: { _controller: "MedicineBundle:MedicineReverse:show" }
+

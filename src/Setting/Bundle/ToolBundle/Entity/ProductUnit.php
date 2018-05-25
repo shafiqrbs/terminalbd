@@ -8,6 +8,7 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineMinimumStock;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -65,6 +66,11 @@ class ProductUnit
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $medicineStocks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineMinimumStock", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $medicineMinimumStock;
 
 
     /**
@@ -240,6 +246,14 @@ class ProductUnit
     public function getDpsParticulars()
     {
         return $this->dpsParticulars;
+    }
+
+    /**
+     * @return MedicineMinimumStock
+     */
+    public function getMedicineMinimumStock()
+    {
+        return $this->medicineMinimumStock;
     }
 
 

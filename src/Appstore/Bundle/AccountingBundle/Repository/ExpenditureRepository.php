@@ -25,21 +25,21 @@ class ExpenditureRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
-        $startDate      = isset($data['startDate']) and $data['startDate'] != '' ? $data['startDate'].' 00:00:00' :'';
-        $endDate        = isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate'].' 23:59:59' :'';
+        $startDate      = isset($data['startDate']) and $data['startDate'] != '' ? $data['startDate']:'';
+        $endDate        = isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate']:'';
         $toUser         = isset($data['toUser'])? $data['toUser'] :'';
         $accountHead    = isset($data['accountHead'])? $data['accountHead'] :'';
+        $transactionMethod    = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $category       = isset($data['category'])? $data['category'] :'';
-
-        if (!empty($startDate) and $startDate !="") {
-
-            $qb->andWhere("e.updated >= :startDate");
-            $qb->setParameter('startDate', $startDate);
-        }
-
-        if (!empty($endDate)) {
-            $qb->andWhere("e.updated <= :endDate");
-            $qb->setParameter('endDate', $endDate);
+        if(!empty($startDate) and !empty($endDate)){
+           $start = new \DateTime($data['startDate']);
+           $startDate = $start->format('Y-m-d 00:00:00');
+           $end = new \DateTime($data['endDate']);
+           $endDate = $end->format('Y-m-d 23:59:59');
+           $qb->andWhere("e.updated >= :startDate");
+           $qb->setParameter('startDate', $startDate);
+           $qb->andWhere("e.updated <= :endDate");
+           $qb->setParameter('endDate', $endDate);
         }
 
         if (!empty($toUser)) {
@@ -50,6 +50,10 @@ class ExpenditureRepository extends EntityRepository
         if (!empty($accountHead)) {
             $qb->andWhere("e.accountHead = :accountHead");
             $qb->setParameter('accountHead', $accountHead);
+        }
+        if (!empty($transactionMethod)) {
+            $qb->andWhere("e.transactionMethod = :transactionMethod");
+            $qb->setParameter('transactionMethod', $transactionMethod);
         }
         if (!empty($category)) {
             $qb->andWhere("e.category = :category");

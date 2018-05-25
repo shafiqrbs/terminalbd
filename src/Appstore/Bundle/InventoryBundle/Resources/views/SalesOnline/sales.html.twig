@@ -345,6 +345,7 @@
                                                 <option value="save">Save & Continue</option>
                                                 <option value="print">Save & Print</option>
                                                 <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
+                                                <option {% if entity.process == 'Created' %} selected="selected" {% endif %} value="Created">Created</option>
                                             </select>
                                             <button type="button" id="saveType" class="btn yellow receiveBtn" name="saveType" value="save" ><i class="icon-save m-icon-white"></i>&nbsp;Process</button>
                                         {% elseif entity.inventoryConfig.onlineSalesPrinter == 'pos'  %}

@@ -57,6 +57,20 @@ class AccountPurchaseController extends Controller
      *
      */
 
+    /**
+     * Lists all AccountSales entities.
+     *
+     */
+    public function vendorOutstandingAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorOutstanding($globalOption,'inventory');
+        return $this->render('AccountingBundle:AccountPurchase:purchaseOutstanding.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
+
     public function purchaseReturnAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -84,7 +98,8 @@ class AccountPurchaseController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setProcessHead('Account Purchase');
+            $entity->setProcessHead('inventory');
+            $entity->setProcessType('Payment');
             if($entity->getPayment() < 0){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);

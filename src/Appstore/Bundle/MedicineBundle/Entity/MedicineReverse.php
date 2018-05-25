@@ -35,6 +35,13 @@ class MedicineReverse
 
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", inversedBy="medicineReverse")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $medicinePurchase;
+
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="medicineReverse" )
      **/
@@ -218,6 +225,22 @@ class MedicineReverse
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMedicinePurchase()
+    {
+        return $this->medicinePurchase;
+    }
+
+    /**
+     * @param mixed $medicinePurchase
+     */
+    public function setMedicinePurchase($medicinePurchase)
+    {
+        $this->medicinePurchase = $medicinePurchase;
     }
 
 

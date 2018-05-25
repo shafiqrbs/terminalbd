@@ -96,11 +96,6 @@
         }
     {% endif %}
 
-    {% if globalOption.templateCustomize.menuTopMargin is not empty %}
-        .fixed-top #menu{
-            margin-top:{{ globalOption.templateCustomize.menuTopMargin - globalOption.templateCustomize.stickyMenuTopMargin }}px!important;;
-        }
-    {% endif %}
 
     {% if globalOption.templateCustomize.menuPosition is not empty %}
         #header-menu{

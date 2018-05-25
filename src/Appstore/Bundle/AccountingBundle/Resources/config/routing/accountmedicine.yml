@@ -30,6 +30,14 @@ account_purchase_medicine:
     path:     /purchase
     defaults: { _controller: "AccountingBundle:AccountMedicine:purchase" }
 
+account_purchase_medicine_outstanding:
+    path:     /vendor-outstanding
+    defaults: { _controller: "AccountingBundle:AccountMedicine:vendorOutstanding" }
+
+account_sales_medicine_outstanding:
+    path:     /customer-outstanding
+    defaults: { _controller: "AccountingBundle:AccountMedicine:customerOutstanding" }
+
 account_purchase_medicine_new:
     path:     /purchase-new
     defaults: { _controller: "AccountingBundle:AccountMedicine:purchaseNew" }

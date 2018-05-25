@@ -108,7 +108,7 @@ class AccountJournal
     /**
      * @var string
      *
-     * @ORM\Column(name="journalSource", type="string", length=25, nullable = true)
+     * @ORM\Column(name="journalSource", type="string", length=100, nullable = true)
      */
     private $journalSource;
 

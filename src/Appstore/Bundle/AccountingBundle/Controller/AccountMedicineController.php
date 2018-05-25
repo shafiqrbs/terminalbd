@@ -81,6 +81,35 @@ class AccountMedicineController extends Controller
         ));
     }
 
+    /**
+     * Lists all AccountSales entities.
+     *
+     */
+    public function customerOutstandingAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption);
+        $pagination = $this->paginate($entities);
+        return $this->render('AccountingBundle:AccountMedicine:customerOutstanding.html.twig', array(
+            'entities' => $pagination,
+        ));
+    }
+
+    /**
+     * Lists all AccountSales entities.
+     *
+     */
+    public function vendorOutstandingAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorOutstanding($globalOption,'medicine');
+        return $this->render('AccountingBundle:AccountMedicine:purchaseOutstanding.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
+
     public function purchaseNewAction()
     {
         $em = $this->getDoctrine()->getManager();

@@ -17,6 +17,7 @@ class TemplateCustomizeType extends AbstractType
         $builder
 
             ->add('showSocialIcon')
+            ->add('mobileLogin')
             ->add('topBar')
             ->add('footerBlock')
             ->add('showCalendar')
@@ -325,7 +326,26 @@ class TemplateCustomizeType extends AbstractType
             ))
             ->add('metaDescription','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'placeholder'=>'Enter meta description')))
             ->add('metaKeyword','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>5,'placeholder'=>'Enter meta keywords')))
-
+            ->add('mobileHeaderBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('mobileMenuBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('mobileMenuBgColorHover','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('mobileMenuLiAColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('mobileMenuLiAHoverColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
         ;
     }
     

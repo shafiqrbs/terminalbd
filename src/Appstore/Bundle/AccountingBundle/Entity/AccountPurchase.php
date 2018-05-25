@@ -216,21 +216,21 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         /**
          * @var string
          *
-         * @ORM\Column(name="process", type="string", length=255, nullable = true)
+         * @ORM\Column(name="process", type="string", length=50, nullable = true)
          */
         private $process;
 
         /**
          * @var string
          *
-         * @ORM\Column(name="processHead", type="string", length=255, nullable = true)
+         * @ORM\Column(name="processHead", type="string", length=100, nullable = true)
          */
         private $processHead;
 
         /**
          * @var string
          *
-         * @ORM\Column(name="processType", type="string", length=255, nullable = true)
+         * @ORM\Column(name="processType", type="string", length=50, nullable = true)
          */
         private $processType;
 

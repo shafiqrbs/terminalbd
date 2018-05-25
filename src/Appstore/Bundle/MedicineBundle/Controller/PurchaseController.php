@@ -201,6 +201,12 @@ class PurchaseController extends Controller
             }
             $purchasePrice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->stockInstantPurchaseItemPrice($config->getVendorPercentage(),$entity->getSalesPrice());
             $entity->setPurchasePrice($purchasePrice);
+            if($entity->getUnit()){
+                $minQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineMinimumStock')->findOneBy(array('medicineConfig'=>$config,'unit'=> $entity->getUnit()));
+                if($minQnt){
+                    $entity->setMinQuantity($minQnt->getMinQuantity());
+                }
+            }
             $entity->setRemainingQuantity($entity->getPurchaseQuantity());
             $em->persist($entity);
             $em->flush();
@@ -402,8 +408,6 @@ class PurchaseController extends Controller
         exit;
     }
 
-
-
     /**
      * Deletes a Vendor entity.
      *
@@ -483,8 +487,8 @@ class PurchaseController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:HmsVendor')->searchAutoComplete($item,$inventory);
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->searchAutoComplete($item,$inventory);
         }
         return new JsonResponse($item);
     }
@@ -496,5 +500,49 @@ class PurchaseController extends Controller
             'text'=>$vendor
         ));
     }
+
+    public function reverseAction(MedicinePurchase $purchase)
+    {
+
+        /*
+         * Item Remove Total quantity
+         * Stock Details
+         * Purchase Item
+         * Purchase Vendor Item
+         * Purchase
+         * Account Purchase
+         * Account Journal
+         * Transaction
+         * Delete Journal & Account Purchase
+         *
+         * */
+
+        set_time_limit(0);
+        $em = $this->getDoctrine()->getManager();
+        if($purchase->getAsInvestment() == 1 ) {
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedMedicinePurchaseJournal($purchase);
+        }
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountMedicinePurchaseReverse($purchase);
+        $purchase->setRevised(true);
+        $purchase->setProcess('created');
+        $em->flush();
+        $template = $this->get('twig')->render('MedicineBundle:MedicinePurchase:purchaseReverse.html.twig', array(
+            'entity' => $purchase,
+            'config' => $purchase->getMedicineConfig(),
+        ));
+        $em->getRepository('MedicineBundle:MedicineReverse')->purchase($purchase, $template);
+        return $this->redirect($this->generateUrl('medicine_purchase_edit',array('id' => $purchase->getId())));
+    }
+
+    public function reverseShowAction($id)
+    {
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineReverse')->findOneBy(array('medicineConfig' => $config, 'medicinePurchase' => $id));
+        return $this->render('MedicineBundle:MedicineReverse:purchase.html.twig', array(
+            'entity' => $entity,
+        ));
+
+    }
+
 
 }
