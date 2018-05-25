@@ -309,6 +309,13 @@ class TemplateCustomize
      */
     private $menuPosition;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="subMenuWith", type="smallint", length=4, nullable=true)
+     */
+    private $subMenuWith;
+
 
     /**
      * @var float
@@ -2415,6 +2422,22 @@ class TemplateCustomize
     public function setMobileLogin($mobileLogin)
     {
         $this->mobileLogin = $mobileLogin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSubMenuWith()
+    {
+        return $this->subMenuWith;
+    }
+
+    /**
+     * @param int $subMenuWith
+     */
+    public function setSubMenuWith($subMenuWith)
+    {
+        $this->subMenuWith = $subMenuWith;
     }
 
 

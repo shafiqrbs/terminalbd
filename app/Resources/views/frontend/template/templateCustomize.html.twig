@@ -129,12 +129,14 @@
     #header-menu ul > li > ul > li:first-child{
         border-color: {{ globalOption.templateCustomize.menuBgColorHover }} !important;
     }
-
-    {% if globalOption.templateCustomize.subMenuBgColor is not empty %}
     #header-menu  ul ul li{
-        background-color: {{ globalOption.templateCustomize.subMenuBgColor }} !important;
+        {% if globalOption.templateCustomize.subMenuWith > 0 %}
+            min-width:{{ globalOption.templateCustomize.subMenuWith }}px !important;
+        {% endif %}
+        {% if globalOption.templateCustomize.subMenuBgColor is not empty %}
+            background-color: {{ globalOption.templateCustomize.subMenuBgColor }} !important;
+        {% endif %}
     }
-    {% endif %}
 
     {% if globalOption.templateCustomize.subMenuBgColorHover is not empty %}
     #header-menu ul ul li a:hover{

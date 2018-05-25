@@ -659,6 +659,18 @@
                            <div class="row-fluid">
                                <div class="span3">
                                    <div class="control-group">
+                                       <label class="control-label" for="firstName">Sub Menu Width</label>
+                                       <div class="controls">
+                                           <div class="input-icon left">
+                                               <i class="icon-magic"></i>
+                                               {{ form_widget(form.subMenuWidth) }}
+                                               {{ form_errors(form.subMenuWith) }}
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                                <div class="span3">
+                                   <div class="control-group">
                                        <label class="control-label" for="firstName">Menu Sub-bg Color</label>
                                        <div class="controls">
                                            <div class="input-icon left">
@@ -691,9 +703,9 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
-                               <div class="span3">
+                               <div class="span2">
                                    <div class="control-group">
-                                       <label class="control-label" for="firstName"></label>
+                                       <label class="control-label" for="firstName">&nbsp;</label>
                                        <div class="controls">
                                          Mobile Login  {{ form_widget(form.mobileLogin) }}
                                        </div>
