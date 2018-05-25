@@ -312,9 +312,9 @@ class TemplateCustomize
     /**
      * @var int
      *
-     * @ORM\Column(name="subMenuWith", type="smallint", length=4, nullable=true)
+     * @ORM\Column(name="subMenuWidth", type="smallint", length=4, nullable=true)
      */
-    private $subMenuWith;
+    private $subMenuWidth;
 
 
     /**
@@ -2427,17 +2427,17 @@ class TemplateCustomize
     /**
      * @return int
      */
-    public function getSubMenuWith()
+    public function getSubMenuWidth()
     {
-        return $this->subMenuWith;
+        return $this->subMenuWidth;
     }
 
     /**
-     * @param int $subMenuWith
+     * @param int $subMenuWidth
      */
-    public function setSubMenuWith($subMenuWith)
+    public function setSubMenuWidth($subMenuWidth)
     {
-        $this->subMenuWith = $subMenuWith;
+        $this->subMenuWidth = $subMenuWidth;
     }
 
 
