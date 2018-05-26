@@ -182,12 +182,9 @@
 <script>  subdomain = "{{ globalOption.subDomain }}"; </script>
 {% block javascriptBlock %}{% endblock %}
 <script type="text/javascript">
-
     $(document).ready(function () {
         {% block documentready %}{% endblock %}
     });
-    var images = ['image-1.jpg', 'image-2.jpg', 'image-3.jpg', 'image-4.jpg','image-5.jpg', 'image-6.jpg', 'image-7.jpg', 'image-8.jpg', 'image-9.jpg', 'image-10.jpg'];
-    document.getElementsByClassName('header-grid')[0].style.backgroundImage = 'url(/assets/template/mobile/images/' + images[Math.round(Math.random() * images.length)] + ')';
 </script>
 
 <style>

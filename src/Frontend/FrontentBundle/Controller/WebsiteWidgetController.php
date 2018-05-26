@@ -206,7 +206,7 @@ class WebsiteWidgetController extends Controller
     public function featureMobileWidgetAction(GlobalOption $globalOption , Menu $menu , $position ='' )
     {
 
-        $widgets                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'widgetFor'=>'ecommerce','menu' => $menu,'position' => $position ),array('sorting'=>'ASC'));
+        $widgets                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu,'position' => $position ),array('sorting'=>'ASC'));
 
         return $this->render('@Frontend/Template/Mobile/WebsiteWidget/widget.html.twig', array(
             'widgets'                  => $widgets,
