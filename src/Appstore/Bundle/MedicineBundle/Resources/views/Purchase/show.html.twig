@@ -90,6 +90,7 @@
                                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
                                             <th class="span3">Name</th>
                                             <th class="span1">Expiration Date</th>
+                                            <th class="span1">PP</th>
                                             <th class="span1">MRP</th>
                                             <th class="span1">Qnt</th>
                                             <th class="span1">Remin. Qnt</th>
@@ -103,6 +104,7 @@
                                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                                     <td class="span1">{% if item.expirationStartDate is not empty and item.expirationEndDate is not empty %}{{ item.expirationStartDate|date('M y') }} To {{ item.expirationEndDate|date('M y') }}{% endif %}</td>
+                                                    <td class="span1">{{ item.purchasePrice }}</td>
                                                     <td class="span1">{{ item.salesPrice }}</td>
                                                     <td class="span1">{{ item.quantity }}</td>
                                                     <td class="span1">{{ item.remainingQuantity }}</td>
@@ -113,23 +115,23 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colspan="7" class="span12" style="border: 1px double #000"></td>
+                                            <td colspan="8" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td colspan="7" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                             <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                            <td colspan="7" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                             <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong> <span class="btn red mini">{{ entity.discountCalculation }}{% if entity.discountType != 'flat' %}%{% endif %}</span></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Payment TK.</strong> =</span></td>
+                                            <td colspan="7" class="span9"><span class="pull-right"><strong>Payment TK.</strong> =</span></td>
                                             <td class="span2"><strong id="subTotal">{{ entity.payment|number_format }}</strong></td>
                                         </tr>
                                         {% if entity.due > 0 %}
                                         <tr>
-                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                            <td colspan="7" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
                                             <td class="span2"><strong id="subTotal">{{ entity.due|number_format }}</strong></td>
                                          </tr>
                                         {% endif %}

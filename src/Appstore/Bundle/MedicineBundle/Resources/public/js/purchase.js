@@ -118,8 +118,9 @@ var formStock = $("#stockItemForm").validate({
         "stockItemForm[name]": {required: true},
         "stockItemForm[rackNo]": {required: true},
         "stockItemForm[unit]": {required: true},
+        "stockItemForm[purchasePrice]": {required: true},
         "stockItemForm[salesPrice]": {required: true},
-        "stockItemForm[purchaseQuantity]": {required: false}
+        "stockItemForm[purchaseQuantity]": {required: true}
     },
 
     messages: {
@@ -127,6 +128,7 @@ var formStock = $("#stockItemForm").validate({
         "stockItemForm[name]":"Enter medicine name",
         "stockItemForm[rackNo]":"Enter medicine rack no",
         "stockItemForm[unit]":"Enter medicine unit",
+        "stockItemForm[purchasePrice]":"Enter purchase price",
         "stockItemForm[salesPrice]":"Enter sales price",
         "stockItemForm[purchaseQuantity]":"Enter purchase quantity",
 
@@ -135,6 +137,7 @@ var formStock = $("#stockItemForm").validate({
         "stockItemForm[name]": {placement:'top',html:true},
         "stockItemForm[rackNo]": {placement:'top',html:true},
         "stockItemForm[unit]": {placement:'top',html:true},
+        "stockItemForm[purchasePrice]": {placement:'top',html:true},
         "stockItemForm[salesPrice]": {placement:'top',html:true},
         "stockItemForm[purchaseQuantity]": {placement:'top',html:true},
     },
@@ -175,6 +178,7 @@ var form = $("#purchaseItemForm").validate({
 
         "purchaseItem[stockName]": {required: true},
         "purchaseItem[purchasePrice]": {required: true},
+        "purchaseItem[salesPrice]": {required: false},
         "purchaseItem[quantity]": {required: true},
         "purchaseItem[expirationStartDate]": {required: false},
         "purchaseItem[expirationEndDate]": {required: false},

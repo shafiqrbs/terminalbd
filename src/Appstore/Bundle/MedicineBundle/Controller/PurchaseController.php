@@ -199,8 +199,6 @@ class PurchaseController extends Controller
                 $entity->setBrandName($medicine->getMedicineCompany()->getName());
                 $entity->setMode('medicine');
             }
-            $purchasePrice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->stockInstantPurchaseItemPrice($config->getVendorPercentage(),$entity->getSalesPrice());
-            $entity->setPurchasePrice($purchasePrice);
             if($entity->getUnit()){
                 $minQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineMinimumStock')->findOneBy(array('medicineConfig'=>$config,'unit'=> $entity->getUnit()));
                 if($minQnt){
@@ -264,7 +262,6 @@ class PurchaseController extends Controller
         $entity->setMedicinePurchase($invoice);
         $stockItem = ($data['purchaseItem']['stockName']);
         $entity->setMedicineStock($this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem));
-        $entity->setPurchasePrice($entity->getSalesPrice());
         $entity->setPurchaseSubTotal($entity->getPurchasePrice() * $entity->getQuantity());
         $entity->setRemainingQuantity($entity->getQuantity());
         if(!empty($expirationStartDate)){

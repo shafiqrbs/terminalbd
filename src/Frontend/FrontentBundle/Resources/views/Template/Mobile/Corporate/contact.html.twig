@@ -24,7 +24,7 @@
                             <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
                             <div class="infoWindow">
                                     <span>{% if page.address1 is not empty %}
-                                        <i class="fa fa-home"></i>&nbsp;{{ page.address1 }}<br>
+                                        <i class="fa fa-home"></i>&nbsp;{{ page.address1|raw }}<br>
                                             {% if page.thana is defined and page.thana %}
                                                 {{ page.thana.name }},
                                             {% endif %}
@@ -59,7 +59,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <strong><i class="fa fa-home"></i>&nbsp;Office</strong><br>
-                        {{ page.address1 }}
+                        {{ page.address1|raw }}
                         {% if page.location is defined and page.location %}
                             ,{{ page.location.name }}
                         {% endif %}

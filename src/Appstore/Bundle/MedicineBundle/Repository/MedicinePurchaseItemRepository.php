@@ -177,9 +177,10 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
-    public function updateRemovePurchaseItemQuantity(MedicinePurchaseItem $item,$fieldName=''){
-        $em = $this->_em;
+    public function updateRemovePurchaseItemQuantity(MedicinePurchaseItem $item,$fieldName='')
+    {
 
+        $em = $this->_em;
         if($fieldName == 'sales'){
             $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($item);
             $item->setSalesQuantity($quantity);
@@ -196,6 +197,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $em->persist($item);
         $em->flush();
         $this->remainingQnt($item);
+
     }
 
     public function remainingQnt(MedicinePurchaseItem $item)
@@ -215,7 +217,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
             $em = $this->_em;
             $percentage = $purchase->getDiscountCalculation();
-            $purchasePrice = $this->stockInstantPurchaseItemPrice($percentage,$item->getSalesPrice());
+            $purchasePrice = $this->stockInstantPurchaseItemPrice($percentage,$item->getPurchasePrice());
             $item->setPurchasePrice($purchasePrice);
             $em->persist($item);
             $em->flush();
@@ -238,10 +240,10 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $entity->setExpirationEndDate($expirationEndDate);
         }
         $entity->setSalesPrice($item->getSalesPrice());
-        $entity->setPurchasePrice($item->getSalesPrice());
+        $entity->setPurchasePrice($item->getPurchasePrice());
         $entity->setQuantity($item->getPurchaseQuantity());
         $entity->setRemainingQuantity($item->getPurchaseQuantity());
-        $entity->setPurchaseSubTotal($item->getPurchaseQuantity() * $item->getSalesPrice());
+        $entity->setPurchaseSubTotal($item->getPurchaseQuantity() * $item->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
     }
@@ -358,7 +360,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $data .= '<td class="span1" >' . $i.'. '.$entity->getBarcode().'</td>';
             $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() . '</td>';
             $data .= '<th class="span1" >' .$expiration. '</th>';
-            $data .= '<td class="span1" ><a class="editable editable-click" data-name="SalesPrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change purchase price">'.$entity->getSalesPrice().'</a></td>';
+            $data .= '<td class="span1" ><a class="editable editable-click" data-name="PurchasePrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change purchase price">'.$entity->getPurchasePrice().'</a></td>';
+            $data .= '<td class="span1" ><a class="editable editable-click" data-name="SalesPrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change MRP price">'.$entity->getSalesPrice().'</a></td>';
             $data .= '<td class="span1" ><a class="editable editable-click" data-name="Quantity" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change quantity">'.$entity->getQuantity().'</a></td>';
             $data .= '<td class="span1" >' . $entity->getSalesQuantity(). '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
