@@ -133,7 +133,7 @@
                                                 <th class="numeric" >S/N</th>
                                                 <th class="numeric span3">Barcode</th>
                                                 {% if entity.inventoryConfig.isAttribute == 1 %}
-                                                <th  class="numeric span2">Serial no</th>
+                                                <th  class="numeric span3">Serial no</th>
                                                 {% endif %}
                                                 <th  class="numeric span1">Quantity</th>
                                                 <th class="numeric span2">Price</th>
@@ -593,7 +593,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('#barcode').focus();
+    $('input[name=barcode]').focus();
     InventorySales({{ entity.id ? entity.id : 0 }});
     EditableInit();
     if($('#sales_discount').val() == 0 ){

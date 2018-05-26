@@ -99,7 +99,6 @@ $('form#salesForm').on('keypress', '.inputs', function (e) {
 var InventorySales = function(sales) {
 
     $('#item').select2('open');
-    $('#item').focus();
 
     $(".addCustomer").click(function(){
         $( ".customer" ).slideToggle( "slow" );
