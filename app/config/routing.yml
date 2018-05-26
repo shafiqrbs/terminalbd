@@ -1,3 +1,7 @@
+site_domain_control:
+    resource: "dynamic/sites.yml"
+    type:     rest
+
 hotel:
     resource: "@HotelBundle/Resources/config/routing.yml"
     prefix:   /
@@ -114,10 +118,6 @@ fos_comment_api:
     resource: "@FOSCommentBundle/Resources/config/routing.yml"
     prefix: /api
     defaults: { _format: html }
-
-site_domain_control:
-    resource: "dynamic/sites.yml"
-    type:     rest
 
 domain_control:
     resource: "@XiideaDomainBundle/Resources/config/routing.yml"

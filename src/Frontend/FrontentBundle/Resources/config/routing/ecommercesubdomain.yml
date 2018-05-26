@@ -97,10 +97,6 @@ webservice_product_inline_item_load:
     path:     /inline-product-load/{product}
     defaults: { _controller: FrontendBundle:WebServiceProduct:inlineSubProduct }
 
-webservice_module_page:
-    path:     /{module}/{slug}
-    defaults: { _controller: FrontendBundle:WebServiceModule:modulePage }
-
 webservice_module_category:
     path:     /category/{module}/{slug}
     defaults: { _controller: FrontendBundle:WebServiceModule:moduleCategory }
@@ -179,7 +175,9 @@ webservice_search:
     path:     /search
     defaults: { _controller: FrontendBundle:WebServiceModule:search }
 
-
+webservice_module_page:
+    path:     /{module}/{slug}
+    defaults: { _controller: FrontendBundle:WebServiceModule:modulePage }
 
 webservice_module:
     path:     /{module}

@@ -26,7 +26,7 @@ class TemplateWidgetController extends Controller
 
     public function mobileMenuAction(GlobalOption $globalOption)
     {
-        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=> NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
+        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption' => $globalOption,'parent'=> NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
         return $this->render('@Frontend/Template/Mobile/Widget/webMenu.html.twig', array(
             'menuTree'           => $menuTree,
