@@ -176,7 +176,7 @@ class AccountJournalRepository extends EntityRepository
 
     public function   insertAccountPurchaseJournal(Purchase $purchase)
     {
-        $journalSource = "purchase-{$purchase->getId()}";
+        $journalSource = "inventory-{$purchase->getId()}";
         $entity = new AccountJournal();
         $accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(49);
         $accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
@@ -201,6 +201,7 @@ class AccountJournalRepository extends EntityRepository
         }
         $entity->setToUser($purchase->getApprovedBy());
         $entity->setJournalSource($journalSource);
+        $entity->setRemark("Inventory purchase as investment,Ref GRN no.{$purchase->getGrn()}");
         $entity->setProcess('approved');
         $this->_em->persist($entity);
         $this->_em->flush();
@@ -210,7 +211,7 @@ class AccountJournalRepository extends EntityRepository
     public function removeApprovedPurchaseJournal(Purchase $purchase)
     {
         $option =  $purchase->getInventoryConfig()->getGlobalOption()->getId();
-        $journalSource = "purchase-{$purchase->getId()}";
+        $journalSource = "inventory-{$purchase->getId()}";
         $journal = $this->_em->getRepository('AccountingBundle:AccountJournal')->findOneBy(array('approvedBy' => $purchase->getApprovedBy(),'globalOption'=> $option ,'amount'=> $purchase->getPaymentAmount(),'journalSource' => $journalSource ));
         if(!empty($journal)) {
             $accountCash = $this->_em->getRepository('AccountingBundle:AccountCash')->findOneBy(array('processHead' => 'Journal', 'globalOption' => $option, 'accountRefNo' => $journal->getAccountRefNo()));
@@ -229,15 +230,13 @@ class AccountJournalRepository extends EntityRepository
             $this->_em->remove($journal);
             $this->_em->flush();
         }
-
-
     }
 
 
     public function   insertAccountMedicinePurchaseJournal(MedicinePurchase $purchase)
     {
 
-        $journalSource = "medicinePurchase-{$purchase->getId()}";
+        $journalSource = "medicine-{$purchase->getId()}";
         $entity = new AccountJournal();
         $accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(49);
         $accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
@@ -262,6 +261,7 @@ class AccountJournalRepository extends EntityRepository
         }
         $entity->setToUser($purchase->getApprovedBy());
         $entity->setJournalSource($journalSource);
+        $entity->setRemark("Medicine purchase as investment,Ref GRN no.{$purchase->getGrn()}");
         $entity->setProcess('approved');
         $this->_em->persist($entity);
         $this->_em->flush();
@@ -271,8 +271,8 @@ class AccountJournalRepository extends EntityRepository
     public function removeApprovedMedicinePurchaseJournal(MedicinePurchase $purchase)
     {
         $option =  $purchase->getMedicineConfig()->getGlobalOption()->getId();
-        $journalSource = "medicinePurchase-{$purchase->getId()}";
-        $journal = $this->_em->getRepository('AccountingBundle:AccountJournal')->findOneBy(array('approvedBy' => $purchase->getApprovedBy(),'globalOption'=> $option ,'amount'=> $purchase->getPaymentAmount(),'journalSource' => $journalSource ));
+        $journalSource = "medicine-{$purchase->getId()}";
+        $journal = $this->_em->getRepository('AccountingBundle:AccountJournal')->findOneBy(array('approvedBy' => $purchase->getApprovedBy(),'globalOption'=> $option,'journalSource' => $journalSource ));
         if(!empty($journal)) {
             $accountCash = $this->_em->getRepository('AccountingBundle:AccountCash')->findOneBy(array('processHead' => 'Journal', 'globalOption' => $option, 'accountRefNo' => $journal->getAccountRefNo()));
             if ($accountCash) {

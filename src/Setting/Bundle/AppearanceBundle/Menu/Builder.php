@@ -1060,9 +1060,11 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
             if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
 
-                $menu['Medicine']['Manage Stock']->addChild('Stock Medicine', array('route' => 'medicine_stock'))
+                $menu['Medicine']['Manage Stock']->addChild('Stock Item', array('route' => 'medicine_stock'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Manage Stock']->addChild('Medicine Expiration', array('route' => 'medicine_purchase_item'))
+                $menu['Medicine']['Manage Stock']->addChild('Stock Item Details', array('route' => 'medicine_purchase_item'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Manage Stock']->addChild('Medicine Expiration', array('route' => 'medicine_expiry_item'))
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Manage Stock']->addChild('Medicine Short List', array('route' => 'medicine_stock_short_item'))
                     ->setAttribute('icon', 'icon-th-list');

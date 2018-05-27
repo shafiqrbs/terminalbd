@@ -72,6 +72,26 @@ class PurchaseController extends Controller
         ));
     }
     /**
+     * Lists all Vendor entities.
+     *
+     */
+    public function medicineExpiryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->expiryMedicineSearch($config,$data);
+        $pagination = $this->paginate($entities);
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+        return $this->render('MedicineBundle:Purchase:medicineExpiry.html.twig', array(
+            'entities' => $pagination,
+            'racks' => $racks,
+            'modeFor' => $modeFor,
+            'searchForm' => $data,
+        ));
+    }
+    /**
      * Creates a new Vendor entity.
      *
      */
@@ -511,8 +531,7 @@ class PurchaseController extends Controller
          * Account Journal
          * Transaction
          * Delete Journal & Account Purchase
-         *
-         * */
+         */
 
         set_time_limit(0);
         $em = $this->getDoctrine()->getManager();
@@ -521,7 +540,7 @@ class PurchaseController extends Controller
         }
         $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountMedicinePurchaseReverse($purchase);
         $purchase->setRevised(true);
-        $purchase->setProcess('created');
+        $purchase->setProcess('Created');
         $em->flush();
         $template = $this->get('twig')->render('MedicineBundle:MedicinePurchase:purchaseReverse.html.twig', array(
             'entity' => $purchase,

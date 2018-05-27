@@ -80,11 +80,12 @@
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
+                                    <th class="numeric" >Mode</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% set process = ['Created','In-progress'] %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
@@ -93,8 +94,9 @@
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
+                                        <td class="numeric" >{{ entity.mode|capitalize }}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'created' or entity.process == 'pending' %}
+                                            {% if entity.process in process %}
                                             <a href="{{ path('medicine_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
@@ -104,7 +106,7 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination" >
+                            <div class="pagination pull-center" >
                                 {{ knp_pagination_render(entities) }}
                             </div>
                         </div>

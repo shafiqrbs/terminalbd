@@ -3,8 +3,12 @@ medicine_purchase:
     defaults: { _controller: "MedicineBundle:Purchase:index" }
 
 medicine_purchase_item:
-    path:     /mediicne-expiration-item
+    path:     /stock-item-details
     defaults: { _controller: "MedicineBundle:Purchase:purchaseItem" }
+
+medicine_expiry_item:
+    path:     /medicine-expiration-item
+    defaults: { _controller: "MedicineBundle:Purchase:medicineExpiry" }
 
 medicine_purchase_show:
     path:     /{id}/show
@@ -79,3 +83,7 @@ medicine_purchaseitem_inline_update:
     methods:  POST
     options:
             expose: true
+
+medicine_purchase_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "MedicineBundle:Purchase:reverse" }

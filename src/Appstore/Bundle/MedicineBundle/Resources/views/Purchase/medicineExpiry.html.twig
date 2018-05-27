@@ -4,14 +4,14 @@
         <!-- BEGIN PAGE HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="page-title">Stock Item Details</h3>
+                <h3 class="page-title">Medicine Expiration</h3>
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Stock Item Details</a></li>
+                    <li><a href="#">Medicine Expiration</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -25,7 +25,7 @@
             <div class="span12">
                 <div class="portlet box green">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Stock Item Details Item</div>
+                        <div class="caption"><i class="icon-reorder"></i>Medicine Expiration Item</div>
                     </div>
                     <div class="portlet-body flip-scroll">
                         {% include('flash-message.html.twig')  %}
@@ -100,7 +100,7 @@
                             </thead>
                             <tbody>
                             {% for entity in entities %}
-                                <tr {% if entity.expirationEndDate is not empty and "now"|date('Y-m-d') >= entity.expirationEndDate|date('Y-m-d') %} class="red-alert" {% endif %} >
+                                <tr {% if "now"|date('Y-m-d') >= entity.expirationEndDate|date('Y-m-d') %} class="red-alert" {% endif %} >
                                     <th class="numeric" >{% if entity.expirationStartDate is not empty and entity.expirationEndDate is not empty %}{{ entity.expirationStartDate|date('d-m-y') }} To {{ entity.expirationEndDate|date('d-m-y') }}{% endif %}</th>
                                     <td class="numeric" >{{ entity.barcode }}</td>
                                     <td class="numeric" >{{ entity.medicineStock.name }}</td>

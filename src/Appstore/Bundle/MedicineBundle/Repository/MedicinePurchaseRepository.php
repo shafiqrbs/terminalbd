@@ -44,11 +44,14 @@ class MedicinePurchaseRepository extends EntityRepository
         }
     }
 
-    public function findWithSearch($config,$data = array(),$instant = ''){
+    public function findWithSearch($config,$data = array(),$instant = '')
+    {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant) ;
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
+        if (!empty($instant)){
+            $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant);
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();

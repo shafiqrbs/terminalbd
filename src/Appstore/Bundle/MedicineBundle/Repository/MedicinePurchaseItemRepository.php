@@ -56,14 +56,14 @@ class MedicinePurchaseItemRepository extends EntityRepository
         if (!empty($startDate) ) {
             $datetime = new \DateTime($data['startDate']);
             $start = $datetime->format('Y-m-d 00:00:00');
-            $qb->andWhere("mpi.expirationStartDate >= :startDate");
+            $qb->andWhere("mpi.expirationEndDate >= :startDate");
             $qb->setParameter('startDate', $start);
         }
 
         if (!empty($endDate)) {
             $datetime = new \DateTime($data['endDate']);
             $end = $datetime->format('Y-m-d 23:59:59');
-            $qb->andWhere("mpi.expirationEndDate >= :endDate");
+            $qb->andWhere("mpi.expirationEndDate <= :endDate");
             $qb->setParameter('endDate', $end);
         }
     }
@@ -112,7 +112,24 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->join('mpi.medicinePurchase','e');
         $qb->join('mpi.medicineStock','s');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
+        $qb->andWhere('mpi.remainingQuantity > 0');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('s.name','ASC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+
+    public function expiryMedicineSearch($config,$data = array(),$instant = ''){
+
+        $qb = $this->createQueryBuilder('mpi');
+        $qb->join('mpi.medicinePurchase','e');
+        $qb->join('mpi.medicineStock','s');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
         $qb->andWhere('mpi.expirationStartDate IS NOT NULL');
+        $qb->andWhere('mpi.remainingQuantity > 0');
         if($instant == 1 ) {
             $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant);
         }

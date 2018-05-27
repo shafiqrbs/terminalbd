@@ -41,7 +41,7 @@ class InstantPurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->findWithInstantItemSearch($config,$data,1);
         $pagination = $this->paginate($entities);
-        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>1));
         return $this->render('MedicineBundle:InstantPurchase:index.html.twig', array(
             'entities' => $pagination,
             'racks' => $racks,
