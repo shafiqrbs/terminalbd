@@ -397,9 +397,9 @@ class AccountPurchaseRepository extends EntityRepository
     public function accountMedicinePurchaseReverse(MedicinePurchase $entity)
     {
         $em = $this->_em;
-        if(!empty($entity->getAccountPurchase())){
+        if(!empty($entity->getAccountPurchases())){
             /* @var AccountPurchase $purchase */
-            foreach ($entity->getAccountPurchase() as $purchase ){
+            foreach ($entity->getAccountPurchases() as $purchase ){
                 $globalOption = $purchase->getGlobalOption()->getId();
                 $accountRefNo = $purchase->getAccountRefNo();
                 $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");

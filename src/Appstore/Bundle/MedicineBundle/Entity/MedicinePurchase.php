@@ -513,13 +513,6 @@ class MedicinePurchase
         $this->accountMobileBank = $accountMobileBank;
     }
 
-    /**
-     * @return AccountPurchase
-     */
-    public function getAccountPurchase()
-    {
-        return $this->accountPurchase;
-    }
 
     /**
      * @return float

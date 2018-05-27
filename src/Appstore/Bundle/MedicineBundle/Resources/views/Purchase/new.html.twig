@@ -171,7 +171,7 @@
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                     <td class="span3">{{ item.medicineStock.name }}</td>
-                                    <th class="span2">{% if item.expirationStartDate is not empty and item.expirationEndDate is not empty %}{{ item.expirationStartDate|date('M y') }} To {{ item.expirationEndDate|date('M y') }}{% endif %}</th>
+                                    <th class="span2"></th>
                                     <td class="span1" ><a class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('medicine_purchaseitem_inline_update',{'id':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Change purchase price"> {{ item.purchasePrice }}</a></td>
                                     <td class="span1" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('medicine_purchaseitem_inline_update',{'id':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Change MRP"> {{ item.salesPrice }}</a></td>
                                     <td class="span1"><a class="editable" data-name="Quantity" href="#"  data-url="{{ path('medicine_purchaseitem_inline_update',{'id':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Change purchase quantity"> {{ item.quantity }}</a></td>

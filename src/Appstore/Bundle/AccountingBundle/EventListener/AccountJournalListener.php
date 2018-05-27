@@ -22,7 +22,6 @@ class AccountJournalListener
             $datetime = new \DateTime("now");
 
             $lastCode = $this->getLastCode($args, $datetime, $entity);
-
             $entity->setCode($lastCode+1);
             $entity->setAccountRefNo(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
         }
@@ -36,8 +35,8 @@ class AccountJournalListener
      */
     public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
     {
-        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
-        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+        $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
+        $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
 
 
         $entityManager = $args->getEntityManager();

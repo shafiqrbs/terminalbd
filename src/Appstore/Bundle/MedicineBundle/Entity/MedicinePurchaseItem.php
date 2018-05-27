@@ -123,9 +123,16 @@ class MedicinePurchaseItem
     /**
      * @var float
      *
-     * @ORM\Column(name="purchasePrice", type="float")
+     * @ORM\Column(name="purchasePrice", type="float", nullable = true)
      */
     private $purchasePrice;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="actualPurchasePrice", type="float", nullable = true)
+     */
+    private $actualPurchasePrice;
 
 
     /**
@@ -539,6 +546,22 @@ class MedicinePurchaseItem
     public function getMedicineSalesReturns()
     {
         return $this->medicineSalesReturns;
+    }
+
+    /**
+     * @return float
+     */
+    public function getActualPurchasePrice()
+    {
+        return $this->actualPurchasePrice;
+    }
+
+    /**
+     * @param float $actualPurchasePrice
+     */
+    public function setActualPurchasePrice($actualPurchasePrice)
+    {
+        $this->actualPurchasePrice = $actualPurchasePrice;
     }
 
 }

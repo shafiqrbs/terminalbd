@@ -273,6 +273,7 @@ class AccountJournalRepository extends EntityRepository
         $option =  $purchase->getMedicineConfig()->getGlobalOption()->getId();
         $journalSource = "medicine-{$purchase->getId()}";
         $journal = $this->_em->getRepository('AccountingBundle:AccountJournal')->findOneBy(array('approvedBy' => $purchase->getApprovedBy(),'globalOption'=> $option,'journalSource' => $journalSource ));
+
         if(!empty($journal)) {
             $accountCash = $this->_em->getRepository('AccountingBundle:AccountCash')->findOneBy(array('processHead' => 'Journal', 'globalOption' => $option, 'accountRefNo' => $journal->getAccountRefNo()));
             if ($accountCash) {

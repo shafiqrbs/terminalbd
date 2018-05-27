@@ -42,7 +42,7 @@ class AccountJournal
     private  $transactionMethod;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountJournal" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountJournal" , cascade={"detach","merge"} )
      **/
     private  $accountCash;
 

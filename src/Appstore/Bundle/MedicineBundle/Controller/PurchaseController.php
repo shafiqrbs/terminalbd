@@ -284,6 +284,7 @@ class PurchaseController extends Controller
         $entity->setMedicineStock($this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem));
         $entity->setPurchaseSubTotal($entity->getPurchasePrice() * $entity->getQuantity());
         $entity->setRemainingQuantity($entity->getQuantity());
+        $entity->setActualPurchasePrice($entity->getPurchasePrice());
         if(!empty($expirationStartDate)){
             $expirationStartDate = (new \DateTime($expirationStartDate));
             $entity->setExpirationStartDate($expirationStartDate);
@@ -362,10 +363,6 @@ class PurchaseController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
-            $data = $request->request->all();
-            $deliveryDateTime = $data['medicinepurchase']['receiveDate'];
-            $receiveDate = (new \DateTime($deliveryDateTime));
-            $entity->setReceiveDate($receiveDate);
             $entity->setProcess('Complete');
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();
@@ -485,6 +482,7 @@ class PurchaseController extends Controller
 
         if($data['name'] == 'PurchasePrice' and 0 < (float)$data['value']){
             $entity->setPurchasePrice((float)$data['value']);
+            $entity->setActualPurchasePrice((float)$data['value']);
             $entity->setPurchaseSubTotal((float)$data['value'] * $entity->getQuantity());
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($entity->getMedicinePurchase());
@@ -542,7 +540,8 @@ class PurchaseController extends Controller
         $purchase->setRevised(true);
         $purchase->setProcess('Created');
         $em->flush();
-        $template = $this->get('twig')->render('MedicineBundle:MedicinePurchase:purchaseReverse.html.twig', array(
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
+        $template = $this->get('twig')->render('MedicineBundle:Purchase:purchaseReverse.html.twig', array(
             'entity' => $purchase,
             'config' => $purchase->getMedicineConfig(),
         ));

@@ -110,8 +110,6 @@ $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
     }
 });
 
-
-
 var formStock = $("#stockItemForm").validate({
     rules: {
 
@@ -314,5 +312,16 @@ $('form#purchaseForm').on('keypress', '.inputs', function (e) {
         }
         return false;
     }
+});
+
+$(document).on("click", ".confirmSubmit", function() {
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('form#purchaseForm').submit();
+        }
+    });
+
 });
 
