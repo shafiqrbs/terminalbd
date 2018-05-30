@@ -40,27 +40,49 @@
                         </div>
                     </div>
                     <div class="portlet-body">
+                        <form class="search-form" action="" method="get" name="itemSearch">
+                            <div class="row-fluid">
+                                {% set modes = ['Receivable','Payable'] %}
+                                <div class="span3">
+                                    <select name="outstanding" id="outstanding" class="leftMargin span12 m-wrap">
+                                        <option value="" >--Outstanding Type--</option>
+                                        {% for mode in modes %}
+                                            <option {% if searchForm.outstanding is defined and searchForm.outstanding == mode %} selected="selected" {% endif %} value="{{ mode }}" >{{ mode }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="span6">
+                                    <input type="text" id="mobile" name="mobile"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Search customer mobile no">
+                                </div>
+                                <div class="span3">
+                                    <div class="controls">
+                                        <div class="input-append span11">
+                                            <input type="text" id="amount" name="amount"  class="leftMargin span10  m-wrap" value="{% if searchForm.amount is defined %}{{ searchForm.amount }}{% endif %}"  autocomplete="off" placeholder="Enter till amount">
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="portlet-body flip-scroll">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Customer Name</th>
                                     <th class="numeric" >Mobile</th>
-                                    <th class="numeric" >Total Amount</th>
-                                    <th class="numeric" >Received</th>
+                                    <th class="numeric" >Address</th>
                                     <th class="numeric" >Outstanding</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {% for entity in entities %}
-                                    {% set balanch = entity.totalAmount - entity.receiveAmount %}
                                     <tr>
                                         <td class="numeric" >{{ entity.customerName }}</td>
-                                        <td class="numeric" >{{ entity.mobileNo }}</td>
-                                        <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
-                                        <td class="numeric" >{{ entity.receiveAmount|number_format }}</td>
-                                        <th class="numeric" >{% if balanch > 0 %}{{ balanch |number_format }} {% else %}({{ balanch|abs|number_format }}){% endif %}</th>
+                                        <td class="numeric" >{{ entity.customerMobile }}</td>
+                                        <td class="numeric" >{{ entity.customerAddress|raw }}</td>
+                                        <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -81,17 +103,9 @@
         }
     </style>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@AccountingBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/editable.js'
     '@AccountingBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -99,7 +113,6 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
     AccountingApproveProcess();
 {% endblock %}
 

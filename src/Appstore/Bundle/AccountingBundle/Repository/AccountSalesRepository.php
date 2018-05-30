@@ -77,6 +77,7 @@ class AccountSalesRepository extends EntityRepository
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
+            $customer =    isset($data['customer'])? $data['customer'] :'';
             $invoice =    isset($data['invoice'])? $data['invoice'] :'';
             $medicineInvoice =    isset($data['medicineInvoice'])? $data['medicineInvoice'] :'';
             $transaction =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
@@ -103,6 +104,11 @@ class AccountSalesRepository extends EntityRepository
                 $qb->join('e.customer','c');
                 $qb->andWhere("c.mobile = :mobile");
                 $qb->setParameter('mobile', $mobile);
+            }
+            if (!empty($customer)) {
+                $qb->join('e.customer','cn');
+                $qb->andWhere("cn.name = :name");
+                $qb->setParameter('name', $customer);
             }
             if (!empty($invoice)) {
                 $qb->join('e.sales','s');
@@ -165,20 +171,38 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
-    public function customerOutstanding($globalOption)
+    public function customerOutstanding($globalOption, $data = array())
     {
+        $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
+        $amount =   isset($data['amount'])  ? $data['amount'] : '';
+        $mobile =   isset($data['mobile'])  ? $data['mobile'] : '';
 
-        $qb = $this->createQueryBuilder('e');
-        $qb->join('e.customer','customer');
-        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount');
-        $qb->addSelect('customer.name as customerName');
-        $qb->addSelect('customer.mobile as mobileNo');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        $qb->andWhere("e.process = :process");
-        $qb->setParameter('process', 'approved');
-        $qb->groupBy('customer.name,customer.mobile');
-        $result = $qb->getQuery()->getArrayResult();
+        $outstanding = '';
+        $customer = '';
+        if($mobile){
+            $customer =  "AND subCustomer.mobile LIKE '%{$mobile}%'";
+        }
+        if($mode == 'Receivable' and $amount !="" ){
+           $outstanding =  "AND sales.balance >= {$amount}";
+        }
+        if($mode == 'Payable' and $amount !="") {
+           $outstanding =  "AND sales.balance <= -{$amount}";
+        }
+        $sql = "SELECT customer.`id` as customerId ,customer.`name` as customerName , customer.mobile as customerMobile, customer.address as customerAddress, sales.balance as customerBalance
+                FROM account_sales as sales
+                JOIN Customer as customer ON sales.customer_id = customer.id
+                WHERE sales.id IN (
+                    SELECT MAX(sub.id)
+                    FROM account_sales AS sub
+                    JOIN Customer as subCustomer ON sub.customer_id = subCustomer.id
+                   WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$customer}
+                   GROUP BY sub.customer_id
+                ) {$outstanding}
+                ORDER BY sales.id DESC";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->bindValue('globalOption', $globalOption->getId());
+        $qb->execute();
+        $result =  $qb->fetchAll();
         return $result;
 
     }
@@ -275,7 +299,6 @@ class AccountSalesRepository extends EntityRepository
         $this->handleSearchBetween($qb,$data);
         $result  = $qb->getQuery()->getOneOrNullResult();
         $salesAmount = $result['salesAmount'];
-
 
         $purchase = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->reportSalesAccessories($globalOption, $data);
         $salesVat               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);

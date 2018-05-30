@@ -41,29 +41,56 @@
                     </div>
 
                     <div class="portlet-body">
+                        <form class="search-form" action="" method="get" name="itemSearch">
+                            <div class="row-fluid">
+                                {% set modes = ['Receivable','Payable'] %}
+                                <div class="span3">
+                                    <select name="outstanding" id="outstanding" class="leftMargin span12 m-wrap">
+                                        <option value="" >--Outstanding Type--</option>
+                                        {% for mode in modes %}
+                                            <option {% if searchForm.outstanding is defined and searchForm.outstanding == mode %} selected="selected" {% endif %} value="{{ mode }}" >{{ mode }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="span6">
+                                    <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2MedicineVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
+                                </div>
+                                <div class="span3">
+                                    <div class="controls">
+                                        <div class="input-append span11">
+                                            <input type="text" id="amount" name="amount"  class="leftMargin span10  m-wrap" value="{% if searchForm.amount is defined %}{{ searchForm.amount }}{% endif %}"  autocomplete="off" placeholder="Enter till amount">
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="portlet-body flip-scroll">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Company Name</th>
-                                    <th class="numeric" >Purchase</th>
-                                    <th class="numeric" >Payment</th>
+                                    <th class="numeric" >Name</th>
+                                    <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Outstanding</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {% for entity in entities %}
-                                    {% set balanch = entity.purchaseAmount - entity.payment %}
                                     <tr>
+                                        <td class="numeric" >{{ entity.companyName }}</td>
                                         <td class="numeric" >{{ entity.vendorName }}</td>
-                                        <td class="numeric" >{{ entity.purchaseAmount|number_format }}</td>
-                                        <td class="numeric" >{{ entity.payment|number_format }}</td>
-                                        <th class="numeric" >{% if balanch > 0 %}{{ balanch |number_format }} {% else %}({{ balanch|abs|number_format }}){% endif %}</th>
+                                        <td class="numeric" >{{ entity.vendorMobile }}</td>
+                                        <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
                         </div>
                     </div>
                 </div>

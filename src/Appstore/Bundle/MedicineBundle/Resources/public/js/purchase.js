@@ -226,11 +226,11 @@ $('#invoiceParticulars').on("click", ".delete", function() {
 
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
-    $('#remove-'+id).hide();
     $.ajax({
         url: url,
         type: 'GET',
         success: function (response) {
+            $('#remove-'+id).hide();
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);
             $('.grandTotal').html(obj['netTotal']);

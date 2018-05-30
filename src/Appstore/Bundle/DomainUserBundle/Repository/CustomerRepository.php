@@ -356,7 +356,40 @@ class CustomerRepository extends EntityRepository
 
         $query->select('e.mobile as id');
         $query->addSelect('e.id as customer');
-        $query->addSelect('e.mobile as text');
+        $query->addSelect('CONCAT(e.mobile, \'-\', e.name) AS text');
+        $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
+        $query->andWhere("e.globalOption = :globalOption");
+        $query->setParameter('globalOption', $globalOption->getId());
+        $query->orderBy('e.name', 'ASC');
+        $query->groupBy('e.mobile');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
+
+    }
+
+     public function searchMobileAutoComplete(GlobalOption $globalOption, $q, $type = 'NULL')
+    {
+        $query = $this->createQueryBuilder('e');
+
+        $query->select('e.mobile as id');
+        $query->addSelect('e.id as customer');
+        $query->addSelect('CONCAT(e.mobile, \'-\', e.name) AS text');
+        $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
+        $query->andWhere("e.globalOption = :globalOption");
+        $query->setParameter('globalOption', $globalOption->getId());
+        $query->orderBy('e.mobile', 'ASC');
+        $query->groupBy('e.mobile');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchCustomerAutoComplete(GlobalOption $globalOption, $q, $type = 'NULL')
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.name as id');
+        $query->addSelect('e.id as name');
+        $query->addSelect('e.name as text');
         $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
         $query->andWhere("e.globalOption = :globalOption");
         $query->setParameter('globalOption', $globalOption->getId());
@@ -370,7 +403,6 @@ class CustomerRepository extends EntityRepository
     public function searchAutoCompleteName(GlobalOption $globalOption, $q)
     {
         $query = $this->createQueryBuilder('e');
-
         $query->select('e.name as id');
         $query->addSelect('e.id as customer');
         $query->addSelect('e.name as text');

@@ -7,6 +7,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ReportController extends Controller
 {
+
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
     public function balanceAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -110,11 +123,13 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview( $this->getUser(),$data);
-        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch($user,$data);
+        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:Report/Expenditure:expenditure.html.twig', array(
             'overview' => $overview,
             'entities' => $pagination,
+            'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
         ));
     }

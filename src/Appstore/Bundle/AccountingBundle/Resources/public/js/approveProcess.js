@@ -215,44 +215,85 @@ function AccountingApproveProcess(){}
 
     $(".select2Customer").select2({
 
-        ajax: {
+    ajax: {
 
-            url: Routing.generate('domain_customer_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
+        url: Routing.generate('domain_customer_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
         },
-        escapeMarkup: function (m) {
-            return m;
+        results: function (data, page) {
+            return {
+                results: data
+            };
         },
-        formatResult: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('domain_customer_name', { user : id}), {
-                dataType: "json"
-            }).done(function (data) {
-                return  callback(data);
-            });
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var id = $(element).val();
+        $.ajax(Routing.generate('domain_customer_name', { customer : id}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 3
+});
+
+    $(".select2CustomerName").select2({
+
+    ajax: {
+
+        url: Routing.generate('domain_customer_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
         },
-        allowClear: true,
-        minimumInputLength: 3
-    });
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var id = $(element).val();
+        $.ajax(Routing.generate('domain_customer_name', { customer : id}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 3
+});
 
     $(".select2Invoice").select2({
 

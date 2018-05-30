@@ -83,7 +83,6 @@ class CustomerController extends Controller
             'action' => $this->generateUrl('customer_create'),
             'method' => 'POST',
         ));
-
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
@@ -118,11 +117,8 @@ class CustomerController extends Controller
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('DomainUserBundle:Customer:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -141,12 +137,9 @@ class CustomerController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -183,7 +176,6 @@ class CustomerController extends Controller
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -196,48 +188,23 @@ class CustomerController extends Controller
         return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
     /**
      * Deletes a Customer entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Customer entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Customer entity.');
         }
 
+        $em->remove($entity);
+        $em->flush();
         return $this->redirect($this->generateUrl('customer'));
-    }
-
-    /**
-     * Creates a form to delete a Customer entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('customer_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
     }
 
     public function autoSearchAction(Request $request)
@@ -245,13 +212,10 @@ class CustomerController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $go = $this->getUser()->getGlobalOption();
-            $type= 'pos';
-            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($go,$item,$type);
+            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($go,$item);
         }
         return new JsonResponse($item);
     }
-
-
 
     public function searchCustomerNameAction($customer)
     {
@@ -261,15 +225,26 @@ class CustomerController extends Controller
         ));
     }
 
-    public function autoCodeSearchAction(Request $request)
+    public function autoMobileSearchAction(Request $request)
     {
-
-        /* $item = $_REQUEST['q'];
+        $item = $_REQUEST['q'];
         if ($item) {
             $go = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteCode($go,$item);
+            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteName($go,$item);
         }
-        return new JsonResponse($item);*/
+        return new JsonResponse($item);
+    }
+
+    public function searchCustomerMobileAction($customer)
+    {
+        return new JsonResponse(array(
+            'id'=> $customer,
+            'text' => $customer
+        ));
+    }
+
+    public function autoCodeSearchAction(Request $request)
+    {
 
         $q = $_REQUEST['term'];
         $option = $this->getUser()->getGlobalOption();

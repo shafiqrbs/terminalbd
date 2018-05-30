@@ -88,11 +88,13 @@ class AccountMedicineController extends Controller
     public function customerOutstandingAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $data =$_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:AccountMedicine:customerOutstanding.html.twig', array(
             'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
 
@@ -103,10 +105,13 @@ class AccountMedicineController extends Controller
     public function vendorOutstandingAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $data =$_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorOutstanding($globalOption,'medicine');
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorMedicineOutstanding($globalOption,'medicine');
+        $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:AccountMedicine:purchaseOutstanding.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
 

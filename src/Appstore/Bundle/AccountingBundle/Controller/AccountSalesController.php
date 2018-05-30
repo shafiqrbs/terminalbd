@@ -61,11 +61,13 @@ class AccountSalesController extends Controller
     public function customerOutstandingAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:AccountSales:customerOutstanding.html.twig', array(
             'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
 

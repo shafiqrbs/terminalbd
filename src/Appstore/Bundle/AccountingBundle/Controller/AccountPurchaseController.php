@@ -63,11 +63,14 @@ class AccountPurchaseController extends Controller
      */
     public function vendorOutstandingAction()
     {
-        $em = $this->getDoctrine()->getManager();
+
+        $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorOutstanding($globalOption,'inventory');
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorInventoryOutstanding($globalOption,'inventory',$data);
+        $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:AccountPurchase:purchaseOutstanding.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
 

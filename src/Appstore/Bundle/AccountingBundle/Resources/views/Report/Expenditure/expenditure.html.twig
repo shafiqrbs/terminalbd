@@ -45,7 +45,7 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span4">
-                                        <select class="search-input span12" id="accountHead" name="accountHead">
+                                        <select class="search-input span12 m-wrap" id="accountHead" name="accountHead">
                                             <option value="">--Select method--</option>
                                             {% for method in transactionMethods %}
                                                 <option value="{{ method.id }}">{{ method.name }}</option>
@@ -53,15 +53,15 @@
                                         </select>
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
+                                        <input type="text" id="toUser" name="toUser"  class="m-wrap span12 select2User leftMargin" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="m-wrap span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="endDate" name="endDate"  class="span10 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <input type="text" id="endDate" name="endDate"  class="m-wrap span10 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -94,6 +94,7 @@
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >Ref No.</th>
                                     <th class="numeric" >Trans. Method</th>
+                                    <th class="numeric" >Attach</th>
                                     <th class="numeric" >Amount</th>
                                 </tr>
                                 </thead>
@@ -107,6 +108,7 @@
                                         <td class="numeric" >{% if entity.expenseCategory is not empty %}{{ entity.expenseCategory.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.webPath is not empty %}<a href="/{{ entity.webPath }}" target="_blank">Download</a>{% endif %}</td>
                                         <td class="numeric" >{{ entity.amount|number_format }}</td>
                                     </tr>
                                     <tr id="show-{{ entity.id }}" class="showing-overview">
