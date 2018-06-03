@@ -2,6 +2,14 @@ medicine_reverse:
     path:     /
     defaults: { _controller: "MedicineBundle:MedicineReverse:index" }
 
+medicine_purchase_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "MedicineBundle:Purchase:reverse" }
+
+medicine_sales_reverse:
+    path:     /{id}/
+    defaults: { _controller: "MedicineBundle:Sales:reverse" }
+
 medicine_reverse_show:
     path:     /{id}/show
     defaults: { _controller: "MedicineBundle:MedicineReverse:show" }

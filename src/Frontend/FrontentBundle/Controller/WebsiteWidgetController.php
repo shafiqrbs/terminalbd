@@ -71,6 +71,17 @@ class WebsiteWidgetController extends Controller
         ));
     }
 
+    public function pageBaseModuleCategoryWidgetAction(GlobalOption $globalOption,FeatureWidget $widget)
+    {
+        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getModuleShowLimit() : 10;
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:ModuleCategory')->getFeatureModuleCategory($globalOption,$limit);
+        return $this->render('@Frontend/Template/Desktop/WebsiteWidget/featureWidgetCategory.html.twig', array(
+            'widget'                => $widget,
+            'globalOption'          => $globalOption,
+            'categories'              => $entities,
+        ));
+    }
+
     public function sidebarBaseContentModuleAction(GlobalOption $globalOption , FeatureWidget $widget)
     {
         $limit = $widget->getModuleShowLimit() > 0 ? $widget->getModuleShowLimit() : 10;

@@ -243,6 +243,8 @@ class ProductController extends Controller
         $entity->setModule($page->getModule());
         $entity->setModuleCategory($page->getModuleCategory());
         $entity->setContent($page->getContent());
+        $entity->setSkuCode($page->getSkuCode());
+        $entity->setPrice($page->getPrice());
         $entity->setPhotoGallery($page->getPhotoGallery());
         $em->persist($entity);
         $em->flush();

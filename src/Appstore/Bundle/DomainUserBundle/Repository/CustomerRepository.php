@@ -83,6 +83,10 @@ class CustomerRepository extends EntityRepository
             $entity->setName($name);
             $entity->setAddress($address);
             $entity->setGlobalOption($globalOption);
+            if(!empty($data['location'])){
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
+                $entity->setLocation($location);
+            }
             $em->persist($entity);
             $em->flush($entity);
             return $entity;

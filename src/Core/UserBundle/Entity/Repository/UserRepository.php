@@ -198,6 +198,7 @@ class UserRepository extends EntityRepository
                 'ROLE_MEDICINE_PURCHASE'                         => 'Medicine Purchase',
                 'ROLE_MEDICINE_STOCK'                            => 'Medicine Stock',
                 'ROLE_MEDICINE_MANAGER'                          => 'Medicine Manager',
+                'ROLE_MEDICINE_REVERSE'                          => 'Medicine Reverse',
                 'ROLE_MEDICINE_ADMIN'                            => 'Medicine Admin',
             );
         }

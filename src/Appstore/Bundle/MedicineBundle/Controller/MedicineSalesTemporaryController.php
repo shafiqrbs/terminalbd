@@ -101,13 +101,13 @@ class MedicineSalesTemporaryController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         if (!empty($data['customerMobile'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
             $entity->setCustomer($customer);
 
-        } elseif(!empty($data['mobile'])) {
+        } elseif (!empty($data['mobile'])) {
 
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
             $entity->setCustomer($customer);
 
         }
@@ -118,22 +118,24 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setReceived($entity->getNetTotal());
             $entity->setPaymentStatus('Paid');
             $entity->setDue(0);
-        }else{
+        } else {
             $entity->setPaymentStatus('Due');
             $entity->setDue($entity->getNetTotal() - $entity->getReceived());
         }
-        if($data['process'] == 'hold'){
+        if ($data['process'] == 'hold') {
             $entity->setProcess('Hold');
-        }else{
+        } else {
             $entity->setApprovedBy($this->getUser());
             $entity->setProcess('Done');
         }
         $em->persist($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->temporarySalesInsert($user,$entity);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->temporarySalesInsert($user, $entity);
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->removeSalesTemporary($this->getUser());
-        $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
-        $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+        if ($entity->getProcess() == 'Done'){
+            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+        }
         $data = array(
             'sales' => $entity->getId(),
             'process' => $data['process'],

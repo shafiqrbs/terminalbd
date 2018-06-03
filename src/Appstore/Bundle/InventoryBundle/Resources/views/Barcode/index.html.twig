@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Item Lists
+                    Item Barcode Print Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,11 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('item') }}">Item</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="#">Item Lists</a></li>
+                    <li><a href="#">Item Barcode Print Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -35,7 +31,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Item lists</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a target="_blank" href="{{ path('barcode_new') }}" id="btn-create-barcode" class="btn" >
+                                <a target="_blank" href="{{ path('barcode_new') }}" id="btn-create-barcode" class="btn yellow" >
                                     Barcode
                                     <i class="icon-barcode"></i>
                                 </a>
@@ -84,7 +80,6 @@
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Qnt</th>
                                     <th class="numeric" >Reaming Qnt</th>
-                                    <th class="numeric" >Purchase price</th>
                                     <th class="numeric" >Sales price</th>
                                 </tr>
                                 </thead>
@@ -97,7 +92,6 @@
                                         <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.grn }}{% endif %}</td>
                                         <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                         <td class="numeric" >{{ purchaseItem.itemStock }}</td>
-                                        <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
                                         <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
                                     </tr>
                                 {% endfor %}

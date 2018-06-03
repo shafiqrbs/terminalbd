@@ -443,7 +443,6 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setMedicineSales($entity);
-        $accountSales->setSourceInvoice('S-'.$entity->getInvoice());
         $accountSales->setProcessHead('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);

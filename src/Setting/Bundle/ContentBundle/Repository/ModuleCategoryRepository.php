@@ -28,4 +28,18 @@ class ModuleCategoryRepository extends EntityRepository
         return $query;
 
     }
+
+    public function getFeatureModuleCategory($globalOption,$limit)
+    {
+
+        $em = $this->_em;
+        $repository = $em->getRepository('SettingContentBundle:ModuleCategory');
+        $query = $repository->createQueryBuilder('mc')
+            ->where('mc.globalOption = :option')
+            ->setParameter('option', $globalOption)
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
+            return $query;
+
+    }
 }

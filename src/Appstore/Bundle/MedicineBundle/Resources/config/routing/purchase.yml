@@ -83,7 +83,3 @@ medicine_purchaseitem_inline_update:
     methods:  POST
     options:
             expose: true
-
-medicine_purchase_reverse:
-    path:     /{id}/reverse
-    defaults: { _controller: "MedicineBundle:Purchase:reverse" }

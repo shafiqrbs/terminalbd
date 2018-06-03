@@ -6,7 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
+use Setting\Bundle\ContentBundle\Entity\ModuleCategory;
 use Setting\Bundle\ContentBundle\Entity\Page;
+use Setting\Bundle\ContentBundle\Entity\PageModule;
+use Setting\Bundle\MediaBundle\Entity\PhotoGallery;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -415,16 +418,9 @@ class Module
         $this->price = $price;
     }
 
-    /**
-     * @return InvoiceModuleItem
-     */
-    public function getInvoiceModuleItems()
-    {
-        return $this->invoiceModuleItems;
-    }
 
     /**
-     * @return mixed
+     * @return PageModule
      */
     public function getPageModules()
     {
@@ -432,7 +428,7 @@ class Module
     }
 
     /**
-     * @return mixed
+     * @return ModuleCategory
      */
     public function getModuleCategory()
     {
@@ -440,7 +436,7 @@ class Module
     }
 
     /**
-     * @return mixed
+     * @return PhotoGallery
      */
     public function getPhotoGallery()
     {
@@ -448,7 +444,7 @@ class Module
     }
 
     /**
-     * @return mixed
+     * @return Page
      */
     public function getPages()
     {

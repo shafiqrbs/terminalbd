@@ -165,6 +165,7 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
+            ->add('dividerBorderWidth','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Divider border width')))
             ->add('dividerBorder','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Border size')))
 
             ->add('dividerAfterColor','text', array('attr'=>array(

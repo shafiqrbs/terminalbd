@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\LocationBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -243,4 +244,22 @@ class LocationController extends Controller
             ->getForm()
         ;
     }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $item = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->searchAutoComplete($item);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchNameAction($grn)
+    {
+        return new JsonResponse(array(
+            'id'=>$grn,
+            'text'=>$grn
+        ));
+    }
+
 }

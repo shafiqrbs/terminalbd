@@ -11,6 +11,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,8 +72,6 @@ class SalesController extends Controller
         ));
     }
 
-
-
     public function newAction()
     {
 
@@ -109,22 +108,6 @@ class SalesController extends Controller
         ));
     }
 
-
-    private function createMedicineSalesTemporaryForm(MedicineSalesTemporary $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new SalesType($globalOption,$location), $entity, array(
-            'action' => $this->generateUrl('medicine_sales_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-            'attr' => array(
-                'class' => 'form-horizontal',
-                'id' => 'salesForm',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
-    }
 
     /**
      * Creates a form to edit a MedicineSales entity.wq
@@ -263,7 +246,6 @@ class SalesController extends Controller
 
     }
 
-
     public function salesItemDeleteAction(MedicineSales $invoice, MedicineSalesItem $particular){
 
         $em = $this->getDoctrine()->getManager();
@@ -353,8 +335,10 @@ class SalesController extends Controller
                 $entity->setDue($entity->getNetTotal() - $entity->getReceived());
             }
             $em->flush();
-            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            if($entity->getProcess() == 'Done'){
+                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
+                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            }
             if($data['process'] == 'save' or $data['process'] == 'hold' ){
                 return $this->redirect($this->generateUrl('medicine_sales_new'));
             }else{
@@ -388,16 +372,16 @@ class SalesController extends Controller
     }
 
 
-    public function approvedAction(MedicineSales $purchase)
+    public function approvedAction(MedicineSales $sales)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($purchase)) {
-            $purchase->setProcess('Approved');
-            $purchase->setApprovedBy($this->getUser());
+        if (!empty($sales)) {
+            $sales->setProcess('Approved');
+            $sales->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getMedicineSalesUpdateQnt($purchase);
-            $accountMedicineSales = $em->getRepository('AccountingBundle:AccountMedicineSales')->insertMedicineAccountMedicineSales($purchase);
-            $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountMedicineSales);
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
+            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
+            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -427,29 +411,7 @@ class SalesController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(Request $request, $id)
-    {
 
-
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('MedicineBundle:HmsVendor')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find District entity.');
-        }
-
-        $status = $entity->isStatus();
-        if($status == 1){
-            $entity->setStatus(false);
-        } else{
-            $entity->setStatus(true);
-        }
-        $em->flush();
-        $this->get('session')->getFlashBag()->add(
-            'success',"Status has been changed successfully"
-        );
-        return $this->redirect($this->generateUrl('medicine_vendor'));
-    }
 
     public function autoSearchAction(Request $request)
     {

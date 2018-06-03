@@ -166,10 +166,10 @@ $(document).on('keyup', '#sales_discountCalculation', function() {
 
     var discountType = $('#sales_discountType').val();
     var discount = parseInt($('#sales_discountCalculation').val());
-    var invoice = parseInt($('#invoiceId').val());
+    var invoice = $('#invoiceId').val();
     var total =  parseInt($('#dueAmount').val());
     if( discount >= total ){
-        $('#sales_discount').val(0)
+        $('#sales_discount').val(0);
         return false;
     }
     $.ajax({
@@ -214,7 +214,6 @@ $('form#salesForm').on('keypress', '.salesInput', function (e) {
     if (e.which === 13) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
         var idx = inputs.index(this);
-
         if (idx == inputs.length - 1) {
             inputs[0].select()
         } else {
@@ -233,5 +232,15 @@ $('form#salesForm').on('keypress', '.salesInput', function (e) {
         }
         return false;
     }
+});
+
+$(document).on("click", "#receiveBtn", function() {
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('form#salesForm').submit();
+        }
+    });
 });
 

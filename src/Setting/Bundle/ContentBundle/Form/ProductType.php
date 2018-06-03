@@ -27,11 +27,13 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter product name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Product name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 )
             ))
+            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Product price')))
+            ->add('skuCode','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Product sku code')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows'=>8)))
 

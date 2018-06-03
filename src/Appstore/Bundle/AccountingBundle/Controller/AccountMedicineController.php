@@ -107,7 +107,7 @@ class AccountMedicineController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data =$_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorMedicineOutstanding($globalOption,'medicine');
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorMedicineOutstanding($globalOption,$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:AccountMedicine:purchaseOutstanding.html.twig', array(
             'entities' => $pagination,
@@ -136,7 +136,8 @@ class AccountMedicineController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setProcessHead('Account Purchase');
+            $entity->setProcessHead('medicine');
+            $entity->setProcessType('Payment');
             if($entity->getPayment() < 0){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);

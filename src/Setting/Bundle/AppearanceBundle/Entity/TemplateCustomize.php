@@ -302,6 +302,15 @@ class TemplateCustomize
     private $stickyMenuTopMargin;
 
 
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="dividerBorderWidth", type="integer", length=3, nullable=true)
+     */
+    private $dividerBorderWidth;
+
+
     /**
      * @var string
      *
@@ -2438,6 +2447,22 @@ class TemplateCustomize
     public function setSubMenuWidth($subMenuWidth)
     {
         $this->subMenuWidth = $subMenuWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDividerBorderWidth()
+    {
+        return $this->dividerBorderWidth;
+    }
+
+    /**
+     * @param int $dividerBorderWidth
+     */
+    public function setDividerBorderWidth($dividerBorderWidth)
+    {
+        $this->dividerBorderWidth = $dividerBorderWidth;
     }
 
 

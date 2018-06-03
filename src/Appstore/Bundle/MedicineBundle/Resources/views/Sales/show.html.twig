@@ -38,7 +38,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Point of Sales</a>
-                                <a class="btn" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine</a>
+                                <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Sales</a>
                             </div>
                         </div>
 
@@ -140,6 +140,9 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
                                    <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
+                                    {% if ( entity.process == 'Done' and app.user.granted("ROLE_MEDICINE_REVERSE")) %}
+                                        <a  href="{{ path('medicine_sales_reverse',{'id':entity.id}) }}" class="btn yellow"><i class="icon-refresh"></i>&nbsp;Reverse</a>
+                                    {% endif %}
                                 </div>
                            </div>
                         </div>

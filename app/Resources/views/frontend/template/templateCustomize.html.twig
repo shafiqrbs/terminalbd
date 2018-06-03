@@ -398,6 +398,12 @@
         {% endif %}
     }
 
+    .page-title:before{
+        {% if globalOption.templateCustomize.dividerBorderWidth  is not empty %}
+            width:{{ globalOption.templateCustomize.dividerBorderWidth }}%!important;
+        {% endif %}
+    }
+
 
     {% if globalOption.templateCustomize.borderColor  is not empty %}
         .social-payment{

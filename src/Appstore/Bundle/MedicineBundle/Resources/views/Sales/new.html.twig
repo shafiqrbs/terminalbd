@@ -15,10 +15,10 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('medicine_sales') }}">Medicine</a>
+                    <a href="{{ path('medicine_sales') }}">Sales</a>
                     <span class="icon-angle-right"></span>
                 </li>
-                <li><a href="#">Manage Medicine</a></li>
+                <li><a href="#">Sales Details</a></li>
                 <li class="pull-right btn blue disabled mini">
                     <i class="fa fa-calendar"></i>
                     {{ "now"|date("d-F-Y") }}
@@ -33,12 +33,11 @@
 
     <div class="portlet box green tabbable">
         <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Add Medicine/Accessories</div>
+            <div class="caption"><i class="icon-reorder"></i>Add Sales Information</div>
             <div class="actions">
                 <div class="btn-group">
                     <a class="btn red" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Point of Sales</a>
-                    <a class="btn" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine</a>
-       {#             <a class="btn yellow" href="javascript:" data-url="{{ path('medicine_instant_purchase_load',{'sales':entity.id}) }}" id="instantPopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>#}
+                    <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Sales</a>
                 </div>
             </div>
         </div>

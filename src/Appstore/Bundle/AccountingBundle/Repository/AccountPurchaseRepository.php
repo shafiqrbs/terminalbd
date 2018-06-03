@@ -114,7 +114,7 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
-    public function vendorMedicineOutstanding($globalOption,$head, $data = array())
+    public function vendorMedicineOutstanding($globalOption,$data = array())
     {
 
         $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
@@ -134,19 +134,18 @@ class AccountPurchaseRepository extends EntityRepository
         }
         $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName,purchase.balance as customerBalance
                 FROM account_purchase as purchase
-                JOIN medicine_vendor as vendor ON purchase.vendor_id = vendor.id
+                JOIN medicine_vendor as vendor ON purchase.medicineVendor_id = vendor.id
                 WHERE purchase.id IN (
                     SELECT MAX(sub.id)
                     FROM account_purchase AS sub
-                    JOIN medicine_vendor as subVendor ON sub.vendor_id = subVendor.id
-                   WHERE sub.globalOption_id = :globalOption AND sub.processHead = :head AND sub.process = 'approved' {$company}
+                    JOIN medicine_vendor as subVendor ON sub.medicineVendor_id = subVendor.id
+                   WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$company}
                     GROUP BY sub.vendor_id
                   
                 ) {$outstanding}
                 ORDER BY purchase.id DESC";
         $qb = $this->getEntityManager()->getConnection()->prepare($sql);
         $qb->bindValue('globalOption', $globalOption->getId());
-        $qb->bindValue('head', $head);
         $qb->execute();
         $result =  $qb->fetchAll();
         return $result;

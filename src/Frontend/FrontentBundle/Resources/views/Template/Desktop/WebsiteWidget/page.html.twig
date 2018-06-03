@@ -1,6 +1,7 @@
 {% if widget.jsFeature is not empty %}
     {% render controller("FrontendBundle:WebsiteWidget:pageBaseFeatureWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
 {% endif %}
+
 {% if widget.page is not empty %}
 <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
     {% if  widget.pageFeatureName is not empty or widget.pageShowType == 'slider' %}
@@ -70,6 +71,9 @@
         </div>
     {% endif  %}
 </div>
+{% endif %}
+{% if widget.module is defined and widget.module.slug == 'category' %}
+    {% render controller("FrontendBundle:WebsiteWidget:pageBaseModuleCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
 {% endif %}
 {% if entities is defined and entities is not empty and widget.module.slug == 'blog' %}
     <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
@@ -777,3 +781,50 @@
             </div>
     </div>
 {% endif %}
+
+{% if entities is defined and entities is not empty and widget.module.slug == 'products' %}
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
+        {% endif %}
+        {% if widget.moduleShowType == 'slider' %}
+            <div class="row">
+                <div id="portfolio-page-slider" class="owl-carousel">
+                    {% for key,product in entities  %}
+                        <div class="col-md-12 grid">
+                            <div class="our-portfolio">
+                                <img style="width: 100%!important;" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
+                                <div class="team-content">
+                                    <h3 class="team-prof">
+                                        <a href="http://{{ product.website }}">{{ product.name }}</a>
+                                        {% if product.category is not empty %}<small>{{ product.category.name }}</small>{% endif %}
+                                    </h3>
+                                </div>
+                                <p><a href="http://{{ product.website }}">{{ product.name }}</a></p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                {% for key,portfolio in entities  %}
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
+                        <div class="our-portfolio">
+                            <img src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
+                            <div class="team-content">
+                                <h3 class="team-prof">
+                                    <a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a>
+                                    {% if portfolio.category is not empty %}<small>{{ portfolio.category.name }}</small>{% endif %}
+                                </h3>
+                            </div>
+                            <p><a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a></p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}
+
+

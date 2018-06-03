@@ -43,3 +43,9 @@ inventory_branches_name:
     options:
             expose: true
 
+inventory_location_search:
+    path:     /location-auto-search
+    defaults: { _controller: "SettingLocationBundle:Location:autoSearch" }
+    options:
+           expose: true
+

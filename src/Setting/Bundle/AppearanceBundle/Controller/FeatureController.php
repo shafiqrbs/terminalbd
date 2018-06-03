@@ -44,14 +44,11 @@ class FeatureController extends Controller
         if (!empty($result)) {
             $form   = $this->createCreateForm($entity);
             $twig ='new';
-
         }else{
-
             $form   = $this->createPageCreateForm($entity);
             $twig ='page';
         }
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
@@ -59,11 +56,8 @@ class FeatureController extends Controller
             $entity->upload();
             $em->persist($entity);
             $em->flush();
-
             return $this->redirect($this->generateUrl('appearancefeature'));
         }
-
-
         return $this->render('SettingAppearanceBundle:Feature:'.$twig.'.html.twig', array(
 
             'entity' => $entity,

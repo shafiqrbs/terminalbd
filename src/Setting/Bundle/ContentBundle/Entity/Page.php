@@ -53,6 +53,13 @@ class Page
     /**
      * @var string
      *
+     * @ORM\Column(name="skuCode", type="string", length=50, nullable = true)
+     */
+    private $skuCode;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="menu", type="string", length=255, nullable = true)
      */
     private $menu;
@@ -1321,6 +1328,22 @@ class Page
     public function setRemoveImage($removeImage)
     {
         $this->removeImage = $removeImage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSkuCode()
+    {
+        return $this->skuCode;
+    }
+
+    /**
+     * @param string $skuCode
+     */
+    public function setSkuCode($skuCode)
+    {
+        $this->skuCode = $skuCode;
     }
 
 }

@@ -36,14 +36,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Feature Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('appearancefeature_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('appearancefeature') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('appearancefeature_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Feature</a>
                             </div>
                         </div>
                     </div>
@@ -78,12 +71,14 @@
                                                 </ul>
                                             {% endif %}
                                         </td>
-                                        <td class="numeric" >{% if(entity.targetTo) %}{{ entity.targetTo }}{% endif %} -
+                                        <td class="numeric" >
+                                            {% if(entity.targetTo) %}{{ entity.targetTo }}{% endif %} -
                                             {% if entity.targetTo == 'Category' and entity.category is not empty %}{{ entity.category.name }}{% endif %}
                                             {% if entity.targetTo == 'Brand' and entity.brand is not empty %}{{ entity.brand.name }}{% endif %}
                                             {% if entity.targetTo == 'Promotion' and entity.promotion is not empty %}{{ entity.promotion.name }}{% endif %}
                                             {% if entity.targetTo == 'Tag' and entity.tag is not empty %}{{ entity.tag.name }}{% endif %}
                                             {% if entity.targetTo == 'Discount' and entity.discount is not empty %}{{ entity.discount.name }}{% endif %}
+                                            {% if entity.targetTo == 'Page' and entity.menu is not empty %}{{ entity.menu.menu }}{% endif %}
                                         </td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}

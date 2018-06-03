@@ -109,6 +109,8 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entity->setMedicineConfig($config);
         $entity->setCreatedBy($this->getUser());
+        $receiveDate = new \DateTime('now');
+        $entity->setReceiveDate($receiveDate);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));

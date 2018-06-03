@@ -50,8 +50,8 @@ class PageFeatureType extends AbstractType
                 },
             ))
             ->add('buttonName','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Button Text')))
-            ->add('buttonBg','text', array('attr'=>array('class'=>'span8 m-wrap colorpicker-default','placeholder'=>'Button Bg')))
-            ->add('captionBgColor','text', array('attr'=>array('class'=>'span12 m-wrap colorpicker-default','placeholder'=>'Caption Background Color')))
+            ->add('buttonBg','text', array('attr'=>array('class'=>'span10 m-wrap colorpicker-default','placeholder'=>'Button Bg')))
+            ->add('captionBgColor','text', array('attr'=>array('class'=>'span11 m-wrap colorpicker-default','placeholder'=>'Caption Background Color')))
 
             ->add('captionPosition', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap'),

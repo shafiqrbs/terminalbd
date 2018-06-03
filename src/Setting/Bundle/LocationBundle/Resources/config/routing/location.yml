@@ -28,3 +28,10 @@ location_delete:
     path:     /{id}/delete
     defaults: { _controller: "SettingLocationBundle:Location:delete" }
     methods:  [POST, DELETE]
+
+location_search:
+    path:     /location-auto-search
+    defaults: { _controller: "SettingLocationBundle:Location:autoSearch" }
+    options:
+           expose: true
+

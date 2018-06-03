@@ -36,14 +36,7 @@
                     <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                Tools
-                                <i class="icon-tasks"></i>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="{{ path('appearancefeature_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                <li><a href="{{ path('appearancefeature') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                            </ul>
+                            <a class="btn black" href="{{ path('appearancefeature') }}"><i class="icon-th-list"></i>&nbsp;Feature</a>
                         </div>
                     </div>
                 </div>
@@ -86,11 +79,8 @@
                                                 <div class="control-group">
                                                     <label class="control-label" for="firstName">Caption Bg Color</label>
                                                     <div class="controls">
-                                                        <div class="input-append color colorpicker-default" data-color=" {{ entity.captionBgColor }}" data-color-format="rgba">
-                                                            {{ form_widget(form.captionBgColor) }}
-                                                            {{ form_errors(form.captionBgColor) }}
-                                                            <span class="add-on"><i style="background-color: {{ entity.captionBgColor }};"></i></span>
-                                                        </div>
+                                                        {{ form_widget(form.captionBgColor) }}
+                                                        {{ form_errors(form.captionBgColor) }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -209,11 +199,8 @@
                                             <div class="control-group">
                                                 <label class="control-label" for="firstName">Button Color</label>
                                                 <div class="controls">
-                                                    <div class="input-append color colorpicker-default" data-color=" {{ entity.buttonBg }}" data-color-format="rgba">
-                                                        {{ form_widget(form.buttonBg) }}
-                                                        {{ form_errors(form.buttonBg) }}
-                                                        <span class="add-on"><i style="background-color: {{ entity.buttonBg }};"></i></span>
-                                                    </div>
+                                                    {{ form_widget(form.buttonBg) }}
+                                                    {{ form_errors(form.buttonBg) }}
                                                 </div>
                                             </div>
                                     </div>
@@ -260,9 +247,6 @@
                         <div class="form-actions portlet box grey">
                             <div class="pull-center">
                                 <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
-                                {% if(entity.id > 0 ) %}
-                                    <a href="{{ path('appearancefeature_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
-                                {% endif %}
                             </div>
                         </div>
                         {{ form_end(form) }}
@@ -274,5 +258,4 @@
         </div>
     </div>
     </div>
-<st
 {% endblock %}

@@ -111,6 +111,8 @@ class InstantPurchaseController extends Controller
         $entity->setPurchaseBy($purchaseBy);
         $entity->setProcess('In-progress');
         $entity->setMode('instant');
+        $receiveDate = new \DateTime('now');
+        $entity->setReceiveDate($receiveDate);
         $em->persist($entity);
         $em->flush();
         $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($config,$entity,$data);

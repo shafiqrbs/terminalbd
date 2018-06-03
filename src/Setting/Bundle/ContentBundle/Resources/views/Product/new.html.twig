@@ -50,7 +50,7 @@
                         {{ form_row(form._token) }}
 
                         <div class="row-fluid">
-                            <div class="span12">
+                            <div class="span8">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">Title <span class="required">*</span></label>
                                     <div class="controls">
@@ -59,6 +59,24 @@
                                             {{ form_widget(form.name) }}
                                             {{ form_errors(form.name) }}
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Price</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.price) }}
+                                        {{ form_errors(form.price) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">SKU Code</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.skuCode) }}
+                                        {{ form_errors(form.skuCode) }}
                                     </div>
                                 </div>
                             </div>
