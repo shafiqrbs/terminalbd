@@ -603,6 +603,7 @@
                                         <p class="description">{{ entity.content|striptags|raw|truncate(180) }}</p>
                                         <a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-right">Read more <i class="fa fa-angle-double-right"></i></a>
                                     </div>
+                                    <p></p>
                                 </div>
                             </div>
                         {% endfor %}
@@ -796,12 +797,18 @@
                                 <img style="width: 100%!important;" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
                                 <div class="team-content">
                                     <h3 class="team-prof">
-                                        <a href="http://{{ product.website }}">{{ product.name }}</a>
+                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a>
                                         {% if product.category is not empty %}<small>{{ product.category.name }}</small>{% endif %}
                                     </h3>
                                 </div>
-                                <p><a href="http://{{ product.website }}">{{ product.name }}</a></p>
                             </div>
+                            <h5><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a></h5>
+                            <p>{% for cat in product.moduleCategory  %}
+                                    <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
+                                    {% if not loop.last %},{% endif %}
+                                {% endfor %}
+                            </p>
+                            <p class="text-center"><strong>{{ product.price }}</strong></p>
                         </div>
                     {% endfor %}
                 </div>
@@ -811,15 +818,21 @@
                 {% for key,portfolio in entities  %}
                     <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                         <div class="our-portfolio">
-                            <img src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
+                            <img style="width: 100%!important;" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
                             <div class="team-content">
                                 <h3 class="team-prof">
-                                    <a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a>
-                                    {% if portfolio.category is not empty %}<small>{{ portfolio.category.name }}</small>{% endif %}
+                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a>
+                                    {% if product.category is not empty %}<small>{{ product.category.name }}</small>{% endif %}
                                 </h3>
                             </div>
-                            <p><a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a></p>
                         </div>
+                        <h5><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a></h5>
+                        <p>{% for cat in product.moduleCategory  %}
+                                <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
+                                {% if not loop.last %},{% endif %}
+                            {% endfor %}
+                        </p>
+                        <p class="text-center"><strong>{{ product.price }}</strong></p>
                     </div>
                 {% endfor %}
             </div>

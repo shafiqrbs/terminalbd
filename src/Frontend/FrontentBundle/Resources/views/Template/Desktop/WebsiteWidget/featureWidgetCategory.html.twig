@@ -6,16 +6,19 @@
         <div class="row">
             <div id="category-page-slider" class="owl-carousel">
                 {% for key,category in categories  %}
-                    <div class="col-md-12 grid">
-                        <div class="our-category">
-                            <img style="width: 100%!important;" src="{{ image(category.webPath).forceResize(400,250) }}" alt="">
-                            <div class="team-content">
-                                <h3 class="team-prof">
-                                    <a href="">{{ category.name }}</a>
-
-                                </h3>
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
+                        <div class="our-team">
+                            <div class="pic">
+                                <img src="{{ image(category.webPath).scaleResize(400,250) }}" alt="">
+                                <div class="social_media_team">
+                                    <ul class="team_social">
+                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':category.id }) }}"><i class="fa fa-search"></i></a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <p><a href="">{{ category.name }}</a></p>
+                            <div class="team-prof">
+                                <h4 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':category.id }) }}">{{ category.name }}</a></h4>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -27,17 +30,16 @@
                 <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                     <div class="our-team">
                         <div class="pic">
-                            <img src="{{ image(category.webPath).scaleResize(380,266) }}" alt="">
+                            <img src="{{ image(category.webPath).scaleResize(400,250) }}" alt="">
                             <div class="social_media_team">
                                 <ul class="team_social">
-                                    <li><a href="#"><i class="fab fa-search"></i></a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':category.id }) }}"><i class="fa fa-search"></i></a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="team-prof">
-                            <h3 class="post-title"><a href="#">williamson</a></h3>
-                            <span class="post">Web Desginer</span>
-                        </div>
+                            <h4 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':category.id }) }}">{{ category.name }}</a></h4>
+                         </div>
                     </div>
                 </div>
             {% endfor %}
