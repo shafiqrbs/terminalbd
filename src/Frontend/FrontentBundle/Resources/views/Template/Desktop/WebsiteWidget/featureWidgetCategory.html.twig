@@ -2,7 +2,7 @@
     {% if  widget.moduleFeatureName is not empty %}
         <div class="page-title">{{ widget.moduleFeatureName }}</div>
     {% endif %}
-    {% if widget.moduleShowType != 'slider' %}
+    {% if widget.moduleShowType = 'slider' %}
         <div class="row">
             <div id="category-page-slider" class="owl-carousel">
                 {% for key,category in categories  %}
