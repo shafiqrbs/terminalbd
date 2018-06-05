@@ -7,6 +7,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ContentBundle\Entity\ModuleCategory;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\Module;
@@ -60,6 +61,11 @@ class FeatureWidget
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="featureWidgets" )
      **/
     private  $category;
+
+     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", inversedBy="featureWidgets" )
+     **/
+    private  $moduleCategory;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetPromotions" )
@@ -1071,5 +1077,21 @@ class FeatureWidget
     public function setFeatureCategoryLimit($featureCategoryLimit)
     {
         $this->featureCategoryLimit = $featureCategoryLimit;
+    }
+
+    /**
+     * @return ModuleCategory
+     */
+    public function getModuleCategory()
+    {
+        return $this->moduleCategory;
+    }
+
+    /**
+     * @param ModuleCategory $moduleCategory
+     */
+    public function setModuleCategory($moduleCategory)
+    {
+        $this->moduleCategory = $moduleCategory;
     }
 }

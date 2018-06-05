@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -50,6 +51,11 @@ class ModuleCategory
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="moduleCategory" )
      **/
     protected $module;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="moduleCategory" )
+     **/
+    protected $featureWidgets;
 
      /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="moduleCategory" )
@@ -285,6 +291,14 @@ class ModuleCategory
     public function getNav()
     {
         return $this->nav;
+    }
+
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgets()
+    {
+        return $this->featureWidgets;
     }
 
 

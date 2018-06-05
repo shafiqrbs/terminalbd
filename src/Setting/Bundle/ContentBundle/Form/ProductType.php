@@ -50,6 +50,18 @@ class ProductType extends AbstractType
                         ->orderBy('o.name','ASC');
                 },
             ))
+            ->add('pricePrefix', 'entity', array(
+                'required'    => false,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\PricePrefix',
+                'empty_value' => '---Select Currency---',
+                'property' => 'countryCurrency',
+                'attr'=>array('class'=>'m-wrap span12'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('o')
+                        ->where("o.status = 1")
+                        ->orderBy('o.id','ASC');
+                },
+            ))
             ->add('moduleCategory', 'entity', array(
                 'required'    => false,
                 'expanded'      =>true,

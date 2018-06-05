@@ -72,9 +72,15 @@
     {% endif  %}
 </div>
 {% endif %}
+
 {% if widget.module is defined and widget.module.slug == 'category' %}
+    {% render controller("FrontendBundle:WebsiteWidget:pageBaseModuleFeatureCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
+{% endif %}
+
+{% if widget.moduleCategory is defined and widget.moduleCategory is not empty %}
     {% render controller("FrontendBundle:WebsiteWidget:pageBaseModuleCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
 {% endif %}
+
 {% if entities is defined and entities is not empty and widget.module.slug == 'blog' %}
     <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
@@ -808,7 +814,9 @@
                                     {% if not loop.last %},{% endif %}
                                 {% endfor %}
                             </p>
-                            <p class="text-center"><strong>{{ product.price }}</strong></p>
+                            {% if product.price is not empty %}
+                                <p class="text-left">{% if product.pricePrefix is not empty %}{{ product.pricePrefix.currency }}. {% endif %}<strong>{{ product.price }}</strong></p>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
@@ -832,7 +840,9 @@
                                 {% if not loop.last %},{% endif %}
                             {% endfor %}
                         </p>
-                        <p class="text-center"><strong>{{ product.price }}</strong></p>
+                        {% if product.price is not empty %}
+                        <p class="text-left">{% if product.pricePrefix is not empty %}{{ product.pricePrefix.currency }}. {% endif %}<strong>{{ product.price }}</strong></p>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

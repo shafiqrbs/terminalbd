@@ -39,11 +39,24 @@ class WebsiteWidgetType extends AbstractType
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.globalOption = $this->globalId")
+                        ->andWhere("e.globalOption =".$this->globalOption->getId())
                         ->orderBy('e.menu','ASC');
                 },
             ))
-
+            ->add('moduleCategory', 'entity', array(
+                'required'    => false,
+                'multiple'    => true,
+                'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
+                'empty_value' => '---Select page---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->globalOption->getId())
+                        ->orderBy('e.name','ASC');
+                },
+            ))
             ->add('position', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12 select2 '),
                 'empty_value' => '---Select Position---',

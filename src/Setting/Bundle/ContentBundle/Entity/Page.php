@@ -7,6 +7,7 @@ use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\MediaBundle\Entity\PhotoGallery;
 use Setting\Bundle\ToolBundle\Entity\Module;
+use Setting\Bundle\ToolBundle\Entity\PricePrefix;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -370,6 +371,14 @@ class Page
      **/
 
     protected $location;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PricePrefix", inversedBy="page")
+     */
+    protected $pricePrefix;
+
+
 
     /**
      * @var text
@@ -1344,6 +1353,22 @@ class Page
     public function setSkuCode($skuCode)
     {
         $this->skuCode = $skuCode;
+    }
+
+    /**
+     * @return PricePrefix
+     */
+    public function getPricePrefix()
+    {
+        return $this->pricePrefix;
+    }
+
+    /**
+     * @param PricePrefix $pricePrefix
+     */
+    public function setPricePrefix($pricePrefix)
+    {
+        $this->pricePrefix = $pricePrefix;
     }
 
 }

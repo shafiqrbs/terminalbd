@@ -12,12 +12,12 @@
                                 <img src="{{ image(category.webPath).scaleResize(400,250) }}" alt="">
                                 <div class="social_media_team">
                                     <ul class="team_social">
-                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':category.id }) }}"><i class="fa fa-search"></i></a></li>
+                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module': category.module.slug,'slug':category.slug }) }}"><i class="fa fa-search"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="team-prof">
-                                <h4 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':category.id }) }}">{{ category.name }}</a></h4>
+                                <h4 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module': category.module.slug,'slug':category.slug }) }}">{{ category.name }}</a></h4>
                             </div>
                         </div>
                     </div>
@@ -33,13 +33,13 @@
                             <img src="{{ image(category.webPath).scaleResize(400,250) }}" alt="">
                             <div class="social_media_team">
                                 <ul class="team_social">
-                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':category.id }) }}"><i class="fa fa-search"></i></a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module':category.module.slug,'slug':category.slug }) }}"><i class="fa fa-search"></i></a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="team-prof">
-                            <h4 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':category.id }) }}">{{ category.name }}</a></h4>
-                         </div>
+                            <h4 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module': category.module.slug,'slug':category.slug }) }}">{{ category.name }}</a></h4>
+                        </div>
                     </div>
                 </div>
             {% endfor %}

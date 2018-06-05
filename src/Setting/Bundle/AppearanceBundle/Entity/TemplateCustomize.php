@@ -89,6 +89,21 @@ class TemplateCustomize
     private $sidebarPosition = 'left';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="pricePrefix", type="string", nullable=true)
+     */
+    private $pricePrefix = 'Tk.';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="buyButton", type="boolean", nullable=true)
+     */
+    private $buyButton = false;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="showSearch", type="boolean", nullable=true)
