@@ -9,7 +9,7 @@
                     <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                         <div class="our-team">
                             <div class="pic">
-                                <img src="{{ image(category.webPath).scaleResize(400,250) }}" alt="">
+                                <img src="{{ image(category.webPath).forceResize(400,250) }}" alt="">
                                 <div class="social_media_team">
                                     <ul class="team_social">
                                         <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module': category.module.slug,'slug':category.slug }) }}"><i class="fa fa-search"></i></a></li>
@@ -30,7 +30,7 @@
                 <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                     <div class="our-team">
                         <div class="pic">
-                            <img src="{{ image(category.webPath).scaleResize(400,250) }}" alt="">
+                            <img src="{{ image(category.webPath).forceResize(400,250) }}" alt="">
                             <div class="social_media_team">
                                 <ul class="team_social">
                                     <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module':category.module.slug,'slug':category.slug }) }}"><i class="fa fa-search"></i></a></li>

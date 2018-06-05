@@ -54,6 +54,13 @@
     </div>
     <div class="col-md-4">
         <h4><strong>Description</strong></h4>
+        {% if page.content is not empty %}<p>{{ page.content|raw }}</p> <hr>{% endif %}
+        {% if page.price is not empty %}
+            <div class="row meta-label"><div class="col-xs-12 col-md-12">Price: {% if page.pricePrefix is not empty %}{{ page.pricePrefix.currency }}. {% endif %}<strong>{{ page.price }}</strong></div></div>
+        {% endif %}
+        {% if page.skuCode is not empty %}
+        <div class="row meta-label"><div class="col-xs-12 col-md-12">SKU: {{ page.skuCode }}</div></div>
+        {% endif %}
         <hr>
         {% if  page.pageMetas is defined and page.pageMetas is not empty %}
             {% for meta in page.pageMetas %}
@@ -122,10 +129,13 @@
                             {% endfor %}
                         {% endif %}</p>
                     <div class="row">
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-md-8">
+                            {% if entity.price is not empty %}
+                               {% if entity.pricePrefix is not empty %}{{ entity.pricePrefix.currency }}. {% endif %}<strong>{{ entity.price }}</strong>
+                            {% endif %}
                         </div>
-                        <div class="col-xs-12 col-md-6">
-                            <a class="btn btn-success" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
+                        <div class="col-xs-12 col-md-4">
+                            <a class="btn btn-warning" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
                         </div>
                     </div>
                 </div>
