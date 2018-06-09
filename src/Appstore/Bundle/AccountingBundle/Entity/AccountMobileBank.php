@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
@@ -192,10 +193,10 @@ class AccountMobileBank
      */
     protected $dpsTreatmentPlans;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="accountMobileBank" )
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="accountMobileBank" )
      */
-    protected $businessTransactions;
+    protected $businessInvoice;
 
     /**
      * @var string
@@ -579,6 +580,14 @@ class AccountMobileBank
     public function getDpsTreatmentPlans()
     {
         return $this->dpsTreatmentPlans;
+    }
+
+    /**
+     * @return BusinessInvoice
+     */
+    public function getBusinessInvoice()
+    {
+        return $this->businessInvoice;
     }
 
 

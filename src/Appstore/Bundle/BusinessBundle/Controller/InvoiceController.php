@@ -66,11 +66,11 @@ class InvoiceController extends Controller
         $entity = new BusinessInvoice();
         $option = $this->getUser()->getGlobalOption();
         $businessConfig = $option->getBusinessConfig();
-        if(!empty($patient)){
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option,'id' => $patient));
-            $entity->setCustomer($customer);
-            $entity->setMobile($customer->getMobile());
-        }
+        $entity->setCreatedBy($this->getUser());
+        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($this->getUser()->getGlobalOption());
+        $entity->setCustomer($customer);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
         $entity->setBusinessConfig($businessConfig);
         $entity->setPaymentStatus('Pending');
         $entity->setCreatedBy($this->getUser());
@@ -109,7 +109,7 @@ class InvoiceController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_BUSINESS")
      */
 
     public function editAction($id)
@@ -122,7 +122,7 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        if (in_array($entity->getProcess(), array('Done','Canceled'))) {
+        if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
         return $this->render('BusinessBundle:Invoice:new.html.twig', array(
@@ -136,32 +136,56 @@ class InvoiceController extends Controller
      */
     public function updateAction(Request $request, BusinessInvoice $entity)
     {
-        $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
 
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Business Ivoice entity.');
+        }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
-        if($editForm->isValid() and !empty($entity->getInvoiceParticulars())) {
-            if (!empty($data['customer']['name'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $data);
+        if ($editForm->isValid()) {
+            if (!empty($data['customerMobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
                 $entity->setCustomer($customer);
-                $entity->setMobile($mobile);
+
+            } elseif (!empty($data['mobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
+                $entity->setCustomer($customer);
             }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setPaymentInWord($amountInWords);
-            if(!empty($entity->getCustomer()) and  $entity->getProcess() == 'Created'){
-                $entity->setProcess('Visit');
+            if ($entity->getTotal() <= $entity->getReceived()) {
+                $entity->setReceived($entity->getTotal());
+                $entity->setDue(0);
+                $entity->setPaymentStatus('Paid');
+            } else {
+                $entity->setPaymentStatus('Due');
+                $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
-        $em->flush();
+            $em->flush();
+            $done = array('Done', 'Delivered');
+            if (in_array($entity->getProcess(), $done)) {
+                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            }
+            $inProgress = array('Hold', 'Created');
+            if (in_array($entity->getProcess(), $inProgress)) {
+                return $this->redirect($this->generateUrl('business_invoice_new'));
+            } else {
+                return $this->redirect($this->generateUrl('business_invoice_print_invoice', array('id' => $entity->getId())));
+            }
         }
-        exit;
+        return $this->render('BusinessBundle:Invoice:new.html.twig', array(
+            'entity' => $entity,
+            'form' => $editForm->createView(),
+        ));
     }
+
+
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_BUSINESS")
      */
     public function showAction(BusinessInvoice $entity)
     {
@@ -177,7 +201,7 @@ class InvoiceController extends Controller
 
     }
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_BUSINESS")
      */
     public function deleteAction(BusinessInvoice $entity)
     {
@@ -240,7 +264,6 @@ class InvoiceController extends Controller
 
     }
 
-
     public function invoiceParticularDeleteAction(BusinessInvoice $invoice, BusinessInvoiceParticular $particular){
 
 
@@ -256,9 +279,38 @@ class InvoiceController extends Controller
         exit;
     }
 
+    public function invoiceDiscountUpdateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $discountType = $request->request->get('discountType');
+        $discountCal = $request->request->get('discount');
+        $invoice = $request->request->get('invoice');
+        $entity = $em->getRepository('BusinessBundle:BusinessInvoice')->find($invoice);
+        $subTotal = $entity->getSubTotal();
+        if($discountType == 'flat'){
+            $total = ($subTotal  - $discountCal);
+            $discount = $discountCal;
+        }else{
+            $discount = ($subTotal*$discountCal)/100;
+            $total = ($subTotal  - $discount);
+        }
+        $vat = 0;
+        if($total > $discount ){
+            $entity->setDiscountType($discountType);
+            $entity->setDiscountCalculation($discountCal);
+            $entity->setDiscount(round($discount));
+            $entity->setTotal(round($total + $vat));
+            $entity->setDue(round($total + $vat));
+            $em->flush();
+        }
+        $msg = 'Discount successfully';
+        $result = $this->returnResultData($entity,$msg);
+        return new Response(json_encode($result));
+        exit;
+    }
+
 
     public function deleteMedicineAction(BusinessInvoice $invoice){
-
 
         $em = $this->getDoctrine()->getManager();
         if (!$invoice) {
@@ -267,52 +319,9 @@ class InvoiceController extends Controller
         $em->remove($invoice);
         $em->flush();
         exit;
-    }
-
-    public function addPaymentAction(Request $request , BusinessInvoice $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $invoiceParticular = $request->request->get('invoiceParticular');
-        $payment = $request->request->get('payment');
-        $discount = $request->request->get('discount');
-        $discount = $discount !="" ? $discount : 0 ;
-        $process = $request->request->get('process');
-
-        if ( (!empty($entity) and !empty($payment)) or (!empty($entity) and $discount > 0 ) ) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess('In-progress');
-            $em->flush();
-            $transactionData = array('process'=> 'In-progress','invoiceParticular' => $invoiceParticular,'payment' => $payment, 'discount' => $discount);
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->insertPaymentTransaction($transactionData);
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($entity);
-            return new Response('success');
-
-        } elseif(!empty($entity) and $process == 'Done' and $entity->getTotal() <= $entity->getPayment()  ) {
-
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess($process);
-            $entity->setPaymentStatus('Paid');
-            $em->flush();
-            return new Response('success');
-
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
-    public function confirmAction(BusinessInvoice $entity)
-    {
-        $inventory = $this->getUser()->getGlobalOption()->getBusinessConfig()->getId();
-        if ($inventory == $entity->getBusinessConfig()->getId()) {
-            return $this->render('BusinessBundle:BusinessInvoice:confirm.html.twig', array(
-                'entity' => $entity,
-            ));
-        } else {
-            return $this->redirect($this->generateUrl('business_invoice'));
-        }
 
     }
+
 
     public function approveAction(Request $request , BusinessInvoice $entity)
     {
@@ -362,7 +371,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_BUSINESS")
      */
 
     public function deleteEmptyInvoiceAction()

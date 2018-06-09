@@ -90,9 +90,9 @@
     {% endif %}
 
     {% if globalOption.templateCustomize.logoWidth is not empty or globalOption.templateCustomize.logoHeight is not empty %}
-        .img-logo{
-            width:{{ globalOption.templateCustomize.logoWidth }}px!important;
-            height:{{ globalOption.templateCustomize.logoHeight }}px!important;
+        .img-logo img{
+            max-width:{{ globalOption.templateCustomize.logoWidth }}px!important;
+            max-height:{{ globalOption.templateCustomize.logoHeight }}px!important;
         }
     {% endif %}
 

@@ -207,8 +207,6 @@ $(document).on('keyup', '#sales_received , #discount', function() {
     }
 });
 
-
-
 $('form#salesForm').on('keypress', '.salesInput', function (e) {
 
     if (e.which === 13) {

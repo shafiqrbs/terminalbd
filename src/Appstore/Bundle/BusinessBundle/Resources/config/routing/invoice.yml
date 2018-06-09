@@ -35,6 +35,14 @@ business_invoice_particular_add:
     options:
             expose: true
 
+business_invoice_discount_update:
+    path:     /dicount-update
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+
 business_invoice_payment:
     path:     /{invoice}/invoice-payment
     defaults: { _controller: "BusinessBundle:Invoice:addPayment" }
@@ -60,12 +68,6 @@ business_invoice_appointment_datetime_check:
     methods:  POST
     options:
             expose: true
-
-business_invoice_appointment_datetime_select:
-    path:     /inline-appointment-datetime-select
-    defaults: { _controller: "BusinessBundle:Invoice:appointmentTime" }
-    options:
-           expose: true
 
 business_invoice_accessories_add:
     path:     /{invoice}/accessories-add
@@ -104,10 +106,6 @@ business_invoice_reverse_show:
     defaults: { _controller: "BusinessBundle:Invoice:InvoiceReverseShow" }
 
 
-business_invoice_confirm:
-    path:     /{id}/invoice-confirm
-    defaults: { _controller: "BusinessBundle:Invoice:confirm" }
-
 business_invoice_particular_delete:
     path:     /{invoice}/{id}/particular-delete
     defaults: { _controller: "BusinessBundle:Invoice:invoiceParticularDelete" }
@@ -119,10 +117,6 @@ business_invoice_print_invoice:
 business_prescription_preview:
     path:     /{invoice}/print-preview
     defaults: { _controller: "BusinessBundle:Invoice:invoicePrintPreview" }
-
-business_invoice_patient_load:
-    path:     /{id}/patient-load
-    defaults: { _controller: "BusinessBundle:Invoice:patientLoad" }
 
 business_invoice_process_update:
     path:     /hms-invoice/upadte-process

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
@@ -499,4 +500,51 @@ class AccountSalesRepository extends EntityRepository
             $accountCash->execute();
         }
     }
+
+
+    public function insertBusinessAccountInvoice(BusinessInvoice $entity)
+    {
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setAccountBank($entity->getAccountBank());
+        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
+        $accountSales->setGlobalOption($entity->getBusinessConfig()->getGlobalOption());
+        $accountSales->setCustomer($entity->getCustomer());
+        $accountSales->setTransactionMethod($entity->getTransactionMethod());
+        $accountSales->setTotalAmount($entity->getTotal());
+        $accountSales->setAmount($entity->getReceived());
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setBusinessInvoice($entity);
+        $accountSales->setProcessHead('Business');
+        $accountSales->setProcess('approved');
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+
+    }
+
+    public function insertBusinessAccountPurchaseReturn(MedicineSalesReturn $entity)
+    {
+        $global = $entity->getMedicineConfig()->getGlobalOption();
+        $sales = $entity->getMedicineSalesItem()->getMedicineSales();
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setGlobalOption($global);
+        $accountSales->setCustomer($sales->getCustomer());
+        $accountSales->setAmount($entity->getSubTotal());
+        $accountSales->setSourceInvoice('Sr-'.$sales->getInvoice());
+        $accountSales->setProcessHead('Sales-return');
+        $accountSales->setProcess('approved');
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+
+    }
+
 }

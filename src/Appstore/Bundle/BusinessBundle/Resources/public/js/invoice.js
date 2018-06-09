@@ -42,31 +42,6 @@ $(document).on("click", ".sms-confirm", function() {
     });
 });
 
-
-$('.checkboxes').checkradios({
-    checkbox: {
-        iconClass:'fa fa-window-close'
-    }
-
-});
-$(document).on("click", "#patientOverview", function() {
-    var url = $(this).attr('data-url');
-    $.ajax({
-        url :url,
-        beforeSend: function(){
-            $('.loader-double').fadeIn(1000).addClass('is-active');
-        },
-        complete: function(){
-            $('.loader-double').fadeIn(1000).removeClass('is-active');
-        },
-        success:  function (data) {
-            $("#patientLoad").html(data);
-        }
-    });
-});
-
-
-
 $( "#mobile" ).autocomplete({
 
     source: function( request, response ) {
@@ -85,17 +60,15 @@ $( "#mobile" ).autocomplete({
 
 });
 
-
-
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
 
     if( paymentMethod == 2){
-        $('#cartMethod').show();
+        $('#cartMethod').css({ 'display': "block" });
         $('#bkashMethod').hide();
     }else if( paymentMethod == 3){
-        $('#bkashMethod').show();
+        $('#bkashMethod').css({ 'display': "block" });
         $('#cartMethod').hide();
     }else{
         $('#cartMethod').hide();
@@ -104,20 +77,12 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
-$(document).on( "click", ".patientShow", function(e){
-    $('#updatePatient').slideToggle(2000);
-    $("span", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
-});
-
-$(document).on( "click", ".receivePayment", function(e){
-    $("#showPayment").slideToggle(1000);
-    $("span", this).toggleClass("fa-minus fa-money");
-});
-
-$(document).on( "change", "#invoiceParticular", function(e){
-
-    var price = $(this).val();
-    $('#appstore_bundle_dmsbundle_invoice_payment').val(price);
+$(".addCustomer").click(function(){
+    $( ".customer" ).slideToggle( "slow" );
+}).toggle( function() {
+    $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+}, function() {
+    $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
 });
 
 
@@ -254,186 +219,81 @@ $(document).on("click", ".approveAccessories", function() {
     });
 });
 
-$(document).on('click', '.appointmentSchedule', function() {
+$(document).on('keyup', '#businessInvoice_discountCalculation', function() {
 
-    var url = $(this).attr('data-url');
-    var dataTitle = $(this).attr('data-title');
-    $('.dialogModal_header').html(dataTitle);
-    $('.dialog_content').dialogModal({
-        topOffset: 0,
-        top: 0,
-        type: '',
-        onOkBut: function(event, el, current) {},
-        onCancelBut: function(event, el, current) {},
-        onLoad: function(el, current) {
-            $.ajax({
-                url: url,
-                type: 'POST',
-                success: function (response) {
-                    el.find('.dialogModal_content').html(response);
-                }
-            });
-        },
-        onClose: function(el, current) {},
-        onChange: function(el, current) {}
-    });
-
-});
-
-$(document).on('click', '#searchAppointment', function() {
-
-    var url = $('form#appointmentForm').attr('action');
+    var discountType = $('#businessInvoice_discountType').val();
+    var discount = parseInt($('#businessInvoice_discountCalculation').val());
+    var invoice = $('#invoiceId').val();
+    var total =  parseInt($('#dueAmount').val());
+    if( discount >= total ){
+        $('#sales_discount').val(0);
+        return false;
+    }
     $.ajax({
-        url: url,
+        url: Routing.generate('business_invoice_discount_update'),
         type: 'POST',
-        data:new FormData($('#appointmentForm')[0]),
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            $('#appointmentSchedule').html(response);
-            setTimeout(datePickerReload(),1000);
-            EditableInit();
+        data:'discount=' + discount+'&discountType='+discountType+'&invoice='+invoice,
+        success: function(response) {
+            obj = JSON.parse(response);
+            $('#subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#sales_discount').val(obj['discount']);
+            $('.discount').html(obj['discount']);
+            $('#due').val(obj['due']);
+            $('.dueAmount').html(obj['due']);
         }
+
     })
 
 });
 
-var form = $("#invoiceForm").validate({
+$(document).on('keyup', '#businessInvoice_received', function() {
 
-    rules: {
-
-        "appstore_bundle_dmsbundle_invoice[customer][name]": {required: true},
-        "appstore_bundle_dmsbundle_invoice[customer][mobile]": {required: true},
-        "appstore_bundle_dmsbundle_invoice[customer][age]": {required: true},
-        "appstore_bundle_dmsbundle_invoice[customer][address]": {required: false},
-    },
-
-    messages: {
-
-        "appstore_bundle_dmsbundle_invoice[customer][name]":"Enter patient name",
-        "appstore_bundle_dmsbundle_invoice[customer][mobile]":"Enter patient mobile no",
-        "appstore_bundle_dmsbundle_invoice[customer][age]": "Enter patient age",
-    },
-    tooltip_options: {
-        "appstore_bundle_dmsbundle_invoice[customer][name]": {placement:'top',html:true},
-        "appstore_bundle_dmsbundle_invoice[customer][mobile]": {placement:'top',html:true},
-        "appstore_bundle_dmsbundle_invoice[customer][age]": {placement:'top',html:true},
-    },
-
-    submitHandler: function(form) {
-
-        $.ajax({
-
-            url         : $('form#invoiceForm').attr( 'action' ),
-            type        : $('form#invoiceForm').attr( 'method' ),
-            data        : new FormData($('form#invoiceForm')[0]),
-            processData : false,
-            contentType : false,
-            success: function(response){
-                location.reload();
-            }
-        });
+    var payment     = parseInt($('#businessInvoice_received').val()  != '' ? $('#businessInvoice_received').val() : 0 );
+    var due =  parseInt($('#due').val());
+    var dueAmount = (due-payment);
+    if(dueAmount > 0){
+        $('#balance').html('Due Tk.');
+        $('.dueAmount').html(dueAmount);
+    }else{
+        var balance =  payment - due ;
+        $('#balance').html('Return Tk.');
+        $('.dueAmount').html(balance);
     }
 });
 
-$('#appstore_bundle_dmsbundle_invoice_customer_name').on('click', function(){
-    form.element($(this));
-});
-$('#appstore_bundle_dmsbundle_invoice_customer_mobile').on('click', function(){
-    form.element($(this));
-});
-$('#appstore_bundle_dmsbundle_invoice_customer_age').on('click', function(){
-    form.element($(this));
-});
+$('form#salesForm').on('keypress', '.salesInput', function (e) {
 
-
-$(document).on("click", ".saveButton", function() {
-
-    var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
-    var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        data:formData,
-        success: function(response){
-
+    if (e.which === 13) {
+        var inputs = $(this).parents("form").eq(0).find("input,select");
+        var idx = inputs.index(this);
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
         }
-    });
-
+        switch (this.id) {
+            case 'sales_transactionMethod':
+                $('#sales_salesBy').focus();
+                break;
+            case 'sales_salesBy':
+                $('#sales_received').focus();
+                break;
+            case 'sales_received':
+                $('#receiveBtn').focus();
+                break;
+        }
+        return false;
+    }
 });
 
-$(document).on("change", ".invoiceProcess", function() {
-
-    var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
-    var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
+$(document).on("click", "#receiveBtn", function() {
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.ajax(url,{
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                data: formData,
-                success: function (response){}
-            });
+            $('form#invoiceForm').submit();
         }
     });
-
 });
-
-
-$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_payment', function() {
-
-    var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
-    var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
-    var dueAmount = (due - payment);
-    if(dueAmount > 0){
-        $('#balance').html('Due Tk.');
-        $('.due').html(dueAmount);
-    }else{
-        var balance =  payment - due ;
-        $('#balance').html('Return Tk.');
-        $('.due').html(balance);
-    }
-});
-
-
-
-$('.particular-info').on('keypress', 'input', function (e) {
-    if (e.which == 13) {
-        e.preventDefault();
-        switch (this.id) {
-
-            case 'quantity':
-                $('#price').focus();
-                break;
-
-            case 'price':
-                $('#addParticular').trigger('click');
-                $('#particular').focus();
-                break;
-        }
-    }
-});
-
-/*
-$('form.horizontal-form').on('keypress', 'input', function (e) {
-
-    if (e.which == 13) {
-        e.preventDefault();
-
-        switch (this.id) {
-            case 'appstore_bundle_hospitalbundle_invoice_discount':
-                $('#appstore_bundle_hospitalbundle_invoice_payment').focus();
-                break;
-
-            case 'paymentAmount':
-                $('#receiveBtn').focus();
-                break;
-        }
-    }
-});
-*/

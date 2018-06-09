@@ -122,14 +122,14 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
-            $data .= "<tr id='remove-{$entity->getId()}>";
-            $data .= "<td class='span1' >{$i}</td>";
-            $data .= "<td class='span1' >{$entity->getParticular()}</td>";
-            $data .= "<td class='span4' >{$entity->getPrice()}</td>";
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td class='span1' >{$i}.</td>";
+            $data .= "<td class='span4' >{$entity->getParticular()}</td>";
+            $data .= "<td class='span1' >{$entity->getPrice()}</td>";
             $data .= "<td class='span2' >{$entity->getQuantity()}</td>";
             $data .= "<td class='span2' >{$entity->getSubTotal()}</td>";
             $data .= "<td class='span1' >";
-            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/dms/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
+            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
             $data .= "</td>";
             $data .= '</tr>';
             $i++;

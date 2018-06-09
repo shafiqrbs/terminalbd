@@ -55,9 +55,58 @@ class BusinessInvoice
     private  $createdBy;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="salesUser" )
+     **/
+    private $salesBy;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="businessInvoiceApprovedBy" )
      **/
     private  $approvedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="businessInvoice" )
+     **/
+    private  $accountSales;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="businessInvoice" )
+     **/
+    private  $transactionMethod;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="businessInvoice" )
+     **/
+    private  $bank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="businessInvoice" )
+     **/
+    private  $paymentCard;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="businessInvoice" )
+     **/
+    private  $accountBank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="businessInvoice" )
+     **/
+    private  $accountMobileBank;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cardNo", type="string", length=100, nullable=true)
+     */
+    private $cardNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paymentMobile", type="string", length=50, nullable=true)
+     */
+    private $paymentMobile;
 
     /**
      * @var string
@@ -65,6 +114,14 @@ class BusinessInvoice
      * @ORM\Column(name="paymentInWord", type="string", length=255, nullable=true)
      */
     private $paymentInWord;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transactionId", type="string", length=100, nullable=true)
+     */
+    private $transactionId;
 
     /**
      * @var string
@@ -94,6 +151,21 @@ class BusinessInvoice
      * @ORM\Column(name="paymentStatus", type="string", length=50, nullable=true)
      */
     private $paymentStatus = "Pending";
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountType", type="string", length=20, nullable=true)
+     */
+    private $discountType ='percentage';
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
+     */
+    private $discountCalculation;
+
 
 
     /**
@@ -135,9 +207,9 @@ class BusinessInvoice
     /**
      * @var string
      *
-     * @ORM\Column(name="receive", type="decimal", nullable=true)
+     * @ORM\Column(name="received", type="decimal", nullable=true)
      */
-    private $receive;
+    private $received;
 
     /**
      * @var string
@@ -524,22 +596,6 @@ class BusinessInvoice
     /**
      * @return string
      */
-    public function getReceive()
-    {
-        return $this->receive;
-    }
-
-    /**
-     * @param string $receive
-     */
-    public function setReceive($receive)
-    {
-        $this->receive = $receive;
-    }
-
-    /**
-     * @return string
-     */
     public function getCommission()
     {
         return $this->commission;
@@ -578,13 +634,204 @@ class BusinessInvoice
     }
 
     /**
-     * @param BusinessInvoiceParticular $businessInvoiceParticulars
+     * @return string
      */
-    public function setBusinessInvoiceParticulars($businessInvoiceParticulars)
+    public function getDiscountType()
     {
-        $this->businessInvoiceParticulars = $businessInvoiceParticulars;
+        return $this->discountType;
     }
 
+    /**
+     * @param string $discountType
+     */
+    public function setDiscountType($discountType)
+    {
+        $this->discountType = $discountType;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountCalculation()
+    {
+        return $this->discountCalculation;
+    }
+
+    /**
+     * @param float $discountCalculation
+     */
+    public function setDiscountCalculation($discountCalculation)
+    {
+        $this->discountCalculation = $discountCalculation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * @param string $transactionId
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->transactionId = $transactionId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMobile()
+    {
+        return $this->paymentMobile;
+    }
+
+    /**
+     * @param string $paymentMobile
+     */
+    public function setPaymentMobile($paymentMobile)
+    {
+        $this->paymentMobile = $paymentMobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCardNo()
+    {
+        return $this->cardNo;
+    }
+
+    /**
+     * @param string $cardNo
+     */
+    public function setCardNo($cardNo)
+    {
+        $this->cardNo = $cardNo;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return Bank
+     */
+    public function getBank()
+    {
+        return $this->bank;
+    }
+
+    /**
+     * @param Bank $bank
+     */
+    public function setBank($bank)
+    {
+        $this->bank = $bank;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return AccountSales
+     */
+    public function getAccountSales()
+    {
+        return $this->accountSales;
+    }
+
+    /**
+     * @return PaymentCard
+     */
+    public function getPaymentCard()
+    {
+        return $this->paymentCard;
+    }
+
+    /**
+     * @param PaymentCard $paymentCard
+     */
+    public function setPaymentCard($paymentCard)
+    {
+        $this->paymentCard = $paymentCard;
+    }
+
+    /**
+     * @return User
+     */
+    public function getSalesBy()
+    {
+        return $this->salesBy;
+    }
+
+    /**
+     * @param User $salesBy
+     */
+    public function setSalesBy($salesBy)
+    {
+        $this->salesBy = $salesBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReceived()
+    {
+        return $this->received;
+    }
+
+    /**
+     * @param string $received
+     */
+    public function setReceived($received)
+    {
+        $this->received = $received;
+    }
 
 }
 

@@ -189,6 +189,19 @@ class ReportController extends Controller
         ));
     }
 
+    public function purchaseBrandAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user,$data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseBrand.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'entities'              => $entities ,
+            'searchForm'            => $data,
+        ));
+    }
+
     public function purchaseVendorDetailsAction()
     {
         $data = $_REQUEST;
@@ -224,18 +237,7 @@ class ReportController extends Controller
         ));
     }
 
-    public function purchaseBrandAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user,$data);
-        return $this->render('MedicineBundle:Report:purchase/purchaseBrand.html.twig', array(
-            'option'                => $user->getGlobalOption() ,
-            'entities'              => $entities ,
-            'searchForm'            => $data,
-        ));
-    }
+
 
     public function purchaseBrandSalesAction()
     {

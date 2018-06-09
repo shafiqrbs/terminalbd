@@ -68,7 +68,6 @@ class TransactionMethod
      **/
     private  $serviceSales;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */
@@ -184,6 +183,11 @@ class TransactionMethod
      */
     protected $businessPurchase;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="transactionMethod" )
+     */
+    protected $businessInvoice;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="transactionMethod" )
      */
@@ -199,21 +203,11 @@ class TransactionMethod
      */
     protected $dpsTreatmentPlans;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="transactionMethod" )
-     */
-    protected $businessTransactions;
-
-
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="transactionMethod" )
      */
     protected $medicineSales;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="transactionMethod" )
-     */
-    protected $businessInvoice;
 
     /**
      * @var string

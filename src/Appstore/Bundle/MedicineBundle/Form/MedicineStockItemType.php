@@ -50,10 +50,10 @@ class MedicineStockItemType extends AbstractType
                         ->andWhere('pt.slug IN (:slugs)')->setParameter('slugs',array('herbal','accessories','medicine','non-medicine','surgery','medical-device'));
                 },
             ])
-            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Qnt')))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span5 stockInput','placeholder'=>'Purchase price')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'MRP')))
-            ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12 stockInput','placeholder'=>'Rack no'),
+            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Qnt','autoComplete'=>'off')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span5 stockInput','placeholder'=>'Purchase price','autoComplete'=>'off')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
+            ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12 stockInput','placeholder'=>'Rack no','autoComplete'=>'off'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )

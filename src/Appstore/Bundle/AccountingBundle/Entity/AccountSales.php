@@ -118,6 +118,13 @@ class AccountSales
      **/
     private  $medicineSales;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="business_invoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $businessInvoice;
+
+
     /**
      * @var string
      *
@@ -680,6 +687,22 @@ class AccountSales
     public function setVat($vat)
     {
         $this->vat = $vat;
+    }
+
+    /**
+     * @return BusinessInvoice
+     */
+    public function getBusinessInvoice()
+    {
+        return $this->businessInvoice;
+    }
+
+    /**
+     * @param BusinessInvoice $businessInvoice
+     */
+    public function setBusinessInvoice($businessInvoice)
+    {
+        $this->businessInvoice = $businessInvoice;
     }
 
 

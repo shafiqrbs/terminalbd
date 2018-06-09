@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
@@ -72,6 +73,12 @@ class PaymentCard
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="paymentCard")
      */
     protected $dpsTreatmentPlans;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="paymentCard" )
+     */
+    protected $businessInvoice;
+
 
     /**
      * @var string
@@ -185,6 +192,14 @@ class PaymentCard
     public function getDpsTreatmentPlans()
     {
         return $this->dpsTreatmentPlans;
+    }
+
+    /**
+     * @return BusinessInvoice
+     */
+    public function getBusinessInvoice()
+    {
+        return $this->businessInvoice;
     }
 
 }

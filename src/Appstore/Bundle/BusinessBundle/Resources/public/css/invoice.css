@@ -1,3 +1,15 @@
+#cartMethod , #bkashMethod{
+    display: none;
+}
+#hide{
+    display: none;
+}
+.customer{
+    display: none;
+}
+.btn-ajax-loading {
+    position:inherit;
+}
 
 .dropdown-menu .divider{
     margin: 0;
@@ -6,10 +18,17 @@
     display: none;
 }
 .particular-info{
-    background: #8a8a8a;
+    background: #333333;
     padding: 10px;
     padding-left:0;
     padding-right: 4px;
+    border-bottom: 2px solid #9e9521fc;
+    border-top: 2px solid #9e9521fc;
+}
+
+div.checker {
+    border: 3px solid red;
+    margin-top: -4px;
 }
 
 .btn-show{
@@ -55,14 +74,16 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .sales-right{
     padding-right: 10px;
+    float: right;
+    text-align: right;
+    width: 190px;
 }
-.sales-right input{
-    width: 110px;
+.sales-right input[class*="span"].m-wrap{
     font-weight: bold;
-    margin-top: -5px;
-    text-align: left;
-    border: 1px solid #f39c12;
-    height: 23px
+    margin-top: -1px;
+    text-align: right;
+    border: 2px solid #4b8df8!important;
+    height: 23px!important;
 }
 .select2-search{
     padding-left: 0;
@@ -107,13 +128,13 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .form-horizontal .payment-info .control-group{
     margin-bottom: 0!important;
-    border-bottom: 1px solid #e67e22;
+    border-bottom: 1px solid #2e2e2e;
 }
 .form-horizontal .payment-info .control-label{
     float: left;
     text-align: left;
-    background: #f39c12;
-    color: #fff;
+    background: #f9f9f9;
+    color: #000;
     font-weight: bold;
     line-height: 32px;
     height: 33px;
@@ -122,7 +143,15 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     font-size: 14px;
 }
 
-.form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span , .form-horizontal .payment-info .control-label span{
+.form-horizontal .payment-info .control-label .label {
+    padding-left: 8px!important;
+    background: none;
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+}
+
+.form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span {
     padding-left: 8px;
 }
 
@@ -186,17 +215,12 @@ input[class*="span"].m-wrap  {
 .portlet.box .form .form-actions, .portlet.solid .form .form-actions {
     margin-top: -9px !important;
 }
-.tab-height{
-    min-height: 525px;
-}
-
 .row-fluid label{
     line-height: 30px!important;
 }
 
 input[class*="span"].wrap-custom{
     height: 30px!important;
-
 }
 
 li.active > a {
@@ -208,14 +232,15 @@ li.active > a {
 }
 
 .select2-container-multi .select2-choices {
-    min-height: 26px;
-    height: 32px!important;
+    min-height: 30px;
 }
 .select2-container-multi .select2-choices .select2-search-choice div {
-    width: 20px!important;
-    background: #d12610;
-    color: #fff!important;
+    color: #000!important;
     text-align: center;
+}
+.form-control-select{
+    width: 100%;
+    overflow-y:scroll;
 }
 #project-label {
     display: block;
@@ -231,84 +256,16 @@ li.active > a {
     margin: 0;
     padding: 0;
 }
-.dms-table {
-
-}
-.dms-table tr{
-    height:15px!important;
-    line-height: 15px!important;
-}
-.dms-table .dms-td{
-    height: 15px!important;
-    line-height: 15px;
-    padding: 1px!important;
-    width: 180px;
-
-}
-.dms-table .dms-td-border-none{
-    border: none!important;
-    text-align:right!important;
-}
-.dms-table .dms-td-border-bottom{
-    border-bottom:2px solid #4b8df8!important;
-}
-
-.dms-table .dms-td ul.rightTeeth , .dms-table .dms-td ul.leftTeeth{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.dms-table .dms-td ul.rightTeeth{
-    float:right;
-}
-.dms-table .dms-td ul.leftTeeth{
-
-}
-.dms-table .dms-td ul.leftTeeth li, .dms-table .dms-td ul.rightTeeth li {
-    float: left;
-    border: 1px solid #000;
-    margin: 1px;
-    height: 15px;
-    line-height: 15px;
-    padding: 5px;
-    padding-bottom: 1px;
-    padding-top: 1px;
-}
-.dms-table .dms-td ul.leftTeeth li.active , .dms-table .dms-td ul.rightTeeth li.active{
-    color: #d12610 !important;
-    border: 1px solid #d12610!important;
-}
-.dms-teeth-plan{
-    margin-top: -18px;
-}
-
-.dms-teeth-plan .dms-plan-td{
-    padding: 1px!important;
-    width: 275px;
-
-}
-.dms-teeth-plan .dms-plan-td-border-none{
-    border: none!important;
-    text-align:right!important;
-}
-.dms-teeth-plan .dms-plan-td-border-bottom{
-    border-bottom:red 1px solid !important;
-}
-.dms-teeth-plan ul.leftFormatTeeth ,.dms-teeth-plan ul.rightFormatTeeth{
-    list-style:none;
-}
-.dms-teeth-plan .leftFormatTeeth li, .dms-teeth-plan .rightFormatTeeth li {
-    float: left;
-    padding: 3px;
-}
-.dms-teeth-plan .dms-td ul.rightFormatTeeth{
-    float:right;
-}
 
 .checkbox-custom.focus{
     border:red 1px solid ;
 }
 .preview-print{
     float: right;
+}
+
+.sales-right .discount-type {
+    height: 20px!important;
+    border: 2px solid red !important;
+    margin-top: -4px!important;
 }
