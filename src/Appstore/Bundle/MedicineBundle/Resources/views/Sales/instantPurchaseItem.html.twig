@@ -37,10 +37,19 @@
                 <input type="text" id="purchasePrice" name="purchasePrice" required="required" class="m-wrap span3 input" placeholder="Purchase price" aria-required="true">
              #}
                 <select name="mode" id="mode" class="span5 m-wrap">
-                    <option  value="">Product Mode</option>
+                    <option  value="">Product Brand</option>
                     {% for mode in modeFor %}
-                        <option {% if searchForm.mode is defined and searchForm.mode == mode.slug %} selected="selected" {% endif %} value="{{ mode.slug }}">{{ mode.name }}</option>
+                        {% if mode.particulars is not empty %}
+                            <optgroup label="{{ mode.name }}">
+                                {% for brand in mode.particulars %}
+                                    {% if brand is not empty and brand.status == 1 %}
+                                        <option  value="{{ brand.id }}">{{ brand.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </optgroup>
+                        {% endif %}
                     {% endfor %}
+
                 </select>
                 <input type="text" id="salesQuantity" name="salesQuantity" class="m-wrap span3 form-control input-number input" placeholder="Sales qnt" aria-required="true">
                 <input type="text" id="salesPrice" name="salesPrice" class="m-wrap span3 input" placeholder="MRP" aria-required="true">

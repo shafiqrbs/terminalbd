@@ -279,7 +279,11 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $entity = new MedicineStock();
             $entity->setMedicineConfig($config);
             if(empty($data['medicineId'])){
-                $entity->setMode($data['mode']);
+                if($data['mode']){
+                    $brandName = $this->_em->getRepository('MedicineBundle:MedicineParticular')->find($data['mode']);
+                    $entity->setMode($brandName->getParticularType()->getSlug());
+                    $entity->setBrandName($brandName->getName());
+                }
                 $entity->setName($data['medicineBrand']);
             }else{
                 $entity->setMedicineBrand($medicine);

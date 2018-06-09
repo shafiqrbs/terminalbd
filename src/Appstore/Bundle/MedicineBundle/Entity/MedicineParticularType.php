@@ -23,7 +23,7 @@ class MedicineParticularType
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticularType", mappedBy="particularType")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticular", mappedBy="particularType")
      */
     protected $particulars;
 
