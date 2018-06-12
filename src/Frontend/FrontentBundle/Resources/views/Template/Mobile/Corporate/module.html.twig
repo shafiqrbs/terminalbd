@@ -10,7 +10,7 @@
     <div class="clearfix"></div>
     <div class="page-title-bar">
         <div class="btn-group pull-left">
-            <div class="page-title">{{ menu.menu }}</div>
+            <div class="page-title">{{ menu.menu }} {% if category is defined and category is not empty %} : {{ category.name }}{% endif %}</div>
         </div>
     </div>
     <div class="clearfix"></div>
