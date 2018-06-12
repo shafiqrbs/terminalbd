@@ -423,8 +423,7 @@ var InventorySales = function(sales) {
 
     $(document).on("click", ".receiveBtn", function() {
 
-        var total =  parseInt($('#paymentTotal').val());
-        if(total === 0 ){
+        if ($('#paymentTotal').val().length == 0){
             alert('Please add sales item');
             $('input[name=barcode]').focus();
             return false;
@@ -439,7 +438,6 @@ var InventorySales = function(sales) {
         });
 
     });
-
 
     $(document).on('change', '#sales_transactionMethod', function() {
 

@@ -89,7 +89,6 @@ owlSidebarClient.owlCarousel({
     ],
 });
 
-
 /*======================== End Client Slider =============================*/
 
 
@@ -266,5 +265,26 @@ owlSidebarTestimonial.owlCarousel({
         "<a id='testimonial-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
     ],
 
+});
+
+/*======================== Product Slider =============================*/
+
+var owlSidebarProduct = $("#product-mobile-slider");
+owlSidebarProduct.owlCarousel({
+    items:1,
+    slideSpeed : 3000,
+    itemsDesktop:[1000,2],
+    itemsDesktopSmall:[979,1],
+    itemsTablet:[768,1],
+    pagination:false,
+    singleItem:true,
+    transitionStyle:"backSlide",
+    rewindNav : false,
+    autoPlay:false,
+    navigation:true,
+    navigationText: [
+        "<a id='feature-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='feature-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 

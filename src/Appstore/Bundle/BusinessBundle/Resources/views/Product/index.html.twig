@@ -42,10 +42,10 @@
                                 <!--/span-->
                                 <div class="span9">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Accessories<span class="required">*</span></label>
+                                        <label class="control-label" for="name">Name<span class="required">*</span></label>
                                         <div class="controls">
-                                            {{ form_widget(form.dmsParticular) }}
-                                            {{ form_errors(form.dmsParticular) }}
+                                            {{ form_widget(form.name) }}
+                                            {{ form_errors(form.name) }}
                                         </div>
                                     </div>
                                 </div>
@@ -58,7 +58,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
@@ -84,8 +83,8 @@
                                 {% for entity in entities %}
                                     <tr id="accessories-{{ entity.id }}">
                                         <td class="numeric">{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric">{{ entity.dmsParticular.particularCode }}</td>
-                                        <td class="numeric">{{ entity.dmsParticular.name }}</td>
+                                        <td class="numeric">{{ entity.particularCode }}</td>
+                                        <td class="numeric">{{ entity.name }}</td>
                                         <td class="numeric">{{ entity.quantity }}</td>
                                         <td class="numeric">{{ entity.price }}</td>
                                         <td class="numeric">{{ entity.subTotal }}</td>

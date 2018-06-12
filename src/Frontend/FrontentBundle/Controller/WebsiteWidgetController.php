@@ -253,4 +253,24 @@ class WebsiteWidgetController extends Controller
         ));
     }
 
+    public function pageMobileModuleFeatureCategoryWidgetAction(GlobalOption $globalOption,FeatureWidget $widget)
+    {
+        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getModuleShowLimit() : 10;
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:ModuleCategory')->getFeatureModuleCategory($globalOption,$limit);
+        return $this->render('@Frontend/Template/Mobile/WebsiteWidget/featureWidgetCategory.html.twig', array(
+            'widget'                => $widget,
+            'globalOption'          => $globalOption,
+            'categories'              => $entities,
+        ));
+    }
+
+    public function pageMobileModuleCategoryWidgetAction(GlobalOption $globalOption,FeatureWidget $widget)
+    {
+        return $this->render('@Frontend/Template/Mobile/WebsiteWidget/moduleCategoryWidget.html.twig', array(
+            'widget'                => $widget,
+            'globalOption'          => $globalOption,
+        ));
+    }
+
+
 }

@@ -60,7 +60,13 @@
         </div>
     {% endif %}
     <div class="clearfix"></div>
-
+    {% if widget.module is defined and widget.module.slug == 'category' %}
+        {% render controller("FrontendBundle:WebsiteWidget:pageMobileModuleFeatureCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
+    {% endif %}
+    {% if widget.moduleCategory is defined and widget.moduleCategory is not empty %}
+        {% render controller("FrontendBundle:WebsiteWidget:pageMobileModuleCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
+    {% endif %}
+    <div class="clearfix"></div>
     {% if entities is defined and entities is not empty and widget.module.slug == 'blog' %}
         <div class="mobile-carousel">
             {% if  widget.moduleFeatureName is not empty %}
@@ -469,7 +475,6 @@
             {% endif %}
         </div>
     {% endif %}
-
     {% if entities is defined and entities is not empty  and widget.module.slug == 'service' %}
         <div class=" -override mobile-carousel">
             {% if  widget.moduleFeatureName is not empty %}
@@ -670,43 +675,16 @@
         </div>
     {% endif %}
     {% if entities is defined and entities is not empty and widget.module.slug == 'products' %}
-        <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
+        <div class="mobile-carousel" >
             {% if  widget.moduleFeatureName is not empty %}
                 <div class="page-title">{{ widget.moduleFeatureName }}</div>
             {% endif %}
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="row">
-                    <div id="portfolio-page-slider" class="owl-carousel">
-                        {% for key,product in entities  %}
-                            <div class="col-md-12 grid">
-                                <div class="our-portfolio">
-                                    <img style="width: 100%!important;" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
-                                    <div class="team-content">
-                                        <h3 class="team-prof">
-                                            <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a>
-                                            {% if product.category is not empty %}<small>{{ product.category.name }}</small>{% endif %}
-                                        </h3>
-                                    </div>
-                                </div>
-                                <h4><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}"><strong>{{ product.name }}</strong></a></h4>
-                                <p>{% for cat in product.moduleCategory  %}
-                                        <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
-                                        {% if not loop.last %},{% endif %}
-                                    {% endfor %}
-                                </p>
-                                {% if product.price is not empty %}
-                                    <p class="text-left">{% if product.pricePrefix is not empty %}{{ product.pricePrefix.currency }}. {% endif %}<strong>{{ product.price }}</strong></p>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% else %}
-                <div class="row">
-                    {% for key,portfolio in entities  %}
-                        <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
-                            <div class="our-portfolio">
-                                <img style="width: 100%!important;" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
+            <div class="row">
+                <div id="product-mobile-slider">
+                    {% for key,product in entities  %}
+                    <div class="col-md-12 wow fadeInDown" data-wow-delay="1s" >
+                        <div class="our-portfolio" data-match-height="pageFeature">
+                            <img style="width:100%!important" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
                                 <div class="team-content">
                                     <h3 class="team-prof">
                                         <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a>
@@ -714,19 +692,19 @@
                                     </h3>
                                 </div>
                             </div>
-                            <h4><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}"><strong>{{ product.name }}</strong></a></h4>
-                            <p>{% for cat in product.moduleCategory  %}
+                            <h5><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}"><strong>{{ product.name }}</strong></a></h5>
+                            <span>{% for cat in product.moduleCategory  %}
                                     <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
                                     {% if not loop.last %},{% endif %}
                                 {% endfor %}
-                            </p>
+                            </span>
                             {% if product.price is not empty %}
                                 <p class="text-left">{% if product.pricePrefix is not empty %}{{ product.pricePrefix.currency }}. {% endif %}<strong>{{ product.price }}</strong></p>
                             {% endif %}
                         </div>
                     {% endfor %}
                 </div>
-            {% endif %}
+            </div>
         </div>
     {% endif %}
 
