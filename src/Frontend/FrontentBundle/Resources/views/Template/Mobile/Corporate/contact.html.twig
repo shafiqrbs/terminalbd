@@ -85,7 +85,10 @@
                     </div>
                 </div>
                 <hr>
-                {% if(page.isContactForm == false) %}
+                {% if page.address2 is not empty %}
+                    {{ page.address2|raw }}
+                {% endif %}
+                {% if(page.contactPerson is not empty) %}
                     <div class="row">
                         <div class="col-md-12">
                             <strong><i class="fa fa-user"></i>&nbsp;Contact Information</strong><br>
@@ -95,7 +98,8 @@
                             {% if(page.additionalEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.additionalEmail|raw }}</a></br>{% endif %}
                         </div>
                     </div>
-                {% else %}
+                {% endif %}
+                {% if(page.isContactForm == 1) %}
                     <div class="row">
                         <div class="col-md-12">
                             <strong><h4><i class="fa fa-user"></i>&nbsp;Contact Information</strong></h4><br>

@@ -19,7 +19,7 @@
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
                     </p>
-                    {% if product.price is not empty %}
+                    {% if product.price is not empty and product.price > 0 %}
                         <p class="text-left">{% if product.pricePrefix is not empty %}{{ product.pricePrefix.currency }}. {% endif %}<strong>{{ product.price }}</strong></p>
                     {% endif %}
                 </div>

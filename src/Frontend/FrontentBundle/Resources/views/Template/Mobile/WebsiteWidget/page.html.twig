@@ -236,7 +236,7 @@
                                 <div class="event-sidebar" data-match-height="mobileEvent" >
                                     <div class="post-img">
                                         <img src="{{ image(entity.webPath) }}" alt="" class="img-responsive">
-                                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}" class="overlay"><i class="fa fa-plus-square-o"></i></a>
+                                        <a href="{{ path('webservice_module_page',{'module': 'event','slug':entity.slug }) }}" class="overlay"><i class="fa fa-plus-square-o"></i></a>
                                     </div>
 
                                     <div class="post-review">
@@ -245,7 +245,7 @@
                                             <li><i class="fa fa-map-marker"></i> <simple>{{ entity.location.name }}</simple></li>
                                         </ul>
                                         <div class="clearfix"></div>
-                                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
                                         <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
                                     </div>
                                 </div>
@@ -260,7 +260,7 @@
                             <div class="event-sidebar" data-match-height="mobileEvent">
                                 <div class="post-img">
                                     <img src="{{ image(entity.webPath) }}" alt="" class="img-responsive">
-                                    <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}" class="overlay"><i class="fa fa-plus-square-o"></i></a>
+                                    <a href="{{ path('webservice_module_page',{'module': 'event','slug':entity.slug }) }}" class="overlay"><i class="fa fa-plus-square-o"></i></a>
                                 </div>
 
                                 <div class="post-review">
@@ -269,7 +269,7 @@
                                         <li><i class="fa fa-map-marker"></i> <simple>{{ entity.location.name }}</simple></li>
                                     </ul>
                                     <div class="clearfix"></div>
-                                    <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                    <h5 class="post-title"><a href="{{ path('webservice_module_page',{'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
                                     <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
                                 </div>
                             </div>
@@ -569,7 +569,7 @@
                                         <img src="{{ image(team.webPath).scaleResize(263,200) }}">
                                         <div class="over-layer">
                                             <ul class="social-links">
-                                                <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'team','slug':team.slug }) }}"><i class="fa fa-link"></i></a></li>
+                                                <li><a href="{{ path('webservice_module_page',{'module': 'team','slug':team.slug }) }}"><i class="fa fa-link"></i></a></li>
                                                 {% if team.facebook is not empty  %}
                                                     <li><a href="https://facebook.com/{{ team.facebook }}"><i class="fa fa-facebook"></i></a></li>
                                                 {% endif %}
@@ -601,7 +601,7 @@
                                     <img src="{{ image(team.webPath).scaleResize(263,200) }}">
                                     <div class="over-layer">
                                         <ul class="social-links">
-                                            <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'team','slug':team.slug }) }}"><i class="fa fa-link"></i></a></li>
+                                            <li><a href="{{ path('webservice_module_page',{'module': 'team','slug':team.slug }) }}"><i class="fa fa-link"></i></a></li>
                                             {% if team.facebook is not empty  %}
                                                 <li><a href="https://facebook.com/{{ team.facebook }}"><i class="fa fa-facebook"></i></a></li>
                                             {% endif %}
@@ -687,18 +687,18 @@
                             <img style="width:100%!important" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
                                 <div class="team-content">
                                     <h3 class="team-prof">
-                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a>
+                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a>
                                         {% if product.category is not empty %}<small>{{ product.category.name }}</small>{% endif %}
                                     </h3>
                                 </div>
                             </div>
-                            <h5><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}"><strong>{{ product.name }}</strong></a></h5>
+                            <h5><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': product.module.slug,'slug':product.slug }) }}"><strong>{{ product.name }}</strong></a></h5>
                             <span>{% for cat in product.moduleCategory  %}
-                                    <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
+                                    <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module': product.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
                                     {% if not loop.last %},{% endif %}
                                 {% endfor %}
                             </span>
-                            {% if product.price is not empty %}
+                            {% if product.price is not empty and product.price > 0 %}
                                 <p class="text-left">{% if product.pricePrefix is not empty %}{{ product.pricePrefix.currency }}. {% endif %}<strong>{{ product.price }}</strong></p>
                             {% endif %}
                         </div>

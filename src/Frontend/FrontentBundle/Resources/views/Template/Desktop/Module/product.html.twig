@@ -18,15 +18,18 @@
                     <p class="group inner list-group-item-text">{{ entity.content|striptags|raw|truncate(150) }}</p>
                     <p class="group inner list-group-item-text"> {% if entity.moduleCategory is not empty %}
                             {% for cat in entity.moduleCategory  %}
-                                <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
+                                <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module': entity.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
                                 {% if not loop.last %},{% endif %}
                             {% endfor %}
                         {% endif %}</p>
                     <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                        </div>
-                        <div class="col-xs-12 col-md-6">
-                            <a class="btn btn-success" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
+                        <div class="col-xs-6 col-md-6 text-left">
+                            {% if entity.price is not empty and entity.price > 0 %}
+                                <strong>
+                                    {% if entity.pricePrefix is not empty %}{{ entity.pricePrefix.currency }}. {% endif %}<strong>{{ entity.price }}</strong>
+                                </strong>
+                            {% endif %}
+                            <a class="btn btn-success" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
                         </div>
                     </div>
                 </div>

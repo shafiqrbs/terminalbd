@@ -11,7 +11,7 @@
     <dl class="entity-list">
         <dd><span><i class="fa fa-tags"></i>
                 {% for cat in page.moduleCategory %}
-                    <a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module':'porduct' ,'slug':cat.slug }) }}">{{ cat.name }}</a>{% if not loop.last %},{% endif %}
+                    <a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module':'porduct' ,'slug':cat.slug }) }}">{{ cat.name }}</a>{% if not loop.last %},{% endif %}
                 {% endfor %}
             </span>
         </dd>
@@ -55,7 +55,7 @@
     <div class="col-md-4">
         <h4><strong>Description</strong></h4>
         {% if page.content is not empty %}<p>{{ page.content|raw }}</p> <hr>{% endif %}
-        {% if page.price is not empty %}
+        {% if page.price is not empty and page.price > 0 %}
             <div class="row meta-label"><div class="col-xs-12 col-md-12">Price: {% if page.pricePrefix is not empty %}{{ page.pricePrefix.currency }}. {% endif %}<strong>{{ page.price }}</strong></div></div>
         {% endif %}
         {% if page.skuCode is not empty %}
@@ -124,18 +124,18 @@
                     <p class="group inner list-group-item-text">{{ entity.content|striptags|raw|truncate(150) }}</p>
                     <p class="group inner list-group-item-text"> {% if entity.moduleCategory is not empty %}
                             {% for cat in entity.moduleCategory  %}
-                                <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
+                                <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module': entity.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
                                 {% if not loop.last %},{% endif %}
                             {% endfor %}
                         {% endif %}</p>
                     <div class="row">
                         <div class="col-xs-12 col-md-8">
-                            {% if entity.price is not empty %}
+                            {% if entity.price is not empty and entity.price > 0 %}
                                {% if entity.pricePrefix is not empty %}{{ entity.pricePrefix.currency }}. {% endif %}<strong>{{ entity.price }}</strong>
                             {% endif %}
                         </div>
                         <div class="col-xs-12 col-md-4">
-                            <a class="btn btn-warning" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
+                            <a class="btn btn-warning" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
                         </div>
                     </div>
                 </div>
