@@ -12,8 +12,8 @@
         {{ include('@Frontend/Template/Mobile/ModuleDetails/service.html.twig')}}
     {% elseif( menu.module.slug == 'team' ) %}
         {{ include('@Frontend/Template/Mobile/ModuleDetails/team.html.twig')}}
-    {% elseif( menu.module.slug == 'syndicate' ) %}
-        {{ include('@Frontend/Template/Mobile/ModuleDetails/syndicate.html.twig')}}
+    {% elseif( menu.module.slug == 'products' ) %}
+        {{ include('@Frontend/Template/Mobile/ModuleDetails/product.html.twig')}}
     {% else %}
         {{ include('@Frontend/Template/Mobile/Module/default.html.twig')}}
     {% endif %}

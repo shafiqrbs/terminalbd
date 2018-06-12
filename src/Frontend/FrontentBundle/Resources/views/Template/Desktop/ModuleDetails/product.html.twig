@@ -9,7 +9,7 @@
 <div class="clearfix"></div>
 <div id="catlist">
     <dl class="entity-list">
-        <dd><i class="fa fa-calendar"></i> {{ page.updated|date('d F, Y') }} <span><i class="fa fa-tags"></i>
+        <dd><span><i class="fa fa-tags"></i>
                 {% for cat in page.moduleCategory %}
                     <a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module':'porduct' ,'slug':cat.slug }) }}">{{ cat.name }}</a>{% if not loop.last %},{% endif %}
                 {% endfor %}

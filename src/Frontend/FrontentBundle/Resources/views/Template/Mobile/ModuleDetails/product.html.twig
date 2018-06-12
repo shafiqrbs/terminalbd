@@ -29,25 +29,6 @@
 {% endif %}
 <div class="clearfix"></div>
 <div class="container">
-    <div class="row">
-        <div class="col-md-12" data-match-height="event-img" >
-            <div class="event-sidebar" style="background: #FBFCFC; height:100%; border-bottom: none">
-                <br/>
-                <div class="col-md-12">
-                <ul class="post-comment">
-                    <li><i class="fa fa-calendar"></i> {{ page.created|date('d') }}&nbsp;<simple>{{ page.created|date('M,Y') }}</simple></li>
-                </ul>
-                </div>
-                <div class="clearfix"></div>
-                <div class="col-md-12"> <h4>{{ page.name }}</h4></div>
-                <div class="col-md-4"><strong>{{ page.eventType }}</strong></div><div class="col-md-8 text-right" ><strong>{{ page.price }}</strong></div>
-                <div class="col-md-12">
-                    by {{ page.organization }}
-                </div>
-                <div class="clearfix"><br/></div>
-            </div>
-        </div>
-    </div>
     <div class="clearfix"></div>
     {% if globalOption.templateCustomize.showSocialIcon == 1 %}
     <div class="col-md-12 social-icon-bar" >
@@ -82,32 +63,60 @@
     <div class="clearfix"></div>
     {% endif %}
     <div class="row">
-        <div class="col-md-12">
-            <h4>Description</h4>
-            <div class="text-content">{{ page.content|raw }}</div>
-        </div>
         <div class="col-md-4">
-            <div class="sidebar-branch">
-                <h5 class="text-center branch-head"><strong>Date & Time</strong></h5>
-                <dl>
-                    <dd style="font-size: 12px" ><i class="fa fa-calendar"></i>&nbsp;{{ page.startDate|date('D M j,Y') }} - {{ page.startDate|date('D M j,Y') }}</dd>
-                    <dd style="font-size: 12px" ><i class="fa fa-times-circle-o"></i>&nbsp;{{ page.startHour }} - {{ page.endHour }}</dd>
-                </dl>
-            </div>
-            <div class="sidebar-branch">
-                <h5 class="text-center branch-head"><strong>Location & Address</strong></h5>
-                <dl>
-                    <dd><i class="fa fa-home"></i>&nbsp;{{ page.address|raw }}</dd>
-                    <dd><i class="fa fa-user"></i>&nbsp;{{ page.contactPerson }}</dd>
-                    <dd><i class="fa fa-mobile"></i>&nbsp;+ {{ page.mobile }}</dd>
-                    <dd><i class="fa fa-envelope-o"></i>&nbsp;{{ page.email }}</dd>
-                    {% if page.phone is not empty %}<dd><i class="fa fa-phone-square"></i>&nbsp;{{ page.phone }}</dd>{% endif %}
-                    {% if page.website is not empty %}<dd><i class="fa fa-anchor"></i>&nbsp;{{ page.website }}</dd>{% endif %}
-                    {% if page.fax is not empty %}<dd><i class="fa fa-fax"></i>&nbsp;{{ page.fax }}</dd>{% endif %}
-                    {% if page.additionalPhone is not empty %}<dd><i class="fa fa-phone-square"></i>&nbsp;{{ page.additionalPhone }}</dd>{% endif %}
-                    <dd class="text-center"><a class="btn btn-success" target="_blank" href="http://maps.google.com/?q={{ page.latitude }},{{ page.longitude }}">View Map</a></dd>
-                </dl>
-
+            <h4><strong>Description</strong></h4>
+            {% if page.content is not empty %}<p>{{ page.content|raw }}</p> <hr>{% endif %}
+            {% if page.price is not empty %}
+                <div class="row meta-label"><div class="col-xs-12 col-md-12">Price: {% if page.pricePrefix is not empty %}{{ page.pricePrefix.currency }}. {% endif %}<strong>{{ page.price }}</strong></div></div>
+            {% endif %}
+            {% if page.skuCode is not empty %}
+                <div class="row meta-label"><div class="col-xs-12 col-md-12">SKU: {{ page.skuCode }}</div></div>
+            {% endif %}
+            <hr>
+            {% if  page.pageMetas is defined and page.pageMetas is not empty %}
+                {% for meta in page.pageMetas %}
+                    {% if meta.metaKey is not empty and meta.metaValue is empty %}
+                        <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
+                    {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
+                        <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
+                    {% else %}
+                        <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ meta.metaValue  }}</div></div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="page-title-bar">
+        <div class="btn-group pull-left">
+            <div class="page-title"><i class="fa fa-tags"></i>&nbsp;{{ page.moduleCategory[0].name }}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="mobile-carousel" >
+            <div id="product-mobile-slider">
+                {% for product in page.moduleCategory[0].pages|slice(0,12) %}
+                    <div class="col-md-12 wow fadeInDown" data-wow-delay="1s" >
+                        <div class="our-portfolio" data-match-height="pageFeature">
+                            <img style="width:100%!important" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
+                            <div class="team-content">
+                                <h3 class="team-prof">
+                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}">{{ product.name }}</a>
+                                    {% if product.category is not empty %}<small>{{ product.category.name }}</small>{% endif %}
+                                </h3>
+                            </div>
+                        </div>
+                        <h5><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':product.slug }) }}"><strong>{{ product.name }}</strong></a></h5>
+                        <span>{% for cat in product.moduleCategory  %}
+                                    <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': product.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
+                                {% if not loop.last %},{% endif %}
+                            {% endfor %}
+                            </span>
+                        {% if product.price is not empty %}
+                            <p class="text-left">{% if product.pricePrefix is not empty %}{{ product.pricePrefix.currency }}. {% endif %}<strong>{{ product.price }}</strong></p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

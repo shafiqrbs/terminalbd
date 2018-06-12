@@ -43,13 +43,13 @@
         {{ include('@Frontend/Template/Mobile/Module/timeline.html.twig')}}
     {% elseif( menu.module.slug == 'admission' ) %}
         {{ include('@Frontend/Template/Mobile/Module/admission.html.twig')}}
-    {% elseif( menu.module.slug == 'syndicate' ) %}
-        {{ include('@Frontend/Template/Mobile/Module/syndicate.html.twig')}}
+    {% elseif( menu.module.slug == 'products' ) %}
+        {{ include('@Frontend/Template/Mobile/Module/product.html.twig')}}
     {% else %}
         {{ include('@Frontend/Template/Mobile/Module/default.html.twig')}}
     {% endif %}
     </div>
-</div>
+</div
 {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
     {% render controller("FrontendBundle:WebsiteWidget:featureMobileWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'mobile'}) %}
 {% endif %}
