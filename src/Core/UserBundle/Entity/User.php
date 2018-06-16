@@ -813,11 +813,6 @@ class User extends BaseUser
     protected $businessInvoiceApprovedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessTransaction", mappedBy="createdBy" , cascade={"persist", "remove"})
-     */
-    protected $businessTransactionCreatedBy;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="createdBy" , cascade={"persist", "remove"})
      */
     protected $businessPurchase;

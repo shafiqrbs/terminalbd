@@ -22,11 +22,25 @@ business_invoice:
     resource: "@BusinessBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice
 
+business_stock:
+    resource: "@BusinessBundle/Resources/config/routing/stock.yml"
+    prefix:   /stock
 
 business_product:
     resource: "@BusinessBundle/Resources/config/routing/product.yml"
     prefix:   /product
 
+business_product_production:
+    resource: "@BusinessBundle/Resources/config/routing/production.yml"
+    prefix:   /product-production
+
+business_damage:
+    resource: "@BusinessBundle/Resources/config/routing/damage.yml"
+    prefix:   /damage
+
+business_category:
+    resource: "@BusinessBundle/Resources/config/routing/category.yml"
+    prefix:   /category
 
 business_config:
     resource: "@BusinessBundle/Resources/config/routing/config.yml"

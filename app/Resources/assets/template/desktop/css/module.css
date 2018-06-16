@@ -67,7 +67,36 @@ a:hover , a:visited, a:focus{
 }
 
 
+/* =================================  MENU STICKY  ===========================*/
+
+.fixed-top{
+    top:0!important;
+    opacity: 1!important;
+    position: fixed!important;
+    animation: smoothScroll 1s forwards;
+}
+
+.sticky{
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: position 10s;
+    -ms-transition: position 10s;
+    -o-transition: position 10s;
+    transition: all 0.5s ease;
+}
+
+@keyframes smoothScroll {
+    0% {
+        transform: translateY(-40px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
 /* ================================= MEGA MENU ===========================*/
+
+
 
 .fixed {
     position: fixed;

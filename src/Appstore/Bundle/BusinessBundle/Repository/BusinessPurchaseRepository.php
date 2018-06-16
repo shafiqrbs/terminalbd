@@ -20,13 +20,14 @@ class BusinessPurchaseRepository extends EntityRepository
         $total = $em->createQueryBuilder()
             ->from('BusinessBundle:BusinessPurchaseItem','si')
             ->select('sum(si.purchaseSubTotal) as total')
-            ->where('si.dmsPurchase = :entity')
+            ->where('si.businessPurchase = :entity')
             ->setParameter('entity', $entity ->getId())
             ->getQuery()->getSingleResult();
 
         if($total['total'] > 0){
-
-            $entity->setSubTotal($total['total']);
+            $subTotal = $total['total'];
+            $entity->setSubTotal($subTotal);
+            $entity->setDiscount($this->getUpdateDiscount($entity,$subTotal));
             $entity->setNetTotal($entity->getSubTotal() - $entity->getDiscount());
             $entity->setDue($entity->getNetTotal() - $entity->getPayment() );
 
@@ -44,5 +45,16 @@ class BusinessPurchaseRepository extends EntityRepository
         return $entity;
 
     }
+
+    public function getUpdateDiscount(BusinessPurchase $invoice,$subTotal)
+    {
+        if($invoice->getDiscountType() == 'flat'){
+            $discount = $invoice->getDiscountCalculation();
+        }else{
+            $discount = ($subTotal * $invoice->getDiscountCalculation())/100;
+        }
+        return $discount;
+    }
+
 
 }

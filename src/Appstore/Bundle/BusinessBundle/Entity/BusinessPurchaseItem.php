@@ -33,6 +33,12 @@ class BusinessPurchaseItem
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem", mappedBy="businessPurchaseItem" )
+     **/
+    private  $businessPurchaseReturnItems;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", inversedBy="businessPurchaseItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
@@ -52,11 +58,63 @@ class BusinessPurchaseItem
     private $quantity;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesQuantity", type="integer",nullable=true)
+     */
+    private $salesQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesReturnQuantity", type="integer",nullable=true)
+     */
+    private $salesReturnQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesReplaceQuantity", type="integer",nullable=true)
+     */
+    private $salesReplaceQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseReturnQuantity", type="integer",nullable=true)
+     */
+    private $purchaseReturnQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="damageQuantity", type="integer",nullable=true)
+     */
+    private $damageQuantity;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="remainingQuantity", type="integer",nullable=true)
+     */
+    private $remainingQuantity;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="purchasePrice", type="float")
      */
     private $purchasePrice;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="actualPurchasePrice", type="float")
+     */
+    private $actualPurchasePrice;
 
 
     /**
@@ -271,6 +329,126 @@ class BusinessPurchaseItem
     public function setUnit($unit)
     {
         $this->unit = $unit;
+    }
+
+    /**
+     * @return float
+     */
+    public function getActualPurchasePrice()
+    {
+        return $this->actualPurchasePrice;
+    }
+
+    /**
+     * @param float $actualPurchasePrice
+     */
+    public function setActualPurchasePrice($actualPurchasePrice)
+    {
+        $this->actualPurchasePrice = $actualPurchasePrice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesQuantity()
+    {
+        return $this->salesQuantity;
+    }
+
+    /**
+     * @param int $salesQuantity
+     */
+    public function setSalesQuantity($salesQuantity)
+    {
+        $this->salesQuantity = $salesQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesReturnQuantity()
+    {
+        return $this->salesReturnQuantity;
+    }
+
+    /**
+     * @param int $salesReturnQuantity
+     */
+    public function setSalesReturnQuantity($salesReturnQuantity)
+    {
+        $this->salesReturnQuantity = $salesReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesReplaceQuantity()
+    {
+        return $this->salesReplaceQuantity;
+    }
+
+    /**
+     * @param int $salesReplaceQuantity
+     */
+    public function setSalesReplaceQuantity($salesReplaceQuantity)
+    {
+        $this->salesReplaceQuantity = $salesReplaceQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseReturnQuantity()
+    {
+        return $this->purchaseReturnQuantity;
+    }
+
+    /**
+     * @param int $purchaseReturnQuantity
+     */
+    public function setPurchaseReturnQuantity($purchaseReturnQuantity)
+    {
+        $this->purchaseReturnQuantity = $purchaseReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDamageQuantity()
+    {
+        return $this->damageQuantity;
+    }
+
+    /**
+     * @param int $damageQuantity
+     */
+    public function setDamageQuantity($damageQuantity)
+    {
+        $this->damageQuantity = $damageQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRemainingQuantity()
+    {
+        return $this->remainingQuantity;
+    }
+
+    /**
+     * @param int $remainingQuantity
+     */
+    public function setRemainingQuantity($remainingQuantity)
+    {
+        $this->remainingQuantity = $remainingQuantity;
+    }
+
+    /**
+     * @return BusinessPurchaseReturnItem
+     */
+    public function getBusinessPurchaseReturnItems()
+    {
+        return $this->businessPurchaseReturnItems;
     }
 
 

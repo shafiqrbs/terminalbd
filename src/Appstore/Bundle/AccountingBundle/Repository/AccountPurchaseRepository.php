@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
@@ -49,6 +50,9 @@ class AccountPurchaseRepository extends EntityRepository
         }elseif(!empty($accountPurchase->getMedicineVendor())){
             $vendor = $accountPurchase->getMedicineVendor()->getId();
             $qb->andWhere("e.medicineVendor = :vendor")->setParameter('vendor', $vendor);
+        }else{
+            $vendor = $accountPurchase->getAccountVendor()->getId();
+            $qb->andWhere("e.accountVendor = :vendor")->setParameter('vendor', $vendor);
         }
         $result = $qb->getQuery()->getSingleResult();
         $balance = ($result['purchaseAmount'] -  $result['payment']);
@@ -441,7 +445,6 @@ class AccountPurchaseRepository extends EntityRepository
     public function insertRestaurantAccountPurchase(\Appstore\Bundle\RestaurantBundle\Entity\Purchase $entity)
     {
 
-
         $em = $this->_em;
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getRestaurantConfig()->getGlobalOption());
@@ -525,6 +528,33 @@ class AccountPurchaseRepository extends EntityRepository
         if(!empty($accountCash)){
             $accountCash->execute();
         }
+    }
+
+    public function insertBusinessAccountPurchase(BusinessPurchase $entity)
+    {
+
+        $global = $entity->getBusinessConfig()->getGlobalOption();
+        $em = $this->_em;
+        $accountPurchase = new AccountPurchase();
+        $accountPurchase->setGlobalOption($global);
+        $accountPurchase->setBusinessPurchase($entity);
+        $accountPurchase->setAccountVendor($entity->getVendor());
+        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
+        $accountPurchase->setPurchaseAmount($entity->getNetTotal());
+        $accountPurchase->setPayment($entity->getPayment());
+        $accountPurchase->setProcessHead('business');
+        $accountPurchase->setProcessType('Purchase');
+        $accountPurchase->setReceiveDate($entity->getReceiveDate());
+        $accountPurchase->setProcess('approved');
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $em->persist($accountPurchase);
+        $em->flush();
+        $this->updateVendorBalance($accountPurchase);
+        if($accountPurchase->getPayment() > 0 ){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        }
+        return $accountPurchase;
+
     }
 
 }

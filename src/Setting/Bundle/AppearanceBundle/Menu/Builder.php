@@ -205,17 +205,12 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_CONFIG')) {
-            $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))
-                ->setAttribute('icon', 'icon-cog');
+            $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))->setAttribute('icon', 'icon-cog');
         }
-        $menu['Business Management']->addChild('Manage Stock')
-            ->setAttribute('icon', 'icon icon-truck')
-            ->setAttribute('dropdown', true);
-        $menu['Business Management']['Manage Stock']->addChild('Product', array('route' => 'business_product'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']->addChild('Purchase')
-            ->setAttribute('icon', 'icon icon-truck')
-            ->setAttribute('dropdown', true);
+        $menu['Business Management']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
+        $menu['Business Management']['Manage Stock']->addChild('Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
+        $menu['Business Management']['Manage Stock']->addChild('Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-th-list');
+        $menu['Business Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
         $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'))
             ->setAttribute('icon', 'icon-th-list');
         $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'))->setAttribute('icon', 'icon-tag');

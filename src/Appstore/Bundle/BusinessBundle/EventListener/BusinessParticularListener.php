@@ -19,7 +19,7 @@ class BusinessParticularListener
         if ($entity instanceof BusinessParticular) {
             $lastCode = $this->getLastCode($args,$entity);
             $entity->setCode((int)$lastCode + 1);
-            $entity->setParticularCode(sprintf("%s%s",$entity->getService()->getCode(), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
+            $entity->setParticularCode(sprintf("%s", str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -36,10 +36,8 @@ class BusinessParticularListener
         $qb = $entityManager->getRepository($class)->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-            ->where('s.dmsConfig = :dms')
-            ->setParameter('dms', $entity->getBusinessConfig())
-            ->andWhere('s.service = :service')
-            ->setParameter('service', $entity->getService());
+            ->where('s.businessConfig = :businessConfig')
+            ->setParameter('businessConfig', $entity->getBusinessConfig());
         $lastCode = $qb->getQuery()->getSingleScalarResult();
 
         if (empty($lastCode)) {

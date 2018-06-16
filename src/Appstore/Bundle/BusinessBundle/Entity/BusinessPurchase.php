@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
@@ -44,9 +45,9 @@ class BusinessPurchase
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendor", inversedBy="businessPurchases" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="businessPurchases" , cascade={"detach","merge"} )
      **/
-    private  $businessVendor;
+    private  $vendor;
 
 
     /**
@@ -107,7 +108,7 @@ class BusinessPurchase
 
 
     /**
-     * @var datetime
+     * @var \Datetime
      *
      * @ORM\Column(name="receiveDate", type="datetime", nullable=true)
      */
@@ -166,6 +167,19 @@ class BusinessPurchase
      */
     private $discount;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountType", type="string", length=20, nullable=true)
+     */
+    private $discountType ='percentage';
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
+     */
+    private $discountCalculation;
 
     /**
      * @var boolean
@@ -651,21 +665,6 @@ class BusinessPurchase
         $this->businessConfig = $businessConfig;
     }
 
-    /**
-     * @return BusinessVendor
-     */
-    public function getBusinessVendor()
-    {
-        return $this->businessVendor;
-    }
-
-    /**
-     * @param BusinessVendor $businessVendor
-     */
-    public function setBusinessVendor($businessVendor)
-    {
-        $this->businessVendor = $businessVendor;
-    }
 
     /**
      * @return BusinessPurchaseItem
@@ -673,6 +672,54 @@ class BusinessPurchase
     public function getBusinessPurchaseItems()
     {
         return $this->businessPurchaseItems;
+    }
+
+    /**
+     * @return AccountVendor
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @param AccountVendor $vendor
+     */
+    public function setVendor($vendor)
+    {
+        $this->vendor = $vendor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountType()
+    {
+        return $this->discountType;
+    }
+
+    /**
+     * @param string $discountType
+     */
+    public function setDiscountType($discountType)
+    {
+        $this->discountType = $discountType;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountCalculation()
+    {
+        return $this->discountCalculation;
+    }
+
+    /**
+     * @param float $discountCalculation
+     */
+    public function setDiscountCalculation($discountCalculation)
+    {
+        $this->discountCalculation = $discountCalculation;
     }
 
 

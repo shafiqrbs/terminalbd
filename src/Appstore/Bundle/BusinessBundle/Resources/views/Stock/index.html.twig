@@ -1,0 +1,131 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                   Manage Stock
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('business_stock') }}">Manage Stock</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">View Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green ">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Manage Stock</div>
+                        <div class="actions">
+                            <a href="{{ path('business_stock_new') }}" class=" btn red"><i class="icon-plus"></i> Add Stock</a>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        {% include('flash-message.html.twig')  %}
+                        <!-- BEGIN FORM-->
+                        <div class="portlet-body flip-scroll">
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                <thead class="flip-content ">
+                                <tr class="head-blue">
+                                    <th class="numeric" >Code</th>
+                                    <th class="numeric" >Name</th>
+                                    <th class="numeric" >Product Mode</th>
+                                    <th class="numeric" >Receive Price</th>
+                                    <th class="numeric" >Price</th>
+                                    <th class="numeric" >Opening</th>
+                                    <th class="numeric" >Receive Qnt</th>
+                                    <th class="numeric" >Sales Qnt</th>
+                                    <th class="numeric" >Stock Qnt</th>
+                                    <th class="numeric" >Min. Qnt</th>
+                                    <th class="numeric" >Unit</th>
+                                    <th class="numeric" >Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for entity in pagination %}
+                                    {% set stockQnt = (entity.purchaseQuantity + entity.openingQuantity) - entity.salesQuantity %}
+
+                                    <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
+                                        <td class="numeric" >{{ entity.particularCode }}</td>
+                                        <td class="numeric" ><a href="{{ path('business_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{{ entity.productType|capitalize }}</td>
+                                        <td class="numeric">
+                                                <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
+                                        </td>
+                                        <td class="numeric">
+                                                <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
+
+                                        </td>
+                                        <td class="numeric">
+                                                <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
+                                       </td>
+                                        <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
+                                        <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
+                                        <td class="numeric" >{{ stockQnt }}</td>
+                                        <td class="numeric">
+                                          <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
+                                        </td>
+                                        <td class="numeric">{% if  entity.unit is defined and  entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
+                                        <td class="numeric" >
+                                            {% if( entity.status == 1) %}
+                                                <a class="btn mini blue btn-action" href="{{ path('business_stock_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
+                                            {% else %}
+                                                <a class="btn mini red btn-action" href="{{ path('business_stock_status', { 'id': entity.id}) }}">x</a>
+                                            {% endif %}
+                                                <a href="{{ path('business_stock_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                                <a title="Are you sure went to delete ?" href="{{ path('business_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            {% if entity.productType == "production" %}
+                                            <a href="{{ path('business_production_edit', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-retweet"></i> Production</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                            <div class="pagination pull-center" >
+                                {{ knp_pagination_render(pagination) }}
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HospitalBundle/Resources/public/js/editable.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+    EditableInit();
+{% endblock %}

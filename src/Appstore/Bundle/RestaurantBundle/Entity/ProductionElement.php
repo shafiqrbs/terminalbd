@@ -65,17 +65,12 @@ class ProductionElement
 
 
     /**
-     * Set quantity
-     *
      * @param integer $quantity
-     *
-     * @return HmsPurchaseItem
      */
+
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
-
-        return $this;
     }
 
     /**
@@ -90,16 +85,11 @@ class ProductionElement
 
     /**
      * Set purchasePrice
-     *
      * @param float $purchasePrice
-     *
-     * @return Purchase
      */
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
-
-        return $this;
     }
 
     /**
@@ -117,16 +107,11 @@ class ProductionElement
 
     /**
      * Set salesPrice
-     *
      * @param float $salesPrice
-     *
-     * @return HmsPurchaseItem
      */
     public function setSalesPrice($salesPrice)
     {
         $this->salesPrice = $salesPrice;
-
-        return $this;
     }
 
     /**
@@ -137,38 +122,6 @@ class ProductionElement
     public function getSalesPrice()
     {
         return $this->salesPrice;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBarcode()
-    {
-        return $this->barcode;
-    }
-
-    /**
-     * @param string $barcode
-     */
-    public function setBarcode($barcode)
-    {
-        $this->barcode = $barcode;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param integer $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
     }
 
     /**
@@ -185,38 +138,6 @@ class ProductionElement
     public function setParticular($particular)
     {
         $this->particular = $particular;
-    }
-
-    /**
-     * @return Purchase
-     */
-    public function getPurchase()
-    {
-        return $this->purchase;
-    }
-
-    /**
-     * @param Purchase $purchase
-     */
-    public function setPurchase($purchase)
-    {
-        $this->purchase = $purchase;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPurchaseSubTotal()
-    {
-        return $this->purchaseSubTotal;
-    }
-
-    /**
-     * @param float $purchaseSubTotal
-     */
-    public function setPurchaseSubTotal($purchaseSubTotal)
-    {
-        $this->purchaseSubTotal = $purchaseSubTotal;
     }
 
 

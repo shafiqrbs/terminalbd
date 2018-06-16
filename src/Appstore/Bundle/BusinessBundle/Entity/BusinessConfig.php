@@ -33,16 +33,6 @@ class BusinessConfig
      **/
     private $businessInvoices;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories", mappedBy="businessConfig")
-     **/
-    private $businessInvoiceAccessories;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendor", mappedBy="businessConfig")
-     **/
-    private $businessVendors;
-
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="businessConfig")
      **/
@@ -52,6 +42,16 @@ class BusinessConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", mappedBy="businessConfig")
      **/
     private $businessParticulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessDamage", mappedBy="businessConfig")
+     **/
+    private $businessDamages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn", mappedBy="businessConfig")
+     **/
+    private $businessPurchaseReturns;
 
 
     /**
@@ -275,9 +275,9 @@ class BusinessConfig
     /**
      * @var boolean
      *
-     * @ORM\Column(name="showAccessories", type="boolean",  nullable=true)
+     * @ORM\Column(name="showStock", type="boolean",  nullable=true)
      */
-     private $showAccessories = false;
+     private $showStock = false;
 
 
     /**
@@ -765,23 +765,6 @@ class BusinessConfig
     }
 
 
-
-    /**
-     * @return bool
-     */
-    public function isShowAccessories()
-    {
-        return $this->showAccessories;
-    }
-
-    /**
-     * @param bool $showAccessories
-     */
-    public function setShowAccessories($showAccessories)
-    {
-        $this->showAccessories = $showAccessories;
-    }
-
     /**
      * @return BusinessInvoiceAccessories
      */
@@ -868,6 +851,38 @@ class BusinessConfig
     public function setCustomInvoice($customInvoice)
     {
         $this->customInvoice = $customInvoice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowStock()
+    {
+        return $this->showStock;
+    }
+
+    /**
+     * @param bool $showStock
+     */
+    public function setShowStock($showStock)
+    {
+        $this->showStock = $showStock;
+    }
+
+    /**
+     * @return BusinessDamage
+     */
+    public function getBusinessDamages()
+    {
+        return $this->businessDamages;
+    }
+
+    /**
+     * @return BusinessPurchaseReturn
+     */
+    public function getBusinessPurchaseReturns()
+    {
+        return $this->businessPurchaseReturns;
     }
 
 

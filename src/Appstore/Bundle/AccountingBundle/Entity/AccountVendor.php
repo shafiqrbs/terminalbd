@@ -1,17 +1,19 @@
 <?php
 
-namespace Appstore\Bundle\BusinessBundle\Entity;
+namespace Appstore\Bundle\AccountingBundle\Entity;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+
 /**
- * BusinessVendor
+ * Vendor
  *
- * @ORM\Table(name="business_vendor")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessVendorRepository")
+ * @ORM\Table(name="account_vendor")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountVendorRepository")
  */
-class BusinessVendor
+class AccountVendor
 {
     /**
      * @var integer
@@ -22,21 +24,31 @@ class BusinessVendor
      */
     private $id;
 
+
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessVendors")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="vendors")
+     **/
+    protected $globalOption;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountVendor")
      */
-    protected $businessConfig;
-
+    protected $accountPurchases;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="businessVendor")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="vendors")
+     */
+    protected $country;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="vendor")
      */
     protected $businessPurchases;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="businessVendor")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn", mappedBy="vendor")
      */
-    protected $accountPurchases;
+    protected $businessPurchasesReturns;
 
 
     /**
@@ -46,24 +58,18 @@ class BusinessVendor
      */
     private $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mode", type="string", length=30, nullable=true)
-     */
-    private $mode ='medicine';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="vendorCode", type="string", length=20, nullable=true)
+     * @ORM\Column(name="vendorCode", type="string", length=20)
      */
     private $vendorCode;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="code", type="integer", nullable=true)
+     * @ORM\Column(name="code", type="integer")
      */
     private $code;
 
@@ -71,7 +77,7 @@ class BusinessVendor
     /**
      * @var string
      *
-     * @ORM\Column(name="companyName", type="string", length=255, nullable=true)
+     * @ORM\Column(name="companyName", type="string", length=255)
      */
     private $companyName;
 
@@ -84,7 +90,7 @@ class BusinessVendor
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="text", nullable=true, nullable=true)
+     * @ORM\Column(name="address", type="text", nullable=true)
      */
     private $address;
 
@@ -125,7 +131,7 @@ class BusinessVendor
      *
      * @param string $name
      *
-     * @return BusinessVendor
+     * @return Vendor
      */
     public function setName($name)
     {
@@ -149,7 +155,7 @@ class BusinessVendor
      *
      * @param string $address
      *
-     * @return BusinessVendor
+     * @return Vendor
      */
     public function setAddress($address)
     {
@@ -173,7 +179,7 @@ class BusinessVendor
      *
      * @param string $mobile
      *
-     * @return BusinessVendor
+     * @return Vendor
      */
     public function setMobile($mobile)
     {
@@ -210,7 +216,6 @@ class BusinessVendor
         $this->companyName = $companyName;
     }
 
-
     /**
      * @return boolean
      */
@@ -243,7 +248,6 @@ class BusinessVendor
         $this->email = $email;
     }
 
-
     /**
      * @return mixed
      */
@@ -260,7 +264,21 @@ class BusinessVendor
         $this->country = $country;
     }
 
+    /**
+     * @return integer
+     */
+    public function getVendorCode()
+    {
+        return $this->vendorCode;
+    }
 
+    /**
+     * @param mixed $vendorCode
+     */
+    public function setVendorCode($vendorCode)
+    {
+        $this->vendorCode = $vendorCode;
+    }
 
     /**
      * @return string
@@ -277,6 +295,7 @@ class BusinessVendor
     {
         $this->code = $code;
     }
+
 
 
     /**
@@ -297,61 +316,19 @@ class BusinessVendor
 
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
-    public function getSTRPadCode()
+    public function getGlobalOption()
     {
-        $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
-        return $code;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->globalOption;
     }
 
     /**
-     * @param string $mode
+     * @param GlobalOption $globalOption
      */
-    public function setMode($mode)
+    public function setGlobalOption($globalOption)
     {
-        $this->mode = $mode;
-    }
-
-    /**
-     * @return BusinessConfig
-     */
-    public function getBusinessConfig()
-    {
-        return $this->businessConfig;
-    }
-
-    /**
-     * @param BusinessConfig $businessConfig
-     */
-    public function setBusinessConfig($businessConfig)
-    {
-        $this->businessConfig = $businessConfig;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVendorCode()
-    {
-        return $this->vendorCode;
-    }
-
-    /**
-     * @param string $vendorCode
-     */
-    public function setVendorCode($vendorCode)
-    {
-        $this->vendorCode = $vendorCode;
+        $this->globalOption = $globalOption;
     }
 
     /**

@@ -13,6 +13,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.account.vendor.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\VendorListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.account.journal.event.listener:
         class: Appstore\Bundle\AccountingBundle\EventListener\AccountJournalListener
         tags:

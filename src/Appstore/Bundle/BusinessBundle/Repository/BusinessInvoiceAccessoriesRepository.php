@@ -4,6 +4,7 @@ namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -50,69 +51,25 @@ class BusinessInvoiceAccessoriesRepository extends EntityRepository
         return $result;
     }
 
-    public function insertAccessories($dmsConfig,$data)
-    {
-
-        $em = $this->_em;
-        $entity = new BusinessInvoiceAccessories();
-        $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
-        $entity->setQuantity($quantity);
-        $accessoriesId = $data['accessories'];
-        $accessories = $em->getRepository('BusinessBundle:BusinessParticular')->find($accessoriesId);
-        $entity->setBusinessParticular($accessories);
-        $entity->setSubTotal($quantity * $accessories->getPrice());
-        $entity->setPrice($accessories->getPrice());
-        $entity->setBusinessConfig($dmsConfig);
-        $em->persist($entity);
-        $em->flush();
-
-    }
-
     public function insertInvoiceAccessories(BusinessInvoice $invoice, $data)
     {
-
         $em = $this->_em;
-        $entity = new BusinessInvoiceAccessories();
+        $entity = new BusinessInvoiceParticular();
         $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
-        $entity->setQuantity($quantity);
         $accessoriesId = $data['accessories'];
         $accessories = $em->getRepository('BusinessBundle:BusinessParticular')->find($accessoriesId);
         $entity->setBusinessParticular($accessories);
+        $entity->setParticular($accessories->getName());
         $entity->setPrice($accessories->getPurchasePrice());
+        $entity->setQuantity($quantity);
+        if($accessories->getUnit()){
+            $entity->setUnit($accessories->getUnit()->getName());
+        }
+        $entity->setPrice($accessories->getPrice());
         $entity->setSubTotal($quantity * $accessories->getPrice());
         $entity->setBusinessInvoice($invoice);
-        $entity->setBusinessConfig($invoice->getBusinessConfig());
         $em->persist($entity);
         $em->flush();
-    }
-
-
-
-
-    public function getInvoiceAccessories(BusinessInvoice $sales)
-    {
-        $entities = $sales->getBusinessInvoiceAccessories();
-        $data = '';
-        $date = '';
-        $i = 1;
-        /** @var $entity BusinessInvoiceAccessories */
-        foreach ($entities as $entity) {
-
-            $data .= '<tr id="accessories-'.$entity->getId().'">';
-            $data .= '<td class="numeric" >' . $i . '</td>';
-            $data .= '<td class="numeric" >' . $entity->getUpdated()->format('d-m-Y') . '</td>';
-            $data .= '<td class="numeric" >' . $entity->getBusinessParticular()->getParticularCode().' - '.$entity->getBusinessParticular()->getName(). '</td>';
-            $data .= '<td class="numeric" >' . $entity->getQuantity(). '</td>';
-            $data .= '<td class="numeric" >' . $entity->getPrice(). '</td>';
-            $data .= '<td class="numeric" >' . $entity->getPrice() * $entity->getQuantity(). '</td>';
-            $data .= '<td class="numeric" id="approved-'.$entity->getId().'" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'"  data-url="/dms/invoice/'. $entity->getId(). '/accessories-approved" href="javascript:" class="btn blue mini approveAccessories" >Approve</a>
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'"  data-url="/dms/invoice/'. $entity->getId(). '/accessories-delete" href="javascript:" class="btn red mini deleteAccessories" ><i class="icon-trash"></i></a>
-            </td>';
-            $data .= '</tr>';
-            $i++;
-        }
-        return $data;
     }
 
     public function reportAccessoriesOut(BusinessConfig $config , $data)

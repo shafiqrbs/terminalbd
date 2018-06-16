@@ -35,7 +35,7 @@ class BusinessInvoiceParticular
     private $businessInvoice;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="invoiceParticular", cascade={"persist"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="invoiceParticulars", cascade={"persist"} )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $businessParticular;

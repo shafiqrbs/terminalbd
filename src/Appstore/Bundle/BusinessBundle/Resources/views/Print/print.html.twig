@@ -99,10 +99,14 @@
                                         {% endfor %}
                                         </tbody>
                                         <tfoot>
-                                        <tr><td colspan="2"><span class="pull-right" >SUB TOTAL</span></td><td>{{ entity.subTotal|number_format() }}</td></tr>
-                                        <tr><td colspan="2"><strong class="pull-right" >TOTAL</strong></td><td>{{ entity.total|number_format() }}</td></tr>
-                                        <tr><td colspan="3" style="border-bottom:5px solid #000!important">&nbsp;</td></tr>
-                                        <tr><td colspan="2"><strong class="pull-right" >PAID</strong></td><td>{{ entity.received|number_format() }}</td></tr>
+                                            <tr><td colspan="2"><span class="pull-right" >SUB TOTAL</span></td><td><strong>{{ entity.subTotal|number_format() }}</strong></td></tr>
+                                            <tr><td colspan="2"><span class="pull-right" >DISCOUNT</span></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>
+                                            <tr><td colspan="2">In words: {{ entity.paymentInWord }} <strong class="pull-right" >TOTAL</strong></td><td><strong>{{ entity.total|number_format() }}</strong></td></tr>
+                                            <tr><td colspan="3" style="border-bottom:5px solid #000!important">&nbsp;</td></tr>
+                                            <tr><td colspan="2"><strong class="pull-right" >PAID</strong></td><td><strong>{{ entity.received|number_format() }}</strong></td></tr>
+                                            {% if  entity.due is not empty %}
+                                                <tr><td colspan="2"><span class="pull-right" >DUE</span></td><td><strong>{{ entity.due|number_format() }}</strong></td></tr>
+                                            {% endif %}
                                         </tfoot>
                                     </table>
                                 {% endif %}

@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\AccountingBundle\Entity\Vendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
@@ -186,8 +187,14 @@ class GlobalOption
     protected $transactions;
 
    /**
+    * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", mappedBy="globalOption" , cascade={"persist", "remove"})
+    */
+   protected $vendors;
+
+   /**
     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="globalOption" , cascade={"persist", "remove"})
     */
+
    protected $accountCashes;
     /**
     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -1755,6 +1762,13 @@ class GlobalOption
         return $this->medicineConfig;
     }
 
+    /**
+     * @return Vendor
+     */
+    public function getVendors()
+    {
+        return $this->vendors;
+    }
 
 
 }

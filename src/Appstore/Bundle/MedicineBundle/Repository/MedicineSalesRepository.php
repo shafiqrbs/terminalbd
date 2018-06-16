@@ -150,8 +150,9 @@ class MedicineSalesRepository extends EntityRepository
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         if($subTotal > 0){
             $invoice->setSubTotal(round($subTotal));
-            $invoice->setNetTotal(round($subTotal));
-            $invoice->setDue(round($subTotal));
+            $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
+            $invoice->setNetTotal(round($subTotal - $invoice->getDiscount()));
+            $invoice->setDue(round($subTotal - $invoice->getDiscount()));
         }else{
             $invoice->setSubTotal(0);
             $invoice->setTotal(0);
@@ -163,6 +164,16 @@ class MedicineSalesRepository extends EntityRepository
         $em->flush();
         return $invoice;
 
+    }
+
+    public function getUpdateDiscount(MedicineSales $invoice,$subTotal)
+    {
+        if($invoice->getDiscountType() == 'flat'){
+            $discount = $invoice->getDiscountCalculation();
+        }else{
+            $discount = ($subTotal * $invoice->getDiscountCalculation())/100;
+        }
+        return $discount;
     }
 
     public function updatePaymentReceive(MedicineSales $invoice)

@@ -6,7 +6,8 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Form\PurchaseType;
-use Appstore\Bundle\BusinessBundle\Form\VendorType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +27,7 @@ class PurchaseController extends Controller
             $this->get('request')->query->get('page', 1)/*page number*/,
             25  /*limit per page*/
         );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
         return $pagination;
     }
 
@@ -39,7 +41,7 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->findBy(array('dmsConfig' => $config,'mode'=>'medicine'),array('created'=>'DESC'));
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->findBy(array('businessConfig' => $config,'mode'=>'medicine'),array('created'=>'DESC'));
         $pagination = $this->paginate($entities);
 
         return $this->render('BusinessBundle:Purchase:index.html.twig', array(
@@ -64,9 +66,11 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entity->setBusinessConfig($config);
         $entity->setCreatedBy($this->getUser());
+        $receiveDate = new \DateTime('now');
+        $entity->setReceiveDate($receiveDate);
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('dms_purchase_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('business_purchase_edit', array('id' => $entity->getId())));
 
     }
 
@@ -75,16 +79,17 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entity = $em->getRepository('BusinessBundle:BusinessPurchase')->findOneBy(array('dmsConfig' => $config , 'id' => $id));
+        $entity = $em->getRepository('BusinessBundle:BusinessPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        $particulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getMedicineParticular($config,array('accessories'))->getArrayResult();
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config,$type = array('consumable','stock'));
 
         return $this->render('BusinessBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
+            'id' => 'purchase',
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
@@ -101,15 +106,36 @@ class PurchaseController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseType($globalOption), $entity, array(
-            'action' => $this->generateUrl('dms_purchase_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('business_purchase_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
-                'id' => 'posForm',
+                'id' => 'purchase',
                 'novalidate' => 'novalidate',
             )
         ));
         return $form;
+    }
+
+    public function returnResultData(BusinessPurchase $invoice,$msg=''){
+
+        $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->getPurchaseItems($invoice);
+        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
+        $netTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
+        $due = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+        $discount = $invoice->getDiscount() > 0 ? $invoice->getDiscount() : 0;
+        $data = array(
+            'subTotal' => $subTotal,
+            'netTotal' => $netTotal,
+            'due' => $due,
+            'discount' => $discount,
+            'invoiceParticulars' => $invoiceParticulars ,
+            'msg' => $msg ,
+            'success' => 'success'
+        );
+
+        return $data;
+
     }
 
     public function particularSearchAction(BusinessParticular $particular)
@@ -126,14 +152,8 @@ class PurchaseController extends Controller
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->getPurchaseItems($invoice);
-        $msg = 'Particular added successfully';
-
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
         exit;
     }
 
@@ -143,45 +163,42 @@ class PurchaseController extends Controller
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
-
         $em->remove($particular);
         $em->flush();
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->getPurchaseItems($invoice);
-
-        $msg = 'Particular deleted successfully';
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
         exit;
-
-
     }
 
+    /**
+     * @Secure(roles="ROLE_BUSINESS")
+     */
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
-        $purchase = $request->request->get('invoice');
-
-        $purchase = $em->getRepository('BusinessBundle:BusinessPurchase')->find($purchase);
-        $total = ($purchase->getSubTotal() - $discount);
+        $discountType = $request->request->get('discountType');
+        $discountCal = $request->request->get('discount');
+        $invoice = $request->request->get('invoice');
+        $entity = $em->getRepository('BusinessBundle:BusinessPurchase')->find($invoice);
+        $subTotal = $entity->getSubTotal();
+        if($discountType == 'flat'){
+            $total = ($subTotal  - $discountCal);
+            $discount = $discountCal;
+        }else{
+            $discount = ($subTotal*$discountCal)/100;
+            $total = ($subTotal  - $discount);
+        }
         $vat = 0;
         if($total > $discount ){
-
-            $purchase->setDiscount($discount);
-            $purchase->setNetTotal($total + $vat);
-            $purchase->setDue($total + $vat);
-            $em->persist($purchase);
+            $entity->setDiscountType($discountType);
+            $entity->setDiscountCalculation($discountCal);
             $em->flush();
         }
-
-        $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->getPurchaseItems($purchase);
-        $subTotal = $purchase->getSubTotal() > 0 ? $purchase->getSubTotal() : 0;
-        $grandTotal = $purchase->getNetTotal() > 0 ? $purchase->getNetTotal() : 0;
-        $dueAmount = $purchase->getDue() > 0 ? $purchase->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($entity);
+        $msg = 'Discount successfully';
+        $result = $this->returnResultData($entity,$msg);
+        return new Response(json_encode($result));
         exit;
     }
 
@@ -192,20 +209,16 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $data = $request->request->all();
-            $deliveryDateTime = $data['appstore_bundle_dmspurchase']['receiveDate'];
-            $receiveDate = (new \DateTime($deliveryDateTime));
-            $entity->setReceiveDate($receiveDate);
             $entity->setProcess('Done');
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();
-            return $this->redirect($this->generateUrl('dms_purchase_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('business_purchase_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('BusinessBundle:Particular')->getMedicineParticular($entity->getBusinessConfig());
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($entity->getBusinessConfig(),$type = array('consumable','stock'));
         return $this->render('BusinessBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
             'particulars' => $particulars,
@@ -240,7 +253,9 @@ class PurchaseController extends Controller
             $purchase->setProcess('Approved');
             $purchase->setApprovedBy($this->getUser());
             $em->flush();
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->updatePurchaseItemPrice($purchase);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);
+            //$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
             return new Response('success');
@@ -249,8 +264,6 @@ class PurchaseController extends Controller
         }
         exit;
     }
-
-
 
     /**
      * Deletes a Vendor entity.
@@ -263,10 +276,9 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-
         $em->remove($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('dms_purchase'));
+        return $this->redirect($this->generateUrl('business_purchase'));
     }
 
 
@@ -295,7 +307,7 @@ class PurchaseController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('dms_vendor'));
+        return $this->redirect($this->generateUrl('business_vendor'));
     }
 
     public function autoSearchAction(Request $request)

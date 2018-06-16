@@ -1,0 +1,26 @@
+business_production_edit:
+    path:     /{id}/
+    defaults: { _controller: "BusinessBundle:Production:production" }
+
+business_production_update:
+    path:     /{id}/update
+    defaults: { _controller: "BusinessBundle:Production:productionUpdate" }
+    methods:  [POST, PUT]
+
+
+business_production_delete:
+    path:     /{particular}/{id}/delete
+    defaults: { _controller: "BusinessBundle:Production:delete" }
+
+business_production_particular_search:
+    path:     /{id}/particular-search
+    defaults: { _controller: "BusinessBundle:Production:particularSearch" }
+
+
+business_production_particular_add:
+    path:     /{id}/particular-add
+    defaults: { _controller: "BusinessBundle:Production:addParticular" }
+    methods:  POST
+    options:
+            expose: true
+

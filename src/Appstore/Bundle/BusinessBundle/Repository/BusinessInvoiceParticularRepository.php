@@ -5,6 +5,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -41,24 +42,6 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         }
     }
 
-    public function fileUpload(BusinessInvoice $invoice,$data,$file)
-    {
-        $em = $this->_em;
-        if(isset($file['file'])){
-            $particular = new BusinessInvoiceParticular();
-            $dmsService = $this->_em->getRepository('BusinessBundle:BusinessService')->find($data['dmsService']);
-            $particular->setBusinessInvoice($invoice);
-            $particular->setBusinessService($dmsService);
-            $img = $file['file'];
-            $fileName = $img->getClientOriginalName();
-            $imgName =  uniqid(). '.' .$fileName;
-            $img->move($particular->getUploadDir(), $imgName);
-            $particular->setMetaValue($data['investigation']);
-            $particular->setPath($imgName);
-            $em->persist($particular);
-            $em->flush();
-        }
-    }
 
     public function insertInvoiceParticular(BusinessInvoice $invoice, $data)
     {
@@ -82,35 +65,13 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
-
-
-
-    public function updateMetaCheckValue($invoice,$data)
+    public function salesStockItemUpdate(BusinessParticular $stockItem)
     {
-        $em = $this->_em;
-        foreach ($data['metaKey'] as $key => $val) {
-            if(isset($data['metaCheck'][$key]) and $data['metaCheck'][$key] > 0) {
-                $particular = $data['metaCheck'][$key];
-                $invoiceBusinessParticular = $this->_em->getRepository('BusinessBundle:BusinessInvoiceParticular')->findOneBy(array('dmsInvoice' => $invoice, 'dmsParticular' => $particular));
-                $invoiceBusinessParticular->setMetaCheck($data['metaCheck'][$key]);
-                $em->flush();
-            }
-        }
-
-    }
-
-    public function removeInvoiceParticularPreviousCheck(BusinessInvoice $invoice)
-    {
-        $em = $this->_em;
-        $update = $em->createQuery("UPDATE BusinessBundle:BusinessInvoiceParticular e SET e.metaCheck = 0 WHERE e.dmsService IS NULL and  e.dmsInvoice = ".$invoice->getId());
-        $update->execute();
-    }
-
-    public function removeInvoiceParticularCheckItem(BusinessInvoice $invoice)
-    {
-        $em = $this->_em;
-        $remove = $em->createQuery("DELETE BusinessBundle:BusinessInvoiceParticular e WHERE e.dmsService IS NULL and  e.dmsInvoice = ".$invoice->getId());
-        $remove->execute();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.businessParticular = :stock')->setParameter('stock', $stockItem->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
     }
 
     public function getSalesItems(BusinessInvoice $sales)
@@ -118,46 +79,33 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $entities = $sales->getBusinessInvoiceParticulars();
         $data = '';
         $i = 1;
+
         /* @var $entity BusinessInvoiceParticular */
 
         foreach ($entities as $entity) {
 
             $data .= "<tr id='remove-{$entity->getId()}'>";
-            $data .= "<td class='span1' >{$i}.</td>";
-            $data .= "<td class='span4' >{$entity->getParticular()}</td>";
-            $data .= "<td class='span1' >{$entity->getPrice()}</td>";
-            $data .= "<td class='span2' >{$entity->getQuantity()}</td>";
-            $data .= "<td class='span2' >{$entity->getSubTotal()}</td>";
-            $data .= "<td class='span1' >";
-            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
-            $data .= "</td>";
+                $data .= "<td>{$i}.</td>";
+                $data .= "<td>{$entity->getParticular()}</td>";
+                $data .= "<td>";
+                $data .= "<input type='hidden' name='salesItem[]' value='{$entity->getId()}'>";
+                $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getId()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getPrice()}'>";
+                $data .= "</td>";
+                $data .= "<td>";
+                $data .= "<input type='text' class='numeric td-inline-input-qnt quantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='quantity-{$entity->getId()}' name='quantity[]' value='{$entity->getQuantity()}' placeholder='Qnt'>";
+                $data .= "</td>";
+                $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
+                $data .= "<td>";
+                $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/medicine/sales-temporary/sales-item-update' href='javascript:' class='btn blue mini itemUpdate' ><i class='icon-save'></i></a>";
+                $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
+                $data .= "</td>";
+
             $data .= '</tr>';
             $i++;
         }
         return $data;
     }
 
-    public function dmsInvoiceParticularReverse(Invoice $invoice)
-    {
-
-        $em = $this->_em;
-
-        /** @var InvoiceBusinessParticular $item */
-
-        foreach($invoice->getBusinessInvoiceParticulars() as $item ){
-
-            /** @var BusinessParticular  $particular */
-
-            $particular = $item->getBusinessParticular();
-            if( $particular->getService()->getId() == 4 ){
-                $qnt = ($particular->getSalesQuantity() - $item->getQuantity());
-                $particular->setSalesQuantity($qnt);
-                $em->persist($particular);
-                $em->flush();
-            }
-        }
-
-    }
 
     public function getLastCode($entity,$datetime)
     {
@@ -256,4 +204,22 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $query->setMaxResults( '10' );
         return $query->getQuery()->getArrayResult();
     }
+
+    public function updateInvoiceItems($data)
+    {
+
+        $em = $this->_em;
+        $invoiceParticular = $this->find($data['itemId']);
+        if(!empty($invoiceParticular)) {
+            $entity = $invoiceParticular;
+            $entity->setQuantity($data['quantity']);
+            $entity->setPrice($data['salesPrice']);
+            $entity->setSubTotal($entity->getPrice() * $entity->getQuantity());
+        }
+        $em->persist($entity);
+        $em->flush();
+        return $invoiceParticular->getBusinessInvoice();
+
+    }
+
 }

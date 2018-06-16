@@ -22,7 +22,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->from('BusinessBundle:BusinessPurchaseItem','e');
         $qb->select('AVG(e.purchasePrice) AS avgPurchasePrice');
-        $qb->where('e.dmsParticular = :particular')->setParameter('particular', $particular) ;
+        $qb->where('e.businessParticular = :particular')->setParameter('particular', $particular) ;
         $res = $qb->getQuery()->getOneOrNullResult();
         if(!empty($res)){
             $particular->setPurchaseAverage($res['avgPurchasePrice']);
@@ -40,6 +40,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
         $entity->setBusinessParticular($particular);
         $entity->setSalesPrice($particular->getPrice());
         $entity->setPurchasePrice($particular->getPurchasePrice());
+        $entity->setActualPurchasePrice($particular->getPurchasePrice());
         $entity->setQuantity($data['quantity']);
         $entity->setPurchaseSubTotal($data['quantity'] * $particular->getPurchasePrice());
         $em->persist($entity);
@@ -53,51 +54,57 @@ class BusinessPurchaseItemRepository extends EntityRepository
         $entities = $sales->getPurchaseItems();
         $data = '';
         $i = 1;
+
+        /* @var $entity BusinessPurchaseItem */
+
         foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() .'">';
-            $data .= '<td class="span1" >' . $i . '</td>';
-            $data .= '<td class="span1" >' . $entity->getBusinessParticular()->getParticularCode() . '</td>';
-            $data .= '<td class="span3" >' . $entity->getBusinessParticular()->getName() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getSalesPrice() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getPurchasePrice() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
-            $data .= '<td class="span1" >
-                     <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/dms/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                     </td>';
+
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td>{$i}</td>";
+            $data .= "<td>{$entity->getBusinessParticular()->getParticularCode()}</td>";
+            $data .= "<td>{$entity->getBusinessParticular()->getName()}</td>";
+            $data .= "<td>{$entity->getSalesPrice()}</td>";
+            $data .= "<td>{$entity->getPurchasePrice()}</td>";
+            $data .= "<td>{$entity->getQuantity()}</td>";
+            $data .= "<td>{$entity->getPurchaseSubTotal()}</td>";
+            $data .= "<td><a id='{$entity->getId()}'  data-url='/business/purchase/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
             $data .= '</tr>';
             $i++;
         }
         return $data;
     }
 
-    public function invoiceBusinessParticularLists($hospital,$data = array()){
-
-        $invoice = isset($data['invoice'])? $data['invoice'] :'';
-        $particular = isset($data['particular'])? $data['particular'] :'';
-        $category = isset($data['category'])? $data['category'] :'';
-
+    public function purchaseStockItemUpdate(BusinessParticular $stockItem)
+    {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e');
-        $qb->join('e.invoice','invoice');
-        $qb->join('e.particular','particular');
-        $qb->join('particular.category','category');
-        $qb->where('particular.service = :service')->setParameter('service', 1) ;
-        /*            $qb->andWhere('invoice.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-                    $qb->andWhere('particular.process IN(:process)');
-                    $qb->setParameter('process',array_values(array('In-progress','Damage','Impossible')));
-                    if (!empty($invoice)) {
-                        $qb->andWhere($qb->expr()->like("invoice.invoice", "'%$invoice%'"  ));
-                    }
-                    if (!empty($particular)) {
-                        $qb->andWhere('particular.name = :partName')->setParameter('partName', $particular) ;
-                    }
-                    if (!empty($category)) {
-                        $qb->andWhere('category.name = :catName')->setParameter('catName', $category) ;
-                    }*/
-        $qb->orderBy('e.updated','DESC');
-        $qb->getQuery();
-        return  $qb;
+        $qb->join('e.businessPurchase', 'mp');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.businessParticular = :particular')->setParameter('particular', $stockItem->getId());
+        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
+    public function updatePurchaseItemPrice(BusinessPurchase $purchase)
+    {
+        /* @var BusinessPurchaseItem $item */
+
+        foreach ($purchase->getBusinessPurchaseItems() as $item){
+
+            $em = $this->_em;
+            $percentage = $purchase->getDiscountCalculation();
+            $purchasePrice = $this->stockPurchaseItemPrice($percentage,$item->getActualPurchasePrice());
+            $item->setPurchasePrice($purchasePrice);
+            $em->persist($item);
+            $em->flush();
+        }
+    }
+
+    public function stockPurchaseItemPrice($percentage,$price)
+    {
+        $discount = (($price * $percentage )/100);
+        $purchasePrice = ($price - $discount);
+        return $purchasePrice;
 
     }
 }

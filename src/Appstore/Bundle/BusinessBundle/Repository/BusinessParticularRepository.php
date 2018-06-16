@@ -64,16 +64,13 @@ class BusinessParticularRepository extends EntityRepository
         return  $qb;
     }
 
-    public function getFindWithParticular($config,$services){
+    public function getFindWithParticular($config,$type){
 
         $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
             ->where('e.businessConfig = :config')->setParameter('config', $config)
             ->andWhere('e.status = :status')->setParameter('status', 1)
-            ->andWhere('s.serviceFormat is null')
-            ->andWhere('s.slug IN(:slugs)')
-            ->setParameter('slugs',array_values($services))
-            ->orderBy('s.sorting','ASC')
+            ->andWhere('e.productType IN(:type)')->setParameter('type',array_values($type))
+            ->orderBy('e.sorting','ASC')
             ->orderBy('e.name','ASC')
             ->getQuery()->getResult();
             return  $qb;
@@ -93,35 +90,20 @@ class BusinessParticularRepository extends EntityRepository
         return  $qb;
     }
 
+    public function updateSalesPrice(BusinessParticular $particular){
 
-    public function getServices($config,$services){
-
-
-        $particular = $this->getMedicineParticular($config,$services);
-        $data = '';
-        $service = '';
-        $result = $particular->getArrayResult();
-        foreach ($result as $particular) {
-            if ($service != $particular['serviceName']) {
-                if ($service != '') {
-                    $data .= '</optgroup>';
-                }
-                $data .= '<optgroup label="' .ucfirst($particular['serviceName']) . '">';
-            }
-            if ($particular['serviceFormat'] != 'treatment'){
-                $data .= '<option value="/dms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
-            }else{
-                $data .= '<option value="/dms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['minimumPrice'] .' - '.$particular['price'].'</option>';
-            }
-            $service = $particular['serviceName'];
-        }
-        if ($service != '') {
-            $data .= '</optgroup>';
-        }
-        return $data ;
-
+        $qb = $this->createQueryBuilder('e')
+            ->join('e.productionElements','pe')
+            ->select('SUM(pe.salesPrice * pe.quantity) AS totalAmount')
+            ->where('pe.businessParticular = :bp')->setParameter('bp', $particular->getId());
+        $row = $qb->getQuery()->getOneOrNullResult();
+        $totalAmount =  $row['totalAmount'];
+        $salesPrice = $totalAmount + $particular->getMarketing()+$particular->getOverHead()+$particular->getPackaging()+$particular->getUtility();
+        $particular->setPrice($salesPrice);
+        $this->_em->persist($particular);
+        $this->_em->flush();
+        return $salesPrice;
     }
-
 
     public function getServiceWithParticular($config,$services){
 
@@ -201,7 +183,7 @@ class BusinessParticularRepository extends EntityRepository
     {
     }
 
-    public function getPurchaseUpdateQnt(BusinessPurchase $purchase){
+    public function getPurchaseUpdateQntx(BusinessPurchase $purchase){
 
         $em = $this->_em;
 
@@ -220,33 +202,60 @@ class BusinessParticularRepository extends EntityRepository
         }
     }
 
-    public function getSalesUpdateQnt(BusinessInvoiceAccessories  $accessories){
+    public function getPurchaseUpdateQnt(BusinessPurchase $purchase){
+
+        /** @var  $purchaseItem BusinessPurchaseItem */
+
+        if(!empty($purchase->getBusinessPurchaseItems())) {
+            foreach ($purchase->getBusinessPurchaseItems() as $purchaseItem) {
+                $stockItem = $purchaseItem->getBusinessParticular();
+                $this->updateRemovePurchaseQuantity($stockItem);
+            }
+        }
+    }
+
+    public function updateRemovePurchaseQuantity(BusinessParticular $stock,$fieldName=''){
+        $em = $this->_em;
+        if($fieldName == 'sales'){
+            $qnt = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->salesStockItemUpdate($stock);
+            $stock->setSalesQuantity($qnt);
+        }elseif($fieldName == 'sales-return'){
+            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockUpdate($stock);
+            $stock->setSalesReturnQuantity($quantity);
+        }elseif($fieldName == 'purchase-return'){
+            $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->purchaseReturnStockUpdate($stock);
+            $stock->setPurchaseReturnQuantity($qnt);
+        }elseif($fieldName == 'damage'){
+            $quantity = $em->getRepository('MedicineBundle:MedicineDamage')->damageStockItemUpdate($stock);
+            $stock->setDamageQuantity($quantity);
+        }else{
+            $qnt = $em->getRepository('BusinessBundle:BusinessPurchaseItem')->purchaseStockItemUpdate($stock);
+            $stock->setPurchaseQuantity($qnt);
+        }
+        $em->persist($stock);
+        $em->flush();
+        $this->remainingQnt($stock);
+    }
+
+    public function remainingQnt(BusinessParticular $stock)
+    {
+        $em = $this->_em;
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity()) - ($stock->getPurchaseReturnQuantity()+$stock->getSalesQuantity()+$stock->getDamageQuantity());
+        $stock->setRemainingQuantity($qnt);
+        $em->persist($stock);
+        $em->flush();
+    }
+
+
+    public function getSalesUpdateQnt(BusinessInvoiceParticular  $item){
 
         $em = $this->_em;
-        $particular = $accessories->getBusinessParticular();
-        $qnt = $particular->getSalesQuantity() + $accessories->getQuantity();
+        $particular = $item->getBusinessParticular();
+        $qnt = $particular->getSalesQuantity() + $item->getQuantity();
         $particular->setSalesQuantity($qnt);
         $em->persist($particular);
         $em->flush();
     }
 
-    public function groupServiceBy(){
-
-        $pass2 = array();
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.businessConfig = :config')->setParameter('config', 1) ;
-        $qb->andWhere('e.service IN(:service)')
-            ->setParameter('service',array_values(array(1,2,3,4)));
-        $qb->orderBy('e.name','ASC');
-        $data = $qb->getQuery()->getResult();
-        foreach ($data as $parent => $children){
-
-            foreach($children as $child => $none){
-                $pass2[$parent][$child] = true;
-                $pass2[$child][$parent] = true;
-            }
-        }
-
-    }
 
 }

@@ -1,0 +1,29 @@
+business_category:
+    path:     /
+    defaults: { _controller: "BusinessBundle:Production:index" }
+
+business_category_create:
+    path:     /create
+    defaults: { _controller: "BusinessBundle:_category:create" }
+    methods:  POST
+
+business_category_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BusinessBundle:Production:edit" }
+
+business_category_update:
+    path:     /{id}/update
+    defaults: { _controller: "BusinessBundle:Production:update" }
+    methods:  [POST, PUT]
+
+business_category_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BusinessBundle:Production:delete" }
+
+business_category_status:
+    path:     /{id}/status
+    defaults: { _controller: "BusinessBundle:Production:status" }
+
+business_category_inline:
+    path:     /inline-update
+    defaults: { _controller: "BusinessBundle:Production:inlineUpdate" }

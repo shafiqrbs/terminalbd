@@ -45,6 +45,11 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $vendor;
 
         /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="accountPurchases" , cascade={"detach","merge"} )
+         **/
+        private  $accountVendor;
+
+        /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
          * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
@@ -77,11 +82,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", inversedBy="accountPurchase" )
          **/
         private  $businessPurchase;
-
-         /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendor", inversedBy="accountPurchases" )
-         **/
-        private  $businessVendor;
 
         /**
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", inversedBy="accountPurchase" )
@@ -829,6 +829,22 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setMedicinePurchase($medicinePurchase)
         {
             $this->medicinePurchase = $medicinePurchase;
+        }
+
+        /**
+         * @return AccountVendor
+         */
+        public function getAccountVendor()
+        {
+            return $this->accountVendor;
+        }
+
+        /**
+         * @param AccountVendor $accountVendor
+         */
+        public function setAccountVendor($accountVendor)
+        {
+            $this->accountVendor = $accountVendor;
         }
 
     }

@@ -2,8 +2,8 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 
-use Appstore\Bundle\BusinessBundle\Entity\BusinessVendor;
-use Appstore\Bundle\BusinessBundle\Form\VendorType;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\AccountingBundle\Form\VendorType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +23,11 @@ class VendorController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = new BusinessVendor();
+        $entity = new AccountVendor();
         $form = $this->createCreateForm($entity);
-        $hospital = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendor')->findBy(array('dmsConfig' => $hospital),array('companyName'=>'ASC'));
-        return $this->render('BusinessBundle:Vendor:index.html.twig', array(
+        $global = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $global),array('companyName'=>'ASC'));
+        return $this->render('AccountingBundle:Vendor:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -39,25 +39,25 @@ class VendorController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new BusinessVendor();
-        $hospital = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendor')->findBy(array('dmsConfig' => $hospital),array('companyName'=>'ASC'));
+        $entity = new AccountVendor();
+        $global = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $global),array('companyName'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $hospital = $this->getUser()->getGlobalOption()->getBusinessConfig();
-            $entity->setBusinessConfig($hospital);
+            $global = $this->getUser()->getGlobalOption();
+            $entity->setGlobalOption($global);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            return $this->redirect($this->generateUrl('dms_vendor', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('business_vendor', array('id' => $entity->getId())));
         }
 
-        return $this->render('BusinessBundle:Vendor:index.html.twig', array(
+        return $this->render('AccountingBundle:Vendor:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -71,10 +71,10 @@ class VendorController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(BusinessVendor $entity)
+    private function createCreateForm(AccountVendor $entity)
     {
         $form = $this->createForm(new VendorType(), $entity, array(
-            'action' => $this->generateUrl('dms_vendor_create'),
+            'action' => $this->generateUrl('business_vendor_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -91,10 +91,9 @@ class VendorController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendor')->findBy(array('dmsConfig' => $hospital),array('companyName'=>'ASC'));
-
-        $entity = $em->getRepository('BusinessBundle:BusinessVendor')->find($id);
+        $global = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $global),array('companyName'=>'ASC'));
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
@@ -103,7 +102,7 @@ class VendorController extends Controller
         $editForm = $this->createEditForm($entity);
 
 
-        return $this->render('BusinessBundle:Vendor:index.html.twig', array(
+        return $this->render('AccountingBundle:Vendor:index.html.twig', array(
             'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
@@ -117,10 +116,10 @@ class VendorController extends Controller
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(BusinessVendor $entity)
+    private function createEditForm(AccountVendor $entity)
     {
         $form = $this->createForm(new VendorType(), $entity, array(
-            'action' => $this->generateUrl('dms_vendor_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('business_vendor_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -136,10 +135,9 @@ class VendorController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendor')->findBy(array('dmsConfig' => $hospital),array('companyName'=>'ASC'));
-
-        $entity = $em->getRepository('BusinessBundle:BusinessVendor')->find($id);
+        $global = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $global),array('companyName'=>'ASC'));
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
@@ -153,10 +151,10 @@ class VendorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-            return $this->redirect($this->generateUrl('dms_vendor'));
+            return $this->redirect($this->generateUrl('business_vendor'));
         }
 
-        return $this->render('BusinessBundle:Vendor:index.html.twig', array(
+        return $this->render('AccountingBundle:Vendor:index.html.twig', array(
             'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
@@ -170,7 +168,7 @@ class VendorController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('BusinessBundle:BusinessVendor')->find($id);
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
@@ -193,7 +191,7 @@ class VendorController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('dms_vendor'));
+        return $this->redirect($this->generateUrl('business_vendor'));
     }
 
 
@@ -205,7 +203,7 @@ class VendorController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('BusinessBundle:BusinessVendor')->find($id);
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -221,15 +219,15 @@ class VendorController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('dms_vendor'));
+        return $this->redirect($this->generateUrl('business_vendor'));
     }
 
     public function autoSearchAction(Request $request)
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getBusinessConfig();
-            $item = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendor')->searchAutoComplete($item,$inventory);
+            $global = $this->getUser()->getGlobalOption();
+            $item = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->searchAutoComplete($item,$global);
         }
         return new JsonResponse($item);
     }

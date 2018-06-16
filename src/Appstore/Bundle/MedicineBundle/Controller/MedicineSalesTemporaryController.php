@@ -178,6 +178,7 @@ class MedicineSalesTemporaryController extends Controller
         $data = array(
            'subTotal' => $subTotal,
            'initialGrandTotal' => $subTotal,
+           'discount' => $subTotal,
            'salesItems' => $salesItems ,
            'msg' => $msg ,
            'success' => 'success'

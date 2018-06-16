@@ -12,19 +12,6 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
-$(document).on("click", ".approve", function() {
-    var url = $(this).attr('data-url');
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                location.reload();
-            });
-        }
-    });
-});
-
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
@@ -85,13 +72,10 @@ $(document).on('click', '#addParticular', function() {
             obj = JSON.parse(response);
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
-            $('.grandTotal').html(obj['grandTotal']);
-            $('#paymentTotal').val(obj['grandTotal']);
-            $('#due').val(obj['dueAmount']);
-            $('.dueAmount').html(obj['dueAmount']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
+            $('#netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#discount').html(obj['discount']);
+            $('#due').html(obj['due']);
             $('#purchasePrice').val('');
             $("#particular").select2().select2("val","");
             $('#price').val('');
@@ -99,28 +83,32 @@ $(document).on('click', '#addParticular', function() {
         }
     })
 });
-$(document).on('change', '#discount', function() {
 
-    var discount = parseInt($('#discount').val());
-    var purchaseId = parseInt($('#purchaseId').val());
+$(document).on('keyup', '#purchase_discountCalculation', function() {
+
+    var discountType = $('#purchase_discountType').val();
+    var discount = parseInt($('#purchase_discountCalculation').val());
+    var invoice = $('#purchaseId').val();
+    var total =  parseInt($('#purchase_payment').val());
+    if( discount >= total ){
+        $('#purchase_discount').val(0);
+        return false;
+    }
     $.ajax({
-        url: Routing.generate('hms_purchase_discount_update'),
+        url: Routing.generate('business_purchase_discount_update'),
         type: 'POST',
-        data:'discount=' + discount+'&invoice='+ purchaseId,
+        data:'discount=' + discount+'&discountType='+discountType+'&invoice='+invoice,
         success: function(response) {
             obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
-            $('.grandTotal').html(obj['grandTotal']);
-            $('#paymentTotal').val(obj['grandTotal']);
-            $('#due').val(obj['dueAmount']);
-            $('.dueAmount').html(obj['dueAmount']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
-        },
+            $('#netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#discount').html(obj['discount']);
+            $('#due').html(obj['due']);
+        }
 
     })
+
 });
 
 $('#invoiceParticulars').on("click", ".delete", function() {
@@ -133,45 +121,43 @@ $('#invoiceParticulars').on("click", ".delete", function() {
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
-            $('.grandTotal').html(obj['grandTotal']);
-            $('#due').val(obj['dueAmount']);
-            $('.dueAmount').html(obj['dueAmount']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
+            $('#netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#discount').html(obj['discount']);
+            $('#due').html(obj['due']);
+
         }
     })
 });
 
-$(document).on('change', '#appstore_bundle_hospitalbundle_hmspurchase_payment', function() {
+$(document).on('keyup', '#purchase_payment', function() {
 
-    var payment     = parseInt($('#appstore_bundle_hospitalbundle_hmspurchase_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_hmspurchase_payment').val() : 0 );
-    var due =  parseInt($('#due').val());
+    var payment     = parseInt($('#purchase_payment').val()  != '' ? $('#purchase_payment').val() : 0 );
+    var due =  parseInt($('#paymentTotal').val());
     var dueAmount = (due - payment);
     if(dueAmount > 0){
         $('#balance').html('Due Tk.');
-        $('.dueAmount').html(dueAmount);
+        $('.due').html(dueAmount);
     }else{
         var balance =  payment - due ;
         $('#balance').html('Return Tk.');
-        $('.dueAmount').html(balance);
+        $('.due').html(balance);
     }
 });
 
-$('form.horizontal-form').on('keypress', 'input', function (e) {
+$('form#purchase').on('keypress', 'input', function (e) {
 
     if (e.which == 13) {
         e.preventDefault();
 
         switch (this.id) {
 
-            case 'discount':
-                $('#paymentAmount').focus();
+            case 'purchase_discountCalculation':
+                $('#purchase_payment').focus();
                 break;
 
-            case 'paymentAmount':
+            case 'purchase_payment':
                 $('#receiveBtn').focus();
                 break;
         }

@@ -110,6 +110,54 @@ $(document).on('click', '#addParticular', function() {
     })
 });
 
+$(document).on('change', '.quantity , .salesPrice', function() {
+
+    var id = $(this).attr('data-id');
+
+    var quantity = parseFloat($('#quantity-'+id).val());
+    var price = parseFloat($('#salesPrice-'+id).val());
+    var subTotal  = (quantity * price);
+    $("#subTotal-"+id).html(subTotal);
+    $.ajax({
+        url: Routing.generate('business_invoice_item_update'),
+        type: 'POST',
+        data:'itemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
+        success: function(response) {
+            obj = JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('.due').html(obj['due']);
+            $('.payment').html(obj['payment']);
+            $('.discount').html(obj['discount']);
+        },
+
+    })
+});
+
+$(document).on('click', '.itemUpdate', function() {
+
+    var id = $(this).attr('data-id');
+    var quantity = parseFloat($('#quantity-'+id).val());
+    var price = parseFloat($('#salesPrice-'+id).val());
+    var subTotal  = (quantity * price);
+    $("#subTotal-"+id).html(subTotal);
+    $.ajax({
+        url: Routing.generate('medicine_sales_temporary_item_update'),
+        type: 'POST',
+        data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
+        success: function(response) {
+            obj = JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('.due').html(obj['due']);
+            $('.payment').html(obj['payment']);
+            $('.discount').html(obj['discount']);
+        },
+
+    })
+});
+
+
 $(document).on("click", ".particularDelete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
@@ -131,20 +179,6 @@ $(document).on("click", ".particularDelete", function() {
     });
 });
 
-$(document).on("click", ".deleteMedicine", function() {
-
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                $('#medicine-'+id).hide();
-            });
-        }
-    });
-});
 
 $(document).on("click", ".approve", function() {
 
@@ -180,44 +214,17 @@ $(document).on('click', '#addAccessories', function() {
         type: 'POST',
         data: 'accessories='+accessories+'&quantity='+quantity,
         success: function (response) {
-            $("#accessories").select2().select2("val","");
-            $('#quantity').val('1');
-            $('#invoiceAccessories').html(response);
-            $(".editable").editable();
-
+            obj = JSON.parse(response);
+            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('.due').html(obj['due']);
+            $('.payment').html(obj['payment']);
+            $('.discount').html(obj['discount']);
         }
     })
 });
 
-$(document).on("click", ".deleteAccessories", function() {
-
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                $('#accessories-'+id).hide();
-            });
-        }
-    });
-});
-
-$(document).on("click", ".approveAccessories", function() {
-
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                $('#approved-'+id).hide();
-            });
-        }
-    });
-});
 
 $(document).on('keyup', '#businessInvoice_discountCalculation', function() {
 

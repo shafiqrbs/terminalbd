@@ -44,10 +44,10 @@ class BusinessPurchaseListener
 
         $qb
             ->select('MAX(s.code)')
-            ->where('s.dmsConfig = :dmsConfig')
+            ->where('s.businessConfig = :config')
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
-            ->setParameter('dmsConfig', $entity->getBusinessConfig())
+            ->setParameter('config', $entity->getBusinessConfig())
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();

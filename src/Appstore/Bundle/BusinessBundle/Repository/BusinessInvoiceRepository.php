@@ -250,32 +250,6 @@ class BusinessInvoiceRepository extends EntityRepository
         return  $qb;
     }
 
-    public function invoicePathologicalReportLists(User $user , $mode , $data)
-    {
-        $config = $user->getGlobalOption()->getBusinessConfig()->getId();
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
-        $this->handleSearchBetween($qb,$data);
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
-        $qb->orderBy('e.created','DESC');
-        $qb->getQuery();
-        return  $qb;
-    }
-
-
-    public function doctorInvoiceLists(User $user,$data)
-    {
-        $config = $user->getGlobalOption()->getBusinessConfig()->getId();
-
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
-        $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
-        $qb->getQuery();
-        return  $qb;
-    }
 
     public function updateInvoiceTotalPrice(BusinessInvoice $invoice)
     {
@@ -295,8 +269,8 @@ class BusinessInvoiceRepository extends EntityRepository
                 $vat = $this->getCulculationVat($invoice,$totalAmount);
                 $invoice->setVat($vat);
             }
-
             $invoice->setSubTotal($subTotal);
+            $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
@@ -311,125 +285,24 @@ class BusinessInvoiceRepository extends EntityRepository
 
         $em->persist($invoice);
         $em->flush();
-
         return $invoice;
 
     }
 
-    public function updatePaymentReceive(BusinessInvoice $invoice)
+    public function getUpdateDiscount(BusinessInvoice $invoice,$subTotal)
     {
-        $em = $this->_em;
-        $res = $em->createQueryBuilder()
-            ->from('BusinessBundle:BusinessTreatmentPlan','si')
-            ->select('sum(si.payment) as payment ,sum(si.discount) as discount')
-            ->where('si.businessInvoice = :invoice')
-            ->setParameter('invoice', $invoice ->getId())
-            ->andWhere('si.status = :status')
-            ->setParameter('status', 1)
-            ->getQuery()->getOneOrNullResult();
-        $payment = !empty($res['payment']) ? $res['payment'] :0;
-        $discount = !empty($res['discount']) ? $res['discount'] :0;
-        $invoice->setPayment($payment);
-        $invoice->setDiscount($discount);
-        $invoice->setTotal($invoice->getSubTotal() - $discount);
-        $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
-        $em->flush();
-
+        if($invoice->getDiscountType() == 'flat'){
+            $discount = $invoice->getDiscountCalculation();
+        }else{
+            $discount = ($subTotal * $invoice->getDiscountCalculation())/100;
+        }
+        return $discount;
     }
-
-    public function updateCommissionPayment(BusinessInvoice $invoice)
-    {
-        $em = $this->_em;
-        $res = $em->createQueryBuilder()
-            ->from('BusinessBundle:BusinessDoctorInvoice','si')
-            ->select('sum(si.payment) as payment')
-            ->where('si.businessInvoice = :invoice')
-            ->setParameter('invoice', $invoice ->getId())
-            ->andWhere('si.process = :process')
-            ->setParameter('process', 'Paid')
-            ->getQuery()->getOneOrNullResult();
-        $payment = !empty($res['payment']) ? $res['payment'] :0;
-        $invoice->setCommission($payment);
-        $em->persist($invoice);
-        $em->flush();
-
-    }
-
 
     public function getCulculationVat(BusinessInvoice $sales,$totalAmount)
     {
         $vat = ( ($totalAmount * (int)$sales->getBusinessConfig()->getVatPercentage())/100 );
         return round($vat);
     }
-
-    public function getInvoiceDetails(BusinessInvoice $invoice){
-
-        $em = $this->_em;
-        $qb = $em->createQueryBuilder();
-        $qb->from('BusinessBundle:InvoiceParticular','ip');
-        $qb->innerJoin('ip.particular','particular');
-        $qb->where('si.businessInvoice = :invoice');
-        $qb->setParameter('invoice', $invoice ->getId());
-        $qb->groupBy('particular.service');
-
-    }
-
-    public function updatePatientInfo($invoice,Customer $patient)
-    {
-        $em = $this->_em;
-        $invoice = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->find($invoice);
-        $invoice->setCustomer($patient);
-        $invoice->setMobile($patient->getMobile());
-        $em->persist($invoice);
-        $em->flush($invoice);
-
-    }
-
-    public function patientAdmissionUpdate($data,BusinessInvoice $entity)
-    {
-        $em = $this->_em;
-        $invoiceInfo = $data['appstore_bundle_configbundle_invoice'];
-        if($invoiceInfo['cabin']){
-            $cabin = $em->getRepository('BusinessBundle:Particular')->find($invoiceInfo['cabin']);
-            $entity->setCabin($cabin);
-        }
-        if($invoiceInfo['assignDoctor']){
-            $assignDoctor = $em->getRepository('BusinessBundle:Particular')->find($invoiceInfo['assignDoctor']);
-            $entity->setAssignDoctor($assignDoctor);
-        }
-        if($invoiceInfo['department']){
-            $department = $em->getRepository('BusinessBundle:HmsCategory')->find($invoiceInfo['department']);
-            $entity->setDepartment($department);
-        }
-        if($invoiceInfo['cabinNo']){
-            $entity->setCabinNo($invoiceInfo['cabinNo']);
-        }
-        if($invoiceInfo['disease']){
-            $entity->setDisease($invoiceInfo['disease']);
-        }
-        $em->persist($entity);
-        $em->flush($entity);
-
-    }
-
-    public function checkCabinBooking($invoice , $cabin)
-    {
-        $invoice = $this->_em->getRepository('BusinessBundle:Invoice')->find($invoice);
-        $cabin = $this->_em->getRepository('BusinessBundle:Particular')->find($cabin);
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('COUNT(e.cabin) AS cabinCount');
-        $qb->where('e.businessConfig = :config')->setParameter('config', $invoice ->getBusinessConfig()->getId());
-        $qb->andWhere('e.cabin = :cabin')->setParameter('cabin', $cabin ->getId());
-        $qb->andWhere('e.process = :process')->setParameter('process', 'Admitted');
-        $res = $qb->getQuery()->getOneOrNullResult();
-        if(!empty($res) and $res['cabinCount'] > 0 ){
-            echo 'invalid';
-        }else{
-            echo 'valid';
-        }
-        exit;
-
-    }
-
 
 }

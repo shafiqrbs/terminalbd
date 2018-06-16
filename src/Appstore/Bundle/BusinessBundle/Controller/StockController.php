@@ -1,19 +1,18 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
-
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
-use Appstore\Bundle\BusinessBundle\Form\ProductType;
+use Appstore\Bundle\BusinessBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 /**
- * ProductController controller.
+ * StockController controller.
  *
  */
-class ProductController extends Controller
+class StockController extends Controller
 {
 
     public function paginate($entities)
@@ -30,11 +29,12 @@ class ProductController extends Controller
     }
 
     /**
-     * Lists all BusinessParticular entities.
+     * Lists all Particular entities.
      *
      */
     public function indexAction()
     {
+
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
@@ -42,14 +42,28 @@ class ProductController extends Controller
         $pagination = $this->paginate($entities);
         $entity = new BusinessParticular();
         $form = $this->createCreateForm($entity);
-        return $this->render('BusinessBundle:Product:index.html.twig', array(
+        return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'pagination' => $pagination,
             'entity' => $entity,
-            'formShow'            => 'hide',
             'form'   => $form->createView(),
         ));
 
     }
+
+    /**
+     * Displays a form to create a new Vendor entity.
+     *
+     */
+    public function newAction()
+    {
+        $entity = new BusinessParticular();
+        $form   = $this->createCreateForm($entity);
+        return $this->render('BusinessBundle:Stock:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView()
+        ));
+    }
+
 
     /**
      * Creates a new BusinessParticular entity.
@@ -66,31 +80,35 @@ class ProductController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setBusinessConfig($config);
+            $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('business_product'));
+            return $this->redirect($this->generateUrl('business_stock'));
         }
-        return $this->render('BusinessBundle:Product:index.html.twig', array(
+        $this->get('session')->getFlashBag()->add(
+            'error',"Required field does not input"
+        );
+        return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a BusinessParticular entity.
+     * Creates a form to create a Particular entity.
      *
-     * @param BusinessParticular $entity The entity
+     * @param Particular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
     private function createCreateForm(BusinessParticular $entity)
     {
 
-        $form = $this->createForm(new ProductType(), $entity, array(
-            'action' => $this->generateUrl('business_product_create', array('id' => $entity->getId())),
+        $form = $this->createForm(new StockType(), $entity, array(
+            'action' => $this->generateUrl('business_stock_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -102,39 +120,34 @@ class ProductController extends Controller
 
 
     /**
-     * Displays a form to edit an existing BusinessParticular entity.
+     * Displays a form to edit an existing Particular entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('BusinessBundle:BusinessParticular')->find($id);
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getProductParticular($config,array('accessories'));
-        $pagination = $this->paginate($entities);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find BusinessParticular entity.');
+            throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render('BusinessBundle:Product:index.html.twig', array(
-            'pagination'        => $pagination,
+        return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'entity'            => $entity,
-            'formShow'            => 'show',
             'form'              => $editForm->createView(),
         ));
     }
 
     /**
-     * Creates a form to edit a BusinessParticular entity.
+     * Creates a form to edit a Particular entity.
      *
-     * @param BusinessParticular $entity The entity
+     * @param Particular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
     private function createEditForm(BusinessParticular $entity)
     {
-        $form = $this->createForm(new ProductType(), $entity, array(
-            'action' => $this->generateUrl('business_product_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new StockType(), $entity, array(
+            'action' => $this->generateUrl('business_stock_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -144,49 +157,45 @@ class ProductController extends Controller
         return $form;
     }
     /**
-     * Edits an existing BusinessParticular entity.
+     * Edits an existing Particular entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getProductParticular($config,array('accessories'));
-        $pagination = $this->paginate($entities);
         $entity = $em->getRepository('BusinessBundle:BusinessParticular')->find($id);
-
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find BusinessParticular entity.');
+            throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->upload() && !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
             $em->flush();
 
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('business_product'));
+            return $this->redirect($this->generateUrl('business_stock'));
         }
-        return $this->render('BusinessBundle:Product:index.html.twig', array(
-            'pagination'      => $pagination,
+        return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'entity'      => $entity,
-            'formShow'            => 'show',
             'form'   => $editForm->createView(),
         ));
     }
     /**
-     * Deletes a BusinessParticular entity.
+     * Deletes a Particular entity.
      *
      */
     public function deleteAction(BusinessParticular $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find BusinessParticular entity.');
+            throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         try {
 
@@ -205,7 +214,7 @@ class ProductController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('business_product'));
+        return $this->redirect($this->generateUrl('business_stock'));
     }
 
    
@@ -231,7 +240,7 @@ class ProductController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('business_product'));
+        return $this->redirect($this->generateUrl('business_stock'));
     }
 
     public function inlineUpdateAction(Request $request)
@@ -246,6 +255,11 @@ class ProductController extends Controller
         $entity->$setField(abs($data['value']));
         $em->flush();
         exit;
+
+    }
+
+    public function production(BusinessParticular $particular)
+    {
 
     }
 }

@@ -29,18 +29,17 @@ class PurchaseType extends AbstractType
     {
         $builder
 
-            ->add('dmsVendor', 'entity', array(
+            ->add('vendor', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\BusinessBundle\Entity\BusinessVendor',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.mode = 'medicine'")
-                        ->andWhere("wt.dmsConfig =".$this->option->getBusinessConfig()->getId());
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->option->getId());
                 },
             ))
             ->add('transactionMethod', 'entity', array(
@@ -61,7 +60,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -74,7 +73,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -82,13 +81,24 @@ class PurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
+
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
+            ->add('discountType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap discount-type span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'percentage' => 'Percentage',
+                    'flat' => 'Flat',
+                ),
+            ))
+            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  memo no'))
-            )))
-            ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark')))
-            ->add('receiveDate','text', array('attr'=>array('class'=>'m-wrap span12 dateCalendar','placeholder'=>'Enter receive date')))
-            ->add('payment','text', array('attr'=>array('class'=>'numeric','placeholder'=>'Payment amount')
+                )))
+            ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
+            ->add('discount','hidden')
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Payment amount','autocomplete'=>'off')
             ));
     }
     
@@ -107,6 +117,6 @@ class PurchaseType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_dmspurchase';
+        return 'purchase';
     }
 }

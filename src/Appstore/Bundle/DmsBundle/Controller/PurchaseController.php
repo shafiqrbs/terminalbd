@@ -116,7 +116,7 @@ class PurchaseController extends Controller
 
     public function particularSearchAction(DmsParticular $particular)
     {
-        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'purchasePrice'=> $particular->getPurchasePrice(), 'quantity'=> 1 , 'minimumPrice'=> '', 'instruction'=>'')));
+        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'purchasePrice'=> $particular->getPurchasePrice(), 'quantity'=> 1 , 'minimumPrice'=> '')));
     }
 
     public function addParticularAction(Request $request, DmsPurchase $invoice)

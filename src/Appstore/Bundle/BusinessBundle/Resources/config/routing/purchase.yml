@@ -1,65 +1,65 @@
 business_purchase:
     path:     /
-    defaults: { _controller: "DmsBundle:Purchase:index" }
+    defaults: { _controller: "BusinessBundle:Purchase:index" }
 
 business_purchase_show:
     path:     /{id}/show
-    defaults: { _controller: "DmsBundle:Purchase:show" }
+    defaults: { _controller: "BusinessBundle:Purchase:show" }
 
 business_purchase_new:
     path:     /new
-    defaults: { _controller: "DmsBundle:Purchase:new" }
+    defaults: { _controller: "BusinessBundle:Purchase:new" }
 
 business_purchase_edit:
     path:     /{id}/edit
-    defaults: { _controller: "DmsBundle:Purchase:edit" }
+    defaults: { _controller: "BusinessBundle:Purchase:edit" }
 
 business_purchase_update:
     path:     /{id}/update
-    defaults: { _controller: "DmsBundle:Purchase:update" }
+    defaults: { _controller: "BusinessBundle:Purchase:update" }
     methods:  [POST, PUT]
 
 business_purchase_status:
     path:     /{id}/status
-    defaults: { _controller: "DmsBundle:Purchase:edit" }
+    defaults: { _controller: "BusinessBundle:Purchase:edit" }
 
 
 business_purchase_approve:
     path:     /{id}/approve
-    defaults: { _controller: "DmsBundle:Purchase:approve" }
+    defaults: { _controller: "BusinessBundle:Purchase:approve" }
 
 business_purchase_delete:
     path:     /{id}/delete
-    defaults: { _controller: "DmsBundle:Purchase:delete" }
+    defaults: { _controller: "BusinessBundle:Purchase:delete" }
 
 business_purchase_particular_search:
     path:     /{id}/particular-search
-    defaults: { _controller: "DmsBundle:Purchase:particularSearch" }
+    defaults: { _controller: "BusinessBundle:Purchase:particularSearch" }
 
 
 business_purchase_particular_add:
     path:     /{invoice}/particular-add
-    defaults: { _controller: "DmsBundle:Purchase:addParticular" }
+    defaults: { _controller: "BusinessBundle:Purchase:addParticular" }
     methods:  POST
     options:
             expose: true
 
 business_purchase_discount_update:
     path:     /purchase/dicount-update
-    defaults: { _controller: "DmsBundle:Purchase:invoiceDiscountUpdate" }
+    defaults: { _controller: "BusinessBundle:Purchase:invoiceDiscountUpdate" }
     methods:  POST
     options:
             expose: true
 
 business_purchase_approved:
     path:     /{id}/invoice-approved
-    defaults: { _controller: "DmsBundle:Purchase:approved" }
+    defaults: { _controller: "BusinessBundle:Purchase:approved" }
 
 
 business_purchase_particular_delete:
     path:     /{invoice}/{id}/particular-delete
-    defaults: { _controller: "DmsBundle:Purchase:invoiceParticularDelete" }
+    defaults: { _controller: "BusinessBundle:Purchase:invoiceParticularDelete" }
 
 business_purchase_print_invoice:
     path:     /{id}/print
-    defaults: { _controller: "DmsBundle:Purchase:invoicePrint" }
+    defaults: { _controller: "BusinessBundle:Purchase:invoicePrint" }

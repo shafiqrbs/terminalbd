@@ -27,36 +27,57 @@ class BusinessParticular
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessParticulars")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessPurchases" , cascade={"detach","merge"} )
      **/
-    private $businessConfig;
+    private  $businessConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories", mappedBy="businessParticular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Category", inversedBy="businessParticulars" )
+     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
-    private $businessInvoiceAccessories;
+    private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessParticular" )
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessParticulars" )
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
-    private $invoiceParticular;
+    private $invoiceParticulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="businessParticular" )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private $productionElements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="particular" )
+     **/
+    private $elements;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem", mappedBy="businessParticular" )
-     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $businessPurchaseItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="businessParticulars")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem", mappedBy="businessParticular" )
      **/
-    protected $location;
+    private $businessPurchaseReturnItems;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="businessParticulars" )
      **/
     private  $unit;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="productType", type="string", length=20, nullable=true)
+     */
+    private $productType;
+
 
     /**
      * @var string
@@ -72,44 +93,6 @@ class BusinessParticular
      * @ORM\Column(name="quantity", type="smallint", length=3, nullable=true)
      */
     private $quantity = 1;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="room", type="string", length=100, nullable=true)
-     */
-    private $room;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
-    private $content;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="instruction", type="text", nullable=true)
-     */
-    private $instruction;
-
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="price", type="float", nullable=true)
-     */
-    private $price;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="minimumPrice", type="float", nullable=true)
-     */
-    private $minimumPrice;
 
     /**
      * @var integer
@@ -141,6 +124,35 @@ class BusinessParticular
     private $salesQuantity;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="remainingQuantity", type="integer", nullable=true)
+     */
+    private $remainingQuantity=0;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseReturnQuantity", type="integer", nullable=true)
+     */
+    private $purchaseReturnQuantity=0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesReturnQuantity", type="integer", nullable=true)
+     */
+    private $salesReturnQuantity=0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="damageQuantity", type="integer", nullable=true)
+     */
+    private $damageQuantity=0;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="purchaseAverage", type="decimal", nullable=true)
@@ -155,32 +167,76 @@ class BusinessParticular
     private $purchasePrice;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="overHead", type="float", nullable=true)
+     */
+    private $overHead;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="packaging", type="float", nullable=true)
+     */
+    private $packaging;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="utility", type="float", nullable=true)
+     */
+    private $utility;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="marketing", type="float", nullable=true)
+     */
+    private $marketing;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="content", type="text", nullable=true)
+     */
+    private $content;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="price", type="decimal", nullable=true)
+     */
+    private $price;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountPrice", type="decimal", nullable=true)
+     */
+    private $discountPrice;
+
+    /**
+     * @var \string
+     *
+     * @ORM\Column(name="minimumPrice", type="decimal", nullable=true)
+     */
+    private $minimumPrice;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="commission", type="decimal" , nullable=true)
+     */
+    private $commission;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="phoneNo", type="string", length=128, nullable=true)
      */
     private $phoneNo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="startHour", type="string", length=10, nullable=true)
-     */
-    private $startHour;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="endHour", type="string", length=10, nullable=true)
-     */
-    private $endHour;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="weeklyOffDay", type="array", nullable=true)
-     */
-    private $weeklyOffDay;
 
     /**
      * @var string
@@ -192,18 +248,9 @@ class BusinessParticular
     /**
      * @var string
      *
-     * @ORM\Column(name="doctorPrescription", type="text", nullable=true)
+     * @ORM\Column(name="sorting", type="string", length=5, nullable=true)
      */
-    private $doctorPrescription;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="designation", type="string", length=256, nullable=true)
-     */
-    private $designation;
-
+    private $sorting;
 
     /**
      * @var integer
@@ -215,17 +262,10 @@ class BusinessParticular
     /**
      * @var string
      *
-     * @ORM\Column(name="businessParticularCode", type="string", length=10, nullable=true)
+     * @ORM\Column(name="particularCode", type="string", length=10, nullable=true)
      */
-    private $businessParticularCode;
+    private $particularCode;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="address", type="string", length=255, nullable=true)
-     */
-    private $address;
 
     /**
      * @var string
@@ -234,34 +274,13 @@ class BusinessParticular
      */
     private $mobile;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="particularCode", type="string", length=15, nullable=true)
-     */
-    private $particularCode;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="testDuration", type="boolean" )
-     */
-    private $testDuration = false;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="reportFormat", type="boolean" )
-     */
-    private $reportFormat = false;
-
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean" )
      */
-    private $status = true;
+    private $status= true;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -289,6 +308,7 @@ class BusinessParticular
     private $updated;
 
 
+
     /**
      * Get id
      *
@@ -301,16 +321,11 @@ class BusinessParticular
 
     /**
      * Set name
-     *
      * @param string $name
-     *
-     * @return BusinessParticular
      */
     public function setName($name)
     {
         $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -323,29 +338,14 @@ class BusinessParticular
         return $this->name;
     }
 
-    public function getReferred()
-    {
-
-        return $this->businessParticularCode . ' - ' . $this->name . ' (' . $this->mobile . ')/' . $this->getService()->getName();
-    }
-
-    public function getDoctor()
-    {
-        return $this->businessParticularCode . ' - ' . $this->name;
-    }
 
     /**
      * Set content
-     *
      * @param string $content
-     *
-     * @return BusinessParticular
      */
     public function setContent($content)
     {
         $this->content = $content;
-
-        return $this;
     }
 
     /**
@@ -360,28 +360,39 @@ class BusinessParticular
 
     /**
      * Set price
-     *
-     * @param float $price
-     *
-     * @return BusinessParticular
+     * @param string $price
      */
     public function setPrice($price)
     {
         $this->price = $price;
-
-        return $this;
     }
 
     /**
      * Get price
      *
-     * @return float
+     * @return string
      */
     public function getPrice()
     {
         return $this->price;
     }
 
+
+    /**
+     * @return string
+     */
+    public function getMinimumPrice()
+    {
+        return $this->minimumPrice;
+    }
+
+    /**
+     * @param string $minimumPrice
+     */
+    public function setMinimumPrice($minimumPrice)
+    {
+        $this->minimumPrice = $minimumPrice;
+    }
 
     /**
      * @return int
@@ -431,136 +442,23 @@ class BusinessParticular
         $this->code = $code;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAssignOperator()
-    {
-        return $this->assignOperator;
-    }
-
-    /**
-     * @param User $assignOperator
-     */
-    public function setAssignOperator($assignOperator)
-    {
-        $this->assignOperator = $assignOperator;
-    }
 
     /**
      * @return string
      */
-    public function getBusinessParticularCode()
+    public function getParticularCode()
     {
-        return $this->businessParticularCode;
+        return $this->particularCode;
     }
 
     /**
-     * @param string $businessParticularCode
+     * @param string $particularCode
      */
-    public function setBusinessParticularCode($businessParticularCode)
+    public function setParticularCode($particularCode)
     {
-        $this->businessParticularCode = $businessParticularCode;
+        $this->particularCode = $particularCode;
     }
 
-    /**
-     * @return Service
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    /**
-     * @param Service $service
-     */
-    public function setService($service)
-    {
-        $this->service = $service;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getStartHour()
-    {
-        return $this->startHour;
-    }
-
-    /**
-     * @param string $startHour
-     */
-    public function setStartHour($startHour)
-    {
-        $this->startHour = $startHour;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEndHour()
-    {
-        return $this->endHour;
-    }
-
-    /**
-     * @param string $endHour
-     */
-    public function setEndHour($endHour)
-    {
-        $this->endHour = $endHour;
-    }
-
-    /**
-     * @return array
-     */
-    public function getWeeklyOffDay()
-    {
-        return $this->weeklyOffDay;
-    }
-
-    /**
-     * @param array $weeklyOffDay
-     */
-    public function setWeeklyOffDay($weeklyOffDay)
-    {
-        $this->weeklyOffDay = $weeklyOffDay;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getPhoneNo()
-    {
-        return $this->phoneNo;
-    }
-
-    /**
-     * @param string $phoneNo
-     */
-    public function setPhoneNo($phoneNo)
-    {
-        $this->phoneNo = $phoneNo;
-    }
 
     /**
      * @return ProductUnit
@@ -578,54 +476,6 @@ class BusinessParticular
         $this->unit = $unit;
     }
 
-
-    /**
-     * @return Location
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     * @param Location $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMobile()
-    {
-        return $this->mobile;
-    }
-
-    /**
-     * @param string $mobile
-     */
-    public function setMobile($mobile)
-    {
-        $this->mobile = $mobile;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param string $address
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-    }
 
     /**
      * Sets file.
@@ -651,24 +501,24 @@ class BusinessParticular
     {
         return null === $this->path
             ? null
-            : $this->getUploadRootDir() . '/' . $this->path;
+            : $this->getUploadRootDir().'/'.$this->path;
     }
 
     public function getWebPath()
     {
         return null === $this->path
             ? null
-            : $this->getUploadDir() . '/' . $this->path;
+            : $this->getUploadDir().'/'.$this->path;
     }
 
     protected function getUploadRootDir()
     {
-        return __DIR__ . '/../../../../../web/' . $this->getUploadDir();
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
     }
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/' . $this->getHospitalConfig()->getGlobalOption()->getId() . '/hms/';
+        return 'uploads/domain/'.$this->getBusinessConfig()->getGlobalOption()->getId().'/business/';
     }
 
     public function upload()
@@ -695,29 +545,20 @@ class BusinessParticular
         $this->file = null;
     }
 
-
     /**
-     * @return string
+     * @return int
      */
-    public function getInstruction()
+    public function getPurchaseQuantity()
     {
-        return $this->instruction;
+        return $this->purchaseQuantity;
     }
 
     /**
-     * @param string $instruction
+     * @param int $purchaseQuantity
      */
-    public function setInstruction($instruction)
+    public function setPurchaseQuantity($purchaseQuantity)
     {
-        $this->instruction = $instruction;
-    }
-
-    /**
-     * @param int $salesQuantity
-     */
-    public function setSalesQuantity($salesQuantity)
-    {
-        $this->salesQuantity = $salesQuantity;
+        $this->purchaseQuantity = $purchaseQuantity;
     }
 
     /**
@@ -728,57 +569,41 @@ class BusinessParticular
         return $this->salesQuantity;
     }
 
-
     /**
-     * @return User
+     * @param int $salesQuantity
      */
-    public function getAssignDoctor()
+    public function setSalesQuantity($salesQuantity)
     {
-        return $this->assignDoctor;
+        $this->salesQuantity = $salesQuantity;
     }
 
+
+
     /**
-     * @param User $assignDoctor
+     * @return BusinessPurchaseItem
      */
-    public function setAssignDoctor($assignDoctor)
+    public function getPurchaseItems()
     {
-        $this->assignDoctor = $assignDoctor;
+        return $this->purchaseItems;
     }
+
 
 
     /**
      * @return string
      */
-    public function getDesignation()
+    public function getPurchaseAverage()
     {
-        return $this->designation;
+        return $this->purchaseAverage;
     }
 
     /**
-     * @param string $designation
+     * @param string $purchaseAverage
      */
-    public function setDesignation($designation)
+    public function setPurchaseAverage($purchaseAverage)
     {
-        $this->designation = $designation;
+        $this->purchaseAverage = $purchaseAverage;
     }
-
-
-    /**
-     * @return bool
-     */
-    public function getTestDuration()
-    {
-        return $this->testDuration;
-    }
-
-    /**
-     * @param bool $testDuration
-     */
-    public function setTestDuration($testDuration)
-    {
-        $this->testDuration = $testDuration;
-    }
-
 
     /**
      * @return \DateTime
@@ -810,128 +635,6 @@ class BusinessParticular
     public function setUpdated($updated)
     {
         $this->updated = $updated;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function getReportFormat()
-    {
-        return $this->reportFormat;
-    }
-
-    /**
-     * @param bool $reportFormat
-     */
-    public function setReportFormat($reportFormat)
-    {
-        $this->reportFormat = $reportFormat;
-    }
-
-
-    /**
-     * @return BusinessInvoice
-     */
-    public function getBusinessInvoice()
-    {
-        return $this->businessInvoice;
-    }
-
-    /**
-     * @return BusinessConfig
-     */
-    public function getBusinessConfig()
-    {
-        return $this->businessConfig;
-    }
-
-    /**
-     * @param BusinessConfig $businessConfig
-     */
-    public function setBusinessConfig($businessConfig)
-    {
-        $this->businessConfig = $businessConfig;
-    }
-
-    /**
-     * @return BusinessInvoiceParticular
-     */
-    public function getInvoiceParticular()
-    {
-        return $this->invoiceParticular;
-    }
-
-    /**
-     * @return string
-     */
-    public function getParticularCode()
-    {
-        return $this->particularCode;
-    }
-
-    /**
-     * @param string $particularCode
-     */
-    public function setParticularCode($particularCode)
-    {
-        $this->particularCode = $particularCode;
-    }
-
-    /**
-     * @return BusinessInvoice
-     */
-    public function getAssignDoctorInvoices()
-    {
-        return $this->assignDoctorInvoices;
-    }
-
-    /**
-     * @return BusinessPurchaseItem
-     */
-    public function getBusinessPurchaseItems()
-    {
-        return $this->businessPurchaseItems;
-    }
-
-    /**
-     * @return BusinessTreatmentPlan
-     */
-    public function getBusinessTreatmentPlans()
-    {
-        return $this->businessTreatmentPlans;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMinimumPrice()
-    {
-        return $this->minimumPrice;
-    }
-
-    /**
-     * @param float $minimumPrice
-     */
-    public function setMinimumPrice($minimumPrice)
-    {
-        $this->minimumPrice = $minimumPrice;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRoom()
-    {
-        return $this->room;
-    }
-
-    /**
-     * @param string $room
-     */
-    public function setRoom($room)
-    {
-        $this->room = $room;
     }
 
     /**
@@ -967,38 +670,6 @@ class BusinessParticular
     }
 
     /**
-     * @return int
-     */
-    public function getPurchaseQuantity()
-    {
-        return $this->purchaseQuantity;
-    }
-
-    /**
-     * @param int $purchaseQuantity
-     */
-    public function setPurchaseQuantity($purchaseQuantity)
-    {
-        $this->purchaseQuantity = $purchaseQuantity;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPurchaseAverage()
-    {
-        return $this->purchaseAverage;
-    }
-
-    /**
-     * @param string $purchaseAverage
-     */
-    public function setPurchaseAverage($purchaseAverage)
-    {
-        $this->purchaseAverage = $purchaseAverage;
-    }
-
-    /**
      * @return string
      */
     public function getPurchasePrice()
@@ -1015,28 +686,269 @@ class BusinessParticular
     }
 
     /**
-     * @return BusinessInvoiceAccessories
+     * @return string
      */
-    public function getBusinessInvoiceAccessories()
+    public function getDiscountPrice()
     {
-        return $this->businessInvoiceAccessories;
+        return $this->discountPrice;
+    }
+
+    /**
+     * @param string $discountPrice
+     */
+    public function setDiscountPrice($discountPrice)
+    {
+        $this->discountPrice = $discountPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOverHead()
+    {
+        return $this->overHead;
+    }
+
+    /**
+     * @param float $overHead
+     */
+    public function setOverHead($overHead)
+    {
+        $this->overHead = $overHead;
+    }
+
+
+    /**
+     * @return float
+     */
+    public function getUtility()
+    {
+        return $this->utility;
+    }
+
+    /**
+     * @param float $utility
+     */
+    public function setUtility($utility)
+    {
+        $this->utility = $utility;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPackaging()
+    {
+        return $this->packaging;
+    }
+
+    /**
+     * @param float $packaging
+     */
+    public function setPackaging($packaging)
+    {
+        $this->packaging = $packaging;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMarketing()
+    {
+        return $this->marketing;
+    }
+
+    /**
+     * @param float $marketing
+     */
+    public function setMarketing($marketing)
+    {
+        $this->marketing = $marketing;
+    }
+
+    public function getCodeName()
+    {
+        $codeName = $this->getSorting().' - '.$this->getName();
+        return $codeName;
+    }
+
+    /**
+     * @return BusinessInvoiceParticular
+     */
+    public function getInvoiceParticulars()
+    {
+        return $this->invoiceParticulars;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
+
+    /**
+     * @param string $sorting
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return BusinessConfig
+     */
+    public function getBusinessConfig()
+    {
+        return $this->businessConfig;
+    }
+
+    /**
+     * @param BusinessConfig $businessConfig
+     */
+    public function setBusinessConfig($businessConfig)
+    {
+        $this->businessConfig = $businessConfig;
     }
 
     /**
      * @return string
      */
-    public function getDoctorPrescription()
+    public function getProductType()
     {
-        return $this->doctorPrescription;
+        return $this->productType;
     }
 
     /**
-     * @param string $doctorPrescription
+     * @param string $productType
      */
-    public function setDoctorPrescription($doctorPrescription)
+    public function setProductType($productType)
     {
-        $this->doctorPrescription = $doctorPrescription;
+        $this->productType = $productType;
     }
 
 
+    /**
+     * @return BusinessProductionElement
+     */
+    public function getProductionElements()
+    {
+        return $this->productionElements;
+    }
+
+    /**
+     * @return BusinessProductionElement
+     */
+    public function getElements()
+    {
+        return $this->elements;
+    }
+
+    /**
+     * @param BusinessProductionElement $elements
+     */
+    public function setElements($elements)
+    {
+        $this->elements = $elements;
+    }
+
+    /**
+     * @return BusinessPurchaseItem
+     */
+    public function getBusinessPurchaseItems()
+    {
+        return $this->businessPurchaseItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRemainingQuantity()
+    {
+        return $this->remainingQuantity;
+    }
+
+    /**
+     * @param int $remainingQuantity
+     */
+    public function setRemainingQuantity($remainingQuantity)
+    {
+        $this->remainingQuantity = $remainingQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseReturnQuantity()
+    {
+        return $this->purchaseReturnQuantity;
+    }
+
+    /**
+     * @param int $purchaseReturnQuantity
+     */
+    public function setPurchaseReturnQuantity($purchaseReturnQuantity)
+    {
+        $this->purchaseReturnQuantity = $purchaseReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesReturnQuantity()
+    {
+        return $this->salesReturnQuantity;
+    }
+
+    /**
+     * @param int $salesReturnQuantity
+     */
+    public function setSalesReturnQuantity($salesReturnQuantity)
+    {
+        $this->salesReturnQuantity = $salesReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDamageQuantity()
+    {
+        return $this->damageQuantity;
+    }
+
+    /**
+     * @param int $damageQuantity
+     */
+    public function setDamageQuantity($damageQuantity)
+    {
+        $this->damageQuantity = $damageQuantity;
+    }
+
+    /**
+     * @return BusinessPurchaseReturnItem
+     */
+    public function getBusinessPurchaseReturnItems()
+    {
+        return $this->businessPurchaseReturnItems;
+    }
+
 }
+
