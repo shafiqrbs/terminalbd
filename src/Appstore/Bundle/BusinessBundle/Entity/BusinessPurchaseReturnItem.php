@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * BusinessPurchaseReturnItem
  *
  * @ORM\Table(name ="business_purchase_return_item")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessPurchaseItemRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessPurchaseReturnItemRepository")
  */
 class BusinessPurchaseReturnItem
 {

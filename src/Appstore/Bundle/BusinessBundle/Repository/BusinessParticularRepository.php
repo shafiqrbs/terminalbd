@@ -215,18 +215,19 @@ class BusinessParticularRepository extends EntityRepository
     }
 
     public function updateRemovePurchaseQuantity(BusinessParticular $stock,$fieldName=''){
+
         $em = $this->_em;
         if($fieldName == 'sales'){
             $qnt = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->salesStockItemUpdate($stock);
             $stock->setSalesQuantity($qnt);
         }elseif($fieldName == 'sales-return'){
-            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockUpdate($stock);
+            $quantity = $this->_em->getRepository('BusinessBundle:BusinessInvoiceReturn')->salesReturnStockUpdate($stock);
             $stock->setSalesReturnQuantity($quantity);
         }elseif($fieldName == 'purchase-return'){
-            $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->purchaseReturnStockUpdate($stock);
+            $qnt = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->purchaseReturnStockUpdate($stock);
             $stock->setPurchaseReturnQuantity($qnt);
         }elseif($fieldName == 'damage'){
-            $quantity = $em->getRepository('MedicineBundle:MedicineDamage')->damageStockItemUpdate($stock);
+            $quantity = $em->getRepository('BusinessBundle:BusinessDamage')->damageStockItemUpdate($stock);
             $stock->setDamageQuantity($quantity);
         }else{
             $qnt = $em->getRepository('BusinessBundle:BusinessPurchaseItem')->purchaseStockItemUpdate($stock);

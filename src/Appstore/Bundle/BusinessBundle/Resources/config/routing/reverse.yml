@@ -1,0 +1,16 @@
+business_reverse:
+    path:     /
+    defaults: { _controller: "BusinessBundle:BusinessReverse:index" }
+
+business_purchase_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "BusinessBundle:Purchase:reverse" }
+
+business_sales_reverse:
+    path:     /{id}/
+    defaults: { _controller: "BusinessBundle:Sales:reverse" }
+
+business_reverse_show:
+    path:     /{id}/show
+    defaults: { _controller: "BusinessBundle:BusinessReverse:show" }
+

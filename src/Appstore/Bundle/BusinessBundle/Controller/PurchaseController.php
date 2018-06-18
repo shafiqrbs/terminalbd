@@ -255,7 +255,6 @@ class PurchaseController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->updatePurchaseItemPrice($purchase);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);
-            //$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
             return new Response('success');

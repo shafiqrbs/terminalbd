@@ -189,18 +189,10 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'fa fa-building-o')
             ->setAttribute('dropdown', true);
 
-        $menu['Business Management']->addChild('Client', array('route' => 'business_invoice'))
-            ->setAttribute('icon', 'fa fa-medkit');
+        $menu['Business Management']->addChild('Invoice', array('route' => 'business_invoice'))
+            ->setAttribute('icon', 'icon-th-list');
         $menu['Business Management']->addChild('Add Invoice', array('route' => 'business_invoice_new'))
-            ->setAttribute('icon', 'fa fa-medkit');
-        $menu['Business Management']->addChild('Expense')
-            ->setAttribute('icon', 'icon icon-money')
-            ->setAttribute('dropdown', true);
-        $menu['Business Management']['Expense']->addChild('Expenditure', array('route' => 'business_account_expenditure'))
-            ->setAttribute('icon', 'fa fa-indent');
-        $menu['Business Management']['Expense']->addChild('Expense Category', array('route' => 'business_expensecategory'))
-            ->setAttribute('icon', 'icon-tags');
-
+            ->setAttribute('icon', 'icon-plus-sign');
         $menu['Business Management']->addChild('Master Data')
             ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);

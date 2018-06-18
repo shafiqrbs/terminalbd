@@ -940,6 +940,18 @@ class User extends BaseUser
         return false;
     }
 
+    public function isRoleAdmin()
+    {
+        $groups = $this->getGroups();
+        foreach ($groups as $group) {
+            if ($group->hasRole('ROLE_ADMIN')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * @return boolean
      */

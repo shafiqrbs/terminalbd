@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Receive GRN # {{ entity.grn }}
+                    Purchase GRN # {{ entity.grn }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_purchase') }}">Receive</a>
+                        <a href="{{ path('business_purchase') }}">Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Receive</a></li>
+                    <li><a href="#">Manage Purchase</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -34,12 +34,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Receive Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Purchase Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('business_purchase_new') }}"><i class="icon-plus-sign"></i> Accessories Receive</a>
-                                <a class="btn" href="{{ path('business_purchase') }}"><i class="icon-th-list"></i> Accessories</a>
+                                <a class="btn red" href="{{ path('business_purchase_new') }}"><i class="icon-plus-sign"></i> Add purchase</a>
+                                <a class="btn black" href="{{ path('business_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                             </div>
                         </div>
 
@@ -116,6 +116,9 @@
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if ( entity.process == 'Done') %}
                                     <a  href="javascript:"  data-url="{{ path('business_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                    {% endif %}
+                                    {% if (entity.process == 'Approved' and app.user.granted("ROLE_SUPER_DOMAIN")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) or (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_REVERSE_PURCHASE"))  %}
+                                        <a  href="javascript:"  data-url="{{ path('business_purchase_reverse',{'id':entity.id}) }}" class="btn black"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>
