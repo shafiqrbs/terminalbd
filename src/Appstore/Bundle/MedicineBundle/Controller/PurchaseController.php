@@ -6,6 +6,7 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
@@ -111,6 +112,8 @@ class PurchaseController extends Controller
         $entity->setCreatedBy($this->getUser());
         $receiveDate = new \DateTime('now');
         $entity->setReceiveDate($receiveDate);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
@@ -190,6 +193,11 @@ class PurchaseController extends Controller
         return $form;
     }
 
+    public function particularSearchAction(MedicineStock $particular)
+    {
+        $unit = !empty($particular->getUnit()->getName())?$particular->getUnit()->getName():'Pack';
+        return new Response(json_encode(array('purchasePrice'=> '', 'salesPrice'=> '','quantity'=> 1,'unit' => $unit)));
+    }
 
     public function stockItemCreateAction(Request $request,MedicinePurchase $purchase)
     {
@@ -222,7 +230,7 @@ class PurchaseController extends Controller
                 $entity->setMode('medicine');
             }
             if($entity->getUnit()){
-                $minQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineMinimumStock')->findOneBy(array('medicineConfig'=>$config,'unit'=> $entity->getUnit()));
+                $minQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineMinimumStock')->findOneBy(array('medicineConfig' => $config,'unit'=> $entity->getUnit()));
                 if($minQnt){
                     $entity->setMinQuantity($minQnt->getMinQuantity());
                 }
@@ -242,10 +250,6 @@ class PurchaseController extends Controller
     }
 
 
-    public function particularSearchAction(MedicineStock $particular)
-    {
-        return new Response(json_encode(array('purchasePrice'=> $particular->getSalesPrice(), 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1)));
-    }
 
     public function returnResultData(MedicinePurchase $entity,$msg=''){
 
@@ -284,14 +288,19 @@ class PurchaseController extends Controller
         $entity->setMedicinePurchase($invoice);
         $stockItem = ($data['purchaseItem']['stockName']);
         $entity->setMedicineStock($this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem));
-        $entity->setPurchaseSubTotal($entity->getPurchasePrice() * $entity->getQuantity());
+
+        $entity->setPurchaseSubTotal($entity->getPurchasePrice());
         $entity->setRemainingQuantity($entity->getQuantity());
-        $entity->setActualPurchasePrice($entity->getPurchasePrice());
+        $unitPrice = round(($entity->getPurchasePrice()/$entity->getQuantity()),2);
+        $salesPrice = round(($entity->getSalesPrice()/$entity->getQuantity()),2);
+        $entity->setActualPurchasePrice($unitPrice);
+        $entity->setPurchasePrice($unitPrice);
+        $entity->setSalesPrice($salesPrice);
         if(!empty($expirationStartDate)){
             $expirationStartDate = (new \DateTime($expirationStartDate));
             $entity->setExpirationStartDate($expirationStartDate);
         }
-        if(!empty($expirationEndDate)) {
+        if(!empty($expirationEndDate)){
             $expirationEndDate = (new \DateTime($expirationEndDate));
             $entity->setExpirationEndDate($expirationEndDate);
         }

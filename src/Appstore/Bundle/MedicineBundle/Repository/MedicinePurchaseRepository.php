@@ -68,9 +68,11 @@ class MedicinePurchaseRepository extends EntityRepository
             ->setParameter('entity', $entity ->getId())
             ->getQuery()->getSingleResult();
 
-        if($total['total'] > 0){
+        $subTotal = $total['total'];
+        if($subTotal > 0){
 
-            $entity->setSubTotal($total['total']);
+            $entity->setSubTotal($subTotal);
+            $entity->setDiscount($this->getUpdateDiscount($entity,$subTotal));
             $entity->setNetTotal($entity->getSubTotal() - $entity->getDiscount());
             $entity->setDue($entity->getNetTotal() - $entity->getPayment() );
 
@@ -87,6 +89,16 @@ class MedicinePurchaseRepository extends EntityRepository
 
         return $entity;
 
+    }
+
+    public function getUpdateDiscount(MedicinePurchase $invoice,$subTotal)
+    {
+        if($invoice->getDiscountType() == 'flat'){
+            $discount = $invoice->getDiscountCalculation();
+        }else{
+            $discount = ($subTotal * $invoice->getDiscountCalculation())/100;
+        }
+        return round($discount,2);
     }
 
     public function reportPurchaseOverview(User $user ,$data)

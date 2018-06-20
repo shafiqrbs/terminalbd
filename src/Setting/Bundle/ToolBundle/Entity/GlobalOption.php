@@ -19,6 +19,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
@@ -630,6 +631,11 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $medicineConfig;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineBrand", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $medicineBrands;
 
 
     /**
@@ -1768,6 +1774,14 @@ class GlobalOption
     public function getVendors()
     {
         return $this->vendors;
+    }
+
+    /**
+     * @return MedicineBrand
+     */
+    public function getMedicineBrands()
+    {
+        return $this->medicineBrands;
     }
 
 

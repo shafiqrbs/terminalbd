@@ -51,7 +51,7 @@ class BusinessConfig
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn", mappedBy="businessConfig")
      **/
-    private $businessPurchaseReturns;
+    private $businessPurchasesReturns;
 
 
     /**
@@ -880,9 +880,9 @@ class BusinessConfig
     /**
      * @return BusinessPurchaseReturn
      */
-    public function getBusinessPurchaseReturns()
+    public function getBusinessPurchasesReturns()
     {
-        return $this->businessPurchaseReturns;
+        return $this->businessPurchasesReturns;
     }
 
 

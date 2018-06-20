@@ -45,6 +45,7 @@ $(document).on('change', '#purchaseItem_stockName', function() {
             $('#purchaseItem_expirationStartDate').focus();
             $('#purchaseItem_salesPrice').val(obj['salesPrice']);
             $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
+            $('#unit').html(obj['unit']);
         }
     })
 
@@ -172,6 +173,7 @@ var formStock = $("#stockItemForm").validate({
                 $('#paymentTotal').val(obj['netTotal']);
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);
+                $('#discount').html(obj['discount']);
                 $('#msg').html(obj['msg']);
                 $("#medicineStock_name").select2("val", "");
                 $("#medicineId").val();
@@ -187,22 +189,24 @@ var form = $("#purchaseItemForm").validate({
 
         "purchaseItem[stockName]": {required: true},
         "purchaseItem[purchasePrice]": {required: true},
-        "purchaseItem[salesPrice]": {required: false},
+        "purchaseItem[salesPrice]": {required: true},
         "purchaseItem[quantity]": {required: true},
         "purchaseItem[expirationStartDate]": {required: false},
-        "purchaseItem[expirationEndDate]": {required: false},
+        "purchaseItem[expirationEndDate]": {required: false}
     },
 
     messages: {
 
         "purchaseItem[stockName]":"Enter medicine name",
         "purchaseItem[purchasePrice]":"Enter purchase price",
-        "purchaseItem[quantity]":"Enter medicine quantity",
+        "purchaseItem[salesPrice]":"Enter sales price",
+        "purchaseItem[quantity]":"Enter medicine quantity"
     },
     tooltip_options: {
         "purchaseItem[stockName]": {placement:'top',html:true},
         "purchaseItem[purchasePrice]": {placement:'top',html:true},
-        "purchaseItem[quantity]": {placement:'top',html:true},
+        "purchaseItem[salesPrice]": {placement:'top',html:true},
+        "purchaseItem[quantity]": {placement:'top',html:true}
 
     },
 
@@ -223,6 +227,7 @@ var form = $("#purchaseItemForm").validate({
                 $('#paymentTotal').val(obj['netTotal']);
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);
+                $('#discount').html(obj['discount']);
                 $('#msg').html(obj['msg']);
                 $("#purchaseItem_stockName").select2("val", "");
                 $('#purchaseItemForm')[0].reset();
@@ -255,8 +260,6 @@ $('#invoiceParticulars').on("click", ".delete", function() {
 });
 
 
-
-
 $(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurchase_discountType', function() {
 
     var discountType = $('#medicinepurchase_discountType').val();
@@ -286,7 +289,7 @@ $(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurch
 $(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
 
     var payment     = parseInt($('#medicinepurchase_payment').val()  != '' ? $('#medicinepurchase_payment').val() : 0 );
-    var due =  parseInt($('#due').val());
+    var due =  parseInt($('#paymentTotal').val());
     var dueAmount = (due-payment);
     if(dueAmount > 0){
         $('#balance').html('Due Tk.');

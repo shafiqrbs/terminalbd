@@ -27,7 +27,7 @@ class BusinessParticular
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessPurchases" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessParticulars" , cascade={"detach","merge"} )
      **/
     private  $businessConfig;
 
@@ -38,10 +38,10 @@ class BusinessParticular
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessParticulars" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessParticular" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
-    private $invoiceParticulars;
+    private $businessInvoiceParticulars;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="businessParticular" )
@@ -63,6 +63,12 @@ class BusinessParticular
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem", mappedBy="businessParticular" )
      **/
     private $businessPurchaseReturnItems;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessDamage", mappedBy="businessParticular" )
+     **/
+    private $businessDamages;
 
 
     /**
@@ -773,15 +779,6 @@ class BusinessParticular
     }
 
     /**
-     * @return BusinessInvoiceParticular
-     */
-    public function getInvoiceParticulars()
-    {
-        return $this->invoiceParticulars;
-    }
-
-
-    /**
      * @return string
      */
     public function getSorting()
@@ -948,6 +945,22 @@ class BusinessParticular
     public function getBusinessPurchaseReturnItems()
     {
         return $this->businessPurchaseReturnItems;
+    }
+
+    /**
+     * @return BusinessDamage
+     */
+    public function getBusinessDamages()
+    {
+        return $this->businessDamages;
+    }
+
+    /**
+     * @return BusinessInvoiceParticular
+     */
+    public function getBusinessInvoiceParticulars()
+    {
+        return $this->businessInvoiceParticulars;
     }
 
 }

@@ -113,6 +113,8 @@ class InstantPurchaseController extends Controller
         $entity->setMode('instant');
         $receiveDate = new \DateTime('now');
         $entity->setReceiveDate($receiveDate);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
         $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertPurchaseItems($config,$entity,$data);

@@ -173,7 +173,7 @@ class MedicineSalesRepository extends EntityRepository
         }else{
             $discount = ($subTotal * $invoice->getDiscountCalculation())/100;
         }
-        return $discount;
+        return round($discount,2);
     }
 
     public function updatePaymentReceive(MedicineSales $invoice)

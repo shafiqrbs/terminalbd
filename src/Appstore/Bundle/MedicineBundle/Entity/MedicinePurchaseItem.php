@@ -51,6 +51,12 @@ class MedicinePurchaseItem
     private  $medicineSalesReturns;
 
      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturnItem", mappedBy="medicinePurchaseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $medicinePurchaseReturnItems;
+
+     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDamage", mappedBy="medicinePurchaseItem" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
@@ -562,6 +568,14 @@ class MedicinePurchaseItem
     public function setActualPurchasePrice($actualPurchasePrice)
     {
         $this->actualPurchasePrice = $actualPurchasePrice;
+    }
+
+    /**
+     * @return MedicinePurchaseReturnItem
+     */
+    public function getMedicinePurchaseReturnItems()
+    {
+        return $this->medicinePurchaseReturnItems;
     }
 
 }

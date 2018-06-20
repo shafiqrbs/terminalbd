@@ -256,12 +256,16 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $expirationEndDate = (new \DateTime($data['expirationEndDate']));
             $entity->setExpirationEndDate($expirationEndDate);
         }
-        $entity->setSalesPrice($item->getSalesPrice());
-        $entity->setPurchasePrice($item->getPurchasePrice());
+        $unitPrice = round(($item->getPurchasePrice()/$item->getPurchaseQuantity()),2);
+        $salesPrice = round(($item->getSalesPrice()/$item->getPurchaseQuantity()),2);
+        $entity->setPurchaseSubTotal($item->getPurchasePrice());
+        $entity->setSalesPrice($salesPrice);
+        $entity->setPurchasePrice($unitPrice);
         $entity->setQuantity($item->getPurchaseQuantity());
         $entity->setRemainingQuantity($item->getPurchaseQuantity());
-        $entity->setPurchaseSubTotal($item->getPurchaseQuantity() * $item->getPurchasePrice());
         $em->persist($entity);
+        $item->setPurchasePrice($unitPrice);
+        $item->setSalesPrice($unitPrice);
         $em->flush();
     }
 
@@ -339,12 +343,13 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $expirationEndDate = (new \DateTime($data['expirationEndDate']));
             $entity->setExpirationEndDate($expirationEndDate);
         }
-        $entity->setSalesPrice($data['salesPrice']);
-        $entity->setPurchasePrice($data['salesPrice']);
-        $entity->setActualPurchasePrice($data['salesPrice']);
+        $unitPrice = round(($data['salesPrice']/$data['salesQuantity']),2);
+        $entity->setSalesPrice($unitPrice);
+        $entity->setPurchasePrice($unitPrice);
+        $entity->setActualPurchasePrice($unitPrice);
         $entity->setQuantity($data['salesQuantity']);
         $entity->setRemainingQuantity($data['salesQuantity']);
-        $entity->setPurchaseSubTotal($data['salesQuantity'] * $data['salesPrice']);
+        $entity->setPurchaseSubTotal($data['salesPrice']);
         $em->persist($entity);
         $em->flush();
         return $entity;

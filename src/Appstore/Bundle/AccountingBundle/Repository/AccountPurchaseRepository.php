@@ -144,7 +144,7 @@ class AccountPurchaseRepository extends EntityRepository
                     FROM account_purchase AS sub
                     JOIN medicine_vendor as subVendor ON sub.medicineVendor_id = subVendor.id
                    WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$company}
-                    GROUP BY sub.vendor_id
+                    GROUP BY sub.medicineVendor_id
                   
                 ) {$outstanding}
                 ORDER BY purchase.id DESC";

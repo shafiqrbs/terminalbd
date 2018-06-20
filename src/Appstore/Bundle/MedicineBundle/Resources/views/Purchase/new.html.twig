@@ -125,26 +125,25 @@
             {{ form_start(purchaseItem) }}
             {{ form_row(purchaseItem._token) }}
             <div class="row-fluid particular-info" >
-                <div class="span5">
+                <div class="span5" style="padding-left:15px">
                     {{ form_widget(purchaseItem.stockName) }}
                     {{ form_errors(purchaseItem.stockName) }}
                 </div>
-                <div class="span5">
-                    {{ form_widget(purchaseItem.expirationStartDate) }}
-                    {{ form_widget(purchaseItem.expirationEndDate) }}
-                    {{ form_widget(purchaseItem.purchasePrice) }}
-                    {{ form_widget(purchaseItem.salesPrice) }}
-
-                </div>
-                <div class="span2">
+                <div class="span7">
                     <div class="input-append">
                         <div class="input-group">
+                             {{ form_widget(purchaseItem.expirationStartDate) }}
+                             {{ form_widget(purchaseItem.expirationEndDate) }}
                              {{ form_widget(purchaseItem.quantity) }}
-                            {{ form_errors(purchaseItem.quantity) }}
-                            <button type="submit" class="btn blue" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
-                            <input type="hidden" id="particularId" name="particularId" value="">
+                             <button class="btn red" id="unit">Pack</button>
+                             {{ form_widget(purchaseItem.purchasePrice) }}
+                             {{ form_widget(purchaseItem.salesPrice) }}
+                             <button type="submit" class="btn blue" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                             <input type="hidden" id="particularId" name="particularId" value="">
                         </div>
                     </div>
+                    {{ form_errors(purchaseItem.quantity) }}
+                    {{ form_errors(purchaseItem.purchasePrice) }}
                 </div>
             </div>
             {{ form_end(purchaseItem) }}

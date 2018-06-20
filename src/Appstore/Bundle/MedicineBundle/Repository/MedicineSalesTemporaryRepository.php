@@ -42,13 +42,13 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         if(!empty($invoiceParticular)) {
             $entity = $invoiceParticular;
             $entity->setQuantity($invoiceParticular->getQuantity() + $data['quantity']);
-            $entity->setSubTotal($data['salesPrice'] * $entity->getQuantity());
+            $entity->setSubTotal(round(($data['salesPrice'] * $entity->getQuantity()),2));
 
         }else{
 
             $entity->setQuantity($data['quantity']);
-            $entity->setSalesPrice($data['salesPrice']);
-            $entity->setSubTotal($data['salesPrice'] * $data['quantity']);
+            $entity->setSalesPrice(round($data['salesPrice'],2));
+            $entity->setSubTotal(round(($entity->getSalesPrice() * $data['quantity']),2));
         }
 
         $entity->setUser($user);

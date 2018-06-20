@@ -28,14 +28,14 @@ class BusinessInvoiceParticular
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="invoiceParticulars")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="businessInvoiceParticulars")
      * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $businessInvoice;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="invoiceParticulars", cascade={"persist"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="businessInvoiceParticulars", cascade={"persist"} )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $businessParticular;

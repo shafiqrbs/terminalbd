@@ -121,11 +121,6 @@ class Location
     protected $dmsParticulars;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", mappedBy="location")
-     */
-    protected $businessParticulars;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular", mappedBy="location")
      */
     protected $dpsParticulars;

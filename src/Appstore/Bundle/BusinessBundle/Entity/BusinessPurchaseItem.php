@@ -45,6 +45,12 @@ class BusinessPurchaseItem
     private  $businessPurchase;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessDamage", mappedBy="businessPurchaseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $businessDamages;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="businessPurchaseItems" )
      **/
     private  $unit;
@@ -449,6 +455,14 @@ class BusinessPurchaseItem
     public function getBusinessPurchaseReturnItems()
     {
         return $this->businessPurchaseReturnItems;
+    }
+
+    /**
+     * @return BusinessDamage
+     */
+    public function getBusinessDamages()
+    {
+        return $this->businessDamages;
     }
 
 

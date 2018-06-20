@@ -1365,6 +1365,5 @@ class Particular
         $this->discountValid = $discountValid;
     }
 
-
 }
 
