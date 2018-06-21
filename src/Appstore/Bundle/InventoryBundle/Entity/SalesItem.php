@@ -104,6 +104,14 @@ class SalesItem
     private $salesPrice;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="discountPrice", type="decimal", nullable=true)
+     */
+    private $discountPrice;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="purchasePrice", type="float", nullable=true)
@@ -390,6 +398,22 @@ class SalesItem
     public function setExpiredDate($expiredDate)
     {
         $this->expiredDate = $expiredDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountPrice()
+    {
+        return $this->discountPrice;
+    }
+
+    /**
+     * @param string $discountPrice
+     */
+    public function setDiscountPrice($discountPrice)
+    {
+        $this->discountPrice = $discountPrice;
     }
 
 

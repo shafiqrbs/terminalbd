@@ -291,12 +291,6 @@ class AccountMedicineController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
-            if ($entity->getMedicineSales()->getDue() < $entity->getAmount() ){
-                $this->get('session')->getFlashBag()->add(
-                    'notice',"Payment amount receive must be same or less as due amount"
-                );
-                return $this->redirect($this->generateUrl('account_sales_medicine_due',array('sales' => $entity->getMedicineSales()->getId())));
-            }
             $em->flush();
             return $this->redirect($this->generateUrl('account_sales_medicine'));
         }

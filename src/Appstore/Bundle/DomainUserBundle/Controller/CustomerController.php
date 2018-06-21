@@ -209,6 +209,7 @@ class CustomerController extends Controller
 
     public function autoSearchAction(Request $request)
     {
+
         $item = $_REQUEST['q'];
         if ($item) {
             $go = $this->getUser()->getGlobalOption();

@@ -117,14 +117,11 @@
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Quantity</th>
                                 <th class="numeric" >Sales Price</th>
-                                <th class="numeric" >Sub-Sales Price</th>
                                 <th class="numeric" >Purchase Price</th>
-                                <th class="numeric" >Sub-Purchase Price</th>
                                 <th class="numeric" >Profit/Loss</th>
                             </tr>
                             </thead>
                             <tbody>
-
                             {%  set totalSales = 0 %}
                             {% for entity in entities %}
                                 <tr>
@@ -135,10 +132,8 @@
                                     <td class="numeric" >{{ entity.name }}</td>
                                     <td class="numeric" >{{ entity.quantity }}</td>
                                     <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
-                                    <td class="numeric" >{{ (entity.quantity * entity.salesPrice)|number_format }}</td>
                                     <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
-                                    <td class="numeric" >{{ (entity.quantity * entity.purchasePrice)|number_format }}</td>
-                                    <td class="numeric" >{{ ((entity.quantity * entity.salesPrice) - (entity.quantity * entity.purchasePrice))|number_format }}</td>
+                                    <td class="numeric" >{{ (entity.salesPrice -  entity.purchasePrice)|number_format }}</td>
                                 </tr>
                             {% endfor %}
 

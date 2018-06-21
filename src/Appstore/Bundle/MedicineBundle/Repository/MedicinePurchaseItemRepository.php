@@ -269,7 +269,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $em->flush();
     }
 
-    public function checkInsertStockItem($config,$data){
+    public function checkInsertStockItem(MedicineConfig $config,$data){
 
         if(empty($data['medicineId'])) {
             $checkStockMedicine = $this->_em->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockNonMedicine($config, $data['medicineBrand']);
@@ -314,7 +314,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
         $discount = (($price * $percentage )/100);
         $purchasePrice = ($price - $discount);
-        return $purchasePrice;
+        return round($purchasePrice,2);
 
     }
 
@@ -322,11 +322,11 @@ class MedicinePurchaseItemRepository extends EntityRepository
     {
         $discount = (($price * $config->getVendorPercentage())/100);
         $purchasePrice = ($price - $discount);
-        return $purchasePrice;
+        return round($purchasePrice,2);
     }
 
 
-    public function insertPurchaseItems($config,MedicinePurchase $purchase, $data)
+    public function insertPurchaseItems(MedicineConfig $config,MedicinePurchase $purchase, $data)
     {
 
         $item = $this->checkInsertStockItem($config,$data);
@@ -346,6 +346,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $unitPrice = round(($data['salesPrice']/$data['salesQuantity']),2);
         $entity->setSalesPrice($unitPrice);
         $entity->setPurchasePrice($unitPrice);
+        $entity->setPurchasePrice($this->stockInstantPurchaseItemPrice($config->getInstantVendorPercentage(),$unitPrice));
         $entity->setActualPurchasePrice($unitPrice);
         $entity->setQuantity($data['salesQuantity']);
         $entity->setRemainingQuantity($data['salesQuantity']);
@@ -413,18 +414,6 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->join('e.particular','particular');
         $qb->join('particular.category','category');
         $qb->where('particular.service = :service')->setParameter('service', 1) ;
-        /*            $qb->andWhere('invoice.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-                    $qb->andWhere('particular.process IN(:process)');
-                    $qb->setParameter('process',array_values(array('In-progress','Damage','Impossible')));
-                    if (!empty($invoice)) {
-                        $qb->andWhere($qb->expr()->like("invoice.invoice", "'%$invoice%'"  ));
-                    }
-                    if (!empty($particular)) {
-                        $qb->andWhere('particular.name = :partName')->setParameter('partName', $particular) ;
-                    }
-                    if (!empty($category)) {
-                        $qb->andWhere('category.name = :catName')->setParameter('catName', $category) ;
-                    }*/
         $qb->orderBy('e.updated','DESC');
         $qb->getQuery();
         return  $qb;

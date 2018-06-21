@@ -48,6 +48,7 @@ class MedicineSalesItemRepository extends EntityRepository
         foreach ($entities as $item){
 
             /* @var  $item MedicineSalesTemporary */
+
             $entity = new MedicineSalesItem();
             $entity->setMedicineSales($sales);
             $entity->setMedicineStock($item->getMedicineStock());
@@ -56,12 +57,24 @@ class MedicineSalesItemRepository extends EntityRepository
             $entity->setSalesPrice($item->getSalesPrice());
             $entity->setSubTotal($item->getSubTotal());
             $entity->setPurchasePrice($item->getMedicinePurchaseItem()->getPurchasePrice());
+            $entity->setDiscountPrice($this->itemDiscountPrice($sales,$item->getSalesPrice()));
             $em->persist($entity);
             $em->flush();
             $em->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item->getMedicinePurchaseItem(),'sales');
             $em->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock(),'sales');
         }
     }
+
+    public function itemDiscountPrice(MedicineSales $sales,$price)
+    {
+        $discountPrice = $price;
+        if($sales->getDiscountType() == 'percentage'){
+            $discount = (($price * $sales->getDiscountCalculation())/100);
+            $discountPrice = ($price - $discount);
+        }
+        return round($discountPrice,2);
+    }
+
 
     public function insertInstantSalesItem(MedicineSales $sales,MedicinePurchaseItem $item,$data){
 
@@ -74,6 +87,7 @@ class MedicineSalesItemRepository extends EntityRepository
         $entity->setSalesPrice($item->getSalesPrice());
         $entity->setSubTotal($item->getSalesPrice() * $data['salesQuantity']);
         $entity->setPurchasePrice($item->getPurchasePrice());
+        $entity->setDiscountPrice($this->itemDiscountPrice($sales,$item->getSalesPrice()));
         $em->persist($entity);
         $em->flush();
         $em->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item->getMedicinePurchaseItem(),'sales');
