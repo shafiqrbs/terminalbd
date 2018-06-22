@@ -161,21 +161,6 @@ class ReportController extends Controller
         ));
     }
 
-    public function purchaseVendorStockSalesAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorStockReport($user,$data);
-        return $this->render('MedicineBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
-            'option'                => $user->getGlobalOption() ,
-            'entities'              => $entities ,
-            'searchForm'            => $data,
-        ));
-    }
-
-
-
     public function purchaseVendorAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -183,19 +168,6 @@ class ReportController extends Controller
         $user = $this->getUser();
         $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user,$data);
         return $this->render('MedicineBundle:Report:purchase/purchaseVendor.html.twig', array(
-            'option'                => $user->getGlobalOption() ,
-            'entities'              => $entities ,
-            'searchForm'            => $data,
-        ));
-    }
-
-    public function purchaseBrandAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user,$data);
-        return $this->render('MedicineBundle:Report:purchase/purchaseBrand.html.twig', array(
             'option'                => $user->getGlobalOption() ,
             'entities'              => $entities ,
             'searchForm'            => $data,
@@ -237,8 +209,6 @@ class ReportController extends Controller
         ));
     }
 
-
-
     public function purchaseBrandSalesAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -256,6 +226,38 @@ class ReportController extends Controller
     }
 
 
+
+
+
+    public function purchaseVendorStockSalesAction()
+    {
+        exit;
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorStockReport($user,$data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'entities'              => $entities ,
+            'searchForm'            => $data,
+        ));
+    }
+
+
+
+
+    public function purchaseBrandAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user,$data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseBrand.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'entities'              => $entities ,
+            'searchForm'            => $data,
+        ));
+    }
 
     public function purchaseDetailsAction()
     {
