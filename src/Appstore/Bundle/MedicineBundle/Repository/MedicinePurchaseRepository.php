@@ -20,14 +20,23 @@ class MedicinePurchaseRepository extends EntityRepository
 
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
         $startDate = isset($data['startDate'])? $data['startDate'] :'';
         $endDate = isset($data['endDate'])? $data['endDate'] :'';
 
         if (!empty($grn)) {
             $qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
         }
+        if(!empty($brand)){
+            $qb->andWhere($qb->expr()->like("ms.brandName", "'%$brand%'"  ));
+        }
         if(!empty($vendor)){
-            $qb->andWhere("e.medicineVendor = :vendor")->setParameter('vendor', $vendor);
+            $qb->join('e.medicineVendor','v');
+            $qb->andWhere("v.companyName = :vendor")->setParameter('vendor', $vendor);
+        }
+        if(!empty($vendorId)){
+            $qb->join('e.medicineVendor','v');
+            $qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
         }
         if (!empty($startDate) ) {
             $datetime = new \DateTime($data['startDate']);
@@ -149,7 +158,6 @@ class MedicinePurchaseRepository extends EntityRepository
         return $result = $res->getArrayResult();
     }
 
-
     public function reportPurchaseModeOverview(User $user,$data)
     {
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
@@ -164,7 +172,6 @@ class MedicinePurchaseRepository extends EntityRepository
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
     }
-
 
     public function reportStockModeOverview(User $user,$data)
     {
@@ -204,36 +211,45 @@ class MedicinePurchaseRepository extends EntityRepository
 
     }
 
-    public function purchaseVendorStockReport(User $user , $data = array())
+    public function productPurchaseStockSalesReport(User $user , $data = array())
     {
-        if(!empty($data['vendor'])){
-            $vendor = $data['vendor'];
             $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
             $qb = $this->createQueryBuilder('e');
             $qb->join('e.medicinePurchaseItems','mpi');
-            $qb->select('sum(mpi.quantity) as quantity , sum(mpi.remainingQuantity) as remainingQuantity, sum(mpi.remainingQuantity * mpi.purchasePrice ) as remainingPurchasePrice, sum(mpi.remainingQuantity * mpi.salesPrice ) as remainingSalesPrice');
+            $qb->join('mpi.medicineStock','ms');
+            $qb->leftJoin('ms.rackNo','rack');
+            $qb->select('ms.name,rack.name AS medicineRack,ms.brandName as brandName, ms.mode as mode , sum(mpi.quantity) as purchaseQuantity , sum(mpi.purchaseReturnQuantity) as purchaseReturnQuantity, sum(mpi.salesQuantity) as salesQuantity, sum(mpi.salesReturnQuantity) as salesReturnQuantity, sum(mpi.damageQuantity) as damageQuantity, sum(mpi.remainingQuantity) as remainingQuantity, sum(mpi.remainingQuantity * mpi.purchasePrice ) as remainingPurchasePrice, sum(mpi.remainingQuantity * mpi.salesPrice ) as remainingSalesPrice');
             $qb->where('e.medicineConfig = :config');
             $qb->setParameter('config', $config);
             $qb->andWhere('e.process = :process');
             $qb->setParameter('process', 'approved');
-            $qb->andWhere('e.medicineVendor = :vendor');
-            $qb->setParameter('vendor', $vendor);
             $this->handleSearchBetween($qb,$data);
-            $qb->groupBy("e.medicineStock");
+            $qb->groupBy("ms.name");
+            $qb->orderBy("ms.name",'ASC');
             $res = $qb->getQuery();
-            $results = $res->getArrayResult();
-            $purchaseVendors = array();
-            foreach ($results as $row){
-                $purchaseVendors[$row['id']] = $row;
-            }
-            return $purchaseVendors;
-        }else{
-            return false;
-        }
-
+            return $res;
     }
 
+    public function productPurchaseStockSalesPriceReport(User $user , $data = array())
+    {
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.medicinePurchaseItems','mpi');
+        $qb->join('mpi.medicineStock','ms');
+        $qb->leftJoin('ms.medicineSalesItems','msi');
+        $qb->leftJoin('ms.rackNo','rack');
+        $qb->select('ms.name,rack.name AS medicineRack,ms.brandName as brandName, ms.mode as mode , sum(mpi.quantity * mpi.purchasePrice) as purchasePrice , sum(mpi.purchaseReturnQuantity * mpi.purchasePrice) as purchaseReturnPrice, sum(msi.salesQuantity * msi.discountPrice) as salesPrice, sum(mpi.salesReturnQuantity * mpi.purchasePrice) as salesReturnPrice, sum(mpi.damageQuantity * mpi.purchasePrice) as damagePrice,  sum(mpi.remainingQuantity * mpi.purchasePrice ) as remainingPurchasePrice, sum(mpi.remainingQuantity * mpi.salesPrice ) as remainingSalesPrice');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process = :process');
+        $qb->setParameter('process', 'approved');
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy("ms.name");
+        $qb->orderBy("ms.name",'ASC');
+        $res = $qb->getQuery();
+        return $res;
 
+    }
 
     public function getPurchaseVendorPrice(User $user , $data = array())
     {
@@ -304,7 +320,11 @@ class MedicinePurchaseRepository extends EntityRepository
         $qb->groupBy("ms.brandName");
         $res = $qb->getQuery();
         $results = $res->getArrayResult();
-        return $results;
+        $purchaseBrands = array();
+        foreach ($results as $row){
+            $purchaseBrands[$row['brandName']] = $row;
+        }
+        return $purchaseBrands;
     }
 
     public function getSalesBrandReport(User $user , $data = array())

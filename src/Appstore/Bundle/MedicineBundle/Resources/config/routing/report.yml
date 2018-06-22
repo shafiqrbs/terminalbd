@@ -19,14 +19,13 @@ medicine_report_purchase_brand_sales:
     defaults: { _controller: "MedicineBundle:Report:purchaseBrandSales" }
 
 
-medicine_report_purchase_vendor_stock:
-    path:     /purchase-stock
-    defaults: { _controller: "MedicineBundle:Report:purchaseStockItem" }
+medicine_report_product_stock_sales:
+    path:     /product-vendor-stock-sales
+    defaults: { _controller: "MedicineBundle:Report:productPurchaseStockSales" }
 
-medicine_report_purchase_brand:
-    path:     /purchase-brand-summary
-    defaults: { _controller: "MedicineBundle:Report:purchaseBrand" }
-
+medicine_report_product_stock_sales_price:
+    path:     /product-brand-stock-sales-price
+    defaults: { _controller: "MedicineBundle:Report:productPurchaseStockSalesPrice" }
 
 
 medicine_report_purchase_details:

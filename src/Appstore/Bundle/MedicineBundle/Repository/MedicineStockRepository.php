@@ -105,6 +105,18 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function getBrandLists($user)
+    {
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.brandName as brandName , e.mode as mode');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->groupBy("e.brandName");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+    }
+
     public function getFindWithParticular($hospital,$services){
 
         $qb = $this->createQueryBuilder('e')

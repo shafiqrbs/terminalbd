@@ -76,6 +76,7 @@ class MedicineConfig
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", mappedBy="medicineConfig")
+     * @ORM\OrderBy({"companyName" = "ASC"})
      **/
     private $medicineVendors;
 

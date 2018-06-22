@@ -202,7 +202,7 @@ class ReportController extends Controller
         $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesVendorPrice($user,$data);
         return $this->render('MedicineBundle:Report:purchase/purchaseSalesVendor.html.twig', array(
             'option'                => $user->getGlobalOption() ,
-            'vendors'                => $user->getGlobalOption()->getMedicineConfig()->getMedicineVendors() ,
+            'vendors'               => $user->getGlobalOption()->getMedicineConfig()->getMedicineVendors() ,
             'purchasePrice'         => $purchasePrice ,
             'salesPrice'            => $salesPrice ,
             'searchForm'            => $data,
@@ -214,22 +214,61 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
+        $brands = $em->getRepository('MedicineBundle:MedicineStock')->getBrandLists($user);
         $purchasePrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getPurchaseBrandReport($user,$data);
         $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesBrandReport($user,$data);
         return $this->render('MedicineBundle:Report:purchase/purchaseSalesBrand.html.twig', array(
             'option'                => $user->getGlobalOption() ,
-            'vendors'                => $user->getGlobalOption()->getMedicineConfig()->getMedicineVendors() ,
+            'brands'                => $brands,
             'purchasePrice'         => $purchasePrice ,
             'salesPrice'            => $salesPrice ,
             'searchForm'            => $data,
         ));
     }
 
+    public function productPurchaseStockSalesAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getMedicineConfig();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->productPurchaseStockSalesReport($user,$data);
+        $pagination = $this->paginate($entities);
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+        return $this->render('MedicineBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'pagination'              => $pagination ,
+            'racks' => $racks,
+            'modeFor' => $modeFor,
+            'searchForm'            => $data,
+        ));
+    }
 
 
+    public function productPurchaseStockSalesPriceAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getMedicineConfig();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->productPurchaseStockSalesPriceReport($user,$data);
+        $pagination = $this->paginate($entities);
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+        return $this->render('MedicineBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'pagination'              => $pagination ,
+            'racks' => $racks,
+            'modeFor' => $modeFor,
+            'searchForm'            => $data,
+        ));
+    }
 
 
-    public function purchaseVendorStockSalesAction()
+    public function purchaseBrandStockSalesAction()
     {
         exit;
         $em = $this->getDoctrine()->getManager();
@@ -242,8 +281,6 @@ class ReportController extends Controller
             'searchForm'            => $data,
         ));
     }
-
-
 
 
     public function purchaseBrandAction()

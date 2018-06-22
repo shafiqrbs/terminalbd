@@ -38,20 +38,31 @@
                         <div class="row-fluid">
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                   <div class="span3">
-                                       <select name="vendor" id="vendor" class="select2 leftMargin span12">
-                                           {% for vendor in globalOption.medicineConfig.medicineVendors %}
-                                               <option {% if searchForm.vendor is defined and searchForm.vendor == vendor.companyName %} selected="selected" {% endif %} value="{{ vendor.companyName }}" >{{ vendor.companyName }}</option>
-                                           {% endfor %}
-                                       </select>
-                                   </div>
-                                    <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="m-wrap span12 search-input  datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                    <div class="span3">
+                                        <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap select2BrandName" value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="vendor" name="vendor"  class="span12 m-wrap select2VendorCompany" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
+                                    </div>
+                                    <div class="span3">
+                                        <select name="rackNo" id="rackNo" class="span4 m-wrap">
+                                            <option value="">Rack no</option>
+                                            {% for rack in racks %}
+                                                <option {% if searchForm.rack is defined and searchForm.rack == method.id %} selected="selected" {% endif %} value="{{ rack.id }}" >{{ rack.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <select name="mode" id="mode" class="span8 m-wrap">
+                                            <option  value="">Product Mode</option>
+                                            {% for mode in modeFor %}
+                                                <option {% if searchForm.mode is defined and searchForm.mode == mode.slug %} selected="selected" {% endif %} value="{{ mode.slug }}">{{ mode.name }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="endDate" name="endDate"  class="m-wrap span10 search-input  m-ctrl-medium datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <input type="text" id="startDate" name="startDate"  class="m-wrap span5 search-input datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                                <input type="text" id="endDate" name="endDate"  class="m-wrap span5 search-input  m-ctrl-medium datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -68,30 +79,36 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
-                                    <th class="numeric" >Rack</th>
-                                    <th class="numeric" >Purchase Qnt</th>
-                                    <th class="numeric" >Sales Qnt</th>
-                                    <th class="numeric" >Stock Qnt</th>
-                                    <th class="numeric" >Unit</th>
+                                    <th class="numeric" >Rack no</th>
+                                    <th class="numeric" >Brand</th>
+                                    <th class="numeric" >Mode</th>
+                                    <th class="numeric" >P Qnt.</th>
+                                    <th class="numeric" >P Return</th>
+                                    <th class="numeric" >S Qnt.</th>
+                                    <th class="numeric" >S Return</th>
+                                    <th class="numeric" >Damage</th>
+                                    <th class="numeric" >Remain Qnt.</th>
+                                    <th class="numeric" >Purchase Price</th>
+                                    <th class="numeric" >Sales Price</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in pagination %}
                                    <tr>
-                                        <td class="numeric" >{{ entity.sku }}</td>
-                                        {% if entity.mode == 'medicine' %}
-                                            <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        {% else %}
-                                            <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{{ entity.accessoriesBrand.name }}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        {% endif %}
-                                        <td class="numeric" >{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
-                                        <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{{ entity.medicineRack }}</td>
+                                        <td class="numeric" >{{ entity.brandName }}</td>
+                                        <td class="numeric" >{{ entity.mode|capitalize }}</td>
+                                        <td class="numeric" >{{ entity.purchaseQuantity }}</td>
+                                       <td class="numeric" >{{ entity.purchaseReturnQuantity }}</td>
+                                       <td class="numeric" >{{ entity.salesQuantity }}</td>
+                                       <td class="numeric" >{{ entity.salesReturnQuantity }}</td>
+                                       <td class="numeric" >{{ entity.damageQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
-                                        <td class="numeric" >{{ entity.unit.name }}</td>
-                                    </tr>
+                                        <td class="numeric" >{{ entity.remainingPurchasePrice }}</td>
+                                        <td class="numeric" >{{ entity.remainingSalesPrice }}</td>
+                                  </tr>
 
                                 {% endfor %}
 
@@ -109,3 +126,11 @@
         </div>
     </div>
 {% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@MedicineBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
