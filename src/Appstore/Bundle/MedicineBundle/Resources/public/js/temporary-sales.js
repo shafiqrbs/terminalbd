@@ -430,6 +430,12 @@ function jqueryInstantTemporaryLoad(){
         }, 2000)
     });
 
+    $('form#instantPurchase').on('keyup', '#purchaseQuantity', function (e) {
+        var mrp = $('#purchaseQuantity').val();
+        $('#salesQuantity').val(mrp);
+    });
+
+
     $('form#instantPurchase').on('keypress', '.input', function (e) {
 
         if (e.which === 13) {
@@ -442,7 +448,10 @@ function jqueryInstantTemporaryLoad(){
             }
             switch (this.id) {
 
-                case 'quantity':
+                case 'purchaseQuantity':
+                    $('#salesPrice').focus();
+                    break;
+                case 'salesPrice':
                     $('#addInstantPurchase').focus();
                     break;
                 case 'addInstantPurchase':
@@ -456,16 +465,15 @@ function jqueryInstantTemporaryLoad(){
     $(document).on('click', '#addInstantPurchase', function() {
 
         var form = $("#instantPurchase").validate({
-
             rules: {
 
                 "medicineName": {required: true},
                 "vendor": {required: true},
-                "purchasesBy": {required: true},
-                "purchasePrice": {required: true},
+                "purchasesBy": {required: false},
+                "purchaseQuantity": {required: true},
+                "salesPrice": {required: true},
                 "expirationStartDate": {required: false},
-                "expirationEndDate": {required: false},
-                "quantity": {required: true}
+                "expirationEndDate": {required: false}
             },
 
             messages: {
@@ -473,15 +481,16 @@ function jqueryInstantTemporaryLoad(){
                 "medicineName": "Enter medicine name",
                 "vendor": "Select vendor name",
                 "purchasesBy": "Enter purchase by medicine",
-                "purchasePrice": "Enter purchase price",
-                "quantity": "Enter medicine quantity"
+                "purchaseQuantity": "Enter medicine quantity",
+                "salesPrice": "Enter sales price"
             },
             tooltip_options: {
+
                 "medicineName": {placement: 'top', html: true},
                 "vendor": {placement: 'top', html: true},
                 "purchasesBy": {placement: 'top', html: true},
-                "purchasePrice": {placement: 'top', html: true},
-                "quantity": {placement: 'top', html: true}
+                "purchaseQuantity": {placement: 'top', html: true},
+                "salesPrice": {placement: 'top', html: true}
             },
 
             submitHandler: function (form) {

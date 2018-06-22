@@ -120,7 +120,6 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return  $qb;
     }
 
-
     public function expiryMedicineSearch($config,$data = array(),$instant = ''){
 
         $qb = $this->createQueryBuilder('mpi');
@@ -138,7 +137,6 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->getQuery();
         return  $qb;
     }
-
 
     public function medicinePurchaseItemUpdate(MedicinePurchaseItem $item,$fieldName)
     {
@@ -325,7 +323,6 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return round($purchasePrice,2);
     }
 
-
     public function insertPurchaseItems(MedicineConfig $config,MedicinePurchase $purchase, $data)
     {
 
@@ -343,13 +340,12 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $expirationEndDate = (new \DateTime($data['expirationEndDate']));
             $entity->setExpirationEndDate($expirationEndDate);
         }
-        $unitPrice = round(($data['salesPrice']/$data['salesQuantity']),2);
+        $unitPrice = round(($data['salesPrice']/$data['purchaseQuantity']),2);
         $entity->setSalesPrice($unitPrice);
-        $entity->setPurchasePrice($unitPrice);
         $entity->setPurchasePrice($this->stockInstantPurchaseItemPrice($config->getInstantVendorPercentage(),$unitPrice));
         $entity->setActualPurchasePrice($unitPrice);
-        $entity->setQuantity($data['salesQuantity']);
-        $entity->setRemainingQuantity($data['salesQuantity']);
+        $entity->setQuantity($data['purchaseQuantity']);
+        $entity->setRemainingQuantity($data['purchaseQuantity']);
         $entity->setPurchaseSubTotal($data['salesPrice']);
         $em->persist($entity);
         $em->flush();
@@ -394,7 +390,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $data .= '<td class="span1" >' . $entity->getSalesQuantity(). '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
-                     <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/medicine/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                     <a id="'.$entity->getId(). '" data-url="/medicine/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';
             $data .= '</tr>';
             $i++;
@@ -402,21 +398,5 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return $data;
     }
 
-    public function invoiceMedicineParticularLists($hospital,$data = array()){
 
-        $invoice = isset($data['invoice'])? $data['invoice'] :'';
-        $particular = isset($data['particular'])? $data['particular'] :'';
-        $category = isset($data['category'])? $data['category'] :'';
-
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('e');
-        $qb->join('e.invoice','invoice');
-        $qb->join('e.particular','particular');
-        $qb->join('particular.category','category');
-        $qb->where('particular.service = :service')->setParameter('service', 1) ;
-        $qb->orderBy('e.updated','DESC');
-        $qb->getQuery();
-        return  $qb;
-
-    }
 }

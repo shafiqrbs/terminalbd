@@ -249,8 +249,6 @@ class PurchaseController extends Controller
         exit;
     }
 
-
-
     public function returnResultData(MedicinePurchase $entity,$msg=''){
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseItems($entity);

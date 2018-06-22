@@ -179,8 +179,16 @@ class InstantPurchaseController extends Controller
         $entity->setNetTotal($entity->getSubTotal());
         $entity->setApprovedBy($this->getUser());
         $entity->setDue($entity->getSubTotal());
-        $purchaseBy = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username' => $data['purchasesBy']));
-        $entity->setPurchaseBy($purchaseBy);
+        if(!empty($data['purchasesBy'])){
+            $purchaseBy = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username' => $data['purchasesBy']));
+            $entity->setPurchaseBy($purchaseBy);
+        }else{
+            $entity->setPurchaseBy($this->getUser());
+        }
+        $receiveDate = new \DateTime('now');
+        $entity->setReceiveDate($receiveDate);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
         $entity->setProcess('In-progress');
         $entity->setMode('instant');
         $em->persist($entity);
@@ -197,7 +205,9 @@ class InstantPurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($id);
+
         /* @var $item MedicinePurchaseItem */
+
         if(empty($item->getSalesQuantity())) {
             $this->removeInstantPurchaseItem($item);
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock());
