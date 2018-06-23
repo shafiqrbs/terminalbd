@@ -135,6 +135,13 @@ class Builder extends ContainerAware
                 }
             }
 
+            $result = array_intersect($menuName, array('Business'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_BUSINESS')){
+                    $menu = $this->BusinessMenu($menu);
+                }
+            }
+
             $applications = array('dms', 'hms', 'prescription', 'medicine');
             $result = array_intersect($arrSlugs, $applications);
             if (!empty($result)) {

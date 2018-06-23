@@ -142,6 +142,7 @@ function jqueryTemporaryLoad() {
                     $('#grandTotal').html(obj['initialGrandTotal']);
                     $('.discount').html(obj['initialDiscount']);
                     $('.dueAmount').html(obj['initialGrandTotal']);
+                    $('#salesSubTotal').val(obj['subTotal']);
                     $('#salesNetTotal').val(obj['initialGrandTotal']);
                     $('#salesTemporary_discount').val(obj['initialDiscount']);
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
@@ -170,6 +171,7 @@ function jqueryTemporaryLoad() {
                 $('#grandTotal').html(obj['initialGrandTotal']);
                 $('.discount').html(obj['initialDiscount']);
                 $('.dueAmount').html(obj['initialGrandTotal']);
+                $('#salesSubTotal').val(obj['subTotal']);
                 $('#salesNetTotal').val(obj['initialGrandTotal']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
@@ -195,6 +197,7 @@ function jqueryTemporaryLoad() {
                 $('#grandTotal').html(obj['initialGrandTotal']);
                 $('.discount').html(obj['initialDiscount']);
                 $('.dueAmount').html(obj['initialGrandTotal']);
+                $('#salesSubTotal').val(obj['subTotal']);
                 $('#salesNetTotal').val(obj['initialGrandTotal']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
@@ -218,6 +221,7 @@ function jqueryTemporaryLoad() {
                 $('#grandTotal').html(obj['initialGrandTotal']);
                 $('.discount').html(obj['initialDiscount']);
                 $('.dueAmount').html(obj['initialGrandTotal']);
+                $('#salesSubTotal').val(obj['subTotal']);
                 $('#salesNetTotal').val(obj['initialGrandTotal']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
@@ -241,6 +245,7 @@ function jqueryTemporaryLoad() {
                 $('#grandTotal').html(obj['initialGrandTotal']);
                 $('.discount').html(obj['initialDiscount']);
                 $('.dueAmount').html(obj['initialGrandTotal']);
+                $('#salesSubTotal').val(obj['subTotal']);
                 $('#salesNetTotal').val(obj['initialGrandTotal']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);

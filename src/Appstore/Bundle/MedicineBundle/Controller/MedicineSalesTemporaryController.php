@@ -111,7 +111,6 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setCustomer($customer);
 
         }
-
         $entity->setSubTotal($data['salesSubTotal']);
         $entity->setNetTotal($data['salesNetTotal']);
         if ($entity->getNetTotal() <= $entity->getReceived()) {

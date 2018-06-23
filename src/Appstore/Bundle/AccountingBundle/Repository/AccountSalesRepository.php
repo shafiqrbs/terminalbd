@@ -535,7 +535,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setCustomer($sales->getCustomer());
         $accountSales->setAmount($entity->getSubTotal());
         $accountSales->setSourceInvoice('Sr-'.$sales->getInvoice());
-        $accountSales->setProcessHead('Sales-return');
+        $accountSales->setProcessHead('Invoice');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
