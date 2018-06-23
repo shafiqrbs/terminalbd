@@ -259,6 +259,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $entity->setPurchaseSubTotal($item->getPurchasePrice());
         $entity->setSalesPrice($salesPrice);
         $entity->setPurchasePrice($unitPrice);
+        $entity->setActualPurchasePrice($unitPrice);
         $entity->setQuantity($item->getPurchaseQuantity());
         $entity->setRemainingQuantity($item->getPurchaseQuantity());
         $em->persist($entity);
