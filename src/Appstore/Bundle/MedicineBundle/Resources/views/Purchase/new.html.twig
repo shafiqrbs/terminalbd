@@ -95,11 +95,11 @@
                     </div>
                     <div class="span3">
                         <div class="control-group">
-                            <label class="control-label" for="name">MRP & Quantity</label>
+                            <label class="control-label" for="name">Qnt & MRP</label>
                             <div class="controls">
+                                {{ form_widget(stockItemForm.purchaseQuantity) }}
                                 {{ form_widget(stockItemForm.purchasePrice) }}
                                 {{ form_widget(stockItemForm.salesPrice) }}
-                                {{ form_widget(stockItemForm.purchaseQuantity) }}
                             </div>
                         </div>
                     </div>
@@ -135,7 +135,7 @@
                              {{ form_widget(purchaseItem.expirationStartDate) }}
                              {{ form_widget(purchaseItem.expirationEndDate) }}
                              {{ form_widget(purchaseItem.quantity) }}
-                             <button class="btn red" id="unit">Pack</button>
+                             <button class="btn red" id="unit">Unit</button>
                              {{ form_widget(purchaseItem.purchasePrice) }}
                              {{ form_widget(purchaseItem.salesPrice) }}
                              <button type="submit" class="btn blue" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>

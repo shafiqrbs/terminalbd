@@ -153,7 +153,7 @@ class MedicineStock
      *
      * @ORM\Column(name="purchaseQuantity", type="integer", nullable=true)
      */
-    private $purchaseQuantity=0;
+    private $purchaseQuantity;
 
     /**
      * @var integer
@@ -181,7 +181,7 @@ class MedicineStock
      *
      * @ORM\Column(name="damageQuantity", type="integer", nullable=true)
      */
-    private $damageQuantity=0;
+    private $damageQuantity = 0;
 
     /**
      * @var float

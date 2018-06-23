@@ -106,17 +106,18 @@ $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
         switch (this.id) {
 
             case 'medicineStock_rackNo':
-                $('#medicineStock_unit').focus();
-                break;
-            case 'medicineStock_unit':
-                $('#medicineStock_salesPrice').focus();
-                break;
-            case 'medicineStock_salesPrice':
                 $('#medicineStock_purchaseQuantity').focus();
                 break;
             case 'medicineStock_purchaseQuantity':
+                $('#medicineStock_purchasePrice').focus();
+                break;
+            case 'medicineStock_purchasePrice':
+                $('#medicineStock_unit').focus();
+                break;
+            case 'medicineStock_unit':
                 $('#stockItemCreate').focus();
                 break;
+
         }
         return false;
     }
