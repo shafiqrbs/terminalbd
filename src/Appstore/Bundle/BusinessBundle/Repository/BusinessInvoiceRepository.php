@@ -105,6 +105,26 @@ class BusinessInvoiceRepository extends EntityRepository
         }
     }
 
+    public function reportSalesOverview(User $user ,$data)
+    {
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.received) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->where('s.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branch = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
 
     public function findWithOverview(User $user , $data , $mode='')
     {

@@ -345,7 +345,6 @@ class Builder extends ContainerAware
             }
         }
 
-
         $menu
             ->addChild('Accounting')
             ->setAttribute('icon', 'fa fa-building-o')
@@ -387,6 +386,15 @@ class Builder extends ContainerAware
                 $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'account_medicine_income_monthly'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Customer Outstanding', array('route' => 'account_sales_medicine_outstanding'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Vendor Outstanding',        array('route' => 'account_purchase_medicine_outstanding'))->setAttribute('icon', 'icon-th-list');
+
+            }
+            $accounting = array('business');
+            $result = array_intersect($arrSlugs, $accounting);
+            if (!empty($result)) {
+                $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'account_business_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'account_business_income_monthly'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Customer Outstanding', array('route' => 'account_sales_business_outstanding'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Vendor Outstanding',        array('route' => 'account_purchase_business_outstanding'))->setAttribute('icon', 'icon-th-list');
 
             }
             $menu['Accounting']['Transaction & Report']->addChild('Expenditure Summary',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
@@ -455,6 +463,13 @@ class Builder extends ContainerAware
         if (!empty($result)) {
             $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_medicine'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_medicine'))->setAttribute('icon', 'icon-th-list');
+
+        }
+        $medicine = array('business');
+        $result = array_intersect($arrSlugs, $medicine);
+        if (!empty($result)) {
+            $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_business'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_business'))->setAttribute('icon', 'icon-th-list');
 
         }
         $restaurant = array('restaurant');

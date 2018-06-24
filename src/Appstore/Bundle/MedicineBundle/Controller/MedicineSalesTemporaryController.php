@@ -111,8 +111,8 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setCustomer($customer);
 
         }
-        $entity->setSubTotal($data['salesSubTotal']);
-        $entity->setNetTotal($data['salesNetTotal']);
+        $entity->setSubTotal(round($data['salesSubTotal']));
+        $entity->setNetTotal(round($data['salesNetTotal']));
         if ($entity->getNetTotal() <= $entity->getReceived()) {
             $entity->setReceived($entity->getNetTotal());
             $entity->setPaymentStatus('Paid');
@@ -153,16 +153,16 @@ class MedicineSalesTemporaryController extends Controller
         $discountType = $request->request->get('discountType');
         $subTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
         if($discountType == 'flat'){
-            $initialDiscount = $discount;
-            $initialGrandTotal = ($subTotal  - $initialDiscount);
+            $initialDiscount = round($discount);
+            $initialGrandTotal =round ($subTotal  - $initialDiscount);
         }else{
-            $initialDiscount = ($subTotal * $discount)/100;
-            $initialGrandTotal = ($subTotal  - $initialDiscount);
+            $initialDiscount = round(($subTotal * $discount)/100);
+            $initialGrandTotal = round($subTotal  - $initialDiscount);
         }
 
         $data = array(
-            'subTotal' => $subTotal,
-            'initialGrandTotal' => $initialGrandTotal,
+            'subTotal' => round($subTotal),
+            'initialGrandTotal' => round($initialGrandTotal),
             'initialDiscount' => $initialDiscount,
             'success' => 'success'
         );

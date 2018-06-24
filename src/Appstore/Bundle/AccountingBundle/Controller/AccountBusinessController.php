@@ -44,7 +44,7 @@ class AccountBusinessController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entities = $em->getRepository('AccountingBundle:AccountSales')->findWithSearch($user,$data);
+        $entities = $em->getRepository('AccountingBundle:AccountSales')->findWithSearch($user,$data,'business');
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(20,29));

@@ -46,7 +46,7 @@ class AccountSalesRepository extends EntityRepository
 
 
 
-    public function findWithSearch(User $user,$data = '')
+    public function findWithSearch(User $user,$data = '',$process = '')
     {
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
@@ -54,6 +54,10 @@ class AccountSalesRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        if(!empty($process)){
+            $qb->andWhere("e.processHead = :process");
+            $qb->setParameter('process', $process);
+        }
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
@@ -226,7 +230,8 @@ class AccountSalesRepository extends EntityRepository
         if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
         }
-        $accountSales->setProcessHead('Sales');
+        $accountSales->setProcessHead('inventory');
+        $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
@@ -399,7 +404,8 @@ class AccountSalesRepository extends EntityRepository
         if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
         }
-        $accountSales->setProcessHead('Sales');
+        $accountSales->setProcessHead('hms');
+        $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
@@ -422,7 +428,8 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setTotalAmount($entity->getPayment());
         $accountSales->setAmount($entity->getPayment());
         $accountSales->setApprovedBy($entity->getCreatedBy());
-        $accountSales->setProcessHead('Sales');
+        $accountSales->setProcessHead('restaurant');
+        $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
@@ -444,7 +451,8 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setMedicineSales($entity);
-        $accountSales->setProcessHead('Sales');
+        $accountSales->setProcessHead('medicine');
+        $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
@@ -463,8 +471,8 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setGlobalOption($global);
         $accountSales->setCustomer($sales->getCustomer());
         $accountSales->setAmount($entity->getSubTotal());
-        $accountSales->setSourceInvoice('Sr-'.$sales->getInvoice());
-        $accountSales->setProcessHead('Sales-return');
+        $accountSales->setProcessHead('medicine');
+        $accountSales->setProcessType('Sales-Return');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
@@ -515,7 +523,8 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setBusinessInvoice($entity);
-        $accountSales->setProcessHead('Business');
+        $accountSales->setProcessHead('business');
+        $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
@@ -534,8 +543,8 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setGlobalOption($global);
         $accountSales->setCustomer($sales->getCustomer());
         $accountSales->setAmount($entity->getSubTotal());
-        $accountSales->setSourceInvoice('Sr-'.$sales->getInvoice());
-        $accountSales->setProcessHead('Invoice');
+        $accountSales->setProcessHead('business');
+        $accountSales->setProcessType('Sales-Return');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));

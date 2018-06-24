@@ -10,6 +10,10 @@ accounting_account_sales_restaurant:
     resource: "@AccountingBundle/Resources/config/routing/accountrestaurant.yml"
     prefix:   /finance/restaurant
 
+accounting_account_business:
+    resource: "@AccountingBundle/Resources/config/routing/accountbusiness.yml"
+    prefix:   /finance/business
+
 accounting_report:
     resource: "@AccountingBundle/Resources/config/routing/accountreport.yml"
     prefix:   /finance/report

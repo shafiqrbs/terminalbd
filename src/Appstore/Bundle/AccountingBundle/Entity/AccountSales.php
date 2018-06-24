@@ -128,9 +128,16 @@ class AccountSales
     /**
      * @var string
      *
-     * @ORM\Column(name="processHead", type="string", length=255, nullable = true)
+     * @ORM\Column(name="processHead", type="string", length=50, nullable = true)
      */
     private $processHead;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="processType", type="string", length=50, nullable = true)
+     */
+    private $processType;
 
     /**
      * @var float
@@ -703,6 +710,22 @@ class AccountSales
     public function setBusinessInvoice($businessInvoice)
     {
         $this->businessInvoice = $businessInvoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessType()
+    {
+        return $this->processType;
+    }
+
+    /**
+     * @param string $processType
+     */
+    public function setProcessType($processType)
+    {
+        $this->processType = $processType;
     }
 
 

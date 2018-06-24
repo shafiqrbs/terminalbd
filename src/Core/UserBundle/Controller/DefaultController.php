@@ -29,7 +29,6 @@ class DefaultController extends Controller
             $enable = 0;
         }
 
-
         $apps = array();
         if (!empty($globalOption ->getSiteSetting())) {
             $modules = $globalOption->getSiteSetting()->getAppModules();
@@ -54,6 +53,8 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('hospital_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') && $enable == 1 && in_array('miss',$apps) ) {
             return $this->redirect($this->generateUrl('medicine_homepage'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') && $enable == 1 && in_array('business',$apps) ) {
+            return $this->redirect($this->generateUrl('business_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1) {
             return $this->redirect($this->generateUrl('website'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {

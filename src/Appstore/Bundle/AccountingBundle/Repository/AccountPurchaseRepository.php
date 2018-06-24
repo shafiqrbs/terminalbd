@@ -355,10 +355,10 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
-        $accountPurchase->setProcessHead('dms');
-        $accountPurchase->setProcessType('Purchase');
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
         $accountPurchase->setBalance(($balance + $entity->getNetTotal()) - $accountPurchase->getPayment() );
+        $accountPurchase->setProcessHead('dms');
+        $accountPurchase->setProcessType('Purchase');
         $accountPurchase->setProcess('approved');
         $accountPurchase->setApprovedBy($entity->getApprovedBy());
         $em->persist($accountPurchase);
