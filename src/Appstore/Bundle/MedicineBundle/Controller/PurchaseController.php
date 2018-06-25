@@ -314,13 +314,14 @@ class PurchaseController extends Controller
 
     public function invoiceParticularDeleteAction(MedicinePurchase $invoice, MedicinePurchaseItem $particular){
 
+        $stock = $particular->getMedicineStock();
         $em = $this->getDoctrine()->getManager();
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
         $em->remove($particular);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($particular->getMedicineStock());
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock);
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($invoice);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -412,18 +413,20 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         if (!empty($purchase)) {
             $em = $this->getDoctrine()->getManager();
-            $purchase->setProcess('Approved');
-            $purchase->setApprovedBy($this->getUser());
-            $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
-            if($purchase->getAsInvestment() == 1){
+            if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
                 $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountMedicinePurchaseJournal($purchase);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
                 $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
+            }else{
+                $purchase->setAsInvestment(false);
             }
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
+            $purchase->setProcess('Approved');
+            $purchase->setApprovedBy($this->getUser());
+            $em->flush();
             return new Response('success');
         } else {
             return new Response('failed');
@@ -442,7 +445,7 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-
+        $em->createQuery('DELETE MedicineBundle:MedicinePurchaseItem e WHERE e.medicinePurchase = '.$entity->getId());
         $em->remove($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('medicine_purchase'));

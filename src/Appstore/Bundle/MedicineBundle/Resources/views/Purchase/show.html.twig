@@ -145,7 +145,7 @@
                                     {% if ( entity.process == 'Complete') %}
                                     <a  href="javascript:"  data-url="{{ path('medicine_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
-                                    {% if ( entity.process == 'Approved' and app.user.granted("ROLE_MEDICINE_REVERSE")) %}
+                                    {% if (entity.process == 'Approved' and app.user.granted("ROLE_MEDICINE_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_ADMIN")) %}
                                         <a  href="{{ path('medicine_purchase_reverse',{'id':entity.id}) }}" class="btn yellow"><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>

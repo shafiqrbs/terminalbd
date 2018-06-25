@@ -400,7 +400,6 @@ class SalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-
         $em->remove($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('medicine_sales'));
@@ -429,6 +428,45 @@ class SalesController extends Controller
             'id'=>$vendor,
             'text'=>$vendor
         ));
+    }
+
+    public function reverseAction(MedicineSales $sales)
+    {
+
+        /*
+         * Item Remove Total quantity
+         * Stock Details
+         * Purchase Item
+         * Purchase Vendor Item
+         * Purchase
+         * Account Purchase
+         * Account Journal
+         * Transaction
+         * Delete Journal & Account Purchase
+         */
+
+        set_time_limit(0);
+        $em = $this->getDoctrine()->getManager();
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($sales);
+        $sales->setRevised(true);
+        $sales->setProcess('Created');
+        $em->flush();
+        $template = $this->get('twig')->render('MedicineBundle:Sales:salesReverse.html.twig', array(
+            'entity' => $sales,
+            'config' => $sales->getMedicineConfig(),
+        ));
+        $em->getRepository('MedicineBundle:MedicineReverse')->insertMedicineSales($sales, $template);
+        return $this->redirect($this->generateUrl('medicine_sales_edit',array('id' => $sales->getId())));
+    }
+
+    public function reverseShowAction($id)
+    {
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineReverse')->findOneBy(array('medicineConfig' => $config, 'medicineSales' => $id));
+        return $this->render('MedicineBundle:MedicineReverse:sales.html.twig', array(
+            'entity' => $entity,
+        ));
+
     }
 
 }

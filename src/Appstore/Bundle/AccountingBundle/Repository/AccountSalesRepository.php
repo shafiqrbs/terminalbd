@@ -54,7 +54,7 @@ class AccountSalesRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if(!empty($process)){
+        if(!empty($process) and $process !=""){
             $qb->andWhere("e.processHead = :process");
             $qb->setParameter('process', $process);
         }
@@ -130,12 +130,6 @@ class AccountSalesRepository extends EntityRepository
                 $qb->andWhere("e.sales = :sales");
                 $qb->setParameter('sales', $sales);
             }
-
-            if (!empty($processHead)) {
-                $qb->andWhere("e.processHead = :process");
-                $qb->setParameter('process', $processHead);
-            }
-
             if (!empty($account)) {
                 $qb->join('e.accountHead','a');
                 $qb->andWhere("a.id = :account");
@@ -555,5 +549,26 @@ class AccountSalesRepository extends EntityRepository
         return $accountSales;
 
     }
+
+    public function accountMedicineSalesReverse(MedicineSales $entity)
+    {
+        $em = $this->_em;
+        if(!empty($entity->getAccountSales())){
+            /* @var AccountSales $sales*/
+            foreach ($entity->getAccountSales() as $sales ){
+                $globalOption = $sales->getGlobalOption()->getId();
+                $accountRefNo = $sales->getAccountRefNo();
+                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $transaction->execute();
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $accountCash->execute();
+            }
+        }
+        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.medicineSales = '.$entity->getId());
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+    }
+
 
 }

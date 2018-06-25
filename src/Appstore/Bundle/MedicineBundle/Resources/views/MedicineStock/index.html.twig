@@ -86,7 +86,6 @@
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Rack</th>
-                                    <th class="numeric" >Purchase Tk.</th>
                                     <th class="numeric" >MRP Tk.</th>
                                     <th class="numeric" >Opening</th>
                                     <th class="numeric" >Purchase Qnt</th>
@@ -107,11 +106,6 @@
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% endif %}
                                         <td class="numeric" >{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</td>
-                                        <td class="numeric">
-                                            {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
-                                                <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.purchasePrice }}</a>
-                                            {% endif %}
-                                        </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
