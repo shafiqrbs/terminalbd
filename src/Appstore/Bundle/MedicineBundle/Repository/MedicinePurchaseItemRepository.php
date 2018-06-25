@@ -380,10 +380,15 @@ class MedicinePurchaseItemRepository extends EntityRepository
             }else{
                 $expiration='';
             }
+            $rack ="";
+            if(!empty($entity->getMedicineStock()->getRackNo())){
+               $rack = $entity->getMedicineStock()->getRackNo()->getName();
+            }
 
             $data .= '<tr id="remove-'. $entity->getId().'">';
             $data .= '<td class="span1" >' . $i.'. '.$entity->getBarcode().'</td>';
-            $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() . '</td>';
+            $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() .'</td>';
+            $data .= '<th class="span1" >' .$rack. '</th>';
             $data .= '<th class="span1" >' .$expiration. '</th>';
             $data .= '<td class="span1" ><a class="editable editable-click" data-name="PurchasePrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change purchase price">'.$entity->getPurchasePrice().'</a></td>';
             $data .= '<td class="span1" ><a class="editable editable-click" data-name="SalesPrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change MRP price">'.$entity->getSalesPrice().'</a></td>';
