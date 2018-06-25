@@ -80,10 +80,10 @@ class MedicinePurchaseRepository extends EntityRepository
         $subTotal = $total['total'];
         if($subTotal > 0){
 
-            $entity->setSubTotal($subTotal);
-            $entity->setDiscount($this->getUpdateDiscount($entity,$subTotal));
-            $entity->setNetTotal($entity->getSubTotal() - $entity->getDiscount());
-            $entity->setDue($entity->getNetTotal() - $entity->getPayment() );
+            $entity->setSubTotal(round($subTotal));
+            $entity->setDiscount(round($this->getUpdateDiscount($entity,$subTotal)));
+            $entity->setNetTotal(round($entity->getSubTotal() - $entity->getDiscount()));
+            $entity->setDue(round($entity->getNetTotal() - $entity->getPayment()));
 
         }else{
 
