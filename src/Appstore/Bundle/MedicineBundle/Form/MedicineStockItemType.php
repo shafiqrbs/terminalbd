@@ -47,7 +47,7 @@ class MedicineStockItemType extends AbstractType
                         ->join("e.particularType","pt")
                         ->where("e.status = 1")
                         ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
-                        ->andWhere('pt.slug IN (:slugs)')->setParameter('slugs',array('herbal','accessories','medicine','non-medicine','surgery','medical-device'));
+                        ->andWhere('pt.modeFor = "brand"');
                 },
             ])
             ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Qnt','autoComplete'=>'off')))
@@ -85,7 +85,7 @@ class MedicineStockItemType extends AbstractType
                         ->join("e.particularType","pt")
                         ->where("e.status = 1")
                         ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
-                        ->andWhere("pt.slug = 'medicine-rack'");
+                        ->andWhere("pt.slug = 'rack'");
                 },
             ))
         ;

@@ -85,7 +85,7 @@ class MedicineStockType extends AbstractType
                         ->join("e.particularType","pt")
                         ->where("e.status = 1")
                         ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
-                        ->andWhere('pt.slug IN (:slugs)')->setParameter('slugs',array('herbal','accessories','medicine','non-medicine','surgery','medical-device'));
+                        ->andWhere('pt.modeFor = "brand"');
                 },
             ])
             ->add('noDiscount')

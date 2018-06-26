@@ -192,7 +192,7 @@ class UserRepository extends EntityRepository
         $miss = array('miss');
         $result = array_intersect($arrSlugs, $miss);
         if (!empty($result)) {
-            $array['Medicine Sales & Inventory'] = array(
+            $array['Medicine'] = array(
                 'ROLE_MEDICINE'                                  => 'Medicine',
                 'ROLE_MEDICINE_SALES'                            => 'Medicine Sales',
                 'ROLE_MEDICINE_PURCHASE'                         => 'Medicine Purchase',
@@ -212,9 +212,6 @@ class UserRepository extends EntityRepository
                 'ROLE_DPS_ADMIN'                            => 'Doctor Admin',
             );
         }
-
-
-
         $array['SMS'] = array(
             'ROLE_SMS'                                  => 'Sms/E-mail',
             'ROLE_SMS_MANAGER'                          => 'Sms/E-mail Manager',

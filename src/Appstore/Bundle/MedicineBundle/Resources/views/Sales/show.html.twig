@@ -140,7 +140,7 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
                                    <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
-                                    {% if ( (entity.process == 'Done' and app.user.granted("ROLE_MEDICINE_REVERSE")) or (entity.process == 'Done' and app.user.granted("ROLE_ADMIN"))) %}
+                                    {% if ( (entity.process == 'Done' and app.user.granted("ROLE_MEDICINE_REVERSE")) or (entity.process == 'Done' and app.user.granted("ROLE_DOMAIN_ADMIN"))) %}
                                         <a  href="{{ path('medicine_sales_reverse',{'id':entity.id}) }}" class="btn yellow"><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                     <a  href="{{ path('medicine_sales_reverse',{'id':entity.id}) }}" class="btn yellow"><i class="icon-refresh"></i>&nbsp;Reverse</a>
