@@ -98,7 +98,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Company Name</th>
-                                    <th class="numeric" >Ref no.</th>
+                                    <th class="numeric" >Grn</th>
                                     <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Purchase</th>
@@ -112,7 +112,7 @@
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.medicineVendor %}{{ entity.medicineVendor.companyName }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.accountRefNo }}</td>
+                                        <td class="numeric" >{% if entity.medicinePurchase is not empty %}{{ entity.medicinePurchase.grn }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.processType }}</td>
                                         <td class="numeric" >{{ entity.purchaseAmount|number_format }}</td>

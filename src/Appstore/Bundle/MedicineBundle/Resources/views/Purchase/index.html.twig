@@ -81,11 +81,12 @@
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Mode</th>
+                                    <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% set process = ['Created','In-progress'] %}
+                                {% set process = ['Created','In-progress','Complete'] %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
@@ -95,6 +96,7 @@
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
                                         <td class="numeric" >{{ entity.mode|capitalize }}</td>
+                                        <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
                                             {% if entity.process in process %}
                                             <a href="{{ path('medicine_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>

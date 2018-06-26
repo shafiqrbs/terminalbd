@@ -13,6 +13,7 @@ class DefaultController extends Controller
 
 
         /* @var GlobalOption $globalOption */
+
         $globalOption = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -26,7 +27,7 @@ class DefaultController extends Controller
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
         $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
 
-        return $this->render('BusinessBundle:Default:index.html.twig', array(
+        return $this->render('MedicineBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
             'transactionCashOverviews'  => $transactionCashOverview,
