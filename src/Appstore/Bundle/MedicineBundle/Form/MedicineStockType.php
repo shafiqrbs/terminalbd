@@ -84,6 +84,7 @@ class MedicineStockType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->join("e.particularType","pt")
                         ->where("e.status = 1")
+                        ->andWhere("pt.status = 1")
                         ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
                         ->andWhere('pt.modeFor = :brand')->setParameter('brand','brand');
                 },
