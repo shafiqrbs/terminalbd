@@ -59,7 +59,6 @@
 
                                 {% for entity in entities %}
                                     <tr>
-
                                         <td class="numeric" >{{ entity.medicineStock.name }}</td>
                                         <td class="numeric" >{{ entity.medicinePurchaseItem.barcode }}</td>
                                         <td class="numeric" >{% if entity.medicinePurchaseItem.expirationStartDate is not empty and entity.medicinePurchaseItem.expirationEndDate is not empty %}{{ entity.medicinePurchaseItem.expirationStartDate|date('M y') }} To {{ entity.medicinePurchaseItem.expirationEndDate|date('M y') }}{% endif %}</td>

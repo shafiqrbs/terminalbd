@@ -413,6 +413,9 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         if (!empty($purchase)) {
             $em = $this->getDoctrine()->getManager();
+            $purchase->setProcess('Approved');
+            $purchase->setApprovedBy($this->getUser());
+            $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
             if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
@@ -424,9 +427,6 @@ class PurchaseController extends Controller
             }
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
-            $purchase->setProcess('Approved');
-            $purchase->setApprovedBy($this->getUser());
-            $em->flush();
             return new Response('success');
         } else {
             return new Response('failed');

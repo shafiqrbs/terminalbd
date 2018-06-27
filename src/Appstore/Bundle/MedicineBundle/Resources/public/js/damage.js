@@ -30,19 +30,6 @@ $(document).on("click", ".approve", function() {
     });
 });
 
-$(document).on('change', '#medicineStock', function() {
-
-    var medicine = $('#medicineStock').val();
-    $.ajax({
-        url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#medicinePurchaseItem').html(obj['purchaseItems']).focus();
-        }
-    })
-
-});
 
 $(".select2StockMedicine").select2({
 
@@ -79,5 +66,19 @@ $(".select2StockMedicine").select2({
     },
     allowClear: true,
     minimumInputLength: 1
+
+});
+
+$(document).on('change', '#damage_medicineStock', function() {
+
+    var medicine = $('#damage_medicineStock').val();
+    $.ajax({
+        url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
+        type: 'GET',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#medicinePurchaseItem').html(obj['purchaseItems']).focus();
+        }
+    })
 
 });

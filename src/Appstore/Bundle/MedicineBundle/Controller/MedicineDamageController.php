@@ -50,14 +50,14 @@ class MedicineDamageController extends Controller
     public function createAction(Request $request)
     {
         $entity = new MedicineDamage();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
-        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['medicineStock']);
+        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['damage']['medicineStock']);
         $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['medicinePurchaseItem']);
 
-        if ($form->isValid()) {
+        if ($form->isValid() and !empty($purchaseItem)) {
+
             $em = $this->getDoctrine()->getManager();
             $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
             $entity->setMedicineConfig($config);

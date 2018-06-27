@@ -49,7 +49,6 @@ class MedicineDamage
     private  $createdBy;
 
 
-
     /**
      * @var integer
      *

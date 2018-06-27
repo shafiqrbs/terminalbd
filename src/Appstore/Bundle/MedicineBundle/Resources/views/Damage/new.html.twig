@@ -43,7 +43,8 @@
                                     <div class="control-group">
                                         <label class="control-label" for="">Stock Name</label>
                                         <div class="controls">
-                                            <input type="text" id="medicineStock" name="medicineStock"  class="m-wrap span12 input select2StockMedicine" placeholder="Search damage medicine" aria-required="true">
+                                            {{ form_widget(form.medicineStock) }}
+                                            {{ form_errors(form.medicineStock) }}
                                         </div>
                                     </div>
                                 </div>
