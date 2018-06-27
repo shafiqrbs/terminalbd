@@ -415,6 +415,9 @@ class PurchaseController extends Controller
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
             $purchase->setApprovedBy($this->getUser());
+            if($purchase->getPayment() == 0){
+                $purchase->setAsInvestment(false);
+            }
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
@@ -422,8 +425,6 @@ class PurchaseController extends Controller
                 $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountMedicinePurchaseJournal($purchase);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
                 $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
-            }else{
-                $purchase->setAsInvestment(false);
             }
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
