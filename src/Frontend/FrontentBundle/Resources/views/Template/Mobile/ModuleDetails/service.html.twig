@@ -2,9 +2,11 @@
     <div class="carousel-container">
         <div id="carousel" class="carousel slide carousel-fade">
             <div class="carousel-inner">
-                <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
-                    {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-                </a>
+                {% if globalOption.templateCustomize.mobileShowLogo == 1 %}
+                    <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
+                        {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
+                    </a>
+                {% endif %}
                 {% if page.webPath is not empty %}
                     <div class="carousel-cover item active" data-slide-no="0" style="background-image: url('{{ image(page.webPath) }}')!important;"></div>
                 {% endif %}

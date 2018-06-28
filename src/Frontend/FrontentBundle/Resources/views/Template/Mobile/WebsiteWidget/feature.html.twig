@@ -2,8 +2,9 @@
 <div class="details-grid">
     <div class="details-shade">
         <div class="details-right">
-            {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-            <h3>Welcome</h3>
+            {% if globalOption.templateCustomize.mobileHomeShowLogo == 1 %}
+                {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
+            {% endif %}
         </div>
     </div>
 </div>
@@ -13,9 +14,11 @@
         <!-- Indicators -->
         <!-- Wrapper for slides -->
         <div class="carousel-inner" >
-            <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
-                {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-            </a>
+            {% if globalOption.templateCustomize.mobileHomeShowLogo == 1 %}
+                <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
+                    {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
+                </a>
+            {% endif %}
             {% for slide in widget.featureWidgetItems %}
                 {% set path ='' %}
                  {% if slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}

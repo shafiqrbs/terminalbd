@@ -13,13 +13,10 @@
     </div>
 {% endblock %}
 {% block documentready %}
-
     $('#blackout').multiDatesPicker({
     dateFormat: "dd/mm/yy",
     addDates:{{ entity.user.blackout.offBlackoutDate|json_encode|raw }}
     });
-
-
 {% endblock %}
 
 
