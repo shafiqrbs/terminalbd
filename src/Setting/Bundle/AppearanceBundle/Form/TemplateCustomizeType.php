@@ -18,6 +18,8 @@ class TemplateCustomizeType extends AbstractType
 
             ->add('showSocialIcon')
             ->add('mobileLogin')
+            ->add('mobileShowLogo')
+            ->add('mobileHomeShowLogo')
             ->add('topBar')
             ->add('footerBlock')
             ->add('showCalendar')

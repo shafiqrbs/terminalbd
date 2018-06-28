@@ -2,17 +2,3 @@ medicine_user:
     path:     /
     defaults: { _controller: "MedicineBundle:Medicine:index" }
 
-medicine_user_create:
-    path:     /create
-    defaults: { _controller: "MedicineBundle:Medicine:create" }
-    methods:  POST
-
-medicine_user_edit:
-    path:     /{id}/edit
-    defaults: { _controller: "MedicineBundle:Medicine:edit" }
-
-medicine_user_update:
-    path:     /{id}/update
-    defaults: { _controller: "MedicineBundle:Medicine:update" }
-    methods:  [POST, PUT]
-

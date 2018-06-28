@@ -52,10 +52,10 @@ var form = $("#medicine").validate({
     rules: {
 
         "brand": {required: true},
-        "generic": {required: true},
+        "generic": {required: false},
         "medicineForm": {required: true},
-        "companyName": {required: true},
-        "packSize": {required: true},
+        "companyName": {required: false},
+        "packSize": {required: false},
         "strength": {required: true}
     },
 
@@ -129,7 +129,7 @@ $( "#generic" ).autocomplete({
     }
 });
 
-$( "#packSize" ).autocomplete({
+$( ".select2PackSize" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
             url: Routing.generate('medicine_search_pack_size_name_complete'),
@@ -148,7 +148,7 @@ $( "#packSize" ).autocomplete({
     }
 });
 
-$( "#strength" ).autocomplete({
+$( ".select2Strength" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
             url: Routing.generate('medicine_search_strength_name_complete'),
@@ -167,7 +167,7 @@ $( "#strength" ).autocomplete({
     }
 });
 
-$( "#medicineForm" ).autocomplete({
+$( ".select2MedicineForm" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
             url: Routing.generate('medicine_search_form_name_complete'),

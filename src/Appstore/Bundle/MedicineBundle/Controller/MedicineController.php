@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
+use Appstore\Bundle\MedicineBundle\Form\MedicineEditType;
 use Appstore\Bundle\MedicineBundle\Form\MedicineType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -71,7 +72,7 @@ class MedicineController extends Controller
     private function createCreateForm(MedicineBrand $entity)
     {
         $form = $this->createForm(new MedicineType(), $entity, array(
-            'action' => $this->generateUrl('medicine_user_create', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('medicine_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -96,11 +97,10 @@ class MedicineController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find MedicineBrand entity.');
         }
-
         $editForm = $this->createEditForm($entity);
-        return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
+        return $this->render('MedicineBundle:MedicineBrand:edit.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
 
@@ -113,8 +113,8 @@ class MedicineController extends Controller
     */
     private function createEditForm(MedicineBrand $entity)
     {
-        $form = $this->createForm(new MedicineType(), $entity, array(
-            'action' => $this->generateUrl('medicine_user_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new MedicineEditType(), $entity, array(
+            'action' => $this->generateUrl('medicine_update', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -141,16 +141,33 @@ class MedicineController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
             $em->flush();
-            return $this->redirect($this->generateUrl('medicine_user_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('medicine'));
         }
 
-        return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
+        return $this->render('MedicineBundle:MedicineBrand:edit.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
+    }
+
+    public function copyAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('MedicineBundle:MedicineBrand')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MedicineBrand entity.');
+        }
+        $medicine = new MedicineBrand();
+        $medicine->setGlobalOption($entity->getGlobalOption());
+        $medicine->setName($entity->getName());
+        $medicine->setMedicineCompany($entity->getMedicineCompany());
+        $medicine->setMedicineGeneric($entity->getMedicineGeneric());
+        $medicine->setMedicineForm($entity->getMedicineForm());
+        $em->persist($medicine);
+        $em->flush();
+        return $this->redirect($this->generateUrl('medicine_edit', array('id' => $id)));
     }
 
 }

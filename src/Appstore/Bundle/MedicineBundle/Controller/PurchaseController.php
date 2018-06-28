@@ -503,6 +503,7 @@ class PurchaseController extends Controller
         $salesQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($entity);
         if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
             $entity->setQuantity((int)$data['value']);
+            $entity->setRemainingQuantity((int)$data['value']);
             $entity->setPurchaseSubTotal((int)$data['value'] * $entity->getPurchasePrice());
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock());

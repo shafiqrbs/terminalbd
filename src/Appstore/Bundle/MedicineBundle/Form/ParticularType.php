@@ -21,7 +21,11 @@ class ParticularType extends AbstractType
 
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter particular name')))
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter rack,medicine brand ete'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                )
+            ))
             ->add('particularType', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticularType',

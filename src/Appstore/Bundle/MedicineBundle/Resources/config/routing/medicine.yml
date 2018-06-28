@@ -1,33 +1,24 @@
 medicine:
     path:     /
-    defaults: { _controller: "MedicineBundle:MedicineBrand:index" }
-
-medicine_show:
-    path:     /{id}/show
-    defaults: { _controller: "MedicineBundle:MedicineBrand:show" }
-
-medicine_new:
-    path:     /new
-    defaults: { _controller: "MedicineBundle:MedicineBrand:new" }
+    defaults: { _controller: "MedicineBundle:Medicine:index" }
 
 medicine_create:
     path:     /create
-    defaults: { _controller: "MedicineBundle:MedicineBrand:create" }
+    defaults: { _controller: "MedicineBundle:Medicine:create" }
     methods:  POST
 
 medicine_edit:
     path:     /{id}/edit
-    defaults: { _controller: "MedicineBundle:MedicineBrand:edit" }
+    defaults: { _controller: "MedicineBundle:Medicine:edit" }
+
+medicine_copy:
+    path:     /{id}/copy
+    defaults: { _controller: "MedicineBundle:Medicine:copy" }
 
 medicine_update:
     path:     /{id}/update
-    defaults: { _controller: "MedicineBundle:MedicineBrand:update" }
+    defaults: { _controller: "MedicineBundle:Medicine:update" }
     methods:  [POST, PUT]
-
-medicine_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "MedicineBundle:MedicineBrand:delete" }
-    methods:  [POST, DELETE]
 
 medicine_select_search:
     path:     /select-medicine-search

@@ -117,6 +117,22 @@ class TemplateCustomize
      */
     private $showMobile = true;
 
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mobileShowLogo", type="boolean", nullable=true)
+     */
+    private $mobileShowLogo = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mobileHomeShowLogo", type="boolean", nullable=true)
+     */
+    private $mobileHomeShowLogo = false;
+
+
     /**
      * @var boolean
      *
@@ -2478,6 +2494,38 @@ class TemplateCustomize
     public function setDividerBorderWidth($dividerBorderWidth)
     {
         $this->dividerBorderWidth = $dividerBorderWidth;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMobileShowLogo()
+    {
+        return $this->mobileShowLogo;
+    }
+
+    /**
+     * @param bool $mobileShowLogo
+     */
+    public function setMobileShowLogo($mobileShowLogo)
+    {
+        $this->mobileShowLogo = $mobileShowLogo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMobileHomeShowLogo()
+    {
+        return $this->mobileHomeShowLogo;
+    }
+
+    /**
+     * @param bool $mobileHomeShowLogo
+     */
+    public function setMobileHomeShowLogo($mobileHomeShowLogo)
+    {
+        $this->mobileHomeShowLogo = $mobileHomeShowLogo;
     }
 
 
