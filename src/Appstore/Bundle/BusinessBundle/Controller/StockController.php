@@ -6,7 +6,7 @@ use Appstore\Bundle\BusinessBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * StockController controller.
@@ -30,7 +30,7 @@ class StockController extends Controller
 
     /**
      * Lists all Particular entities.
-     *
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
      */
     public function indexAction()
     {
@@ -52,7 +52,7 @@ class StockController extends Controller
 
     /**
      * Displays a form to create a new Vendor entity.
-     *
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
      */
     public function newAction()
     {
@@ -122,6 +122,8 @@ class StockController extends Controller
     /**
      * Displays a form to edit an existing Particular entity.
      *
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     *
      */
     public function editAction($id)
     {
@@ -189,7 +191,7 @@ class StockController extends Controller
     }
     /**
      * Deletes a Particular entity.
-     *
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
      */
     public function deleteAction(BusinessParticular $entity)
     {

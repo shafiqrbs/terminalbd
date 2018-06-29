@@ -33,7 +33,13 @@ class InvoiceController extends Controller
         return $pagination;
     }
 
-
+    /**
+     * Lists all BusinessCategory entities.
+     *
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     *
+     */
+    
     public function indexAction()
     {
 
@@ -99,7 +105,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
 
     public function editAction($id)
@@ -115,7 +121,7 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig,$type = array('production','stock'));
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig,$type = array('production','stock','service','virtual'));
         return $this->render('BusinessBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'particulars' => $particulars,
@@ -124,8 +130,9 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
     public function updateAction(Request $request, BusinessInvoice $entity)
     {
 
@@ -179,8 +186,10 @@ class InvoiceController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
+
     public function showAction(BusinessInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -195,8 +204,10 @@ class InvoiceController extends Controller
 
     }
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
+
     public function deleteAction(BusinessInvoice $entity)
     {
 
@@ -211,16 +222,20 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
+
     public function particularSearchAction(BusinessParticular $particular)
     {
         return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
+
     public function returnResultData(BusinessInvoice $entity,$msg=''){
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->getSalesItems($entity);
@@ -247,8 +262,9 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
     public function addParticularAction(Request $request, BusinessInvoice $invoice)
     {
 
@@ -268,8 +284,9 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
     public function invoiceParticularDeleteAction(BusinessInvoice $invoice, BusinessInvoiceParticular $particular){
 
 
@@ -286,8 +303,9 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -319,8 +337,9 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
     public function invoiceReverseAction(BusinessInvoice $invoice)
     {
         $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
@@ -332,8 +351,10 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
+
     public function invoiceReverseShowAction(BusinessInvoice $invoice)
     {
         $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
@@ -345,7 +366,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUSINESS")
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
 
     public function deleteEmptyInvoiceAction()
@@ -479,7 +500,7 @@ class InvoiceController extends Controller
         $quantity = $request->request->get('quantity');
         if(!empty($accessories)){
             $invoiceItems = array('accessories' => $accessories ,'quantity' => $quantity);
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceAccessories')->insertInvoiceAccessories($invoice, $invoiceItems);
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStockItem($invoice,$invoiceItems);
             $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';
             $result = $this->returnResultData($invoice,$msg);

@@ -79,19 +79,20 @@
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                {{ form_widget(form.showAccessories) }} Show Invoice Accessories
+                                                {{ form_widget(form.customInvoice) }} Custom Invoice
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                {{ form_widget(form.customPrescription) }} Custom Prescription
+                                                {{ form_widget(form.showStock) }} Stock Item
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                {{ form_widget(form.isDefaultMedicine) }} Invoice Set Default Medicine
+                                                {{ form_widget(form.customInvoicePrint) }} Custom Invoice Print
                                             </div>
                                         </div>
+
                                     </div>
                                     <div class="span4">
                                         <div class="row-fluid">
@@ -108,7 +109,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label " >Prescription Sidebar Top Margin</label>
+                                                    <label class="control-label " >Sidebar Top Margin</label>
                                                     <div class="control">
                                                         {{ form_widget(form.leftTopMargin) }}
                                                         {{ form_errors(form.leftTopMargin) }}
@@ -119,7 +120,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label " >Prescription Sidebar Width</label>
+                                                    <label class="control-label " >Sidebar Width</label>
                                                     <div class="control">
                                                         {{ form_widget(form.sidebarWidth) }}
                                                         {{ form_errors(form.sidebarWidth) }}
@@ -130,7 +131,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label ">Prescription Sidebar Font Size</label>
+                                                    <label class="control-label ">Sidebar Font Size</label>
                                                     <div class="control">
                                                         {{ form_widget(form.sidebarFontSize) }}
                                                         {{ form_errors(form.sidebarFontSize) }}
@@ -154,7 +155,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label" >Prescription Body Top Margin</label>
+                                                    <label class="control-label" >Body Top Margin</label>
                                                     <div class="control">
                                                         {{ form_widget(form.bodyTopMargin) }}
                                                         {{ form_errors(form.bodyTopMargin) }}
@@ -165,7 +166,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label " >Prescription Body Width</label>
+                                                    <label class="control-label " >Body Width</label>
                                                     <div class="control">
                                                         {{ form_widget(form.bodyWidth) }}
                                                         {{ form_errors(form.bodyWidth) }}
@@ -176,7 +177,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label ">Prescription Body Font Size</label>
+                                                    <label class="control-label ">Body Font Size</label>
                                                     <div class="control">
                                                         {{ form_widget(form.bodyFontSize) }}
                                                         {{ form_errors(form.bodyFontSize) }}
@@ -187,58 +188,6 @@
                                     </div>
 
                                  </div>
-                            <div class="clearfix">&nbsp;</div>
-                            <div class="form-actions portlet box blue">
-                                <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Prescription Format</div>
-                                    <div class="actions">
-                                        <div class="btn-group">
-                                            <a class="btn yellow" href="{{ path('dms_default_service') }}"><i class="icon-refresh"></i> Reset Service</a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-                            <div class="row-fluid">
-                                <style>
-                                    .sortable input[class*="span"].m-wrap{
-                                        height: 30px!important;
-                                        margin-top: -6px!important;
-                                        background-color: #fff;
-                                    }
-                                    .dd-select{
-                                        margin-top: -6px;
-                                        height: 28px!important;
-                                    }
-
-                                </style>
-                                <div style="position: relative" class="portlet-body flip-scroll dd" id="nestable_list_2">
-                                    <ul class="sortable grid dd-list">
-                                        {% set prescriptionPosition = {1:'Left',2:'Right'} %}
-                                        {% for service in pagination %}
-                                            <li  data-id="{{ service.id }}" id="item_{{ service.id }}" class="dd-item dd3-item">
-                                                <span data-id="{{ service.id }}" class="dd-handle dd3-handle"></span>
-                                                <div class="dd3-content">
-                                                    <div class="span1 tooltips" data-trigger="hover" data-original-title="Check for service show prescription"><input type="checkbox" {% if service.serviceShow == 1  %} checked="checked" {% endif %} name="serviceShow[]" value="{{ service.id }}"></div>
-                                                    <div class="span5">{{ service.name }}
-                                                        <input type="hidden" name="serviceKey[]" value="{{ service.id }}">
-                                                    </div>
-                                                    <div class="span3 tooltips" data-trigger="hover" data-original-title="Enter service position for prescription">
-                                                        <select id="servicePosition" name="servicePosition[]" class="span12 dd-select">
-                                                            {% for key,position in prescriptionPosition %}
-                                                                <option {% if key == service.servicePosition  %} selected="selected" {% endif %} value="{{ key }}">{{ position }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                    <div class="span1 tooltips" data-trigger="hover" data-original-title="Enter number for service height" ><input type="number" class="span12 m-wrap"   name="serviceHeight[]" value="{{ service.serviceHeight }}"></div>
-                                                    <div class="span2 tooltips" data-trigger="hover" data-original-title="Check for service show prescription service header" ><input class=""  type="checkbox" {% if service.serviceHeaderShow == 1  %} checked="checked" {% endif %} name="serviceHeaderShow[]" value="{{ service.id }}"></div>
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
                             <div class="form-actions portlet box purple">
                                     <div class="portlet-title">
                                         <div class="caption"><i class="icon-reorder"></i>Print</div>
@@ -265,11 +214,6 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 {{ form_widget(form.isPrintFooter) }} Print Footer
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                {{ form_widget(form.printInstruction) }} Print Instruction
                                             </div>
                                         </div>
                                     </div>

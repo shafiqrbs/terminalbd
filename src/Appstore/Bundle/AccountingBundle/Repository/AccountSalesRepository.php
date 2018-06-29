@@ -54,10 +54,6 @@ class AccountSalesRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if(!empty($process) and $process !=""){
-            $qb->andWhere("e.processHead = :process");
-            $qb->setParameter('process', $process);
-        }
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
@@ -88,7 +84,6 @@ class AccountSalesRepository extends EntityRepository
             $transaction =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
             $account =    isset($data['accountHead'])? $data['accountHead'] :'';
             $sales =    isset($data['sales'])? $data['sales'] :'';
-            $processHead =    isset($data['processHead'])? $data['processHead'] :'';
 
             if (!empty($startDate) ) {
                 $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
@@ -187,7 +182,7 @@ class AccountSalesRepository extends EntityRepository
         if($mode == 'Payable' and $amount !="") {
            $outstanding =  "AND sales.balance <= -{$amount}";
         }
-        $sql = "SELECT customer.`id` as customerId ,customer.`name` as customerName , customer.mobile as customerMobile, customer.address as customerAddress, sales.balance as customerBalance
+        $sql = "SELECT customer.`id` as id,customer.`customerId` as customerId,customer.`name` as customerName , customer.mobile as customerMobile, customer.address as customerAddress, sales.balance as customerBalance
                 FROM account_sales as sales
                 JOIN Customer as customer ON sales.customer_id = customer.id
                 WHERE sales.id IN (

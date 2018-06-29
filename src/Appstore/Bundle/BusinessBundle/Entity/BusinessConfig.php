@@ -275,6 +275,13 @@ class BusinessConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="customInvoicePrint", type="boolean")
+     */
+    private $customInvoicePrint = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="showStock", type="boolean",  nullable=true)
      */
      private $showStock = false;
@@ -883,6 +890,22 @@ class BusinessConfig
     public function getBusinessPurchasesReturns()
     {
         return $this->businessPurchasesReturns;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomInvoicePrint(): bool
+    {
+        return $this->customInvoicePrint;
+    }
+
+    /**
+     * @param bool $customInvoicePrint
+     */
+    public function setCustomInvoicePrint(bool $customInvoicePrint)
+    {
+        $this->customInvoicePrint = $customInvoicePrint;
     }
 
 

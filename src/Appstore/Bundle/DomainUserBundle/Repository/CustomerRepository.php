@@ -265,8 +265,6 @@ class CustomerRepository extends EntityRepository
                 $qb->andWhere("customer.customerId LIKE :customerId");
                 $qb->setParameter('customerId','%'. $customerId.'%');
             }
-
-
         }
 
     }
@@ -510,8 +508,6 @@ class CustomerRepository extends EntityRepository
             if($customer['alternativeContactPerson']){
                 $entity->setAlternativeContactPerson($customer['alternativeContactPerson']);
             }
-
-
             $entity->setGlobalOption($option);
             $em->persist($entity);
             $em->flush($entity);

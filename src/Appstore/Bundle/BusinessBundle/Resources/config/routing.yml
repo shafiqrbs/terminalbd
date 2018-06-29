@@ -44,7 +44,7 @@ business_category:
 
 business_reverse:
     resource: "@BusinessBundle/Resources/config/routing/reverse.yml"
-    prefix:   /config
+    prefix:   /reverse
 
 business_config:
     resource: "@BusinessBundle/Resources/config/routing/config.yml"

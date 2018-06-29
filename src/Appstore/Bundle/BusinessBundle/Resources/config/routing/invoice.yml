@@ -15,10 +15,10 @@ business_invoice_edit:
     defaults: { _controller: "BusinessBundle:Invoice:edit" }
 
 business_invoice_particular_search:
-    path:     /{id}/particular-search
-    defaults: { _controller: "BusinessBundle:Invoice:particularSearch" }
+    path:     /particular-search
+    defaults: { _controller: "BusinessBundle:Invoice:autoParticularSearch" }
     options:
-           expose: true
+            expose: true
 
 
 business_item_unit_search:

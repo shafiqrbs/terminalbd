@@ -2,10 +2,12 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
 
@@ -31,9 +33,9 @@ class CustomerController extends Controller
 
 
     /**
-     * Lists all Customer entities.
-     *
+     * @Secure(roles="ROLE_CRM")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -58,10 +60,11 @@ class CustomerController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $globalOption = $this->getUser()->getGlobalOption();
+            $entity->setGlobalOption($globalOption);
             $em->persist($entity);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('customer_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('domain_customer'));
         }
 
         return $this->render('DomainUserBundle:Customer:new.html.twig', array(
@@ -79,12 +82,15 @@ class CustomerController extends Controller
      */
     private function createCreateForm(Customer $entity)
     {
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_create'),
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new CustomerType($location), $entity, array(
+            'action' => $this->generateUrl('domain_customer_create'),
             'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
         return $form;
     }
 
@@ -152,14 +158,15 @@ class CustomerController extends Controller
     */
     private function createEditForm(Customer $entity)
     {
-
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_update', array('id' => $entity->getId())),
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new CustomerType($location), $entity, array(
+            'action' => $this->generateUrl('domain_customer_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
         return $form;
     }
     /**
@@ -182,7 +189,7 @@ class CustomerController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('customer_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('domain_customer_edit', array('id' => $id)));
         }
 
         return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
@@ -197,13 +204,26 @@ class CustomerController extends Controller
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
+        try {
 
-        $em->remove($entity);
-        $em->flush();
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }
+        exit;
+
         return $this->redirect($this->generateUrl('customer'));
     }
 

@@ -85,29 +85,46 @@ $(".addCustomer").click(function(){
     $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
 });
 
+var form = $("#customInvoice").validate({
 
-$(document).on('click', '#addParticular', function() {
+    rules: {
 
+        "particular": {required: true},
+        "price": {required: true},
+        "quantity": {required: false},
+        "unit": {required: false},
+    },
 
-    var particular = $('#particular').val();
-    var price = $('#price').val();
-    var quantity = $('#quantity').val();
-    var unit = $('#unit').val();
-    var url = $(this).attr('data-url');
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'particular='+particular+'&price='+price+'&quantity='+quantity+'&unit='+unit,
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('.due').html(obj['due']);
-            $('.payment').html(obj['payment']);
-            $('.discount').html(obj['discount']);
-        }
-    })
+    messages: {
+
+        "particular":"Enter particular name",
+        "price":"Enter sales price",
+    },
+    tooltip_options: {
+        "particular": {placement:'top',html:true},
+        "price": {placement:'top',html:true},
+    },
+
+    submitHandler: function(form) {
+
+        $.ajax({
+            url         : $('form#customInvoice').attr( 'action' ),
+            type        : $('form#customInvoice').attr( 'method' ),
+            data        : new FormData($('form#customInvoice')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.payment').html(obj['payment']);
+                $('.discount').html(obj['discount']);
+                $('#customInvoice')[0].reset();
+            }
+        });
+    }
 });
 
 $(document).on('change', '.quantity , .salesPrice', function() {
@@ -198,38 +215,52 @@ $(document).on("click", ".approve", function() {
     });
 });
 
-$(document).on('click', '#addAccessories', function() {
+var stockInvoice = $("#stockInvoice").validate({
 
-    var accessories = $('#accessories').val();
-    if (accessories == '') {
-        $('#accessories').focus();
-        $('#accessories').addClass('input-error');
-        alert('Please select accessories name');
-        return false;
+    rules: {
+
+        "accessories": {required: true},
+        "quantity": {required: true}
+    },
+
+    messages: {
+
+        "particular":"Enter particular name",
+        "quantity":"Enter sales quantity"
+    },
+
+    tooltip_options: {
+        "particular": {placement:'top',html:true},
+        "quantity": {placement:'top',html:true}
+    },
+
+    submitHandler: function(stockInvoice) {
+
+        $.ajax({
+            url         : $('form#stockInvoice').attr( 'action' ),
+            type        : $('form#stockInvoice').attr( 'method' ),
+            data        : new FormData($('form#stockInvoice')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.payment').html(obj['payment']);
+                $('.discount').html(obj['discount']);
+                $('#stockInvoice')[0].reset();
+            }
+        });
     }
-    var quantity = parseInt($('#quantity').val());
-    var url = $(this).attr('data-url');
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'accessories='+accessories+'&quantity='+quantity,
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('.due').html(obj['due']);
-            $('.payment').html(obj['payment']);
-            $('.discount').html(obj['discount']);
-        }
-    })
 });
 
 
 $(document).on('keyup', '#businessInvoice_discountCalculation', function() {
 
     var discountType = $('#businessInvoice_discountType').val();
-    var discount = parseInt($('#businessInvoice_discountCalculation').val());
+    var discount = parseInt($('#businessInvoice_discountCalculation').val() !="" ? $('#businessInvoice_discountCalculation').val() : 0);
     var invoice = $('#invoiceId').val();
     var total =  parseInt($('#dueAmount').val());
     if( discount >= total ){
@@ -258,15 +289,15 @@ $(document).on('keyup', '#businessInvoice_discountCalculation', function() {
 $(document).on('keyup', '#businessInvoice_received', function() {
 
     var payment     = parseInt($('#businessInvoice_received').val()  != '' ? $('#businessInvoice_received').val() : 0 );
-    var due =  parseInt($('#due').val());
-    var dueAmount = (due-payment);
+    var paymentTotal =  parseInt($('#paymentTotal').val());
+    var dueAmount = (paymentTotal-payment);
     if(dueAmount > 0){
         $('#balance').html('Due Tk.');
-        $('.dueAmount').html(dueAmount);
+        $('.due').html(dueAmount);
     }else{
-        var balance =  payment - due ;
+        var balance =  payment - paymentTotal ;
         $('#balance').html('Return Tk.');
-        $('.dueAmount').html(balance);
+        $('.due').html(balance);
     }
 });
 

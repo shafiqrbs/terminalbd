@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Patient No # {{ entity.invoice }}
+                    Invoice No # {{ entity.invoice }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Patient Details</a></li>
+                    <li><a href="#">Manage Invoice Details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -30,12 +30,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Patient Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Invoice Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('dms_invoice_new') }}"><i class="icon-plus-sign"></i> Add New Patient</a>
-                                <a class="btn" href="{{ path('dms_invoice') }}"><i class="icon-th-list"></i> Patient</a>
+                                <a class="btn red" href="{{ path('business_invoice_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
+                                <a class="btn black" href="{{ path('business_invoice') }}"><i class="icon-th-list"></i> Invoice</a>
                             </div>
                         </div>
 
@@ -110,8 +110,7 @@
                                     <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                                         <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                        <td class="span1"></td>
-                                    </tr>
+                                   </tr>
                                     <tr>
                                         <td colspan="4" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
                                         <td class="span1"><strong class="vat">{{ entity.vat|number_format }}</strong></td>

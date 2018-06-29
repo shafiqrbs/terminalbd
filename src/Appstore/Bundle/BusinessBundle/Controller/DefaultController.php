@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Controller;
 
 use Knp\Snappy\Pdf;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,7 +27,7 @@ class DefaultController extends Controller
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
         $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
 
-        return $this->render('MedicineBundle:Default:index.html.twig', array(
+        return $this->render('BusinessBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
             'transactionCashOverviews'  => $transactionCashOverview,

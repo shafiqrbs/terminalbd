@@ -97,7 +97,7 @@ $(document).on("click", ".approve", function() {
 $( ".select2Particular" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('business_invoice_auto_particular_search'),
+            url: Routing.generate('business_invoice_particular_search'),
             data: {
                 term: request.term
             },

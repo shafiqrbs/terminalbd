@@ -47,7 +47,7 @@ class CustomerType extends AbstractType
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 span12'),
+                'attr'=>array('class'=>'select2 m-wrap span12'),
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select customer location'))
@@ -57,7 +57,7 @@ class CustomerType extends AbstractType
                 'choice_label' => 'nestedLabel',
             ))
             ->add('ageGroup', 'choice', array(
-            'attr'=>array('class'=>'span12 select2'),
+            'attr'=>array('class'=>'span12 m-wrap'),
             'choices' => array(
                 'Adult' => 'Adult',
                 'Kids' => 'Kids',
@@ -66,7 +66,7 @@ class CustomerType extends AbstractType
             'empty_data'  => null,
             ))
             ->add('gender', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'choices' => array(
                     'Male' => 'Male',
                     'Female' => 'Female'
@@ -89,7 +89,7 @@ class CustomerType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_domainuserbundle_customer';
+        return 'customer';
     }
 
     protected function LocationChoiceList()

@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Symfony\Component\HttpFoundation\Response;
-use Hackzilla\BarcodeBundle\Utility\Barcode;
+
 
 /**
  * Barcode controller.

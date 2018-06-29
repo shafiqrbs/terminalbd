@@ -827,11 +827,17 @@ class User extends BaseUser
 
     public function isGranted($role)
     {
-        return in_array($role, $this->getRoles());
+        $domain = $this->getRole();
+        if('ROLE_SUPER_ADMIN' === $domain or 'ROLE_DOMAIN' === $domain) {
+            return true;
+        }elseif(in_array($role, $this->getRoles())){
+            return true;
+        }
+        return false;
     }
 
     /**
-     * Set username
+     * Set username;
      *
      * @param string $username
      * @return User
@@ -936,7 +942,6 @@ class User extends BaseUser
                 return true;
             }
         }
-
         return false;
     }
 
@@ -951,14 +956,6 @@ class User extends BaseUser
         return false;
     }
 
-
-    /**
-     * @return boolean
-     */
-    public function getNotification()
-    {
-        return $this->notification;
-    }
 
     /**
      * @param mixed $education

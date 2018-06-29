@@ -24,17 +24,15 @@ class Builder extends ContainerAware
 
     public function mainMenu(FactoryInterface $factory, array $options)
     {
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+        $globalOption = $securityContext->getGlobalOption();
 
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'page-sidebar-menu');
         $menu = $this->dashboardMenu($menu);
-        if ($securityContext->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($securityContext->getRole() === 'ROLE_SUPER_ADMIN') {
 
             $menu = $this->toolsMenu($menu);
-            // $menu = $this->syndicateMenu($menu);
             $menu = $this->productCategoryMenu($menu);
             $menu = $this->manageFrontendMenu($menu);
             $menu = $this->manageVendorMenu($menu);
@@ -43,8 +41,8 @@ class Builder extends ContainerAware
             $menu = $this->manageDomainMenu($menu);
             $menu = $this->manageSystemAccountMenu($menu);
             $menu = $this->PayrollMenu($menu);
-            $menu = $this->manageCustomerOrderMenu($menu);
             $menu = $this->businessMenu($menu);
+
         }
 
             $modules = $globalOption->getSiteSetting()->getAppModules();
@@ -56,7 +54,6 @@ class Builder extends ContainerAware
                         $menuName[] = $mod->getModuleClass();
                         $arrSlugs[] = $mod->getSlug();
                     }
-
                 }
             }
 
@@ -100,24 +97,11 @@ class Builder extends ContainerAware
                 }
             }
 
-            $result = array_intersect($menuName, array('Accounting'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_ACCOUNTING')){
-                    $menu = $this->AccountingMenu($menu);
-                }
-            }
 
             $result = array_intersect($menuName, array('Ecommerce'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_ECOMMERCE')){
                     $menu = $this->EcommerceMenu($menu);
-                }
-            }
-
-            $result = array_intersect($menuName, array('Payroll'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_HR') || $securityContext->isGranted('ROLE_PAYROLL')){
-                    $menu = $this->PayrollMenu($menu);
                 }
             }
 
@@ -137,28 +121,27 @@ class Builder extends ContainerAware
 
             $result = array_intersect($menuName, array('Business'));
             if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_BUSINESS')){
+                if ($securityContext->isGranted('ROLE_BUSINESS') or $securityContext->isGranted('ROLE_DOMAIN')){
                     $menu = $this->BusinessMenu($menu);
                 }
             }
 
-            $applications = array('dms', 'hms', 'prescription', 'medicine');
-            $result = array_intersect($arrSlugs, $applications);
+            $result = array_intersect($menuName, array('Accounting'));
             if (!empty($result)) {
-                $roles = $securityContext->getToken()->getUser()->getRoles();
-                if (array_intersect(array('ROLE_ADMIN','ROLE_SUPER_ADMIN','ROLE_DOMAIN_DOCTOR','ROLE_DOMAIN_MEDICINE_ADMIN','ROLE_DOMAIN_MEDICINE_MANAGER','ROLE_DOMAIN_HOSPITAL_MANAGER','ROLE_DOMAIN_HOSPITAL_DOCTOR','ROLE_DOMAIN_DMS_DOCTOR','ROLE_DOMAIN_DMS_ADMIN','ROLE_DOMAIN'),$roles)){
-                  //  $menu = $this->DrugMenu($menu);
+                if ($securityContext->isGranted('ROLE_ACCOUNTING')){
+                    $menu = $this->AccountingMenu($menu);
                 }
             }
 
+            $result = array_intersect($menuName, array('Payroll'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_HR') || $securityContext->isGranted('ROLE_PAYROLL')){
+                    $menu = $this->PayrollMenu($menu);
+                }
+            }
             if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_SMS')) {
                 $menu = $this->manageDomainInvoiceMenu($menu);
             }
-
-            if ($securityContext->isGranted('ROLE_CUSTOMER')) {
-                $menu = $this->manageCustomerOrderMenu($menu);
-            }
-
             return $menu;
     }
 
@@ -170,7 +153,7 @@ class Builder extends ContainerAware
         return $menu;
     }
 
-    public function manageCustomerOrderMenu($menu)
+/*    public function manageCustomerOrderMenu($menu)
     {
         $securityContext = $this->container->get('security.context');
         $menu
@@ -183,37 +166,54 @@ class Builder extends ContainerAware
         $menu['Inbox & Transaction']['Manage Inbox']->addChild('Email', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-envelope');
         $menu['Inbox & Transaction']['Manage Inbox']->addChild('SMS', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-phone');
         return $menu;
-    }
+    }*/
 
 
     public function businessMenu($menu)
     {
 
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
         $menu
             ->addChild('Business Management')
-            ->setAttribute('icon', 'fa fa-building-o')
+            ->setAttribute('icon', 'icon-briefcase')
             ->setAttribute('dropdown', true);
 
-        $menu['Business Management']->addChild('Invoice', array('route' => 'business_invoice'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']->addChild('Add Invoice', array('route' => 'business_invoice_new'))
-            ->setAttribute('icon', 'icon-plus-sign');
-        $menu['Business Management']->addChild('Master Data')
+        if ($securityContext->isGranted('ROLE_BUSINESS_INVOICE')) {
+
+            $menu['Business Management']->addChild('Add Invoice', array('route' => 'business_invoice_new'))
+                ->setAttribute('icon', 'icon-plus-sign');
+            $menu['Business Management']->addChild('Invoice', array('route' => 'business_invoice'))
+                ->setAttribute('icon', 'icon-th-list');
+        }
+        if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
+            $menu['Business Management']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
+        }
+        if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
+
+            $menu['Business Management']->addChild('Master Data')
             ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);
-        if ($securityContext->isGranted('ROLE_DOMAIN_DMS_CONFIG')) {
+            $menu['Business Management']['Master Data']->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
             $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))->setAttribute('icon', 'icon-cog');
         }
-        $menu['Business Management']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
-        $menu['Business Management']['Manage Stock']->addChild('Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']['Manage Stock']->addChild('Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
-        $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'))->setAttribute('icon', 'icon-tag');
-        /*$menu['Business Management']->addChild('Sales Reports')
+        if ($securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
+
+            $menu['Business Management']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
+            $menu['Business Management']['Manage Stock']->addChild('Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Manage Stock']->addChild('Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-th-list');
+        }
+        if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
+
+            $menu['Business Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
+            $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'))->setAttribute('icon', 'icon-tag');
+        }
+
+        /*
+
+        $menu['Business Management']->addChild('Sales Reports')
             ->setAttribute('icon', 'icon-bar-chart')
             ->setAttribute('dropdown', true);
         $menu['Business Management']['Sales Reports']->addChild('Sales Summary', array('route' => 'business_report_sales_summary'))
@@ -247,7 +247,9 @@ class Builder extends ContainerAware
         $menu['Business Management']['Stock Report']->addChild('Accessories Stock', array('route' => 'business_report_stock'))
             ->setAttribute('icon', ' icon-inbox');
         $menu['Business Management']['Stock Report']->addChild('Accessories Out', array('route' => 'business_report_stock_out'))
-            ->setAttribute('icon', 'icon-hdd');*/
+            ->setAttribute('icon', 'icon-hdd');
+
+        */
 
         return $menu;
 
@@ -256,11 +258,11 @@ class Builder extends ContainerAware
     public function WebsiteMenu($menu,$menuName)
     {
 
-        $securityContext = $this->container->get('security.context');
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+        $option = $securityContext->getGlobalOption();
 
         if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_MANAGER')) {
 
-            $option = $this->container->get('security.context')->getToken()->getUser()->getGlobalOption();
             $menu
                 ->addChild('Manage Content')
                 ->setAttribute('icon', 'fa fa-book')
@@ -290,17 +292,16 @@ class Builder extends ContainerAware
             $menu['Manage Content']->addChild('Contact', array('route' => 'contactpage_modify'));
             $menu['Media']->addChild('Galleries', array('route' => 'gallery'));
         }
+
         if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING')) {
 
             $result = array_intersect($menuName, array('Ecommerce'));
-            $securityContext = $this->container->get('security.context');
-            $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
             $menu
                 ->addChild('Manage Appearance')
                 ->setAttribute('icon', 'fa fa-cog')
                 ->setAttribute('dropdown', true);
 
-            $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
+            $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $option->getId())));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')){
                     $menu['Manage Appearance']->addChild('E-commerce')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
@@ -332,10 +333,14 @@ class Builder extends ContainerAware
 
     public function AccountingMenu($menu)
     {
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $globalOption = $user->getGlobalOption();
-        $modules = $user->getGlobalOption()->getSiteSetting()->getAppModules();
+
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
+        /* @var  $globalOption GlobalOption */
+
+        $globalOption = $securityContext->getGlobalOption();
+
+        $modules = $globalOption->getSiteSetting()->getAppModules();
         $arrSlugs = array();
         if (!empty($globalOption->getSiteSetting()) and !empty($modules)) {
             foreach ($globalOption->getSiteSetting()->getAppModules() as $mod) {
@@ -400,9 +405,6 @@ class Builder extends ContainerAware
             $menu['Accounting']['Transaction & Report']->addChild('Expenditure Summary',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Transaction & Report']->addChild('Expenditure Category',        array('route' => 'report_expenditure_category'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Transaction & Report']->addChild('Expenditure Details',        array('route' => 'report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
-
-
-
         }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_TRANSACTION')) {
@@ -446,39 +448,50 @@ class Builder extends ContainerAware
         $accounting = array('e-commerce');
         $result = array_intersect($arrSlugs, $accounting);
         if (!empty($result) && $securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_ECOMMERCE')) {
-
-            $menu['Accounting']->addChild('Online Order', array('route' => 'account_onlineorder'));
-            $menu['Accounting']->addChild('Online Order Return', array('route' => 'account_onlineorder'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
+                $menu['Accounting']->addChild('Online Order', array('route' => 'account_onlineorder'));
+                $menu['Accounting']->addChild('Online Order Return', array('route' => 'account_onlineorder'));
+            }
         }
 
         $hospital = array('hms');
         $result = array_intersect($arrSlugs, $hospital);
         if (!empty($result)) {
-            $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_hospital'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_hospital'))->setAttribute('icon', 'icon-th-list');
-
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
+                $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_hospital'))->setAttribute('icon', 'icon-th-list');
+            }
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
+                $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_hospital'))->setAttribute('icon', 'icon-th-list');
+            }
         }
         $medicine = array('miss');
         $result = array_intersect($arrSlugs, $medicine);
         if (!empty($result)) {
-            $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_medicine'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_medicine'))->setAttribute('icon', 'icon-th-list');
-
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
+                $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_medicine'))->setAttribute('icon', 'icon-th-list');
+            }
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
+                $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_medicine'))->setAttribute('icon', 'icon-th-list');
+            }
         }
-        $medicine = array('business');
-        $result = array_intersect($arrSlugs, $medicine);
+        $business = array('business');
+        $result = array_intersect($arrSlugs, $business);
         if (!empty($result)) {
-            $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_business'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_business'))->setAttribute('icon', 'icon-th-list');
-
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
+                $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_business'))->setAttribute('icon', 'icon-th-list');
+            }
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
+                $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_business'))->setAttribute('icon', 'icon-th-list');
+            }
         }
         $restaurant = array('restaurant');
         $result = array_intersect($arrSlugs, $restaurant);
         if (!empty($result)) {
           /*  $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_restaurant'))->setAttribute('icon', 'icon-th-list');
           */
-          $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_restaurant'))->setAttribute('icon', 'icon-th-list');
-
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
+                $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_restaurant'))->setAttribute('icon', 'icon-th-list');
+            }
         }
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');
@@ -500,10 +513,8 @@ class Builder extends ContainerAware
 
     public function InventorySalesMenu($menu)
     {
-
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+        $inventory = $securityContext->getGlobalOption()->getInventoryConfig();
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES')) {
 
             $menu
@@ -543,7 +554,7 @@ class Builder extends ContainerAware
                 }
 
                 if ('order' == $deliveryProcess) {
-                    if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ORDER')){
+                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ORDER')){
                         $menu['Sales']
                             ->addChild('Online Order')
                             ->setAttribute('icon', 'icon icon-truck')
@@ -580,9 +591,8 @@ class Builder extends ContainerAware
     public function InventoryMenu($menu)
     {
 
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+        $inventory = $securityContext->getGlobalOption()->getInventoryConfig();
         $menu
             ->addChild('Inventory')
             ->setAttribute('icon', 'icon-archive')
@@ -697,7 +707,7 @@ class Builder extends ContainerAware
 
     public function EcommerceMenu($menu)
     {
-        $securityContext = $this->container->get('security.context');
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
         $menu
             ->addChild('E-commerce')
             ->setAttribute('icon', 'icon  icon-shopping-cart')
@@ -794,9 +804,8 @@ class Builder extends ContainerAware
     public function HospitalMenu($menu)
     {
 
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $config = $user->getGlobalOption()->getHospitalConfig()->getInvoiceProcess();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+        $config = $securityContext->getGlobalOption()->getHospitalConfig()->getInvoiceProcess();
         $menu
             ->addChild('Hospital & Diagnostic')
             ->setAttribute('icon', 'fa fa-hospital-o')
@@ -894,9 +903,9 @@ class Builder extends ContainerAware
     public function DmsMenu($menu)
     {
 
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $config = $user->getGlobalOption()->getHospitalConfig()->getInvoiceProcess();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
+        $config = $securityContext->getGlobalOption()->getHospitalConfig()->getInvoiceProcess();
         $menu
             ->addChild('Dental & Diagnosis')
             ->setAttribute('icon', 'fa fa-hospital-o')
@@ -1002,8 +1011,7 @@ class Builder extends ContainerAware
     public function DpsMenu($menu)
     {
 
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
         $menu
             ->addChild('Doctor Prescription')
             ->setAttribute('icon', 'fa fa-hospital-o')
@@ -1039,7 +1047,8 @@ class Builder extends ContainerAware
 
     public function DrugMenu($menu)
     {
-        $securityContext = $this->container->get('security.context');
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
         $menu
             ->addChild('Drug')
             ->setAttribute('icon', 'fa fa-stethoscope')
@@ -1054,8 +1063,8 @@ class Builder extends ContainerAware
 
     public function medicineMenu($menu)
     {
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
         $menu
             ->addChild('Medicine')
             ->setAttribute('icon', 'icon icon-th-large')
@@ -1146,8 +1155,8 @@ class Builder extends ContainerAware
     public function RestaurantMenu($menu)
     {
 
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
         $menu
             ->addChild('Restaurant')
             ->setAttribute('icon', 'icon icon-th-large')
@@ -1251,8 +1260,9 @@ class Builder extends ContainerAware
 
     public function PayrollMenu($menu)
     {
-        $securityContext = $this->container->get('security.context');
-        $global = $securityContext->getToken()->getUser()->getGlobalOption();
+
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+        $global = $securityContext->getGlobalOption();
         $menu
             ->addChild('HR & Payroll')
             ->setAttribute('icon', 'fa fa-group')
@@ -1295,8 +1305,8 @@ class Builder extends ContainerAware
 
     public function manageDomainInvoiceMenu($menu)
     {
-        $securityContext = $this->container->get('security.context');
-        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
         $menu
             ->addChild('Invoice Sms & Email')
             ->setAttribute('icon', 'fa fa-files-o')
@@ -1315,7 +1325,6 @@ class Builder extends ContainerAware
         }
         return $menu;
     }
-
 
     public function manageSystemAccountMenu($menu)
     {
@@ -1345,7 +1354,6 @@ class Builder extends ContainerAware
 
         return $menu;
     }
-
 
     public function manageFrontendMenu($menu)
     {

@@ -35,21 +35,20 @@
                         <div class="caption"><i class="icon-reorder"></i>Customer list</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('inventory_customer_new') }}"><i class="icon-th-list"></i>&nbsp;New Customer</a>
+                                <a class="btn red" href="{{ path('domain_customer_new') }}"><i class="icon-th-list"></i>&nbsp;New Customer</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
-                            {% include('flash-message.html.twig')  %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span4">
-                                        <input type="text" id="mobile" name="mobile"  class="span12 select2Customer" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile">
+                                        <input type="text" id="mobile" name="mobile"  class="span12 m-wrap select2Customer" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Search customer name/mobile">
                                     </div>
                                     <div class="span4">
-                                        <input type="text" id="location" name="location"  class="span12 select2Location" value="{% if searchForm.location is defined %}{{ searchForm.location }}{% endif %}"  autocomplete="off" placeholder="Customer location">
+                                        <input type="text" id="location" name="location"  class="span12 m-wrap select2Location" value="{% if searchForm.location is defined %}{{ searchForm.location }}{% endif %}"  autocomplete="off" placeholder="Customer location">
                                     </div>
                                     <div class="span4">
                                         <div class="controls">
@@ -63,30 +62,32 @@
                                     </div>
                                 </div>
                             </form>
+                            {% include('flash-message.html.twig')  %}
+
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-green">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                    <th class="numeric">Customer ID</th>
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i> Customer ID</td>
                                     <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
                                     <th class="numeric">Location</th>
+                                    <th class="numeric">Address</th>
                                     <th class="numeric">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in entities %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
                                         <td>{{ entity.customerId }}</td>
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
+                                        <td>{{ entity.address|raw }}</td>
                                         <td class="numeric">
-                                            <a class="btn mini green" href="{{ path('inventory_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
-                                            {% if entity.sales is empty %}
-                                            <a class="btn mini delete red" href="javascript:" rel="{{ path('inventory_customer_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
-                                            {% endif %}
+                                            {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
+                                                <a class="btn mini green" href="{{ path('domain_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_customer_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
+                                             {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -107,18 +108,8 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/editable.js'
-    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    '@DomainUserBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
-{% block documentready %}
-    {{ parent() }}
-    $( "#search-product" ).hide();
-    $( "#searchToggole" ).click(function() {
-    $( "#search-product" ).slideToggle( "slow" );
-    });
-    EditableInit();
-    ApproveProcess();
-{% endblock %}

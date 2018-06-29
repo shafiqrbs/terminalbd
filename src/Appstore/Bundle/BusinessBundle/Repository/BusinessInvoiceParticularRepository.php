@@ -65,6 +65,26 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function insertStockItem(BusinessInvoice $invoice, $data)
+    {
+
+        $em = $this->_em;
+        $entity = new BusinessInvoiceParticular();
+        $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
+        $entity->setQuantity($quantity);
+        $accessoriesId = $data['accessories'];
+        $stock = $em->getRepository('BusinessBundle:BusinessParticular')->find($accessoriesId);
+        $entity->setParticular($stock->getName());
+        $entity->setBusinessParticular($stock);
+        $entity->setPrice($stock->getPurchasePrice());
+        $entity->setSubTotal($quantity * $stock->getPrice());
+        $entity->setBusinessInvoice($invoice);
+        $em->persist($entity);
+        $em->flush();
+
+    }
+
+
     public function salesStockItemUpdate(BusinessParticular $stockItem)
     {
         $qb = $this->createQueryBuilder('e');

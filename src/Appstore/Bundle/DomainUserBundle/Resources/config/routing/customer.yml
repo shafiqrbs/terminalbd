@@ -39,7 +39,8 @@ domain_customer_update:
 domain_customer_delete:
     path:     /{id}/delete
     defaults: { _controller: "DomainUserBundle:Customer:delete" }
-    methods:  [POST, DELETE]
+    options:
+           expose: true
 
 domain_customer_search:
     path:     /customer-search

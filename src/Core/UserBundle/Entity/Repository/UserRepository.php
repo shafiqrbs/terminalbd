@@ -66,6 +66,7 @@ class UserRepository extends EntityRepository
             }
         }
 
+
         $array = array();
 
         $website = array('website');
@@ -149,6 +150,21 @@ class UserRepository extends EntityRepository
             );
         }
 
+        $business = array('business');
+        $result = array_intersect($arrSlugs, $business);
+        if (!empty($result)) {
+
+            $array['Business'] = array(
+                'ROLE_BUSINESS'                             => 'Business',
+                'ROLE_BUSINESS_INVOICE'                     => 'Business Invoice',
+                'ROLE_BUSINESS_PURCHASE'                    => 'Business Purchase',
+                'ROLE_BUSINESS_STOCK'                       => 'Business Stock',
+                'ROLE_BUSINESS_INVOICE_REVERSE'             => 'Business Invoice Reverse',
+                'ROLE_BUSINESS_PURCHASE_REVERSE'            => 'Business Purchase Reverse',
+                'ROLE_BUSINESS_MANAGER'                     => 'Business Manager',
+            );
+        }
+
 
         $hms = array('hms');
         $result = array_intersect($arrSlugs, $hms);
@@ -207,16 +223,20 @@ class UserRepository extends EntityRepository
         $result = array_intersect($arrSlugs, $dms);
         if (!empty($result)) {
             $array['DMS'] = array(
-                'ROLE_DPS'                                  => 'Doctor Prescription',
-                'ROLE_DPS_DOCTOR'                           => 'Doctor',
-                'ROLE_DPS_ADMIN'                            => 'Doctor Admin',
+                'ROLE_DPS'                                      => 'Doctor Prescription',
+                'ROLE_DPS_DOCTOR'                               => 'Doctor',
+                'ROLE_DPS_ADMIN'                                => 'Doctor Admin',
             );
         }
+        $array['Customer'] = array(
+            'ROLE_CRM'                  => 'Customer',
+            'ROLE_CRM_MANAGER'          => 'Manage Customer ',
+        );
         $array['SMS'] = array(
-            'ROLE_SMS'                                  => 'Sms/E-mail',
-            'ROLE_SMS_MANAGER'                          => 'Sms/E-mail Manager',
-            'ROLE_SMS_CONFIG'                           => 'SMS/E-mail Setup',
-            'ROLE_SMS_BULK'                             => 'SMS Bulk',
+            'ROLE_SMS'                                          => 'Sms/E-mail',
+            'ROLE_SMS_MANAGER'                                  => 'Sms/E-mail Manager',
+            'ROLE_SMS_CONFIG'                                   => 'SMS/E-mail Setup',
+            'ROLE_SMS_BULK'                                     => 'SMS Bulk',
 
         );
 

@@ -3,16 +3,13 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\AccountingBundle\Form\AccountHmsPurchaseType;
 use Appstore\Bundle\AccountingBundle\Form\AccountMedicinePurchaseType;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesInvoiceType;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesMedicineType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\AccountingBundle\Form\AccountSalesType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -44,7 +41,7 @@ class AccountBusinessController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entities = $em->getRepository('AccountingBundle:AccountSales')->findWithSearch($user,$data,'business');
+        $entities = $em->getRepository('AccountingBundle:AccountSales')->findWithSearch($user,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(20,29));

@@ -23,8 +23,6 @@ class ConfigType extends AbstractType
 
             ->add('customerPrefix','text', array('attr'=>array('class'=>'m-wrap span5','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span5 ','maxlength'=> 4,'placeholder'=>'max 4 char')))
-            ->add('isDefaultMedicine')
-            ->add('showAccessories')
             ->add('bodyFontSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),
@@ -37,25 +35,13 @@ class ConfigType extends AbstractType
                 'attr'=>array('class'=>' span12'),
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),
             ))
-            /*->add('invoiceProcess',
-                'choice', array(
-                    'attr'=>array('class'=>'check-list  span12'),
-                    'choices' => array(
-                        'diagnostic'    => 'Diagnostic',
-                        'admission'   => 'Admission',
-                        'doctor'  => 'Doctor',
-                    ),
-                    'required'    => true,
-                    'multiple'    => true,
-                    'expanded'  => true,
-                    'empty_data'  => null,
-            ))*/
-            ->add('customPrescription')
             ->add('invoicePrintLogo')
+            ->add('customInvoicePrint')
+            ->add('customInvoice')
             ->add('isInvoiceTitle')
+            ->add('showStock')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
-            ->add('printInstruction')
             ->add('headerLeftWidth','text',array('attr'=>array('class'=>'m-wrap span12')))
             ->add('headerRightWidth','text',array('attr'=>array('class'=>'m-wrap  span12')))
             ->add('bodyTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
@@ -84,7 +70,7 @@ class ConfigType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_particular';
+        return 'config';
     }
 
 

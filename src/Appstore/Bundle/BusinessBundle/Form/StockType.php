@@ -31,9 +31,11 @@ class StockType extends AbstractType
                     new NotBlank(array('message'=>'Please select required'))
                 ),
                 'choices' => array(
-                    'consumable' => 'Consumable',
-                    'stock' => 'Stock',
-                    'production' => 'Production',
+                    'consumable'    => 'Consumable',
+                    'stock'         => 'Stock',
+                    'production'    => 'Production',
+                    'service'       => 'Service',
+                    'virtual'       => 'Virtual',
                 ),
             ))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),

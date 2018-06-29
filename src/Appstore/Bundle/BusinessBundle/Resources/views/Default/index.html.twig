@@ -8,31 +8,43 @@
             </div>
             <div class="portlet-body">
                 <div class="row-fluid" >
+                     <div class="span5">
+                        <div class="btn-group">
+                            <a class="btn black big">Quick Links <i class="m-icon-big-swapright m-icon-white"></i></a>
+                            {% if (app.user.granted("ROLE_BUSINESS_INVOICE"))  %}
+                                <a href="{{ path('business_invoice_new') }}" class="btn red big"><i class="icon-plus-sign"></i> Add Invoice </a>
+                                <a href="{{ path('business_invoice') }}" class="btn blue big"><i class="icon-th-large"></i> Invoice </a>
+                            {% endif %}
+                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
+                            <a href="{{ path('account_sales_business_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
+                            {% endif %}
+                        </div>
+                    </div>
                     <div class="span4">
                         <div class="btn-group">
-                            <a class="btn red big" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Add Sales</a>
-                            <a href="{{ path('medicine_sales') }}" class="btn blue big"><i class="icon-th-large"></i> Sales </a>
-                            <a href="{{ path('account_sales_medicine_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
+                            {% if (app.user.granted("ROLE_BUSINESS_PURCHASE"))  %}
+                                <a href="{{ path('business_purchase_new') }}" class="btn red big"><i class="icon-plus-sign"></i> Add Purchase</a>
+                                <a href="{{ path('business_purchase') }}" class="btn green big"><i class="icon-th-large"></i> Purchase</a>
+                            {% endif %}
+                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE"))  %}
+                                <a href="{{ path('account_purchase_business_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="span5">
+                    <div class="span2">
                         <div class="btn-group">
-                            <a href="{{ path('medicine_purchase_new') }}" class="btn red big"><i class="icon-plus-sign"></i> Add Purchase</a>
-                            <a href="{{ path('medicine_purchase') }}" class="btn green big"><i class="icon-th-large"></i> Purchase</a>
-                            <a href="{{ path('medicine_stock_short_item') }}" class="btn black big"><i class="icon-sort-by-order"></i> Short List</a>
-                            <a href="{{ path('account_purchase_medicine_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
-                        </div>
-                    </div>
-                    <div class="span3">
-                        <div class="btn-group">
+                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE"))  %}
                             <a href="{{ path('account_expenditure_new') }}" class="btn purple big"><i class="icon-plus-sign"></i> Expenditure</a>
+                            {% endif %}
+                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_JOURNAL"))  %}
                             <a href="{{ path('account_journal_new') }}" class="btn blue big"><i class="icon-money"></i> Journal</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="portlet-body form">
-                <div class="form-actions portlet box grey">
+                <div class="form-actions portlet box purple">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon icon-money"></i> Today Cash Overview</div>
                         <div class="actions">
@@ -116,7 +128,7 @@
                         <div class="caption"><i class="icon icon-medkit"></i> Today Sales Overview</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('medicine_report_sales_summary') }}"><i class="icon-bar-chart"></i> Sales Reports</a>
+                                <a class="btn red" href="{{ path('business_report_sales_summary') }}"><i class="icon-bar-chart"></i> Sales Reports</a>
                             </div>
                         </div>
                     </div>
@@ -152,7 +164,7 @@
                         <div class="caption"><i class="icon icon-medkit"></i> Today Purchase Overview</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('medicine_report_purchase_summary') }}"><i class="icon-bar-chart"></i> Purchase Reports</a>
+                                <a class="btn red" href="{{ path('business_report_purchase_summary') }}"><i class="icon-bar-chart"></i> Purchase Reports</a>
                             </div>
                         </div>
                     </div>
@@ -174,15 +186,15 @@
                     </tr>
                 </table>
             </div>
-            <div class="portlet-body">
+           {# <div class="portlet-body">
                 <div class="row-fluid pull-center" >
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="portlet box grey">
                             <div class="portlet-title"><div class="caption"><i class="icon-shopping-cart"></i>Medicine Sales </div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_sales') }}">Manage Sales</a></li>
-                                    <li><i class="icon-retweet"></i> <a href="{{ path('medicine_sales_return') }}">Sales Return</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_sales') }}">Manage Sales</a></li>
+                                    <li><i class="icon-retweet"></i> <a href="{{ path('business_sales_return') }}">Sales Return</a></li>
                                     <li><i class="icon-user"></i> <a href="{{ path('domain_customer') }}">Customer</a></li>
                                 </ul>
                             </div>
@@ -195,10 +207,10 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-folder-close"></i> <a href="{{ path('medicine_stock') }}">Stock Medicine</a></li>
-                                    <li><i class="icon-calendar"></i> <a href="{{ path('medicine_purchase_item') }}">Medicine Expiration</a></li>
-                                    <li><i class="icon-bar-chart"></i> <a href="{{ path('medicine_stock_short_item') }}">Stock Short Item</a></li>
-                                    <li><i class="icon-trash"></i> <a href="{{ path('medicine_damage') }}">Damage</a></li>
+                                    <li><i class="icon-folder-close"></i> <a href="{{ path('business_stock') }}">Stock Medicine</a></li>
+                                    <li><i class="icon-calendar"></i> <a href="{{ path('business_purchase_item') }}">Medicine Expiration</a></li>
+                                    <li><i class="icon-bar-chart"></i> <a href="{{ path('business_stock_short_item') }}">Stock Short Item</a></li>
+                                    <li><i class="icon-trash"></i> <a href="{{ path('business_damage') }}">Damage</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -210,11 +222,11 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-th-large"></i> <a href="{{ path('medicine_purchase') }}">Manage Purchase</a></li>
-                                    <li><i class="icon-shopping-cart"></i> <a href="{{ path('medicine_purchase_new') }}">Add Purchase</a></li>
-                                    <li><i class="icon-th-list"></i> <a href="{{ path('medicine_instantpurchase') }}">Instant Purchase</a></li>
-                                    <li><i class="icon-retweet"></i> <a href="{{ path('medicine_purchase_return') }}">Purchase Return</a></li>
-                                    <li><i class="icon-user"></i> <a href="{{ path('medicine_vendor') }}">Vendor</a></li>
+                                    <li><i class="icon-th-large"></i> <a href="{{ path('business_purchase') }}">Manage Purchase</a></li>
+                                    <li><i class="icon-shopping-cart"></i> <a href="{{ path('business_purchase_new') }}">Add Purchase</a></li>
+                                    <li><i class="icon-th-list"></i> <a href="{{ path('business_instantpurchase') }}">Instant Purchase</a></li>
+                                    <li><i class="icon-retweet"></i> <a href="{{ path('business_purchase_return') }}">Purchase Return</a></li>
+                                    <li><i class="icon-user"></i> <a href="{{ path('business_vendor') }}">Vendor</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -224,19 +236,19 @@
                             <div class="portlet-title"><div class="caption"><i class="icon-hdd"></i>Master Data</div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-reorder"></i> <a href="{{ path('medicine_particular') }}">Particular</a></li>
-                                    <li><i class="icon-group"></i> <a href="{{ path('medicine_sales_user') }}">User Sales Setup</a></li>
-                                    <li><i class="icon-cog"></i> <a href="{{ path('medicine_config_manage') }}">Configuration</a></li>
-                                    <li><i class="icon-medkit"></i> <a href="{{ path('medicine_user') }}">New Medicine</a></li>
+                                    <li><i class="icon-reorder"></i> <a href="{{ path('business_particular') }}">Particular</a></li>
+                                    <li><i class="icon-group"></i> <a href="{{ path('business_sales_user') }}">User Sales Setup</a></li>
+                                    <li><i class="icon-cog"></i> <a href="{{ path('business_config_manage') }}">Configuration</a></li>
+                                    <li><i class="icon-medkit"></i> <a href="{{ path('business_user') }}">New Medicine</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>#}
             <div class="clearfix"></div>
         </div>
-        <div class="form-actions portlet box yellow">
+{#        <div class="form-actions portlet box yellow">
             <div class="portlet-title">
                 <div class="caption"><i class="icon-bar-chart"></i>Medicine Reports</div>
             </div>
@@ -247,9 +259,9 @@
                             <div class="portlet-title"><div class="caption"><i class="icon-shopping-cart"></i>Medicine Sales </div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_summary') }}">Sales Summary</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_details') }}">Sales Details</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_stock') }}">Product Wise Sales</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_summary') }}">Sales Summary</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_details') }}">Sales Details</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_stock') }}">Product Wise Sales</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -259,8 +271,8 @@
                             <div class="portlet-title"><div class="caption"><i class="icon-user"></i>User wise Sales</div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_user') }}">User Wise Sales</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_user_monthly') }}">User Monthly Sales</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_user') }}">User Wise Sales</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_user_monthly') }}">User Monthly Sales</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -272,11 +284,11 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_summary') }}">Purchase Summary</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor') }}">Vendor Outstanding</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor_details') }}">Purchase Details</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor_sales') }}">Vendor Purchase & Sales</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_brand_sales') }}">Brand Purchase & Sales</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_summary') }}">Purchase Summary</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_vendor') }}">Vendor Outstanding</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_vendor_details') }}">Purchase Details</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_vendor_sales') }}">Vendor Purchase & Sales</a></li>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_brand_sales') }}">Brand Purchase & Sales</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -288,15 +300,15 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('medicine_report_product_stock_sales') }}">Product Stock & Sales</a></li>
-                                    {#         <li><i class="icon-list"></i> <a href="{{ path('medicine_report_product_stock_sales_price') }}">Product Stock & Sales Price</a></li>
-                                  #}       </ul>
+                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_product_stock_sales') }}">Product Stock & Sales</a></li>
+                                    #}{#         <li><i class="icon-list"></i> <a href="{{ path('business_report_product_stock_sales_price') }}">Product Stock & Sales Price</a></li>
+                                  #}{#       </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>#}
 
     </div>
     <style>
