@@ -143,9 +143,9 @@ class CustomerController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
+        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
 
@@ -188,13 +188,12 @@ class CustomerController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-
-            return $this->redirect($this->generateUrl('domain_customer_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('domain_customer'));
         }
 
-        return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
+        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
     /**

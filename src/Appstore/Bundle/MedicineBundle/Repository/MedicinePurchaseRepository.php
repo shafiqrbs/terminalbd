@@ -198,7 +198,7 @@ class MedicinePurchaseRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->from('AccountingBundle:AccountPurchase','e');
         $qb->join('e.medicineVendor','t');
-        $qb->select('t.companyName as companyName , sum(e.purchaseAmount) as total ,sum(e.payment) as payment');
+        $qb->select('t.companyName as companyName ,t.name as vendorName ,t.mobile as vendorMobile , sum(e.purchaseAmount) as total ,sum(e.payment) as payment');
         $qb->where('e.globalOption = :config');
         $qb->setParameter('config', $global);
         $qb->andWhere('e.process = :process');

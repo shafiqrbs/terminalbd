@@ -522,7 +522,6 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'fa fa-shopping-bag')
             ->setAttribute('dropdown', true);
 
-            $menu['Sales']->addChild('Customers', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
 
             $deliveryProcess = $inventory->getDeliveryProcess();
             if (!empty($deliveryProcess)) {
@@ -566,8 +565,9 @@ class Builder extends ContainerAware
                         }
                     }
                 }
-
-
+            }
+            if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
+                $menu['Sales']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
             }
             $menu['Sales']->addChild('Pre-purchase', array('route' => 'prepurchaseitem'))->setAttribute('icon', 'icon icon-archive');
             if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {
@@ -1070,13 +1070,13 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon icon-th-large')
             ->setAttribute('dropdown', true);
             if ($securityContext->isGranted('ROLE_MEDICINE_SALES')) {
-            /*$menu['Medicine']->addChild('Point of Sales ', array('route' => 'medicine_sales_new'))
-                ->setAttribute('icon', 'icon-th-large');*/
-            $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
-                ->setAttribute('icon', 'icon-list');
-            $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
-                ->setAttribute('icon', 'icon-list');
-            /* $menu['Medicine']->addChild('Customer', array('route' => 'medicine_customer'))->setAttribute('icon', 'icon icon-user');*/
+                $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
+                    ->setAttribute('icon', 'icon-list');
+                $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
+                    ->setAttribute('icon', 'icon-list');
+                if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
+                    $menu['Medicine']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
+                }
             }
             $menu['Medicine']->addChild('Manage Stock')
                 ->setAttribute('icon', 'icon icon-truck')

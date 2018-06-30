@@ -20,10 +20,10 @@ class CustomerListener
         if ($entity instanceof Customer) {
 
             $lastCode = $this->getLastCode($args,$entity);
-            if(!empty($lastCode)){
+           // if(!empty($lastCode)){
                 $entity->setCode($lastCode + 1);
                 $entity->setCustomerId(sprintf("%s%s", $entity->getGlobalOption()->getId(), str_pad($entity->getCode(), 6, '0', STR_PAD_LEFT)));
-            }
+           // }
 
         }
     }
