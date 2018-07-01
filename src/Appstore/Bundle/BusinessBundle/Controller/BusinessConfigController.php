@@ -72,7 +72,11 @@ class BusinessConfigController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
+            if($entity->getRemoveImage() == 1 ){
+                $entity->removeUpload();
+            }elseif($entity->getRemoveImage() != 1) {
+                $entity->upload();
+            }
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Report has been created successfully"

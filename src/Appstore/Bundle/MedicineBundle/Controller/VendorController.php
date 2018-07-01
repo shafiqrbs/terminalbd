@@ -44,10 +44,17 @@ class VendorController extends Controller
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        $data = $request->request->all();
         if ($form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
             $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['customer']));
+            if($customer){
+                $entity->setCustomer($customer);
+            }else{
+                $entity->setCustomer(null);
+            }
             $entity->setMedicineConfig($config);
             $em->persist($entity);
             $em->flush();
@@ -136,7 +143,8 @@ class VendorController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $global = $this->getUser()->getGlobalOption();
+        $config = $global->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
 
         $entity = $em->getRepository('MedicineBundle:MedicineVendor')->find($id);
@@ -147,8 +155,12 @@ class VendorController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
+        $data = $request->request->all();
         if ($editForm->isValid()) {
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $global , 'mobile' => $data['customer']));
+            if(!empty($customer)){
+                $entity->setCustomer($customer);
+            }
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"

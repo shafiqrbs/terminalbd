@@ -26,8 +26,7 @@ class VendorType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')))
             ))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter vendor address')))
-            ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address')))
-           ;
+            ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address')));
     }
     
     /**
@@ -45,6 +44,6 @@ class VendorType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_dms_vendor';
+        return 'vendor';
     }
 }

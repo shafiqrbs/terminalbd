@@ -14,6 +14,10 @@ medicine_report_purchase_vendor_sales:
     path:     /purchase-vendor-sales
     defaults: { _controller: "MedicineBundle:Report:purchaseVendorSales" }
 
+medicine_report_sales_vendor_customer:
+    path:     /vendor-base-sales
+    defaults: { _controller: "MedicineBundle:Report:salesVendorCustomer" }
+
 medicine_report_purchase_brand_sales:
     path:     /purchase-brand-sales
     defaults: { _controller: "MedicineBundle:Report:purchaseBrandSales" }

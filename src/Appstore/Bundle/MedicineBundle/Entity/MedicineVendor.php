@@ -2,13 +2,17 @@
 
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * MedicineVendor
  *
  * @ORM\Table(name="medicine_vendor")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\MedicineVendorRepository")
+ * @UniqueEntity(fields="mobile",message="User mobile no already existing,Please try again.")
  */
 class MedicineVendor
 {
@@ -26,7 +30,6 @@ class MedicineVendor
      */
     protected $medicineConfig;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="medicineVendor")
      */
@@ -36,6 +39,11 @@ class MedicineVendor
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="medicineVendor")
      */
     protected $accountPurchases;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="medicineVendor")
+     */
+    protected $customer;
 
 
     /**
@@ -342,6 +350,22 @@ class MedicineVendor
     public function getMedicinePurchases()
     {
         return $this->medicinePurchases;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param mixed $customer
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
     }
 
 

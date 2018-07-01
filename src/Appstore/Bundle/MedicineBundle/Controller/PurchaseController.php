@@ -126,7 +126,6 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
@@ -504,7 +503,7 @@ class PurchaseController extends Controller
         if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
             $entity->setQuantity((int)$data['value']);
             $entity->setRemainingQuantity((int)$data['value']);
-            $entity->setPurchaseSubTotal((int)$data['value'] * $entity->getPurchasePrice());
+            $entity->setPurchaseSubTotal((int)$data['value'] * $entity->getActualPurchasePrice());
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock());
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($entity->getMedicinePurchase());

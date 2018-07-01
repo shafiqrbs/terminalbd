@@ -4,6 +4,8 @@ namespace Appstore\Bundle\BusinessBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * BusinessConfig
@@ -60,6 +62,13 @@ class BusinessConfig
      * @ORM\Column(name="printer", type="string", length=50,nullable = true)
      */
     private $printer;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="text",nullable = true)
+     */
+    private $address;
 
     /**
      * @var smallint
@@ -285,6 +294,23 @@ class BusinessConfig
      * @ORM\Column(name="showStock", type="boolean",  nullable=true)
      */
      private $showStock = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="removeImage", type="boolean")
+     */
+    private $removeImage = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $path;
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $file;
 
 
     /**
@@ -906,6 +932,126 @@ class BusinessConfig
     public function setCustomInvoicePrint(bool $customInvoicePrint)
     {
         $this->customInvoicePrint = $customInvoicePrint;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param Page $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return Page
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/' . $this->path;
+    }
+
+
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/business';
+    }
+
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+            $this->path = null ;
+        }
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $filename ;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRemoveImage()
+    {
+        return $this->removeImage;
+    }
+
+    /**
+     * @param boolean $removeImage
+     */
+    public function setRemoveImage($removeImage)
+    {
+        $this->removeImage = $removeImage;
+    }
+
+   
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return BusinessConfig
+     */
+    public function setContent($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->address;
     }
 
 

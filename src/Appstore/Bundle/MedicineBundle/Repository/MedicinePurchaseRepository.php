@@ -211,6 +211,66 @@ class MedicinePurchaseRepository extends EntityRepository
 
     }
 
+    public function salesVendorCustomerReport(User $user , $data = array())
+    {
+
+        $global =  $user->getGlobalOption()->getId();
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('AccountingBundle:AccountPurchase','e');
+        $qb->join('e.medicineVendor','t');
+        $qb->join('t.customer','customer');
+        $qb->select('customer.id as customerId ,t.companyName as companyName ,t.name as vendorName ,t.mobile as vendorMobile , sum(e.purchaseAmount) as total ,sum(e.payment) as payment');
+        $qb->where('e.globalOption = :config');
+        $qb->setParameter('config', $global);
+        $qb->andWhere('e.process = :process');
+        $qb->setParameter('process', 'approved');
+        $qb->andWhere('t.customer is not NULL');
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy("e.medicineVendor");
+        $qb->orderBy("t.companyName",'ASC');
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+
+    }
+
+    public function vendorCustomerSalesReport(User $user , $customers)
+    {
+
+        $array=array();
+        foreach ($customers as $customer){
+            $array[] = $customer['customerId'];
+        }
+        $array2 = implode("','",$array);
+        $global =  $user->getGlobalOption();
+        $customer = '';
+        if($customers){
+            $customer =  "AND subCustomer.id IN ($array2) ";
+        }
+        $sql = "SELECT customer.`id` as id, sales.balance as customerBalance
+                FROM account_sales as sales
+                JOIN Customer as customer ON sales.customer_id = customer.id
+                WHERE sales.id IN (
+                    SELECT MAX(sub.id)
+                    FROM account_sales AS sub
+                    JOIN Customer as subCustomer ON sub.customer_id = subCustomer.id
+                   WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$customer}
+                   GROUP BY sub.customer_id
+                ) 
+                ORDER BY sales.id DESC";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->bindValue('globalOption', $global->getId());
+        $qb->execute();
+        $results =  $qb->fetchAll();
+        $salesVendors = array();
+        foreach ($results as $row){
+            $salesVendors[$row['id']] = $row;
+        }
+        return $salesVendors;
+
+    }
+
+
+
     public function productPurchaseStockSalesReport(User $user , $data = array())
     {
             $config =  $user->getGlobalOption()->getMedicineConfig()->getId();

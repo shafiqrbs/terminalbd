@@ -381,43 +381,6 @@ class InvoiceController extends Controller
         return $this->redirect($this->generateUrl('business_invoice'));
     }
 
-    public function getBarcode($value)
-    {
-        $barcode = new BarcodeGenerator();
-        $barcode->setText($value);
-        $barcode->setType(BarcodeGenerator::Code39Extended);
-        $barcode->setScale(1);
-        $barcode->setThickness(25);
-        $barcode->setFontSize(8);
-        $code = $barcode->generate();
-        $data = '';
-        $data .= '<img src="data:image/png;base64,'.$code .'" />';
-        return $data;
-    }
-
-    public function invoicePrintAction(BusinessInvoice $entity)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
-
-            if($businessConfig->isCustomInvoice() == 1){
-                $template = $businessConfig->getGlobalOption()->getSubDomain();
-            }else{
-                $template = 'print';
-            }
-            return  $this->render('BusinessBundle:Print:'.$template.'.html.twig',
-                array(
-                    'entity' => $entity,
-                    'print' => 'print',
-                )
-            );
-
-        }
-
-    }
-
     public function invoicePrintPdfAction(BusinessInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -520,6 +483,44 @@ class InvoiceController extends Controller
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
         exit;
+    }
+
+    public function getBarcode($value)
+    {
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($value);
+        $barcode->setType(BarcodeGenerator::Code39Extended);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(8);
+        $code = $barcode->generate();
+        $data = '';
+        $data .= '<img src="data:image/png;base64,'.$code .'" />';
+        return $data;
+    }
+
+    public function invoicePrintAction(BusinessInvoice $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
+
+            if($businessConfig->isCustomInvoicePrint() == 1){
+                $template = $businessConfig->getGlobalOption()->getSubDomain();
+            }else{
+                $template = 'print';
+            }
+            return  $this->render('BusinessBundle:Print:'.$template.'.html.twig',
+                array(
+                    'config' => $businessConfig,
+                    'entity' => $entity,
+                    'print' => 'print',
+                )
+            );
+
+        }
+
     }
 
 }

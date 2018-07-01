@@ -69,7 +69,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label " >Prescription Invoice Font Size</label>
+                                                    <label class="control-label " >Invoice Font Size</label>
                                                     <div class="control">
                                                         {{ form_widget(form.invoiceFontSize) }}
                                                         {{ form_errors(form.invoiceFontSize) }}
@@ -98,95 +98,60 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label" >Header Left Width</label>
+                                                    <label class="control-label " >Address</label>
                                                     <div class="control">
-                                                        {{ form_widget(form.headerLeftWidth) }}
-                                                        {{ form_errors(form.headerLeftWidth) }}
+                                                        {{ form_widget(form.address) }}
+                                                        {{ form_errors(form.address) }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label " >Sidebar Top Margin</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.leftTopMargin) }}
-                                                        {{ form_errors(form.leftTopMargin) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label " >Sidebar Width</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.sidebarWidth) }}
-                                                        {{ form_errors(form.sidebarWidth) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label ">Sidebar Font Size</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.sidebarFontSize) }}
-                                                        {{ form_errors(form.sidebarFontSize) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
+
                                     </div>
                                     <div class="span4">
                                         <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label" >Header Right Width</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.headerRightWidth) }}
-                                                        {{ form_errors(form.headerRightWidth) }}
+                                            <div class="control-group">
+                                                <label class="control-label" >Feature image</label>
+                                                <div class="controls">
+                                                    <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                        <div  class="fileupload-new thumbnail">
+                                                            {% if(entity.webPath) %}
+                                                                <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.webPath).resize(250,150) }}">
+                                                            {% else %}
+                                                                <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                        <div>
+                                            <span class="btn btn-file">
+                                                <span class="fileupload-new blue btn">Select image</span>
+                                                <span class="fileupload-exists">Change</span>
+                                                {{ form_widget(form.file) }}
+                                                {{ form_errors(form.file) }}
+                                            </span>
+                                                            <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                                        </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label" >Body Top Margin</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.bodyTopMargin) }}
-                                                        {{ form_errors(form.bodyTopMargin) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label " >Body Width</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.bodyWidth) }}
-                                                        {{ form_errors(form.bodyWidth) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label ">Body Font Size</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.bodyFontSize) }}
-                                                        {{ form_errors(form.bodyFontSize) }}
+                                                    <label class="control-label" ></label>
+                                                    <div class="controls">
+                                                        <div class="input-icon left">
+                                                            Remove Image {{ form_widget(form.removeImage) }}
+                                                            {{ form_errors(form.removeImage) }}
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                  </div>
                             <div class="form-actions portlet box purple">
                                     <div class="portlet-title">
@@ -228,6 +193,17 @@
                                                     <div class="control">
                                                         {{ form_widget(form.invoiceHeight) }}
                                                         {{ form_errors(form.invoiceHeight) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label " for="vatPercentage">Body Font Size</label>
+                                                    <div class="control">
+                                                        {{ form_widget(form.bodyFontSize) }}
+                                                        {{ form_errors(form.bodyFontSize) }}
                                                     </div>
                                                 </div>
                                             </div>

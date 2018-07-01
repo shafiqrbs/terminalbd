@@ -83,6 +83,12 @@ class Customer
      */
     protected $medicineSales;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", mappedBy="customer")
+     * @ORM\OrderBy({"companyName" = "ASC"})
+     */
+    protected $medicineVendor;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="customer" )
