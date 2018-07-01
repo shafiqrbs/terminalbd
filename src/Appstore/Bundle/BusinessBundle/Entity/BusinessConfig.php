@@ -1037,7 +1037,7 @@ class BusinessConfig
      * @param string $address
      * @return BusinessConfig
      */
-    public function setContent($address)
+    public function setAddress($address)
     {
         $this->address = $address;
 
@@ -1049,7 +1049,7 @@ class BusinessConfig
      *
      * @return string
      */
-    public function getContent()
+    public function getAddress()
     {
         return $this->address;
     }
