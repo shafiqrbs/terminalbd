@@ -565,5 +565,49 @@ class AccountSalesRepository extends EntityRepository
         }
     }
 
+    public function reportBusinessMonthlyIncome(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+        if(empty($data)){
+
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+
+        }else{
+
+            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
+            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+        }
+
+        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['purchasePrice'], 'expenditures' => $expenditures);
+        return $data;
+
+    }
+
+    public function reportBusinessIncome(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption()->getId();
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+
+        $sales = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user, $data);
+        $purchase = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['purchasePrice'], 'expenditures' => $expenditures);
+        return $data;
+
+    }
+
+
 
 }
