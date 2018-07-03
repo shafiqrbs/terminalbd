@@ -175,7 +175,7 @@ class InvoiceController extends Controller
             if (in_array($entity->getProcess(), $inProgress)) {
                 return $this->redirect($this->generateUrl('business_invoice_new'));
             } else {
-                return $this->redirect($this->generateUrl('business_invoice_print_invoice', array('id' => $entity->getId())));
+                return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
             }
         }
         return $this->render('BusinessBundle:Invoice:new.html.twig', array(

@@ -74,26 +74,11 @@ business_invoice_particular_delete:
     path:     /{invoice}/{id}/particular-delete
     defaults: { _controller: "BusinessBundle:Invoice:invoiceParticularDelete" }
 
-business_invoice_print_invoice:
+business_invoice_print:
     path:     /{id}/print
     defaults: { _controller: "BusinessBundle:Invoice:invoicePrint" }
 
-business_prescription_preview:
-    path:     /{invoice}/print-preview
-    defaults: { _controller: "BusinessBundle:Invoice:invoicePrintPreview" }
 
-business_invoice_process_update:
-    path:     /hms-invoice/upadte-process
-    defaults: { _controller: "BusinessBundle:Invoice:invoiceProcessUpdate" }
-    methods:  POST
-    options:
-            expose: true
-
-business_invoice_status_select:
-    path:     /invoice-status-select
-    defaults: { _controller: "BusinessBundle:Invoice:statusSelect" }
-    options:
-           expose: true
 
 business_invoice_empty_delete:
     path:     /delete/empty-invoice

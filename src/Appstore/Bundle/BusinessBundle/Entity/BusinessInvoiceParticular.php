@@ -73,6 +73,14 @@ class BusinessInvoiceParticular
     /**
      * @var float
      *
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
+     */
+    private $purchasePrice;
+
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
@@ -199,6 +207,22 @@ class BusinessInvoiceParticular
     public function setSubTotal($subTotal)
     {
         $this->subTotal = $subTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice(float $purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
     }
 
 

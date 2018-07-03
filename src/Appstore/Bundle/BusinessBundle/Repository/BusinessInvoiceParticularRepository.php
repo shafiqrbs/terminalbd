@@ -52,7 +52,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $entity->setPrice($data['price']);
         $entity->setQuantity($data['quantity']);
         if(!empty($data['quantity'])){
-            $entity->setSubTotal($data['price']*$data['quantity']);
+            $entity->setSubTotal($data['price'] * $data['quantity']);
         }else{
             $entity->setSubTotal($data['price']);
         }
@@ -76,7 +76,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $stock = $em->getRepository('BusinessBundle:BusinessParticular')->find($accessoriesId);
         $entity->setParticular($stock->getName());
         $entity->setBusinessParticular($stock);
-        $entity->setPrice($stock->getPurchasePrice());
+        $entity->setPrice($stock->getPrice());
+        $entity->setPurchasePrice($stock->getPurchasePrice());
         $entity->setSubTotal($quantity * $stock->getPrice());
         $entity->setBusinessInvoice($invoice);
         $em->persist($entity);

@@ -176,6 +176,7 @@ $(document).on('click', '.itemUpdate', function() {
 
 
 $(document).on("click", ".particularDelete", function() {
+
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
        $('#confirm-content').confirmModal({
@@ -279,7 +280,7 @@ $(document).on('keyup', '#businessInvoice_discountCalculation', function() {
             $('#sales_discount').val(obj['discount']);
             $('.discount').html(obj['discount']);
             $('#due').val(obj['due']);
-            $('.dueAmount').html(obj['due']);
+            $('.due').html(obj['due']);
         }
 
     })

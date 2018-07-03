@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_invoice') }}"> Customer Invoice</a>
+                        <a href="{{ path('business_invoice') }}"> Invoice</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -32,7 +32,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Customer</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Invoice</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('business_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
@@ -143,12 +143,12 @@
                                             <div class="btn-group">
                                                 {% set processIntArr = ['Hold','Created','Revised'] %}
                                                 {% if entity.process in  processIntArr %}
-                                                <a href="{{ path('business_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Manage</a>
+                                                <a href="{{ path('business_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Edit</a>
                                                 {% endif %}
                                                 {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
-                                                <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('business_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
+                                                <a  id="{{ entity.id }}" data-url="{{ path('business_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
-                                                <a target="_blank"  href="{{ path('business_invoice_print_invoice',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
+                                                <a target="_blank"  href="{{ path('business_invoice_print',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
                                                 <a href="{{ path('business_invoice_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
                                                 {% if entity.revised == 1 %}
                                                 <a href="{{ path('business_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>

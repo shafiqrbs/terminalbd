@@ -14,7 +14,11 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Invoice Details</a></li>
+                    <li>
+                        <a href="{{ path('business_invoice') }}"> Invoice</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="javascript:">Manage Invoice Details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -134,6 +138,7 @@
                                 {% if (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) or (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_REVERSE_SALES"))  %}
                                     <a  href="javascript:"  data-url="{{ path('business_sales_reverse',{'id':entity.id}) }}" class="btn black"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                 {% endif %}
+                                <a class="btn yellow" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id}) }}"><i class="icon-print"></i> Print</a>
                                 <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                             </div>
                         </div>
