@@ -121,7 +121,7 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig,$type = array('production','stock','service','virtual'));
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('production','stock','service','virtual'));
         return $this->render('BusinessBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'particulars' => $particulars,
@@ -168,6 +168,7 @@ class InvoiceController extends Controller
             $em->flush();
             $done = array('Done', 'Delivered');
             if (in_array($entity->getProcess(), $done)) {
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }

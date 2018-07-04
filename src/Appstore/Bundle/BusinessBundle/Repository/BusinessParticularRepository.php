@@ -3,12 +3,15 @@
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -67,43 +70,17 @@ class BusinessParticularRepository extends EntityRepository
     public function getFindWithParticular($config,$type){
 
         $qb = $this->createQueryBuilder('e')
+            ->join('e.businessParticularType','p')
             ->where('e.businessConfig = :config')->setParameter('config', $config)
             ->andWhere('e.status = :status')->setParameter('status', 1)
-            ->andWhere('e.productType IN(:type)')->setParameter('type',array_values($type))
+            ->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type))
             ->orderBy('e.sorting','ASC')
             ->orderBy('e.name','ASC')
             ->getQuery()->getResult();
             return  $qb;
     }
 
-    public function getFindDentalServiceParticular($config,$services){
 
-        $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->where('e.businessConfig = :config')->setParameter('config', $config)
-         /*   ->andWhere('e.status = :status')->setParameter('status', 1)*/
-            ->andWhere('s.serviceFormat IN(:slugs)')
-            ->setParameter('slugs',array_values($services))
-            ->orderBy('s.sorting','ASC')
-            ->orderBy('e.name','ASC')
-            ->getQuery()->getResult();
-        return  $qb;
-    }
-
-    public function updateSalesPrice(BusinessParticular $particular){
-
-        $qb = $this->createQueryBuilder('e')
-            ->join('e.productionElements','pe')
-            ->select('SUM(pe.salesPrice * pe.quantity) AS totalAmount')
-            ->where('pe.businessParticular = :bp')->setParameter('bp', $particular->getId());
-        $row = $qb->getQuery()->getOneOrNullResult();
-        $totalAmount =  $row['totalAmount'];
-        $salesPrice = $totalAmount + $particular->getMarketing()+$particular->getOverHead()+$particular->getPackaging()+$particular->getUtility();
-        $particular->setPrice($salesPrice);
-        $this->_em->persist($particular);
-        $this->_em->flush();
-        return $salesPrice;
-    }
 
     public function getServiceWithParticular($config,$services){
 
@@ -247,6 +224,61 @@ class BusinessParticularRepository extends EntityRepository
         $em->flush();
     }
 
+    public function insertInvoiceProductItem(BusinessInvoice $invoice){
+
+        if(!empty($invoice->getBusinessInvoiceParticulars())) {
+
+            /* @var  $item BusinessInvoiceParticular */
+
+            foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
+
+                if($item->getBusinessParticular()->getProductType() == 'production'){
+                   $this->productionExpense($item);
+                }else{
+                  $this->getSalesUpdateQnt($item);
+                }
+            }
+        }
+
+    }
+
+    public function productionExpense(BusinessInvoiceParticular  $item)
+    {
+       if(!empty($item->getParticular()->getProductionElements())){
+
+           $productionElements = $item->getParticular()->getProductionElements();
+
+           /* @var $element BusinessProductionElement */
+
+           foreach ($productionElements as $element){
+
+               $entity = new BusinessProductionExpense();
+
+               $entity->setBusinessInvoiceParticular($item);
+               $entity->setProductionItem($item->getBusinessParticular());
+               $entity->setProductionElement($element->getParticular());
+               $entity->setPurchasePrice($element->getPurchasePrice());
+               $entity->setSalesPrice($element->getSalesPrice());
+               $entity->setQuantity($element->getQuantity());
+               $this->_em->persist($entity);
+               $this->_em->flush();
+               $this->salesProductionQnt($element);
+
+           }
+
+       }
+    }
+
+    public function salesProductionQnt(ProductionElement  $element){
+
+        $em = $this->_em;
+        $particular = $element->getParticular();
+        $qnt = $particular->getSalesQuantity() + $element->getQuantity();
+        $particular->setSalesQuantity($qnt);
+        $em->persist($particular);
+        $em->flush();
+
+    }
 
     public function getSalesUpdateQnt(BusinessInvoiceParticular  $item){
 
@@ -256,6 +288,7 @@ class BusinessParticularRepository extends EntityRepository
         $particular->setSalesQuantity($qnt);
         $em->persist($particular);
         $em->flush();
+
     }
 
 

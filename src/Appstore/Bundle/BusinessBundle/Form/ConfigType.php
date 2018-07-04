@@ -25,12 +25,16 @@ class ConfigType extends AbstractType
             ->add('customerPrefix','text', array('attr'=>array('class'=>'m-wrap span5','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span5 ','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('bodyFontSize', 'choice', array(
-                'attr'=>array('class'=>' span12'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),
             ))
             ->add('invoiceFontSize', 'choice', array(
-                'attr'=>array('class'=>' span12'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),
+            ))
+            ->add('productionType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'choices' => array('' => '-- Select Production --', 'pre-production' => 'Pre Production',  'post-production' => 'Post Production'),
             ))
             ->add('invoicePrintLogo')
             ->add('customInvoicePrint')

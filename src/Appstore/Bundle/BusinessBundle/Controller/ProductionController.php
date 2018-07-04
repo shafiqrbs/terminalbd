@@ -48,7 +48,6 @@ class ProductionController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-
         $config =$this->getUser()->getGlobalOption()->getBusinessConfig()->getId();
         if($entity->getProductType() != 'production' and $entity->getBusinessConfig()->getId() != $config){
             return $this->redirect($this->generateUrl('business_stock'));
@@ -61,6 +60,10 @@ class ProductionController extends Controller
             'particulars' => $particulars,
             'form'   => $editForm->createView(),
         ));
+    }
+
+    public function preProductionAction(){
+
     }
 
     public function productionUpdateAction(Request $request, $id)

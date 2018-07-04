@@ -41,6 +41,12 @@ class BusinessInvoiceParticular
     private $businessParticular;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense", mappedBy="businessInvoiceParticular", cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $businessProductionExpense;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="unit", type="string", length=225, nullable=true)
@@ -223,6 +229,14 @@ class BusinessInvoiceParticular
     public function setPurchasePrice(float $purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return BusinessProductionExpense
+     */
+    public function getBusinessProductionExpense()
+    {
+        return $this->businessProductionExpense;
     }
 
 

@@ -23,20 +23,17 @@ class StockType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('productType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
-                'choices' => array(
-                    'consumable'    => 'Consumable',
-                    'stock'         => 'Stock',
-                    'production'    => 'Production',
-                    'service'       => 'Service',
-                    'virtual'       => 'Virtual',
-                ),
+            ->add('businessParticularType', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\BusinessBundle\Entity\BusinessParticularType',
+                'empty_value' => '---Choose a particular type ---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'constraints' =>array( new NotBlank(array('message'=>'Please select particular type')) ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1");
+                },
             ))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),
                 'constraints' =>array(

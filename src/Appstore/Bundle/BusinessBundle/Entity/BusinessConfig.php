@@ -55,7 +55,6 @@ class BusinessConfig
      **/
     private $businessPurchasesReturns;
 
-
     /**
      * @var string
      *
@@ -193,6 +192,13 @@ class BusinessConfig
      */
     private $customerPrefix;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="productionType", type="string", length=30,nullable = true)
+     */
+    private $productionType;
+
 
     /**
      * @var string
@@ -258,7 +264,6 @@ class BusinessConfig
      * @ORM\Column(name="bodyWidth", type="string", nullable = true)
      */
     private $bodyWidth = 0;
-
 
     /**
      * @var boolean
@@ -1052,6 +1057,22 @@ class BusinessConfig
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductionType()
+    {
+        return $this->productionType;
+    }
+
+    /**
+     * @param string $productionType
+     */
+    public function setProductionType(string $productionType)
+    {
+        $this->productionType = $productionType;
     }
 
 

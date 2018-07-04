@@ -38,6 +38,11 @@ class BusinessParticular
     private $category;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticularType", inversedBy="businessParticulars" )
+     **/
+    private $businessParticularType;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessParticular" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
@@ -48,6 +53,18 @@ class BusinessParticular
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $productionElements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense", mappedBy="productionItem" )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private $businessProductionExpense;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense", mappedBy="productionElement" )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private $businessProductionExpenseItem;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="particular" )
@@ -92,6 +109,13 @@ class BusinessParticular
      */
     private $name;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="productionType", type="string", length=30,nullable = true)
+     */
+    private $productionType;
+
 
     /**
      * @var integer
@@ -134,7 +158,7 @@ class BusinessParticular
      *
      * @ORM\Column(name="remainingQuantity", type="integer", nullable=true)
      */
-    private $remainingQuantity=0;
+    private $remainingQuantity = 0;
 
 
     /**
@@ -142,28 +166,22 @@ class BusinessParticular
      *
      * @ORM\Column(name="purchaseReturnQuantity", type="integer", nullable=true)
      */
-    private $purchaseReturnQuantity=0;
+    private $purchaseReturnQuantity = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="salesReturnQuantity", type="integer", nullable=true)
      */
-    private $salesReturnQuantity=0;
+    private $salesReturnQuantity = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="damageQuantity", type="integer", nullable=true)
      */
-    private $damageQuantity=0;
+    private $damageQuantity = 0;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="purchaseAverage", type="decimal", nullable=true)
-     */
-    private $purchaseAverage;
 
     /**
      * @var string
@@ -171,34 +189,6 @@ class BusinessParticular
      * @ORM\Column(name="purchasePrice", type="decimal", nullable=true)
      */
     private $purchasePrice;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="overHead", type="float", nullable=true)
-     */
-    private $overHead;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="packaging", type="float", nullable=true)
-     */
-    private $packaging;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="utility", type="float", nullable=true)
-     */
-    private $utility;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="marketing", type="float", nullable=true)
-     */
-    private $marketing;
 
 
     /**
@@ -230,26 +220,6 @@ class BusinessParticular
      */
     private $minimumPrice;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="commission", type="decimal" , nullable=true)
-     */
-    private $commission;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phoneNo", type="string", length=128, nullable=true)
-     */
-    private $phoneNo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=100, nullable=true)
-     */
-    private $email;
 
     /**
      * @var string
@@ -271,14 +241,6 @@ class BusinessParticular
      * @ORM\Column(name="particularCode", type="string", length=10, nullable=true)
      */
     private $particularCode;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mobile", type="string", length=15, nullable=true)
-     */
-    private $mobile;
 
 
     /**
@@ -582,17 +544,6 @@ class BusinessParticular
     {
         $this->salesQuantity = $salesQuantity;
     }
-
-
-
-    /**
-     * @return BusinessPurchaseItem
-     */
-    public function getPurchaseItems()
-    {
-        return $this->purchaseItems;
-    }
-
 
 
     /**
@@ -961,6 +912,54 @@ class BusinessParticular
     public function getBusinessInvoiceParticulars()
     {
         return $this->businessInvoiceParticulars;
+    }
+
+    /**
+     * @return BusinessProductionExpense
+     */
+    public function getBusinessProductionExpense()
+    {
+        return $this->businessProductionExpense;
+    }
+
+    /**
+     * @return BusinessProductionExpense
+     */
+    public function getBusinessProductionExpenseItem()
+    {
+        return $this->businessProductionExpenseItem;
+    }
+
+    /**
+     * @return BusinessParticularType
+     */
+    public function getBusinessParticularType()
+    {
+        return $this->businessParticularType;
+    }
+
+    /**
+     * @param BusinessParticularType $businessParticularType
+     */
+    public function setBusinessParticularType($businessParticularType)
+    {
+        $this->businessParticularType = $businessParticularType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductionType()
+    {
+        return $this->productionType;
+    }
+
+    /**
+     * @param string $productionType
+     */
+    public function setProductionType(string $productionType)
+    {
+        $this->productionType = $productionType;
     }
 
 }

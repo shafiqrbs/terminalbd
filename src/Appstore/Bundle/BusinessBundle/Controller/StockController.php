@@ -44,6 +44,7 @@ class StockController extends Controller
         $form = $this->createCreateForm($entity);
         return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'pagination' => $pagination,
+            'config' => $config,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -54,6 +55,7 @@ class StockController extends Controller
      * Displays a form to create a new Vendor entity.
      * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
      */
+
     public function newAction()
     {
         $entity = new BusinessParticular();
@@ -80,6 +82,11 @@ class StockController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setBusinessConfig($config);
+            if($entity->getBusinessParticularType() == 'production' ){
+               if(!empty($config->getProductionType())){
+                   $entity->setProductionType($config->getProductionType());
+               }
+            }
             $entity->upload();
             $em->persist($entity);
             $em->flush();

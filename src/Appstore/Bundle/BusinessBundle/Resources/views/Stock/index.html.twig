@@ -65,7 +65,7 @@
                                     <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('business_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >{{ entity.productType|capitalize }}</td>
+                                        <td class="numeric" >{{ entity.businessParticularType.name }}</td>
                                         <td class="numeric">
                                                 <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
                                         </td>
@@ -91,7 +91,7 @@
                                             {% endif %}
                                                 <a href="{{ path('business_stock_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                                 <a title="Are you sure went to delete ?" href="{{ path('business_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-                                            {% if entity.productType == "production" %}
+                                            {% if entity.businessParticularType.slug == "production" and config.productionType == 'post-production' %}
                                             <a href="{{ path('business_production_edit', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-retweet"></i> Production</a>
                                             {% endif %}
                                         </td>

@@ -133,7 +133,6 @@ class SalesOnlineController extends Controller
         }else{
             $theme = 'sales';
         }
-
         return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,
@@ -379,6 +378,7 @@ class SalesOnlineController extends Controller
             }
             $em->flush();
             if ($data['process'] != 'In-progress'){
+
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
