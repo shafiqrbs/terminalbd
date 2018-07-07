@@ -67,6 +67,8 @@ class MedicinePurchaseRepository extends EntityRepository
         return  $qb;
     }
 
+
+
     public function updatePurchaseTotalPrice(MedicinePurchase $entity)
     {
         $em = $this->_em;

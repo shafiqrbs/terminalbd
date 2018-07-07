@@ -10,6 +10,10 @@ medicine_stock_show:
     path:     /{id}/show
     defaults: { _controller: "MedicineBundle:MedicineStock:show" }
 
+medicine_stock_rack:
+    path:     /rack-no
+    defaults: { _controller: "MedicineBundle:MedicineStock:rackSelect" }
+
 medicine_stock_new:
     path:     /new
     defaults: { _controller: "MedicineBundle:MedicineStock:new" }

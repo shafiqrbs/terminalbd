@@ -68,6 +68,13 @@ medicine_purchase_discount_update:
     options:
             expose: true
 
+medicine_purchase_item_update:
+    path:     /item-update
+    defaults: { _controller: "MedicineBundle:Purchase:purchaseItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_purchase_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "MedicineBundle:Purchase:approved" }

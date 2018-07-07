@@ -248,6 +248,16 @@ class PurchaseController extends Controller
         exit;
     }
 
+    public function purchaseItemUpdateAction(Request $request)
+    {
+
+        $data = $request->request->all();
+        $purchase = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItem($data);
+        $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($purchase);
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
+    }
+
     public function returnResultData(MedicinePurchase $entity,$msg=''){
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseItems($entity);

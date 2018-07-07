@@ -232,6 +232,18 @@ class MedicineStockController extends Controller
             'form'              => $editForm->createView(),
         ));
     }
+    public function showAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = $em->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('medicineConfig' => $config,'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MedicineStock entity.');
+        }
+        return $this->render('MedicineBundle:MedicineStock:show.html.twig', array(
+            'entity'            => $entity,
+        ));
+    }
 
     /**
      * Creates a form to edit a MedicineStock entity.
@@ -332,6 +344,17 @@ class MedicineStockController extends Controller
         return $this->redirect($this->generateUrl('medicine_stock'));
     }
 
+    public function rackSelectAction()
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig' => $inventory, 'particularType' => 1,'status'=>1),array('name'=>'ASC'));
+        $items  = array();
+        foreach ($entity as $row){
+            $items[]= array('value' => $row->getId(),'text' => $row->getName());
+        }
+        return new JsonResponse($items);
+    }
+
    
     /**
      * Status a Page entity.
@@ -344,7 +367,6 @@ class MedicineStockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
         }
-
         $status = $entity->getStatus();
         if($status == 1){
             $entity->setStatus(0);
@@ -366,12 +388,15 @@ class MedicineStockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find particular entity.');
         }
-        if('openingQuantity' == $data['name']){
-            $setField = 'set'.$data['name'];
-            $quantity =abs($data['value']);
+        if('openingQuantity' == $data['name']) {
+            $setField = 'set' . $data['name'];
+            $quantity = abs($data['value']);
             $entity->$setField($quantity);
-            $remainingQuantity = $entity->getRemainingQuantity()+$quantity;
+            $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
             $entity->setRemainingQuantity($remainingQuantity);
+        }elseif('rackNo' == $data['name']){
+            $rackNo = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->find($data['value']);
+            $entity->setRackNo($rackNo);
         }else{
             $setField = 'set' . $data['name'];
             $entity->$setField(abs($data['value']));

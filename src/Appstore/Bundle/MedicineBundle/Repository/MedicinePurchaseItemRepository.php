@@ -241,6 +241,30 @@ class MedicinePurchaseItemRepository extends EntityRepository
         }
     }
 
+    public function updatePurchaseItem($data)
+    {
+
+        if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
+
+        }
+        $em = $this->_em;
+        $entity = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['purchaseItemId']);
+        $salesQnt = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($entity);
+        if(!empty($entity) and $salesQnt  <= (float)$data['value']) {
+            $entity->setQuantity($data['quantity']);
+            $entity->setPurchasePrice($data['purchasePrice']);
+            $entity->setActualPurchasePrice($data['purchasePrice']);
+            $entity->setSalesPrice($data['salesPrice']);
+            $entity->setPurchaseSubTotal($data['purchasePrice'] * $data['quantity']);
+            $entity->setRemainingQuantity($data['quantity']);
+        }
+        $em->persist($entity);
+        $em->flush();
+        return $entity->getMedicinePurchase();
+
+    }
+
+
     public function insertStockPurchaseItems(MedicinePurchase $purchase,MedicineStock $item, $data)
     {
         $em = $this->_em;

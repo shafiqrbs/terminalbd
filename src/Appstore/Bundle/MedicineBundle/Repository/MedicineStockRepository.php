@@ -213,89 +213,6 @@ class MedicineStockRepository extends EntityRepository
         $this->remainingQnt($stock);
     }
 
-    public function findMedicineExistingCustomer($hospital, $mobile,$data)
-    {
-        $em = $this->_em;
-
-        $name = $data['referredDoctor']['name'];
-        $department = $data['referredDoctor']['department'];
-        $location = $data['referredDoctor']['location'];
-        $address = $data['referredDoctor']['address'];
-        $entity = $em->getRepository('MedicineBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
-        if($entity){
-
-            return $entity;
-
-        }else{
-
-            $entity = new Particular();
-            if(!empty($location)){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
-            if(!empty($department)){
-                $department = $em->getRepository('MedicineBundle:MedicineCategory')->find($department);
-                $entity->setDepartment($department);
-            }
-            $entity->setService($em->getRepository('MedicineBundle:Service')->find(6));
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setAddress($address);
-            $entity->setMedicineConfig($hospital);
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
-
-    }
-
-
-    public function insertAccessories(Invoice $invoice){
-
-        $em = $this->_em;
-
-        $em = $this->_em;
-        /** @var InvoiceParticular $item */
-        if(!empty($invoice->getInvoiceParticulars())){
-            foreach($invoice->getInvoiceParticulars() as $item ){
-                /** @var Particular  $particular */
-                $particular = $item->getParticular();
-                if( $particular->getService()->getId() == 4 ){
-                    $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                    $particular->setSalesQuantity($qnt);
-                    $em->persist($particular);
-                    $em->flush();
-                }
-            }
-        }
-    }
-
-
-
-    public function admittedPatientAccessories(InvoiceTransaction $transaction){
-
-        $em = $this->_em;
-
-        /** @var InvoiceParticular $item */
-        if(!empty($transaction->getAdmissionPatientParticulars())){
-
-            foreach($transaction->getAdmissionPatientParticulars() as $item ){
-
-                /** @var Particular  $particular */
-
-                $particular = $item->getParticular();
-                if( $particular->getService()->getId() == 4 ){
-                    $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                    $particular->setSalesQuantity($qnt);
-                    $em->persist($particular);
-                    $em->flush();
-                }
-            }
-        }
-
-    }
-
-
     public function searchAutoComplete($q, MedicineConfig $config)
     {
 
@@ -303,9 +220,12 @@ class MedicineStockRepository extends EntityRepository
         $query->join('e.medicineConfig', 'ic');
         $query->join('e.rackNo', 'rack');
         $query->join('e.unit', 'unit');
+        $query->leftJoin('e.medicineBrand', 'brand');
+        $query->leftJoin('brand.medicineGeneric', 'generic');
         $query->select('e.id as id');
         $query->addSelect('CONCAT(e.sku, \' - \', e.name,  \' [\', e.remainingQuantity, \'] \', unit.name,\' => \', rack.name) AS text');
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->orWhere($query->expr()->like("generic.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');

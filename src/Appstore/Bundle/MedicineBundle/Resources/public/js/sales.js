@@ -165,9 +165,9 @@ $('#invoiceParticulars').on("click", ".delete", function() {
 $(document).on('keyup', '#sales_discountCalculation', function() {
 
     var discountType = $('#sales_discountType').val();
-    var discount = parseInt($('#sales_discountCalculation').val());
+    var discount = parseFloat($('#sales_discountCalculation').val());
     var invoice = $('#invoiceId').val();
-    var total =  parseInt($('#dueAmount').val());
+    var total =  parseFloat($('#dueAmount').val());
     if( discount >= total ){
         $('#sales_discount').val(0);
         return false;
@@ -193,8 +193,8 @@ $(document).on('keyup', '#sales_discountCalculation', function() {
 
 $(document).on('keyup', '#sales_received , #discount', function() {
 
-    var payment     = parseInt($('#sales_received').val()  != '' ? $('#sales_received').val() : 0 );
-    var discount     = parseInt($('#discount').val()  != '' ? $('#discount').val() : 0 );
+    var payment     = parseFloat($('#sales_received').val()  != '' ? $('#sales_received').val() : 0 );
+    var discount     = parseFloat($('#discount').val()  != '' ? $('#discount').val() : 0 );
     var due =  parseInt($('#due').val());
     var dueAmount = (due-discount-payment);
     if(dueAmount > 0){

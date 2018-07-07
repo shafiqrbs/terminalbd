@@ -37,7 +37,7 @@ class MedicineSalesItemRepository extends EntityRepository
         $qb->select('SUM(e.quantity) AS quantity');
         $qb->where('e.medicinePurchaseItem = :purchaseItem')->setParameter('purchaseItem', $item->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
-        return $qnt['quantity'];
+        return !empty($qnt['quantity']) ? $qnt['quantity'] : 0;
     }
 
     public function temporarySalesInsert(User $user, MedicineSales $sales)

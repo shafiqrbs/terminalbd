@@ -160,8 +160,8 @@
                             <th class="span1">PP</th>
                             <th class="span1">MRP</th>
                             <th class="span1">Qnt</th>
-                            <th class="span1">Sales Qnt</th>
                             <th class="span1">Total</th>
+                            <th class="span1">Sales Qnt</th>
                             <th class=""><i class="icon-trash"></i></th>
                         </tr>
                         </thead>
@@ -173,11 +173,16 @@
                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                     <td class="span1">{% if item.expirationStartDate is not empty and item.expirationEndDate is not empty %}{{ item.expirationStartDate|date('M y') }} To {{ item.expirationEndDate|date('M y') }}{% endif %}</td>
-                                    <td class="span1" ><a class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('medicine_purchaseitem_inline_update',{'id':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Change purchase price"> {{ item.purchasePrice }}</a></td>
-                                    <td class="span1" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('medicine_purchaseitem_inline_update',{'id':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Change MRP"> {{ item.salesPrice }}</a></td>
-                                    <td class="span1"><a class="editable" data-name="Quantity" href="#"  data-url="{{ path('medicine_purchaseitem_inline_update',{'id':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Change purchase quantity"> {{ item.quantity }}</a></td>
+                                    <td class="span1">
+                                        <input type="hidden" name="purchaseItem[]" value="{{ item.id }}" >
+                                        <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.purchasePrice }}" >
+                                    </td>
+                                    <td class="span1" ><input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" ></td>
+                                    <td class="span1">
+                                        <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
+                                    </td>
+                                    <td class="" id="subTotal-{{ item.id }}">{{ item.purchaseSubTotal|number_format }}</td>
                                     <td class="span1">{{ item.salesQuantity }}</td>
-                                    <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                     <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>{% endif %}</td>
                                 </tr>
                             {% endfor %}
@@ -380,6 +385,45 @@
     </div>
     </div>
     </div>
+    <style>
+        .form-horizontal .payment-info .control-label {
+            float: left;
+            text-align: left;
+            background: #f9f9f9;
+            color: #000;
+            font-weight: bold;
+            line-height: 32px;
+            height: 38px;
+            margin: 0!important;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .numeric input {
+            margin-bottom: 0;
+            min-height: 15px!important;
+            width: 70px;
+            height: 15px!important;
+            border: 1px solid #999;
+            font-size: 13px!important;
+            line-height: 15px!important;
+        }
+
+        .td-inline-input{
+            height: 15px!important;
+            line-height: 13px!important;
+            font-size: 13px!important;
+            border: 2px solid #4d90fe!important;
+            width: 50px;
+            margin-bottom:0!important;
+        }
+        .td-inline-label{
+            height: 15px!important;
+            line-height: 20px!important;
+            min-height: 15px!important;
+            font-size: 13px!important;
+        }
+    </style>
 {% endblock %}
 
 {% block cssBlock %}
