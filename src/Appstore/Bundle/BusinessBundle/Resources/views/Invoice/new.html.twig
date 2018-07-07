@@ -45,44 +45,10 @@
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
                             <div class="clearfix"></div>
-                            {% if entity.businessConfig.customInvoice == 1 %}
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <!--BEGIN TABS-->
-                                        <div class="form-actions portlet box blue">
-                                            <div class="portlet-title">
-                                                <div class="caption"><i class="icon-reorder"></i>Custom Invoice Particular</div>
-                                            </div>
-                                        </div>
-                                        <div class="clearfix">&nbsp;</div>
-                                        <form class="" id="customInvoice" name="customInvoice" action="{{ path('business_invoice_particular_add',{'invoice':entity.id}) }}" method="post">
-                                            <div class="row-fluid particular-info">
-                                                <div class="span8">
-                                                    <div class="form-control">
-                                                        <input type="text" id="particular" name="particular"  class="span12 m-wrap select2Particular" value=""  autocomplete="off" placeholder="Search particular name">
-                                                    </div>
-                                                </div>
-                                                <div class="span4">
-                                                    <div class="input-group input-append input-group">
-                                                        <span class="input-group-btn">
-                                                           <input type="text" style="text-align: center; font-weight: bold" class="m-wrap span3 form-control" autocomplete="off" id="quantity" name="quantity" placeholder="Qnt" value="" min="" >
-                                                           <input type="text" class="m-wrap span4 con select2Unit" name="unit" id="unit" placeholder="Item unit">
-                                                            <input type="text" class="m-wrap span3 con" name="price" id="price" placeholder="Price" autocomplete="off">
-                                                        </span>
-                                                        <button type="submit" class="btn blue"  id="addParticular" data-url="" ><i class="icon-save"></i> Add </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <!--END TABS-->
-                                    </div>
-                                </div>
-                                <div class="clearfix">&nbsp;</div>
-                            {% endif %}
                             {% if entity.businessConfig.showStock == 1 %}
                                 <div class="row-fluid">
                                     <div class="span12">
-                                        <div class="form-actions portlet box green">
+                                        <div class="form-actions portlet box yellow">
                                             <div class="portlet-title">
                                                 <div class="caption"><i class="icon-reorder"></i>Stock Product</div>
                                             </div>
@@ -117,6 +83,41 @@
                                 </div>
                                 <div class="clearfix">&nbsp;</div>
                             {% endif %}
+                            {% if entity.businessConfig.customInvoice == 1 %}
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <!--BEGIN TABS-->
+                                        <div class="form-actions portlet box blue">
+                                            <div class="portlet-title">
+                                                <div class="caption"><i class="icon-reorder"></i>Custom Invoice Particular</div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+                                        <form class="" id="customInvoice" name="customInvoice" action="{{ path('business_invoice_particular_add',{'invoice':entity.id}) }}" method="post">
+                                            <div class="row-fluid particular-info">
+                                                <div class="span8">
+                                                    <div class="form-control">
+                                                        <input type="text" id="particular" name="particular"  class="span12 m-wrap select2Particular" value=""  autocomplete="off" placeholder="Search particular name">
+                                                    </div>
+                                                </div>
+                                                <div class="span4">
+                                                    <div class="input-group input-append input-group">
+                                                        <span class="input-group-btn">
+                                                           <input type="text" style="text-align: center; font-weight: bold" class="m-wrap span3 form-control" autocomplete="off" id="quantity" name="quantity" placeholder="Qnt" value="" min="" >
+                                                           <input type="text" class="m-wrap span4 con select2Unit" name="unit" id="unit" placeholder="Item unit">
+                                                            <input type="text" class="m-wrap span3 con" name="price" id="price" placeholder="Price" autocomplete="off">
+                                                        </span>
+                                                        <button type="submit" class="btn blue"  id="addParticular" data-url="" ><i class="icon-save"></i> Add </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!--END TABS-->
+                                    </div>
+                                </div>
+                                <div class="clearfix">&nbsp;</div>
+                            {% endif %}
+
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div class="row-fluid">
@@ -324,7 +325,7 @@
                                 <div class="pull-right">
                                     <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">
                                     <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
-                                    <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
+                                    <input type="hidden" class="netTotal" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                     <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
                                     <div class="action"> <strong>Invoice For: </strong>
                                         {{ form_widget(form.process) }}
