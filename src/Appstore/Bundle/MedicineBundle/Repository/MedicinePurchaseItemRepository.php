@@ -244,9 +244,6 @@ class MedicinePurchaseItemRepository extends EntityRepository
     public function updatePurchaseItem($data)
     {
 
-        if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
-
-        }
         $em = $this->_em;
         $entity = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['purchaseItemId']);
         $salesQnt = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($entity);
@@ -415,9 +412,20 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() .'</td>';
             $data .= '<th class="span1" >' .$rack. '</th>';
             $data .= '<th class="span1" >' .$expiration. '</th>';
+            $data .= "<td class='span1' >";
+            $data .= "<input type='text' class='numeric td-inline-input purchasePrice' data-id='{$entity->getid()}' autocomplete='off' id='purchasePrice-{$entity->getId()}' name='purchasePrice' value='{$entity->getActualPurchasePrice()}'>";
+            $data .= "</td>";
+            $data .= "<td class='span1' >";
+            $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
+            $data .= "</td>";
+            $data .= "<td class='span1' >";
+            $data .= "<input type='text' class='numeric td-inline-input quantity' data-id='{$entity->getid()}' autocomplete='off' id='quantity-{$entity->getId()}' name='quantity' value='{$entity->getQuantity()}'>";
+            $data .= "</td>";
+            $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$entity->getPurchaseSubTotal()}</td>";
             $data .= '<td class="span1" ><a class="editable editable-click" data-name="PurchasePrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change purchase price">'.$entity->getPurchasePrice().'</a></td>';
             $data .= '<td class="span1" ><a class="editable editable-click" data-name="SalesPrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change MRP price">'.$entity->getSalesPrice().'</a></td>';
             $data .= '<td class="span1" ><a class="editable editable-click" data-name="Quantity" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change quantity">'.$entity->getQuantity().'</a></td>';
+
             $data .= '<td class="span1" >' . $entity->getSalesQuantity(). '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
