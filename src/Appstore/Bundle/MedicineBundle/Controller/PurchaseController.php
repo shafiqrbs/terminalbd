@@ -130,6 +130,11 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
+
+        if($entity->getProcess() == 'Approved'){
+            return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
+        }
+
         $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
         $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
         $editForm = $this->createEditForm($entity);
@@ -337,8 +342,6 @@ class PurchaseController extends Controller
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
         exit;
-
-
     }
 
     public function invoiceDiscountUpdateAction(Request $request)

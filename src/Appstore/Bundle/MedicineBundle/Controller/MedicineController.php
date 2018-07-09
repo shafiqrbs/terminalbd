@@ -167,7 +167,7 @@ class MedicineController extends Controller
         $medicine->setMedicineForm($entity->getMedicineForm());
         $em->persist($medicine);
         $em->flush();
-        return $this->redirect($this->generateUrl('medicine_edit', array('id' => $id)));
+        return $this->redirect($this->generateUrl('medicine_edit', array('id' => $medicine->getId())));
     }
 
 }
