@@ -79,6 +79,10 @@ medicine_purchase_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "MedicineBundle:Purchase:approved" }
 
+medicine_purchase_vendor_merge:
+    path:     /{id}/invoice-merge
+    defaults: { _controller: "MedicineBundle:Purchase:vendorMerge" }
+
 
 medicine_purchase_particular_delete:
     path:     /{invoice}/{id}/particular-delete

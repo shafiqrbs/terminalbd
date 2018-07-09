@@ -7,6 +7,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
@@ -555,6 +556,8 @@ class PurchaseController extends Controller
          */
 
         set_time_limit(0);
+        ignore_user_abort(true);
+
         $em = $this->getDoctrine()->getManager();
         if($purchase->getAsInvestment() == 1 ) {
             $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedMedicinePurchaseJournal($purchase);
@@ -581,6 +584,31 @@ class PurchaseController extends Controller
         ));
 
     }
+
+    public function vendorMergeAction(MedicineVendor $vendor)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = new MedicinePurchase();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity->setMedicineConfig($config);
+        $entity->setMedicineVendor($vendor);
+        $entity->setCreatedBy($this->getUser());
+        $receiveDate = new \DateTime('now');
+        $entity->setReceiveDate($receiveDate);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $em->persist($entity);
+        $em->flush();
+
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->mergePurchaseItem($entity,$vendor);
+
+        return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
+
+    }
+
 
 
 }

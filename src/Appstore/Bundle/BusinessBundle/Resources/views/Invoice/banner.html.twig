@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="category-title">
-                    Customer Invoice #  <strong>{{ entity.invoice }}</strong>
+                    Banner Invoice #  <strong>{{ entity.invoice }}</strong>
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_invoice') }}">Customer Invoice</a>
+                        <a href="{{ path('business_invoice') }}">Banner Invoice</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Customer Invoice</a></li>
+                    <li><a href="#">Manage Banner Invoice</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -57,24 +57,52 @@
                                         <form class="" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_accessories_add',{'invoice':entity.id}) }}" method="post">
                                             <div class="row-fluid">
                                                 <div class="span12">
-                                                    <div class="row-fluid particular-info" >
-                                                        <div class="span10" >
-                                                            <select id="accessories" name="accessories" class="span12 m-wrap" style="margin-left: 15px">
+                                                    <table class="table table-bordered table-striped table-condensed table-fixed">
+                                                        <thead class="flip-content ">
+                                                        <tr class="head-green">
+                                                            <th class="span6">Particular</th>
+                                                            <th class="span2">Price</th>
+                                                            <th class="span3">Size(Width x Height)</th>
+                                                            <th class="span1">Qnt</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <td>
+                                                            <div class="span12" >
+                                                            <select id="accessories" name="accessories" class="span12 m-wrap">
                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                 {% for particular in particulars %}
                                                                     <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => BDT. {{ particular.price }}</option>
                                                                 {% endfor %}
                                                             </select>
-                                                        </div>
-                                                        <div class="span2">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                               <span class="input-group-btn">
+                                                                        <input type="text" class="m-wrap span12 con" name="price" id="price" placeholder="Price" autocomplete="off">
+                                                              </span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-append">
+                                                                 <span class="input-group">
+                                                                   <input type="text" style="text-align: center;" class="m-wrap span3 form-control input-number" autocomplete="off" id="width" name="width" placeholder="width" value="" min="" >
+                                                                   <input type="text" style="text-align: center;" class="m-wrap span3 form-control input-number" autocomplete="off" id="height" name="height" placeholder="height" value="" min="" >
+                                                                   <button type="button" class="btn green " id="totalQnt" >&nbsp;</button>
+                                                                   <button type="button" class="btn red " id="unit" >Unit</button>
+                                                                   <button type="button" class="btn green " id="totalQnt" >&nbsp;</button>
+                                                                 </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
                                                             <div class="input-append span12" style="margin-bottom:0!important">
                                                                 <div class="input-group">
                                                                     <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1">
                                                                     <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
+                                                        </td>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </form>
@@ -286,8 +314,8 @@
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
                                         <div class="span12 input-append-border">
-                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
-                                            <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
+                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Banner inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Banner mobile">
+                                            <a href="javascript:" class="pull-right btn green addBanner inputs"><i class="icon-user"></i></a>
                                         </div>
                                     </div>
                                     <div class="row-fluid customer" id="">
@@ -295,7 +323,7 @@
                                             <div class="row-fluid">
                                                 <div class="input-icon left input-height">
                                                     <i class="icon-user"></i>
-                                                    <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name/company" value="">
+                                                    <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Banner name/company" value="">
                                                 </div>
                                             </div>
                                         </div>
@@ -305,7 +333,7 @@
                                             <div class="row-fluid">
                                                 <div class="input-icon left input-height">
                                                     <i class="icon-phone"></i>
-                                                    <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
+                                                    <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Banner mobile no" value="">
                                                 </div>
                                             </div>
                                         </div>

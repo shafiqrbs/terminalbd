@@ -122,7 +122,7 @@ class InvoiceController extends Controller
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('production','stock','service','virtual'));
-        return $this->render('BusinessBundle:Invoice:new.html.twig', array(
+        return $this->render('BusinessBundle:Invoice:banner.html.twig', array(
             'entity' => $entity,
             'particulars' => $particulars,
             'form' => $editForm->createView(),

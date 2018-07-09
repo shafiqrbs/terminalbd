@@ -6,6 +6,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Appstore\Bundle\RestaurantBundle\Form\StockType;
 use Doctrine\ORM\EntityRepository;
 
@@ -246,8 +247,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
         $em = $this->_em;
         $entity = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['purchaseItemId']);
-       // $salesQnt = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($entity);
-        if(!empty($entity)) {
+        $salesQnt = $entity->getSalesQuantity() + $entity->getDamageQuantity() + $entity->getPurchaseReturnQuantity();
+        if(!empty($entity) and $salesQnt  <= (float)$data['quantity']) {
             $entity->setQuantity($data['quantity']);
             $entity->setPurchasePrice($data['purchasePrice']);
             $entity->setActualPurchasePrice($data['purchasePrice']);
@@ -419,15 +420,12 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
             $data .= "</td>";
             $data .= "<td class='span1' >";
+            $data .= "<input type='hidden' id='purchaseQuantity-{$entity->getId()}'  value='{$entity->getQuantity()}' >";
+            $data .= "<input type='hidden' id='salesQuantity-{$entity->getId()}'  value='{$entity->getSalesQuantity()}' >";
             $data .= "<input type='text' class='numeric td-inline-input quantity' data-id='{$entity->getid()}' autocomplete='off' id='quantity-{$entity->getId()}' name='quantity' value='{$entity->getQuantity()}'>";
             $data .= "</td>";
             $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$entity->getPurchaseSubTotal()}</td>";
-            $data .= '<td class="span1" ><a class="editable editable-click" data-name="PurchasePrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change purchase price">'.$entity->getPurchasePrice().'</a></td>';
-            $data .= '<td class="span1" ><a class="editable editable-click" data-name="SalesPrice" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change MRP price">'.$entity->getSalesPrice().'</a></td>';
-            $data .= '<td class="span1" ><a class="editable editable-click" data-name="Quantity" href="#" data-url="/medicine/purchase/purchase-item-inline-update?id='.$entity->getId().'" data-type="text" data-pk="'.$entity->getId().'" data-original-title="Change quantity">'.$entity->getQuantity().'</a></td>';
-
             $data .= '<td class="span1" >' . $entity->getSalesQuantity(). '</td>';
-            $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
                      <a id="'.$entity->getId(). '" data-url="/medicine/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';
@@ -435,6 +433,40 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $i++;
         }
         return $data;
+    }
+
+    public function mergePurchaseItem(MedicinePurchase $purchase , MedicineVendor $vendor){
+
+
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.medicinePurchase','e');
+        $qb->where('e.medicineConfig = :config')->setParameter('config',$purchase->getMedicineConfig()->getId());
+        $qb->andWhere('e.medicineVendor = :vendor')->setParameter('vendor',$vendor->getId());
+        $result = $qb->getQuery()->getResult();
+
+        /* @var $row MedicinePurchaseItem */
+
+        foreach ($result as $row){
+
+            $entity = new MedicinePurchaseItem();
+            $entity->setMedicinePurchase($purchase);
+            $entity->setActualPurchasePrice($row->getActualPurchasePrice());
+            $entity->setPurchasePrice($row->getActualPurchasePrice());
+            $entity->setSalesPrice($row->getSalesPrice());
+            $entity->setMedicineStock($row->getMedicineStock());
+            $entity->setExpirationEndDate($row->getExpirationStartDate());
+            $entity->setExpirationStartDate($row->getExpirationEndDate());
+            $em->persist($entity);
+            $em->flush();
+
+        }
+
+
+
+
+
+
     }
 
 

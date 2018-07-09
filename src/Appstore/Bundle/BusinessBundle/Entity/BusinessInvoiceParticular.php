@@ -67,13 +67,27 @@ class BusinessInvoiceParticular
      */
     private $quantity = 0;
 
-
     /**
      * @var float
      *
      * @ORM\Column(name="price", type="float", nullable=true)
      */
     private $price;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="height", type="float", nullable=true)
+     */
+    private $height;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="width", type="float", nullable=true)
+     */
+    private $width;
 
 
     /**
@@ -237,6 +251,38 @@ class BusinessInvoiceParticular
     public function getBusinessProductionExpense()
     {
         return $this->businessProductionExpense;
+    }
+
+    /**
+     * @return float
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param float $height
+     */
+    public function setHeight(float $height)
+    {
+        $this->height = $height;
+    }
+
+    /**
+     * @return float
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param float $width
+     */
+    public function setWidth(float $width)
+    {
+        $this->width = $width;
     }
 
 

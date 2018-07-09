@@ -174,15 +174,17 @@
                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                     <td class="span1">{% if item.expirationStartDate is not empty and item.expirationEndDate is not empty %}{{ item.expirationStartDate|date('M y') }} To {{ item.expirationEndDate|date('M y') }}{% endif %}</td>
                                     <td class="span1">
-                                        <input type="hidden" name="purchaseItem[]" value="{{ item.id }}" >
-                                        <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.actualPurchasePrice }}" >
+                                       <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.actualPurchasePrice }}" >
                                     </td>
                                     <td class="span1" ><input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" ></td>
                                     <td class="span1">
                                         <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                     </td>
                                     <td class="" id="subTotal-{{ item.id }}">{{ item.purchaseSubTotal|number_format }}</td>
-                                    <td class="span1">{{ item.salesQuantity }}</td>
+                                    <td class="span1">
+                                        <input type="hidden" id="purchaseQuantity-{{ item.id }}"  value="{{ item.quantity }}" >
+                                        <input type="hidden" id="salesQuantity-{{ item.id }}"  value="{{ item.salesQuantity }}" >
+                                        {{ item.salesQuantity }}</td>
                                     <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>{% endif %}</td>
                                 </tr>
                             {% endfor %}

@@ -73,6 +73,7 @@
                                 <div class="span4">
                                     <h4>Payment Method:</h4>
                                     <ul class="unstyled">
+                                        <li><strong>Investment:</strong>&nbsp;{% if  entity.asInvestment == 1 %}Yes {% else %} No{% endif %}</li>
                                         <li><strong>Payment Method:</strong>&nbsp;{% if  entity.TransactionMethod is not empty %}{{ entity.TransactionMethod.name }}{% endif %}</li>
                                         {% if entity.accountMobileBank is not empty %}<li><strong>Payment Mobile:</strong>&nbsp;{{ entity.accountMobileBank.name }}</li>{% endif %}
                                         {% if entity.accountBank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.accountBank.name  }}</li>{% endif %}

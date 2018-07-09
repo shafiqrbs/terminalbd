@@ -265,9 +265,15 @@ $(document).on('change', '.quantity , .purchasePrice ,.salesPrice', function() {
 
     var id = $(this).attr('data-id');
     var quantity = parseFloat($('#quantity-'+id).val());
+    var salesQuantity = parseFloat($('#salesQuantity-'+id).val());
     var purchasePrice = parseFloat($('#purchasePrice-'+id).val());
     var salesPrice = parseFloat($('#salesPrice-'+id).val());
-    var subTotal  = (quantity * price);
+    if(salesQuantity > quantity){
+        $('#quantity-'+id).val($('purchaseQuantity-'+id).val());
+        alert("Purchase quantity must be more then sales quantity.");
+        return false;
+    }
+    var subTotal  = (quantity * purchasePrice);
     $("#subTotal-"+id).html(subTotal);
     $.ajax({
         url: Routing.generate('medicine_purchase_item_update'),
