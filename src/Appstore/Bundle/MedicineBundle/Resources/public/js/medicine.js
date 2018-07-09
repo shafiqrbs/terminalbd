@@ -69,6 +69,8 @@ var form = $("#medicine").validate({
     }
 });
 
+$('#brand').chan
+
 
 $( "#brand" ).autocomplete({
 
@@ -86,7 +88,18 @@ $( "#brand" ).autocomplete({
     minLength: 1,
     select: function( event, ui ) {
         $("#medicineId").val(ui.item.id); // save selected id to hidden input
-
+        $.ajax( {
+            url: Routing.generate('medicine_details'),
+            data: {
+                medicine: ui.item.id
+            },
+            success: function( response ) {
+                obj = JSON.parse(response);
+                $('#generic').val(obj['generic']);
+                $('#medicineForm').val(obj['medicineForm']);
+                $('#companyName').val(obj['company']);
+            }
+        });
     }
 });
 
@@ -105,7 +118,6 @@ $( "#companyName" ).autocomplete({
     minLength: 1,
     select: function( event, ui ) {
         $("#companyId").val(ui.item.id); // save selected id to hidden input
-
     }
 });
 

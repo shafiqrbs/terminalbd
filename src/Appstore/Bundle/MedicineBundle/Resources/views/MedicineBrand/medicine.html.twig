@@ -106,10 +106,10 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Medicine Form</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Generic</th>
                                     <th class="numeric" >Strength</th>
+                                    <th class="numeric" >Medicine Form</th>
                                     <th class="numeric" >Pack Size</th>
                                     <th class="numeric" >Medicine Company</th>
                                     <th class="numeric" >Action</th>
@@ -118,11 +118,11 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.medicineForm }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.medicineGeneric.name }}</td>
-                                        <td class="numeric" >{{ entity.strength }}</td>
+                                        <td class="numeric" >{{ entity.medicineForm }}</td>
                                         <td class="numeric" >{{ entity.packSize }}</td>
+                                        <td class="numeric" >{{ entity.strength }}</td>
                                         <td class="numeric" >{{ entity.medicineCompany.name }}</td>
                                         <td class="numeric" >
                                             <a href="{{ path('medicine_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>

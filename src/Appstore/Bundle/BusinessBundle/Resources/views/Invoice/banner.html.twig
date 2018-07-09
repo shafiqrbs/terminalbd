@@ -54,14 +54,13 @@
                                             </div>
                                         </div>
                                         <div class="clearfix">&nbsp;</div>
-                                        <form class="" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_accessories_add',{'invoice':entity.id}) }}" method="post">
+                                        <form class="" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_banner_sign',{'invoice':entity.id}) }}" method="post">
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <table class="table table-bordered table-striped table-condensed table-fixed">
                                                         <thead class="flip-content ">
                                                         <tr class="head-green">
-                                                            <th class="span6">Particular</th>
-                                                            <th class="span2">Price</th>
+                                                            <th class="span8">Particular</th>
                                                             <th class="span3">Size(Width x Height)</th>
                                                             <th class="span1">Qnt</th>
                                                         </tr>
@@ -69,7 +68,7 @@
                                                         <tbody>
                                                         <td>
                                                             <div class="span12" >
-                                                            <select id="accessories" name="accessories" class="span12 m-wrap">
+                                                            <select id="particular" name="particular" class="span12 m-wrap">
                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                 {% for particular in particulars %}
                                                                     <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => BDT. {{ particular.price }}</option>
@@ -78,25 +77,19 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                               <span class="input-group-btn">
-                                                                        <input type="text" class="m-wrap span12 con" name="price" id="price" placeholder="Price" autocomplete="off">
-                                                              </span>
-                                                        </td>
-                                                        <td>
                                                             <div class="input-append">
                                                                  <span class="input-group">
                                                                    <input type="text" style="text-align: center;" class="m-wrap span3 form-control input-number" autocomplete="off" id="width" name="width" placeholder="width" value="" min="" >
                                                                    <input type="text" style="text-align: center;" class="m-wrap span3 form-control input-number" autocomplete="off" id="height" name="height" placeholder="height" value="" min="" >
-                                                                   <button type="button" class="btn green " id="totalQnt" >&nbsp;</button>
+                                                                   <button type="button" class="btn green " id="subQuantity" >&nbsp;</button>
                                                                    <button type="button" class="btn red " id="unit" >Unit</button>
-                                                                   <button type="button" class="btn green " id="totalQnt" >&nbsp;</button>
                                                                  </span>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-append span12" style="margin-bottom:0!important">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1">
+                                                                    <input type="text" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1">
                                                                     <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
                                                                 </div>
                                                             </div>

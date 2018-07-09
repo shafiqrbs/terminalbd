@@ -39,7 +39,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->select('e.id as id');
         $query->addSelect('e.name AS text');
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
-        $query->groupBy('e.id');
+        $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '20' );
         return $query->getQuery()->getResult();
@@ -53,7 +53,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->select('e.id as id');
         $query->addSelect('e.name AS text');
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
-        $query->groupBy('e.id');
+        $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '20' );
         return $query->getQuery()->getResult();
@@ -123,7 +123,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->select('e.id as id');
         $query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', g.name, \' \', e.strength, \' \', c.name) AS text');
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
-        $query->groupBy('e.id');
+        $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
         return $query->getQuery()->getResult();
@@ -138,7 +138,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->select('e.id as id');
         $query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', e.strength, \' \', g.name, \' \', c.name) AS text');
         $query->where($query->expr()->like("g.name", "'$q%'"  ));
-        $query->groupBy('e.id');
+        $query->groupBy('g.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
         return $query->getQuery()->getResult();

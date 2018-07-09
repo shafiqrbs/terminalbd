@@ -32,6 +32,12 @@ medicine_search:
     options:
             expose: true
 
+medicine_details:
+    path:     /medicine-details
+    defaults: { _controller: "MedicineBundle:MedicineBrand:medicineDetails" }
+    options:
+            expose: true
+
 generic_search:
     path:     /generic-search
     defaults: { _controller: "MedicineBundle:MedicineBrand:autoSearchGeneric" }

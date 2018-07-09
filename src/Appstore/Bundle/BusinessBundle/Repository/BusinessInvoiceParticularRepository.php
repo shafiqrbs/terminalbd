@@ -85,6 +85,37 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function insertBannerSignItem(BusinessInvoice $invoice, $data)
+    {
+
+        $em = $this->_em;
+        $entity = new BusinessInvoiceParticular();
+        $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
+        $width = !empty($data['width']) ? $data['width'] :'';
+        $height = !empty($data['height']) ? $data['height'] :'';
+        $entity->setQuantity($quantity);
+        $particular = $data['particular'];
+        $stock = $em->getRepository('BusinessBundle:BusinessParticular')->find($particular);
+        $entity->setParticular($stock->getName());
+        $entity->setBusinessParticular($stock);
+        $entity->setPrice($stock->getPrice());
+        $entity->setPurchasePrice($stock->getPurchasePrice());
+        if(!empty($width) and !empty($height)){
+            $entity->setWidth($width);
+            $entity->setHeight($height);
+            $entity->setSubQuantity($width*$height);
+            $entity->setSubTotal(($quantity * $entity->getSubQuantity()) * $stock->getPrice());
+        }else{
+            $entity->setSubTotal($quantity * $stock->getPrice());
+        }
+        $entity->setBusinessInvoice($invoice);
+        $em->persist($entity);
+        $em->flush();
+
+    }
+
+
+
 
     public function salesStockItemUpdate(BusinessParticular $stockItem)
     {

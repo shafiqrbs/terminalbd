@@ -216,11 +216,35 @@ $(document).on("click", ".approve", function() {
     });
 });
 
+$(document).on('change', '#particular', function() {
+
+    var particular = $('#particular').val();
+    $.ajax({
+        url: Routing.generate('business_particular_search',{'id':particular}),
+        type: 'GET',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#unit').html(obj['unit']);
+        }
+    })
+
+});
+
+$(document).on('keyup', '#width ,#height ', function() {
+
+    var width = parseFloat($('#width').val());
+    var height = parseFloat($('#height').val());
+    if(width !== "" && height !== "" ){
+        $('#subQuantity').html(width*height);
+    }
+
+});
+
 var stockInvoice = $("#stockInvoice").validate({
 
     rules: {
 
-        "accessories": {required: true},
+        "particular": {required: true},
         "quantity": {required: true}
     },
 

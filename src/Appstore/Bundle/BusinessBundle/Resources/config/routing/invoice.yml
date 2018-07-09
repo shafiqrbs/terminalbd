@@ -14,8 +14,14 @@ business_invoice_edit:
     path:     /{id}/edit
     defaults: { _controller: "BusinessBundle:Invoice:edit" }
 
+business_particular_search:
+    path:     /{id}/particular-search
+    defaults: { _controller: "BusinessBundle:Invoice:particularSearch" }
+    options:
+            expose: true
+
 business_invoice_particular_search:
-    path:     /particular-search
+    path:     /invoice-particular-search
     defaults: { _controller: "BusinessBundle:Invoice:autoParticularSearch" }
     options:
             expose: true
@@ -45,6 +51,13 @@ business_invoice_discount_update:
 business_invoice_accessories_add:
     path:     /{invoice}/stock-accessories
     defaults: { _controller: "BusinessBundle:Invoice:addAccessories" }
+    methods:  POST
+    options:
+            expose: true
+
+business_invoice_banner_sign:
+    path:     /{invoice}/stock-accessories
+    defaults: { _controller: "BusinessBundle:Invoice:bannerSign" }
     methods:  POST
     options:
             expose: true

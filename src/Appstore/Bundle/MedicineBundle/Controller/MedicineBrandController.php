@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Form\MedicineBrandType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * MedicineBrand controller.
@@ -213,6 +214,23 @@ class MedicineBrandController extends Controller
      */
     private function createDeleteForm($id)
     {
+
+    }
+
+    public function medicineDetailsAction(){
+
+        $data = $_REQUEST['medicine'];
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($data);
+        $items = array();
+        if($entity) {
+            $items =array(
+                'generic' => $entity->getMedicineGeneric()->getName(),
+                'company' => $entity->getMedicineCompany()->getName(),
+                'medicineForm' => $entity->getMedicineForm()
+            );
+        }
+        return new Response(json_encode($items));
+        exit;
 
     }
 

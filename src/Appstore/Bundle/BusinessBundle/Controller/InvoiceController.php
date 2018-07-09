@@ -104,6 +104,8 @@ class InvoiceController extends Controller
         return $form;
     }
 
+
+
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
@@ -222,20 +224,12 @@ class InvoiceController extends Controller
         exit;
     }
 
-    /**
-     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
-     */
-
 
     public function particularSearchAction(BusinessParticular $particular)
     {
-        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
+        $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
+        return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getPrice(),'quantity'=> 1,'unit' => $unit)));
     }
-
-    /**
-     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
-     */
-
 
     public function returnResultData(BusinessInvoice $entity,$msg=''){
 
@@ -460,11 +454,31 @@ class InvoiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $accessories = $request->request->get('accessories');
+        $particular = $request->request->get('particular');
         $quantity = $request->request->get('quantity');
         if(!empty($accessories)){
-            $invoiceItems = array('accessories' => $accessories ,'quantity' => $quantity);
+            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStockItem($invoice,$invoiceItems);
+            $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
+            $msg = 'Particular added successfully';
+            $result = $this->returnResultData($invoice,$msg);
+            return new Response(json_encode($result));
+        }
+        exit;
+
+    }
+
+    public function bannerSignAction(Request $request, BusinessInvoice $invoice)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $particular = $request->request->get('particular');
+        $quantity = $request->request->get('quantity');
+        $width = $request->request->get('width');
+        $height = $request->request->get('height');
+        if(!empty($accessories)){
+            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'width'=> $width,'height'=> $height);
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertBannerSignItem($invoice,$invoiceItems);
             $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';
             $result = $this->returnResultData($invoice,$msg);

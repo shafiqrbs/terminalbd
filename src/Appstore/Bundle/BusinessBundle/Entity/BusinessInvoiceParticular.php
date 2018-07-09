@@ -89,6 +89,13 @@ class BusinessInvoiceParticular
      */
     private $width;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="subQuantity", type="float", nullable=true)
+     */
+    private $subQuantity;
+
 
     /**
      * @var float
@@ -283,6 +290,22 @@ class BusinessInvoiceParticular
     public function setWidth(float $width)
     {
         $this->width = $width;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubQuantity(): float
+    {
+        return $this->subQuantity;
+    }
+
+    /**
+     * @param float $subQuantity
+     */
+    public function setSubQuantity(float $subQuantity)
+    {
+        $this->subQuantity = $subQuantity;
     }
 
 
