@@ -91,6 +91,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $em = $this->_em;
         $entity = new BusinessInvoiceParticular();
         $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
+        $salesPrice = !empty($data['salesPrice']) ? $data['salesPrice'] :0;
         $width = !empty($data['width']) ? $data['width'] :'';
         $height = !empty($data['height']) ? $data['height'] :'';
         $entity->setQuantity($quantity);
@@ -98,23 +99,24 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $stock = $em->getRepository('BusinessBundle:BusinessParticular')->find($particular);
         $entity->setParticular($stock->getName());
         $entity->setBusinessParticular($stock);
+        if(!empty($stock->getUnit())) {
+            $entity->setUnit($stock->getUnit()->getName());
+        }
         $entity->setPrice($stock->getPrice());
         $entity->setPurchasePrice($stock->getPurchasePrice());
         if(!empty($width) and !empty($height)){
             $entity->setWidth($width);
             $entity->setHeight($height);
-            $entity->setSubQuantity($width*$height);
-            $entity->setSubTotal(($quantity * $entity->getSubQuantity()) * $stock->getPrice());
+            $entity->setSubQuantity($width * $height);
+            $entity->setSubTotal(($quantity * $entity->getSubQuantity()) * $salesPrice);
         }else{
-            $entity->setSubTotal($quantity * $stock->getPrice());
+            $entity->setSubTotal($quantity * $salesPrice);
         }
         $entity->setBusinessInvoice($invoice);
         $em->persist($entity);
         $em->flush();
 
     }
-
-
 
 
     public function salesStockItemUpdate(BusinessParticular $stockItem)
@@ -136,22 +138,29 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
-            $data .= "<tr id='remove-{$entity->getId()}'>";
-                $data .= "<td>{$i}.</td>";
-                $data .= "<td>{$entity->getParticular()}</td>";
-                $data .= "<td>";
-                $data .= "<input type='hidden' name='salesItem[]' value='{$entity->getId()}'>";
-                $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getId()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getPrice()}'>";
-                $data .= "</td>";
-                $data .= "<td>";
-                $data .= "<input type='text' class='numeric td-inline-input-qnt quantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='quantity-{$entity->getId()}' name='quantity[]' value='{$entity->getQuantity()}' placeholder='Qnt'>";
-                $data .= "</td>";
-                $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
-                $data .= "<td>";
-                $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/medicine/sales-temporary/sales-item-update' href='javascript:' class='btn blue mini itemUpdate' ><i class='icon-save'></i></a>";
-                $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
-                $data .= "</td>";
+            $subQuantity ='';
+            if (!empty($entity->getSubQuantity())) {
+                $subQuantity = $entity->getHeight().' x '.$entity->getWidth().' = '.$entity->getSubQuantity();
+            }
 
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td>{$i}.</td>";
+            $data .= "<td>{$entity->getParticular()}</td>";
+            if($sales->getBusinessConfig()->getInvoiceType() == 'banner-print') {
+            $data .= "<td>{$subQuantity}</td>";
+            }
+            $data .= "<td>";
+            $data .= "<input type='hidden' name='salesItem[]' value='{$entity->getId()}'>";
+            $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getId()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getPrice()}'>";
+            $data .= "</td>";
+            $data .= "<td>";
+            $data .= "<input type='text' class='numeric td-inline-input-qnt quantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='quantity-{$entity->getId()}' name='quantity[]' value='{$entity->getQuantity()}' placeholder='Qnt'>";
+            $data .= "</td>";
+            $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
+            $data .= "<td>";
+            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/medicine/sales-temporary/sales-item-update' href='javascript:' class='btn blue mini itemUpdate' ><i class='icon-save'></i></a>";
+            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
+            $data .= "</td>";
             $data .= '</tr>';
             $i++;
         }

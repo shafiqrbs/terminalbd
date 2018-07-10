@@ -47,24 +47,16 @@
 
                                     <div class="span4">
                                         <div class="row-fluid">
-                                            <div class="span6">
+                                            <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label " for="customerPrefix">Customer Prefix</label>
+                                                    <label class="control-label " for="vatPercentage">Invoice Type</label>
                                                     <div class="control">
-                                                        {{ form_widget(form.customerPrefix) }}
-                                                        {{ form_errors(form.customerPrefix) }}
+                                                        {{ form_widget(form.invoiceType) }}
+                                                        {{ form_errors(form.invoiceType) }}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="span6">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="vatPercentage">Invoice Prefix</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.invoicePrefix) }}
-                                                        {{ form_errors(form.invoicePrefix) }}
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span6">

@@ -225,17 +225,43 @@ $(document).on('change', '#particular', function() {
         success: function (response) {
             obj = JSON.parse(response);
             $('#unit').html(obj['unit']);
+            $('#salesPrice').val(obj['salesPrice']);
+            $('#subTotal').html(obj['salesPrice']);
         }
     })
 
 });
 
-$(document).on('keyup', '#width ,#height ', function() {
+$(document).on('keyup', '#width , #height ', function() {
 
     var width = parseFloat($('#width').val());
     var height = parseFloat($('#height').val());
-    if(width !== "" && height !== "" ){
-        $('#subQuantity').html(width*height);
+    var salesPrice = parseFloat($('#salesPrice').val());
+    var quantity = parseInt($('#quantity').val());
+
+    if((!isNaN(width) && jQuery.isNumeric(width)) && !isNaN(height) && jQuery.isNumeric(height)) {
+
+        $('#subQuantity').html(width * height);
+        var total = (width * height) * quantity;
+        $('#subTotal').html(total * salesPrice);
+
+    }
+
+});
+
+$(document).on('keyup', '#quantity , #salesPrice ', function() {
+
+    var width = parseFloat($('#width').val());
+    var height = parseFloat($('#height').val());
+    var salesPrice = parseFloat($('#salesPrice').val());
+    var quantity = parseInt($('#quantity').val());
+
+    if(isNaN(width) && !jQuery.isNumeric(width)) {
+        $('#subTotal').html(quantity * salesPrice);
+    }else{
+        $('#subQuantity').html(width * height);
+        var total = (width * height) * quantity;
+        $('#subTotal').html(total * salesPrice);
     }
 
 });

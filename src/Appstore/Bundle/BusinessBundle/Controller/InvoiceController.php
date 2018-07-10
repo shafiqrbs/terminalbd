@@ -124,7 +124,8 @@ class InvoiceController extends Controller
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('production','stock','service','virtual'));
-        return $this->render('BusinessBundle:Invoice:banner.html.twig', array(
+        $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
+        return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
@@ -181,7 +182,10 @@ class InvoiceController extends Controller
                 return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
             }
         }
-        return $this->render('BusinessBundle:Invoice:new.html.twig', array(
+
+        $businessConfig = $entity->getBusinessConfig();
+        $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
+        return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'form' => $editForm->createView(),
         ));
@@ -231,9 +235,10 @@ class InvoiceController extends Controller
         return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getPrice(),'quantity'=> 1,'unit' => $unit)));
     }
 
-    public function returnResultData(BusinessInvoice $entity,$msg=''){
+    public function returnResultData(BusinessInvoice $entity, $msg=''){
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->getSalesItems($entity);
+
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
@@ -474,10 +479,11 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $particular = $request->request->get('particular');
         $quantity = $request->request->get('quantity');
+        $salesPrice = $request->request->get('salesPrice');
         $width = $request->request->get('width');
         $height = $request->request->get('height');
-        if(!empty($accessories)){
-            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'width'=> $width,'height'=> $height);
+        if(!empty($particular)){
+            $invoiceItems = array('particular' => $particular ,'quantity' => $quantity,'salesPrice'=> $salesPrice, 'width'=> $width,'height'=> $height);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertBannerSignItem($invoice,$invoiceItems);
             $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';

@@ -295,7 +295,7 @@ class BusinessInvoiceParticular
     /**
      * @return float
      */
-    public function getSubQuantity(): float
+    public function getSubQuantity()
     {
         return $this->subQuantity;
     }

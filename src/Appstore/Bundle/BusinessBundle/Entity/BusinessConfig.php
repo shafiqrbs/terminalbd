@@ -65,7 +65,7 @@ class BusinessConfig
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="text",nullable = true)
+     * @ORM\Column(name="address", type="text", nullable = true)
      */
     private $address;
 
@@ -198,6 +198,13 @@ class BusinessConfig
      * @ORM\Column(name="productionType", type="string", length=30,nullable = true)
      */
     private $productionType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceType", type="string", length=30,nullable = true)
+     */
+    private $invoiceType;
 
 
     /**
@@ -1039,7 +1046,7 @@ class BusinessConfig
     /**
      * Set address
      *
-     * @param string $address
+     * @param mixed $address
      * @return BusinessConfig
      */
     public function setAddress($address)
@@ -1052,7 +1059,7 @@ class BusinessConfig
     /**
      * Get address
      *
-     * @return string
+     * @return mixed
      */
     public function getAddress()
     {
@@ -1073,6 +1080,22 @@ class BusinessConfig
     public function setProductionType(string $productionType)
     {
         $this->productionType = $productionType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceType()
+    {
+        return $this->invoiceType;
+    }
+
+    /**
+     * @param string $invoiceType
+     */
+    public function setInvoiceType(string $invoiceType)
+    {
+        $this->invoiceType = $invoiceType;
     }
 
 

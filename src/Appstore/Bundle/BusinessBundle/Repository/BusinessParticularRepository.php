@@ -233,9 +233,9 @@ class BusinessParticularRepository extends EntityRepository
             foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
 
                 if($item->getBusinessParticular()->getProductType() == 'production'){
-                   $this->productionExpense($item);
+                   //$this->productionExpense($item);
                 }else{
-                  $this->getSalesUpdateQnt($item);
+                 // $this->getSalesUpdateQnt($item);
                 }
             }
         }

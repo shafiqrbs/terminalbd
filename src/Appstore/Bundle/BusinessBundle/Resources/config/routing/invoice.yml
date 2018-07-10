@@ -56,7 +56,7 @@ business_invoice_accessories_add:
             expose: true
 
 business_invoice_banner_sign:
-    path:     /{invoice}/stock-accessories
+    path:     /{invoice}/stock-banner-sign
     defaults: { _controller: "BusinessBundle:Invoice:bannerSign" }
     methods:  POST
     options:
