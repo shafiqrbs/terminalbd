@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
@@ -524,15 +525,18 @@ class InvoiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+
+        /* @var $businessConfig BusinessConfig */
+
         $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
         if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
 
             if($businessConfig->isCustomInvoicePrint() == 1){
                 $template = $businessConfig->getGlobalOption()->getSubDomain();
             }else{
-                $template = 'print';
+                $template = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'print';
             }
-            return  $this->render('BusinessBundle:Print:'.$template.'.html.twig',
+            return  $this->render("BusinessBundle:Print:{$template}.html.twig",
                 array(
                     'config' => $businessConfig,
                     'entity' => $entity,

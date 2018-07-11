@@ -96,6 +96,13 @@ class BusinessInvoiceParticular
      */
     private $subQuantity;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="totalQuantity", type="float", nullable=true)
+     */
+    private $totalQuantity;
+
 
     /**
      * @var float
@@ -306,6 +313,22 @@ class BusinessInvoiceParticular
     public function setSubQuantity(float $subQuantity)
     {
         $this->subQuantity = $subQuantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalQuantity()
+    {
+        return $this->totalQuantity;
+    }
+
+    /**
+     * @param float $totalQuantity
+     */
+    public function setTotalQuantity(float $totalQuantity)
+    {
+        $this->totalQuantity = $totalQuantity;
     }
 
 

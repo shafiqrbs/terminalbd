@@ -108,8 +108,10 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $entity->setWidth($width);
             $entity->setHeight($height);
             $entity->setSubQuantity($width * $height);
+            $entity->setTotalQuantity($entity->getSubQuantity() * $quantity);
             $entity->setSubTotal(($quantity * $entity->getSubQuantity()) * $salesPrice);
         }else{
+            $entity->setTotalQuantity($quantity);
             $entity->setSubTotal($quantity * $salesPrice);
         }
         $entity->setBusinessInvoice($invoice);
@@ -167,32 +169,6 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         return $data;
     }
 
-
-    public function getLastCode($entity,$datetime)
-    {
-
-        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
-        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
-
-
-        $qb = $this->createQueryBuilder('ip');
-        $qb
-            ->select('MAX(ip.code)')
-            ->join('ip.dmsInvoice','s')
-            ->where('s.hospitalConfig = :hospital')
-            ->andWhere('s.updated >= :today_startdatetime')
-            ->andWhere('s.updated <= :today_enddatetime')
-            ->setParameter('hospital', $entity->getBusinessConfig())
-            ->setParameter('today_startdatetime', $today_startdatetime)
-            ->setParameter('today_enddatetime', $today_enddatetime);
-        $lastCode = $qb->getQuery()->getSingleScalarResult();
-
-        if (empty($lastCode)) {
-            return 0;
-        }
-
-        return $lastCode;
-    }
 
     public function reportSalesAccessories(GlobalOption $option ,$data)
     {

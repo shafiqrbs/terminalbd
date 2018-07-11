@@ -233,9 +233,9 @@ class BusinessParticularRepository extends EntityRepository
             foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
 
                 if($item->getBusinessParticular()->getProductType() == 'production'){
-                   //$this->productionExpense($item);
+                   $this->productionExpense($item);
                 }else{
-                 // $this->getSalesUpdateQnt($item);
+                   $this->getSalesUpdateQnt($item);
                 }
             }
         }
@@ -244,26 +244,28 @@ class BusinessParticularRepository extends EntityRepository
 
     public function productionExpense(BusinessInvoiceParticular  $item)
     {
-       if(!empty($item->getParticular()->getProductionElements())){
+       if(!empty($item->getBusinessParticular()->getProductionElements())){
 
-           $productionElements = $item->getParticular()->getProductionElements();
+           $productionElements = $item->getBusinessParticular()->getProductionElements();
 
            /* @var $element BusinessProductionElement */
 
-           foreach ($productionElements as $element){
+           if($productionElements) {
 
-               $entity = new BusinessProductionExpense();
+               foreach ($productionElements as $element) {
 
-               $entity->setBusinessInvoiceParticular($item);
-               $entity->setProductionItem($item->getBusinessParticular());
-               $entity->setProductionElement($element->getParticular());
-               $entity->setPurchasePrice($element->getPurchasePrice());
-               $entity->setSalesPrice($element->getSalesPrice());
-               $entity->setQuantity($element->getQuantity());
-               $this->_em->persist($entity);
-               $this->_em->flush();
-               $this->salesProductionQnt($element);
+                   $entity = new BusinessProductionExpense();
+                   $entity->setBusinessInvoiceParticular($item);
+                   $entity->setProductionItem($item->getBusinessParticular());
+                   $entity->setProductionElement($element->getParticular());
+                   $entity->setPurchasePrice($element->getPurchasePrice());
+                   $entity->setSalesPrice($element->getSalesPrice());
+                   $entity->setQuantity($element->getQuantity());
+                   $this->_em->persist($entity);
+                   $this->_em->flush();
+                   $this->salesProductionQnt($element);
 
+               }
            }
 
        }
@@ -284,7 +286,7 @@ class BusinessParticularRepository extends EntityRepository
 
         $em = $this->_em;
         $particular = $item->getBusinessParticular();
-        $qnt = $particular->getSalesQuantity() + $item->getQuantity();
+        $qnt = $particular->getSalesQuantity() + $item->getTotalQuantity();
         $particular->setSalesQuantity($qnt);
         $em->persist($particular);
         $em->flush();
