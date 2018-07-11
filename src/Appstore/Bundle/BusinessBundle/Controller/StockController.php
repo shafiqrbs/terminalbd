@@ -114,7 +114,8 @@ class StockController extends Controller
     private function createCreateForm(BusinessParticular $entity)
     {
 
-        $form = $this->createForm(new StockType(), $entity, array(
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new StockType($option), $entity, array(
             'action' => $this->generateUrl('business_stock_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -155,7 +156,8 @@ class StockController extends Controller
      */
     private function createEditForm(BusinessParticular $entity)
     {
-        $form = $this->createForm(new StockType(), $entity, array(
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new StockType($option), $entity, array(
             'action' => $this->generateUrl('business_stock_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -191,7 +193,7 @@ class StockController extends Controller
             );
             return $this->redirect($this->generateUrl('business_stock'));
         }
-        return $this->render('BusinessBundle:Stock:index.html.twig', array(
+        return $this->render('BusinessBundle:Stock:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

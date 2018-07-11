@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -10,6 +11,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class StockType extends AbstractType
 {
+
+    /** @var  $option GlobalOption  */
+    public  $option;
+
+    public function __construct(GlobalOption $option)
+    {
+        $this->option = $option;
+
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -52,6 +63,7 @@ class StockType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
+                        ->andWhere("e.businessConfig ={$this->option->getBusinessConfig()->getId()}")
                         ->orderBy("e.sorting","ASC");
                 }
             ))
