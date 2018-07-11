@@ -140,7 +140,7 @@ class StockController extends Controller
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render('BusinessBundle:Stock:index.html.twig', array(
+        return $this->render('BusinessBundle:Stock:new.html.twig', array(
             'entity'            => $entity,
             'form'              => $editForm->createView(),
         ));
