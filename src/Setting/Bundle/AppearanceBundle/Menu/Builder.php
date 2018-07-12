@@ -201,7 +201,7 @@ class Builder extends ContainerAware
 
             $menu['Business Management']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
             $menu['Business Management']['Manage Stock']->addChild('Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
-            $menu['Business Management']['Manage Stock']->addChild('Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-th-list');
+      //      $menu['Business Management']['Manage Stock']->addChild('Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-th-list');
         }
         if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
 

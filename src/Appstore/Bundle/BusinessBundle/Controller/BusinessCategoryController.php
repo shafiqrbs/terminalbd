@@ -108,7 +108,7 @@ class BusinessCategoryController extends Controller
         $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entities = $em->getRepository('BusinessBundle:Category')->findBy(array('businessConfig' => $option),array( 'name' =>'asc' ));
 
-        $entity = $em->getRepository('BusinessBundle:BusinessCategory')->find($id);
+        $entity = $em->getRepository('BusinessBundle:Category')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find BusinessCategory entity.');
@@ -153,10 +153,7 @@ class BusinessCategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entities = $em->getRepository('BusinessBundle:Category')->findBy(array('businessConfig' => $option),array( 'name' =>'asc' ));
-
-
-        $entity = $em->getRepository('BusinessBundle:BusinessCategory')->find($id);
-
+        $entity = $em->getRepository('BusinessBundle:Category')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find BusinessCategory entity.');
         }
