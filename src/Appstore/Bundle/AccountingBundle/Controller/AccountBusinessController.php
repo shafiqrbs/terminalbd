@@ -104,7 +104,7 @@ class AccountBusinessController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data =$_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorMedicineOutstanding($globalOption,$data);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorBusinessOutstanding($globalOption,'business',$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:AccountMedicine:purchaseOutstanding.html.twig', array(
             'entities' => $pagination,

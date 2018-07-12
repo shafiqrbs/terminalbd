@@ -156,6 +156,45 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
+    public function vendorBusinessOutstanding($globalOption,$data = array())
+    {
+
+        $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
+        $amount =   isset($data['amount'])  ? $data['amount'] : '';
+        $vendor =   isset($data['vendor'])  ? $data['vendor'] : '';
+
+        $outstanding = '';
+        $company = '';
+        if($vendor){
+            $company =  "AND subVendor.companyName LIKE '%{$vendor}%'";
+        }
+        if($mode == 'Receivable' and $amount !="" ){
+            $outstanding ="AND purchase.balance <= -{$amount}";
+        }
+        if($mode == 'Payable' and $amount !=""){
+            $outstanding ="AND purchase.balance >= {$amount}";
+        }
+        $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName,purchase.balance as customerBalance
+                FROM account_purchase as purchase
+                JOIN account_vendor as vendor ON purchase.accountVendor_id = vendor.id
+                WHERE purchase.id IN (
+                    SELECT MAX(sub.id)
+                    FROM account_purchase AS sub
+                    JOIN account_vendor as subVendor ON sub.accountVendor_id = subVendor.id
+                   WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$company}
+                    GROUP BY sub.accountVendor_id
+                  
+                ) {$outstanding}
+                ORDER BY purchase.id DESC";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->bindValue('globalOption', $globalOption->getId());
+        $qb->execute();
+        $result =  $qb->fetchAll();
+        return $result;
+
+    }
+
+
     public function vendorOutstanding($globalOption,$head,$data)
     {
 
@@ -177,6 +216,11 @@ class AccountPurchaseRepository extends EntityRepository
             $qb->join('e.medicineVendor','iv');
             $qb->addSelect('iv.companyName as vendorName');
             $qb->groupBy('e.medicineVendor');
+        }
+        if($head == 'business'){
+            $qb->join('e.accountVendor','iv');
+            $qb->addSelect('iv.companyName as vendorName');
+            $qb->groupBy('e.accountVendor');
         }
         $result = $qb->getQuery()->getArrayResult();
         return $result;

@@ -118,7 +118,7 @@
                                     <a  href="javascript:"  data-url="{{ path('business_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     {% if (entity.process == 'Approved' and app.user.granted("ROLE_SUPER_DOMAIN")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) or (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_REVERSE_PURCHASE"))  %}
-                                        <a  href="javascript:"  data-url="{{ path('business_purchase_reverse',{'id':entity.id}) }}" class="btn black"><i class="icon-retweet"></i>&nbsp;Reverse</a>
+                                        <a  href="javascript:"  data-url="{{ path('business_purchase_reverse',{'id':entity.id}) }}" class="btn red"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>

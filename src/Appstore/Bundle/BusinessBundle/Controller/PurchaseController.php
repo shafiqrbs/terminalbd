@@ -68,6 +68,8 @@ class PurchaseController extends Controller
         $entity->setCreatedBy($this->getUser());
         $receiveDate = new \DateTime('now');
         $entity->setReceiveDate($receiveDate);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('business_purchase_edit', array('id' => $entity->getId())));

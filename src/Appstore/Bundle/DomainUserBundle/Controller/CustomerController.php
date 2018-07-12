@@ -33,7 +33,7 @@ class CustomerController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_CRM")
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
      */
 
     public function indexAction()
@@ -98,6 +98,11 @@ class CustomerController extends Controller
      * Displays a form to create a new Customer entity.
      *
      */
+
+    /**
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     */
+
     public function newAction()
     {
         $entity = new Customer();
@@ -132,6 +137,11 @@ class CustomerController extends Controller
      * Displays a form to edit an existing Customer entity.
      *
      */
+
+    /**
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -200,6 +210,11 @@ class CustomerController extends Controller
      * Deletes a Customer entity.
      *
      */
+
+    /**
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     */
+
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
