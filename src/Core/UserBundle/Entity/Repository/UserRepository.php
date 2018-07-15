@@ -118,6 +118,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_ACCOUNTING_TRANSACTION'        => 'Accounting Transaction',
                 'ROLE_DOMAIN_ACCOUNTING_CONFIG'             => 'Accounting Config',
                 'ROLE_DOMAIN_ACCOUNTING_REPORT'             => 'Accounting Report',
+                'ROLE_DOMAIN_ACCOUNT_REVERSE'               => 'Accounting Reverse',
                 'ROLE_DOMAIN_ACCOUNTING'                    => 'Accounting Admin',
             );
         }

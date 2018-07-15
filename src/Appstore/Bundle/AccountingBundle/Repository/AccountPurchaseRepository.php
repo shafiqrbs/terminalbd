@@ -601,4 +601,14 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
+	public function accountReverse(AccountPurchase $entity)
+	{
+		$em = $this->_em;
+		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Purchase'");
+		$transaction->execute();
+		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Purchase'");
+		$accountCash->execute();
+	}
+
+
 }

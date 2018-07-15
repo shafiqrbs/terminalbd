@@ -93,7 +93,7 @@ class SalesReturnController extends Controller
     public function approveAction(MedicineSalesReturn $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($entity)) {
+        if (!empty($entity) and $entity->getProcess() !='approved') {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $em->flush();

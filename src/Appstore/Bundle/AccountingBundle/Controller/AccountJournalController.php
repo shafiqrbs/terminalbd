@@ -4,7 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Form\AccountJournalType;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +34,12 @@ class AccountJournalController extends Controller
      * Lists all AccountJournal entities.
      *
      */
-    public function indexAction()
+
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
+	 */
+
+	public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -105,6 +111,12 @@ class AccountJournalController extends Controller
      * Displays a form to create a new AccountJournal entity.
      *
      */
+
+
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
+	 */
+
     public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -143,6 +155,11 @@ class AccountJournalController extends Controller
      * Displays a form to edit an existing AccountJournal entity.
      *
      */
+
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
+	 */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -266,12 +283,11 @@ class AccountJournalController extends Controller
 
     public function approveAction(AccountJournal $entity)
     {
-        if (!empty($entity)) {
+        if (!empty($entity) and $entity->getProcess() != 'approved') {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity,'Journal');
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
             return new Response('success');
@@ -285,6 +301,12 @@ class AccountJournalController extends Controller
      * Deletes a AccountJournal entity.
      *
      */
+
+
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
+	 */
+
     public function deleteAction(AccountJournal $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -314,4 +336,22 @@ class AccountJournalController extends Controller
         return new Response('success');
         exit;
     }
+
+
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNT_REVERSE,ROLE_DOMAIN")
+	 */
+
+	public function journalReverseAction(AccountJournal $entity){
+
+		$em = $this->getDoctrine()->getManager();
+		$this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountReverse($entity);
+		$entity->setProcess(null);
+		$entity->setApprovedBy(null);
+		$entity->setAmount(0);
+		$em->flush();
+		return $this->redirect($this->generateUrl('account_journal'));
+
+	}
+
 }

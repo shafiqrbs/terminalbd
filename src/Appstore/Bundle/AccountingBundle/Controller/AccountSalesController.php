@@ -285,17 +285,16 @@ class AccountSalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
         }
-        $lastBalance = $em->getRepository('AccountingBundle:AccountSales')->lastInsertSales($this->getUser()->getGlobalOption(),$entity);
         $entity->setAmount($data['value']);
-        //$entity->setBalance($lastBalance - floatval($data['value']));
         $em->flush();
         exit;
     }
 
     public function approveAction(AccountSales $entity)
     {
-        if (!empty($entity)) {
-            $em = $this->getDoctrine()->getManager();
+	    if (!empty($entity) and $entity->getProcess() != 'approved') {
+
+	    	$em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
@@ -305,7 +304,9 @@ class AccountSalesController extends Controller
             }
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
             return new Response('success');
+
         } else {
+
             return new Response('failed');
         }
         exit;

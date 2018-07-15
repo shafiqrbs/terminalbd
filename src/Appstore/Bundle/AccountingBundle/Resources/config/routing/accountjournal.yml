@@ -19,6 +19,10 @@ account_journal_edit:
     path:     /{id}/edit
     defaults: { _controller: "AccountingBundle:AccountJournal:edit" }
 
+account_journal_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "AccountingBundle:AccountJournal:journalReverse" }
+
 account_journal_approve:
     path:     /{id}/payment-approve
     defaults: { _controller: "AccountingBundle:AccountJournal:approve" }

@@ -111,8 +111,8 @@ class SalesTemporaryType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
-                    'percentage' => 'Percentage',
                     'flat' => 'Flat',
+                    'percentage' => 'Percentage',
                 ),
             ))
         ;

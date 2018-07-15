@@ -14,6 +14,7 @@ $( ".dateCalendar" ).datepicker({
 
 $(document).on("click", ".approve", function() {
     var url = $(this).attr('data-url');
+    $('.approve').hide();
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',

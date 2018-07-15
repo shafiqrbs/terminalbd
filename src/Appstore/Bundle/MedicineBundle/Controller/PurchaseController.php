@@ -424,7 +424,7 @@ class PurchaseController extends Controller
     public function approvedAction(MedicinePurchase $purchase)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($purchase)) {
+        if (!empty($purchase) and $purchase->getProcess() == "Complete" ) {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
             $purchase->setApprovedBy($this->getUser());

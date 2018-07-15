@@ -134,10 +134,6 @@
                         <div class="form-actions portlet box grey">
                             <div class="pull-right">
                                 <button type="submit" class="btn green"><i class="icon-ok"></i>&nbsp;Payment</button>
-                                <button type="submit" class="btn red"><i class="icon-refresh"></i>&nbsp;Cancel</button>
-                                {% if(entity.id > 0 ) %}
-                                    <a href="{{ path('account_purchase_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
-                                {% endif %}
                             </div>
                         </div>
                         {{ form_end(form) }}

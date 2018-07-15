@@ -290,9 +290,16 @@ class AccountJournalRepository extends EntityRepository
                 }
         }
 
-
-
     }
+
+	public function accountReverse(AccountJournal $entity)
+	{
+		$em = $this->_em;
+		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Journal'");
+		$transaction->execute();
+		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Journal'");
+		$accountCash->execute();
+	}
 
 
 

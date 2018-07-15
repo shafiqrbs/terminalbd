@@ -46,8 +46,18 @@ account_purchase_medicine_create:
     path:     /purchase-create
     defaults: { _controller: "AccountingBundle:AccountMedicine:purchaseCreate" }
 
+
 account_sales_medicine_approve:
     path:     /{id}/medicine-payment-approve
     defaults: { _controller: "AccountingBundle:AccountMedicine:salesApprove" }
     options:
            expose: true
+
+account_sales_medicine_reverse:
+    path:     /{id}/sales-reverse
+    defaults: { _controller: "AccountingBundle:AccountMedicine:salesMedicineReverse" }
+
+
+account_purchase_medicine_reverse:
+    path:     /{id}/purchase-reverse
+    defaults: { _controller: "AccountingBundle:AccountMedicine:purchaseMedicineReverse" }

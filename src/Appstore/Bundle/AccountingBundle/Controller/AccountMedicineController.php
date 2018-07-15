@@ -3,16 +3,15 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\AccountingBundle\Form\AccountHmsPurchaseType;
 use Appstore\Bundle\AccountingBundle\Form\AccountMedicinePurchaseType;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesInvoiceType;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesMedicineType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\AccountingBundle\Form\AccountSalesType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -39,6 +38,12 @@ class AccountMedicineController extends Controller
      * Lists all AccountSales entities.
      *
      */
+
+
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
+	 */
+
     public function salesAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -62,6 +67,12 @@ class AccountMedicineController extends Controller
      * Lists all AccountSales entities.
      *
      */
+
+
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
+	 */
+
     public function purchaseAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -115,7 +126,12 @@ class AccountMedicineController extends Controller
         ));
     }
 
-    public function purchaseNewAction()
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCHASE,ROLE_DOMAIN")
+	 */
+
+
+	public function purchaseNewAction()
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new AccountPurchase();
@@ -185,7 +201,13 @@ class AccountMedicineController extends Controller
      * Displays a form to create a new AccountSales entity.
      *
      */
-    public function salesNewAction()
+
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
+	 */
+
+
+	public function salesNewAction()
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new AccountSales();
@@ -323,7 +345,7 @@ class AccountMedicineController extends Controller
 
     public function salesApproveAction(AccountSales $entity)
     {
-        if (!empty($entity)) {
+        if (!empty($entity) and $entity->getProcess() != 'approved' ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
@@ -340,6 +362,29 @@ class AccountMedicineController extends Controller
         exit;
 
     }
+
+    public function salesMedicineReverseAction(AccountSales $entity){
+
+	    $em = $this->getDoctrine()->getManager();
+    	$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountReverse($entity);
+	    $entity->setProcess(null);
+	    $entity->setApprovedBy(null);
+	    $entity->setBalance(0);
+	    $em->flush();
+	    return $this->redirect($this->generateUrl('account_sales_medicine'));
+    }
+
+	public function purchaseMedicineReverseAction(AccountPurchase $entity){
+
+		$em = $this->getDoctrine()->getManager();
+		$this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountReverse($entity);
+		$entity->setProcess(null);
+		$entity->setApprovedBy(null);
+		$entity->setBalance(0);
+		$em->flush();
+		return $this->redirect($this->generateUrl('account_purchase_medicine'));
+
+	}
 
 
 }
