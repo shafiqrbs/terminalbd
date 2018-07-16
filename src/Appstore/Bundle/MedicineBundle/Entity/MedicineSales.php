@@ -142,7 +142,7 @@ class MedicineSales
      *
      * @ORM\Column(name="discountType", type="string", length=20, nullable=true)
      */
-    private $discountType ='percentage';
+    private $discountType ='flat';
 
     /**
      * @var string

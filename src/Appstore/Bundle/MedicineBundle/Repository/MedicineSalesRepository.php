@@ -39,6 +39,7 @@ class MedicineSalesRepository extends EntityRepository
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
         $process = isset($data['process'])? $data['process'] :'';
+        $customer = isset($data['customer'])? $data['customer'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $createdStart = isset($data['startDate'])? $data['startDate'] :'';
@@ -47,13 +48,18 @@ class MedicineSalesRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
         if (!empty($customerName)) {
-            $qb->join('s.customer','c');
+            $qb->join('e.customer','c');
             $qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
         }
 
         if (!empty($customerMobile)) {
-            $qb->join('s.customer','m');
-            $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
+            $qb->join('e.customer','c');
+            $qb->andWhere($qb->expr()->like("c.mobile", "'%$customerMobile%'"  ));
+        }
+
+		if (!empty($customer)) {
+            $qb->join('e.customer','c');
+            $qb->andWhere($qb->expr()->like("c.mobile", "'%$customer%'"  ));
         }
 
         if (!empty($createdStart)) {

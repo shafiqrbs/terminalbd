@@ -157,6 +157,7 @@ class AccountMedicineController extends Controller
             if($entity->getPayment() < 0){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
+                $entity->setProcessType('Opening');
                 $entity->setTransactionMethod(null);
             }
             $em->persist($entity);

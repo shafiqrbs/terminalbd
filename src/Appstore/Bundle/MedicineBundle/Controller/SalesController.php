@@ -340,7 +340,7 @@ class SalesController extends Controller
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
             if($data['process'] == 'save' or $data['process'] == 'hold' ){
-                return $this->redirect($this->generateUrl('medicine_sales_new'));
+                return $this->redirect($this->generateUrl('medicine_sales'));
             }else{
                 return $this->redirect($this->generateUrl('medicine_sales_print_invoice', array('id' => $entity->getId())));
             }
