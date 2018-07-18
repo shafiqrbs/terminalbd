@@ -89,6 +89,13 @@ class MedicineSalesTemporaryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
+        if( 0 == $data['salesSubTotal']){
+	        $data = array( 'sales' => '',
+	                      'process' => 'save',
+	                      'success' => 'invalid');
+	        return new Response(json_encode($data));
+	        exit;
+        }
         $entity = New MedicineSales();
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getMedicineConfig();

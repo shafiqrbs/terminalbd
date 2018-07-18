@@ -156,9 +156,8 @@ class SalesController extends Controller
             if($item->getRemainingQuantity() > 0) {
 
                 if(!empty($item->getExpirationEndDate()) and !empty($item->getExpirationStartDate())){
-                    $expirationStartDate = $item->getExpirationStartDate()->format('M y');
-                    $expirationEndDate = $item->getExpirationEndDate()->format('M y');
-                    $expiration = $expirationStartDate.' To '.$expirationEndDate;
+                    $expirationEndDate = $item->getExpirationEndDate()->format('d-m-y');
+                    $expiration = $expirationEndDate;
                 }else{
                     $expiration='Expiry empty';
                 }
