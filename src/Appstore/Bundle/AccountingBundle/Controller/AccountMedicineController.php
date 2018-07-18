@@ -213,10 +213,8 @@ class AccountMedicineController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new AccountSales();
         $form   = $this->salesCreateForm($entity);
-        $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
         return $this->render('AccountingBundle:AccountMedicine:new.html.twig', array(
             'entity' => $entity,
-            'banks' => $banks,
             'form'   => $form->createView(),
         ));
     }

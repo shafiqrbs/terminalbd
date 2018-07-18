@@ -61,6 +61,7 @@ security:
 
         ROLE_MEDICINE:                                  [ROLE_MEDICINE]
         ROLE_MEDICINE_STAFF:                            [ROLE_MEDICINE,ROLE_MEDICINE_STAFF]
+        ROLE_MEDICINE_REPORT:                           [ROLE_MEDICINE,ROLE_MEDICINE_REPORT]
         ROLE_MEDICINE_SALES:                            [ROLE_MEDICINE,ROLE_MEDICINE_SALES]
         ROLE_MEDICINE_PURCHASE:                         [ROLE_MEDICINE,ROLE_MEDICINE_PURCHASE]
         ROLE_MEDICINE_REVERSE_PURCHASE:                 [ROLE_MEDICINE,ROLE_MEDICINE_REVERSE_PURCHASE]

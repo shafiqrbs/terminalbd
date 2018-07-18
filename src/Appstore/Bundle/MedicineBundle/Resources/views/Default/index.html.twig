@@ -10,23 +10,37 @@
                 <div class="row-fluid" >
                     <div class="span4">
                         <div class="btn-group">
+                            {% if ( app.user.granted("ROLE_MEDICINE_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a class="btn red big" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Add Sales</a>
                             <a href="{{ path('medicine_sales') }}" class="btn blue big"><i class="icon-th-large"></i> Sales </a>
-                            <a href="{{ path('account_sales_medicine_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
+                            {% endif %}
+                            {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
+                                <a href="{{ path('account_sales_medicine_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="span5">
                         <div class="btn-group">
+                            {% if ( app.user.granted("ROLE_MEDICINE_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('medicine_purchase_new') }}" class="btn red big"><i class="icon-plus-sign"></i> Add Purchase</a>
                             <a href="{{ path('medicine_purchase') }}" class="btn green big"><i class="icon-th-large"></i> Purchase</a>
+                            {% endif %}
+                            {% if ( app.user.granted("ROLE_MEDICINE_STOCK") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('medicine_stock_short_item') }}" class="btn black big"><i class="icon-sort-by-order"></i> Short List</a>
+                            {% endif %}
+                            {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('account_purchase_medicine_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="span3">
                         <div class="btn-group">
-                            <a href="{{ path('account_expenditure_new') }}" class="btn purple big"><i class="icon-plus-sign"></i> Expenditure</a>
-                            <a href="{{ path('account_journal_new') }}" class="btn blue big"><i class="icon-money"></i> Journal</a>
+                            {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE") or  app.user.granted("ROLE_DOMAIN") ) %}
+                                <a href="{{ path('account_expenditure_new') }}" class="btn purple big"><i class="icon-plus-sign"></i> Expenditure</a>
+                            {% endif %}
+                            {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_JOURNAL") or  app.user.granted("ROLE_DOMAIN") ) %}
+                                <a href="{{ path('account_journal_new') }}" class="btn blue big"><i class="icon-money"></i> Journal</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -114,11 +128,13 @@
                 <div class="form-actions portlet box blue">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon icon-medkit"></i> Today Sales Overview</div>
+                        {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('medicine_report_sales_summary') }}"><i class="icon-bar-chart"></i> Sales Reports</a>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="clearfix">&nbsp;</div>
@@ -150,11 +166,13 @@
                 <div class="form-actions portlet box green">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon icon-medkit"></i> Today Purchase Overview</div>
+                        {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('medicine_report_purchase_summary') }}"><i class="icon-bar-chart"></i> Purchase Reports</a>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="clearfix">&nbsp;</div>
@@ -181,9 +199,11 @@
                             <div class="portlet-title"><div class="caption"><i class="icon-shopping-cart"></i>Medicine Sales </div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
+                                    {% if ( app.user.granted("ROLE_MEDICINE_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_sales') }}">Manage Sales</a></li>
                                     <li><i class="icon-retweet"></i> <a href="{{ path('medicine_sales_return') }}">Sales Return</a></li>
                                     <li><i class="icon-user"></i> <a href="{{ path('domain_customer') }}">Customer</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -195,10 +215,12 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-folder-close"></i> <a href="{{ path('medicine_stock') }}">Stock Medicine</a></li>
-                                    <li><i class="icon-calendar"></i> <a href="{{ path('medicine_purchase_item') }}">Medicine Expiration</a></li>
-                                    <li><i class="icon-bar-chart"></i> <a href="{{ path('medicine_stock_short_item') }}">Stock Short Item</a></li>
-                                    <li><i class="icon-trash"></i> <a href="{{ path('medicine_damage') }}">Damage</a></li>
+                                    {% if ( app.user.granted("ROLE_MEDICINE_STOCK") or  app.user.granted("ROLE_DOMAIN") ) %}
+                                        <li><i class="icon-folder-close"></i> <a href="{{ path('medicine_stock') }}">Stock Medicine</a></li>
+                                        <li><i class="icon-calendar"></i> <a href="{{ path('medicine_purchase_item') }}">Medicine Expiration</a></li>
+                                        <li><i class="icon-bar-chart"></i> <a href="{{ path('medicine_stock_short_item') }}">Stock Short Item</a></li>
+                                        <li><i class="icon-trash"></i> <a href="{{ path('medicine_damage') }}">Damage</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -210,11 +232,13 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    <li><i class="icon-th-large"></i> <a href="{{ path('medicine_purchase') }}">Manage Purchase</a></li>
-                                    <li><i class="icon-shopping-cart"></i> <a href="{{ path('medicine_purchase_new') }}">Add Purchase</a></li>
-                                    <li><i class="icon-th-list"></i> <a href="{{ path('medicine_instantpurchase') }}">Instant Purchase</a></li>
-                                    <li><i class="icon-retweet"></i> <a href="{{ path('medicine_purchase_return') }}">Purchase Return</a></li>
-                                    <li><i class="icon-user"></i> <a href="{{ path('medicine_vendor') }}">Vendor</a></li>
+                                    {% if ( app.user.granted("ROLE_MEDICINE_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
+                                        <li><i class="icon-th-large"></i> <a href="{{ path('medicine_purchase') }}">Manage Purchase</a></li>
+                                        <li><i class="icon-shopping-cart"></i> <a href="{{ path('medicine_purchase_new') }}">Add Purchase</a></li>
+                                        <li><i class="icon-th-list"></i> <a href="{{ path('medicine_instantpurchase') }}">Instant Purchase</a></li>
+                                        <li><i class="icon-retweet"></i> <a href="{{ path('medicine_purchase_return') }}">Purchase Return</a></li>
+                                        <li><i class="icon-user"></i> <a href="{{ path('medicine_vendor') }}">Vendor</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -224,10 +248,12 @@
                             <div class="portlet-title"><div class="caption"><i class="icon-hdd"></i>Master Data</div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
+                                    {% if ( app.user.granted("ROLE_MEDICINE_ADMIN") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-reorder"></i> <a href="{{ path('medicine_particular') }}">Particular</a></li>
                                     <li><i class="icon-group"></i> <a href="{{ path('medicine_sales_user') }}">User Sales Setup</a></li>
                                     <li><i class="icon-cog"></i> <a href="{{ path('medicine_config_manage') }}">Configuration</a></li>
                                     <li><i class="icon-medkit"></i> <a href="{{ path('medicine_user') }}">New Medicine</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -247,10 +273,12 @@
                             <div class="portlet-title"><div class="caption"><i class="icon-shopping-cart"></i>Medicine Sales </div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
+                                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_summary') }}">Sales Summary</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_details') }}">Sales Details</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_stock') }}">Product Wise Sales</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_vendor_customer') }}">Vendor base Sales</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -260,8 +288,10 @@
                             <div class="portlet-title"><div class="caption"><i class="icon-user"></i>User wise Sales</div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
+                                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_user') }}">User Wise Sales</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_user_monthly') }}">User Monthly Sales</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -273,11 +303,13 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
+                                    {% if ( app.user.granted("ROL_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_summary') }}">Purchase Summary</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor') }}">Vendor Outstanding</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor_details') }}">Purchase Details</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor_sales') }}">Vendor Purchase & Sales</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_brand_sales') }}">Brand Purchase & Sales</a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -289,9 +321,11 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
+                                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_product_stock_sales') }}">Product Stock & Sales</a></li>
                            {#         <li><i class="icon-list"></i> <a href="{{ path('medicine_report_product_stock_sales_price') }}">Product Stock & Sales Price</a></li>
-                         #}       </ul>
+                         #}     {% endif %}
+                                </ul>
                             </div>
                         </div>
                     </div>
