@@ -302,7 +302,7 @@ function jqueryTemporaryLoad() {
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $('#confirmTemporarySubmit').prop("disabled", true);
+                $('#receiveBtn').prop("disabled", true);
                 $.ajax({
                     url         : $('form#salesTemporaryForm').attr( 'action' ),
                     type        : $('form#salesTemporaryForm').attr( 'method' ),
@@ -324,7 +324,7 @@ function jqueryTemporaryLoad() {
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
-                        $('#confirmTemporarySubmit').prop("disabled", false);
+                        $('#receiveBtn').prop("disabled", false);
                    }
                 });
             }
