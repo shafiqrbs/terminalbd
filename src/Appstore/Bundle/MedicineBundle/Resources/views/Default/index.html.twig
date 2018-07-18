@@ -303,7 +303,7 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    {% if ( app.user.granted("ROL_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
+                                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_summary') }}">Purchase Summary</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor') }}">Vendor Outstanding</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor_details') }}">Purchase Details</a></li>
