@@ -95,7 +95,7 @@
                                     <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{{ item.subTotal|number_format }}</td>
-                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_sales_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_sales_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini itemDelete" ><i class="icon-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}

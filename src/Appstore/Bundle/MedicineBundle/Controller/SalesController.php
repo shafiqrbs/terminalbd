@@ -250,12 +250,17 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $item = $particular->getMedicinePurchaseItem();
         $stock = $particular->getMedicineStock();
-        if (!$particular) {
+	    $this->get('session')->set('item', $item);
+	    $this->get('session')->set('stock', $stock);
+
+	    if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
         $em->remove($particular);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
+	    $item = $this->get('session')->get('item');
+	    $stock = $this->get('session')->get('stock');
+	    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
         $msg = 'Medicine added successfully';
@@ -266,7 +271,9 @@ class SalesController extends Controller
 
     }
 
-    public function invoiceDiscountUpdateAction(Request $request)
+
+
+	public function invoiceDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
@@ -399,13 +406,40 @@ class SalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
+		$this->allSalesItemDelete($entity);
         $em->remove($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('medicine_sales'));
+        exit;
+        //return $this->redirect($this->generateUrl('medicine_sales'));
     }
 
+	public function allSalesItemDelete(MedicineSales $invoice){
 
-    /**
+		$em = $this->getDoctrine()->getManager();
+
+		/* @var $particular MedicineSalesItem */
+
+		foreach ($invoice->getMedicineSalesItems() as $particular){
+
+			$item = $particular->getMedicinePurchaseItem();
+			$stock = $particular->getMedicineStock();
+			$this->get('session')->set('item', $item);
+			$this->get('session')->set('stock', $stock);
+			$em->remove($particular);
+			$em->flush();
+			$item = $this->get('session')->get('item');
+			$stock = $this->get('session')->get('stock');
+			$this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
+			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
+
+		}
+
+
+	}
+
+
+
+	/**
      * Status a Page entity.
      *
      */

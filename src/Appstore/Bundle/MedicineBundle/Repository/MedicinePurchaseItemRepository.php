@@ -27,7 +27,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $startDate = isset($data['startDate'])? $data['startDate'] :'';
         $endDate = isset($data['endDate'])? $data['endDate'] :'';
-        $name = isset($data['name'])? $data['name'] :'';
+	    $name = isset($data['name'])? $data['name'] :'';
         $rackNo = isset($data['rackNo'])? $data['rackNo'] :'';
         $mode = isset($data['mode'])? $data['mode'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';

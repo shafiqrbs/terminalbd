@@ -162,6 +162,7 @@ class MedicineSalesRepository extends EntityRepository
         }else{
             $invoice->setSubTotal(0);
             $invoice->setTotal(0);
+            $invoice->setNetTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
             $invoice->setVat(0);

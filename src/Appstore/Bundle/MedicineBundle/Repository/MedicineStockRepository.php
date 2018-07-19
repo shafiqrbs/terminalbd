@@ -153,7 +153,8 @@ class MedicineStockRepository extends EntityRepository
     }
 
     public function updateRemovePurchaseQuantity(MedicineStock $stock,$fieldName=''){
-        $em = $this->_em;
+
+    	$em = $this->_em;
         if($fieldName == 'sales'){
             $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
             $stock->setSalesQuantity($qnt);
@@ -178,7 +179,7 @@ class MedicineStockRepository extends EntityRepository
     public function remainingQnt(MedicineStock $stock)
     {
         $em = $this->_em;
-        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity()) - ($stock->getPurchaseReturnQuantity()+$stock->getSalesQuantity()+$stock->getDamageQuantity());
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
         $em->persist($stock);
         $em->flush();

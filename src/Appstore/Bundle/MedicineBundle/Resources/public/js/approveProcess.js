@@ -63,6 +63,10 @@ $(document).on("click", ".delete", function() {
 });
 
 /*
+
+
+
+
 $(document).on("click", ".delete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");

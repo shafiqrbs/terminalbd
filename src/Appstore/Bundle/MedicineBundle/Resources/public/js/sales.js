@@ -142,24 +142,31 @@ var form = $("#salesItemForm").validate({
     }
 });
 
-$('#invoiceParticulars').on("click", ".delete", function() {
+$('#invoiceParticulars').on("click", ".itemDelete", function() {
 
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
-    $('#remove-'+id).hide();
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#subTotal').html(obj['subTotal']);
-            $('.grandTotal').html(obj['netTotal']);
-            $('#paymentTotal').val(obj['netTotal']);
-            $('#due').val(obj['due']);
-            $('.dueAmount').html(obj['due']);
-            $('#msg').html(obj['msg']);
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('#remove-'+id).hide();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    obj = JSON.parse(response);
+                    $('#subTotal').html(obj['subTotal']);
+                    $('.grandTotal').html(obj['netTotal']);
+                    $('#paymentTotal').val(obj['netTotal']);
+                    $('#due').val(obj['due']);
+                    $('.dueAmount').html(obj['due']);
+                    $('#msg').html(obj['msg']);
+                }
+            })
         }
-    })
+    });
+
 });
 
 $(document).on('keyup', '#sales_discountCalculation', function() {
