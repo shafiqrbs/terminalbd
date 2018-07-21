@@ -77,7 +77,7 @@
                                             {% if entity.process != 'approved' %}
                                                 <a href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('medicine_sales_return_approve',{'id':entity.id}) }}" class="btn blue approve mini"><i class="icon-ok"></i> Approve</a>
                                             {% else %}
-                                                <a href="javascript:"  class="btn red"><i class="icon-ok"></i> Approve</a>
+                                                <a href="javascript:"  class="btn red confirm"><i class="icon-ok"></i> Approve</a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -94,6 +94,16 @@
         </div>
     </div>
 {% endblock %}
-
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@MedicineBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}
 
 

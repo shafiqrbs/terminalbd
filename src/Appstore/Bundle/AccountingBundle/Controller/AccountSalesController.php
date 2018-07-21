@@ -285,7 +285,9 @@ class AccountSalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
         }
-        $entity->setAmount($data['value']);
+        if($data['value'] > 0 ){
+	        $entity->setAmount($data['value']);
+        }
         $em->flush();
         exit;
     }

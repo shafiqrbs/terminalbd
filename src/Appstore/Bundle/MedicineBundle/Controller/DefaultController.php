@@ -26,15 +26,23 @@ class DefaultController extends Controller
         $purchaseCashOverview = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
         $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
+	    $purchaseUserReport = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data);
+	    $salesUserReport = $em->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data);
 
-        return $this->render('MedicineBundle:Default:index.html.twig', array(
+
+
+	    return $this->render('MedicineBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
             'transactionCashOverviews'  => $transactionCashOverview,
             'expenditureOverview'       => $expenditureOverview ,
             'salesCashOverview'         => $salesCashOverview ,
             'purchaseCashOverview'      => $purchaseCashOverview ,
+            'salesUserReport'           => $salesUserReport ,
+            'purchaseUserReport'        => $purchaseUserReport ,
             'searchForm'                => $data ,
         ));
+
+
     }
 }

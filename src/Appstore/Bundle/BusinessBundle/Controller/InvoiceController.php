@@ -462,7 +462,7 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $particular = $request->request->get('particular');
         $quantity = $request->request->get('quantity');
-        if(!empty($accessories)){
+        if(!empty($particular)){
             $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStockItem($invoice,$invoiceItems);
             $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
