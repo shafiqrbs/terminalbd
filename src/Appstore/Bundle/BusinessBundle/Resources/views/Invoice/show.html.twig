@@ -120,27 +120,34 @@
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
+                                    {% if entity.businessConfig.invoiceType == 'banner-print' %}
+                                        {% set colspan = 7 %}
+                                        {% set panCol = 6 %}
+                                    {% else %}
+                                        {% set colspan = 6 %}
+                                        {% set panCol = 5 %}
+                                    {% endif %}
                                     <tr>
-                                        <td colspan="7" class="span12" style="border: 1px double #000"></td>
+                                        <td colspan="{{ colspan }}" class="span12" style="border: 1px double #000"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                                         <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                                    </tr>
                                     <tr>
-                                        <td colspan="6" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
                                         <td class="span1"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                         <td class="span1"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
                                         <td class="span1"><strong class="netTotal">{{ entity.received|number_format }}</strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
                                         <td class="span1"><strong class="netTotal">{{ entity.due|number_format }}</strong></td>
                                     </tr>
                                     </tfoot>

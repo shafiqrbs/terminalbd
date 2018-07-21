@@ -3,7 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\AccountingBundle\Form\AccountMedicinePurchaseType;
+use Appstore\Bundle\AccountingBundle\Form\AccountBusinessPurchaseType;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesInvoiceType;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesMedicineType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -46,7 +46,7 @@ class AccountBusinessController extends Controller
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(20,29));
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
-        return $this->render('AccountingBundle:AccountMedicine:sales.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:sales.html.twig', array(
             'entities' => $pagination,
             'accountHead' => $accountHead,
             'transactionMethods' => $transactionMethods,
@@ -69,7 +69,7 @@ class AccountBusinessController extends Controller
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($globalOption,$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(5));
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
-        return $this->render('AccountingBundle:AccountMedicine:purchase.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:purchase.html.twig', array(
             'entities' => $pagination,
             'accountHead' => $accountHead,
             'transactionMethods' => $transactionMethods,
@@ -89,7 +89,7 @@ class AccountBusinessController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('AccountingBundle:AccountMedicine:customerOutstanding.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:customerOutstanding.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
         ));
@@ -106,7 +106,7 @@ class AccountBusinessController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorBusinessOutstanding($globalOption,'business',$data);
         $pagination = $this->paginate($entities);
-        return $this->render('AccountingBundle:AccountMedicine:purchaseOutstanding.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:purchaseOutstanding.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
         ));
@@ -118,7 +118,7 @@ class AccountBusinessController extends Controller
         $entity = new AccountPurchase();
         $form   = $this->createCreateForm($entity);
         $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
-        return $this->render('AccountingBundle:AccountMedicine:purchaseNew.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:purchaseNew.html.twig', array(
             'entity'    => $entity,
             'banks'     => $banks,
             'form'      => $form->createView(),
@@ -148,7 +148,7 @@ class AccountBusinessController extends Controller
             return $this->redirect($this->generateUrl('account_purchase_medicine'));
         }
 
-        return $this->render('AccountingBundle:AccountMedicine:purchaseNew.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:purchaseNew.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -165,7 +165,7 @@ class AccountBusinessController extends Controller
     private function createCreateForm(AccountPurchase $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new AccountMedicinePurchaseType($globalOption), $entity, array(
+        $form = $this->createForm(new AccountBusinessPurchaseType($globalOption), $entity, array(
             'action' => $this->generateUrl('account_purchase_medicine_create'),
             'method' => 'POST',
             'attr' => array(
@@ -188,7 +188,7 @@ class AccountBusinessController extends Controller
         $entity = new AccountSales();
         $form   = $this->salesCreateForm($entity);
         $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
-        return $this->render('AccountingBundle:AccountMedicine:new.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:new.html.twig', array(
             'entity' => $entity,
             'banks' => $banks,
             'form'   => $form->createView(),
@@ -214,7 +214,7 @@ class AccountBusinessController extends Controller
             return $this->redirect($this->generateUrl('account_sales_medicine'));
         }
 
-        return $this->render('AccountingBundle:AccountMedicine:new.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -267,7 +267,7 @@ class AccountBusinessController extends Controller
         $em->persist($entity);
         $em->flush();
         $editForm = $this->createEditForm($entity);
-        return $this->render('AccountingBundle:AccountMedicine:invoice.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:invoice.html.twig', array(
             'sales'      => $sales,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
@@ -291,7 +291,7 @@ class AccountBusinessController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('account_sales_medicine'));
         }
-        return $this->render('AccountingBundle:AccountMedicine:invoice.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:invoice.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
