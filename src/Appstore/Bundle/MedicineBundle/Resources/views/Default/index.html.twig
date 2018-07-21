@@ -175,7 +175,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="clearfix"></div>
+                <div class="clearfix">&nbsp;</div>
                 <table class="table table-bordered table-striped table-condensed flip-content ">
                     <tr>
                         <th class="numeric" >Total Amount</th>
@@ -191,7 +191,9 @@
                         <th class="numeric" >{{ due|number_format }}</th>
                     </tr>
                 </table>
+
             </div>
+            <div class="clearfix">&nbsp;</div>
             <div class="portlet-body form">
                 <div class="form-actions portlet box yellow">
                     <div class="portlet-title">
@@ -235,7 +237,7 @@
                         {% set discount = discount+entity.discount %}
                         {% set vat = vat+entity.vat %}
                         {% set total = total+entity.total %}
-                        {% set payment = payment+entity.payment %}
+                        {% set payment = payment + entity.payment %}
                         {% set due = due + entity.due %}
                         {% set purchasePrice = purchasePrice + purchaseUserReport[entity.salesBy] %}
                         <tr>
@@ -246,8 +248,8 @@
                             <th class="numeric" >{{ entity.total|number_format  }}</th>
                             <th class="numeric" >{{ entity.payment|number_format }}</th>
                             <th class="numeric" >{{ entity.due|number_format }}</th>
-                            <th class="numeric" >{% if salesPurchasePrice[entity.salesBy] is defined %}{{ salesPurchasePrice[entity.salesBy]|number_format }}{% endif %}</th>
-                            <th class="numeric" >{% if salesPurchasePrice[entity.salesBy] is defined %}{{ (entity.total-salesPurchasePrice[entity.salesBy])|number_format }}{% endif %}</th>
+                            <th class="numeric" >{% if purchaseUserReport[entity.salesBy] is defined %}{{ purchaseUserReport[entity.salesBy]|number_format }}{% endif %}</th>
+                            <th class="numeric" >{% if purchaseUserReport[entity.salesBy] is defined %}{{ (entity.total- purchaseUserReport[entity.salesBy])|number_format }}{% endif %}</th>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -271,6 +273,7 @@
                             </div>
                         </div>
                     </div>
+                    {% if (app.user.granted("ROLE_MEDICINE_STOCK") or  app.user.granted("ROLE_DOMAIN") ) %}
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="portlet box blue">
                             <div class="portlet-title">
@@ -278,16 +281,15 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    {% if ( app.user.granted("ROLE_MEDICINE_STOCK") or  app.user.granted("ROLE_DOMAIN") ) %}
                                         <li><i class="icon-folder-close"></i> <a href="{{ path('medicine_stock') }}">Stock Medicine</a></li>
                                         <li><i class="icon-calendar"></i> <a href="{{ path('medicine_purchase_item') }}">Medicine Expiration</a></li>
                                         <li><i class="icon-bar-chart"></i> <a href="{{ path('medicine_stock_short_item') }}">Stock Short Item</a></li>
                                         <li><i class="icon-trash"></i> <a href="{{ path('medicine_damage') }}">Damage</a></li>
-                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="portlet box green">
                             <div class="portlet-title">
@@ -331,52 +333,54 @@
             </div>
             <div class="portlet-body">
                 <div class="row-fluid pull-center" >
+                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="portlet box green">
                             <div class="portlet-title"><div class="caption"><i class="icon-shopping-cart"></i>Medicine Sales </div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_summary') }}">Sales Summary</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_details') }}">Sales Details</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_stock') }}">Product Wise Sales</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_vendor_customer') }}">Vendor base Sales</a></li>
-                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="portlet box red">
                             <div class="portlet-title"><div class="caption"><i class="icon-user"></i>User wise Sales</div></div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_user') }}">User Wise Sales</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_sales_user_monthly') }}">User Monthly Sales</a></li>
-                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                    {% endif %}
+                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
+                        <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-briefcase"></i>Purchase Reports</div>
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_summary') }}">Purchase Summary</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor') }}">Vendor Outstanding</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor_details') }}">Purchase Details</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_vendor_sales') }}">Vendor Purchase & Sales</a></li>
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_purchase_brand_sales') }}">Brand Purchase & Sales</a></li>
-                                    {% endif %}
+
                                 </ul>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="portlet box blue">
                             <div class="portlet-title">
@@ -384,14 +388,14 @@
                             </div>
                             <div class="portlet-body">
                                 <ul class="unstyled text-left">
-                                    {% if ( app.user.granted("ROLE_MEDICINE_REPORT") or  app.user.granted("ROLE_DOMAIN") ) %}
                                     <li><i class="icon-list"></i> <a href="{{ path('medicine_report_product_stock_sales') }}">Product Stock & Sales</a></li>
                            {#         <li><i class="icon-list"></i> <a href="{{ path('medicine_report_product_stock_sales_price') }}">Product Stock & Sales Price</a></li>
-                         #}     {% endif %}
+                         #}
                                 </ul>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
