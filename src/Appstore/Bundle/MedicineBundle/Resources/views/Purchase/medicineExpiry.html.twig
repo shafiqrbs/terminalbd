@@ -101,7 +101,7 @@
                             <tbody>
                             {% for entity in entities %}
                                 <tr {% if "now"|date('Y-m-d') >= entity.expirationEndDate|date('Y-m-d') %} class="red-alert" {% endif %} >
-                                    <th class="numeric" >{% if entity.expirationStartDate is not empty and entity.expirationEndDate is not empty %}{{ entity.expirationStartDate|date('d-m-y') }} To {{ entity.expirationEndDate|date('d-m-y') }}{% endif %}</th>
+                                    <th class="numeric" >{% if  entity.expirationEndDate is not empty %}{{ entity.expirationEndDate|date('d-m-y') }}{% endif %}</th>
                                     <td class="numeric" >{{ entity.barcode }}</td>
                                     <td class="numeric" >{{ entity.medicineStock.name }}</td>
                                     <td class="numeric" >{% if entity.medicineStock.rackNo is not empty %}{{ entity.medicineStock.rackNo.name }}{% endif %}</td>

@@ -45,20 +45,20 @@ class MedicineSalesRepository extends EntityRepository
         $createdStart = isset($data['startDate'])? $data['startDate'] :'';
         $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
         if (!empty($invoice)) {
-            $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
+            $qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
         }
         if (!empty($customerName)) {
-            $qb->join('e.customer','c');
+            $qb->join('s.customer','c');
             $qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
         }
 
         if (!empty($customerMobile)) {
-            $qb->join('e.customer','c');
+            $qb->join('s.customer','c');
             $qb->andWhere($qb->expr()->like("c.mobile", "'%$customerMobile%'"  ));
         }
 
 		if (!empty($customer)) {
-            $qb->join('e.customer','c');
+            $qb->join('s.customer','c');
             $qb->andWhere($qb->expr()->like("c.mobile", "'%$customer%'"  ));
         }
 
@@ -77,17 +77,17 @@ class MedicineSalesRepository extends EntityRepository
         }
 
         if(!empty($salesBy)){
-            $qb->join("e.salesBy",'u');
+            $qb->join("s.salesBy",'u');
             $qb->andWhere("u.username = :username");
             $qb->setParameter('username', $salesBy);
         }
 
         if(!empty($process)){
-            $qb->andWhere("e.process = :process");
+            $qb->andWhere("s.process = :process");
             $qb->setParameter('process', $process);
         }
         if(!empty($transactionMethod)){
-            $qb->andWhere("e.transactionMethod = :method");
+            $qb->andWhere("s.transactionMethod = :method");
             $qb->setParameter('method', $transactionMethod);
         }
 
@@ -135,10 +135,10 @@ class MedicineSalesRepository extends EntityRepository
     {
         $config = $user->getGlobalOption()->getMedicineConfig()->getId();
 
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb = $this->createQueryBuilder('s');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.created','DESC');
+        $qb->orderBy('s.created','DESC');
         $qb->getQuery();
         return  $qb;
     }

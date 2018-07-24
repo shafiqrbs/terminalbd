@@ -265,7 +265,7 @@ class ExpenditureController extends Controller
 
     public function approveAction(Expenditure $expenditure)
     {
-        if (!empty($expenditure)) {
+        if (!empty($expenditure) and $expenditure->getProcess() != "approved" ) {
             $em = $this->getDoctrine()->getManager();
             $expenditure->setProcess('approved');
             $expenditure->setApprovedBy($this->getUser());

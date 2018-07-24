@@ -43,8 +43,9 @@ class ExpenditureRepository extends EntityRepository
         }
 
         if (!empty($toUser)) {
-            $qb->andWhere("e.toUser = :toUser");
-            $qb->setParameter('toUser', $toUser);
+            $qb->join("e.toUser",'u');
+	        $qb->andWhere("u.username = :username");
+	        $qb->setParameter('username', $toUser);
         }
 
         if (!empty($accountHead)) {
