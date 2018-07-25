@@ -249,12 +249,11 @@ class AccountPurchaseRepository extends EntityRepository
                 $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
 
                 if (!empty($data['startDate']) and !empty($data['endDate']) ) {
-
-                    $qb->andWhere("e.updated >= :startDate");
+                    $qb->andWhere("e.created >= :startDate");
                     $qb->setParameter('startDate', $startDate.' 00:00:00');
                 }
                 if (!empty($data['endDate']) and !empty($data['startDate'])) {
-                    $qb->andWhere("e.updated <= :endDate");
+                    $qb->andWhere("e.created <= :endDate");
                     $qb->setParameter('endDate', $endDate.' 00:00:00');
                 }
                if (!empty($inventoryVendor)) {
