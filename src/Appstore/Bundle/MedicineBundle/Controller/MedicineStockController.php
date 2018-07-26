@@ -57,6 +57,7 @@ class MedicineStockController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+	    $data['minQnt'] = 'minimum';
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $em->getRepository('MedicineBundle:MedicineStock')->findWithShortListSearch($config,$data);
         $pagination = $this->paginate($entities);

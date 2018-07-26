@@ -48,12 +48,11 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                      <div class="row-fluid">
-                                        <div class="span3">
-                                            <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
-                                        </div>
-                                        <div class="span3">
-                                            <input type="text" id="salesBy" name="salesBy"  class="span12 m-wrap select2User" value="{% if searchForm.select2User is defined %}{{ searchForm.select2User }}{% endif %}"  autocomplete="off" placeholder="Enter sales by ">
-                                        </div>
+                                        <div class="span6">
+                                            <input type="text" id="customer" name="customer"  class="span4 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
+                                            <input type="text" id="salesBy" name="salesBy"  class="span4 m-wrap select2User" value="{% if searchForm.select2User is defined %}{{ searchForm.select2User }}{% endif %}"  autocomplete="off" placeholder="Enter sales by ">
+                                            <input type="text" id="invoice" name="invoice"  class="span4 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
+                                         </div>
                                          <div class="span3">
                                              <input type="text" id="medicineName" name="medicineName"  class="span12 m-wrap select2StockMedicine" value="{% if searchForm.medicineName is defined %}{{ searchForm.medicineName }}{% endif %}"  autocomplete="off" placeholder="Enter medicine name">
                                          </div>
@@ -100,7 +99,7 @@
                                         <td class="numeric" >{{ entity.medicineSales.salesBy }}</td>
                                         <td class="numeric" >{{ entity.medicineSales.process|capitalize }}</td>
                                         <td class="numeric" >
-                                            {% if entity.medicineSalesReturn is empty %}
+                                            {% if entity.medicineSalesReturns is empty %}
                                             <a href="{{ path('medicine_sales_return_new', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-retweet"></i> Return</a>
                                             {% endif %}
                                         </td>

@@ -99,6 +99,68 @@ class MedicineSalesItemRepository extends EntityRepository
 
     }
 
+	protected function handleSearchBetween($qb,$data)
+	{
+
+		$invoice = isset($data['invoice'])? $data['invoice'] :'';
+		$transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
+		$salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
+		$process = isset($data['process'])? $data['process'] :'';
+		$customer = isset($data['customer'])? $data['customer'] :'';
+		$customerName = isset($data['name'])? $data['name'] :'';
+		$customerMobile = isset($data['mobile'])? $data['mobile'] :'';
+		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
+		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+		if (!empty($invoice)) {
+			$qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
+		}
+		if (!empty($customerName)) {
+			$qb->join('s.customer','c');
+			$qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
+		}
+
+		if (!empty($customerMobile)) {
+			$qb->join('s.customer','c');
+			$qb->andWhere($qb->expr()->like("c.mobile", "'%$customerMobile%'"  ));
+		}
+
+		if (!empty($customer)) {
+			$qb->join('s.customer','c');
+			$qb->andWhere($qb->expr()->like("c.mobile", "'%$customer%'"  ));
+		}
+
+		if (!empty($createdStart)) {
+			$compareTo = new \DateTime($createdStart);
+			$created =  $compareTo->format('Y-m-d 00:00:00');
+			$qb->andWhere("s.created >= :createdStart");
+			$qb->setParameter('createdStart', $created);
+		}
+
+		if (!empty($createdEnd)) {
+			$compareTo = new \DateTime($createdEnd);
+			$createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+			$qb->andWhere("s.created <= :createdEnd");
+			$qb->setParameter('createdEnd', $createdEnd);
+		}
+
+		if(!empty($salesBy)){
+			$qb->join("s.salesBy",'u');
+			$qb->andWhere("u.username = :username");
+			$qb->setParameter('username', $salesBy);
+		}
+
+		if(!empty($process)){
+			$qb->andWhere("s.process = :process");
+			$qb->setParameter('process', $process);
+		}
+		if(!empty($transactionMethod)){
+			$qb->andWhere("s.transactionMethod = :method");
+			$qb->setParameter('method', $transactionMethod);
+		}
+
+
+	}
+
     public function handleDateRangeFind($qb,$data)
     {
         if(empty($data)){
@@ -132,7 +194,7 @@ class MedicineSalesItemRepository extends EntityRepository
             $qb->andWhere("s.branch = :branch");
             $qb->setParameter('branch', $userBranch);
         }
-      //  $this->handleSearchBetween($qb,$data);
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
         $qb->getQuery();
         return  $qb;
