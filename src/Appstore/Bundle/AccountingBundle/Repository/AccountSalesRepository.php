@@ -440,7 +440,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setMedicineSales($entity);
-        $accountSales->setProcessHead('medicine');
+        $accountSales->setProcessHead('Sales');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
@@ -451,7 +451,7 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
-    public function insertMedicineAccountPurchaseReturn(MedicineSalesReturn $entity)
+    public function insertMedicineAccountSalesReturn(MedicineSalesReturn $entity)
     {
         $global = $entity->getMedicineConfig()->getGlobalOption();
         $sales = $entity->getMedicineSalesItem()->getMedicineSales();
@@ -460,15 +460,16 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setGlobalOption($global);
         $accountSales->setCustomer($sales->getCustomer());
         $accountSales->setAmount($entity->getSubTotal());
-        $accountSales->setProcessHead('medicine');
+        $accountSales->setProcessHead('Sales-Return');
         $accountSales->setProcessType('Sales-Return');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($entity->getCreatedBy());
+	    $accountSales->setMedicineSales($entity->getMedicineSalesItem()->getMedicineSales());
         $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+      //$this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
 
     }

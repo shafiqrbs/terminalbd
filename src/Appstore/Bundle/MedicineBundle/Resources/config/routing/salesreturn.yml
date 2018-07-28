@@ -18,4 +18,4 @@ medicine_sales_return_delete:
 
 medicine_sales_return_approve:
     path:     /{id}/approve
-    defaults: { _controller: "MedicineBundle:MedicinePurchaseReturn:approve" }
+    defaults: { _controller: "MedicineBundle:SalesReturn:approve" }

@@ -14,6 +14,16 @@ $(document).on("click", "#submitBtn", function() {
     });
 });
 
+$(document).on('keyup', '.td-inline-input', function() {
+
+    var id = $(this).attr('data-id');
+    var quantity = parseFloat($('#quantity-'+id).val());
+    var price = parseFloat($('#price-'+id).val());
+    var subTotal  = (quantity * price);
+    $("#subTotal-"+id).html(subTotal);
+
+});
+
 $(document).on("click", ".approve", function() {
     var url = $(this).attr('data-url');
     var id = $(this).attr('data-id');
@@ -29,7 +39,6 @@ $(document).on("click", ".approve", function() {
         }
     });
 });
-
 
 $(".select2StockMedicine").select2({
 

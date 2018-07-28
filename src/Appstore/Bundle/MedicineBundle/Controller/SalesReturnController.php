@@ -53,6 +53,7 @@ class SalesReturnController extends Controller
             $entity = new MedicineSalesReturn();
             $salesItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->find($data['salesItem'][$key]);
             $entity->setMedicineConfig($config);
+            $entity->setAccountMode($data['accountMode']);
             $entity->setQuantity($qnt);
             $entity->setMedicineStock($salesItem->getMedicineStock());
             $entity->setMedicinePurchaseItem($salesItem->getMedicinePurchaseItem());
@@ -92,13 +93,18 @@ class SalesReturnController extends Controller
 
     public function approveAction(MedicineSalesReturn $entity)
     {
-        $em = $this->getDoctrine()->getManager();
+
+    	$em = $this->getDoctrine()->getManager();
         if (!empty($entity) and $entity->getProcess() !='approved') {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $em->flush();
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountPurchaseReturn($entity);
-            $em->getRepository('AccountingBundle:Transaction')->purchaseReturnGlobalTransaction($accountPurchase);
+            if($entity->getAccountMode() == 'adjustment'){
+	            $account = $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountSalesReturn($entity);
+	            $em->getRepository('AccountingBundle:Transaction')->salesReturnGlobalPayableTransaction($account);
+            }elseif($entity->getAccountMode() == 'cash-return'){
+	            $em->getRepository('AccountingBundle:AccountJournal')->insertMedicineAccountSalesReturn($entity);
+	        }
             return new Response('success');
         } else {
             return new Response('failed');

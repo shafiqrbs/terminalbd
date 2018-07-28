@@ -118,6 +118,13 @@ class MedicineSalesReturn
      */
     private $notes;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountMode",length=25, type="string",  nullable=true)
+     */
+     private $accountMode='adjustment';
+
 
     /**
      * Get id
@@ -353,6 +360,20 @@ class MedicineSalesReturn
     {
         $this->medicinePurchaseItem = $medicinePurchaseItem;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getAccountMode(): string {
+		return $this->accountMode;
+	}
+
+	/**
+	 * @param string $accountMode
+	 */
+	public function setAccountMode( string $accountMode ) {
+		$this->accountMode = $accountMode;
+	}
 
 }
 

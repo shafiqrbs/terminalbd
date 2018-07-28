@@ -1339,8 +1339,101 @@ class TransactionRepository extends EntityRepository
 
     }
 
+	public function salesReturnGlobalCashTransaction(AccountJournal $accountJournal,$source='')
+	{
+		$this->insertGlobalSalesReturnCashAsset($accountJournal);
+		$this->insertGlobalSalesReturnCash($accountJournal);
+	}
 
-    public function purchaseGlobalTransaction($accountPurchase,$source='')
+	private function insertGlobalSalesReturnCashAsset(AccountJournal $account)
+	{
+
+		$amount =  $account->getAmount();
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($account->getGlobalOption());
+		$transaction->setAccountRefNo($account->getAccountRefNo());
+		$transaction->setProcessHead('Sales Return');
+		$transaction->setProcess('Goods');
+		/* Sales Revenue - Sales Return Account */
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(34));
+		$transaction->setAmount($amount);
+		$transaction->setDebit($amount);
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+
+	}
+
+	private function insertGlobalSalesReturnCash(AccountJournal $account)
+	{
+
+		$amount = $account->getAmount();
+		if($amount > 0){
+
+			$transaction = new Transaction();
+			$transaction->setGlobalOption($account->getGlobalOption());
+			$transaction->setAccountRefNo($account->getAccountRefNo());
+			$transaction->setProcessHead('SalesReturn');
+			$transaction->setProcess('Cash');
+			/* Cash - Sales Return Payment Account */
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+			$transaction->setAmount('-'.$amount);
+			$transaction->setCredit($amount);
+			$this->_em->persist($transaction);
+			$this->_em->flush();
+
+		}
+	}
+
+
+	public function salesReturnGlobalPayableTransaction(AccountSales $accountSales,$source='')
+	{
+		$this->insertGlobalSalesReturnAsset($accountSales);
+		$this->insertGlobalSalesReturnPayable($accountSales);
+	}
+
+	private function insertGlobalSalesReturnAsset(AccountSales $accountSales)
+	{
+
+		$amount =  $accountSales->getAmount();
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($accountSales->getGlobalOption());
+		$transaction->setAccountRefNo($accountSales->getAccountRefNo());
+		$transaction->setProcessHead('Sales Return');
+		$transaction->setProcess('Goods');
+		/* Sales Revenue - Sales Return Account */
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(34));
+		$transaction->setAmount($amount);
+		$transaction->setDebit($amount);
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+
+	}
+
+	private function insertGlobalSalesReturnPayable(AccountSales $accountSales)
+	{
+
+		$amount = $accountSales->getAmount();
+		if($amount > 0){
+
+			$transaction = new Transaction();
+			$transaction->setGlobalOption($accountSales->getGlobalOption());
+			$transaction->setAccountRefNo($accountSales->getAccountRefNo());
+			$transaction->setProcessHead('SalesReturn');
+			$transaction->setProcess('Current Liabilities');
+			/* Cash - Sales Return Payment Account */
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(35));
+			$transaction->setAmount('-'.$amount);
+			$transaction->setCredit($amount);
+			$this->_em->persist($transaction);
+			$this->_em->flush();
+
+		}
+	}
+
+
+	public function purchaseGlobalTransaction($accountPurchase,$source='')
     {
         $this->insertGlobalInventoryAsset($accountPurchase);
         $this->insertGlobalPurchaseCash($accountPurchase);
