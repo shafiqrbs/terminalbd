@@ -611,8 +611,8 @@ class SalesRepository extends EntityRepository
         $qb->select('s')
             ->where('s.inventoryConfig = :inventory')
             ->andWhere('s.salesMode =:mode')
-            ->andWhere('s.updated >= :today_startdatetime')
-            ->andWhere('s.updated <= :today_enddatetime');
+            ->andWhere('s.created >= :today_startdatetime')
+            ->andWhere('s.created <= :today_enddatetime');
 
         $qb->setParameter('inventory', $inventory)
             ->setParameter('mode', $mode)
