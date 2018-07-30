@@ -538,8 +538,8 @@ $(".select2User").select2({
         return item.text
     }, // omitted for brevity, see the source of this page
     initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('domain_user_name', { user : id}), {
+        var user = $(element).val();
+        $.ajax(Routing.generate('domain_user_name', { user : user}), {
             dataType: "json"
         }).done(function (data) {
             return  callback(data);

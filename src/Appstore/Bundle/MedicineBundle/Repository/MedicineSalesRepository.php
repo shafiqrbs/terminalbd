@@ -38,6 +38,7 @@ class MedicineSalesRepository extends EntityRepository
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
+        $paymentStatus = isset($data['paymentStatus'])? $data['paymentStatus'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $customer = isset($data['customer'])? $data['customer'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
@@ -85,6 +86,10 @@ class MedicineSalesRepository extends EntityRepository
         if(!empty($process)){
             $qb->andWhere("s.process = :process");
             $qb->setParameter('process', $process);
+        }
+         if(!empty($paymentStatus)){
+            $qb->andWhere("s.paymentStatus = :status");
+            $qb->setParameter('status', $paymentStatus);
         }
         if(!empty($transactionMethod)){
             $qb->andWhere("s.transactionMethod = :method");

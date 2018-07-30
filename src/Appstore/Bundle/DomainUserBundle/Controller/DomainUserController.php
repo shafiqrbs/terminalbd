@@ -301,8 +301,8 @@ class DomainUserController extends Controller
     public function searchUserNameAction($user)
     {
         return new JsonResponse(array(
-            'id'=>$user,
-            'text'=>$user
+            'id' => $user,
+            'text' => $user
         ));
     }
 
