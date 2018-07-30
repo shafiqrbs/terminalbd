@@ -331,7 +331,7 @@ class AccountJournalRepository extends EntityRepository
 		$this->_em->flush();
 		$this->_em->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity);
 		$this->_em->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
-		return $accountSales;
+		return $entity->getAccountRefNo();
 
 	}
 

@@ -43,7 +43,7 @@ class MedicineSalesReturn
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", inversedBy="medicineSalesReturns", cascade={"persist"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", inversedBy="medicineSalesReturns", cascade={"persist"} )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $medicineSalesItem;
@@ -121,9 +121,9 @@ class MedicineSalesReturn
     /**
      * @var string
      *
-     * @ORM\Column(name="accountMode",length=25, type="string",  nullable=true)
+     * @ORM\Column(name="journal",length=25, type="string",  nullable=true)
      */
-     private $accountMode='adjustment';
+     private $journal = '';
 
 
     /**
@@ -361,18 +361,19 @@ class MedicineSalesReturn
         $this->medicinePurchaseItem = $medicinePurchaseItem;
     }
 
+
 	/**
 	 * @return string
 	 */
-	public function getAccountMode(): string {
-		return $this->accountMode;
+	public function getJournal() {
+		return $this->journal;
 	}
 
 	/**
-	 * @param string $accountMode
+	 * @param string $journal
 	 */
-	public function setAccountMode( string $accountMode ) {
-		$this->accountMode = $accountMode;
+	public function setJournal( string $journal ) {
+		$this->journal = $journal;
 	}
 
 }

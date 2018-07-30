@@ -45,8 +45,7 @@ class MedicineSalesItem
     private $medicinePurchaseItem;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineSalesItem", cascade={"persist"} )
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineSalesItem", cascade={"persist"} )
      **/
     private $medicineSalesReturns;
 

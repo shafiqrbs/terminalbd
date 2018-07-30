@@ -56,7 +56,7 @@
                                     <th class="numeric" >Return Qnt.</th>
                                     <th class="numeric" >Return Price</th>
                                     <th class="numeric" >SubTotal</th>
-                                    <th class="numeric" >Mode</th>
+                                    <th class="numeric" >Journal</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -74,7 +74,7 @@
                                          <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.salesPrice }}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
-                                        <td class="numeric" >{{ entity.accountMode|capitalize }}</td>
+                                        <td class="numeric" >{{ entity.journal }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved' %}
                                                 <a title="Are you sure went to delete ?" href="{{ path('medicine_sales_return_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
