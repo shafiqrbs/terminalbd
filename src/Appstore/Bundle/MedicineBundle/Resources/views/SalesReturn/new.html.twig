@@ -110,9 +110,9 @@
                                                 <td class="span1">{{ item.subTotal|number_format }}</td>
                                                 <td class="span2" >
                                                     <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
-                                                    <input type="number" class="span12 numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"   id="quantity-{{ item.id }}" name="quantity[]" value="1" placeholder="{{ item.quantity }}"></td>
+                                                    <input type="number" class="span12 numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"   id="quantity-{{ item.id }}" name="quantity[]" value="0" placeholder="{{ item.quantity }}"></td>
                                                 <td class="span2" ><input type="text" class="span12 numeric td-inline-input price" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.salesPrice }}"  id="price-{{ item.id }}" name="price[]" value="{{ item.salesPrice }}" placeholder="{{ item.salesPrice }}"></td>
-                                                <td><span id="subTotal-{{ item.id }}">{{ item.salesPrice }}</span></td>
+                                                <td><span id="subTotal-{{ item.id }}">0</span></td>
                                             </tr>
                                         {% endfor %}
                                     {% endif %}
