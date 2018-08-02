@@ -396,10 +396,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
-            if(!empty($entity->getExpirationEndDate()) and !empty($entity->getExpirationStartDate())){
-                $expirationStartDate = $entity->getExpirationStartDate()->format('M y');
-                $expirationEndDate = $entity->getExpirationEndDate()->format('M y');
-                $expiration = $expirationStartDate.' To '.$expirationEndDate;
+            if(!empty($entity->getExpirationEndDate())){
+	            $expiration = $entity->getExpirationEndDate()->format('M y');
             }else{
                 $expiration='';
             }

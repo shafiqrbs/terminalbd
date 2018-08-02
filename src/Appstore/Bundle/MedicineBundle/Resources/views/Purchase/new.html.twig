@@ -170,7 +170,7 @@
                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-                                    <td class="span1">{% if item.expirationStartDate is not empty and item.expirationEndDate is not empty %}{{ item.expirationStartDate|date('M y') }} To {{ item.expirationEndDate|date('M y') }}{% endif %}</td>
+                                    <td class="span1">{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</td>
                                     <td class="span1">
                                        <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.actualPurchasePrice }}" >
                                     </td>

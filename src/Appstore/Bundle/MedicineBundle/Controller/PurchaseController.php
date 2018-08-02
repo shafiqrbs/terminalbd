@@ -293,7 +293,6 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
 
-        $expirationStartDate = ($data['purchaseItem']['expirationStartDate']);
         $expirationEndDate = ($data['purchaseItem']['expirationEndDate']);
         $entity = new MedicinePurchaseItem();
         $form = $this->createPurchaseItemForm($entity,$invoice);
