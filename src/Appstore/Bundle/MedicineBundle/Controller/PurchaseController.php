@@ -513,6 +513,15 @@ class PurchaseController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($entity->getMedicinePurchase());
         }
+
+	    if($data['name'] == 'expirationDate' and !empty($data['value'])){
+		    $expirationEndDate = $data['value'];
+		    $expirationEndDate = (new \DateTime($expirationEndDate));
+		    $entity->setExpirationStartDate($expirationEndDate);
+		    $entity->setExpirationEndDate($expirationEndDate);
+		    $em->flush();
+	    }
+
         $salesQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($entity);
         if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
             $entity->setQuantity((int)$data['value']);

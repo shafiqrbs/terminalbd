@@ -86,10 +86,9 @@
                     <div class="span4">&nbsp;</div>
                     <div class="span3">
                         <div class="control-group">
-                            <label class="control-label" for="name">Expiry Start & End Date</label>
+                            <label class="control-label" for="name">Expiry Date</label>
                             <div class="controls">
-                                <input type="text" id="expirationStartDate" name="expirationStartDate" autocomplete="off"   class="m-wrap span6 dateCalendar" placeholder="Expiry start date">
-                                <input type="text" id="expirationEndDate" name="expirationEndDate" autocomplete="off" class="m-wrap span6 dateCalendar" placeholder="Expiry end date">
+                                <input type="text" id="expirationEndDate" name="expirationEndDate" autocomplete="off" class="m-wrap span12 dateCalendar" placeholder="Expiry date">
                             </div>
                         </div>
                     </div>
@@ -132,7 +131,6 @@
                 <div class="span7">
                     <div class="input-append">
                         <div class="input-group">
-                             {{ form_widget(purchaseItem.expirationStartDate) }}
                              {{ form_widget(purchaseItem.expirationEndDate) }}
                              {{ form_widget(purchaseItem.quantity) }}
                              <button class="btn red" id="unit">Unit</button>

@@ -175,12 +175,15 @@ var FormEditable = function () {
 
         $('#dob').editable({
             inputclass: 'form-control',
+            minYear: 2015,
+            maxYear: 2025,
+            minuteStep: 10
         });
 
         $('#event').editable({
             placement: (App.isRTL() ? 'left' : 'right'),
             combodate: {
-                firstItem: 'name'
+                firstItem: 'name',
             }
         });
 

@@ -356,8 +356,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $entity = new MedicinePurchaseItem();
         $entity->setMedicinePurchase($purchase);
         $entity->setMedicineStock($item);
-        if(!empty($data['expirationStartDate'])){
-            $expirationStartDate = (new \DateTime($data['expirationStartDate']));
+        if(!empty($data['expirationEndDate'])){
+            $expirationStartDate = (new \DateTime($data['expirationEndDate']));
             $entity->setExpirationStartDate($expirationStartDate);
         }
         if(!empty($data['expirationEndDate'])){
