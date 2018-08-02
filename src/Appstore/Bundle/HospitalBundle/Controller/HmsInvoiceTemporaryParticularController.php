@@ -143,7 +143,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         if($discountType == 'flat'){
             $initialGrandTotal = ($subTotal  - $discount);
         }else{
-            $discount = ($subTotal*$discount)/100;
+            $discount = ($subTotal * $discount)/100;
             $initialGrandTotal = ($subTotal  - $discount);
         }
 
@@ -155,7 +155,6 @@ class HmsInvoiceTemporaryParticularController extends Controller
         );
         return new Response(json_encode($data));
         exit;
-
 
     }
 
@@ -171,6 +170,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $subTotal = $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->getSubTotalAmount($user);
         $data = array(
            'subTotal' => $subTotal,
+           'initialGrandTotal' => $subTotal,
            'invoiceParticulars' => $invoiceParticulars ,
            'msg' => $msg ,
            'success' => 'success'

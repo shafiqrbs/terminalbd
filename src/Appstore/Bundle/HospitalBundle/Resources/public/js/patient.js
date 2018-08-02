@@ -71,6 +71,27 @@ function formSubmit() {
 
     });
 
+    $(document).on('change', '#particular', function() {
+
+        var url = $(this).val();
+        if(url == ''){
+            alert('You have to add particulars from drop down and this not service item');
+            return false;
+        }
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                obj = JSON.parse(response);
+                $('#particularId').val(obj['particularId']);
+                $('#quantity').val(obj['quantity']).focus();
+                $('#price').val(obj['price']);
+                $('#instruction').html(obj['instruction']);
+                $('#addParticular').attr("disabled", false);
+            }
+        })
+    });
+
     $(document).on('click', '#temporaryParticular', function() {
 
         var particularId = $('#particularId').val();
@@ -84,7 +105,8 @@ function formSubmit() {
             success: function (response) {
                 obj = JSON.parse(response);
                 $('.subTotal').html(obj['subTotal']);
-                $('#initialDue').val(obj['subTotal']);
+                $('.initialGrandTotal').html(obj['initialGrandTotal']);
+                $('#initialDue').val(obj['initialGrandTotal']);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('.msg-hidden').show();
                 $('#msg').html(obj['msg']);
@@ -112,6 +134,7 @@ function formSubmit() {
                 $('.initialGrandTotal').html(obj['initialGrandTotal']);
                 $('.initialDiscount').html(obj['initialDiscount']);
                 $('#initialDiscount').val(obj['initialDiscount']);
+                $('#initialDue').val(obj['initialGrandTotal']);
 
             }
 
@@ -119,7 +142,7 @@ function formSubmit() {
     });
 
 
-    $(document).on("click", ".initialParticularDelete", function() {
+    $(document).on("click", ".initialParticularDelete , .particularDelete", function() {
 
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
@@ -130,7 +153,8 @@ function formSubmit() {
                 $.get(url, function( data ) {
                     obj = JSON.parse(data);
                     $('.subTotal').html(obj['subTotal']);
-                    $('.netTotal').html(obj['netTotal']);
+                    $('.initialGrandTotal').html(obj['initialGrandTotal']);
+                    $('#initialDue').val(obj['initialGrandTotal']);
                     $('.due').html(obj['due']);
                     $('.discountAmount').html(obj['discount']);
                     $('.discount').val('').attr( "placeholder", obj['discount'] );
