@@ -47,6 +47,11 @@ class MedicinePurchaseReturn
     private  $createdBy;
 
 
+	/**
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="medicinePurchasesReturnApprovedBy" )
+	 **/
+	private  $approvedBy;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturnItem", mappedBy="medicinePurchaseReturn")
      **/
@@ -60,10 +65,6 @@ class MedicinePurchaseReturn
     private $created;
 
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="medicinePurchasesReturnApprovedBy" )
-     **/
-    private  $approvedBy;
 
 
     /**

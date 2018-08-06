@@ -790,6 +790,17 @@ class User extends BaseUser
     protected $medicineReverse;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $medicinePurchaseReturn;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $medicinePurchaseReturnApprovedBy;
+
+
     /*=========================== BUSINESS BUNDLE ====================================*/
 
     /**

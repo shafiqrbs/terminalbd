@@ -24,7 +24,7 @@ class WearHouse
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="wearHouse" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="wearHouses" , cascade={"detach","merge"} )
      **/
     private  $businessConfig;
 
