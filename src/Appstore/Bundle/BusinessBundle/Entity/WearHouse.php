@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
- * RestaurantCategory
+ * BusinessWearHouse
  *
- * @ORM\Table( name ="business_category")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\CategoryRepository")
+ * @ORM\Table( name ="business_wearhouse")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\WearHouseRepository")
  */
-class Category
+class WearHouse
 {
     /**
      * @var integer
@@ -24,13 +24,12 @@ class Category
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="categories" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="wearHouse" , cascade={"detach","merge"} )
      **/
     private  $businessConfig;
 
-
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", mappedBy="wearHouse")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $businessParticulars;
@@ -46,6 +45,13 @@ class Category
     /**
      * @var string
      *
+     * @ORM\Column(name="shortCode", type="string", length=5, nullable=true)
+     */
+    private $shortCode;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="slug", type="string", length=50, nullable=true)
      */
     private $slug;
@@ -57,6 +63,13 @@ class Category
      */
     private $code;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="wearHouseCode", type="string", length=10, nullable=true)
+     */
+    private $wearHouseCode;
+
     /**
      * @var int
      *
@@ -64,12 +77,6 @@ class Category
      */
     private $sorting = 0;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="hasQuantity", type="boolean" )
-     */
-    private $hasQuantity = false;
 
     /**
      * @var boolean
@@ -77,6 +84,7 @@ class Category
      * @ORM\Column(name="status", type="boolean" )
      */
     private $status= true;
+
 
     /**
      * Get id
@@ -90,7 +98,7 @@ class Category
 
 
     /**
-     * @return Category
+     * @return WearHouse
      */
     public function getName()
     {
@@ -98,7 +106,7 @@ class Category
     }
 
     /**
-     * @param Category $name
+     * @param WearHouse $name
      */
     public function setName($name)
     {
@@ -155,23 +163,6 @@ class Category
     }
 
     /**
-     * @return bool
-     */
-    public function getHasQuantity()
-    {
-        return $this->hasQuantity;
-    }
-
-    /**
-     * @param bool $hasQuantity
-     */
-    public function setHasQuantity($hasQuantity)
-    {
-        $this->hasQuantity = $hasQuantity;
-    }
-
-
-    /**
      * @return string
      */
     public function getSlug()
@@ -185,14 +176,6 @@ class Category
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getParticulars()
-    {
-        return $this->particulars;
     }
 
 
@@ -219,6 +202,34 @@ class Category
     {
         return $this->businessParticulars;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getShortCode(){
+		return $this->shortCode;
+	}
+
+	/**
+	 * @param string $shortCode
+	 */
+	public function setShortCode( string $shortCode ) {
+		$this->shortCode = $shortCode;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getWearHouseCode(){
+		return $this->wearHouseCode;
+	}
+
+	/**
+	 * @param string $wearHouseCode
+	 */
+	public function setWearHouseCode( string $wearHouseCode ) {
+		$this->wearHouseCode = $wearHouseCode;
+	}
 
 
 }

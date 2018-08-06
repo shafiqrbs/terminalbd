@@ -271,17 +271,20 @@ var stockInvoice = $("#stockInvoice").validate({
     rules: {
 
         "particular": {required: true},
-        "quantity": {required: true}
+        "quantity": {required: true},
+        "salesPrice": {required: true}
     },
 
     messages: {
 
         "particular":"Enter particular name",
+        "salesPrice":"Enter sales price",
         "quantity":"Enter sales quantity"
     },
 
     tooltip_options: {
         "particular": {placement:'top',html:true},
+        "salesPrice": {placement:'top',html:true},
         "quantity": {placement:'top',html:true}
     },
 

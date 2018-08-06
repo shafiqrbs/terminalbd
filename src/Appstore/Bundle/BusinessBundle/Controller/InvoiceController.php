@@ -125,7 +125,7 @@ class InvoiceController extends Controller
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('production','stock','service','virtual'));
-        $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
+	    $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
         return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'particulars' => $particulars,
@@ -462,8 +462,9 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $particular = $request->request->get('particular');
         $quantity = $request->request->get('quantity');
+        $price = $request->request->get('salesPrice');
         if(!empty($particular)){
-            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity);
+            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'price' => $price);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStockItem($invoice,$invoiceItems);
             $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';

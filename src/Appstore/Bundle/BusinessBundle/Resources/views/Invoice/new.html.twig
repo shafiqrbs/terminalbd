@@ -58,18 +58,20 @@
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="row-fluid particular-info" >
-                                                        <div class="span10" >
-                                                            <select id="particular" name="particular" class="span12 m-wrap" style="margin-left: 15px">
+                                                        <div class="span8" >
+                                                            <select id="particular" name="particular" data-url="{{ path('business_invoice_particular_search',{'invoice':entity.id}) }}" class="span12 m-wrap" style="margin-left: 15px">
                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                 {% for particular in particulars %}
                                                                     <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => BDT. {{ particular.price }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         </div>
-                                                        <div class="span2">
+                                                        <div class="span4">
                                                             <div class="input-append span12" style="margin-bottom:0!important">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1">
+                                                                    <input type="text" class="m-wrap span3 form-control input-number" id="salesPrice" name="salesPrice" placeholder="Price" value="" min="">
+                                                                    <input type="number" class="m-wrap span4 form-control input-number" id="quantity" name="quantity" value="1" min="1">
+                                                                    <button type="button" class="btn yellow"  id="unit" >Unit</button>
                                                                     <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
                                                                 </div>
                                                             </div>

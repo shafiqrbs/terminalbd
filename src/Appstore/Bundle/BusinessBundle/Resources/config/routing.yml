@@ -42,6 +42,10 @@ business_category:
     resource: "@BusinessBundle/Resources/config/routing/category.yml"
     prefix:   /category
 
+business_wearhouse:
+    resource: "@BusinessBundle/Resources/config/routing/wearhouse.yml"
+    prefix:   /wear-house
+
 business_reverse:
     resource: "@BusinessBundle/Resources/config/routing/reverse.yml"
     prefix:   /reverse

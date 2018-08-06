@@ -35,6 +35,17 @@ class BusinessConfig
      **/
     private $businessInvoices;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Category", mappedBy="businessConfig")
+     **/
+    private $categories;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse", mappedBy="businessConfig")
+     **/
+    private $wearHouses;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="businessConfig")
      **/
@@ -54,6 +65,13 @@ class BusinessConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn", mappedBy="businessConfig")
      **/
     private $businessPurchasesReturns;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="stockFormat", type="array", length=50,nullable = true)
+     */
+    private $stockFormat;
 
     /**
      * @var string
@@ -695,14 +713,6 @@ class BusinessConfig
         $this->fontSizeValue = $fontSizeValue;
     }
 
-    /**
-     * @return BusinessInvoice
-     */
-    public function getBusinessInvoices()
-    {
-        return $this->businessInvoices;
-    }
-
 
     /**
      * @return BusinessVendor
@@ -809,14 +819,6 @@ class BusinessConfig
         $this->leftTopMargin = $leftTopMargin;
     }
 
-
-    /**
-     * @return BusinessInvoiceAccessories
-     */
-    public function getBusinessInvoiceAccessories()
-    {
-        return $this->businessInvoiceAccessories;
-    }
 
     /**
      * @return string
@@ -1097,6 +1099,41 @@ class BusinessConfig
     {
         $this->invoiceType = $invoiceType;
     }
+
+	/**
+	 * @return WearHouse
+	 */
+	public function getWearHouses() {
+		return $this->wearHouses;
+	}
+
+	/**
+	 * @return BusinessInvoice
+	 */
+	public function getBusinessInvoices() {
+		return $this->businessInvoices;
+	}
+
+	/**
+	 * @return Category
+	 */
+	public function getCategories() {
+		return $this->categories;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getStockFormat(){
+		return $this->stockFormat;
+	}
+
+	/**
+	 * @param array $stockFormat
+	 */
+	public function setStockFormat( array $stockFormat ) {
+		$this->stockFormat = $stockFormat;
+	}
 
 
 }

@@ -36,9 +36,22 @@ class ConfigType extends AbstractType
             ))
             ->add('invoiceType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
-                'choices' => array('' => '-- Select invoice type --', 'general' => 'General',  'banner-print' => 'Banner-Print'),
+                'choices' => array('' => '-- Select invoice type --', 'new' => 'General',  'banner-print' => 'Banner-Print'),
             ))
-            ->add('invoicePrintLogo')
+	        ->add('stockFormat',
+		        'choice', array(
+			        'attr'=>array('class'=>'m-wrap  span12'),
+			        'choices' => array(
+				        'wearhouse'           => 'Wearhouse',
+				        'category'           => 'Category'
+			        ),
+			        'required'    => false,
+			        'multiple'    => true,
+			        'expanded'  => false,
+			        'empty_data'  => null,
+		        ))
+
+	        ->add('invoicePrintLogo')
             ->add('customInvoicePrint')
             ->add('customInvoice')
             ->add('isInvoiceTitle')

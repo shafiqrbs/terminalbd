@@ -9,6 +9,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.business.wearhouse.event.listener:
+        class: Appstore\Bundle\BusinessBundle\EventListener\BusinessWearHouseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.business.invoice.event.listener:
         class: Appstore\Bundle\BusinessBundle\EventListener\BusinessInvoiceListener
         tags:

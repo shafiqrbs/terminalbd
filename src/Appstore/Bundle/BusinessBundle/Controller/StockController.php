@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -59,9 +60,12 @@ class StockController extends Controller
     public function newAction()
     {
         $entity = new BusinessParticular();
+	    $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+	    $stockFormat = $config->getStockFormat();
         $form   = $this->createCreateForm($entity);
         return $this->render('BusinessBundle:Stock:new.html.twig', array(
             'entity' => $entity,
+            'stockFormat' => $stockFormat,
             'form'   => $form->createView()
         ));
     }
@@ -74,12 +78,27 @@ class StockController extends Controller
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+
+        /* @var $config BusinessConfig */
+
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entity = new BusinessParticular();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
-        if ($form->isValid()) {
+	    if(!empty($entity->getWearHouse()) and !empty($entity->getWearHouse()->getWearHouseCode())) {
+		    $name = $entity->getWearHouse()->getShortCode() . '-' . $entity->getName();
+		    $checkName = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessParticular' )->findOneBy( array(
+			    'businessConfig' => $config,
+			    'name'           => $name
+		    ) );
+	    }else{
+		    $name = $entity->getName();
+		    $checkName = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessParticular' )->findOneBy( array(
+			    'businessConfig' => $config,
+			    'name'           => $name
+		    ) );
+	    }
+        if ($form->isValid() and empty($checkName)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setBusinessConfig($config);
             if($entity->getBusinessParticularType() == 'production' ){
@@ -93,7 +112,7 @@ class StockController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('business_stock'));
+            return $this->redirect($this->generateUrl('business_stock_new'));
         }
         $this->get('session')->getFlashBag()->add(
             'error',"Required field does not input"
@@ -140,9 +159,12 @@ class StockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
+	    $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+	    $stockFormat = $config->getStockFormat();
         $editForm = $this->createEditForm($entity);
         return $this->render('BusinessBundle:Stock:new.html.twig', array(
             'entity'            => $entity,
+            'stockFormat'       => $stockFormat,
             'form'              => $editForm->createView(),
         ));
     }

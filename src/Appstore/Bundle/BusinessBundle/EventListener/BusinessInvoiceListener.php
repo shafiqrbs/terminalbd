@@ -26,7 +26,7 @@ class BusinessInvoiceListener
             if(empty($entity->getBusinessConfig()->getInvoicePrefix())){
                 $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
             }else{
-                $entity->setInvoice(sprintf("%s%s%s", $entity->getHospitalConfig()->getInvoicePrefix(), $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+                $entity->setInvoice(sprintf("%s%s%s", $entity->getBusinessConfig()->getInvoicePrefix(), $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
             }
 
         }

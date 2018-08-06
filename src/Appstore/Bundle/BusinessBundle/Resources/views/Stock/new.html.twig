@@ -45,6 +45,20 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div class="row-fluid" >
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <label class="control-label"  for="category" >Product<span class="required">*</span></label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-medkit"></i>
+                                                {{ form_widget(form.name) }}
+                                                {{ form_errors(form.name) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid" >
                                 <div class="span4">
                                     <div class="row-fluid" >
                                         <div class="span12">
@@ -68,20 +82,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row-fluid" >
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label"  for="category" >Product<span class="required">*</span></label>
-                                                <div class="controls">
-                                                    <div class="input-icon left">
-                                                        <i class="icon-medkit"></i>
-                                                        {{ form_widget(form.name) }}
-                                                        {{ form_errors(form.name) }}
+                                    {% if 'wearhouse' in stockFormat %}
+                                        <div class="row-fluid" >
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label"  for="category" >Wearhouse</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.wearHouse) }}
+                                                        {{ form_errors(form.wearHouse) }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
+
                                 </div>
                                 <div class="span4">
                                     <div class="row-fluid" >

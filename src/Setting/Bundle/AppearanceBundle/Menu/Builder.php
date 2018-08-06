@@ -195,6 +195,7 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);
             $menu['Business Management']['Master Data']->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
+            $menu['Business Management']['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
             $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))->setAttribute('icon', 'icon-cog');
         }
         if ($securityContext->isGranted('ROLE_BUSINESS_STOCK')) {

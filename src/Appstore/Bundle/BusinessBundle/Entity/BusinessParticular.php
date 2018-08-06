@@ -37,6 +37,12 @@ class BusinessParticular
      **/
     private $category;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse", inversedBy="businessParticulars" )
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $wearHouse;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticularType", inversedBy="businessParticulars" )
      **/
@@ -961,6 +967,20 @@ class BusinessParticular
     {
         $this->productionType = $productionType;
     }
+
+	/**
+	 * @return WearHouse
+	 */
+	public function getWearHouse() {
+		return $this->wearHouse;
+	}
+
+	/**
+	 * @param WearHouse $wearHouse
+	 */
+	public function setWearHouse( $wearHouse ) {
+		$this->wearHouse = $wearHouse;
+	}
 
 }
 

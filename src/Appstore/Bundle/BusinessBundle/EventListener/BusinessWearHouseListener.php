@@ -2,10 +2,10 @@
 
 namespace Appstore\Bundle\BusinessBundle\EventListener;
 
-use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\WearHouse;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-class BusinessParticularListener
+class BusinessWearHouseListener
 {
     public function prePersist(LifecycleEventArgs $args)
     {
@@ -16,16 +16,10 @@ class BusinessParticularListener
     {
 
         $entity = $args->getEntity();
-        if ($entity instanceof BusinessParticular) {
+        if ($entity instanceof WearHouse) {
             $lastCode = $this->getLastCode($args,$entity);
             $entity->setCode((int)$lastCode + 1);
-            if(!empty($entity->getWearHouse()) and !empty($entity->getWearHouse()->getWearHouseCode())){
-	            $entity->setParticularCode(sprintf("%s%s", $entity->getWearHouse()->getWearHouseCode().'-',str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
-		        $name = $entity->getWearHouse()->getShortCode().'-'.$entity->getName();
-	            $entity->setName($name);
-            }else{
-	            $entity->setParticularCode(sprintf("%s",str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
-            }
+            $entity->setWearHouseCode(sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -36,7 +30,6 @@ class BusinessParticularListener
      */
     public function getLastCode(LifecycleEventArgs $args, $entity)
     {
-
         $class = get_class($entity);
         $entityManager = $args->getEntityManager();
         $qb = $entityManager->getRepository($class)->createQueryBuilder('s');
@@ -50,8 +43,5 @@ class BusinessParticularListener
             return 0;
         }
         return $lastCode;
-
     }
-
-
 }
