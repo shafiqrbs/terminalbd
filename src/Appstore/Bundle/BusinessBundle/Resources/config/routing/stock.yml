@@ -24,6 +24,10 @@ business_stock_delete:
     path:     /{id}/delete
     defaults: { _controller: "BusinessBundle:Stock:delete" }
 
+business_stock_transfer:
+    path:     /{id}/transfer
+    defaults: { _controller: "BusinessBundle:Stock:transfer" }
+
 business_stock_status:
     path:     /{id}/status
     defaults: { _controller: "BusinessBundle:Stock:status" }

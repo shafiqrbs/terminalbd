@@ -209,7 +209,6 @@ class StockController extends Controller
                 $entity->removeUpload();
             }
             $em->flush();
-
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
@@ -220,16 +219,20 @@ class StockController extends Controller
             'form'   => $editForm->createView(),
         ));
     }
+
     /**
      * Deletes a Particular entity.
      * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
      */
+
     public function deleteAction(BusinessParticular $entity)
     {
         $em = $this->getDoctrine()->getManager();
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
+
         try {
 
             $em->remove($entity);
@@ -255,6 +258,7 @@ class StockController extends Controller
      * Status a Page entity.
      *
      */
+
     public function statusAction(BusinessParticular $entity)
     {
 
@@ -262,7 +266,6 @@ class StockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
         }
-
         $status = $entity->getStatus();
         if($status == 1){
             $entity->setStatus(0);
@@ -295,4 +298,10 @@ class StockController extends Controller
     {
 
     }
+
+    public function transfer(BusinessParticular $particular)
+    {
+
+    }
+
 }

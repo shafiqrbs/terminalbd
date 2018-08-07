@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Sales Invoice # {{ entity.invoice }}
+                    Medicine Invoice # {{ entity.invoice }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('medicine_sales') }}">Sales</a>
+                        <a href="{{ path('medicine_sales_return') }}">Medicine Return</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Sales Details</a></li>
+                    <li><a href="#">Manage Medicine Return Details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i> {{ "now"|date("d-F-Y") }}
                     </li>
@@ -33,12 +33,11 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Sales Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Medicine Return Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Point of Sales</a>
-                                <a class="btn" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine</a>
+                                <a class="btn" href="{{ path('medicine_sales_return') }}"><i class="icon-th-list"></i> Medicine Return</a>
                             </div>
                         </div>
 
@@ -102,18 +101,32 @@
                                     <tbody id="">
                                     {% if entity.medicineSalesItems is not empty %}
                                         {% for item in entity.medicineSalesItems %}
-                                            <tr id="remove-{{ item.id }}">
-                                                <td  class="span1">{{ loop.index }}. {{ item.getMedicinePurchaseItem.barcode }}</td>
-                                                <td class="span2">{{ item.medicineStock.name }}</td>
-                                                <td class="span1">{{ item.salesPrice }}</td>
-                                                <td class="span1">{{ item.quantity }}</td>
-                                                <td class="span1">{{ item.subTotal|number_format }}</td>
-                                                <td class="span2" >
-                                                    <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
-                                                    <input type="number" class="span12 numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"   id="quantity-{{ item.id }}" name="quantity[]" value="0" placeholder="{{ item.quantity }}"></td>
-                                                <td class="span2" ><input type="text" class="span12 numeric td-inline-input price" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.salesPrice }}"  id="price-{{ item.id }}" name="price[]" value="{{ item.salesPrice }}" placeholder="{{ item.salesPrice }}"></td>
-                                                <td><span id="subTotal-{{ item.id }}">0</span></td>
-                                            </tr>
+
+                                            {% if item.medicineSalesReturns is empty %}
+                                                <tr>
+                                                    <td  class="span1">{{ loop.index }}. {{ item.getMedicinePurchaseItem.barcode }}</td>
+                                                    <td class="span2">{{ item.medicineStock.name }}</td>
+                                                    <td class="span1">{{ item.salesPrice }}</td>
+                                                    <td class="span1">{{ item.quantity }}</td>
+                                                    <td class="span1">{{ item.subTotal|number_format }}</td>
+                                                    <td class="span2" >
+                                                        <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
+                                                        <input type="number" class="span12 numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"   id="quantity-{{ item.id }}" name="quantity[]" value="0" placeholder="{{ item.quantity }}"></td>
+                                                    <td class="span2" ><input type="text" class="span12 numeric td-inline-input price" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.salesPrice }}"  id="price-{{ item.id }}" name="price[]" value="{{ item.salesPrice }}" placeholder="{{ item.salesPrice }}"></td>
+                                                    <td><span id="subTotal-{{ item.id }}">0</span></td>
+                                                </tr>
+                                             {% else %}
+                                                    <tr>
+                                                        <td  class="span1">{{ loop.index }}. {{ item.getMedicinePurchaseItem.barcode }}</td>
+                                                        <td class="span2">{{ item.medicineStock.name }}</td>
+                                                        <td class="span1">{{ item.salesPrice }}</td>
+                                                        <td class="span1">{{ item.quantity }}</td>
+                                                        <td class="span1">{{ item.subTotal|number_format }}</td>
+                                                        <td class="span2" ></td>
+                                                        <td class="span2" ></td>
+                                                        <td></td>
+                                                    </tr>
+                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}
                                     </tbody>

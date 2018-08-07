@@ -58,7 +58,7 @@ class SalesReturnController extends Controller
 		        $entity->setMedicineStock($salesItem->getMedicineStock());
 		        $entity->setMedicinePurchaseItem($salesItem->getMedicinePurchaseItem());
 		        $entity->setMedicineSalesItem($salesItem);
-		        $price = empty($data[$key])? $salesItem->getSalesPrice() : $data['salesPrice'][$key];
+		        $price = empty($data['price'][$key])? $salesItem->getSalesPrice() : $data['price'][$key];
 		        $entity->setSalesPrice($price);
 		        $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
 		        $em->persist($entity);
