@@ -41,7 +41,7 @@ $(document).on('change', '#particular', function() {
             $('#quantity').val(obj['quantity']);
             $('#price').val(obj['price']);
             $('#purchasePrice').val(obj['purchasePrice']);
-            $('#instruction').html(obj['instruction']);
+            $('#unit').html(obj['unit']);
         }
     })
 });
@@ -79,6 +79,7 @@ $(document).on('click', '#addParticular', function() {
             $('#purchasePrice').val('');
             $("#particular").select2().select2("val","");
             $('#price').val('');
+            $('#unit').html('Unit');
             $('#quantity').val('1');
         }
     })

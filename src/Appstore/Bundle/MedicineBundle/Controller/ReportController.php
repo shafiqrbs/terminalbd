@@ -87,10 +87,9 @@ class ReportController extends Controller
         $user = $this->getUser();
         $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user,$data);
         $cashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
-        $entities = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItem($user,$data);
+        $entities = $em->getRepository('MedicineBundle:MedicineSalesItem')->reportSalesStockItem($user,$data);
         $pagination = $this->paginate($entities);
-
-        return $this->render('MedicineBundle:Report:sales/salesStock.html.twig', array(
+	    return $this->render('MedicineBundle:Report:sales/salesStock.html.twig', array(
             'option'  => $user->getGlobalOption() ,
             'entities' => $pagination,
             'cashOverview' => $cashOverview,

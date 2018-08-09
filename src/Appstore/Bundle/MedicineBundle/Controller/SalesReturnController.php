@@ -26,7 +26,7 @@ class SalesReturnController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesReturn')->findBy(array('medicineConfig' => $config),array('created'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesReturn')->findBy(array('medicineConfig' => $config),array('created'=>'DESC'));
         return $this->render('MedicineBundle:SalesReturn:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -56,14 +56,18 @@ class SalesReturnController extends Controller
 		        $entity->setMedicineConfig($config);
 		        $entity->setQuantity($qnt);
 		        $entity->setMedicineStock($salesItem->getMedicineStock());
-		        $entity->setMedicinePurchaseItem($salesItem->getMedicinePurchaseItem());
+		        if($salesItem->getMedicinePurchaseItem()){
+			        $entity->setMedicinePurchaseItem($salesItem->getMedicinePurchaseItem());
+		        }
 		        $entity->setMedicineSalesItem($salesItem);
 		        $price = empty($data['price'][$key])? $salesItem->getSalesPrice() : $data['price'][$key];
 		        $entity->setSalesPrice($price);
 		        $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
 		        $em->persist($entity);
 		        $em->flush();
-		        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($salesItem->getMedicinePurchaseItem(), 'sales-return');
+		        if(!empty($salesItem->getMedicinePurchaseItem())) {
+			        $this->getDoctrine()->getRepository( 'MedicineBundle:MedicinePurchaseItem' )->updateRemovePurchaseItemQuantity( $salesItem->getMedicinePurchaseItem(), 'sales-return' );
+		        }
 		        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($salesItem->getMedicineStock(), 'sales-return');
 
 	        }
@@ -78,19 +82,24 @@ class SalesReturnController extends Controller
 
     public function deleteAction($id)
     {
-
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('MedicineBundle:MedicineSalesReturn')->find($id);
-        $purchaseItem = $entity->getMedicinePurchaseItem();
+	    $item = $entity->getMedicinePurchaseItem();
         $stock = $entity->getMedicineStock();
-        $em->remove($entity);
+	    $this->get('session')->set('item', $item);
+	    $this->get('session')->set('stock', $stock);
+	    $em->remove($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'sales-return');
+	    $item = $this->get('session')->get('item');
+	    $stock = $this->get('session')->get('stock');
+	    if(!empty($item)) {
+		    $this->getDoctrine()->getRepository( 'MedicineBundle:MedicinePurchaseItem' )->updateRemovePurchaseItemQuantity( $item, 'sales-return' );
+	    }
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales-return');
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
-        return $this->redirect($this->generateUrl('medicine_damage'));
+        return $this->redirect($this->generateUrl('medicine_sales_return'));
     }
 
     public function approveAction(MedicineSalesReturn $entity)

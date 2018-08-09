@@ -48,6 +48,7 @@ class InvoiceType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
+                    'flat' => 'Flat',
                     'percentage' => 'Percentage',
                 ),
             ))

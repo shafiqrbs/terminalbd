@@ -86,6 +86,7 @@
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Rack</th>
+                                    <th class="numeric" >PP Tk.</th>
                                     <th class="numeric" >MRP Tk.</th>
                                     <th class="numeric" >Opening</th>
                                     <th class="numeric" >Purchase Qnt</th>
@@ -107,6 +108,11 @@
                                         {% endif %}
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.rackNo is not empty %}{{ entity.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</a>
+                                        </td>
+                                        <td class="numeric">
+                                            {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
+                                                <a  class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purchase price">{{ entity.purchasePrice }}</a>
+                                            {% endif %}
                                         </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}

@@ -44,14 +44,14 @@
                                     <li><strong>Product Mode #:</strong>&nbsp;{{ entity.mode }}</li>
                                     {% if entity.medicineBrand is not empty %}<li><strong>Generic Name #:</strong>&nbsp;{{ entity.medicineBrand.medicineGeneric.name }}</li>{% endif %}
                                     {% if entity.medicineBrand is not empty %}<li><strong>Brand Name #:</strong>&nbsp;{{ entity.medicineBrand.medicineCompany.name }}</li>{% endif %}
-                                    {% if entity.accessoriesBrand is not empty %}<li><strong>Brand Name #:</strong>&nbsp;{ entity.accessoriesBrand.name }}</li>{% endif %}
+                                    {% if entity.accessoriesBrand is not empty %}<li><strong>Brand Name #:</strong>&nbsp;{{ entity.accessoriesBrand.name }}</li>{% endif %}
                                 </ul>
                             </div>
                             <div class="span4">
                                 <h4>Stock Details:</h4>
                                 <ul class="unstyled">
                                     <li><strong>Purchase:</strong>&nbsp;{{ entity.purchaseQuantity }}</li>
-                                    <li><strong>Purchase Return:</strong>&nbsp;{{ entity.purchaseQuantity }}</li>
+                                    <li><strong>Purchase Return:</strong>&nbsp;{{ entity.purchaseReturnQuantity }}</li>
                                     <li><strong>Damage:</strong>&nbsp;{{ entity.damageQuantity }}</li>
                                 </ul>
                             </div>

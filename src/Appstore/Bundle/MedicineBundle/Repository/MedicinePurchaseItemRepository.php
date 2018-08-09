@@ -114,7 +114,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->join('mpi.medicineStock','s');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
-        $qb->andWhere('mpi.remainingQuantity > 0');
+       // $qb->andWhere('mpi.remainingQuantity > 0');
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.name','ASC');
         $qb->getQuery();
@@ -198,10 +198,10 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
         $em = $this->_em;
         if($fieldName == 'sales'){
-            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($item);
+	        $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($item);
             $item->setSalesQuantity($quantity);
         }elseif($fieldName == 'sales-return'){
-            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockItemUpdate($item);
+	        $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockItemUpdate($item);
             $item->setSalesReturnQuantity($quantity);
         }elseif($fieldName == 'purchase-return'){
             $quantity = $this->_em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->purchaseReturnStockItemUpdate($item);
@@ -219,7 +219,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
     public function remainingQnt(MedicinePurchaseItem $item)
     {
         $em = $this->_em;
-        $qnt = ($item->getQuantity()  + $item->getSalesReturnQuantity()) - ($item->getPurchaseReturnQuantity()+$item->getSalesQuantity()+$item->getDamageQuantity());
+	    $qnt = ($item->getQuantity()  + $item->getSalesReturnQuantity()) - ($item->getPurchaseReturnQuantity() + $item->getSalesQuantity() + $item->getDamageQuantity());
         $item->setRemainingQuantity($qnt);
         $em->persist($item);
         $em->flush();

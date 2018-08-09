@@ -108,7 +108,7 @@ function jqueryTemporaryLoad() {
         rules: {
 
             "salesTemporaryItem[stockName]": {required: true},
-            "salesTemporaryItem[barcode]": {required: true},
+            "salesTemporaryItem[barcode]": {required: false},
             "salesTemporaryItem[salesPrice]": {required: true},
             "salesTemporaryItem[quantity]": {required: true},
         },

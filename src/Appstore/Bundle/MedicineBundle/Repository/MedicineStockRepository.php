@@ -148,6 +148,7 @@ class MedicineStockRepository extends EntityRepository
             foreach ($purchase->getMedicinePurchaseItems() as $purchaseItem) {
                  $stockItem = $purchaseItem->getMedicineStock();
                  $this->updateRemovePurchaseQuantity($stockItem);
+                 $this->updatePurchasePrice($stockItem,$purchaseItem);
             }
         }
     }
@@ -159,7 +160,7 @@ class MedicineStockRepository extends EntityRepository
             $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
             $stock->setSalesQuantity($qnt);
         }elseif($fieldName == 'sales-return'){
-            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockUpdate($stock);
+	        $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockUpdate($stock);
             $stock->setSalesReturnQuantity($quantity);
         }elseif($fieldName == 'purchase-return'){
             $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->purchaseReturnStockUpdate($stock);
@@ -179,8 +180,16 @@ class MedicineStockRepository extends EntityRepository
     public function remainingQnt(MedicineStock $stock)
     {
         $em = $this->_em;
-        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
+	    $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
+        $em->persist($stock);
+        $em->flush();
+    }
+
+    public function updatePurchasePrice(MedicineStock $stock,MedicinePurchaseItem $item)
+    {
+        $em = $this->_em;
+	    $stock->setPurchasePrice($item->getPurchasePrice());
         $em->persist($stock);
         $em->flush();
     }

@@ -81,6 +81,7 @@
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Mode</th>
+                                    <th class="numeric" >Reverse</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -96,6 +97,11 @@
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
                                         <td class="numeric" >{{ entity.mode|capitalize }}</td>
+                                        <td class="numeric" >
+                                            {% if entity.revised == 1 %}
+                                                <a href="{{ path('medicine_purchase_reverse_show', { 'id': entity.id }) }}" class="btn yellow mini" >Reverse</a>
+                                            {% endif %}
+                                        </td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
                                             {% if entity.process in process %}

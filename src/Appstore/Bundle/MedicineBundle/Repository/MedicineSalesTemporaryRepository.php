@@ -33,7 +33,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
     {
 
         $stockItem = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['stockName']);
-        $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['barcode']);
+    //    $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['barcode']);
 
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
@@ -54,7 +54,11 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         $entity->setUser($user);
         $entity->setMedicineConfig($user->getGlobalOption()->getMedicineConfig());
         $entity->setMedicineStock($stockItem);
-        $entity->setMedicinePurchaseItem($purchaseStockItem);
+	    $entity->setPurchasePrice(round($stockItem->getPurchasePrice(),2));
+	   /* if(!empty($purchaseStockItem)){
+	        $entity->setPurchasePrice(round($purchaseStockItem->getPurchasePrice(),2));
+	        $entity->setMedicinePurchaseItem($purchaseStockItem);
+        }*/
         $em->persist($entity);
         $em->flush();
 
@@ -105,15 +109,20 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         foreach ($entities as $entity) {
 
             $rack ="";
+            $barcode ="";
             if(!empty($entity->getMedicineStock()->getRackNo())){
                 $rack = $entity->getMedicineStock()->getRackNo()->getName();
             }
+            if(!empty($entity->getMedicinePurchaseItem())){
+	            $barcode = $entity->getMedicinePurchaseItem()->getBarcode();
+            }
+
 
             $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class="span1" >' . $entity->getMedicinePurchaseItem()->getBarcode() . '</td>';
+            /*$data .= '<td class="span1" >' . $barcode . '</td>';*/
             $data .= '<td class="span4" >' . $entity->getMedicineStock()->getName() . '</td>';
             $data .= '<td class="span1" >' . $rack. '</td>';
-            $data .= '<td class="span1" >' . $entity->getMedicinePurchaseItem()->getPurchasePrice() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getPurchasePrice() . '</td>';
             $data .= "<td class='span1' >";
             $data .= "<input type='number' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
             $data .= "</td>";

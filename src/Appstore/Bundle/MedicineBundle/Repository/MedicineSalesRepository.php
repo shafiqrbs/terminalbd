@@ -99,6 +99,47 @@ class MedicineSalesRepository extends EntityRepository
 
     }
 
+	protected function handleSearchStockBetween($qb,$data)
+	{
+
+		$grn = isset($data['grn'])? $data['grn'] :'';
+		$vendor = isset($data['vendor'])? $data['vendor'] :'';
+		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
+		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+		$name = isset($data['name'])? $data['name'] :'';
+		$rackNo = isset($data['rackNo'])? $data['rackNo'] :'';
+		$mode = isset($data['mode'])? $data['mode'] :'';
+		$sku = isset($data['sku'])? $data['sku'] :'';
+		$brandName = isset($data['brandName'])? $data['brandName'] :'';
+
+		if (!empty($name)) {
+			$qb->andWhere($qb->expr()->like("mds.name", "'%$name%'"  ));
+		}
+		if (!empty($sku)) {
+			$qb->andWhere($qb->expr()->like("mds.sku", "'%$sku%'"  ));
+		}
+		if (!empty($brandName)) {
+			$qb->andWhere($qb->expr()->like("mds.brandName", "'%$brandName%'"  ));
+		}
+		if(!empty($rackNo)){
+			$qb->andWhere("mds.rackNo = :rack")->setParameter('rack', $rackNo);
+		}
+		if (!empty($createdStart)) {
+			$compareTo = new \DateTime($createdStart);
+			$created =  $compareTo->format('Y-m-d 00:00:00');
+			$qb->andWhere("s.created >= :createdStart");
+			$qb->setParameter('createdStart', $created);
+		}
+
+		if (!empty($createdEnd)) {
+			$compareTo = new \DateTime($createdEnd);
+			$createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+			$qb->andWhere("s.created <= :createdEnd");
+			$qb->setParameter('createdEnd', $createdEnd);
+		}
+
+	}
+
     public function handleDateRangeFind($qb,$data)
     {
         if(empty($data)){
@@ -403,7 +444,29 @@ class MedicineSalesRepository extends EntityRepository
         return $array;
     }
 
-    public  function reportSalesItem(User $user, $data=''){
+	public  function reportSalesItem(User $user, $data=''){
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$group = isset($data['group']) ? $data['group'] :'medicineStock';
+
+		$qb = $this->createQueryBuilder('s');
+		$qb->join('s.medicineSalesItems','si');
+		$qb->join('si.medicineStock','mds');
+		$qb->select('SUM(si.quantity) AS quantity');
+		$qb->addSelect('SUM(si.quantity * si.discountPrice ) AS salesPrice');
+		$qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS purchasePrice');
+		$qb->addSelect('mds.name AS name');
+		$qb->where('s.medicineConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('s.process = :process');
+		$qb->setParameter('process', 'Done');
+		$qb->groupBy('si.medicineStock');
+		$qb->orderBy('mds.name','ASC');
+		return $qb->getQuery()->getArrayResult();
+	}
+
+    public  function reportSalesStockItem(User $user, $data=''){
 
         $userBranch = $user->getProfile()->getBranches();
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
@@ -412,11 +475,11 @@ class MedicineSalesRepository extends EntityRepository
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.medicineSalesItems','si');
         $qb->join('si.medicinePurchaseItem','item');
-        $qb->join('si.medicineStock','m');
+        $qb->join('si.medicineStock','mds');
         $qb->select('SUM(si.quantity) AS quantity');
         $qb->addSelect('SUM(si.quantity * si.discountPrice ) AS salesPrice');
         $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS purchasePrice');
-        $qb->addSelect('m.name AS name');
+        $qb->addSelect('mds.name AS name');
         $qb->where('s.medicineConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('s.process = :process');
@@ -424,15 +487,14 @@ class MedicineSalesRepository extends EntityRepository
         if($group == 'medicinePurchaseItem') {
             $qb->addSelect('item.barcode AS barcode');
         }
-        $this->handleSearchBetween($qb,$data);
+        $this->handleSearchStockBetween($qb,$data);
         if ($userBranch){
             $qb->andWhere("s.branches = :branch");
             $qb->setParameter('branch', $userBranch);
         }
         $qb->groupBy('si.'.$group);
         $qb->orderBy('s.created','DESC');
-        $result = $qb->getQuery();
-        return $result;
+        return $qb;
     }
 
     public function monthlySales(User $user , $data =array())

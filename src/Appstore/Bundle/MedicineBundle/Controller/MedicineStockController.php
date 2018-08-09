@@ -74,7 +74,8 @@ class MedicineStockController extends Controller
 
     public function newAction()
     {
-        $entity = new MedicineStock();
+
+		$entity = new MedicineStock();
         $form = $this->createCreateForm($entity);
         return $this->render('MedicineBundle:MedicineStock:medicine.html.twig', array(
             'entity' => $entity,
@@ -450,5 +451,26 @@ class MedicineStockController extends Controller
             'id' => $brand,
             'text' => $brand
         ));
+    }
+
+    public function stockPriceUpdate()
+    {
+	    set_time_limit(0);
+	    ignore_user_abort(true);
+
+	    $em = $this->getDoctrine()->getManager();
+	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+	    $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findBy(array('medicineConfig'=>$config));
+
+	    /* @var $item MedicineStock */
+	    foreach ($entities as $item){
+
+		    $percentage = floatval(12.50);
+		    $purchasePrice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->stockInstantPurchaseItemPrice($percentage,$item->getSalesPrice());
+		    $item->setPurchasePrice($purchasePrice);
+		    $em->persist($item);
+		    $em->flush();
+
+	    }
     }
 }

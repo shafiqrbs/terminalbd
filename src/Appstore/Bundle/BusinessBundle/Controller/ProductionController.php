@@ -47,7 +47,8 @@ class ProductionController extends Controller
     public function productionAction(BusinessParticular  $entity)
     {
 
-        $em = $this->getDoctrine()->getManager();
+
+    	$em = $this->getDoctrine()->getManager();
         $config =$this->getUser()->getGlobalOption()->getBusinessConfig()->getId();
         if($entity->getProductType() != 'production' and $entity->getBusinessConfig()->getId() != $config){
             return $this->redirect($this->generateUrl('business_stock'));

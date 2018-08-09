@@ -17,20 +17,20 @@
     <div class="clearfix">&nbsp;</div>
     {{ form_start(salesItem) }}
     {{ form_row(salesItem._token) }}
-    <div class="row-fluid particular-info" >
-        <div class="span6">
+    <div class="row-fluid particular-info" style="padding-left:15px!important" >
+        <div class="span8">
             {{ form_widget(salesItem.stockName) }}
             {{ form_errors(salesItem.stockName) }}
         </div>
-        <div class="span4">
+        {#<div class="span2">
             {{ form_widget(salesItem.barcode) }}
             {{ form_errors(salesItem.barcode) }}
-            {{ form_widget(salesItem.salesPrice) }}
-            {{ form_errors(salesItem.salesPrice) }}
-        </div>
-        <div class="span2">
+        </div>#}
+        <div class="span4">
             <div class="input-append">
                 <div class="input-group">
+                    {{ form_widget(salesItem.salesPrice) }}
+                    {{ form_errors(salesItem.salesPrice) }}
                     {{ form_widget(salesItem.quantity) }}
                     {{ form_errors(salesItem.quantity) }}
                     <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-save"></span> Add</button>
@@ -46,7 +46,7 @@
             <table class="table table-bordered table-striped table-condensed table-fixed">
                 <thead>
                 <tr>
-                    <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
+                    {#<th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>#}
                     <th class="span3">Name</th>
                     <th class="span1">Rack</th>
                     <th class="span1">PP</th>
@@ -60,10 +60,10 @@
                 {% if user.medicineSalesTemporary is not empty %}
                     {% for item in user.medicineSalesTemporary %}
                         <tr id="remove-{{ item.id }}">
-                            <td  class="span1">{{ item.medicinePurchaseItem.barcode }}</td>
+                            {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
                             <td class="span5">{{ item.medicineStock.name }}</td>
                             <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-                            <td class="span1">{{ item.medicinePurchaseItem.purchasePrice }}</td>
+                            <td class="span1">{{ item.purchasePrice }}</td>
                             <td class="span1">
                                 <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
                                 <input type="number" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" >
@@ -82,20 +82,20 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td colspan="8" class="span12" style="border: 1px double #000"></td>
+                    <td colspan="7" class="span12" style="border: 1px double #000"></td>
                 </tr>
                 <tr>
-                    <td colspan="6" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                    <td colspan="5" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                     <td class=""><strong id="subTotal">{{ subTotal|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>
                 <tr>
-                    <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                    <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                     <td class=""><strong class="discount"></strong></td>
                     <td class="span1"></td>
                 </tr>
                 <tr>
-                    <td colspan="6" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
+                    <td colspan="5" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
                     <td class=""><strong id="grandTotal">{{ subTotal|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>

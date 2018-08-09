@@ -103,7 +103,10 @@
 
                             <thead class="flip-content ">
                             <tr class="head-blue">
-                                <th class="numeric" ><i class="icon-reorder"></i> SKU</th>
+                                <th class="numeric" ><i class="icon-reorder"></i></th>
+                                {% if searchForm.group is defined and  searchForm.group =='medicinePurchaseItem' %}
+                                <th class="numeric" >Barcode</th>
+                                {% endif %}
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Quantity</th>
                                 <th class="numeric" >Sales Price</th>
@@ -115,7 +118,10 @@
                             {%  set totalSales = 0 %}
                             {% for entity in entities %}
                                 <tr>
-                                    <td class="numeric" >{{ entity.sku }}</td>
+                                    <td>{{ loop.index }}</td>
+                                    {% if searchForm.group is defined and  searchForm.group =='medicinePurchaseItem' %}
+                                    <td class="numeric" >{{ entity.barcode }}</td>
+                                    {% endif %}
                                     <td class="numeric" >{{ entity.name }}</td>
                                     <td class="numeric" >{{ entity.quantity }}</td>
                                     <td class="numeric" >{{ entity.salesPrice|number_format }}</td>

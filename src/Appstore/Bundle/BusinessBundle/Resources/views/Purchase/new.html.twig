@@ -48,6 +48,33 @@
             {{ form_start(form) }}
             {{ form_row(form._token) }}
             <div class="row-fluid">
+                <div class="span12">
+                    <div class="row-fluid particular-info" >
+                        <div class="span6" style="margin-left:15px">
+                            <select id="particular" name="particular" class="span12 select2">
+                                <option value="">--- Select product name ---</option>
+                                {% for particular in particulars %}
+                                    <option value="{{ path('business_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="span4">
+                            <div class="input-append">
+                                <div class="input-group">
+                                    <input type="text" class="m-wrap span4" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
+                                    <input type="text" class="m-wrap span4" id="price"  name="price" placeholder="Sales price" value="" maxlength="8" autocomplete="off">
+                                    <input type="number" class="m-wrap span4 form-control input-number" id="quantity" name="quantity" value="1" min="1" autocomplete="off">
+                                    <input type="hidden" id="particularId" name="particularId" value="">
+                                    <button type="button" class="btn yellow"  id="unit" >Unit</button>
+                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('business_purchase_particular_add',{'invoice':entity.id}) }}" ><i class="icon-save"></i> Add</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
                 <div class="span12" id="particular-table">
                     <table class="table table-bordered table-striped table-condensed table-fixed">
                         <thead>
@@ -99,47 +126,12 @@
                         </tr>
                         </tfoot>
                     </table>
-                    <div class="clearfix">&nbsp;</div>
-                </div>
-            </div>
-            <div class="clearfix">&nbsp;</div>
-            <div class="form-actions portlet box purple">
-                <div class="pull-left span3">
-                    <a class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Product</a>
-                </div>
-                <div class="pull-left span9 msg-hidden" style="display: none">
-                    <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
                 </div>
             </div>
             <div class="clearfix">&nbsp;</div>
             <div class="row-fluid">
                 <div class="span8">
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="row-fluid particular-info" >
-                                <div class="span7">
-                                    <select id="particular" name="particular" class="span12 select2">
-                                        <option value="">--- Select product name ---</option>
-                                       {% for particular in particulars %}
-                                           <option value="{{ path('business_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }}</option>
-                                       {% endfor %}
-                                     </select>
-                                </div>
-                                <div class="span4">
-                                    <div class="input-append">
-                                    <div class="input-group">
-                                        <input type="text" class="m-wrap span4" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
-                                        <input type="text" class="m-wrap span4" id="price"  name="price" placeholder="Sales price" value="" maxlength="8" autocomplete="off">
-                                        <input type="number" class="m-wrap span4 form-control input-number" id="quantity" name="quantity" value="1" min="1" autocomplete="off">
-                                        <input type="hidden" id="particularId" name="particularId" value="">
-                                        <button type="button" class="btn blue" id="addParticular" data-url="{{ path('business_purchase_particular_add',{'invoice':entity.id}) }}" ><i class="icon-save"></i> Add</button>
-                                    </div>
-                                    </div>
-                                </div>
 
-                            </div>
-                        </div>
-                    </div>
                </div>
                 <div class="span4 payment-info">
                     <div class="row-fluid">

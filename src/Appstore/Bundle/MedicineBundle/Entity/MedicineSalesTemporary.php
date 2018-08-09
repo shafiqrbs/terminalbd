@@ -65,6 +65,13 @@ class MedicineSalesTemporary
      */
     private $salesPrice;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="purchasePrice", type="float")
+     */
+    private $purchasePrice;
+
     /**
      * @var string
      *
@@ -272,6 +279,20 @@ class MedicineSalesTemporary
     {
         $this->medicinePurchaseItem = $medicinePurchaseItem;
     }
+
+	/**
+	 * @return float
+	 */
+	public function getPurchasePrice(): float {
+		return $this->purchasePrice;
+	}
+
+	/**
+	 * @param float $purchasePrice
+	 */
+	public function setPurchasePrice( float $purchasePrice ) {
+		$this->purchasePrice = $purchasePrice;
+	}
 
 
 }

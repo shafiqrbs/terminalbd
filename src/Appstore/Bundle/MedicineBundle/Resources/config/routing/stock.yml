@@ -58,6 +58,10 @@ medicine_stock_inline:
     path:     /inline-update
     defaults: { _controller: "MedicineBundle:MedicineStock:inlineUpdate" }
 
+medicine_stock_price:
+    path:     /stock-price-update
+    defaults: { _controller: "MedicineBundle:MedicineStock:stockPriceUpdate" }
+
 medicine_stock_details:
     path:     /{sku}/stock-details
     defaults: { _controller: "MedicineBundle:MedicineStock:inlineUpdate" }

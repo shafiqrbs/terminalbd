@@ -189,28 +189,30 @@ class Builder extends ContainerAware
         if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
             $menu['Business Management']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
         }
-        if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
+	    if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
 
-            $menu['Business Management']->addChild('Master Data')
-            ->setAttribute('icon', 'icon icon-cog')
-            ->setAttribute('dropdown', true);
-            $menu['Business Management']['Master Data']->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
-            $menu['Business Management']['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
-            $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))->setAttribute('icon', 'icon-cog');
-        }
+		    $menu['Business Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
+		    $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'))
+		                                            ->setAttribute('icon', 'icon-th-list');
+		    $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'))->setAttribute('icon', 'icon-tag');
+	    }
+
         if ($securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
 
             $menu['Business Management']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
             $menu['Business Management']['Manage Stock']->addChild('Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
       //      $menu['Business Management']['Manage Stock']->addChild('Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-th-list');
         }
-        if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
 
-            $menu['Business Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
-            $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'))->setAttribute('icon', 'icon-tag');
-        }
+	    if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
+
+		    $menu['Business Management']->addChild('Master Data')
+		                                ->setAttribute('icon', 'icon icon-cog')
+		                                ->setAttribute('dropdown', true);
+		    $menu['Business Management']['Master Data']->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
+		    $menu['Business Management']['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
+		    $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))->setAttribute('icon', 'icon-cog');
+	    }
 
         /*
 

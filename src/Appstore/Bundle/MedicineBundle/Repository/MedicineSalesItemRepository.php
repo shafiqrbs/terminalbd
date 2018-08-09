@@ -33,9 +33,9 @@ class MedicineSalesItemRepository extends EntityRepository
     public function salesPurchaseStockItemUpdate(MedicinePurchaseItem $item)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.medicineSales', 'mp');
         $qb->select('SUM(e.quantity) AS quantity');
         $qb->where('e.medicinePurchaseItem = :purchaseItem')->setParameter('purchaseItem', $item->getId());
+        $qb->andWhere('e.medicineStock = :medicineStock')->setParameter('medicineStock', $item->getMedicineStock()->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return !empty($qnt['quantity']) ? $qnt['quantity'] : 0;
     }
@@ -45,28 +45,34 @@ class MedicineSalesItemRepository extends EntityRepository
         $em = $this->_em;
         $entities = $user->getMedicineSalesTemporary();
 
-        foreach ($entities as $item){
+        foreach ($entities as $item) {
 
-            /* @var  $item MedicineSalesTemporary */
+	        /* @var  $item MedicineSalesTemporary */
 
-            $entity = new MedicineSalesItem();
-            $entity->setMedicineSales($sales);
-            $entity->setMedicineStock($item->getMedicineStock());
-            $entity->setMedicinePurchaseItem($item->getMedicinePurchaseItem());
-            $entity->setQuantity($item->getQuantity());
-            $entity->setSalesPrice($item->getSalesPrice());
-            $entity->setSubTotal($item->getSubTotal());
-            $entity->setPurchasePrice($item->getMedicinePurchaseItem()->getPurchasePrice());
-            if($sales->getDiscountType() == 'percentage') {
-                $entity->setDiscountPrice($this->itemDiscountPrice($sales, $item->getSalesPrice()));
-            }else{
-                $entity->setDiscountPrice($item->getSalesPrice());
+
+	        	$entity = new MedicineSalesItem();
+		        $entity->setMedicineSales( $sales );
+		        $entity->setMedicineStock( $item->getMedicineStock() );
+		        $entity->setQuantity( $item->getQuantity() );
+		        $entity->setSalesPrice( $item->getSalesPrice() );
+		        $entity->setSubTotal( $item->getSubTotal() );
+	            $entity->setPurchasePrice( $item->getPurchasePrice() );
+	            if(!empty($item->getMedicinePurchaseItem())) {
+		            $entity->setMedicinePurchaseItem( $item->getMedicinePurchaseItem() );
+		        }
+		        if ( $sales->getDiscountType() == 'percentage' ) {
+			        $entity->setDiscountPrice( $this->itemDiscountPrice( $sales, $item->getSalesPrice() ) );
+		        } else {
+			        $entity->setDiscountPrice( $item->getSalesPrice() );
+		        }
+		        $em->persist( $entity );
+		        $em->flush();
+	            if(!empty($item->getMedicinePurchaseItem())) {
+		            $em->getRepository( 'MedicineBundle:MedicinePurchaseItem' )->updateRemovePurchaseItemQuantity( $item->getMedicinePurchaseItem(), 'sales' );
+	            }
+		        $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $item->getMedicineStock(), 'sales' );
             }
-            $em->persist($entity);
-            $em->flush();
-            $em->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item->getMedicinePurchaseItem(),'sales');
-            $em->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock(),'sales');
-        }
+
     }
 
     public function itemDiscountPrice(MedicineSales $sales,$price)
@@ -304,39 +310,6 @@ class MedicineSalesItemRepository extends EntityRepository
 
     }
 
-    public function serviceMedicineParticularDetails(User $user, $data)
-    {
-
-        $hospital = $user->getGlobalOption()->getMedicineConfig()->getId();
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-        if(!empty($data['service'])){
-
-            $qb = $this->createQueryBuilder('ip');
-            $qb->leftJoin('ip.particular','p');
-            $qb->leftJoin('ip.medicineInvoice','e');
-            $qb->select('SUM(ip.quantity) AS totalQuantity');
-            $qb->addSelect('SUM(ip.quantity * p.purchasePrice ) AS purchaseAmount');
-            $qb->addSelect('SUM(ip.quantity * ip.salesPrice ) AS salesAmount');
-            $qb->addSelect('p.name AS serviceName');
-            $qb->where('e.hospitalConfig = :hospital');
-            $qb->setParameter('hospital', $hospital);
-            $qb->andWhere('p.service = :service');
-            $qb->setParameter('service', $data['service']);
-            $qb->andWhere("e.process IN (:process)");
-            $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death'));
-            $this->handleDateRangeFind($qb,$data);
-            $qb->groupBy('p.id');
-            $res = $qb->getQuery()->getArrayResult();
-            return $res;
-
-        }else{
-
-            return false;
-        }
-
-    }
-
 
     public function searchAutoComplete(MedicineConfig $config,$q)
     {
@@ -365,4 +338,72 @@ class MedicineSalesItemRepository extends EntityRepository
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
     }
+
+    /* Sales Medicine item */
+
+	public  function reportSalesStockItem(User $user, $data=''){
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$group = isset($data['group']) ? $data['group'] :'medicineStock';
+
+		$qb = $this->createQueryBuilder('si');
+		$qb->join('si.medicineSales','s');
+		$qb->join('si.medicineStock','mds');
+		$qb->select('SUM(si.quantity) AS quantity');
+		$qb->addSelect('SUM(si.quantity * si.discountPrice ) AS salesPrice');
+		$qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS purchasePrice');
+		$qb->addSelect('mds.name AS name');
+		$qb->addSelect('mds.sku AS sku');
+		$qb->where('s.medicineConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('s.process = :process');
+		$qb->setParameter('process', 'Done');
+		if($group == 'medicinePurchaseItem') {
+			$qb->addSelect('item.barcode AS barcode');
+		}
+		$this->handleSearchStockBetween($qb,$data);
+		if ($userBranch){
+			$qb->andWhere("s.branches = :branch");
+			$qb->setParameter('branch', $userBranch);
+		}
+		$qb->groupBy('si.'.$group);
+		$qb->orderBy('mds.name','ASC');
+		return $qb->getQuery()->getArrayResult();
+	}
+
+	protected function handleSearchStockBetween($qb,$data)
+	{
+
+		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
+		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+		$name = isset($data['name'])? $data['name'] :'';
+		$sku = isset($data['sku'])? $data['sku'] :'';
+		$brandName = isset($data['brandName'])? $data['brandName'] :'';
+
+		if (!empty($name)) {
+			$qb->andWhere($qb->expr()->like("mds.name", "'%$name%'"  ));
+		}
+		if (!empty($sku)) {
+			$qb->andWhere($qb->expr()->like("mds.sku", "'%$sku%'"  ));
+		}
+		if (!empty($brandName)) {
+			$qb->andWhere($qb->expr()->like("mds.brandName", "'%$brandName%'"  ));
+		}
+
+		if (!empty($createdStart)) {
+			$compareTo = new \DateTime($createdStart);
+			$created =  $compareTo->format('Y-m-d 00:00:00');
+			$qb->andWhere("s.created >= :createdStart");
+			$qb->setParameter('createdStart', $created);
+		}
+
+		if (!empty($createdEnd)) {
+			$compareTo = new \DateTime($createdEnd);
+			$createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+			$qb->andWhere("s.created <= :createdEnd");
+			$qb->setParameter('createdEnd', $createdEnd);
+		}
+
+	}
 }
