@@ -79,12 +79,12 @@
                                         <th class="numeric" >Vendor</th>
                                         <th class="numeric" >PP</th>
                                         <th class="numeric" >MRP</th>
-                                        <th class="numeric" >P Qnt.</th>
-                                        <th class="numeric" >P Return</th>
+                                        <th class="numeric" >Quantity</th>
+                                        {#<th class="numeric" >P Return</th>
                                         <th class="numeric" >S Qnt.</th>
                                         <th class="numeric" >S Return</th>
                                         <th class="numeric" >Damage</th>
-                                        <th class="numeric" >Remain Qnt.</th>
+                                        <th class="numeric" >Remain Qnt.</th>#}
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -98,11 +98,11 @@
                                             <td class="numeric" >{{ item.purchasePrice }}</td>
                                             <td class="numeric" >{{ item.salesPrice }}</td>
                                             <td class="numeric" >{{ item.quantity }}</td>
-                                            <td class="numeric" >{{ item.purchaseReturnQuantity }}</td>
+                                            {#<td class="numeric" >{{ item.purchaseReturnQuantity }}</td>
                                             <td class="numeric" >{{ item.salesQuantity }}</td>
                                             <td class="numeric" >{{ item.salesReturnQuantity }}</td>
                                             <td class="numeric" >{{ item.damageQuantity }}</td>
-                                            <td class="numeric" >{{ item.remainingQuantity }}</td>
+                                            <td class="numeric" >{{ item.remainingQuantity }}</td>#}
                                         </tr>
                                     {% endfor %}
                                     </tbody>

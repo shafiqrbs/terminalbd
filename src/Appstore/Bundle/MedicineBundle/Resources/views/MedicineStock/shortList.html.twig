@@ -80,8 +80,10 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
+                                    <th class="numeric" ><i class="icon icon-th-list"></i></th>
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Brand Name</th>
                                     <th class="numeric" >Rack</th>
                                     <th class="numeric" >Sales Tk.</th>
                                     <th class="numeric" >Receive Qnt</th>
@@ -94,12 +96,14 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr {% if entity.minQuantity > 0 and entity.remainingQuantity <= entity.minQuantity %} class="min" {% endif %}>
+                                        <td><input type="checkbox" class="checkbox"></td>
                                         <td class="numeric" >{{ entity.sku }}</td>
                                         {% if entity.mode == 'medicine' %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% else %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% endif %}
+                                        <td class="numeric" >{{ entity.brandName }}</td>
                                         <td class="numeric" >{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</td>
                                         <td class="numeric">{{ entity.salesPrice }}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>

@@ -39,7 +39,9 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $cashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
-        $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user,$data);
+	   // $cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+
+	    $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user,$data);
         $transactionCash = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesTransactionOverview($user,$data);
         $salesProcess = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesProcessOverview($user,$data);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));

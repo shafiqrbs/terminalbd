@@ -20,6 +20,9 @@ class MedicinePurchaseRepository extends EntityRepository
 
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $medicine = isset($data['name'])? $data['name'] :'';
+        $brand = isset($data['brandName'])? $data['brandName'] :'';
+        $mode = isset($data['mode'])? $data['mode'] :'';
         $vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
         $startDate = isset($data['startDate'])? $data['startDate'] :'';
         $endDate = isset($data['endDate'])? $data['endDate'] :'';
@@ -27,8 +30,14 @@ class MedicinePurchaseRepository extends EntityRepository
         if (!empty($grn)) {
             $qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
         }
+        if(!empty($medicine)){
+            $qb->andWhere($qb->expr()->like("ms.name", "'%$medicine%'"  ));
+        }
         if(!empty($brand)){
             $qb->andWhere($qb->expr()->like("ms.brandName", "'%$brand%'"  ));
+        }
+        if(!empty($mode)){
+            $qb->andWhere($qb->expr()->like("ms.mode", "'%$mode%'"  ));
         }
         if(!empty($vendor)){
             $qb->join('e.medicineVendor','v');
@@ -280,7 +289,7 @@ class MedicinePurchaseRepository extends EntityRepository
             $qb->join('e.medicinePurchaseItems','mpi');
             $qb->join('mpi.medicineStock','ms');
             $qb->leftJoin('ms.rackNo','rack');
-            $qb->select('ms.name,rack.name AS medicineRack,ms.brandName as brandName, ms.mode as mode , sum(mpi.quantity) as purchaseQuantity , sum(mpi.purchaseReturnQuantity) as purchaseReturnQuantity, sum(mpi.salesQuantity) as salesQuantity, sum(mpi.salesReturnQuantity) as salesReturnQuantity, sum(mpi.damageQuantity) as damageQuantity, sum(mpi.remainingQuantity) as remainingQuantity, sum(mpi.remainingQuantity * mpi.purchasePrice ) as remainingPurchasePrice, sum(mpi.remainingQuantity * mpi.salesPrice ) as remainingSalesPrice');
+            $qb->select('ms.name,rack.name AS medicineRack,ms.brandName as brandName, ms.mode as mode , ms.purchaseQuantity as purchaseQuantity , ms.purchaseReturnQuantity as purchaseReturnQuantity, ms.salesQuantity as salesQuantity, ms.salesReturnQuantity as salesReturnQuantity, ms.damageQuantity as damageQuantity, ms.remainingQuantity as remainingQuantity, (ms.remainingQuantity * ms.purchasePrice ) as remainingPurchasePrice, (ms.remainingQuantity * ms.salesPrice ) as remainingSalesPrice');
             $qb->where('e.medicineConfig = :config');
             $qb->setParameter('config', $config);
             $qb->andWhere('e.process = :process');
@@ -288,7 +297,7 @@ class MedicinePurchaseRepository extends EntityRepository
             $this->handleSearchBetween($qb,$data);
             $qb->groupBy("ms.name");
             $qb->orderBy("ms.name",'ASC');
-            $res = $qb->getQuery();
+            $res = $qb->getQuery()->getArrayResult();
             return $res;
     }
 

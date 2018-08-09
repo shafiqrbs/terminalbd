@@ -76,9 +76,11 @@
                                 </div>
                                 {% endif %}
                                 <div class="row-fluid">
+                                    <div class="span3"></div>
                                     <div class="span3">
-                                        <input type="text" id="toUser" name="toUser"  class="span12 m-wrap select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Enter sales user">
+                                        <input type="text" id="salesBy" name="salesBy"  class="span12 m-wrap select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Enter sales by">
                                     </div>
+                                    {#
                                     <div class="span3">
                                         <select name="process" id="process" class="span12 m-wrap">
                                             <option value=""> ---Process--- </option>
@@ -89,7 +91,7 @@
                                             <option value="Returned" {% if searchForm.process is defined and searchForm.process == 'Returned' %} selected="selected" {% endif %}>Returned</option>
                                         </select>
                                     </div>
-                                    {#<div class="span3">
+                                    <div class="span3">
                                         <select name="mode" id="mode" class="span12 m-wrap">
                                             <option value=""> ---Sales Mode--- </option>
                                             <option value="Pos" {% if searchForm.mode is defined and searchForm.mode == 'Pos' %} selected="selected" {% endif %} >Pos Sales</option>
@@ -98,14 +100,14 @@
                                             <option value="ManualSales" {% if searchForm.mode is defined and searchForm.mode == 'ManualSales' %} selected="selected" {% endif %} >Manual Sales</option>
                                         </select>
                                     </div>
-#}
+                                      #}
                                     <div class="span3">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" aria-autocomplete="none" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                <input type="text" aria-autocomplete="none" id="endDate" name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -119,18 +121,16 @@
                                 <tr class="head-red">
                                     <th class="numeric" ><strong>Total Quantity</strong></th>
                                     <th class="numeric" ><strong>Sales Amount</strong></th>
-                                    <th class="numeric" ><strong>Vat Amount</strong></th>
                                     <th class="numeric" ><strong>Purchase Amount</strong></th>
                                     <th class="numeric" ><strong>Profit/Loss</strong></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class="numeric" ><strong>{{ purchaseSalesItem.quantity }}</strong></td>
+                                    <td class="numeric" ><strong>{{ purchaseSalesPrice.quantity }}</strong></td>
                                     <td class="numeric" ><strong>{{ cashOverview.total|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ cashOverview.totalVat|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ purchaseSalesItem.purchasePrice|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + purchaseSalesItem.purchasePrice))|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ purchaseSalesPrice.purchasePrice|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + purchaseSalesPrice.purchasePrice))|number_format }}</strong></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -143,7 +143,6 @@
                                 <th class="numeric" >Invoice</th>
                                 <th class="numeric" >SalesBy</th>
                                 <th class="numeric" >Transaction</th>
-                                <th class="numeric" >Process</th>
                                 <th class="numeric" >Sub-Total</th>
                                 <th class="numeric" >Discount</th>
                                 <th class="numeric" >Vat</th>
@@ -161,7 +160,6 @@
                                     <td class="numeric" >{{ entity.invoice }}</td>
                                     <td class="numeric" >{{ entity.salesBy }}</td>
                                     <td class="numeric" >{{ entity.transactionMethod }}</td>
-                                    <td class="numeric" >{{ entity.process }}</td>
                                     <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
                                     <td class="numeric" >{{ entity.discount|number_format  }}</td>
                                     <td class="numeric" >{{ entity.vat|number_format  }}</td>

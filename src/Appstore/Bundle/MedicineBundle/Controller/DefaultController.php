@@ -22,7 +22,7 @@ class DefaultController extends Controller
         $data['endDate'] = $datetime->format('Y-m-d');
 
         $user = $this->getUser();
-        $salesCashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
+	    $salesCashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
         $purchaseCashOverview = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
         $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);

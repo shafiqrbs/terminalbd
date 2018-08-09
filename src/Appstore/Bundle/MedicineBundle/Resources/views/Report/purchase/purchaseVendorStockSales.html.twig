@@ -39,30 +39,30 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span3">
+                                        <input type="text" id="name" name="name"  class="span12 m-wrap select2StockMedicineName" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine & others name ">
+                                    </div>
+
+                                    <div class="span3">
                                         <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap select2BrandName" value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="vendor" name="vendor"  class="span12 m-wrap select2VendorCompany" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
-                                    </div>
-                                    <div class="span3">
-                                        <select name="rackNo" id="rackNo" class="span4 m-wrap">
+                                        <select name="rackNo" id="rackNo" class="span12 m-wrap">
                                             <option value="">Rack no</option>
                                             {% for rack in racks %}
                                                 <option {% if searchForm.rack is defined and searchForm.rack == method.id %} selected="selected" {% endif %} value="{{ rack.id }}" >{{ rack.name }}</option>
                                             {% endfor %}
                                         </select>
-                                        <select name="mode" id="mode" class="span8 m-wrap">
-                                            <option  value="">Product Mode</option>
-                                            {% for mode in modeFor %}
-                                                <option {% if searchForm.mode is defined and searchForm.mode == mode.slug %} selected="selected" {% endif %} value="{{ mode.slug }}">{{ mode.name }}</option>
-                                            {% endfor %}
-                                        </select>
+
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="startDate" name="startDate"  class="m-wrap span5 search-input datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
-                                                <input type="text" id="endDate" name="endDate"  class="m-wrap span5 search-input  m-ctrl-medium datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <select name="mode" id="mode" class="span11 m-wrap">
+                                                    <option  value="">Product Mode</option>
+                                                    {% for mode in modeFor %}
+                                                        <option {% if searchForm.mode is defined and searchForm.mode == mode.slug %} selected="selected" {% endif %} value="{{ mode.slug }}">{{ mode.name }}</option>
+                                                    {% endfor %}
+                                                </select>
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -106,8 +106,8 @@
                                        <td class="numeric" >{{ entity.salesReturnQuantity }}</td>
                                        <td class="numeric" >{{ entity.damageQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
-                                        <td class="numeric" >{{ entity.remainingPurchasePrice }}</td>
-                                        <td class="numeric" >{{ entity.remainingSalesPrice }}</td>
+                                        <td class="numeric" >{{ entity.remainingPurchasePrice|number_format }}</td>
+                                        <td class="numeric" >{{ entity.remainingSalesPrice|number_format }}</td>
                                   </tr>
 
                                 {% endfor %}

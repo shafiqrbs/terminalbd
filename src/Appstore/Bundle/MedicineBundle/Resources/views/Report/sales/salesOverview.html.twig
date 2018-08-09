@@ -110,6 +110,7 @@
                                     <td class="numeric" >{{ (cashOverview.total- (cashOverview.totalVat + purchaseSalesPrice.purchasePrice))|number_format }}</td>
                                 </tr>
                             </table>
+                            {#
                             <div class="form-actions portlet box purple">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Transaction wise cash Overview</div>
@@ -161,7 +162,7 @@
                                         <td class="numeric" >{{ process.totalDue|default|number_format }}</td>
                                     </tr>
                                 {% endfor %}
-                            </table>
+                            </table>#}
                         </div>
                     </div>
                 </div>

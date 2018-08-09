@@ -78,16 +78,11 @@ class MedicineSalesRepository extends EntityRepository
         }
 
         if(!empty($salesBy)){
-            $qb->join("s.salesBy",'u');
-            $qb->andWhere("u.username = :username");
+            $qb->join("s.salesBy",'un');
+            $qb->andWhere("un.username = :username");
             $qb->setParameter('username', $salesBy);
         }
-
-        if(!empty($process)){
-            $qb->andWhere("s.process = :process");
-            $qb->setParameter('process', $process);
-        }
-         if(!empty($paymentStatus)){
+	    if(!empty($paymentStatus)){
             $qb->andWhere("s.paymentStatus = :status");
             $qb->setParameter('status', $paymentStatus);
         }

@@ -75,7 +75,7 @@ class MedicineStockRepository extends EntityRepository
     {
 
         $item = isset($data['item'])? $data['item'] :'';
-        $brand = isset($data['brand'])? $data['brand'] :'';
+        $brand = isset($data['brandName'])? $data['brandName'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
         $minQnt = isset($data['minQnt'])? $data['minQnt'] :'';
 
@@ -89,15 +89,13 @@ class MedicineStockRepository extends EntityRepository
         if (!empty($sku)) {
             $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
         }
+        if (!empty($brand)) {
+            $qb->andWhere($qb->expr()->like("item.brandName", "'%$brand%'"  ));
+        }
         if (!empty($item)) {
 
             $qb->andWhere("item.name = :name");
             $qb->setParameter('name', $item);
-        }
-        if (!empty($brand)) {
-            $qb->join('item.medicineBrand', 'b');
-            $qb->andWhere("b.name = :brand");
-            $qb->setParameter('brand', $brand);
         }
         $qb->orderBy('item.name','ASC');
         $qb->getQuery();
