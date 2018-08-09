@@ -453,7 +453,7 @@ class MedicineStockController extends Controller
         ));
     }
 
-    public function stockPriceUpdate()
+    public function stockPriceUpdateAction()
     {
 	    set_time_limit(0);
 	    ignore_user_abort(true);
@@ -472,5 +472,6 @@ class MedicineStockController extends Controller
 		    $em->flush();
 
 	    }
+	    return $this->redirect($this->generateUrl('medicine_stock'));
     }
 }
