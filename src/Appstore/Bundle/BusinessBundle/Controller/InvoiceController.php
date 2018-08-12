@@ -167,12 +167,13 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            $done = array('Done', 'Delivered');
+            $done = array('Done','Delivered','Chalan');
             if (in_array($entity->getProcess(), $done)) {
-                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+	          //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($invoiceItem,'sales');
+	            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
@@ -185,9 +186,11 @@ class InvoiceController extends Controller
         }
 
         $businessConfig = $entity->getBusinessConfig();
-        $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
+	    $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('production','stock','service','virtual'));
+	    $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
         return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
+            'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
     }
@@ -233,7 +236,7 @@ class InvoiceController extends Controller
     public function particularSearchAction(BusinessParticular $particular)
     {
         $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
-        return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getPrice(),'quantity'=> 1,'unit' => $unit)));
+        return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1,'unit' => $unit)));
     }
 
     public function returnResultData(BusinessInvoice $entity, $msg=''){
@@ -290,14 +293,13 @@ class InvoiceController extends Controller
 
     public function invoiceParticularDeleteAction(BusinessInvoice $invoice, BusinessInvoiceParticular $particular){
 
-
         $em = $this->getDoctrine()->getManager();
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
         $em->remove($particular);
         $em->flush();
-        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
+	    $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
         $result = $this->returnResultData($invoice,$msg ='');
         return new Response(json_encode($result));
         exit;
@@ -487,7 +489,7 @@ class InvoiceController extends Controller
         if(!empty($particular)){
             $invoiceItems = array('particular' => $particular ,'quantity' => $quantity,'salesPrice'=> $salesPrice, 'width'=> $width,'height'=> $height);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertBannerSignItem($invoice,$invoiceItems);
-            $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
+	        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';
             $result = $this->returnResultData($invoice,$msg);
             return new Response(json_encode($result));
@@ -533,14 +535,17 @@ class InvoiceController extends Controller
         if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
 
             if($businessConfig->isCustomInvoicePrint() == 1){
-                $template = $businessConfig->getGlobalOption()->getSubDomain();
-            }else{
+                $template = $businessConfig->getGlobalOption()->getSlug();
+	        }else{
                 $template = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'print';
             }
+	        $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($businessConfig->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
+	        $balance = $result[0]['customerBalance'];
             return  $this->render("BusinessBundle:Print:{$template}.html.twig",
                 array(
                     'config' => $businessConfig,
                     'entity' => $entity,
+                    'balance' => $balance,
                     'print' => 'print',
                 )
             );

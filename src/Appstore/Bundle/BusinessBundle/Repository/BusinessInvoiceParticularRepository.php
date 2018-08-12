@@ -5,8 +5,10 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -79,7 +81,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $entity->setBusinessParticular($stock);
         $entity->setPrice($price);
         $entity->setPurchasePrice($stock->getPurchasePrice());
-        $entity->setSubTotal($quantity * $stock->getPrice());
+        $entity->setSubTotal($quantity * $price);
         $entity->setBusinessInvoice($invoice);
         $em->persist($entity);
         $em->flush();
@@ -103,7 +105,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         if(!empty($stock->getUnit())) {
             $entity->setUnit($stock->getUnit()->getName());
         }
-        $entity->setPrice($stock->getPrice());
+        $entity->setPrice($salesPrice);
         $entity->setPurchasePrice($stock->getPurchasePrice());
         if(!empty($width) and !empty($height)){
             $entity->setWidth($width);
@@ -118,11 +120,28 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $entity->setBusinessInvoice($invoice);
         $em->persist($entity);
         $em->flush();
+        return $entity;
 
     }
 
+	public function salesStockItemProduction(BusinessInvoiceParticular $invoice_particular,BusinessProductionElement $element)
+	{
+		$qb = $this->createQueryBuilder('e');
+		if(!empty($element->getParticular()->getUnit()) and ($element->getParticular()->getUnit()->getName() != 'Sft')){
+			$qb->select('e.quantity AS quantity');
+		}else{
+			$qb->select('SUM(e.totalQuantity) AS quantity');
+		}
+		$qb->where('e.id = :particular')->setParameter('particular', $invoice_particular->getId());
+		$qnt = $qb->getQuery()->getOneOrNullResult();
+		$qnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
+		$stockQuantity = floatval($element->getParticular()->getSalesQuantity());
+		return ($stockQuantity+$qnt);
 
-    public function salesStockItemUpdate(BusinessParticular $stockItem)
+	}
+
+
+	public function salesStockItemUpdate(BusinessParticular $stockItem)
     {
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.quantity) AS quantity');

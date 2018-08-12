@@ -63,7 +63,7 @@ class StockType extends AbstractType
                         ->where("e.status = 1");
                 },
             ))
-            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sales price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )

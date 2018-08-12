@@ -114,12 +114,14 @@ class StockController extends Controller
             );
             return $this->redirect($this->generateUrl('business_stock_new'));
         }
+	    $stockFormat = $config->getStockFormat();
         $this->get('session')->getFlashBag()->add(
             'error',"Required field does not input"
         );
-        return $this->render('BusinessBundle:Stock:index.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
+        return $this->render('BusinessBundle:Stock:new.html.twig', array(
+            'entity'        => $entity,
+            'stockFormat'   => $stockFormat,
+            'form'          => $form->createView(),
         ));
     }
 

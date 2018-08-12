@@ -325,6 +325,13 @@ class BusinessConfig
      */
      private $showStock = false;
 
+/**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPowered", type="boolean",  nullable=true)
+     */
+     private $isPowered = false;
+
     /**
      * @var boolean
      *
@@ -1133,6 +1140,20 @@ class BusinessConfig
 	 */
 	public function setStockFormat( array $stockFormat ) {
 		$this->stockFormat = $stockFormat;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isPowered(){
+		return $this->isPowered;
+	}
+
+	/**
+	 * @param bool $isPowered
+	 */
+	public function setIsPowered( bool $isPowered ) {
+		$this->isPowered = $isPowered;
 	}
 
 

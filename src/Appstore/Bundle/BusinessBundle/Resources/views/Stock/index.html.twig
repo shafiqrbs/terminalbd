@@ -76,7 +76,7 @@
                                                 <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
                                         </td>
                                         <td class="numeric">
-                                                <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
+                                                <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
 
                                         </td>
                                         <td class="numeric">
@@ -100,7 +100,7 @@
                                                 <a title="Are you sure went to delete ?" href="{{ path('business_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% if entity.businessParticularType.slug == "production" and config.productionType == 'post-production' %}
-                                                <a href="{{ path('business_production_edit', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-retweet"></i> Production</a>
+                                                <a href="{{ path('business_production_edit', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-plus"></i> Production</a>
                                             {% endif %}
                                             {% if 'wearhouse' in config.stockFormat %}
                                                 <a href="{{ path('business_stock_transfer', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-retweet"></i> Transfer</a>
@@ -137,5 +137,5 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
+    EditableWithOutReloadInit();
 {% endblock %}

@@ -55,12 +55,6 @@ class BusinessParticular
     private $businessInvoiceParticulars;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="businessParticular" )
-     * @ORM\OrderBy({"id" = "ASC"})
-     **/
-    private $productionElements;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense", mappedBy="productionItem" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
@@ -72,10 +66,16 @@ class BusinessParticular
      **/
     private $businessProductionExpenseItem;
 
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="businessParticular" )
+	 **/
+	private $productionElements;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="particular" )
      **/
-    private $elements;
+    private $production;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem", mappedBy="businessParticular" )
@@ -190,11 +190,20 @@ class BusinessParticular
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="purchasePrice", type="decimal", nullable=true)
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
     private $purchasePrice;
+
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="productionSalesPrice", type="float", nullable=true)
+	 */
+	private $productionSalesPrice;
+
 
 
     /**
@@ -204,6 +213,13 @@ class BusinessParticular
      */
     private $content;
 
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="salesPrice", type="float", nullable=true)
+     */
+    private $salesPrice;
 
     /**
      * @var string
@@ -801,30 +817,6 @@ class BusinessParticular
 
 
     /**
-     * @return BusinessProductionElement
-     */
-    public function getProductionElements()
-    {
-        return $this->productionElements;
-    }
-
-    /**
-     * @return BusinessProductionElement
-     */
-    public function getElements()
-    {
-        return $this->elements;
-    }
-
-    /**
-     * @param BusinessProductionElement $elements
-     */
-    public function setElements($elements)
-    {
-        $this->elements = $elements;
-    }
-
-    /**
      * @return BusinessPurchaseItem
      */
     public function getBusinessPurchaseItems()
@@ -980,6 +972,48 @@ class BusinessParticular
 	 */
 	public function setWearHouse( $wearHouse ) {
 		$this->wearHouse = $wearHouse;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getSalesPrice() {
+		return $this->salesPrice;
+	}
+
+	/**
+	 * @param float $salesPrice
+	 */
+	public function setSalesPrice( float $salesPrice ) {
+		$this->salesPrice = $salesPrice;
+	}
+
+	/**
+	 * @return BusinessProductionElement
+	 */
+	public function getProductionElements() {
+		return $this->productionElements;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getProduction() {
+		return $this->production;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getProductionSalesPrice(){
+		return $this->productionSalesPrice;
+	}
+
+	/**
+	 * @param float $productionSalesPrice
+	 */
+	public function setProductionSalesPrice( float $productionSalesPrice ) {
+		$this->productionSalesPrice = $productionSalesPrice;
 	}
 
 }

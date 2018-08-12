@@ -36,6 +36,18 @@ class BusinessParticularRepository extends EntityRepository
         return $result;
     }
 
+    public function updateSalesPrice(BusinessParticular $particular)
+    {
+	    $price = $this->_em->getRepository('BusinessBundle:BusinessProductionElement')->getProductPurchaseSalesPrice($particular);
+	    $salesPrice =  empty($price['salesPrice']) ? 0 : $price['salesPrice'];
+	    $purchasePrice = empty($price['purchasePrice']) ? 0 : $price['purchasePrice'];
+	    $particular->setSalesPrice($salesPrice);
+    	$particular->setPurchasePrice($purchasePrice);
+    	$particular->setProductionSalesPrice($salesPrice);
+	    $this->_em->flush();
+	    return $particular;
+    }
+
     public function searchAutoComplete(BusinessConfig $config,$q)
     {
         $query = $this->createQueryBuilder('e');
@@ -191,7 +203,17 @@ class BusinessParticularRepository extends EntityRepository
         }
     }
 
-    public function updateRemovePurchaseQuantity(BusinessParticular $stock,$fieldName=''){
+	public function updateRemovePurchaseQuantity(BusinessInvoiceParticular $invoice_particular,$fieldName=''){
+
+    	if($invoice_particular->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'production'){
+		    $this->updateRemoveProductionQuantity($invoice_particular,$fieldName);
+	    }else{
+		    $this->updateRemoveStockQuantity($invoice_particular->getBusinessParticular(),$fieldName);
+	    }
+
+    }
+
+    public function updateRemoveStockQuantity(BusinessParticular $stock,$fieldName=''){
 
         $em = $this->_em;
         if($fieldName == 'sales'){
@@ -215,6 +237,33 @@ class BusinessParticularRepository extends EntityRepository
         $this->remainingQnt($stock);
     }
 
+	public function updateRemoveProductionQuantity(BusinessInvoiceParticular $invoice_particular,$fieldName=''){
+
+		$em = $this->_em;
+
+		/* @var $entity BusinessProductionElement */
+
+		foreach ($invoice_particular->getBusinessParticular()->getProductionElements() as $entity){
+
+			$production = $entity->getParticular();
+
+			if($fieldName == 'sales'){
+				$qnt = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->salesStockItemProduction($invoice_particular,$entity);
+				$production->setSalesQuantity($qnt);
+			}elseif($fieldName == 'sales-return'){
+				$quantity = $em->getRepository('BusinessBundle:BusinessInvoiceReturn')->salesStockItemProduction($invoice_particular,$entity);
+				$production->setSalesReturnQuantity($quantity);
+			}elseif($fieldName == 'damage'){
+				$quantity = $em->getRepository('BusinessBundle:BusinessDamage')->salesStockItemProduction($invoice_particular,$entity);
+				$production->setDamageQuantity($quantity);
+			}
+			$em->persist($production);
+			$em->flush();
+			$this->remainingQnt($production);
+		}
+
+	}
+
     public function remainingQnt(BusinessParticular $stock)
     {
         $em = $this->_em;
@@ -225,17 +274,23 @@ class BusinessParticularRepository extends EntityRepository
     }
 
     public function insertInvoiceProductItem(BusinessInvoice $invoice){
-
+	    $em = $this->_em;
         if(!empty($invoice->getBusinessInvoiceParticulars())) {
 
             /* @var  $item BusinessInvoiceParticular */
 
             foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
 
-                if($item->getBusinessParticular()->getProductType() == 'production'){
-                   $this->productionExpense($item);
+                if($item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'production' and $invoice->getBusinessConfig()->getProductionType() == 'post-production'){
+                	$this->productionExpense($item);
+					$particular = $item->getBusinessParticular();
+					$qnt = $particular->getSalesQuantity() + $item->getTotalQuantity();
+					$particular->setPurchaseQuantity($qnt);
+					$particular->setSalesQuantity($qnt);
+					$em->persist($particular);
+					$em->flush();
                 }else{
-                   $this->getSalesUpdateQnt($item);
+                    $this->getSalesUpdateQnt($item);
                 }
             }
         }
@@ -260,22 +315,24 @@ class BusinessParticularRepository extends EntityRepository
                    $entity->setProductionElement($element->getParticular());
                    $entity->setPurchasePrice($element->getPurchasePrice());
                    $entity->setSalesPrice($element->getSalesPrice());
-                   $entity->setQuantity($element->getQuantity());
+	               if(!empty($element->getParticular()->getUnit()) and ($element->getParticular()->getUnit()->getName() != 'Sft')) {
+		               $entity->setQuantity( $element->getQuantity() * $item->getQuantity());
+	               }else{
+		               $entity->setQuantity( $element->getQuantity() * $item->getTotalQuantity());
+	               }
                    $this->_em->persist($entity);
                    $this->_em->flush();
-                   $this->salesProductionQnt($element);
-
+                   $this->salesProductionQnt($element,$entity);
                }
            }
-
        }
     }
 
-    public function salesProductionQnt(ProductionElement  $element){
+	public function salesProductionQnt(BusinessProductionElement  $element, BusinessProductionExpense $entity){
 
         $em = $this->_em;
         $particular = $element->getParticular();
-        $qnt = $particular->getSalesQuantity() + $element->getQuantity();
+        $qnt = $particular->getSalesQuantity() + $entity->getQuantity();
         $particular->setSalesQuantity($qnt);
         $em->persist($particular);
         $em->flush();

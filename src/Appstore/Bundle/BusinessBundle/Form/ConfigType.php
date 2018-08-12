@@ -51,6 +51,7 @@ class ConfigType extends AbstractType
 			        'empty_data'  => null,
 		        ))
 
+	        ->add('isPowered')
 	        ->add('invoicePrintLogo')
             ->add('customInvoicePrint')
             ->add('customInvoice')

@@ -35,9 +35,9 @@ twig:
             #myGlobaService: "@SettingContentBundle.content_footer_service"  'footer-content'
             portal_domain: 'http://www.terminalbd.com'
             portal_name: 'terminalbd.com'
-            portal_design_development: 'TERMINAL BD .COM'
-            portal_power: 'Powered By: TERMINAL BD .COM, www.terminalbd.com'
-            portal_copyright: 'Copy Right TERMINAL BD .COM'
+            portal_design_development: 'TERMINAL BD.COM - 01737300829'
+            portal_power: 'Powered By: TERMINAL BD.COM, www.terminalbd.com'
+            portal_copyright: 'Copy Right TERMINAL BD.COM'
 
 # Assetic Configuration
 assetic:

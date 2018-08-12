@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BusinessProductionElement
  *
  * @ORM\Table(name ="business_production_element")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\ProductionElementRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessProductionElementRepository")
  */
 class BusinessProductionElement
 {
@@ -28,7 +28,7 @@ class BusinessProductionElement
     private  $businessParticular;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="elements" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="production" )
      **/
     private  $particular;
 

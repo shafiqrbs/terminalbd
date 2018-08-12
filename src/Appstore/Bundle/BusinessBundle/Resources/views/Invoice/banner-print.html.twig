@@ -72,7 +72,7 @@
                                                             <select id="particular" name="particular" class="span12 m-wrap">
                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                 {% for particular in particulars %}
-                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => BDT. {{ particular.price }}</option>
+                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => BDT. {{ particular.salesPrice }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                             </div>

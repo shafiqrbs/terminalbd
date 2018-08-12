@@ -21,14 +21,7 @@ class ProductionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-
-           ->add('overHead','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Over head')))
-            ->add('packaging','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Packaging')))
-            ->add('utility','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Utility')))
-            ->add('marketing','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Marketing')))
-
-        ;
+        $builder;
     }
     
     /**

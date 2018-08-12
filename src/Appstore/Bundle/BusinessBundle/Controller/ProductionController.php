@@ -99,7 +99,7 @@ class ProductionController extends Controller
 
     public function particularSearchAction(BusinessParticular $particular)
     {
-        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'purchasePrice'=> $particular->getPurchasePrice(), 'quantity'=> 1 , 'minimumPrice'=> '')));
+        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getSalesPrice() , 'purchasePrice'=> $particular->getPurchasePrice(), 'quantity'=> 1 , 'minimumPrice'=> '')));
     }
 
     public function addParticularAction(Request $request, BusinessParticular $particular)
@@ -110,9 +110,9 @@ class ProductionController extends Controller
         $price = $request->request->get('price');
         $data = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionElement')->insertProductionElement($particular, $data);
-        $salesPrice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateSalesPrice($particular);
+	    $particularReturn = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateSalesPrice($particular);
         $production = $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionElement')->particularProductionElements($particular);
-        return new Response(json_encode(array('subTotal'=>$salesPrice,'particulars' => $production)));
+        return new Response(json_encode(array('subTotal' => $particularReturn->getSalesPrice(),'purchasePrice' => $particular->getPurchasePrice(),'particulars' => $production)));
         exit;
     }
 
@@ -124,8 +124,8 @@ class ProductionController extends Controller
         }
         $em->remove($element);
         $em->flush();
-        $salesPrice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateSalesPrice($particular);
-        return new Response(json_encode(array('subTotal'=>$salesPrice,'particulars' => '')));
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateSalesPrice($particular);
+        return new Response(json_encode(array('subTotal' => $particular->getSalesPrice(),'purchasePrice' => $particular->getPurchasePrice(),'particulars' => '')));
         exit;
 
 

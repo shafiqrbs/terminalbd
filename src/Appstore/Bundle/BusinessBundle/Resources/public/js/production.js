@@ -10,6 +10,7 @@ $(document).on('change', '#particular', function() {
             $('#particularId').val(obj['particularId']);
             $('#quantity').val(obj['quantity']);
             $('#price').val(obj['price']);
+            $('#unit').html(obj['unit']);
             $('#purchasePrice').val(obj['purchasePrice']);
         }
     })
@@ -19,7 +20,7 @@ $(document).on('click', '#addParticular', function() {
 
     var particularId = $('#particularId').val();
     var quantity = $('#quantity').val();
-    var price = $('#purchasePrice').val();
+    var price = $('#price').val();
     var url = $('#addParticular').attr('data-url');
     if(particularId == ''){
         $('.msg-hidden').show();
@@ -35,6 +36,8 @@ $(document).on('click', '#addParticular', function() {
             obj = JSON.parse(response);
             $('#invoiceParticulars').html(obj['particulars']);
             $('#subTotal').html(obj['subTotal']);
+            $('#productionSalesPrice').val(obj['subTotal']);
+            $('#productionPurchasePrice').val(obj['purchasePrice']);
             $('#purchasePrice').val('');
             $("#particular").select2().select2("val","");
             $('#price').val('');

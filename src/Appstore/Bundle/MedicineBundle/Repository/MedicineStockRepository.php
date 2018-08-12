@@ -57,7 +57,7 @@ class MedicineStockRepository extends EntityRepository
 
     public function checkDuplicateStockNonMedicine(MedicineConfig $config,$brand)
     {
-        $stock =  $this->findOneBy(array('medicineConfig'=>$config,'name'=> $brand));
+        $stock =  $this->findOneBy(array('medicineConfig' => $config,'name' => $brand));
         return $stock;
     }
 
