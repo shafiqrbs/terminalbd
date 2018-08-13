@@ -59,11 +59,41 @@ class AccountSalesRepository extends EntityRepository
             $qb->setParameter('branch', $branch);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','ASC');
+        $qb->orderBy('e.updated','DESC');
         $result = $qb->getQuery();
         return $result;
 
     }
+
+	public function customerLedger(User $user,$data = '',$process = '')
+	{
+		$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+		$endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+		$mobile =    isset($data['mobile'])? $data['mobile'] :'';
+
+
+		$globalOption = $user->getGlobalOption();
+		$qb = $this->createQueryBuilder('e');
+		$qb->where("e.globalOption = :globalOption");
+		$qb->setParameter('globalOption', $globalOption);
+		$qb->join('e.customer','c');
+		$qb->andWhere("c.mobile = :mobile");
+		$qb->setParameter('mobile', $mobile);
+		if (!empty($startDate) ) {
+			$start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
+			$qb->andWhere("e.updated >= :startDate");
+			$qb->setParameter('startDate', $start);
+		}
+		if (!empty($endDate)) {
+			$end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
+			$qb->andWhere("e.updated <= :endDate");
+			$qb->setParameter('endDate',$end);
+		}
+		$qb->orderBy('e.updated','ASC');
+		$result = $qb->getQuery();
+		return $result;
+
+	}
 
     /**
      * @param $qb

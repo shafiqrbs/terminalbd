@@ -343,11 +343,19 @@ class AccountBusinessController extends Controller
 	    $em = $this->getDoctrine()->getManager();
     	$data = $_REQUEST;
 	    $user = $this->getUser();
-	    $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
-	    $entities = $em->getRepository('AccountingBundle:AccountSales')->findWithSearch($user,$data);
+	    $customer ='';
+	    $overview = '';
+	    if(isset($data['mobile']) and !empty($data['mobile'])){
+		    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['mobile']));
+		    $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+
+	    }
+	    $entities = $em->getRepository('AccountingBundle:AccountSales')->customerLedger($user,$data);
 	    return $this->render('AccountingBundle:AccountBusiness:salesLedger.html.twig', array(
 		    'entities' => $entities->getResult(),
-		    'overview' => $overview
+		    'overview' => $overview,
+		    'customer' => $customer,
+		    'searchForm' => $data,
 	    ));
     }
 

@@ -399,6 +399,7 @@ class Builder extends ContainerAware
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'account_business_income'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'account_business_income_monthly'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Customer Outstanding', array('route' => 'account_sales_business_outstanding'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Customer Ledger', array('route' => 'account_sales_business_ledger'))->setAttribute('icon', 'icon-money');
                 $menu['Accounting']['Transaction & Report']->addChild('Vendor Outstanding',        array('route' => 'account_purchase_business_outstanding'))->setAttribute('icon', 'icon-th-list');
 
             }
