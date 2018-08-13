@@ -36,8 +36,7 @@
             <div class="caption"><i class="icon-reorder"></i>Add Sales Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn red" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Point of Sales</a>
-                    <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Sales</a>
+                   <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Sales</a>
                 </div>
             </div>
         </div>
@@ -49,13 +48,11 @@
             {{ form_start(salesItem) }}
             {{ form_row(salesItem._token) }}
             <div class="row-fluid particular-info" >
-                <div class="span5">
+                <div class="span8">
                     {{ form_widget(salesItem.stockName) }}
                     {{ form_errors(salesItem.stockName) }}
                 </div>
-                <div class="span5">
-                    {{ form_widget(salesItem.barcode) }}
-                    {{ form_errors(salesItem.barcode) }}
+                <div class="span2">
                     {{ form_widget(salesItem.salesPrice) }}
                     {{ form_errors(salesItem.salesPrice) }}
                 </div>
@@ -78,8 +75,8 @@
                     <table class="table table-bordered table-striped table-condensed table-fixed">
                         <thead>
                         <tr>
-                            <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
-                            <th class="span3">Name</th>
+                            <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
+                            <th class="span5">Name</th>
                             <th class="span1">MRP</th>
                             <th class="span1">Quantity</th>
                             <th class="span1">Sub-total</th>
@@ -90,8 +87,8 @@
                         {% if entity.medicineSalesItems is not empty %}
                             {% for item in entity.medicineSalesItems %}
                                 <tr id="remove-{{ item.id }}">
-                                    <td  class="span1">{{ loop.index }}. {{ item.getMedicinePurchaseItem.barcode }}</td>
-                                    <td class="span3">{{ item.medicineStock.name }}</td>
+                                    <td  class="span1">{{ loop.index }}.</td>
+                                    <td class="span5">{{ item.medicineStock.name }}</td>
                                     <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{{ item.subTotal|number_format }}</td>

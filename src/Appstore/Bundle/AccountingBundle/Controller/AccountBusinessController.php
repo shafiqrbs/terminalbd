@@ -338,5 +338,18 @@ class AccountBusinessController extends Controller
 
     }
 
+    public function customerLedgerAction()
+    {
+	    $em = $this->getDoctrine()->getManager();
+    	$data = $_REQUEST;
+	    $user = $this->getUser();
+	    $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+	    $entities = $em->getRepository('AccountingBundle:AccountSales')->findWithSearch($user,$data);
+	    return $this->render('AccountingBundle:AccountBusiness:salesLedger.html.twig', array(
+		    'entities' => $entities->getResult(),
+		    'overview' => $overview
+	    ));
+    }
+
 
 }

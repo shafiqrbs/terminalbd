@@ -51,7 +51,7 @@
             {% if entity.medicineSalesItems is not empty %}
                 {% for item in entity.medicineSalesItems %}
                     <tr id="remove-{{ item.id }}">
-                        <td  class="span1">{{ loop.index }}. {{ item.getMedicinePurchaseItem.barcode }}</td>
+                        <td  class="span1">{{ loop.index }}</td>
                         <td class="span3">{{ item.medicineStock.name }}</td>
                         <td class="span1">{{ item.salesPrice }}</td>
                         <td class="span1">{{ item.quantity }}</td>

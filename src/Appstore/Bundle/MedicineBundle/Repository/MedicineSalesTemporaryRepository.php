@@ -37,7 +37,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
-        $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem,'medicinePurchaseItem' => $purchaseStockItem));
+        $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
 
         if(!empty($invoiceParticular)) {
             $entity = $invoiceParticular;

@@ -34,13 +34,18 @@
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('account_sales_business_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Receive</a>
                                 <a class="btn yellow" href="{{ path('account_sales_business_outstanding') }}"><i class="icon-th-list"></i>&nbsp; Customer Outstanding</a>
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
+                                {% set businessInvoice = searchForm.businessInvoice is defined ? searchForm.businessInvoice :'' %}
+                                {% set mobile = searchForm.mobile is defined ? searchForm.mobile :'' %}
+                                {% set method = searchForm.method is defined ? searchForm.method :'' %}
+                                <a class="btn purple"  href="{{ path('account_sales_business_ledger') }}" ><i class=" icon-money"></i>&nbsp;Customer Ledger</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="portlet-body">
                         <div class="portlet-body">
-                            {% include('flash-message.html.twig') %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span4">

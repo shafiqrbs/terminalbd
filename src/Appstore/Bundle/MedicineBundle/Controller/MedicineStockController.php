@@ -492,6 +492,6 @@ class MedicineStockController extends Controller
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'purchase-return');
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'damage');
 		}
-		return $this->redirect($this->generateUrl('item'));
+		return $this->redirect($this->generateUrl('medicine_stock'));
 	}
 }

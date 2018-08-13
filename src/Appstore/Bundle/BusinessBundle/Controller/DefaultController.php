@@ -16,10 +16,10 @@ class DefaultController extends Controller
 
         $globalOption = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $datetime = new \DateTime("now");
-        $data['startDate'] = $datetime->format('Y-m-d');
-        $data['endDate'] = $datetime->format('Y-m-d');
+	    $data = $_REQUEST;
+	    $datetime = new \DateTime("now");
+	    $data['startDate'] = $datetime->format('Y-m-d');
+	    $data['endDate'] = $datetime->format('Y-m-d');
 
         $user = $this->getUser();
         $salesCashOverview = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user,$data);

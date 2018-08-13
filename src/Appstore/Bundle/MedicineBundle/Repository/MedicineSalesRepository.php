@@ -196,10 +196,10 @@ class MedicineSalesRepository extends EntityRepository
 
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         if($subTotal > 0){
-            $invoice->setSubTotal(round($subTotal));
+            $invoice->setSubTotal(floor($subTotal));
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
-            $invoice->setNetTotal(round($subTotal - $invoice->getDiscount()));
-            $invoice->setDue(round($subTotal - $invoice->getDiscount()));
+            $invoice->setNetTotal(floor($subTotal - $invoice->getDiscount()));
+            $invoice->setDue(floor($subTotal - $invoice->getDiscount()));
         }else{
             $invoice->setSubTotal(0);
             $invoice->setTotal(0);

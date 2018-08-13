@@ -220,16 +220,16 @@ class MedicineSalesItemRepository extends EntityRepository
         $i = 1;
         /* @var $entity MedicineSalesItem */
         foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId().'">';
-            $data .= '<td class="span1" >' . $i. '. '.$entity->getMedicinePurchaseItem()->getBarcode().'</td>';
-            $data .= '<td class="span4" >' . $entity->getMedicineStock()->getName().'</td>';
-            $data .= '<td class="span2" >' . $entity->getSalesPrice() .'</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity() .'</td>';
-            $data .= '<td class="span2" >' . $entity->getSubTotal() .'</td>';
-            $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/medicine/sales/' . $sales->getId() . '/' . $entity->getId() . '/sales-item-delete" href="javascript:" class="btn red mini itemDelete" ><i class="icon-trash"></i></a>
-            </td>';
-            $data .= '</tr>';
+            $data .= "<tr id='remove-{$entity->getId()}>";
+            $data .= "<td class='span1' >{$i}.</td>";
+            $data .= "<td class='span4' >{$entity->getMedicineStock()->getName()}</td>";
+            $data .= "<td class='span2' >{$entity->getSalesPrice()}</td>";
+            $data .= "<td class='span1' >{$entity->getQuantity()}</td>";
+            $data .= "<td class='span2' >{$entity->getSubTotal()}</td>";
+            $data .= "<td class='span1' >";
+            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}'  data-url='/medicine/sales/{$sales->getId()}/{$entity->getId()}/sales-item-delete' href='javascript:' class='btn red mini itemDelete' ><i class='icon-trash'></i></a>";
+            $data .= "</td>";
+            $data .= "</tr>";
             $i++;
         }
         return $data;

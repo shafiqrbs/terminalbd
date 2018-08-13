@@ -52,7 +52,7 @@ class InvoiceType extends AbstractType
                     'percentage' => 'Percentage',
                 ),
             ))
-            ->add('discount','hidden')
+           /* ->add('discount','hidden')*/
             ->add('received','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Payment amount')))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),

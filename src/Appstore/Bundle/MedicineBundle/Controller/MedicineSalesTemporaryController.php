@@ -181,7 +181,7 @@ class MedicineSalesTemporaryController extends Controller
 
         $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
         $subTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-	    $subTotal = round($subTotal,2);
+	    $subTotal = floor($subTotal);
         $data = array(
            'subTotal' => $subTotal,
            'initialGrandTotal' => $subTotal,

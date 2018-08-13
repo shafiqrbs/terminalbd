@@ -280,18 +280,19 @@ class BusinessParticularRepository extends EntityRepository
             /* @var  $item BusinessInvoiceParticular */
 
             foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
-
-                if($item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'production' and $invoice->getBusinessConfig()->getProductionType() == 'post-production'){
-                	$this->productionExpense($item);
-					$particular = $item->getBusinessParticular();
-					$qnt = $particular->getSalesQuantity() + $item->getTotalQuantity();
-					$particular->setPurchaseQuantity($qnt);
-					$particular->setSalesQuantity($qnt);
-					$em->persist($particular);
-					$em->flush();
-                }else{
-                    $this->getSalesUpdateQnt($item);
-                }
+				if(!empty($item->getBusinessParticular())) {
+					if ( $item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'production' and $invoice->getBusinessConfig()->getProductionType() == 'post-production' ) {
+						$this->productionExpense( $item );
+						$particular = $item->getBusinessParticular();
+						$qnt        = $particular->getSalesQuantity() + $item->getTotalQuantity();
+						$particular->setPurchaseQuantity( $qnt );
+						$particular->setSalesQuantity( $qnt );
+						$em->persist( $particular );
+						$em->flush();
+					} else {
+						$this->getSalesUpdateQnt( $item );
+					}
+				}
             }
         }
 

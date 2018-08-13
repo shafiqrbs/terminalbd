@@ -195,6 +195,40 @@ class InvoiceController extends Controller
         ));
     }
 
+	/**
+	 * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+	 */
+
+	public function invoiceDiscountUpdateAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$discountType = $request->request->get('discountType');
+		$discountCal = $request->request->get('discount');
+		$invoice = $request->request->get('invoice');
+		$entity = $em->getRepository('BusinessBundle:BusinessInvoice')->find($invoice);
+		$subTotal = $entity->getSubTotal();
+		if($discountType == 'flat'){
+			$total = ($subTotal  - $discountCal);
+			$discount = $discountCal;
+		}else{
+			$discount = ($subTotal*$discountCal)/100;
+			$total = ($subTotal  - $discount);
+		}
+		$vat = 0;
+		if($total > $discount ){
+			$entity->setDiscountType($discountType);
+			$entity->setDiscountCalculation($discountCal);
+			$entity->setDiscount(round($discount));
+			$entity->setTotal(round($total + $vat));
+			$entity->setDue(round($total + $vat));
+			$em->flush();
+		}
+		$msg = 'Discount successfully';
+		$result = $this->returnResultData($entity,$msg);
+		return new Response(json_encode($result));
+		exit;
+	}
+
 
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
@@ -305,39 +339,7 @@ class InvoiceController extends Controller
         exit;
     }
 
-    /**
-     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
-     */
 
-    public function invoiceDiscountUpdateAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $discountType = $request->request->get('discountType');
-        $discountCal = $request->request->get('discount');
-        $invoice = $request->request->get('invoice');
-        $entity = $em->getRepository('BusinessBundle:BusinessInvoice')->find($invoice);
-        $subTotal = $entity->getSubTotal();
-        if($discountType == 'flat'){
-            $total = ($subTotal  - $discountCal);
-            $discount = $discountCal;
-        }else{
-            $discount = ($subTotal*$discountCal)/100;
-            $total = ($subTotal  - $discount);
-        }
-        $vat = 0;
-        if($total > $discount ){
-            $entity->setDiscountType($discountType);
-            $entity->setDiscountCalculation($discountCal);
-            $entity->setDiscount(round($discount));
-            $entity->setTotal(round($total + $vat));
-            $entity->setDue(round($total + $vat));
-            $em->flush();
-        }
-        $msg = 'Discount successfully';
-        $result = $this->returnResultData($entity,$msg);
-        return new Response(json_encode($result));
-        exit;
-    }
 
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");

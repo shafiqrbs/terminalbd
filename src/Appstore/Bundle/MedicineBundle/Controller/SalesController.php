@@ -164,7 +164,7 @@ class SalesController extends Controller
                 $purchaseItems .= '<option value="' . $item->getId() . '">' . $item->getBarcode() . ' - ' . $expiration . '[' . $item->getRemainingQuantity() . ']</option>';
             }
         }
-        return new Response(json_encode(array('purchaseItems' => $purchaseItems,'salesPrice'=> $stock->getSalesPrice())));
+        return new Response(json_encode(array('purchaseItems' => '','salesPrice'=> round($stock->getSalesPrice()))));
     }
 
     public function returnResultData(MedicineSales $entity,$msg=''){
@@ -202,14 +202,14 @@ class SalesController extends Controller
         $stockItem = ($data['salesitem']['stockName']);
         $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
         $entity->setMedicineStock($stock);
-        $barcode = $data['salesitem']['barcode'];
-        $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($barcode);
-        $entity->setMedicinePurchaseItem($purchaseItem);
+       // $barcode = $data['salesitem']['barcode'];
+       // $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($barcode);
+      //  $entity->setMedicinePurchaseItem($purchaseItem);
         $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
         $entity->setPurchasePrice($stock->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'sales');
+      //  $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'sales');
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
         $msg = 'Medicine added successfully';

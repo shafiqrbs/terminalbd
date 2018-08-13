@@ -51,7 +51,7 @@
                                         <select name="rackNo" id="rackNo" class="span12 m-wrap">
                                             <option value="">Rack no</option>
                                             {% for rack in racks %}
-                                                <option {% if searchForm.rack is defined and searchForm.rack == method.id %} selected="selected" {% endif %} value="{{ rack.id }}" >{{ rack.name }}</option>
+                                                <option {% if searchForm.rack is defined and searchForm.rack == rack.id %} selected="selected" {% endif %} value="{{ rack.id }}" >{{ rack.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -174,5 +174,5 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
+    EditableWithLoadInit();
 {% endblock %}

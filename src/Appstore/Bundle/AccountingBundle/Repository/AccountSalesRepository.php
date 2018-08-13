@@ -59,7 +59,7 @@ class AccountSalesRepository extends EntityRepository
             $qb->setParameter('branch', $branch);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
+        $qb->orderBy('e.updated','ASC');
         $result = $qb->getQuery();
         return $result;
 
@@ -581,9 +581,9 @@ class AccountSalesRepository extends EntityRepository
             $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
         }
 
-        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+	    $sales = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user, $data);
+	    $purchase = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesItemPurchaseSalesOverview($user, $data);
+	    $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
         $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['purchasePrice'], 'expenditures' => $expenditures);
         return $data;
 

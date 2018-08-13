@@ -157,7 +157,7 @@ class BusinessInvoice
      *
      * @ORM\Column(name="discountType", type="string", length=20, nullable=true)
      */
-    private $discountType ='percentage';
+    private $discountType ='';
 
     /**
      * @var float

@@ -37,12 +37,11 @@ class BusinessInvoiceRepository extends EntityRepository
     {
 
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
-        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
-        $createdStart = isset($data['createdStart'])? $data['createdStart'] :'';
-        $createdEnd = isset($data['createdEnd'])? $data['createdEnd'] :'';
+        $createdStart = isset($data['startDate'])? $data['startDate'] :'';
+        $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
@@ -58,21 +57,16 @@ class BusinessInvoiceRepository extends EntityRepository
         }
         if (!empty($createdStart)) {
             $compareTo = new \DateTime($createdStart);
-            $created =  $compareTo->format('Y-m-d');
+            $created =  $compareTo->format('Y-m-d 00:00:00');
             $qb->andWhere("e.created >= :created");
             $qb->setParameter('created', $created);
         }
 
         if (!empty($createdEnd)) {
             $compareTo = new \DateTime($createdEnd);
-            $createdEnd =  $compareTo->format('Y-m-d');
+            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
             $qb->andWhere("e.created <= :createdEnd");
             $qb->setParameter('createdEnd', $createdEnd);
-        }
-
-        if(!empty($assignDoctor)){
-            $qb->andWhere("e.assignDoctor = :assignDoctor");
-            $qb->setParameter('assignDoctor', $assignDoctor);
         }
 
         if(!empty($process)){
@@ -111,15 +105,15 @@ class BusinessInvoiceRepository extends EntityRepository
         $userBranch = $user->getProfile()->getBranches();
         $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
 
-        $qb = $this->createQueryBuilder('s');
-        $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.received) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
-        $qb->where('s.businessConfig = :config');
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.subTotal) as subTotal , sum(e.total) as total ,sum(e.received) as totalPayment , count(e.id) as totalVoucher, sum(e.due) as totalDue, sum(e.discount) as totalDiscount, sum(e.vat) as totalVat');
+        $qb->where('e.businessConfig = :config');
         $qb->setParameter('config', $config);
-        $qb->andWhere('s.process = :process');
-        $qb->setParameter('process', 'Done');
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered','Chalan'));
         $this->handleSearchBetween($qb,$data);
         if ($userBranch){
-            $qb->andWhere("s.branch = :branch");
+            $qb->andWhere("e.branch = :branch");
             $qb->setParameter('branch', $userBranch);
         }
         return $qb->getQuery()->getOneOrNullResult();
@@ -130,19 +124,19 @@ class BusinessInvoiceRepository extends EntityRepository
         $userBranch = $user->getProfile()->getBranches();
         $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
 
-        $qb = $this->createQueryBuilder('s');
-        $qb->join('s.businessInvoiceParticulars','si');
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.businessInvoiceParticulars','si');
         $qb->select('SUM(si.quantity) AS quantity');
         $qb->addSelect('COUNT(si.id) AS totalItem');
-        $qb->addSelect('SUM(si.quantity * si.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(si.totalQuantity * si.purchasePrice) AS purchasePrice');
         $qb->addSelect('SUM(si.subTotal) AS salesPrice');
-        $qb->where('s.businessConfig = :config');
+        $qb->where('e.businessConfig = :config');
         $qb->setParameter('config', $config);
-        $qb->andWhere('s.process = :process');
-        $qb->setParameter('process', 'Done');
+	    $qb->andWhere('e.process IN (:process)');
+	    $qb->setParameter('process', array('Done','Delivered','Chalan'));
         $this->handleSearchBetween($qb,$data);
         if ($userBranch){
-            $qb->andWhere("s.branches = :branch");
+            $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $userBranch);
         }
         $result = $qb->getQuery()->getOneOrNullResult();
