@@ -542,7 +542,7 @@ class InvoiceController extends Controller
                 $template = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'print';
             }
 	        $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($businessConfig->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
-	        $balance = $result[0]['customerBalance'];
+	        $balance = empty($result) ? 0 :$result[0]['customerBalance'];
             return  $this->render("BusinessBundle:Print:{$template}.html.twig",
                 array(
                     'config' => $businessConfig,
@@ -555,6 +555,35 @@ class InvoiceController extends Controller
         }
 
     }
+	public function invoiceChalanAction(BusinessInvoice $entity)
+	{
+
+		$em = $this->getDoctrine()->getManager();
+
+		/* @var $businessConfig BusinessConfig */
+
+		$businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
+		if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
+
+			if($businessConfig->isCustomInvoicePrint() == 1){
+				$template = $businessConfig->getGlobalOption()->getSlug();
+			}else{
+				$template = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'print';
+			}
+			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($businessConfig->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
+			$balance = empty($result) ? 0 :$result[0]['customerBalance'];
+			return  $this->render("BusinessBundle:Print:{$template}.html.twig",
+				array(
+					'config' => $businessConfig,
+					'entity' => $entity,
+					'balance' => $balance,
+					'print' => 'chalan',
+				)
+			);
+
+		}
+
+	}
 
 }
 

@@ -1,12 +1,14 @@
 function AccountingApproveProcess(){}
 
-$("#printLedger").on('click', function() {
+$("#printLedgerx").on('click', function() {
     $("#DivIdToPrint").print({
         globalStyles: true,
         timeout: 750
     });
 
 })
+
+
 
 $( ".date-picker" ).datepicker({
         dateFormat: "dd-mm-yy",

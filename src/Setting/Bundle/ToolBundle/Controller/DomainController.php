@@ -193,6 +193,9 @@ class DomainController extends Controller
         if(!empty($option->getMedicineConfig()) and $option->getMedicineConfig()) {
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineConfig')->medicineReset($option);
         }
+        if(!empty($option->getBusinessConfig()) and $option->getBusinessConfig()) {
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessConfig')->businessReset($option);
+        }
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
         $a = new Filesystem();
         $a->remove($dir);

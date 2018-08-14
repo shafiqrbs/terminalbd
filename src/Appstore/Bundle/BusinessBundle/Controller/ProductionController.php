@@ -77,16 +77,14 @@ class ProductionController extends Controller
         }
         $editForm = $this->createProductionCostingForm($entity);
         $editForm->handleRequest($request);
-
+        $data = $request->request->all();
         if ($editForm->isValid()) {
-            if($entity->upload() && !empty($entity->getFile())){
-                $entity->removeUpload();
-            }
+            $entity->setSalesPrice($data['productionSalesPrice']);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateSalesPrice($entity);
+            //$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateSalesPrice($entity);
             return $this->redirect($this->generateUrl('business_stock'));
         }
 

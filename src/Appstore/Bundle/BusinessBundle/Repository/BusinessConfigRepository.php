@@ -14,30 +14,21 @@ class BusinessConfigRepository extends EntityRepository
 {
 
 
-    public function hospitalReset(GlobalOption $option)
+    public function businessReset(GlobalOption $option)
     {
 
-        $em = $this->_em;
-        $config = $option->getHospitalConfig()->getId();
 
-        $DoctorInvoice = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hospitalConfig = '.$config);
-        $DoctorInvoice->execute();
+	    $em = $this->_em;
+	    $config = $option->getBusinessConfig()->getId();
 
-        $Invoice = $em->createQuery('DELETE HospitalBundle:Invoice e WHERE e.hospitalConfig = '.$config);
-        $Invoice->execute();
+	    $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
+	    $sales->execute();
 
+	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = '.$config);
+	    $purchase->execute();
 
-        $reverse = $em->createQuery('DELETE HospitalBundle:HmsReverse e WHERE e.hospitalConfig = '.$config);
-        $reverse->execute();
-
-        // $PathologicalReport = $em->createQuery('DELETE HospitalBundle:PathologicalReport e WHERE e.hospitalConfig = '.$config);
-        // $PathologicalReport->execute();
-
-        $hmsPurchase = $em->createQuery('DELETE HospitalBundle:HmsPurchase e WHERE e.hospitalConfig = '.$config);
-        $hmsPurchase->execute();
-
-        //  $Particular = $em->createQuery('DELETE HospitalBundle:Particular e WHERE e.hospitalConfig = '.$config);
-        // $Particular->execute();
+	    $stock = $em->createQuery('DELETE BusinessBundle:BusinessParticular e WHERE e.businessConfig = '.$config);
+	    $stock->execute();
 
     }
 }

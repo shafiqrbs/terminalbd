@@ -63,7 +63,7 @@
                     </div>
                     <div class="clearfix">&nbsp;</div>
 
-                    <div class="portlet-body flip-scroll">
+                    <div class="portlet-body flip-scroll" id="DivIdToPrint">
                         <div class="row-fluid">
                             <div class="span4">
                                 <h4>About:</h4>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
-                        <table id="DivIdToPrint" class="table table-bordered table-striped table-condensed flip-content ">
+                        <table  class="table table-bordered table-striped table-condensed flip-content ">
                             <thead class="flip-content ">
                             <tr class="head-blue">
                                 <th class="numeric" >S/N</th>
@@ -144,6 +144,11 @@
 {% block documentready %}
     {{ parent() }}
     AccountingApproveProcess();
+    $('#printLedger').on('click', function(e)  {
+        $('#DivIdToPrint').printThis({
+            styles: ['{{ asset('assets/css/print.css') }}']
+        });
+    });
 {% endblock %}
 
 

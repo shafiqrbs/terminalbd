@@ -63,14 +63,8 @@ class StockType extends AbstractType
                         ->where("e.status = 1");
                 },
             ))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sales price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter purchase price'),
-
-            ))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sales price')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter purchase price')))
             ->add('category', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\BusinessBundle\Entity\Category',
