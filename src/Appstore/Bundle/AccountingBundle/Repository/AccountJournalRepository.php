@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn;
@@ -336,6 +337,65 @@ class AccountJournalRepository extends EntityRepository
 	}
 
 
+	public function   insertAccountBusinessPurchaseJournal(BusinessPurchase $purchase)
+	{
+
+		$journalSource = "business-{$purchase->getId()}";
+		$entity = new AccountJournal();
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(49);
+		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
+		$accountBankHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(38);
+		$accountMobileHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(45);
+
+		$entity->setGlobalOption($purchase->getBusinessConfig()->getGlobalOption());
+		$entity->setTransactionType('Debit');
+		$entity->setAmount($purchase->getPayment());
+		$entity->setTransactionMethod($purchase->getTransactionMethod());
+		$entity->setAccountBank($purchase->getAccountBank());
+		$entity->setAccountMobileBank($purchase->getAccountMobileBank());
+		$entity->setApprovedBy($purchase->getApprovedBy());
+		$entity->setCreatedBy($purchase->getApprovedBy());
+		$entity->setAccountHeadCredit($accountHeadCredit);
+		if ($purchase->getTransactionMethod()->getId() == 2){
+			$entity->setAccountHeadDebit($accountBankHead);
+		}elseif ($purchase->getTransactionMethod()->getId() == 3){
+			$entity->setAccountHeadDebit($accountMobileHead);
+		}else{
+			$entity->setAccountHeadDebit($accountCashHead);
+		}
+		$entity->setToUser($purchase->getApprovedBy());
+		$entity->setJournalSource($journalSource);
+		$entity->setRemark("Business purchase as investment,Ref GRN no.{$purchase->getGrn()}");
+		$entity->setProcess('approved');
+		$this->_em->persist($entity);
+		$this->_em->flush();
+		return $entity;
+	}
+
+	public function removeApprovedBusinessPurchaseJournal(BusinessPurchase $purchase)
+	{
+		$option =  $purchase->getBusinessConfig()->getGlobalOption()->getId();
+		$journalSource = "business-{$purchase->getId()}";
+		$journal = $this->_em->getRepository('AccountingBundle:AccountJournal')->findOneBy(array('approvedBy' => $purchase->getApprovedBy(),'globalOption'=> $option,'journalSource' => $journalSource ));
+		$em = $this->_em;
+		if(!empty($journal)) {
+
+			/* @var  $journal AccountJournal */
+
+			$globalOption = $journal->getGlobalOption()->getId();
+			$accountRefNo = $journal->getAccountRefNo();
+
+			$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Journal'");
+			$transaction->execute();
+			$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Journal'");
+			$accountCash->execute();
+			$journalRemove = $em->createQuery('DELETE AccountingBundle:AccountJournal e WHERE e.id = '.$journal->getId());
+			if(!empty($journalRemove)){
+				$journalRemove->execute();
+			}
+		}
+
+	}
 
 
 }

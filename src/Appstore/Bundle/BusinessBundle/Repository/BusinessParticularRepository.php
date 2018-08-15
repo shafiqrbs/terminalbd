@@ -198,7 +198,7 @@ class BusinessParticularRepository extends EntityRepository
         if(!empty($purchase->getBusinessPurchaseItems())) {
             foreach ($purchase->getBusinessPurchaseItems() as $purchaseItem) {
                 $stockItem = $purchaseItem->getBusinessParticular();
-                $this->updateRemovePurchaseQuantity($stockItem);
+                $this->updateRemoveStockQuantity($stockItem);
             }
         }
     }

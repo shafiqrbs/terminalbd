@@ -410,9 +410,11 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->find($id);
+	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+	    $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
 
-        if (!$entity) {
+
+	    if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
         return $this->render('MedicineBundle:Purchase:show.html.twig', array(
@@ -420,15 +422,19 @@ class PurchaseController extends Controller
         ));
     }
 
-    public function approvedAction(MedicinePurchase $purchase)
+    public function approvedAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($purchase) and $purchase->getProcess() == "Complete" ) {
+	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+	    $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
+
+	    if (!empty($purchase) and $purchase->getProcess() == "Complete" ) {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
             $purchase->setApprovedBy($this->getUser());
             if($purchase->getPayment() == 0){
                 $purchase->setAsInvestment(false);
+	            $purchase->setTransactionMethod(NULL);
             }
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);

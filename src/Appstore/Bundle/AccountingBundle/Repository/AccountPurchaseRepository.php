@@ -359,7 +359,16 @@ class AccountPurchaseRepository extends EntityRepository
         return $entity->getBalance();
     }
 
-    public function insertAccountPurchase(Purchase $entity)
+	public function accountReverse(AccountPurchase $entity)
+	{
+		$em = $this->_em;
+		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Purchase'");
+		$transaction->execute();
+		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Purchase'");
+		$accountCash->execute();
+	}
+
+	public function insertAccountPurchase(Purchase $entity)
     {
 
         $em = $this->_em;
@@ -422,7 +431,9 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setGlobalOption($global);
         $accountPurchase->setMedicinePurchase($entity);
         $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
-        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
+	    if (!empty( $entity->getTransactionMethod())) {
+		    $accountPurchase->setTransactionMethod( $entity->getTransactionMethod() );
+	    }
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
         $accountPurchase->setProcessHead('medicine');
@@ -573,16 +584,17 @@ class AccountPurchaseRepository extends EntityRepository
         }
     }
 
-    public function insertBusinessAccountPurchase(BusinessPurchase $entity)
-    {
+    public function insertBusinessAccountPurchase(BusinessPurchase $entity) {
 
-        $global = $entity->getBusinessConfig()->getGlobalOption();
-        $em = $this->_em;
-        $accountPurchase = new AccountPurchase();
-        $accountPurchase->setGlobalOption($global);
-        $accountPurchase->setBusinessPurchase($entity);
-        $accountPurchase->setAccountVendor($entity->getVendor());
-        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
+	    $global          = $entity->getBusinessConfig()->getGlobalOption();
+	    $em              = $this->_em;
+	    $accountPurchase = new AccountPurchase();
+	    $accountPurchase->setGlobalOption( $global );
+	    $accountPurchase->setBusinessPurchase( $entity );
+	    $accountPurchase->setAccountVendor( $entity->getVendor() );
+	    if (!empty( $entity->getTransactionMethod())) {
+		    $accountPurchase->setTransactionMethod( $entity->getTransactionMethod() );
+	    }
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
         $accountPurchase->setProcessHead('business');
@@ -600,13 +612,24 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
-	public function accountReverse(AccountPurchase $entity)
+	public function accountBusinessPurchaseReverse(BusinessPurchase $entity)
 	{
 		$em = $this->_em;
-		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Purchase'");
-		$transaction->execute();
-		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Purchase'");
-		$accountCash->execute();
+		if(!empty($entity->getAccountPurchase())){
+			/* @var AccountPurchase $purchase */
+			foreach ($entity->getAccountPurchase() as $purchase ){
+				$globalOption = $purchase->getGlobalOption()->getId();
+				$accountRefNo = $purchase->getAccountRefNo();
+				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
+				$transaction->execute();
+				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
+				$accountCash->execute();
+			}
+		}
+		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountPurchase e WHERE e.businessPurchase = '.$entity->getId());
+		if(!empty($accountCash)){
+			$accountCash->execute();
+		}
 	}
 
 

@@ -43,6 +43,11 @@ class BusinessPurchase
      **/
     private  $accountPurchase;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessReverse", mappedBy="businessPurchase" , cascade={"remove"})
+     **/
+    private  $businessReverse;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="businessPurchases" , cascade={"detach","merge"} )
@@ -104,7 +109,7 @@ class BusinessPurchase
      *
      * @ORM\Column(name="mode", type="string", length=30, nullable=true)
      */
-    private $mode ='medicine';
+    private $mode ='product';
 
 
     /**
@@ -172,7 +177,7 @@ class BusinessPurchase
      *
      * @ORM\Column(name="discountType", type="string", length=20, nullable=true)
      */
-    private $discountType ='percentage';
+    private $discountType ='flat';
 
     /**
      * @var float
@@ -195,7 +200,16 @@ class BusinessPurchase
      */
     private $asInvestment = false;
 
-    /**
+
+	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="isReversed", type="boolean")
+	 */
+	private $isReversed = false;
+
+
+	/**
      * @var string
      *
      * @ORM\Column(name="process", type="string", nullable=true)
@@ -721,6 +735,27 @@ class BusinessPurchase
     {
         $this->discountCalculation = $discountCalculation;
     }
+
+	/**
+	 * @return BusinessReverse
+	 */
+	public function getBusinessReverse() {
+		return $this->businessReverse;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isReversed(){
+		return $this->isReversed;
+	}
+
+	/**
+	 * @param bool $isReversed
+	 */
+	public function setIsReversed( bool $isReversed ) {
+		$this->isReversed = $isReversed;
+	}
 
 
 }

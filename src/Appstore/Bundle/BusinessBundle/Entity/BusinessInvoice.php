@@ -38,6 +38,11 @@ class BusinessInvoice
     private $businessConfig;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessReverse", inversedBy="businessInvoice")
+     **/
+    private $businessReverse;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
@@ -245,9 +250,9 @@ class BusinessInvoice
     /**
      * @var boolean
      *
-     * @ORM\Column(name="revised", type="boolean", nullable=true)
+     * @ORM\Column(name="isReversed", type="boolean", nullable=true)
      */
-    private $revised;
+    private $isReversed;
 
     /**
      * @var \DateTime
@@ -610,22 +615,6 @@ class BusinessInvoice
     }
 
     /**
-     * @return bool
-     */
-    public function isRevised()
-    {
-        return $this->revised;
-    }
-
-    /**
-     * @param bool $revised
-     */
-    public function setRevised($revised)
-    {
-        $this->revised = $revised;
-    }
-
-    /**
      * @return BusinessInvoiceParticular
      */
     public function getBusinessInvoiceParticulars()
@@ -832,6 +821,27 @@ class BusinessInvoice
     {
         $this->received = $received;
     }
+
+	/**
+	 * @return BusinessReverse
+	 */
+	public function getBusinessReverse() {
+		return $this->businessReverse;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isReversed(){
+		return $this->isReversed;
+	}
+
+	/**
+	 * @param bool $isReversed
+	 */
+	public function setIsReversed( bool $isReversed ) {
+		$this->isReversed = $isReversed;
+	}
 
 }
 

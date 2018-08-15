@@ -38,29 +38,21 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
         $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
-
-        if(!empty($invoiceParticular)) {
-            $entity = $invoiceParticular;
-            $entity->setQuantity($invoiceParticular->getQuantity() + $data['quantity']);
-            $entity->setSubTotal(round(($data['salesPrice'] * $entity->getQuantity()),2));
-
-        }else{
-
-            $entity->setQuantity($data['quantity']);
-            $entity->setSalesPrice(round($data['salesPrice'],2));
-            $entity->setSubTotal(round(($entity->getSalesPrice() * $data['quantity']),2));
+        if(empty($invoiceParticular)) {
+	        $entity->setQuantity( $data['quantity'] );
+	        $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
+	        $entity->setSubTotal( round( ( $entity->getSalesPrice() * $data['quantity'] ), 2 ) );
+	        $entity->setUser( $user );
+	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
+	        $entity->setMedicineStock( $stockItem );
+	        $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
+	        /* if(!empty($purchaseStockItem)){
+				 $entity->setPurchasePrice(round($purchaseStockItem->getPurchasePrice(),2));
+				 $entity->setMedicinePurchaseItem($purchaseStockItem);
+			 }*/
+	        $em->persist( $entity );
+	        $em->flush();
         }
-
-        $entity->setUser($user);
-        $entity->setMedicineConfig($user->getGlobalOption()->getMedicineConfig());
-        $entity->setMedicineStock($stockItem);
-	    $entity->setPurchasePrice(round($stockItem->getPurchasePrice(),2));
-	   /* if(!empty($purchaseStockItem)){
-	        $entity->setPurchasePrice(round($purchaseStockItem->getPurchasePrice(),2));
-	        $entity->setMedicinePurchaseItem($purchaseStockItem);
-        }*/
-        $em->persist($entity);
-        $em->flush();
 
     }
 

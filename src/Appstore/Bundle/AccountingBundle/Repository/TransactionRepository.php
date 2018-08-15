@@ -1433,10 +1433,12 @@ class TransactionRepository extends EntityRepository
 	}
 
 
-	public function purchaseGlobalTransaction($accountPurchase,$source='')
+	public function purchaseGlobalTransaction(AccountPurchase $accountPurchase,$source='')
     {
         $this->insertGlobalInventoryAsset($accountPurchase);
-        $this->insertGlobalPurchaseCash($accountPurchase);
+	    if(!empty($accountPurchase->getTransactionMethod())){
+	        $this->insertGlobalPurchaseCash($accountPurchase);
+        }
         $this->insertGlobalPurchaseAccountPayable($accountPurchase);
     }
 

@@ -46,7 +46,54 @@ $(document).on('change', '#particular', function() {
     })
 });
 
-$(document).on('click', '#addParticular', function() {
+var form = $("#purchaseItem").validate({
+
+    rules: {
+
+        "particular": {required: true},
+        "purchasePrice": {required: true},
+        "quantity": {required: true},
+    },
+
+    messages: {
+
+        "particular":"Enter particular name",
+        "purchasePrice":"Enter purchase price",
+        "quantity":"Enter purchase quantity",
+    },
+    tooltip_options: {
+        "particular": {placement:'top',html:true},
+        "purchasePrice": {placement:'top',html:true},
+        "quantity": {placement:'top',html:true},
+    },
+
+    submitHandler: function(form) {
+
+        $.ajax({
+            url         : $('form#purchaseItem').attr( 'action' ),
+            type        : $('form#purchaseItem').attr( 'method' ),
+            data        : new FormData($('form#purchaseItem')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#netTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#discount').html(obj['discount']);
+                $('#due').html(obj['due']);
+                $('#purchasePrice').val('');
+                $("#particular").select2().select2("val","");
+                $('#price').val('');
+                $('#unit').html('Unit');
+                $('#quantity').val('1');
+            }
+        });
+    }
+});
+
+/*$(document).on('click', '#addParticular', function() {
 
     var particularId = $('#particularId').val();
     var quantity = $('#quantity').val();
@@ -83,7 +130,7 @@ $(document).on('click', '#addParticular', function() {
             $('#quantity').val('1');
         }
     })
-});
+});*/
 
 $(document).on('keyup', '#purchase_discountCalculation', function() {
 

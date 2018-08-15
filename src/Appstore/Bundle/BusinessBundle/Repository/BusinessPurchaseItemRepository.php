@@ -33,16 +33,20 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
     public function insertPurchaseItems($invoice, $data)
     {
-        $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
+
+    	$particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
         $em = $this->_em;
+	    $purchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
         $entity = new BusinessPurchaseItem();
         $entity->setBusinessPurchase($invoice);
         $entity->setBusinessParticular($particular);
-        $entity->setSalesPrice($particular->getPrice());
-        $entity->setPurchasePrice($particular->getPurchasePrice());
-        $entity->setActualPurchasePrice($particular->getPurchasePrice());
+        if(!empty($particular->getPrice())){
+	        $entity->setSalesPrice($particular->getPrice());
+        }
+        $entity->setPurchasePrice($purchasePrice);
+        $entity->setActualPurchasePrice($purchasePrice);
         $entity->setQuantity($data['quantity']);
-        $entity->setPurchaseSubTotal($data['quantity'] * $particular->getPurchasePrice());
+        $entity->setPurchaseSubTotal($data['quantity'] * $entity->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
         $this->getPurchaseAveragePrice($particular);

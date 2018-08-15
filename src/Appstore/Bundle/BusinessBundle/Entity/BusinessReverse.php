@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * BusinessReverse
  *
  * @ORM\Table(name="business_reverse")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessConfigRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessReverseRepository")
  */
 class BusinessReverse
 {
@@ -32,6 +32,13 @@ class BusinessReverse
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $businessInvoice;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", inversedBy="businessReverse")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $businessPurchase;
 
 
     /**
@@ -195,7 +202,47 @@ class BusinessReverse
         $this->updated = $updated;
     }
 
+	/**
+	 * @return BusinessPurchase
+	 */
+	public function getBusinessPurchase() {
+		return $this->businessPurchase;
+	}
 
+	/**
+	 * @param BusinessPurchase $businessPurchase
+	 */
+	public function setBusinessPurchase( $businessPurchase ) {
+		$this->businessPurchase = $businessPurchase;
+	}
+
+	/**
+	 * @return BusinessConfig
+	 */
+	public function getBusinessConfig() {
+		return $this->businessConfig;
+	}
+
+	/**
+	 * @param BusinessConfig $businessConfig
+	 */
+	public function setBusinessConfig( $businessConfig ) {
+		$this->businessConfig = $businessConfig;
+	}
+
+	/**
+	 * @return BusinessInvoice
+	 */
+	public function getBusinessInvoice() {
+		return $this->businessInvoice;
+	}
+
+	/**
+	 * @param BusinessInvoice $businessInvoice
+	 */
+	public function setBusinessInvoice( $businessInvoice ) {
+		$this->businessInvoice = $businessInvoice;
+	}
 
 
 }

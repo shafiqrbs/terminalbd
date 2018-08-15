@@ -69,6 +69,7 @@ function jqueryTemporaryLoad() {
             success: function (response) {
                 obj = JSON.parse(response);
                 $('#salesTemporaryItem_barcode').html(obj['purchaseItems']).focus();
+                $("#addTemporaryItem").attr("disabled", false);
                 $('#salesTemporaryItem_salesPrice').val(obj['salesPrice']);
             }
         })
@@ -86,10 +87,6 @@ function jqueryTemporaryLoad() {
                 inputs[idx + 1].focus(); //  handles submit buttons
             }
             switch (this.id) {
-
-                case 'salesTemporaryItem_barcode':
-                    $('#salesTemporaryItem_quantity').focus();
-                    break;
 
                 case 'salesTemporaryItem_quantity':
                     $('#addTemporaryItem').focus();
@@ -137,6 +134,7 @@ function jqueryTemporaryLoad() {
                 contentType : false,
                 success: function(response){
                     obj = JSON.parse(response);
+                    $("#addTemporaryItem").attr("disabled", true);
                     $('#invoiceParticulars').html(obj['salesItems']);
                     $('#subTotal').html(obj['subTotal']);
                     $('#grandTotal').html(obj['initialGrandTotal']);
