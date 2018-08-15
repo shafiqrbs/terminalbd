@@ -30,7 +30,7 @@ class BusinessReverseRepository extends EntityRepository
 			$reverse = $entity->getBusinessReverse();
 		}
 		$reverse->setBusinessConfig($entity->getBusinessConfig());
-		$reverse->setProcess('Purchase');
+		$reverse->setProcess('purchase');
 		$reverse->setContent($data);
 		$reverse->setBusinessPurchase($entity);
 		$this->_em->persist($reverse);
@@ -46,7 +46,7 @@ class BusinessReverseRepository extends EntityRepository
 			$reverse = $entity->getBusinessReverse();
 		}
 		$reverse->setBusinessConfig($entity->getBusinessConfig());
-		$reverse->setProcess('Sales');
+		$reverse->setProcess('sales');
 		$reverse->setContent($data);
 		$reverse->setBusinessInvoice($entity);
 		$this->_em->persist($reverse);

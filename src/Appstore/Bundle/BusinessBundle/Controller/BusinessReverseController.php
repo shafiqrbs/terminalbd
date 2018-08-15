@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncode;
  * Vendor controller.
  *
  */
-class ReverseController extends Controller
+class BusinessReverseController extends Controller
 {
 
     public function paginate($entities)
@@ -37,7 +37,7 @@ class ReverseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:Reverse')->findAll();
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessReverse')->findAll();
         $pagination = $this->paginate($entities);
         return $this->render('BusinessBundle:Reverse:index.html.twig', array(
             'entities' => $pagination,
@@ -45,10 +45,11 @@ class ReverseController extends Controller
         ));
     }
 
-    public function reverseShowAction($id)
+    public function showAction($id)
     {
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entity = $this->getDoctrine()->getRepository('BusinessBundle:Reverse')->findOneBy(array('medicineConfig' => $config, 'id' => $id));
+
+    	$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessReverse')->findOneBy(array('businessConfig' => $config, 'id' => $id));
         $twig = 'sales';
         if($entity->getProcess() == 'purchase'){
           $twig = 'purchase';

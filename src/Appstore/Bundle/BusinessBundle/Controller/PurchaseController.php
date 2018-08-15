@@ -330,7 +330,7 @@ class PurchaseController extends Controller
 			'entity' => $purchase,
 			'config' => $purchase->getBusinessConfig(),
 		));
-		$em->getRepository('BusinessBundle:BusinessReverse')->purchaseReverse($purchase, $template);
+		$this->getDoctrine()->getRepository('BusinessBundle:BusinessReverse')->purchaseReverse($purchase, $template);
 		return $this->redirect($this->generateUrl('business_purchase_edit',array('id' => $purchase->getId())));
 	}
 
