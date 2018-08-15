@@ -95,7 +95,7 @@
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
                                         <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
-                                        <td class="numeric" >{% if entity.isReversed == 1 %}<a href="{{ path('business_reverse_show',{'id':entity.businessReverse.id}) }}">Reversed</a></td>
+                                        <td class="numeric" >{% if entity.isReversed == 1 %}<a href="{{ path('business_reverse_show',{'id':entity.businessReverse.id}) }}">Reversed</a>{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'created' or entity.process == 'pending' %}
                                             <a href="{{ path('business_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
@@ -107,7 +107,7 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination" >
+                            <div class="pagination pull-center" >
                                 {{ knp_pagination_render(entities) }}
                             </div>
                         </div>
