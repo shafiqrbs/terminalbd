@@ -122,7 +122,7 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
+	    $config = $user->getGlobalOption()->getBusinessConfig();
         $employees = $em->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
         $entities = $em->getRepository('MedicineBundle:MedicineSales')->monthlySales($user,$data);
         $salesAmount = array();
@@ -130,7 +130,7 @@ class ReportController extends Controller
             $salesAmount[$row['salesBy'].$row['month']] = $row['total'];
         }
         return $this->render('MedicineBundle:Report:sales/salesMonthlyUser.html.twig', array(
-            'inventory'      => $inventory ,
+            'inventory'      => $config ,
             'salesAmount'      => $salesAmount ,
             'employees'      => $employees ,
             'branches' => $this->getUser()->getGlobalOption()->getBranches(),

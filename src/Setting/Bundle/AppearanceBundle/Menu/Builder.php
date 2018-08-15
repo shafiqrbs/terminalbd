@@ -1092,8 +1092,10 @@ class Builder extends ContainerAware
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Manage Stock']->addChild('Medicine Short List', array('route' => 'medicine_stock_short_item'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Manage Stock']->addChild('Damage', array('route' => 'medicine_damage'))
-                    ->setAttribute('icon', 'icon-th-list');
+	            if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
+		            $menu['Medicine']['Manage Stock']->addChild( 'Damage', array( 'route' => 'medicine_damage' ) )
+		                                             ->setAttribute( 'icon', 'icon-th-list' );
+	            }
 
             }
          if ($securityContext->isGranted('ROLE_MEDICINE_PURCHASE')) {

@@ -21,16 +21,27 @@ class DefaultController extends Controller
         $data['startDate'] = $datetime->format('Y-m-d');
         $data['endDate'] = $datetime->format('Y-m-d');
 
-        $user = $this->getUser();
-	    $salesCashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
-        $purchaseCashOverview = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
-        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
-        $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
-	    $purchaseUserReport = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data);
-	    $salesUserReport = $em->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data);
+	    $startMonthDate = $datetime->format('Y-m-01 00:00:00');
+	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
+	    $user = $this->getUser();
+	    $salesCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
+        $purchaseCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
+	    $transactionMethods = array(1,2,3,4);
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
+	    $expenditureOverview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+	    $purchaseUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    $salesUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 
+	    $userSalesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    $userEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 
+	    $employees = $this->getDoctrine()->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
 
+	    $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->currentMonthSales($user,$data);
+	    $salesAmount = array();
+	    foreach($entities as $row) {
+		    $salesAmount[$row['salesBy'].$row['month']] = $row['total'];
+	    }
 	    return $this->render('MedicineBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
@@ -40,6 +51,10 @@ class DefaultController extends Controller
             'purchaseCashOverview'      => $purchaseCashOverview ,
             'salesUserReport'           => $salesUserReport ,
             'purchaseUserReport'        => $purchaseUserReport ,
+            'userSalesPurchasePrice'    => $userSalesPurchasePrice ,
+            'userEntities'              => $userEntities ,
+            'salesAmount'      => $salesAmount ,
+            'employees'      => $employees ,
             'searchForm'                => $data ,
         ));
 

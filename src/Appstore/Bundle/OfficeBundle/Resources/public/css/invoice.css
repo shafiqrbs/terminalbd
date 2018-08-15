@@ -40,8 +40,8 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 
 #particular-table  thead tr th{
-    background-color: #f39c12;
-    border-color:#e67e22;
+    background-color: #a48334;
+    border-color:#dbb233;
 }
 .referred-add{
     display: none;
@@ -61,7 +61,7 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     font-weight: bold;
     margin-top: -5px;
     text-align: left;
-    border: 1px solid #f39c12;
+    border: 1px solid #a48334;
     height: 23px
 }
 .select2-search{
@@ -107,12 +107,12 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .form-horizontal .payment-info .control-group{
     margin-bottom: 0!important;
-    border-bottom: 1px solid #e67e22;
+    border-bottom: 1px solid #dbb233;
 }
 .form-horizontal .payment-info .control-label{
     float: left;
     text-align: left;
-    background: #f39c12;
+    background: #a48334;
     color: #fff;
     font-weight: bold;
     line-height: 32px;

@@ -39,11 +39,9 @@ class PurchaseController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->findBy(array('businessConfig' => $config,'mode'=>'medicine'),array('created'=>'DESC'));
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->findBy(array('businessConfig' => $config),array('created'=>'DESC'));
         $pagination = $this->paginate($entities);
-
         return $this->render('BusinessBundle:Purchase:index.html.twig', array(
             'entities' => $pagination,
         ));

@@ -1346,7 +1346,7 @@ Portlets
 .portlet.yellow > .portlet-title > .caption, .portlet-title.yellow > .caption,
 .portlet.red > .portlet-title > .caption, .portlet-title.red > .caption,
 .portlet.purple > .portlet-title > .caption, .portlet-title.purple > .caption,
-.portlet.grey > .portlet-title > .caption, .portlet-title.dark-grey > .caption, {
+.portlet.grey > .portlet-title > .caption, .portlet-title.dark-grey > .caption{
   color: #fff;
 }
 
@@ -1458,23 +1458,23 @@ Portlets
 }
 
 .portlet > .portlet-body.blue, .portlet.blue {
-  background-color: #4b8df8 !important;
+  background-color: #3598dc !important;
 }
 
 .portlet > .portlet-body.red, .portlet.red {
-  background-color: #e02222 !important;
+  background-color: #cb5a5e !important;
 }
 
 .portlet > .portlet-body.yellow, .portlet.yellow {
-  background-color: #ffb848 !important;
+  background-color: #c49f47 !important;
 }
 
 .portlet > .portlet-body.green, .portlet.green {
-  background-color: #35aa47 !important;
+  background-color: #26a69a !important;
 }
 
 .portlet > .portlet-body.purple, .portlet.purple {
-  background-color: #852b99 !important;
+  background-color: #8e5fa2 !important;
 }
 
 .portlet > .portlet-body.light-grey, .portlet.light-grey {
@@ -1621,7 +1621,7 @@ Box portlet
 }
 
 .portlet.box.blue > .portlet-title {
-  background-color: #4b8df8;
+  background-color: #3598dc;
 }
 
 .portlet.box.blue {
@@ -1630,7 +1630,7 @@ Box portlet
 }
 
 .portlet.box.red > .portlet-title {
-  background-color: #e02222;
+  background-color: #cb5a5e;
 }
 
 .portlet.box.red {
@@ -1639,7 +1639,7 @@ Box portlet
 }
 
 .portlet.box.yellow > .portlet-title {
-  background-color: #ffb848;
+  background-color: #c49f47;
 }
 
 .portlet.box.yellow {
@@ -1648,7 +1648,7 @@ Box portlet
 }
 
 .portlet.box.green > .portlet-title {
-  background-color: #35aa47;
+  background-color: #26a69a;
 }
 
 .portlet.box.green {
@@ -1657,7 +1657,7 @@ Box portlet
 }
 
 .portlet.box.purple > .portlet-title {
-  background-color: #852b99;
+  background-color: #8e5fa2;
 }
 
 .portlet.box.purple {
