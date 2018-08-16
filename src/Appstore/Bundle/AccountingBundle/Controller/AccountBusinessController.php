@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\AccountingBundle\Form\AccountBusinessPurchaseType;
+use Appstore\Bundle\AccountingBundle\Form\AccountSalesBusinessType;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesInvoiceType;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesMedicineType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -132,7 +134,7 @@ class AccountBusinessController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setProcessHead('medicine');
+            $entity->setProcessHead('business');
             $entity->setProcessType('Payment');
             if($entity->getPayment() < 0){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
@@ -144,7 +146,7 @@ class AccountBusinessController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_purchase_medicine'));
+            return $this->redirect($this->generateUrl('account_purchase_business'));
         }
 
         return $this->render('AccountingBundle:AccountBusiness:purchaseNew.html.twig', array(
@@ -165,7 +167,7 @@ class AccountBusinessController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountBusinessPurchaseType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_purchase_medicine_create'),
+            'action' => $this->generateUrl('account_purchase_business_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -205,12 +207,17 @@ class AccountBusinessController extends Controller
             if(!empty($this->getUser()->getProfile()->getBranches())){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
+	        if($entity->getProcessHead() == 'Outstanding'){
+		        $entity->setTotalAmount(abs($entity->getAmount()));
+		        $entity->setAmount(0);
+		        $entity->setTransactionMethod(null);
+	        }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_sales_medicine'));
+            return $this->redirect($this->generateUrl('account_sales_business'));
         }
 
         return $this->render('AccountingBundle:AccountBusiness:new.html.twig', array(
@@ -230,8 +237,8 @@ class AccountBusinessController extends Controller
     private function salesCreateForm(AccountSales $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new AccountSalesMedicineType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_sales_medicine_create'),
+        $form = $this->createForm(new AccountSalesBusinessType($globalOption), $entity, array(
+            'action' => $this->generateUrl('account_sales_business_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -249,9 +256,9 @@ class AccountBusinessController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $global=$this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('AccountingBundle:AccountSales')->findOneBy(array('globalOption'=>$global,'medicineSales'=>$sales->getId()));
+        $entity = $em->getRepository('AccountingBundle:AccountSales')->findOneBy(array('globalOption'=>$global,'businessSales'=>$sales->getId()));
         if (!$entity) {
-            return $this->redirect($this->generateUrl('account_sales_medicine_new'));
+            return $this->redirect($this->generateUrl('account_sales_business_new'));
         }
         $em = $this->getDoctrine()->getManager();
         $entity = new AccountSales();
@@ -288,7 +295,7 @@ class AccountBusinessController extends Controller
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $em->flush();
-            return $this->redirect($this->generateUrl('account_sales_medicine'));
+            return $this->redirect($this->generateUrl('account_sales_business'));
         }
         return $this->render('AccountingBundle:AccountBusiness:invoice.html.twig', array(
             'entity'      => $entity,
@@ -307,7 +314,7 @@ class AccountBusinessController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountSalesInvoiceType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_sales_medicine_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('account_sales_business_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -324,11 +331,15 @@ class AccountBusinessController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
-            if($entity->getMedicineSales()){
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateSalesPaymentReceive($entity);
-            }
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
+	        $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
+	        if($entity->getAmount() > 0 ){
+		        $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
+		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
+	        }else{
+		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
+
+
+	        }
             return new Response('success');
         } else {
             return new Response('failed');

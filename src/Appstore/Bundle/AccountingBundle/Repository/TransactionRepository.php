@@ -354,10 +354,11 @@ class TransactionRepository extends EntityRepository
 
     public function insertVendorOpeningTransaction(AccountPurchase $entity)
     {
-        $transaction = new Transaction();
+
+    	$transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
         $transaction->setAccountRefNo($entity->getAccountRefNo());
-        $transaction->setProcessHead('Purchase Opening');
+        $transaction->setProcessHead('Opening Liabilities');
         $transaction->setUpdated($entity->getUpdated());
         $transaction->setProcess('Current Liabilities');
         /* Current Liabilities - Account Payable Payment */
@@ -366,7 +367,23 @@ class TransactionRepository extends EntityRepository
         $transaction->setCredit($entity->getPurchaseAmount());
         $this->_em->persist($transaction);
         $this->_em->flush();
+
+	    $transaction = new Transaction();
+	    $transaction->setGlobalOption($entity->getGlobalOption());
+	    $transaction->setAccountRefNo($entity->getAccountRefNo());
+	    $transaction->setProcessHead('Opening Liabilities');
+	    $transaction->setUpdated($entity->getUpdated());
+	    $transaction->setProcess('Inventory Assets');
+	    /* Current Liabilities - Account Payable Payment */
+	    $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
+	    $transaction->setAmount('-'.$entity->getPurchaseAmount());
+	    $transaction->setCredit($entity->getPurchaseAmount());
+	    $this->_em->persist($transaction);
+	    $this->_em->flush();
+
     }
+
+
 
     public function insertPurchaseVendorTransaction(AccountPurchase $entity)
     {
@@ -471,6 +488,37 @@ class TransactionRepository extends EntityRepository
         $this->insertSalesAccountReceivable($entity,$accountSales);
         $this->insertSalesVatAccountPayable($entity,$accountSales);
     }
+
+	public function insertCustomerOutstandingTransaction(AccountSales $entity)
+	{
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($entity->getGlobalOption());
+		$transaction->setAccountRefNo($entity->getAccountRefNo());
+		$transaction->setProcessHead('Customer Outstanding');
+		$transaction->setUpdated($entity->getUpdated());
+		$transaction->setProcess('Current Asset');
+		/* Current Current Asset - Account Receivable */
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+		$transaction->setAmount($entity->getTotalAmount());
+		$transaction->setDebit($entity->getTotalAmount());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($entity->getGlobalOption());
+		$transaction->setAccountRefNo($entity->getAccountRefNo());
+		$transaction->setProcessHead('Customer Outstanding');
+		$transaction->setUpdated($entity->getUpdated());
+		$transaction->setProcess('Inventory Assets');
+		/* Current Current Asset - Account Receivable */
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+		$transaction->setAmount('-'.$entity->getTotalAmount());
+		$transaction->setCredit($entity->getTotalAmount());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+	}
 
     private function insertSalesItem(Sales $entity , AccountSales $accountSales)
     {

@@ -52,8 +52,8 @@
                                             <div class="control-group">
                                                 <label class="control-label" for="vendor">Vendor name</label>
                                                 <div class="controls">
-                                                    {{ form_widget(form.businessVendor) }}
-                                                    {{ form_errors(form.businessVendor) }}
+                                                    {{ form_widget(form.accountVendor) }}
+                                                    {{ form_errors(form.accountVendor) }}
                                                 </div>
                                             </div>
                                         </div>
@@ -99,11 +99,8 @@
                                             <div class="control-group">
                                                 <label class="control-label" for="firstName">Amount</label>
                                                 <div class="controls">
-                                                    <div class="input-icon left">
-                                                        <i class="icon-money"></i>
-                                                        {{ form_widget(form.payment) }}
-                                                        {{ form_errors(form.payment) }}
-                                                    </div>
+                                                    {{ form_widget(form.payment) }}
+                                                    {{ form_errors(form.payment) }}
                                                 </div>
                                             </div>
                                         </div>

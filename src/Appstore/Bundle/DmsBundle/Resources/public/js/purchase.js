@@ -26,6 +26,22 @@ $(document).on("click", ".approve", function() {
     });
 });
 
+$(document).on("click", ".reverse", function() {
+    var url = $(this).attr('data-url');
+    var href = $(this).attr('data-id');
+    $('.approve').hide();
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                window.location = href; //Will take you to Google.
+            });
+
+        }
+    });
+});
+
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();

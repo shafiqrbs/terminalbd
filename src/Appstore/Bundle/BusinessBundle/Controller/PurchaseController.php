@@ -323,7 +323,8 @@ class PurchaseController extends Controller
 		}
 		$this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountBusinessPurchaseReverse($purchase);
 		$purchase->setIsReversed(true);
-		$purchase->setProcess('Created');
+		$purchase->setProcess('created');
+		$purchase->setApprovedBy(NULL);
 		$em->flush();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);
 		$template = $this->get('twig')->render('BusinessBundle:Purchase:purchaseReverse.html.twig', array(

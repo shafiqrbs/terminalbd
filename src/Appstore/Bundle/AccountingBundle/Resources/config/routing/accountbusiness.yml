@@ -46,12 +46,16 @@ account_purchase_business_new:
     path:     /purchase-new
     defaults: { _controller: "AccountingBundle:AccountBusiness:purchaseNew" }
 
+account_purchase_business_reverse:
+    path:     /purchase-reverse
+    defaults: { _controller: "AccountingBundle:AccountBusiness:purchaseReverse" }
+
 account_purchase_business_create:
     path:     /purchase-create
     defaults: { _controller: "AccountingBundle:AccountBusiness:purchaseCreate" }
 
 account_sales_business_approve:
-    path:     /{id}/medicine-payment-approve
+    path:     /{id}/business-payment-approve
     defaults: { _controller: "AccountingBundle:AccountBusiness:salesApprove" }
     options:
            expose: true
