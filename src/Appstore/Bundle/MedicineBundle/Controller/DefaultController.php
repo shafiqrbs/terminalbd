@@ -19,34 +19,32 @@ class DefaultController extends Controller
         $data = $_REQUEST;
         $datetime = new \DateTime("now");
         $data['startDate'] = $datetime->format('Y-m-d');
-        $data['endDate'] = $datetime->format('Y-m-d');
+	    $data['endDate'] = $datetime->format('Y-m-d');
 
-	    $startMonthDate = $datetime->format('Y-m-01 00:00:00');
-	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
 	    $user = $this->getUser();
 	    $salesCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
         $purchaseCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
 	    $transactionMethods = array(1,2,3,4);
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
+
 	    $expenditureOverview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-
-
+	    $salesUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,array('startDate'=>$data['startDate'],'endDate'=>$data['endDate']));
+	 //   $userEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data);
+	    $startMonthDate = $datetime->format('Y-m-01 00:00:00');
+	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
 	    $medicineSalesMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->medicineSalesMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 	    $medicinePurchaseMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->medicinePurchaseMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
-        $purchaseUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
-
-	    $salesUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data);
-
-	    $userSalesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
-	    $userEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data);
+	 //   $purchaseUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	  //  $userSalesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 
 	    $employees = $this->getDoctrine()->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
 
 	    $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->currentMonthSales($user,$data);
-	    $salesAmount = array();
+	    $userSalesAmount = array();
 	    foreach($entities as $row) {
-		    $salesAmount[$row['salesBy'].$row['month']] = $row['total'];
+		    $userSalesAmount[$row['salesBy'].$row['month']] = $row['total'];
 	    }
+
 	    $medicineSalesMonthlyArr = array();
 	    foreach($medicineSalesMonthly as $row) {
 		    $medicineSalesMonthlyArr[$row['month']] = $row['total'];
@@ -67,11 +65,8 @@ class DefaultController extends Controller
             'medicineSalesMonthly'      => $medicineSalesMonthlyArr ,
             'medicinePurchaseMonthly'   => $medicinePurchaseMonthlyArr ,
             'salesUserReport'           => $salesUserReport ,
-            'purchaseUserReport'        => $purchaseUserReport ,
-            'userSalesPurchasePrice'    => $userSalesPurchasePrice ,
-            'userEntities'              => $userEntities ,
-            'salesAmount'      => $salesAmount ,
-            'employees'      => $employees ,
+            'userSalesAmount'           => $userSalesAmount ,
+            'employees'                 => $employees ,
             'searchForm'                => $data ,
         ));
 

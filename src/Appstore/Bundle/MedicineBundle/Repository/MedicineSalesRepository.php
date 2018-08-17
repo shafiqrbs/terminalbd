@@ -44,7 +44,7 @@ class MedicineSalesRepository extends EntityRepository
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $createdStart = isset($data['startDate'])? $data['startDate'] :'';
-        $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+	    $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
         }
@@ -72,11 +72,10 @@ class MedicineSalesRepository extends EntityRepository
 
         if (!empty($createdEnd)) {
             $compareTo = new \DateTime($createdEnd);
-            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+	        $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
             $qb->andWhere("s.created <= :createdEnd");
             $qb->setParameter('createdEnd', $createdEnd);
         }
-
         if(!empty($salesBy)){
             $qb->join("s.salesBy",'un');
             $qb->andWhere("un.username = :username");
