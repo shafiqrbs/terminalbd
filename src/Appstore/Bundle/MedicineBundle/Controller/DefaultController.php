@@ -29,11 +29,16 @@ class DefaultController extends Controller
 	    $transactionMethods = array(1,2,3,4);
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
 	    $expenditureOverview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-	    $purchaseUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+
+
+	    $medicineSalesMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->medicineSalesMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    $medicinePurchaseMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->medicinePurchaseMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+        $purchaseUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+
 	    $salesUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 
 	    $userSalesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
-	    $userEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    $userEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data);
 
 	    $employees = $this->getDoctrine()->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
 
@@ -42,6 +47,16 @@ class DefaultController extends Controller
 	    foreach($entities as $row) {
 		    $salesAmount[$row['salesBy'].$row['month']] = $row['total'];
 	    }
+	    $medicineSalesMonthlyArr = array();
+	    foreach($medicineSalesMonthly as $row) {
+		    $medicineSalesMonthlyArr[$row['month']] = $row['total'];
+	    }
+	    $medicinePurchaseMonthlyArr = array();
+	    foreach($medicinePurchaseMonthly as $row) {
+		    $medicinePurchaseMonthlyArr[$row['month']] = $row['total'];
+	    }
+
+
 	    return $this->render('MedicineBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
@@ -49,6 +64,8 @@ class DefaultController extends Controller
             'expenditureOverview'       => $expenditureOverview ,
             'salesCashOverview'         => $salesCashOverview ,
             'purchaseCashOverview'      => $purchaseCashOverview ,
+            'medicineSalesMonthly'      => $medicineSalesMonthlyArr ,
+            'medicinePurchaseMonthly'   => $medicinePurchaseMonthlyArr ,
             'salesUserReport'           => $salesUserReport ,
             'purchaseUserReport'        => $purchaseUserReport ,
             'userSalesPurchasePrice'    => $userSalesPurchasePrice ,

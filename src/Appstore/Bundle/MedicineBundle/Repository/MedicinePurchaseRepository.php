@@ -136,7 +136,30 @@ class MedicinePurchaseRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function reportPurchaseTransactionOverview(User $user , $data = array())
+	public function medicinePurchaseMonthly(User $user , $data =array())
+	{
+
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$compare = new \DateTime();
+		$year =  $compare->format('Y');
+		$year = isset($data['year'])? $data['year'] :$year;
+		$sql = "SELECT MONTH (purchase.created) as month,SUM(purchase.netTotal) AS total
+                FROM medicine_purchase as purchase
+                WHERE purchase.medicineConfig_id = :config AND purchase.process = :process  AND YEAR(purchase.updated) =:year
+                GROUP BY month ORDER BY month ASC";
+		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->bindValue('config', $config);
+		$stmt->bindValue('process', 'Approved');
+		$stmt->bindValue('year', $year);
+		$stmt->execute();
+		$result =  $stmt->fetchAll();
+		return $result;
+
+
+	}
+
+
+	public function reportPurchaseTransactionOverview(User $user , $data = array())
     {
 
         $global =  $user->getGlobalOption()->getId();

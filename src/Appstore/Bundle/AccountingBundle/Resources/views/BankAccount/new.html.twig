@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_bank') }}">Bank Payment</a>
+                        <a href="{{ path('accountbank') }}">Bank Payment</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Bank Payment new/edit</a></li>
@@ -36,18 +36,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Bank Account Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('appsetting_bank_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('appsetting_bank') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('appsetting_bank_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('appsetting_bank_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="btn red" href="{{ path('accountbank_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Account</a>
+                                <a class="btn black" href="{{ path('accountbank') }}"><i class="icon-th-list"></i>&nbsp;Bank Account</a>
                             </div>
                         </div>
 

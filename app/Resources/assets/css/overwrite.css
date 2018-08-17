@@ -186,7 +186,7 @@ ul.page-sidebar-menu > li > ul.sub-menu > li > ul.sub-menu > li > ul.sub-menu > 
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #cacaca;
-    background: #555555;
+    background: #555555!important;
 }
 
 .portlet.box.blue > .portlet-title {
@@ -222,18 +222,13 @@ ul.page-sidebar-menu > li > ul.sub-menu > li > ul.sub-menu > li > ul.sub-menu > 
 .head-sky-blue{
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
-    color: #ffffff;
+    color: #000;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #dfe3ee;
-    background-color: white;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #555555))!important;
-    background: -webkit-linear-gradient(top,#8b9dc3 0%, #dfe3ee 100%)!important;
-    background: -moz-linear-gradient(top, #8b9dc3 0%, #dfe3ee 100%)!important;
-    background: -ms-linear-gradient(top, #8b9dc3 0%, #dfe3ee 100%)!important;
-    background: -o-linear-gradient(top, #8b9dc3 0%, #dfe3ee 100%)!important;
-    background: linear-gradient(to bottom, #8b9dc3 0%, #dfe3ee 100%)!important;
+    background-color: #8b9dc3;
+
 }
 
 
@@ -249,13 +244,7 @@ ul.page-sidebar-menu > li > ul.sub-menu > li > ul.sub-menu > li > ul.sub-menu > 
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #00959c;
-    background-color: white;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #555555))!important;
-    background: -webkit-linear-gradient(top, #00959c 0%, #56b5bb 100%)!important;
-    background: -moz-linear-gradient(top, #00959c 0%, #56b5bb 100%)!important;
-    background: -ms-linear-gradient(top, #00959c 0%, #56b5bb 100%)!important;
-    background: -o-linear-gradient(top, #00959c 0%, #56b5bb 100%)!important;
-    background: linear-gradient(to bottom, #00959c 0%, #56b5bb 100%)!important;
+    background-color: #00959c;
 
 }
 
@@ -268,14 +257,7 @@ ul.page-sidebar-menu > li > ul.sub-menu > li > ul.sub-menu > li > ul.sub-menu > 
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #fccb7e;
-    background-color: white;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #fccb7e))!important;
-    background: -webkit-linear-gradient(top, #ffb848 0%, #fccb7e 100%)!important;
-    background: -moz-linear-gradient(top, #ffb848 0%, #fccb7e 100%)!important;
-    background: -ms-linear-gradient(top, #ffb848 0%, #fccb7e 100%)!important;
-    background: -o-linear-gradient(top, #ffb848 0%, #fccb7e 100%)!important;
-    background: linear-gradient(to bottom, #ffb848 0%, #fccb7e 100%)!important;
-
+    background-color: #c49f47;
 }
 
 
@@ -287,13 +269,8 @@ ul.page-sidebar-menu > li > ul.sub-menu > li > ul.sub-menu > li > ul.sub-menu > 
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #ef8476;
-    background-color: white;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #ef8476))!important;
-    background: -webkit-linear-gradient(top, #e02222 0%, #ef8476 100%)!important;
-    background: -moz-linear-gradient(top, #e02222 0%, #ef8476 100%)!important;
-    background: -ms-linear-gradient(top, #e02222 0%, #ef8476 100%)!important;
-    background: -o-linear-gradient(top, #e02222 0%, #ef8476 100%)!important;
-    background: linear-gradient(to bottom, #e02222 0%, #ef8476 100%)!important;
+    background-color:#cb5a5e;
+
 
 }
 
@@ -306,13 +283,7 @@ ul.page-sidebar-menu > li > ul.sub-menu > li > ul.sub-menu > li > ul.sub-menu > 
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #af5cc1;
-    background-color: white;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #af5cc1))!important;
-    background: -webkit-linear-gradient(top, #852b99 0%, #af5cc1 100%)!important;
-    background: -moz-linear-gradient(top, #852b99 0%, #af5cc1 100%)!important;
-    background: -ms-linear-gradient(top, #852b99 0%, #af5cc1 100%)!important;
-    background: -o-linear-gradient(top, #852b99 0%, #af5cc1 100%)!important;
-    background: linear-gradient(to bottom, #852b99 0%, #af5cc1 100%)!important;
+    background-color: #852b99;
 
 }
 
