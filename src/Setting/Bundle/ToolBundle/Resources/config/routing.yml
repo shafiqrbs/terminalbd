@@ -133,3 +133,7 @@ SettingToolBundle_module:
 SettingToolBundle_transaction_method:
         resource: "@SettingToolBundle/Resources/config/routing/transactionmethod.yml"
         prefix:   /admin/transaction-method
+
+SettingToolBundle_medicine:
+        resource: "@SettingToolBundle/Resources/config/routing/medicineimport.yml"
+        prefix:   /admin/medicine-import

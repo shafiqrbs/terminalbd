@@ -124,6 +124,7 @@
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Process</th>
+                                    <th class="numeric" >Revised</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -139,19 +140,22 @@
                                         <td class="numeric" >{{ entity.received }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
+                                        <td class="numeric" >  {% if entity.isReversed == 1 %}
+                                                <a href="{{ path('business_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
+                                            {% endif %}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processIntArr = ['Hold','Created','Revised'] %}
+                                                {% set processDone = ['Done','Delivered','Chalan'] %}
                                                 {% if entity.process in  processIntArr %}
                                                 <a href="{{ path('business_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Edit</a>
                                                 {% endif %}
                                                 {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
                                                 <a  id="{{ entity.id }}" data-url="{{ path('business_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
+                                                {% if entity.process in  processDone %}
                                                 <a target="_blank"  href="{{ path('business_invoice_print',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
                                                 <a href="{{ path('business_invoice_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
-                                                {% if entity.revised == 1 %}
-                                                <a href="{{ path('business_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
                                                 {% endif %}
                                             </div>
                                         </td>

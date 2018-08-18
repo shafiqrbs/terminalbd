@@ -42,7 +42,6 @@ class BusinessInvoiceParticular
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense", mappedBy="businessInvoiceParticular", cascade={"persist"} )
-     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $businessProductionExpense;
 

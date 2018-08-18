@@ -17,7 +17,6 @@ class BusinessConfigRepository extends EntityRepository
     public function businessReset(GlobalOption $option)
     {
 
-
 	    $em = $this->_em;
 	    $config = $option->getBusinessConfig()->getId();
 
@@ -27,8 +26,8 @@ class BusinessConfigRepository extends EntityRepository
 	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = '.$config);
 	    $purchase->execute();
 
-	    $stock = $em->createQuery('DELETE BusinessBundle:BusinessParticular e WHERE e.businessConfig = '.$config);
-	    $stock->execute();
+	 //   $stock = $em->createQuery('DELETE BusinessBundle:BusinessParticular e WHERE e.businessConfig = '.$config);
+	  //  $stock->execute();
 
     }
 }

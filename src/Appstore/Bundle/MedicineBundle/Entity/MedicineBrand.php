@@ -58,6 +58,20 @@ class MedicineBrand
     /**
      * @var string
      *
+     * @ORM\Column(name="dar", type="string", length=255), nullable=true
+     */
+    private $dar;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="useFor", type="string", length=50), nullable=true
+     */
+    private $useFor;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="brand_id", type="string", length=255, nullable=true)
      */
     private $brandId;
@@ -192,72 +206,6 @@ class MedicineBrand
     {
         $this->sideEffect = $sideEffect;
     }
-
-    /**
-     * @return string
-     */
-    public function getDose()
-    {
-        return $this->dose;
-    }
-
-    /**
-     * @param string $dose
-     */
-    public function setDose($dose)
-    {
-        $this->dose = $dose;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContraIndication()
-    {
-        return $this->contraIndication;
-    }
-
-    /**
-     * @param string $contraIndication
-     */
-    public function setContraIndication($contraIndication)
-    {
-        $this->contraIndication = $contraIndication;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIndication()
-    {
-        return $this->indication;
-    }
-
-    /**
-     * @param string $indication
-     */
-    public function setIndication($indication)
-    {
-        $this->indication = $indication;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrecaution()
-    {
-        return $this->precaution;
-    }
-
-    /**
-     * @param string $precaution
-     */
-    public function setPrecaution($precaution)
-    {
-        $this->precaution = $precaution;
-    }
-
-
 
     /**
      * @return string
@@ -435,6 +383,34 @@ class MedicineBrand
     {
         $this->globalOption = $globalOption;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getDar(){
+		return $this->dar;
+	}
+
+	/**
+	 * @param string $dar
+	 */
+	public function setDar( string $dar ) {
+		$this->dar = $dar;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUseFor(){
+		return $this->useFor;
+	}
+
+	/**
+	 * @param string $useFor
+	 */
+	public function setUseFor( string $useFor ) {
+		$this->useFor = $useFor;
+	}
 
 
 }

@@ -35,120 +35,172 @@
         </div>
         <div class="clearfix"><br/></div>
         <div class="row-fluid">
-            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat2 ">
-                    <div class="display">
-                        <div class="number">
-                            <h3 class="font-green-sharp">
-                                <span data-counter="counterup" data-value="">{{ ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit'])-transactionCashOverviews['credit'])|number_format }}</span>
-                                <small class="font-green-sharp">BDT</small>
-                            </h3>
-                            <small>BALANCE</small>
-                        </div>
-                        <div class="icon">
-                            <i class="icon-bar-chart"></i>
-                        </div>
-                    </div>
-                    <div class="progress-info">
-                        <div class="progress">
+            <div class="span8">
+                <div class="row-fluid">
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-green-sharp">
+                                        <span data-counter="counterup" data-value="">{{ ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit'])-transactionCashOverviews['credit'])|number_format }}</span>
+                                        <small class="font-green-sharp">BDT</small>
+                                    </h3>
+                                    <small>BALANCE</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-bar-chart"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
                             <span style="width: 75%;" class="progress-bar progress-bar-success green-sharp">
                                 <span class="sr-only">75% progress</span>
                             </span>
-                        </div>
-                        <div class="status">
-                            <div class="status-number">
-                                <a href="{{ path('account_transaction_cash_overview') }}" class="btn green mini">More <i class="icon-circle-arrow-right"></i></a>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('account_transaction_cash_overview') }}" class="btn green mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat2 ">
-                    <div class="display">
-                        <div class="number">
-                            <h3 class="font-purple-soft">
-                                <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total'] }}</span>
-                                <small class="font-purple-soft">BDT</small>
-                            </h3>
-                            <small>SALES</small>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-money"></i>
-                        </div>
-                    </div>
-                    <div class="progress-info">
-                        <div class="progress">
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-purple-soft">
+                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total'] }}</span>
+                                        <small class="font-purple-soft">BDT</small>
+                                    </h3>
+                                    <small>SALES</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-money"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
                             <span style="width: 75%;" class="progress-bar progress-bar-success purple-soft">
                                 <span class="sr-only">75% change</span>
                             </span>
-                        </div>
-                        <div class="status">
-                            <div class="status-number">
-                                <a href="{{ path('medicine_sales') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('medicine_sales') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat2 ">
-                    <div class="display">
-                        <div class="number">
-                            <h3 class="font-blue-sharp">
-                                <span data-counter="counterup" data-value="{{ purchaseCashOverview['total'] }}">{{ purchaseCashOverview['total'] }}</span>
-                                <small class="font-blu-sharp">BDT</small>
-                            </h3>
-                            <small>Purchase</small>
-                        </div>
-                        <div class="icon">
-                            <i class="icon-shopping-cart"></i>
-                        </div>
-                    </div>
-                    <div class="progress-info">
-                        <div class="progress">
+                <div class="row-fluid">
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-blue-sharp">
+                                        <span data-counter="counterup" data-value="{{ purchaseCashOverview['total'] }}">{{ purchaseCashOverview['total'] }}</span>
+                                        <small class="font-blu-sharp">BDT</small>
+                                    </h3>
+                                    <small>Purchase</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-shopping-cart"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
                             <span style="width: 75%;" class="progress-bar progress-bar-success blue-sharp">
                                 <span class="sr-only">75% grow</span>
                             </span>
-                        </div>
-                        <div class="status">
-                            <div class="status-number">
-                                <a href="{{ path('medicine_purchase') }}" class="btn blue mini">More <i class="icon-circle-arrow-right"></i></a>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('medicine_purchase') }}" class="btn blue mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-
                     </div>
-                </div>
-            </div>
-
-            <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat2 ">
-                    <div class="display">
-                        <div class="number">
-                            <h3 class="font-red-haze">
-                                <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format }}</span>
-                                <small class="font-red-sharp">BDT</small>
-                            </h3>
-                            <small>Expense</small>
-                        </div>
-                        <div class="icon">
-                            <i class="icon-money"></i>
-                        </div>
-                    </div>
-                    <div class="progress-info">
-                        <div class="progress">
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-red-haze">
+                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format }}</span>
+                                        <small class="font-red-sharp">BDT</small>
+                                    </h3>
+                                    <small>Expense</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-money"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
                             <span style="width: 75%;" class="progress-bar progress-bar-success red-haze">
                                 <span class="sr-only">75% change</span>
                             </span>
-                        </div>
-                        <div class="status">
-                            <div class="status-number">
-                                <a href="{{ path('account_expenditure') }}" class="btn red mini">More <i class="icon-circle-arrow-right"></i></a>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('account_expenditure') }}" class="btn red mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+            <div class="span4">
+                      <div class="span6" style="margin-top:-10px">
+                            <div class="portlet-body">
+                                <a href="{{ path('account_sales_medicine_outstanding') }}" class="icon-btn">
+                                    <i class="fa fa-group"></i>
+                                    <div> Customer </div>
+                                </a>
+                                <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
+                                    <i class="icon-tags"></i>
+                                    <div> Sales </div>
+                                </a>
+                                <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
+                                    <i class="fa fa-user"></i>
+                                    <div> Vendor </div>
+                                </a>
+                                <a href="{{ path('medicine_report_purchase_summary') }}" class="icon-btn">
+                                    <i class="icon-truck"></i>
+                                    <div> Purchase </div>
+                                </a>
+
+                            </div>
+
+                        </div>
+                        <div class="span6" style="margin-top:-10px">
+                            <div class="portlet-body">
+                                <a href="{{ path('medicine_stock') }}" class="icon-btn">
+                                    <i class="icon-bar-chart"></i>
+                                    <div> Stock </div>
+                                </a>
+                                <a href="{{ path('medicine_expiry_item') }}" class="icon-btn">
+                                    <i class="icon-signal"></i>
+                                    <div> Short List </div>
+                                </a>
+                                <a href="{{ path('medicine_purchase_item') }}" class="icon-btn">
+                                    <i class=" icon-list-ol"></i>
+                                    <div> Expiration </div>
+                                </a>
+                                <a href="{{ path('medicine_stock_short_item') }}" class="icon-btn">
+                                    <i class="icon-th"></i>
+                                    <div> Stock Details </div>
+                                </a>
+                            </div>
+
+                        </div>
+            </div>
+
         </div>
 
         <div class="portlet-body form">
@@ -459,52 +511,10 @@ Dashboard Stats 2
             <div class="portlet box green">
                 <div class="portlet-body">
                     <div class="row-fluid" >
-                        <div class="span8">
+                        <div class="span12">
                             <div id="salesPurchaseChartContainer" style="height: 330px; width: 100%;"></div>
                         </div>
-                        <div class="span2">
-                            <div class="portlet-body">
-                                <a href="{{ path('account_sales_medicine_outstanding') }}" class="icon-btn">
-                                    <i class="fa fa-group"></i>
-                                    <div> Customer </div>
-                                </a>
-                                <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
-                                    <i class="icon-tags"></i>
-                                    <div> Sales </div>
-                                </a>
-                                <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
-                                    <i class="fa fa-user"></i>
-                                    <div> Vendor </div>
-                                </a>
-                                <a href="{{ path('medicine_report_purchase_summary') }}" class="icon-btn">
-                                    <i class="icon-truck"></i>
-                                    <div> Purchase </div>
-                                </a>
 
-                            </div>
-
-                        </div>
-                        <div class="span2">
-                            <div class="portlet-body">
-                                <a href="{{ path('medicine_stock') }}" class="icon-btn">
-                                    <i class="icon-bar-chart"></i>
-                                    <div> Stock </div>
-                                </a>
-                                <a href="{{ path('medicine_expiry_item') }}" class="icon-btn">
-                                    <i class="icon-signal"></i>
-                                    <div> Short List </div>
-                                </a>
-                                <a href="{{ path('medicine_purchase_item') }}" class="icon-btn">
-                                    <i class=" icon-list-ol"></i>
-                                    <div> Expiration </div>
-                                </a>
-                                <a href="{{ path('medicine_stock_short_item') }}" class="icon-btn">
-                                    <i class="icon-th"></i>
-                                    <div> Stock Details </div>
-                                </a>
-                            </div>
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -516,7 +526,7 @@ Dashboard Stats 2
         <style>
         .icon-btn{
             width: 100%;
-            height: 55px!important;
+            height: 50px!important;
         }
         .icon-btn div{
             font-size: 15px;

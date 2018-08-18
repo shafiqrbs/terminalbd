@@ -24,6 +24,7 @@ class BusinessProductionExpense
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", inversedBy="businessProductionExpense" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessInvoiceParticular;
 

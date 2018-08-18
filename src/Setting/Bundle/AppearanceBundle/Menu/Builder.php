@@ -1387,6 +1387,7 @@ class Builder extends ContainerAware
         $menu['Tools']->addChild('Location', array('route' => 'location'));
         $menu['Tools']->addChild('Business Sector', array('route' => 'syndicate'));
         $menu['Tools']->addChild('Designation', array('route' => 'designation'));
+        $menu['Tools']->addChild('Medicine Import', array('route' => 'medicine_import'));
         $menu['Tools']->addChild('Course', array('route' => 'course'));
         $menu['Tools']->addChild('Institute Level', array('route' => 'institutelevel'));
         $menu['Tools']->addChild('Syndicate Module', array('route' => 'syndicatemodule'));

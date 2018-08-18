@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * MedicineDamage
  *
- * @ORM\Table("medicine_damage")
+ * @ORM\Table("medicine_import")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\MedicineDamageRepository")
  */
 class MedicineDamage

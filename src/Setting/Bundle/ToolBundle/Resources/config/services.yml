@@ -6,9 +6,18 @@ services:
 #        class: %setting_tool.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
 
+  appstore_medicine_importer_excel:
+        class: Setting\Bundle\ToolBundle\Importer\Excel
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+  appstore_medicine.importer.excel_data_reader:
+        class: Setting\Bundle\ToolBundle\Importer\ExcelDataReader
+        arguments: [ @phpexcel ]
+
   settong.toolManageRepo:
-    class: Setting\Bundle\ToolBundle\Service\ToolManager
-    arguments: [@doctrine]
+        class: Setting\Bundle\ToolBundle\Service\ToolManager
+        arguments: [@doctrine]
 
   setting_tool.sms_gateWay:
        class: Setting\Bundle\ToolBundle\Service\SmsGateWay

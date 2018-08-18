@@ -41,7 +41,7 @@ class AccountMedicineController extends Controller
 
 
 	/**
-	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
 	 */
 
     public function salesAction()
@@ -63,14 +63,27 @@ class AccountMedicineController extends Controller
         ));
     }
 
-    /**
-     * Lists all AccountSales entities.
-     *
-     */
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCHASE,ROLE_DOMAIN")
+	 */
+
+	public function customerOutstandingAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data =$_REQUEST;
+		$globalOption = $this->getUser()->getGlobalOption();
+		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
+		$pagination = $this->paginate($entities);
+		return $this->render('AccountingBundle:AccountMedicine:customerOutstanding.html.twig', array(
+			'entities' => $pagination,
+			'searchForm' => $data,
+		));
+	}
+
 
 
 	/**
-	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCHASE,ROLE_DOMAIN")
 	 */
 
     public function purchaseAction()
@@ -92,27 +105,11 @@ class AccountMedicineController extends Controller
         ));
     }
 
-    /**
-     * Lists all AccountSales entities.
-     *
-     */
-    public function customerOutstandingAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data =$_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
-        $pagination = $this->paginate($entities);
-        return $this->render('AccountingBundle:AccountMedicine:customerOutstanding.html.twig', array(
-            'entities' => $pagination,
-            'searchForm' => $data,
-        ));
-    }
 
-    /**
-     * Lists all AccountSales entities.
-     *
-     */
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCHASE,ROLE_DOMAIN")
+	 */
+
     public function vendorOutstandingAction()
     {
         $em = $this->getDoctrine()->getManager();
