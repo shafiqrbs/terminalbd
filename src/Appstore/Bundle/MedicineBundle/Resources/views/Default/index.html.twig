@@ -69,30 +69,31 @@
                         <div class="dashboard-stat2 ">
                             <div class="display">
                                 <div class="number">
-                                    <h3 class="font-purple-soft">
-                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total'] }}</span>
-                                        <small class="font-purple-soft">BDT</small>
+                                    <h3 class="font-red-haze">
+                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format }}</span>
+                                        <small class="font-red-sharp">BDT</small>
                                     </h3>
-                                    <small>SALES</small>
+                                    <small>Expense</small>
                                 </div>
                                 <div class="icon">
-                                    <i class="fa fa-money"></i>
+                                    <i class="icon-money"></i>
                                 </div>
                             </div>
                             <div class="progress-info">
                                 <div class="progress">
-                            <span style="width: 75%;" class="progress-bar progress-bar-success purple-soft">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success red-haze">
                                 <span class="sr-only">75% change</span>
                             </span>
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
-                                        <a href="{{ path('medicine_sales') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        <a href="{{ path('account_expenditure') }}" class="btn red mini">More <i class="icon-circle-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="row-fluid">
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
@@ -128,25 +129,25 @@
                         <div class="dashboard-stat2 ">
                             <div class="display">
                                 <div class="number">
-                                    <h3 class="font-red-haze">
-                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format }}</span>
-                                        <small class="font-red-sharp">BDT</small>
+                                    <h3 class="font-purple-soft">
+                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total'] }}</span>
+                                        <small class="font-purple-soft">BDT</small>
                                     </h3>
-                                    <small>Expense</small>
+                                    <small>SALES</small>
                                 </div>
                                 <div class="icon">
-                                    <i class="icon-money"></i>
+                                    <i class="fa fa-money"></i>
                                 </div>
                             </div>
                             <div class="progress-info">
                                 <div class="progress">
-                            <span style="width: 75%;" class="progress-bar progress-bar-success red-haze">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success purple-soft">
                                 <span class="sr-only">75% change</span>
                             </span>
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
-                                        <a href="{{ path('account_expenditure') }}" class="btn red mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        <a href="{{ path('medicine_sales') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +203,6 @@
             </div>
 
         </div>
-
         <div class="portlet-body form">
         <style>
             /***
@@ -495,7 +495,7 @@ Dashboard Stats 2
             }
 
         </style>
-            <div class="portlet box blue">
+        <div class="portlet box blue">
                 <div class="portlet-body">
                     <div class="row-fluid" >
                         <div class="span6">
@@ -508,18 +508,27 @@ Dashboard Stats 2
 
                 </div>
             </div>
-            <div class="portlet box green">
+        <div class="portlet box green">
                 <div class="portlet-body">
                     <div class="row-fluid" >
                         <div class="span12">
-                            <div id="salesPurchaseChartContainer" style="height: 330px; width: 100%;"></div>
+                            <div id="optionsYearlyMonthlyPurchase" style="height: 330px; width: 100%;"></div>
                         </div>
-
+                    </div>
+                </div>
+            </div>
+            <div class="portlet box blue">
+                <div class="portlet-body">
+                    <div class="row-fluid" >
+                        <div class="span12">
+                            <div id="optionsYearlyMonthlySales" style="height: 330px; width: 100%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
 
+    </div>
     </div>
 
 
@@ -575,7 +584,6 @@ Dashboard Stats 2
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
-
 {% block documentready %}
     {{ parent() }}
     jqueryTemporaryLoad();
@@ -641,78 +649,57 @@ Dashboard Stats 2
     };
     $("#userDailySales").CanvasJSChart(userDailySales);
 
-    var optionsPurchaseSales = {
+    var optionsYearlyMonthlySales = {
     animationEnabled: true,
-    theme: "light2",
     title: {
-    text: "Monthly Progress Report"
-    },
-    axisX: {
-    valueFormatString: "MMM"
+    text: "Monthly Sales - {{ "now"|date("Y") }}"
     },
     axisY: {
-    prefix: "BDT",
-    labelFormatter: addSymbols
+    title: "",
+    suffix: "",
+    includeZero: false
     },
-    toolTip: {
-    shared: true
+    axisX: {
+    title: "Monthly Sales - {{ "now"|date("Y") }}"
     },
-    legend: {
-    cursor: "pointer",
-    itemclick: toggleDataSeries
-    },
-    data: [
-    {
+    data: [{
     type: "column",
-    name: "Purchase",
-    showInLegend: true,
-    xValueFormatString: "MMMM YYYY",
-    yValueFormatString: "BDT#,##0",
+    yValueFormatString: "#,##0.0#",
     dataPoints: [
-    {%  set months = [0,1,2,3,4,5,6,7,8,9,10,11] %}
+    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
     {% for key,month in months %}
-        { x: new Date( {{ "now"|date("Y") }}, {{ key }}), y: {% if key in medicinePurchaseMonthly|keys %}{{ medicinePurchaseMonthly[key] }}{% else %}0{% endif %}},
-    {% endfor %}
-
-    ]
-    },
-    {
-    type: "column",
-    name: "Sales",
-    markerBorderColor: "white",
-    markerBorderThickness: 2,
-    showInLegend: true,
-    yValueFormatString: "BDT#,##0",
-    dataPoints: [
-    {%  set months = [0,1,2,3,4,5,6,7,8,9,10,11] %}
-    {% for key,month in months %}
-        { x: new Date( {{ "now"|date("Y") }}, {{ key }}), y: {% if key in medicineSalesMonthly|keys %}{{ medicineSalesMonthly[key] }}{% else %}0{% endif %}},
+        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in medicineSalesMonthly|keys %}{{ medicineSalesMonthly[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in medicineSalesMonthly|keys %}{{ medicineSalesMonthly[key]|number_format }}{% endif %}" },
     {% endfor %}
     ]
     }]
     };
-    $("#salesPurchaseChartContainer").CanvasJSChart(optionsPurchaseSales);
+    $("#optionsYearlyMonthlySales").CanvasJSChart(optionsYearlyMonthlySales);
 
-    function addSymbols(e) {
-    var suffixes = ["", "K", "M", "B"];
-    var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
-
-    if (order > suffixes.length - 1)
-    order = suffixes.length - 1;
-
-    var suffix = suffixes[order];
-    return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
-    }
-
-    function toggleDataSeries(e) {
-    if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-    e.dataSeries.visible = false;
-    } else {
-    e.dataSeries.visible = true;
-    }
-    e.chart.render();
-    }
-
+    var optionsYearlyMonthlyPurchase = {
+    animationEnabled: true,
+    title: {
+    text: "Monthly Purchase - {{ "now"|date("Y") }}"
+    },
+    axisY: {
+    title: "",
+    suffix: "",
+    includeZero: false
+    },
+    axisX: {
+    title: "Monthly Purchase - {{ "now"|date("Y") }} "
+    },
+    data: [{
+    type: "column",
+    yValueFormatString: "#,##0.0#",
+    dataPoints: [
+    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
+    {% for key,month in months %}
+        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in medicinePurchaseMonthly|keys %}{{ medicinePurchaseMonthly[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in medicinePurchaseMonthly|keys %}{{ medicinePurchaseMonthly[key]|number_format }}{% endif %}" },
+    {% endfor %}
+    ]
+    }]
+    };
+    $("#optionsYearlyMonthlyPurchase").CanvasJSChart(optionsYearlyMonthlyPurchase);
 
     }
 
