@@ -7,6 +7,7 @@ use Appstore\Bundle\MedicineBundle\Form\MedicineDamageType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Damage controller.
@@ -54,7 +55,7 @@ class MedicineDamageController extends Controller
         $form->handleRequest($request);
         $data = $request->request->all();
         $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['damage']['medicineStock']);
-        $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['medicinePurchaseItem']);
+      //  $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['medicinePurchaseItem']);
 
         if ($form->isValid() and !empty($purchaseItem)) {
 
@@ -62,9 +63,9 @@ class MedicineDamageController extends Controller
             $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
             $entity->setMedicineConfig($config);
             $entity->setMedicineStock($stock);
-            $entity->setMedicinePurchaseItem($purchaseItem);
-            $entity->setPurchasePrice($purchaseItem->getPurchasePrice());
-            $entity->setSubTotal($purchaseItem->getPurchasePrice() * $entity->getQuantity());
+       //     $entity->setMedicinePurchaseItem($purchaseItem);
+            $entity->setPurchasePrice($stock->getPurchasePrice());
+            $entity->setSubTotal($stock->getPurchasePrice() * $entity->getQuantity());
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
@@ -187,16 +188,34 @@ class MedicineDamageController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('MedicineBundle:MedicineDamage')->find($id);
-        $purchaseItem = $entity->getMedicinePurchaseItem();
+       // $purchaseItem = $entity->getMedicinePurchaseItem();
         $stock = $entity->getMedicineStock();
         $em->remove($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
+      //  $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'damage');
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
         return $this->redirect($this->generateUrl('medicine_damage'));
     }
+
+	public function approvedAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+		$damage = $em->getRepository('BusinessBundle:BusinessDamage')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
+		if (!empty($damage) and empty($damage->getProcess() != 'Approved')) {
+			$em = $this->getDoctrine()->getManager();
+			$damage->setProcess('Approved');
+			$em->flush();
+			$em->getRepository('AccountingBundle:Transaction')->insertGlobalDamageTransaction($this->getUser()->getGlobalOption(),$damage);
+			return new Response('success');
+		} else {
+			return new Response('failed');
+		}
+		exit;
+	}
+
 
 }

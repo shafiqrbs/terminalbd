@@ -1614,6 +1614,43 @@ class TransactionRepository extends EntityRepository
     }
 
 
+	public function insertGlobalDamageTransaction($global,$damage)
+	{
+		$this->insertGlobalDamageDebitTransaction($global,$damage);
+		$this->insertGlobalDamageCreditTransaction($global,$damage);
+
+	}
+
+	public function insertGlobalDamageDebitTransaction($globalOption,$damage)
+	{
+		$transaction = new Transaction();
+		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(48);
+		$transaction->setGlobalOption($globalOption);
+		$transaction->setAccountHead($accountHead);
+		$transaction->setProcess('Long Term Liabilities');
+		/* Cash - Cash various */
+		$transaction->setAmount($damage->getSubTotal());
+		$transaction->setDebit($damage->getSubTotal());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+	}
+
+	public function insertGlobalDamageCreditTransaction($globalOption,$damage)
+	{
+		$transaction = new Transaction();
+		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(47);
+		$transaction->setGlobalOption($globalOption);
+		$transaction->setAccountHead($accountHead);
+		$transaction->setProcess('Inventory Assets');
+		/* Cash - Long Term Liabilities	 */
+		$transaction->setAmount('-'.$damage->getSubTotal());
+		$transaction->setCredit($damage->getSubTotal());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+	}
+
+
     /** =========================== HOSPITAL MANAGEMENT SYSTEM  =========================== */
 
     public function approvedDeleteRecord($entity,$process){

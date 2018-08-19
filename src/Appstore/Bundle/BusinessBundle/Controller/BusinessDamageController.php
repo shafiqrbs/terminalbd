@@ -4,9 +4,9 @@ namespace Appstore\Bundle\BusinessBundle\Controller;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessDamage;
 use Appstore\Bundle\BusinessBundle\Form\BusinessDamageType;
-use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Damage controller.
@@ -15,21 +15,31 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class BusinessDamageController extends Controller
 {
 
-    /**
+	public function paginate($entities)
+	{
+		$paginator = $this->get('knp_paginator');
+		$pagination = $paginator->paginate(
+			$entities,
+			$this->get('request')->query->get('page', 1)/*page number*/,
+			25  /*limit per page*/
+		);
+		$pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+		return $pagination;
+	}
+
+
+	/**
      * Lists all Damage entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = new BusinessDamage();
-        $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessDamage')->findBy(array('medicineConfig' => $config),array('created'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessDamage')->findBy(array('businessConfig' => $config),array('created'=>'ASC'));
+	    $pagination = $this->paginate($entities);
         return $this->render('BusinessBundle:Damage:index.html.twig', array(
-            'entities' => $entities,
-            'entity' => $entity,
-            'form'   => $form->createView(),
+            'entities' => $pagination,
         ));
     }
 
@@ -52,27 +62,18 @@ class BusinessDamageController extends Controller
         $entity = new BusinessDamage();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $data = $request->request->all();
-        $stock = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStock')->find($data['damage']['medicineStock']);
-        $purchaseItem = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->find($data['medicinePurchaseItem']);
-
-        if ($form->isValid() and !empty($purchaseItem)) {
-
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
             $entity->setBusinessConfig($config);
-            $entity->setBusinessStock($stock);
-            $entity->setBusinessPurchaseItem($purchaseItem);
-            $entity->setPurchasePrice($purchaseItem->getPurchasePrice());
-            $entity->setSubTotal($purchaseItem->getPurchasePrice() * $entity->getQuantity());
+            $entity->setSubTotal($entity->getBusinessParticular()->getPurchasePrice() * $entity->getQuantity());
             $em->persist($entity);
             $em->flush();
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessStock')->updateRemovePurchaseQuantity($stock,'damage');
+	        $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($entity->getBusinessParticular(),'damage');
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            return $this->redirect($this->generateUrl('medicine_damage', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('business_damage', array('id' => $entity->getId())));
         }
 
         return $this->render('BusinessBundle:Damage:new.html.twig', array(
@@ -90,8 +91,9 @@ class BusinessDamageController extends Controller
      */
     private function createCreateForm(BusinessDamage $entity)
     {
-        $form = $this->createForm(new BusinessDamageType(), $entity, array(
-            'action' => $this->generateUrl('medicine_damage_create'),
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+    	$form = $this->createForm(new BusinessDamageType($config), $entity, array(
+            'action' => $this->generateUrl('business_damage_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -136,8 +138,9 @@ class BusinessDamageController extends Controller
     */
     private function createEditForm(BusinessDamage $entity)
     {
-        $form = $this->createForm(new BusinessDamageType(), $entity, array(
-            'action' => $this->generateUrl('medicine_damage_update', array('id' => $entity->getId())),
+	    $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+    	$form = $this->createForm(new BusinessDamageType($config), $entity, array(
+            'action' => $this->generateUrl('business_damage_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -170,7 +173,7 @@ class BusinessDamageController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-            return $this->redirect($this->generateUrl('medicine_damage'));
+            return $this->redirect($this->generateUrl('business_damage'));
         }
         return $this->render('BusinessBundle:Damage:index.html.twig', array(
             'entities'      => $entities,
@@ -184,19 +187,33 @@ class BusinessDamageController extends Controller
      */
     public function deleteAction($id)
     {
-
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('BusinessBundle:BusinessDamage')->find($id);
-        $purchaseItem = $entity->getBusinessPurchaseItem();
-        $stock = $entity->getBusinessStock();
+        $stock = $entity->getBusinessParticular();
         $em->remove($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessStock')->updateRemovePurchaseQuantity($stock,'damage');
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($stock,'damage');
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
-        return $this->redirect($this->generateUrl('medicine_damage'));
+        return $this->redirect($this->generateUrl('business_damage'));
     }
+
+	public function approvedAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+		$damage = $em->getRepository('BusinessBundle:BusinessDamage')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+		if (!empty($damage) and ($damage->getProcess() == 'Created')) {
+			$em = $this->getDoctrine()->getManager();
+			$damage->setProcess('Approved');
+			$em->flush();
+			$em->getRepository('AccountingBundle:Transaction')->insertGlobalDamageTransaction($this->getUser()->getGlobalOption(),$damage);
+			return new Response('success');
+		} else {
+			return new Response('failed');
+		}
+		exit;
+	}
 
 }

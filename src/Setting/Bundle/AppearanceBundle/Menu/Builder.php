@@ -186,7 +186,8 @@ class Builder extends ContainerAware
             $menu['Business Management']->addChild('Invoice', array('route' => 'business_invoice'))
                 ->setAttribute('icon', 'icon-th-list');
         }
-        if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
+	    $menu['Business Management']->addChild('Note Pad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
+	    if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
             $menu['Business Management']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
         }
 	    if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
@@ -199,6 +200,7 @@ class Builder extends ContainerAware
 
         if ($securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
 	        $menu['Business Management']->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
+	        $menu['Business Management']->addChild('Manage Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-trash');
         }
 
 	    if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {

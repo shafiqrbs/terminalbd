@@ -23,3 +23,7 @@ medicine_damage_update:
 medicine_damage_delete:
     path:     /{id}/delete
     defaults: { _controller: "MedicineBundle:MedicineDamage:delete" }
+
+medicine_damage_approved:
+    path:     /{id}/approved
+    defaults: { _controller: "MedicineBundle:MedicineDamage:approved" }

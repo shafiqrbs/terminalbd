@@ -8,14 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Appstore\Bundle\DomainUserBundle\Entity\Notepad;
+use Appstore\Bundle\DomainUserBundle\Form\NotepadType;
 
 /**
- * Customer controller.
+ * Notepad controller.
  *
  */
-class CustomerController extends Controller
+class NotepadController extends Controller
 {
 
 
@@ -41,21 +41,24 @@ class CustomerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
+        $entities = $em->getRepository('DomainUserBundle:Notepad')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('DomainUserBundle:Customer:index.html.twig', array(
+		$notepad = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->generateNotepad($globalOption);
+
+        return $this->render('DomainUserBundle:Notepad:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
+            'notepad' => $notepad,
         ));
     }
 
     /**
-     * Creates a new Customer entity.
+     * Creates a new Notepad entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Customer();
+        $entity = new Notepad();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -65,27 +68,27 @@ class CustomerController extends Controller
             $entity->setGlobalOption($globalOption);
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('domain_customer'));
+            return $this->redirect($this->generateUrl('domain_notepad'));
         }
 
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Notepad:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a Customer entity.
+     * Creates a form to create a Notepad entity.
      *
-     * @param Customer $entity The entity
+     * @param Notepad $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Customer $entity)
+    private function createCreateForm(Notepad $entity)
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerType($location), $entity, array(
-            'action' => $this->generateUrl('domain_customer_create'),
+        $form = $this->createForm(new NotepadType($location), $entity, array(
+            'action' => $this->generateUrl('domain_notepad_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -96,7 +99,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Displays a form to create a new Customer entity.
+     * Displays a form to create a new Notepad entity.
      *
      */
 
@@ -106,36 +109,36 @@ class CustomerController extends Controller
 
     public function newAction()
     {
-        $entity = new Customer();
+        $entity = new Notepad();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Notepad:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a Customer entity.
+     * Finds and displays a Notepad entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+        $entity = $em->getRepository('DomainUserBundle:Notepad')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            throw $this->createNotFoundException('Unable to find Notepad entity.');
         }
 
-        return $this->render('DomainUserBundle:Customer:show.html.twig', array(
+        return $this->render('DomainUserBundle:Notepad:show.html.twig', array(
             'entity'      => $entity,
         ));
     }
 
     /**
-     * Displays a form to edit an existing Customer entity.
+     * Displays a form to edit an existing Notepad entity.
      *
      */
 
@@ -147,31 +150,31 @@ class CustomerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+        $entity = $em->getRepository('DomainUserBundle:Notepad')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            throw $this->createNotFoundException('Unable to find Notepad entity.');
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Notepad:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a Customer entity.
+    * Creates a form to edit a Notepad entity.
     *
-    * @param Customer $entity The entity
+    * @param Notepad $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Customer $entity)
+    private function createEditForm(Notepad $entity)
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerType($location), $entity, array(
-            'action' => $this->generateUrl('domain_customer_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new NotepadType($location), $entity, array(
+            'action' => $this->generateUrl('domain_notepad_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -181,17 +184,17 @@ class CustomerController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Customer entity.
+     * Edits an existing Notepad entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+        $entity = $em->getRepository('DomainUserBundle:Notepad')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            throw $this->createNotFoundException('Unable to find Notepad entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -199,16 +202,16 @@ class CustomerController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            return $this->redirect($this->generateUrl('domain_customer'));
+            return $this->redirect($this->generateUrl('domain_notepad'));
         }
 
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Notepad:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
     }
     /**
-     * Deletes a Customer entity.
+     * Deletes a Notepad entity.
      *
      */
 
@@ -220,9 +223,9 @@ class CustomerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'id' => $id));
+        $entity = $em->getRepository('DomainUserBundle:Notepad')->findOneBy(array('globalOption'=>$globalOption,'id' => $id));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            throw $this->createNotFoundException('Unable to find Notepad entity.');
         }
         try {
 
@@ -248,12 +251,12 @@ class CustomerController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $go = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($go,$item);
+            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoComplete($go,$item);
         }
         return new JsonResponse($item);
     }
 
-    public function searchCustomerNameAction($customer)
+    public function searchNotepadNameAction($customer)
     {
         return new JsonResponse(array(
             'id'=> $customer,
@@ -266,12 +269,12 @@ class CustomerController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $go = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteName($go,$item);
+            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoCompleteName($go,$item);
         }
         return new JsonResponse($item);
     }
 
-    public function searchCustomerMobileAction($customer)
+    public function searchNotepadMobileAction($customer)
     {
         return new JsonResponse(array(
             'id'=> $customer,
@@ -284,7 +287,7 @@ class CustomerController extends Controller
 
         $q = $_REQUEST['term'];
         $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteCode($option,$q);
+        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoCompleteCode($option,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('id' => $entity['customer'],'value' => $entity['text']);
@@ -326,7 +329,7 @@ class CustomerController extends Controller
     {
         $q = $_REQUEST['q'];
         $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteName($option,$q);
+        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoCompleteName($option,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('id' => $entity['id'],'value' => $entity['id']);
@@ -339,7 +342,7 @@ class CustomerController extends Controller
     {
         $q = $_REQUEST['term'];
         $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($option,$q);
+        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoComplete($option,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('id' => $entity['customer'],'value' => $entity['id']);

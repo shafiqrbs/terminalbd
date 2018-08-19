@@ -1,29 +1,30 @@
 business_damage:
     path:     /
-    defaults: { _controller: "BusinessBundle:Damage:index" }
+    defaults: { _controller: "BusinessBundle:BusinessDamage:index" }
+
+business_damage_new:
+    path:     /new
+    defaults: { _controller: "BusinessBundle:BusinessDamage:new" }
+
 
 business_damage_create:
     path:     /create
-    defaults: { _controller: "BusinessBundle:Damage:create" }
+    defaults: { _controller: "BusinessBundle:BusinessDamage:create" }
     methods:  POST
 
 business_damage_edit:
     path:     /{id}/edit
-    defaults: { _controller: "BusinessBundle:Damage:edit" }
+    defaults: { _controller: "BusinessBundle:BusinessDamage:edit" }
 
 business_damage_update:
     path:     /{id}/update
-    defaults: { _controller: "BusinessBundle:Damage:update" }
+    defaults: { _controller: "BusinessBundle:BusinessDamage:update" }
     methods:  [POST, PUT]
 
 business_damage_delete:
     path:     /{id}/delete
-    defaults: { _controller: "BusinessBundle:Damage:delete" }
+    defaults: { _controller: "BusinessBundle:BusinessDamage:delete" }
 
-business_damage_status:
-    path:     /{id}/status
-    defaults: { _controller: "BusinessBundle:Damage:status" }
-
-business_damage_inline:
-    path:     /inline-update
-    defaults: { _controller: "BusinessBundle:Damage:inlineUpdate" }
+business_damage_approved:
+    path:     /{id}/approved
+    defaults: { _controller: "BusinessBundle:BusinessDamage:approved" }

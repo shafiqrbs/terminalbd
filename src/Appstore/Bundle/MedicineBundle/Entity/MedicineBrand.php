@@ -58,14 +58,14 @@ class MedicineBrand
     /**
      * @var string
      *
-     * @ORM\Column(name="dar", type="string", length=255), nullable=true
+     * @ORM\Column(name="dar", type="string", length=255, nullable=true)
      */
     private $dar;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="useFor", type="string", length=50), nullable=true
+     * @ORM\Column(name="useFor", type="string", length=50, nullable=true)
      */
     private $useFor;
 

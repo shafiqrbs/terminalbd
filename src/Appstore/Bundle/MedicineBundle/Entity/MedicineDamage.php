@@ -91,6 +91,13 @@ class MedicineDamage
      */
     private $notes;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="process", type="string", nullable=true)
+	 */
+	private $process = "Created";
+
 
     /**
      * Get id
@@ -261,6 +268,20 @@ class MedicineDamage
     {
         $this->subTotal = $subTotal;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getProcess(){
+		return $this->process;
+	}
+
+	/**
+	 * @param string $process
+	 */
+	public function setProcess( string $process ) {
+		$this->process = $process;
+	}
 
 
 }

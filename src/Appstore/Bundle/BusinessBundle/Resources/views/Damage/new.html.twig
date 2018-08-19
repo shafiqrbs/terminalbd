@@ -26,10 +26,16 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-                <div class="portlet box green tabbable">
+                <div class="portlet box green">
+
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Damage Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn black" href="{{ path('business_damage') }}"><i class="icon-plus-sign"></i> Damage</a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="portlet-body">
@@ -43,8 +49,8 @@
                                     <div class="control-group">
                                         <label class="control-label" for="">Stock Name</label>
                                         <div class="controls">
-                                            {{ form_widget(form.particular) }}
-                                            {{ form_errors(form.particular) }}
+                                            {{ form_widget(form.businessParticular) }}
+                                            {{ form_errors(form.businessParticular) }}
                                         </div>
                                     </div>
                                 </div>

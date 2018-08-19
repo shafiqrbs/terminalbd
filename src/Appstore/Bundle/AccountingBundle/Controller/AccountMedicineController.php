@@ -33,13 +33,6 @@ class AccountMedicineController extends Controller
         return $pagination;
     }
 
-
-    /**
-     * Lists all AccountSales entities.
-     *
-     */
-
-
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
 	 */
@@ -193,13 +186,6 @@ class AccountMedicineController extends Controller
         return $form;
     }
 
-
-
-    /**
-     * Displays a form to create a new AccountSales entity.
-     *
-     */
-
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
 	 */
@@ -249,6 +235,7 @@ class AccountMedicineController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
+
     private function salesCreateForm(AccountSales $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();

@@ -3,15 +3,17 @@
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * CustomerInbox
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\CustomerInboxRepository")
+ * @ORM\Table("domain_notepad")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\NotepadRepository")
  */
-class CustomerInbox
+class Notepad
 {
     /**
      * @var integer
@@ -22,16 +24,16 @@ class CustomerInbox
      */
     private $id;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="customers")
+	 * @ORM\JoinColumn(onDelete="CASCADE")
+	 **/
+	protected $globalOption;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="customerInbox")
+	/**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="notePad")
      **/
-    protected $customer;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="customerInbox")
-     **/
-    protected $replyUser;
+    protected $user;
 
 
     /**
@@ -48,16 +50,6 @@ class CustomerInbox
      */
     private $updated;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255,nullable=true)
-     *
-     * 'contact','callback','leave'
-     */
-    private $type;
-
     /**
      * @var string
      *
@@ -66,6 +58,14 @@ class CustomerInbox
      */
     private $content;
 
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string" , length=255, nullable=true)
+     *
+     */
+    private $name;
+
 
     /**
      * @var boolean
@@ -73,15 +73,6 @@ class CustomerInbox
      * @ORM\Column(name="archive", type="boolean" )
      */
     private $archive = 0;
-
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="replyDate", type="datetime", nullable=true)
-     */
-    private $replyDate;
-
 
     /**
      * Get id
@@ -92,8 +83,6 @@ class CustomerInbox
     {
         return $this->id;
     }
-
-
 
     /**
      * @return \DateTime
@@ -112,7 +101,7 @@ class CustomerInbox
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getUser()
     {
@@ -120,7 +109,7 @@ class CustomerInbox
     }
 
     /**
-     * @param mixed $user
+     * @param User $user
      */
     public function setUser($user)
     {
@@ -143,21 +132,6 @@ class CustomerInbox
         $this->content = $content;
     }
 
-    /**
-     * @return string
-     */
-    public function getReply()
-    {
-        return $this->reply;
-    }
-
-    /**
-     * @param string $reply
-     */
-    public function setReply($reply)
-    {
-        $this->reply = $reply;
-    }
 
     /**
      * @return boolean
@@ -173,54 +147,6 @@ class CustomerInbox
     public function setArchive($archive)
     {
         $this->archive = $archive;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getReplyDate()
-    {
-        return $this->replyDate;
-    }
-
-    /**
-     * @param \DateTime $replyDate
-     */
-    public function setReplyDate($replyDate)
-    {
-        $this->replyDate = $replyDate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
-    }
-
-    /**
-     * @param mixed $customer
-     */
-    public function setCustomer($customer)
-    {
-        $this->customer = $customer;
     }
 
 
@@ -240,21 +166,33 @@ class CustomerInbox
         $this->updated = $updated;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getReplyUser()
-    {
-        return $this->replyUser;
-    }
+	/**
+	 * @return string
+	 */
+	public function getName(){
+		return $this->name;
+	}
 
-    /**
-     * @param mixed $replyUser
-     */
-    public function setReplyUser($replyUser)
-    {
-        $this->replyUser = $replyUser;
-    }
+	/**
+	 * @param string $name
+	 */
+	public function setName( string $name ) {
+		$this->name = $name;
+	}
+
+	/**
+	 * @return GlobalOption
+	 */
+	public function getGlobalOption() {
+		return $this->globalOption;
+	}
+
+	/**
+	 * @param GlobalOption $globalOption
+	 */
+	public function setGlobalOption( $globalOption ) {
+		$this->globalOption = $globalOption;
+	}
 
 
 }
