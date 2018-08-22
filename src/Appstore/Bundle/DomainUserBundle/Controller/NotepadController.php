@@ -43,12 +43,13 @@ class NotepadController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('DomainUserBundle:Notepad')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
-		$notepad = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->generateNotepad($globalOption);
+		$notepadID = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->generateNotepad($globalOption);
+	    $entity = $em->getRepository('DomainUserBundle:Notepad')->findOneBy(array('globalOption'=>$globalOption,'id' => $notepadID));
 
-        return $this->render('DomainUserBundle:Notepad:index.html.twig', array(
+	    return $this->render('DomainUserBundle:Notepad:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
-            'notepad' => $notepad,
+            'notepad' => $entity,
         ));
     }
 
@@ -163,6 +164,22 @@ class NotepadController extends Controller
         ));
     }
 
+     public function insertAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+		$notes = $_REQUEST['notes'];
+        $entity = $em->getRepository('DomainUserBundle:Notepad')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Notepad entity.');
+        }
+
+        $entity->setContent($notes);
+        $em->flush();
+        exit;
+
+
+    }
+
     /**
     * Creates a form to edit a Notepad entity.
     *
@@ -242,113 +259,8 @@ class NotepadController extends Controller
         }
         exit;
 
-        return $this->redirect($this->generateUrl('customer'));
+        return $this->redirect($this->generateUrl('domain_notepad'));
     }
 
-    public function autoSearchAction(Request $request)
-    {
-
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $go = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoComplete($go,$item);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchNotepadNameAction($customer)
-    {
-        return new JsonResponse(array(
-            'id'=> $customer,
-            'text' => $customer
-        ));
-    }
-
-    public function autoMobileSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $go = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoCompleteName($go,$item);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchNotepadMobileAction($customer)
-    {
-        return new JsonResponse(array(
-            'id'=> $customer,
-            'text' => $customer
-        ));
-    }
-
-    public function autoCodeSearchAction(Request $request)
-    {
-
-        $q = $_REQUEST['term'];
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoCompleteCode($option,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('id' => $entity['customer'],'value' => $entity['text']);
-        endforeach;
-        return new JsonResponse($items);
-
-    }
-
-
-
-    public function searchCodeAction($customer)
-    {
-        return new JsonResponse(array(
-            'id'=> $customer,
-            'text' => $customer
-        ));
-    }
-
-
-    public function autoLocationSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $item = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->searchAutoComplete($item);
-        }
-        return new JsonResponse($item);
-
-    }
-
-    public function searchLocationNameAction($location)
-    {
-        return new JsonResponse(array(
-            'id'=> $location,
-            'text' => $location
-        ));
-    }
-
-    public function searchAutoCompleteNameAction()
-    {
-        $q = $_REQUEST['q'];
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoCompleteName($option,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('id' => $entity['id'],'value' => $entity['id']);
-        endforeach;
-        return new JsonResponse($entities);
-
-    }
-
-    public function searchAutoCompleteMobileAction()
-    {
-        $q = $_REQUEST['term'];
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Notepad')->searchAutoComplete($option,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('id' => $entity['customer'],'value' => $entity['id']);
-        endforeach;
-        return new JsonResponse($items);
-
-    }
 
 }

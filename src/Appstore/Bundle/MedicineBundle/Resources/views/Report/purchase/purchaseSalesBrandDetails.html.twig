@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Brand base Purchase & Sales Report
+                    Brand base Purchase & Sales Details Report
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Brand base Purchase & Sales Report</a></li>
+                    <li><a href="#">Brand base Purchase & Sales Details Report</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,22 +29,25 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Brand base Purchase & Sales Report</div>
+                        <div class="caption"><i class="icon-reorder"></i>Brand base Purchase & Sales Details Report</div>
                     </div>
                     <div class="portlet-body flip-scroll">
                         <div class="row-fluid">
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
+                                    <div class="span3"></div>
                                     <div class="span6">
                                         <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap select2BrandName" value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
-                                    </div>
-                                    <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                               <select name="mode" id="mode" class="span12 m-wrap">
+                                                    <option  value="">Product Mode</option>
+                                                    {% for mode in modeFor %}
+                                                        <option {% if searchForm.mode is defined and searchForm.mode == mode.slug %} selected="selected" {% endif %} value="{{ mode.slug }}">{{ mode.name }}</option>
+                                                    {% endfor %}
+                                                </select>
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -57,8 +60,10 @@
                         <table class="table table-bordered table-striped table-condensed flip-content ">
                             <thead class="flip-content ">
                             <tr class="head-blue">
-                                <th class="numeric" >Brand Name</th>
+                                <th class="numeric" >Medicine Name</th>
+                                <th class="numeric" >Brand</th>
                                 <th class="numeric" >Mode</th>
+                                <th class="numeric" >Remaining</th>
                                 <th class="numeric" >Purchase Price</th>
                                 <th class="numeric" >Sales Price</th>
                                 <th class="numeric" >Sales Purchase Price</th>
@@ -66,20 +71,22 @@
                             </tr>
                             </thead>
                             <tbody id="sales">
-                            {% for entity in brands %}
+                            {% for entity in pagination %}
                                 <tr>
+                                    <td class="numeric" >{{ entity.name }}</td>
                                     <td class="numeric" >{{ entity.brandName }}</td>
                                     <td class="numeric" >{{ entity.mode|capitalize }}</td>
-                                    <th class="numeric" >{{ purchasePrice[entity.brandName].purchasePrice|default|number_format  }}</th>
-                                    <th class="numeric" >{{ salesPrice[entity.brandName].salesPrice|default|number_format  }}</th>
-                                    <th class="numeric" >{{ salesPrice[entity.brandName].purchasePrice|default|number_format  }}</th>
-                                    <th class="numeric" >{{ (salesPrice[entity.brandName].salesPrice|default(0) - salesPrice[entity.brandName].purchasePrice|default(0))|default|number_format  }}</th>
+                                    <td class="numeric" >{{ entity.remainingQuantity }}</td>
+                                    <th class="numeric" >{{ entity.purchasePrice|number_format  }}</th>
+                                    <th class="numeric" >{{ salesPrice[entity.name].salesPrice|default|number_format  }}</th>
+                                    <th class="numeric" >{{ salesPrice[entity.name].purchasePrice|default|number_format  }}</th>
+                                    <th class="numeric" >{{ (salesPrice[entity.name].salesPrice|default(0) - salesPrice[entity.name].purchasePrice|default(0))|default|number_format  }}</th>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                         <div class="pagination pull-center"  >
-                            {{ knp_pagination_render(brands) }}
+                            {{ knp_pagination_render(pagination) }}
                         </div>
                     </div>
                 </div>

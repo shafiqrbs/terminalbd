@@ -190,63 +190,112 @@ class BusinessInvoiceParticularRepository extends EntityRepository
     }
 
 
-    public function reportSalesAccessories(GlobalOption $option ,$data)
-    {
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-        $qb = $this->createQueryBuilder('ip');
-        $qb->join('ip.particular','p');
-        $qb->join('ip.dmsInvoice','i');
-        $qb->select('SUM(ip.quantity * p.purchasePrice ) AS totalPurchaseAmount');
-        $qb->where('i.hospitalConfig = :hospital');
-        $qb->setParameter('hospital', $option->getBusinessConfig());
-        $qb->andWhere("i.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death','Released','Dead'));
-        if (!empty($data['startDate']) ) {
-            $qb->andWhere("i.updated >= :startDate");
-            $qb->setParameter('startDate', $startDate.' 00:00:00');
-        }
-        if (!empty($data['endDate'])) {
-            $qb->andWhere("i.updated <= :endDate");
-            $qb->setParameter('endDate', $endDate.' 23:59:59');
-        }
-        $res = $qb->getQuery()->getOneOrNullResult();
-        return $res['totalPurchaseAmount'];
+	/**
+	 * @param $qb
+	 * @param $data
+	 */
 
-    }
+	protected function handleSearchStockBetween($qb,$data)
+	{
 
-    public function serviceBusinessParticularDetails(User $user, $data)
-    {
+		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
+		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+		$name = isset($data['name'])? $data['name'] :'';
+		$customer = isset($data['customer'])? $data['customer'] :'';
+		$category = isset($data['category'])? $data['category'] :'';
+		$type = isset($data['type'])? $data['type'] :'';
+		$sku = isset($data['sku'])? $data['sku'] :'';
 
-        $hospital = $user->getGlobalOption()->getBusinessConfig()->getId();
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-        if(!empty($data['service'])){
+		if (!empty($customer)) {
+			$qb->join('e.customer','c');
+			$qb->andWhere($qb->expr()->like("c.name", "'%$customer%'"  ));
+		}
+		if (!empty($name)) {
+			$qb->andWhere($qb->expr()->like("mds.name", "'%$name%'"  ));
+		}
+		if (!empty($sku)) {
+			$qb->andWhere($qb->expr()->like("mds.sku", "'%$sku%'"  ));
+		}
+		if(!empty($category)){
+			$qb->andWhere("mds.category = :category");
+			$qb->setParameter('category', $category);
+		}
+		if(!empty($type)){
+			$qb->andWhere("mds.businessParticularType = :type");
+			$qb->setParameter('type', $type);
+		}
 
-            $qb = $this->createQueryBuilder('ip');
-            $qb->leftJoin('ip.particular','p');
-            $qb->leftJoin('ip.dmsInvoice','e');
-            $qb->select('SUM(ip.quantity) AS totalQuantity');
-            $qb->addSelect('SUM(ip.quantity * p.purchasePrice ) AS purchaseAmount');
-            $qb->addSelect('SUM(ip.quantity * ip.salesPrice ) AS salesAmount');
-            $qb->addSelect('p.name AS serviceName');
-            $qb->where('e.hospitalConfig = :hospital');
-            $qb->setParameter('hospital', $hospital);
-            $qb->andWhere('p.service = :service');
-            $qb->setParameter('service', $data['service']);
-            $qb->andWhere("e.process IN (:process)");
-            $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death'));
-            $this->handleDateRangeFind($qb,$data);
-            $qb->groupBy('p.id');
-            $res = $qb->getQuery()->getArrayResult();
-            return $res;
+		if (!empty($category)) {
+			$qb->join('e.businessCategory','c');
+			$qb->andWhere("c.id = :cid");
+			$qb->setParameter('cid', $category);
+		}
 
-        }else{
+		if (!empty($createdStart)) {
+			$compareTo = new \DateTime($createdStart);
+			$created =  $compareTo->format('Y-m-d 00:00:00');
+			$qb->andWhere("s.created >= :createdStart");
+			$qb->setParameter('createdStart', $created);
+		}
 
-            return false;
-        }
+		if (!empty($createdEnd)) {
+			$compareTo = new \DateTime($createdEnd);
+			$createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+			$qb->andWhere("s.created <= :createdEnd");
+			$qb->setParameter('createdEnd', $createdEnd);
+		}
 
-    }
+	}
+
+
+	public  function reportSalesStockItem(User $user, $data=''){
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+
+		$qb = $this->createQueryBuilder('si');
+		$qb->join('si.businessInvoice','e');
+		$qb->join('si.businessParticular','mds');
+		$qb->select('SUM(si.quantity) AS quantity');
+		$qb->addSelect('SUM(si.totalQuantity * si.purchasePrice) AS purchasePrice');
+		$qb->addSelect('SUM(si.subTotal) AS salesPrice');
+		$qb->addSelect('mds.name AS name');
+		$qb->addSelect('mds.particularCode AS sku');
+		$qb->where('e.businessConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('e.process IN (:process)');
+		$qb->setParameter('process', array('Done','Delivered','Chalan'));
+		$this->handleSearchStockBetween($qb,$data);
+		$qb->groupBy('si.businessParticular');
+		$qb->orderBy('mds.name','ASC');
+		return $qb->getQuery()->getArrayResult();
+	}
+
+    public  function reportCustomerSalesItem(User $user, $data=''){
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+
+		$qb = $this->createQueryBuilder('si');
+		$qb->join('si.businessInvoice','e');
+		$qb->join('si.businessParticular','mds');
+		$qb->leftJoin('mds.unit','u');
+		$qb->select('si.totalQuantity AS quantity');
+		$qb->addSelect('si.totalQuantity * si.purchasePrice AS purchasePrice');
+		$qb->addSelect('si.subTotal AS salesPrice');
+		$qb->addSelect('e.invoice AS invoice');
+		$qb->addSelect('e.created AS created');
+		$qb->addSelect('mds.name AS name');
+		$qb->addSelect('u.name AS unit');
+		$qb->addSelect('mds.particularCode AS sku');
+		$qb->where('e.businessConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('e.process IN (:process)');
+		$qb->setParameter('process', array('Done','Delivered','Chalan'));
+		$this->handleSearchStockBetween($qb,$data);
+		$qb->orderBy('mds.name','ASC');
+		return $qb->getQuery()->getArrayResult();
+	}
 
     public function searchAutoComplete(BusinessConfig $config,$q)
     {

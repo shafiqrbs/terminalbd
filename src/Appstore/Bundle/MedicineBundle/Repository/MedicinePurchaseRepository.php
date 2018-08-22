@@ -155,7 +155,6 @@ class MedicinePurchaseRepository extends EntityRepository
 		$result =  $stmt->fetchAll();
 		return $result;
 
-
 	}
 
 
@@ -274,7 +273,7 @@ class MedicinePurchaseRepository extends EntityRepository
         foreach ($customers as $customer){
             $array[] = $customer['customerId'];
         }
-        $array2 = implode("','",$array);
+        $array2 = implode(",",$array);
         $global =  $user->getGlobalOption();
         $customer = '';
         if($customers){
@@ -302,8 +301,6 @@ class MedicinePurchaseRepository extends EntityRepository
         return $salesVendors;
 
     }
-
-
 
     public function productPurchaseStockSalesReport(User $user , $data = array())
     {
@@ -399,17 +396,25 @@ class MedicinePurchaseRepository extends EntityRepository
 
     }
 
-    public function getPurchaseBrandReport(User $user , $data = array())
+    public function getPurchaseBrandReport(User $user ,  $brands,  $data = array())
     {
+
+	    $ids = array();
+	    foreach ($brands as $y){
+		    $ids[]=$y['brandName'];
+	    }
+
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.medicinePurchaseItems','mpi');
         $qb->join('mpi.medicineStock','ms');
-        $qb->select('ms.brandName as brandName , sum(mpi.purchaseSubTotal) as purchasePrice, sum(mpi.purchasePrice * mpi.remainingQuantity) as remainingPurchasePrice');
+        $qb->select('ms.brandName as brandName , sum(mpi.purchaseSubTotal) as purchasePrice');
         $qb->where('e.medicineConfig = :config');
         $qb->setParameter('config', $config);
-        $qb->andWhere('e.process = :process');
-        $qb->setParameter('process', 'approved');
+        $qb->andWhere('e.process IN (:process)');
+	    $qb->setParameter('process', array('Approved','Complete'));
+	    $qb->andWhere('ms.brandName IN (:brands)');
+	    $qb->setParameter('brands', $ids);
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy("ms.brandName");
         $res = $qb->getQuery();
@@ -421,9 +426,15 @@ class MedicinePurchaseRepository extends EntityRepository
         return $purchaseBrands;
     }
 
-    public function getSalesBrandReport(User $user , $data = array())
+    public function getSalesBrandReport(User $user ,$brands, $data = array())
     {
-        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+	    $ids = array();
+	    foreach ($brands as $y){
+		    $ids[]=$y['brandName'];
+	    }
+
+    	$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->_em->createQueryBuilder();
         $qb->from('MedicineBundle:MedicineSales','e');
         $qb->join('e.medicineSalesItems','mpi');
@@ -433,6 +444,8 @@ class MedicinePurchaseRepository extends EntityRepository
         $qb->setParameter('config', $config);
         $qb->andWhere('e.process = :process');
         $qb->setParameter('process', 'Done');
+	    $qb->andWhere('ms.brandName IN (:brands)');
+	    $qb->setParameter('brands', $ids);
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy("ms.brandName");
         $res = $qb->getQuery();
@@ -444,7 +457,54 @@ class MedicinePurchaseRepository extends EntityRepository
         return $salesBrands;
     }
 
+	public function getPurchaseBrandDetailsReport(User $user, $data = array())
+	{
 
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.medicinePurchaseItems','mpi');
+		$qb->join('mpi.medicineStock','ms');
+		$qb->leftJoin('ms.rackNo','r');
+		$qb->select('ms.name as name ,ms.brandName as brandName , ms.mode as mode , r.name as rackNo , ms.remainingQuantity as remainingQuantity , sum(mpi.purchaseSubTotal) as purchasePrice');
+		$qb->where('e.medicineConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('e.process IN (:process)');
+		$qb->setParameter('process', array('Approved','Complete'));
+		$qb->groupBy("ms.name");
+		$this->handleSearchBetween($qb,$data);
+		$res = $qb->getQuery();
+		$results = $res->getArrayResult();
+		return $results;
+	}
+
+	public function getSalesBrandDetailsReport(User $user, $stocks, $data = array())
+	{
+
+		$ids = array();
+		foreach ($stocks as $y){
+			$ids[]=$y['name'];
+		}
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$qb = $this->_em->createQueryBuilder();
+		$qb->from('MedicineBundle:MedicineSales','e');
+		$qb->join('e.medicineSalesItems','mpi');
+		$qb->join('mpi.medicineStock','ms');
+		$qb->select('ms.name as name , sum(mpi.discountPrice * mpi.quantity) as salesPrice, sum(mpi.purchasePrice*mpi.quantity) as purchasePrice');
+		$qb->where('e.medicineConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('e.process = :process');
+		$qb->setParameter('process', 'Done');
+		$qb->andWhere('ms.name IN (:names)');
+		$qb->setParameter('names', $ids);
+		$qb->groupBy("ms.name");
+		$res = $qb->getQuery();
+		$results = $res->getArrayResult();
+		$salesBrands = array();
+		foreach ($results as $row){
+			$salesBrands[$row['name']] = $row;
+		}
+		return $salesBrands;
+	}
 
     public function purchaseReport( User $user , $data)
     {

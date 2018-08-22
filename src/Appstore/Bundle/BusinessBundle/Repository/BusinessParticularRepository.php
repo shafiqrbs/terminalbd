@@ -51,7 +51,8 @@ class BusinessParticularRepository extends EntityRepository
     public function searchAutoComplete(BusinessConfig $config,$q)
     {
         $query = $this->createQueryBuilder('e');
-        $query->select('e.name as id');
+	    $query->select('e.name as id');
+	    $query->addSelect('e.name as text');
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
         $query->andWhere("e.businessConfig = :config");
         $query->setParameter('config', $config->getId());
@@ -65,14 +66,19 @@ class BusinessParticularRepository extends EntityRepository
 
         $name = isset($data['name'])? $data['name'] :'';
         $category = isset($data['category'])? $data['category'] :'';
+        $type = isset($data['type'])? $data['type'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }
         if(!empty($category)){
-            $qb->andWhere("e.category = :category");
+        	$qb->andWhere("e.category = :category");
             $qb->setParameter('category', $category);
+        }
+        if(!empty($type)){
+            $qb->andWhere("e.businessParticularType = :type");
+            $qb->setParameter('type', $type);
         }
         $qb->orderBy('e.name','ASC');
         $qb->getQuery();

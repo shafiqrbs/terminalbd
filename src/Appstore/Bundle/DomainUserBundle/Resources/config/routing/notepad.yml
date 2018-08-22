@@ -19,6 +19,12 @@ domain_notepad_edit:
     path:     /{id}/edit
     defaults: { _controller: "DomainUserBundle:Notepad:edit" }
 
+domain_notepad_insert:
+    path:     /{id}/insert
+    defaults: { _controller: "DomainUserBundle:Notepad:insert" }
+    options:
+            expose: true
+
 domain_notepad_update:
     path:     /{id}/update
     defaults: { _controller: "DomainUserBundle:Notepad:update" }

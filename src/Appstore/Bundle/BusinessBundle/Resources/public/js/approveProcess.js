@@ -129,6 +129,47 @@ $( ".select2Unit" ).autocomplete({
     }
 });
 
+$(".select2ParticularName").select2({
+
+    ajax: {
+
+        url: Routing.generate('business_stock_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var id = $(element).val();
+        $.ajax(Routing.generate('business_stock_name_search', { stock : id}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+});
+
 $(".select2User").select2({
 
     ajax: {
@@ -211,11 +252,11 @@ $(".select2Customer").select2({
     minimumInputLength: 1
 });
 
-$(".select2Location").select2({
+$(".select2CustomerName").select2({
 
     ajax: {
 
-        url: Routing.generate('domain_location_search'),
+        url: Routing.generate('domain_customer_auto_name_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -241,15 +282,15 @@ $(".select2Location").select2({
         return item.text
     }, // omitted for brevity, see the source of this page
     initSelection: function (element, callback) {
-        var location = $(element).val();
-        $.ajax(Routing.generate('domain_location_name', { location : location}), {
+        var customer = $(element).val();
+        $.ajax(Routing.generate('domain_customer_name', { customer : customer}), {
             dataType: "json"
         }).done(function (data) {
             return  callback(data);
         });
     },
     allowClear: true,
-    minimumInputLength: 1
+    minimumInputLength: 2
 });
 
 $(document).on( "click", ".btn-number", function(e){

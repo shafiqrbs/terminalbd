@@ -24,16 +24,33 @@ class DefaultController extends Controller
         $user = $this->getUser();
         $salesCashOverview = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user,$data);
         $purchaseCashOverview = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
-        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
-        $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
+	    $transactionMethods = array(1,2,3,4);
+	    $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
+	    $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
 
-        return $this->render('BusinessBundle:Default:index.html.twig', array(
+	    $startMonthDate = $datetime->format('Y-m-01 00:00:00');
+	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
+	    $monthlySales = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->monthlySales($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    $monthlyPurchase = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->monthlyPurchase($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+
+	    $monthlySalesArr = array();
+	    foreach($monthlySales as $row) {
+		    $monthlySalesArr[$row['month']] = $row['total'];
+	    }
+	    $monthlyPurchaseArr = array();
+	    foreach($monthlyPurchase as $row) {
+		    $monthlyPurchaseArr[$row['month']] = $row['total'];
+	    }
+
+	    return $this->render('BusinessBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
             'transactionCashOverviews'  => $transactionCashOverview,
             'expenditureOverview'       => $expenditureOverview ,
             'salesCashOverview'         => $salesCashOverview ,
             'purchaseCashOverview'      => $purchaseCashOverview ,
+            'monthlyPurchase'           => $monthlyPurchaseArr ,
+            'monthlySales'              => $monthlySalesArr ,
             'searchForm'                => $data ,
         ));
     }

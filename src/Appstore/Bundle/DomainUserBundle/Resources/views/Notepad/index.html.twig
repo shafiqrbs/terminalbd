@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Notepad list
+                    Notepad
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('domain') }}">Notepad list</a>
+                        <a href="{{ path('domain') }}">Notepad</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -41,31 +41,49 @@
                     </div>
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
-                            <form class="" action="" method="get" name="itemSearch">
+                            <form class="" action="" method="get" name="xxx">
                                 <div class="row-fluid">
                                     <div class="span12">
-                                        <textarea rows="4" id="content" name="content"  class="span12 m-wrap"   autocomplete="off" placeholder="Enter daily note"></textarea>
-                                        <input type="hidden" id="notepad" name="notepad" value="">
+                                        <textarea rows="4" data-url="{{ path('domain_notepad_insert',{'id':notepad.id}) }}" id="notes" name="notes"  class="span12 m-wrap"   autocomplete="off" placeholder="Enter daily note">{{ notepad.content }}</textarea>
+                                        <input type="hidden" id="notepad" name="notepad" value="{{ notepad.id }}">
                                     </div>
                                 </div>
                             </form>
-                            {% include('flash-message.html.twig')  %}
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <input type="text" id="keywords" name="keywords"  class="span12 m-wrap" value="{% if searchForm.keywords is defined %}{{ searchForm.keywords }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="Start date">
+                                    </div>
+                                    <div class="span3">
+                                        <div class="controls">
+                                            <div class="input-append span10">
+                                                <input type="text" id="endDate"  name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="End date">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
 
+                            {% include('flash-message.html.twig')  %}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i> Date</td>
-                                    <th class="numeric">Name</th>
-                                    <th class="numeric">Content</th>
+                                    <th class="numeric">Note</th>
                                     <th class="numeric">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in entities %}
-                                    <tr>
-                                        <td>{{ entity.created }}</td>
-                                        <td>{{ entity.name }}</td>
-                                        <td>{{ entity.content|raw }}</td>
+                                    <tr id="remove-{{ entity.id }}">
+                                        <td class="numeric">{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric">{{ entity.content|raw }}</td>
                                         <td class="numeric">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
                                                 <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_notepad_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
@@ -95,3 +113,4 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
+

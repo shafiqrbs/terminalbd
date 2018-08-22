@@ -281,8 +281,8 @@ class MedicineSalesRepository extends EntityRepository
         $qb->join('s.medicineSalesItems','si');
         $qb->select('SUM(si.quantity) AS quantity');
         $qb->addSelect('COUNT(si.id) AS totalItem');
-        $qb->addSelect('SUM(si.quantity * si.purchasePrice) AS purchasePrice');
-        $qb->addSelect('SUM(si.quantity * si.salesPrice) AS salesPrice');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice) AS totalPurchase');
+        $qb->addSelect('SUM(si.quantity * si.salesPrice) AS totalSales');
         $qb->where('s.medicineConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('s.process = :process');

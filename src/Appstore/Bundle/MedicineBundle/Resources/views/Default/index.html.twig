@@ -7,8 +7,8 @@
                 <div class="span1">
                     {% if globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ globalOption.templateCustomize.webPath('logo') }}">{% endif %}
                 </div>
-                <div class="span2"></div>
-                <div class="span3">
+                <div class="span3"></div>
+                <div class="span4">
                     <div class="btn-group">
                         {% if ( app.user.granted("ROLE_MEDICINE_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a class="btn blue big" style="width: 50%" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-shopping-cart"></i> Sales</a>
@@ -16,10 +16,9 @@
                         {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('account_sales_medicine_new') }}" style="width: 50%" class="btn yellow big"><i class="icon-money"></i> Receive</a>
                         {% endif %}
-
                     </div>
                 </div>
-                <div class="span3">
+                <div class="span4">
                     <div class="btn-group">
                         {% if ( app.user.granted("ROLE_MEDICINE_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('medicine_purchase_new') }}" style="width: 50%" class="btn green big"><i class="icon-truck"></i> Purchase</a>
@@ -29,8 +28,6 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="span3"></div>
-
             </div>
         </div>
         <div class="clearfix"><br/></div>

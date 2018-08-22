@@ -5,6 +5,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -41,13 +42,14 @@ class StockController extends Controller
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
-        $entity = new BusinessParticular();
-        $form = $this->createCreateForm($entity);
+        $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
         return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'pagination' => $pagination,
+            'types' => $type,
+            'categories' => $category,
             'config' => $config,
-            'entity' => $entity,
-            'form'   => $form->createView(),
+            'searchForm' => $data,
         ));
 
     }
@@ -305,5 +307,23 @@ class StockController extends Controller
     {
 
     }
+
+	public function autoSearchAction(Request $request)
+	{
+		$item = $_REQUEST['q'];
+		if ($item) {
+			$inventory = $this->getUser()->getGlobalOption()->getBusinessConfig();
+			$item = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->searchAutoComplete($inventory,$item);
+		}
+		return new JsonResponse($item);
+	}
+
+	public function searchNameAction($stock)
+	{
+		return new JsonResponse(array(
+			'id'=> $stock,
+			'text'=> $stock
+		));
+	}
 
 }

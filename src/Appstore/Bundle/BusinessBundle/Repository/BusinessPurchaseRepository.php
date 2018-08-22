@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -14,7 +15,56 @@ use Doctrine\ORM\EntityRepository;
 class BusinessPurchaseRepository extends EntityRepository
 {
 
-    public function updatePurchaseTotalPrice(BusinessPurchase $entity)
+
+	protected function handleSearchBetween($qb,$data)
+	{
+
+		$grn = isset($data['grn'])? $data['grn'] :'';
+		$vendor = isset($data['vendor'])? $data['vendor'] :'';
+		$business = isset($data['name'])? $data['name'] :'';
+		$brand = isset($data['brandName'])? $data['brandName'] :'';
+		$mode = isset($data['mode'])? $data['mode'] :'';
+		$vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
+		$startDate = isset($data['startDate'])? $data['startDate'] :'';
+		$endDate = isset($data['endDate'])? $data['endDate'] :'';
+
+		if (!empty($grn)) {
+			$qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
+		}
+		if(!empty($business)){
+			$qb->andWhere($qb->expr()->like("ms.name", "'%$business%'"  ));
+		}
+		if(!empty($brand)){
+			$qb->andWhere($qb->expr()->like("ms.brandName", "'%$brand%'"  ));
+		}
+		if(!empty($mode)){
+			$qb->andWhere($qb->expr()->like("ms.mode", "'%$mode%'"  ));
+		}
+		if(!empty($vendor)){
+			$qb->join('e.businessVendor','v');
+			$qb->andWhere("v.companyName = :vendor")->setParameter('vendor', $vendor);
+		}
+		if(!empty($vendorId)){
+			$qb->join('e.businessVendor','v');
+			$qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
+		}
+		if (!empty($startDate) ) {
+			$datetime = new \DateTime($data['startDate']);
+			$start = $datetime->format('Y-m-d 00:00:00');
+			$qb->andWhere("e.created >= :startDate");
+			$qb->setParameter('startDate', $start);
+		}
+
+		if (!empty($endDate)) {
+			$datetime = new \DateTime($data['endDate']);
+			$end = $datetime->format('Y-m-d 23:59:59');
+			$qb->andWhere("e.created <= :endDate");
+			$qb->setParameter('endDate', $end);
+		}
+	}
+
+
+	public function updatePurchaseTotalPrice(BusinessPurchase $entity)
     {
         $em = $this->_em;
         $total = $em->createQueryBuilder()
@@ -55,6 +105,114 @@ class BusinessPurchaseRepository extends EntityRepository
         }
         return $discount;
     }
+
+	public function monthlyPurchase(User $user , $data =array())
+	{
+
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+		$compare = new \DateTime();
+		$year =  $compare->format('Y');
+		$year = isset($data['year'])? $data['year'] :$year;
+		$sql = "SELECT MONTH (purchase.created) as month,SUM(purchase.netTotal) AS total
+                FROM business_purchase as purchase
+                WHERE purchase.businessConfig_id = :config AND purchase.process = :process  AND YEAR(purchase.updated) =:year
+                GROUP BY month ORDER BY month ASC";
+		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->bindValue('config', $config);
+		$stmt->bindValue('process', 'Approved');
+		$stmt->bindValue('year', $year);
+		$stmt->execute();
+		$result =  $stmt->fetchAll();
+		return $result;
+
+
+	}
+
+
+	public function reportPurchaseOverview(User $user ,$data)
+{
+	$global =  $user->getGlobalOption()->getId();
+
+	$qb = $this->_em->createQueryBuilder();
+	$qb->from('AccountingBundle:AccountPurchase','e');
+	$qb->select('sum(e.purchaseAmount) as total ,sum(e.payment) as totalPayment');
+	$qb->where('e.globalOption = :config');
+	$qb->setParameter('config', $global);
+	$qb->andWhere('e.process = :process');
+	$qb->setParameter('process', 'approved');
+	$this->handleSearchBetween($qb,$data);
+	return $qb->getQuery()->getOneOrNullResult();
+}
+
+	public function reportPurchaseTransactionOverview(User $user , $data = array())
+	{
+
+		$global =  $user->getGlobalOption()->getId();
+
+		$qb = $this->_em->createQueryBuilder();
+		$qb->from('AccountingBundle:AccountPurchase','e');
+		$qb->join('e.transactionMethod','t');
+		$qb->select('t.name as transactionName , sum(e.purchaseAmount) as total ,sum(e.payment) as totalPayment');
+		$qb->where('e.globalOption = :config');
+		$qb->setParameter('config', $global);
+		$qb->andWhere('e.process = :process');
+		$qb->setParameter('process', 'approved');
+		$this->handleSearchBetween($qb,$data);
+		$qb->groupBy("e.transactionMethod");
+		$res = $qb->getQuery();
+		return $result = $res->getArrayResult();
+
+	}
+
+	public function reportPurchaseProcessOverview(User $user,$data)
+	{
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+		$qb = $this->createQueryBuilder('s');
+		$qb->select('e.process as name , sum(e.subTotal) as subTotal , sum(e.netTotal) as total ,sum(e.payment) as totalPayment , count(e.id) as totalVoucher, sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
+		$qb->where('e.businessConfig = :config');
+		$qb->setParameter('config', $config);
+		$this->handleSearchBetween($qb,$data);
+		$qb->groupBy("e.process");
+		$res = $qb->getQuery();
+		return $result = $res->getArrayResult();
+	}
+
+	public function reportPurchaseModeOverview(User $user,$data)
+	{
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('sum(e.netTotal) as total , sum(e.payment) as totalPayment ,  sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
+		$qb->where('e.businessConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('e.process = :process');
+		$qb->setParameter('process', 'Approved');
+		$this->handleSearchBetween($qb,$data);
+		$qb->groupBy("e.mode");
+		$res = $qb->getQuery();
+		return $result = $res->getArrayResult();
+	}
+
+
+
+	public function purchaseVendorReport(User $user , $data = array())
+	{
+
+		$global =  $user->getGlobalOption()->getId();
+		$qb = $this->_em->createQueryBuilder();
+		$qb->from('AccountingBundle:AccountPurchase','e');
+		$qb->join('e.accountVendor','t');
+		$qb->select('t.companyName as companyName ,t.name as vendorName ,t.mobile as vendorMobile , sum(e.purchaseAmount) as total ,sum(e.payment) as payment');
+		$qb->where('e.globalOption = :config');
+		$qb->setParameter('config', $global);
+		$qb->andWhere('e.process = :process');
+		$qb->setParameter('process', 'approved');
+		$this->handleSearchBetween($qb,$data);
+		$qb->groupBy("e.accountVendor");
+		$qb->orderBy("t.companyName",'ASC');
+		$res = $qb->getQuery();
+		return $result = $res->getArrayResult();
+
+	}
 
 
 }

@@ -2,316 +2,243 @@
 {% block body %}
     <div class="container-fluid">
         <!-- END PAGE HEADER-->
-        <div class="portlet box green">
-            <div class="portlet-title">
-                <div class="caption"><i class="icon icon-medkit"></i> Dashboard</div>
-            </div>
-            <div class="portlet-body">
-                <div class="row-fluid" >
-                     <div class="span5">
-                        <div class="btn-group">
-                            <a class="btn black big">Quick Links <i class="m-icon-big-swapright m-icon-white"></i></a>
-                            {% if (app.user.granted("ROLE_BUSINESS_INVOICE"))  %}
-                                <a href="{{ path('business_invoice_new') }}" class="btn red big"><i class="icon-plus-sign"></i> Add Invoice </a>
-                                <a href="{{ path('business_invoice') }}" class="btn blue big"><i class="icon-th-large"></i> Invoice </a>
-                            {% endif %}
-                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
-                            <a href="{{ path('account_sales_business_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="span4">
-                        <div class="btn-group">
-                            {% if (app.user.granted("ROLE_BUSINESS_PURCHASE"))  %}
-                                <a href="{{ path('business_purchase_new') }}" class="btn red big"><i class="icon-plus-sign"></i> Add Purchase</a>
-                                <a href="{{ path('business_purchase') }}" class="btn green big"><i class="icon-th-large"></i> Purchase</a>
-                            {% endif %}
-                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE"))  %}
-                                <a href="{{ path('account_purchase_business_outstanding') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="span2">
-                        <div class="btn-group">
-                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE"))  %}
-                            <a href="{{ path('account_expenditure_new') }}" class="btn purple big"><i class="icon-plus-sign"></i> Expenditure</a>
-                            {% endif %}
-                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_JOURNAL"))  %}
-                            <a href="{{ path('account_journal_new') }}" class="btn blue big"><i class="icon-money"></i> Journal</a>
-                            {% endif %}
-                        </div>
-                    </div>
+        <div class="portlet-body">
+            <div class="row-fluid" >
+                <div class="span1">
+                    {% if globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ globalOption.templateCustomize.webPath('logo') }}">{% endif %}
                 </div>
-            </div>
-            <div class="portlet-body form">
-                <div class="form-actions portlet box purple">
-                    <div class="portlet-title">
-                        <div class="caption"><i class="icon icon-money"></i> Today Cash Overview</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn red" href="{{ path('account_transaction_cash_overview') }}"><i class="icon-bar-chart"></i> Cash Summary</a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="span3"></div>
+                <div class="span4">
+                    <div class="btn-group">
+                        {% if (app.user.granted("ROLE_BUSINESS_INVOICE"))  %}
+                        <a href="{{ path('business_invoice_new') }}" class="btn green big"><i class="icon-plus-sign"></i> Add Invoice </a>
+                        {% endif %}
+                        {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
+                            <a href="{{ path('account_sales_business_new') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
+                        {% endif %}
+                     </div>
                 </div>
-                <div class="clearfix">&nbsp;</div>
-                <table class="table table-bordered table-striped table-condensed flip-content ">
-                    <thead class="flip-content ">
-                    <tr class="head-blue">
-                        <th class="numeric">Cash Account</th>
-                        <th class="numeric" >Opening Balance</th>
-                        <th class="numeric" >Receive</th>
-                        <th class="numeric" >Payment</th>
-                        <th class="numeric" >Closing Balance</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {#{{ dump(transactionCashOverviews.transactionBalances[1][0]['debit']) }}#}
-                    {% set totalOpen = 0 %}
-                    {% set totalDebit = 0 %}
-                    {% set totalCredit = 0 %}
-                    {% for mode in transactionCashOverviews.result %}
-                        {% set open = transactionCashOverviews.openingBalance[mode.transactionId]|default(0) %}
-                        {% set debit = transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].debit|default(0)  %}
-                        {% set credit = transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].credit|default(0)  %}
-                        {% set totalOpen = totalOpen + open %}
-                        {% set totalDebit = totalDebit + debit %}
-                        {% set totalCredit = totalCredit + credit %}
+                <div class="span4">
+                    <div class="btn-group">
+                        {% if ( app.user.granted("ROLE_BUSINESS_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
+                            <a href="{{ path('business_purchase_new') }}" class="btn blue big"><i class="icon-plus-sign"></i> Add Purchase</a>
+                        {% endif %}
+                        {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE"))  %}
+                            <a href="{{ path('account_purchase_business_new') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
+                        {% endif %}
 
-                        <tr>
-                            <th class="numeric">{{ mode.transactionName }}</th>
-                            <th class="numeric">{{ open|number_format }}</th>
-                            <th class="numeric">{{ debit|number_format }}</th>
-                            <th class="numeric">{{ credit|number_format }}</th>
-                            <th class="numeric" >{{ ((open + debit)-credit)|number_format }}</th>
-                        </tr>
-                    {% endfor %}
-                    <tr>
-                        <th class="numeric">Total Amount</th>
-                        <th class="numeric">{{ totalOpen|number_format }}</th>
-                        <th class="numeric">{{ totalDebit|number_format }}</th>
-                        <th class="numeric">{{ totalCredit|number_format }}</th>
-                        <th class="numeric" >{{ ((totalOpen + totalDebit)-totalCredit)|number_format }}</th>
-                    </tr>
-                    </tbody>
+                    </div>
+                </div>
 
-                </table>
             </div>
-            <div class="clearfix"></div>
-            <div class="portlet-body form">
-                <div class="form-actions portlet box red">
-                    <div class="portlet-title">
-                        <div class="caption"><i class="icon icon-medkit"></i> Today Expenditure Overview</div>
-                    </div>
-                </div>
-                <div class="clearfix">&nbsp;</div>
-                <table class="table table-bordered table-striped table-condensed flip-content ">
-                    {% if expenditureOverview is not empty %}
-                        {% set total = 0 %}
-                        {% for expenditure in expenditureOverview %}
-                            {% set total = total+expenditure.amount %}
-                            <tr>
-                                <th class="numeric" >{{ expenditure.categoryName }}</th>
-                                <td class="numeric" >{{ expenditure.amount|number_format }}</td>
-                            </tr>
-                        {% endfor %}
-                        <tfoot>
-                        <tr><th>Grand Total</th><th>{{ total|number_format }}</th></tr>
-                        </tfoot>
-                    {% endif %}
-                </table>
-            </div>
-            <div class="clearfix"></div>
-            <div class="portlet-body form">
-                <div class="form-actions portlet box blue">
-                    <div class="portlet-title">
-                        <div class="caption"><i class="icon icon-medkit"></i> Today Sales Overview</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn red" href="{{ path('business_report_sales_summary') }}"><i class="icon-bar-chart"></i> Sales Reports</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix">&nbsp;</div>
-                <table class="table table-bordered table-striped table-condensed flip-content ">
-                    <tr>
-                        <th class="numeric" >Sub-total Amount</th>
-                        <td class="numeric" >{{ salesCashOverview.subTotal|number_format }}</td>
-                    </tr>
-                    <tr>
-                        <th class="numeric" >Discount</th>
-                        <td class="numeric" >{{ salesCashOverview.totalDiscount|number_format }}</td>
-                    </tr>
-                    <tr>
-                        <th class="numeric" >Net Total</th>
-                        <td class="numeric" >{{ salesCashOverview.total|number_format }}</td>
-                    </tr>
-                    <tr>
-                        <th class="numeric" >Payment</th>
-                        <td class="numeric" >{{ salesCashOverview.totalPayment|number_format }}</td>
-                    </tr>
-                    <tr>
-                        <th class="numeric" >Receivable</th>
-                        <th class="numeric" >{{ salesCashOverview.totalDue|number_format }}</th>
-                    </tr>
-                </table>
-            </div>
-            <div class="clearfix"></div>
-            <div class="portlet-body form">
-                <div class="form-actions portlet box green">
-                    <div class="portlet-title">
-                        <div class="caption"><i class="icon icon-medkit"></i> Today Purchase Overview</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn red" href="{{ path('business_report_purchase_summary') }}"><i class="icon-bar-chart"></i> Purchase Reports</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix">&nbsp;</div>
-                <table class="table table-bordered table-striped table-condensed flip-content ">
-                    <tr>
-                        <th class="numeric" >Total Amount</th>
-                        <td class="numeric" >{{ purchaseCashOverview.total|number_format }}</td>
-                    </tr>
-                    <tr>
-                        <th class="numeric" >Payment</th>
-                        <td class="numeric" >{{ purchaseCashOverview.totalPayment|number_format }}</td>
-                    </tr>
-                    <tr>
-                        {% set due = (purchaseCashOverview.total - purchaseCashOverview.totalPayment) %}
-                        <th class="numeric" >{% if due >= 0 %}Payable {% else %}Receivable{% endif %}</th>
-                        <th class="numeric" >{{ due|number_format }}</th>
-                    </tr>
-                </table>
-            </div>
-           {# <div class="portlet-body">
-                <div class="row-fluid pull-center" >
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                        <div class="portlet box grey">
-                            <div class="portlet-title"><div class="caption"><i class="icon-shopping-cart"></i>Medicine Sales </div></div>
-                            <div class="portlet-body">
-                                <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_sales') }}">Manage Sales</a></li>
-                                    <li><i class="icon-retweet"></i> <a href="{{ path('business_sales_return') }}">Sales Return</a></li>
-                                    <li><i class="icon-user"></i> <a href="{{ path('domain_customer') }}">Customer</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                        <div class="portlet box blue">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="icon-briefcase"></i>Manage Stock</div>
-                            </div>
-                            <div class="portlet-body">
-                                <ul class="unstyled text-left">
-                                    <li><i class="icon-folder-close"></i> <a href="{{ path('business_stock') }}">Stock Medicine</a></li>
-                                    <li><i class="icon-calendar"></i> <a href="{{ path('business_purchase_item') }}">Medicine Expiration</a></li>
-                                    <li><i class="icon-bar-chart"></i> <a href="{{ path('business_stock_short_item') }}">Stock Short Item</a></li>
-                                    <li><i class="icon-trash"></i> <a href="{{ path('business_damage') }}">Damage</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                        <div class="portlet box green">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="icon-truck"></i>Manage Purchase</div>
-                            </div>
-                            <div class="portlet-body">
-                                <ul class="unstyled text-left">
-                                    <li><i class="icon-th-large"></i> <a href="{{ path('business_purchase') }}">Manage Purchase</a></li>
-                                    <li><i class="icon-shopping-cart"></i> <a href="{{ path('business_purchase_new') }}">Add Purchase</a></li>
-                                    <li><i class="icon-th-list"></i> <a href="{{ path('business_instantpurchase') }}">Instant Purchase</a></li>
-                                    <li><i class="icon-retweet"></i> <a href="{{ path('business_purchase_return') }}">Purchase Return</a></li>
-                                    <li><i class="icon-user"></i> <a href="{{ path('business_vendor') }}">Vendor</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                        <div class="portlet box yellow">
-                            <div class="portlet-title"><div class="caption"><i class="icon-hdd"></i>Master Data</div></div>
-                            <div class="portlet-body">
-                                <ul class="unstyled text-left">
-                                    <li><i class="icon-reorder"></i> <a href="{{ path('business_particular') }}">Particular</a></li>
-                                    <li><i class="icon-group"></i> <a href="{{ path('business_sales_user') }}">User Sales Setup</a></li>
-                                    <li><i class="icon-cog"></i> <a href="{{ path('business_config_manage') }}">Configuration</a></li>
-                                    <li><i class="icon-medkit"></i> <a href="{{ path('business_user') }}">New Medicine</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>#}
-            <div class="clearfix"></div>
         </div>
-{#        <div class="form-actions portlet box yellow">
-            <div class="portlet-title">
-                <div class="caption"><i class="icon-bar-chart"></i>Medicine Reports</div>
-            </div>
-            <div class="portlet-body">
-                <div class="row-fluid pull-center" >
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                        <div class="portlet box green">
-                            <div class="portlet-title"><div class="caption"><i class="icon-shopping-cart"></i>Medicine Sales </div></div>
-                            <div class="portlet-body">
-                                <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_summary') }}">Sales Summary</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_details') }}">Sales Details</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_stock') }}">Product Wise Sales</a></li>
-                                </ul>
+        <div class="clearfix"><br/></div>
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="row-fluid">
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-green-sharp">
+                                        <span data-counter="counterup" data-value="">{{ ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit'])-transactionCashOverviews['credit'])|number_format }}</span>
+                                        <small class="font-green-sharp">BDT</small>
+                                    </h3>
+                                    <small>BALANCE</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-bar-chart"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success green-sharp">
+                                <span class="sr-only">75% progress</span>
+                            </span>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('account_transaction_cash_overview') }}" class="btn green mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                        <div class="portlet box red">
-                            <div class="portlet-title"><div class="caption"><i class="icon-user"></i>User wise Sales</div></div>
-                            <div class="portlet-body">
-                                <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_user') }}">User Wise Sales</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_sales_user_monthly') }}">User Monthly Sales</a></li>
-                                </ul>
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-red-haze">
+                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format }}</span>
+                                        <small class="font-red-sharp">BDT</small>
+                                    </h3>
+                                    <small>Expense</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-money"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success red-haze">
+                                <span class="sr-only">75% change</span>
+                            </span>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('account_expenditure') }}" class="btn red mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                        <div class="portlet box blue">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="icon-briefcase"></i>Purchase Reports</div>
+
+                </div>
+                <div class="row-fluid">
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-blue-sharp">
+                                        <span data-counter="counterup" data-value="{{ purchaseCashOverview['total'] }}">{{ purchaseCashOverview['total'] }}</span>
+                                        <small class="font-blu-sharp">BDT</small>
+                                    </h3>
+                                    <small>Purchase</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-shopping-cart"></i>
+                                </div>
                             </div>
-                            <div class="portlet-body">
-                                <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_summary') }}">Purchase Summary</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_vendor') }}">Vendor Outstanding</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_vendor_details') }}">Purchase Details</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_vendor_sales') }}">Vendor Purchase & Sales</a></li>
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_purchase_brand_sales') }}">Brand Purchase & Sales</a></li>
-                                </ul>
+                            <div class="progress-info">
+                                <div class="progress">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success blue-sharp">
+                                <span class="sr-only">75% grow</span>
+                            </span>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('business_purchase') }}" class="btn blue mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
-                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                        <div class="portlet box blue">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="icon-briefcase"></i>Product Stock Reports</div>
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-purple-soft">
+                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total'] }}</span>
+                                        <small class="font-purple-soft">BDT</small>
+                                    </h3>
+                                    <small>SALES</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-money"></i>
+                                </div>
                             </div>
-                            <div class="portlet-body">
-                                <ul class="unstyled text-left">
-                                    <li><i class="icon-list"></i> <a href="{{ path('business_report_product_stock_sales') }}">Product Stock & Sales</a></li>
-                                    #}{#         <li><i class="icon-list"></i> <a href="{{ path('business_report_product_stock_sales_price') }}">Product Stock & Sales Price</a></li>
-                                  #}{#       </ul>
+                            <div class="progress-info">
+                                <div class="progress">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success purple-soft">
+                                <span class="sr-only">75% change</span>
+                            </span>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('business_invoice') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
-        </div>#}
+            <div class="span4">
+                      <div class="span6" style="margin-top:-10px">
+                            <div class="portlet-body">
+                                <a href="{{ path('account_sales_business_outstanding') }}" class="icon-btn">
+                                    <i class="fa fa-group"></i>
+                                    <div> Customer </div>
+                                </a>
+                                <a href="{{ path('business_report_sales_summary') }}" class="icon-btn">
+                                    <i class="icon-tags"></i>
+                                    <div> Sales </div>
+                                </a>
+                                <a href="{{ path('account_purchase_business_outstanding') }}" class="icon-btn">
+                                    <i class="fa fa-user"></i>
+                                    <div> Vendor </div>
+                                </a>
+                                <a href="{{ path('business_report_purchase_summary') }}" class="icon-btn">
+                                    <i class="icon-truck"></i>
+                                    <div> Purchase </div>
+                                </a>
+
+                            </div>
+
+                        </div>
+                        <div class="span6" style="margin-top:-10px">
+                            <div class="portlet-body">
+                                <a href="{{ path('business_stock') }}" class="icon-btn">
+                                    <i class="icon-th"></i>
+                                    <div> Stock Details </div>
+                                </a>
+                                <a href="{{ path('business_account_expenditure_new') }}" class="icon-btn">
+                                    <i class="icon-bar-chart"></i>
+                                    <div> Expense </div>
+                                </a>
+                                <a href="{{ path('business_damage_create') }}" class="icon-btn">
+                                    <i class="icon-trash"></i>
+                                    <div> Damage </div>
+                                </a>
+                                <a href="{{ path('domain_notepad') }}" class="icon-btn">
+                                    <i class=" icon-file"></i>
+                                    <div> Notepad </div>
+                                </a>
+
+                            </div>
+
+                        </div>
+            </div>
+
+        </div>
+        <div class="portlet-body form">
+            <div class="portlet box blue">
+                <div class="portlet-body">
+                    <div class="row-fluid" >
+                        <div class="span12">
+                            <div id="optionsYearlyMonthlySales" style="height: 330px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet box green">
+                <div class="portlet-body">
+                    <div class="row-fluid" >
+                        <div class="span12">
+                            <div id="optionsYearlyMonthlyPurchase" style="height: 330px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
     </div>
-    <style>
+    </div>
+
+
+        <style>
+        .icon-btn{
+            width: 100%;
+            height: 50px!important;
+        }
+        .icon-btn div{
+            font-size: 15px;
+            font-weight: bold;
+            color: #26a69a;
+        }
         .dashboard-stat .visual{
             width: auto;
             float: none;
@@ -339,7 +266,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@MedicineBundle/Resources/public/css/invoice.css'
+    '@MedicineBundle/Resources/public/css/dashboard.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -347,15 +274,67 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@MedicineBundle/Resources/public/js/approveProcess.js'
+    '@MedicineBundle/Resources/public/js/jquery-canvas.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    Charts.init();
-    Charts.initCharts();
-    Charts.initPieCharts();
-{% endblock %}
+    window.onload = function () {
 
+    var optionsYearlyMonthlySales = {
+    animationEnabled: true,
+    title: {
+    text: "Monthly Sales - {{ "now"|date("Y") }}"
+    },
+    axisY: {
+    title: "",
+    suffix: "",
+    includeZero: false
+    },
+    axisX: {
+    title: "Monthly Sales - {{ "now"|date("Y") }}"
+    },
+    data: [{
+    type: "column",
+    yValueFormatString: "#,##0.0#",
+    dataPoints: [
+    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
+    {% for key,month in months %}
+        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlySales|keys %}{{ monthlySales[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlySales|keys %}{{ monthlySales[key]|number_format }}{% endif %}" },
+    {% endfor %}
+    ]
+    }]
+    };
+    $("#optionsYearlyMonthlySales").CanvasJSChart(optionsYearlyMonthlySales);
+
+    var optionsYearlyMonthlyPurchase = {
+    animationEnabled: true,
+    title: {
+    text: "Monthly Purchase - {{ "now"|date("Y") }}"
+    },
+    axisY: {
+    title: "",
+    suffix: "",
+    includeZero: false
+    },
+    axisX: {
+    title: "Monthly Purchase - {{ "now"|date("Y") }} "
+    },
+    data: [{
+    type: "column",
+    yValueFormatString: "#,##0.0#",
+    dataPoints: [
+    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
+    {% for key,month in months %}
+        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlyPurchase|keys %}{{ monthlyPurchase[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlyPurchase|keys %}{{ monthlyPurchase[key]|number_format }}{% endif %}" },
+    {% endfor %}
+    ]
+    }]
+    };
+    $("#optionsYearlyMonthlyPurchase").CanvasJSChart(optionsYearlyMonthlyPurchase);
+
+    }
+
+{% endblock %}

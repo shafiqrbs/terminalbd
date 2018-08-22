@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\DomainUserBundle\Entity\Notepad;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\EntityRepository;
@@ -23,6 +24,7 @@ class NotepadRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+	    $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;
@@ -38,19 +40,47 @@ class NotepadRepository extends EntityRepository
 	    $day =  $compare->format('d');
 	    $sql = "SELECT id
                 FROM domain_notepad as notepad
-                WHERE notepad.globalOption_id = :globalOption  AND DAY (notepad.created) =:day AND MONTH (notepad.created) =:month AND YEAR(notepad.created) =:year";
+                WHERE notepad.globalOption_id = {$globalOption->getId()}  AND YEAR(notepad.created)= {$year} AND MONTH(notepad.created)= {$month} AND DAY(notepad.created)= {$day}";
 	    $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-	    $stmt->bindValue('globalOption', $globalOption->getId());
-	    $stmt->bindValue('day', $day);
-	    $stmt->bindValue('month', $month);
-	    $stmt->bindValue('year', $year);
 	    $stmt->execute();
-	    $result =  $stmt->getOneOrNullResult();
-	    var_dump($result);
-	    exit;
-	    return $result;
+	    $result =  $stmt->fetchAll();
+	    if(empty($result)){
+		    $entity = new Notepad();
+		    $entity->setGlobalOption($globalOption);
+		    $this->_em->persist($entity);
+		    $this->_em->flush();
+		    return $entity->getId();
+	    }else{
+		    return $result[0]['id'];
+	    }
 
     }
+
+	protected function handleSearchBetween($qb,$data)
+	{
+
+		$keyword = isset($data['keyword'])? $data['keyword'] :'';
+		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
+		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+		if (!empty($invoice)) {
+			$qb->andWhere($qb->expr()->like("e.invoice", "'%$keyword%'"  ));
+		}
+		if (!empty($createdStart)) {
+			$compareTo = new \DateTime($createdStart);
+			$created =  $compareTo->format('Y-m-d 00:00:00');
+			$qb->andWhere("e.created >= :createdStart");
+			$qb->setParameter('createdStart', $created);
+		}
+
+		if (!empty($createdEnd)) {
+			$compareTo = new \DateTime($createdEnd);
+			$createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+			$qb->andWhere("e.created <= :createdEnd");
+			$qb->setParameter('createdEnd', $createdEnd);
+		}
+		
+
+	}
 
 
 

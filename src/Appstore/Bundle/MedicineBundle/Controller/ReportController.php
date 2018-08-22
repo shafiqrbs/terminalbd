@@ -38,21 +38,15 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $cashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
-	   // $cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+	    $cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
 
-	    $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user,$data);
-        $transactionCash = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesTransactionOverview($user,$data);
-        $salesProcess = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesProcessOverview($user,$data);
-        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-
+	    $salesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
+	    $purchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user,$data);
         return $this->render('MedicineBundle:Report:sales/salesOverview.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'cashOverview'              => $cashOverview ,
-            'purchaseSalesPrice'        => $purchaseSalesPrice ,
-            'transactionCash'           => $transactionCash ,
-            'salesProcess'              => $salesProcess ,
-            'transactionMethods'        => $transactionMethods ,
+            'salesPrice'                => $salesPrice ,
+            'purchasePrice'             => $purchasePrice ,
             'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm'                => $data ,
         ));
@@ -70,7 +64,7 @@ class ReportController extends Controller
         $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user,$data);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         $cashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
-        return $this->render('InventoryBundle:Report:sales/sales.html.twig', array(
+        return $this->render('MedicineBundle:Report:sales/sales.html.twig', array(
             'option'                => $user->getGlobalOption() ,
             'entities'              => $pagination ,
             'purchasePrice'         => $salesPurchasePrice ,
@@ -151,7 +145,6 @@ class ReportController extends Controller
         $purchaseMode           = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseModeOverview($user,$data);
         $stockMode              = $em->getRepository('MedicineBundle:MedicinePurchase')->reportStockModeOverview($user,$data);
         return $this->render('MedicineBundle:Report:purchase/overview.html.twig', array(
-
             'option'                            => $user->getGlobalOption() ,
             'purchaseCashOverview'              => $purchaseCashOverview ,
             'transactionCash'                   => $transactionCash ,
@@ -229,12 +222,34 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $purchasePrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getPurchaseBrandReport($user,$data);
-        $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesBrandReport($user,$data);
+        $brands = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrandLists($user);
+	    $pagination = $this->paginate($brands);
+        $purchasePrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getPurchaseBrandReport($user,$pagination,$data);
+        $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesBrandReport($user,$pagination,$data);
         return $this->render('MedicineBundle:Report:purchase/purchaseSalesBrand.html.twig', array(
             'option'                => $user->getGlobalOption() ,
             'purchasePrice'         => $purchasePrice ,
             'salesPrice'            => $salesPrice ,
+            'brands'                => $pagination ,
+            'searchForm'            => $data,
+        ));
+    }
+
+    public function purchaseBrandSalesDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $purchasePrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getPurchaseBrandDetailsReport($user,$data);
+	    $pagination = $this->paginate($purchasePrice);
+        $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesBrandDetailsReport($user,$pagination,$data);
+	    $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+
+	    return $this->render('MedicineBundle:Report:purchase/purchaseSalesBrandDetails.html.twig', array(
+            'option'                => $user->getGlobalOption() ,
+            'salesPrice'            => $salesPrice ,
+            'pagination'            => $pagination ,
+            'modeFor'               => $modeFor ,
             'searchForm'            => $data,
         ));
     }
@@ -252,9 +267,9 @@ class ReportController extends Controller
         $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
         return $this->render('MedicineBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
             'option'                => $user->getGlobalOption() ,
-            'pagination'              => $pagination ,
-            'racks' => $racks,
-            'modeFor' => $modeFor,
+            'pagination'            => $pagination ,
+            'racks'                 => $racks,
+            'modeFor'               => $modeFor,
             'searchForm'            => $data,
         ));
     }

@@ -39,3 +39,16 @@ business_stock_inline:
 business_stock_production:
     path:     /{id}/production
     defaults: { _controller: "BusinessBundle:Stock:production" }
+
+
+business_stock_search:
+    path:     /search
+    defaults: { _controller: "BusinessBundle:Stock:autoSearch" }
+    options:
+            expose: true
+
+business_stock_name_search:
+    path:     /{stock}/search-name
+    defaults: { _controller: "BusinessBundle:Stock:searchName" }
+    options:
+            expose: true

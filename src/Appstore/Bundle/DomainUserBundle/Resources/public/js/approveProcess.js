@@ -23,6 +23,22 @@ var table = $('#attendance').DataTable( {
     }
 });
 
+$(document).on('keypress', '#notes', function() {
+
+    var notes = $('#notes').val();
+    var url = $(this).attr("data-url");
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data:'notes=' + notes,
+        success: function(response) {
+
+        }
+
+    })
+
+});
+
 
 $(document).on("click", ".delete , .remove", function() {
 

@@ -128,7 +128,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->join('e.businessInvoiceParticulars','si');
         $qb->select('SUM(si.quantity) AS quantity');
         $qb->addSelect('COUNT(si.id) AS totalItem');
-        $qb->addSelect('SUM(si.totalQuantity * si.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(si.totalQuantity * si.purchasePrice) AS totalPurchase');
         $qb->addSelect('SUM(si.subTotal) AS salesPrice');
         $qb->where('e.businessConfig = :config');
         $qb->setParameter('config', $config);
@@ -143,9 +143,130 @@ class BusinessInvoiceRepository extends EntityRepository
         return $result;
     }
 
+	public function salesReport( User $user , $data)
+	{
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->leftJoin('e.salesBy', 'u');
+		$qb->leftJoin('e.transactionMethod', 't');
+		$qb->select('u.username as salesBy');
+		$qb->addSelect('t.name as transactionMethod');
+		$qb->addSelect('e.id as id');
+		$qb->addSelect('e.created as created');
+		$qb->addSelect('e.process as process');
+		$qb->addSelect('e.invoice as invoice');
+		$qb->addSelect('(e.due) as due');
+		$qb->addSelect('(e.subTotal) as subTotal');
+		$qb->addSelect('(e.total) as total');
+		$qb->addSelect('(e.received) as payment');
+		$qb->addSelect('(e.discount) as discount');
+		$qb->addSelect('(e.vat) as vat');
+		$qb->where('e.businessConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('e.process IN (:process)');
+		$qb->setParameter('process', array('Done','Delivered','Chalan'));
+		if(!empty($userBranch)){
+			$qb->andWhere("e.branches =".$userBranch);
+		}
+		$this->handleSearchBetween($qb,$data);
+		$qb->orderBy('e.updated','DESC');
+		$result = $qb->getQuery();
+		return $result;
+
+	}
 
 
-    public function findWithOverview(User $user , $data , $mode='')
+	public function salesPurchasePriceReport(User $user,$data,$x)
+	{
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+
+		$ids = array();
+		foreach ($x as $y){
+			$ids[]=$y['id'];
+		}
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.businessInvoiceParticulars','si');
+		$qb->select('e.id as salesId');
+		$qb->addSelect('SUM(si.totalQuantity * si.purchasePrice ) AS totalPurchaseAmount');
+		$qb->where('e.businessConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('e.process IN (:process)');
+		$qb->setParameter('process', array('Done','Delivered','Chalan'));
+		$qb->andWhere("e.id IN (:salesId)")->setParameter('salesId', $ids);
+		if(!empty($userBranch)){
+			$qb->andWhere("e.branches =".$userBranch);
+		}
+		$this->handleSearchBetween($qb,$data);
+		$qb->orderBy('totalPurchaseAmount','DESC');
+		$qb->groupBy('salesId');
+		$result = $qb->getQuery()->getArrayResult();
+		$array= array();
+		foreach ($result as $row ){
+			$array[$row['salesId']]= $row['totalPurchaseAmount'];
+		}
+		return $array;
+	}
+
+	public  function reportSalesItem(User $user, $data=''){
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$group = isset($data['group']) ? $data['group'] :'medicineStock';
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.medicineSalesItems','si');
+		$qb->join('si.medicineStock','mds');
+		$qb->select('SUM(si.quantity) AS quantity');
+		$qb->addSelect('SUM(si.quantity * si.discountPrice ) AS salesPrice');
+		$qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS purchasePrice');
+		$qb->addSelect('mde.name AS name');
+		$qb->where('e.medicineConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('e.process = :process');
+		$qb->setParameter('process', 'Done');
+		$qb->groupBy('si.medicineStock');
+		$qb->orderBy('mde.name','ASC');
+		return $qb->getQuery()->getArrayResult();
+	}
+
+	public  function reportSalesStockItem(User $user, $data=''){
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$group = isset($data['group']) ? $data['group'] :'medicineStock';
+
+		$qb = $this->createQueryBuilder('s');
+		$qb->join('e.medicineSalesItems','si');
+		$qb->join('si.medicinePurchaseItem','item');
+		$qb->join('si.medicineStock','mds');
+		$qb->select('SUM(si.quantity) AS quantity');
+		$qb->addSelect('SUM(si.quantity * si.discountPrice ) AS salesPrice');
+		$qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS purchasePrice');
+		$qb->addSelect('mde.name AS name');
+		$qb->where('s.medicineConfig = :config');
+		$qb->setParameter('config', $config);
+		$qb->andWhere('s.process = :process');
+		$qb->setParameter('process', 'Done');
+		if($group == 'medicinePurchaseItem') {
+			$qb->addSelect('item.barcode AS barcode');
+		}
+		$this->handleSearchStockBetween($qb,$data);
+		if ($userBranch){
+			$qb->andWhere("s.branches = :branch");
+			$qb->setParameter('branch', $userBranch);
+		}
+		$qb->groupBy('si.'.$group);
+		$qb->orderBy('s.created','DESC');
+		return $qb;
+	}
+
+	public function findWithOverview(User $user , $data , $mode='')
     {
 
         $config = $user->getGlobalOption()->getBusinessConfig()->getId();
@@ -288,6 +409,28 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->getQuery();
         return  $qb;
     }
+
+	public function monthlySales(User $user , $data =array())
+	{
+
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+		$compare = new \DateTime();
+		$year =  $compare->format('Y');
+		$year = isset($data['year'])? $data['year'] :$year;
+		$sql = "SELECT MONTH (sales.created) as month,SUM(sales.total) AS total
+                FROM business_invoice as sales
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year
+                GROUP BY month ORDER BY month ASC";
+		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->bindValue('config', $config);
+		$stmt->bindValue('process', 'Done');
+		$stmt->bindValue('year', $year);
+		$stmt->execute();
+		$result =  $stmt->fetchAll();
+		return $result;
+
+
+	}
 
 
     public function updateInvoiceTotalPrice(BusinessInvoice $invoice)

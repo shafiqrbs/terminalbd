@@ -19,496 +19,288 @@ use Symfony\Component\HttpFoundation\Response;
 class ReportController extends Controller
 {
 
-    public function paginate($entities)
-    {
-
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            25  /*limit per page*/
-        );
-        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
-        return $pagination;
-    }
-
-
-    public function salesSummaryAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-
-        $user = $this->getUser();
-        $config = $user->getGlobalOption()->getBusinessConfig();
-        $salesTotalTransactionOverview = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->transactionOverview($config,$data);
-        $serviceOverview = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->findWithServiceOverview($config,$data);
-        return $this->render('BusinessBundle:Report:salesSummary.html.twig', array(
-
-            'salesOverview'      => $salesTotalTransactionOverview,
-            'serviceOverview'               => $serviceOverview,
-            'searchForm'                    => $data,
-
-        ));
-
-    }
-
-
-    public function salesSummaryPdfAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-
-        $user = $this->getUser();
-        $config = $user->getGlobalOption()->getBusinessConfig();
-        $salesTotalTransactionOverview = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->transactionOverview($config,$data);
-        $serviceOverview = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->findWithServiceOverview($config,$data);
-        $html = $this->renderView(
-            'BusinessBundle:Report:salesSummaryPdf.html.twig', array(
-                'salesOverview'      => $salesTotalTransactionOverview,
-                'serviceOverview'               => $serviceOverview,
-                'searchForm'                    => $data,
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='sales-summary-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-    }
-
-
-
-    public function serviceBaseSummaryAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-
-        $user = $this->getUser();
-        $entity = '';
-        if(!empty($data) and $data['service']){
-            $entity = $em->getRepository('HospitalBundle:Service')->find($data['service']);
-        }
-        $services = $em->getRepository('HospitalBundle:Service')->findBy(array(),array('name'=>'ASC'));
-        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
-        $serviceGroup = $em->getRepository('HospitalBundle:InvoiceParticular')->serviceParticularDetails($user,$data);
-        return $this->render('HospitalBundle:Report:serviceBaseSales.html.twig', array(
-            'serviceOverview'       => $serviceOverview,
-            'serviceGroup'          => $serviceGroup,
-            'services'              => $services,
-            'entity'                => $entity,
-            'searchForm'            => $data,
-        ));
-
-    }
-
-    public function allYearSalesAction()
-    {
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getBusinessConfig();
-        $dailyReceive = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->allYearlySales($dmsConfig,$data);
-        return $this->render('BusinessBundle:Report:allYearlySales.html.twig', array(
-            'entities' => $dailyReceive,
-            'searchForm' => $data,
-        ));
-
-    }
-
-    public function allYearSalesPdfAction()
-    {
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getBusinessConfig();
-        $dailyReceive = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->allYearlySales($dmsConfig,$data);
-        $html = $this->renderView(
-            'BusinessBundle:Report:allYearlySalesPdf.html.twig', array(
-                'entities' => $dailyReceive,
-                'searchForm' => $data,
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='sales-summary-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-    }
-
-
-    public function yearlySalesAction()
-    {
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getBusinessConfig();
-        $dailyReceive = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->yearlySales($dmsConfig,$data);
-        return $this->render('BusinessBundle:Report:yearlySales.html.twig', array(
-            'entities' => $dailyReceive,
-            'searchForm' => $data,
-        ));
-
-    }
-
-    public function  yearlySalesPdfAction()
-    {
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getBusinessConfig();
-        $dailyReceive = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->monthlySales($dmsConfig,$data);
-        $html = $this->renderView(
-            'BusinessBundle:Report:yearlySalesPdf.html.twig', array(
-                'entities' => $dailyReceive,
-                'searchForm' => $data,
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='yearly-sales-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-
-    }
-
-
-    public function monthlySalesAction()
-    {
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getBusinessConfig();
-        $dailyReceive = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->monthlySales($dmsConfig,$data);
-        return $this->render('BusinessBundle:Report:monthlySales.html.twig', array(
-            'entities' => $dailyReceive,
-            'searchForm' => $data,
-        ));
-
-    }
-
-    public function monthlySalesPdfAction()
-    {
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $dmsConfig = $user->getGlobalOption()->getBusinessConfig();
-        $dailyReceive = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->monthlySales($dmsConfig,$data);
-        $html = $this->renderView(
-            'BusinessBundle:Report:monthlySalesPdf.html.twig', array(
-                'entities' => $dailyReceive,
-                'searchForm' => $data,
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='monthly-sales-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-
-    }
-
-    public function salesAction()
-    {
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $config = $user->getGlobalOption()->getBusinessConfig();
-        $dailyReceive = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->salesDetails($config,$data);
-        $assignDoctors = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config,array('doctor'));
-        $treatments = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getFindDentalServiceParticular($config,array('treatment'));
-
-        return $this->render('BusinessBundle:Report:sales.html.twig', array(
-            'entities' => $dailyReceive,
-            'assignDoctors' => $assignDoctors,
-            'treatments' => $treatments,
-            'searchForm' => $data,
-        ));
-
-    }
-
-    public function salesPdfAction()
-    {
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $config = $user->getGlobalOption()->getBusinessConfig();
-        $dailyReceive = $this->getDoctrine()->getRepository('BusinessBundle:BusinessTreatmentPlan')->salesDetails($config,$data);
-        $html = $this->renderView(
-            'BusinessBundle:Report:salesPdf.html.twig', array(
-                'entities' => $dailyReceive,
-                'searchForm' => $data,
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='daily-sales-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-
-    }
-
-
-    public function treatmentWiseSalesAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-
-        $user = $this->getUser();
-        $config = $user->getGlobalOption()->getBusinessConfig();
-        $serviceOverview = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->findWithServiceOverview($config,$data);
-
-        return $this->render('BusinessBundle:Report:treatmentWiseSales.html.twig', array(
-            'serviceOverview' => $serviceOverview,
-            'searchForm' => $data,
-        ));
-
-    }
-
-    public function treatmentWiseSalesPdfAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-
-        $user = $this->getUser();
-        $config = $user->getGlobalOption()->getBusinessConfig();
-        $serviceOverview = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->findWithServiceOverview($config,$data);
-        $html = $this->renderView(
-            'BusinessBundle:Report:treatmentWiseSalesPdf.html.twig', array(
-                'serviceOverview' => $serviceOverview,
-                'searchForm' => $data,
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='daily-sales-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-
-    }
-
-
-    public function cashAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $transactionMethods = array(1,4);
-        $globalOption = $this->getUser()->getGlobalOption();
-        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
-        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
-        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
-        $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
-        return $this->render('BusinessBundle:Report:cashoverview.html.twig', array(
-            'transactionCashOverviews'               => $transactionCashOverview,
-            'transactionBankCashOverviews'          => $transactionBankCashOverviews,
-            'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
-            'transactionAccountHeadCashOverviews'   => $transactionAccountHeadCashOverviews,
-            'searchForm' => $data,
-        ));
-
-    }
-
-
-    public function cashPdfAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $transactionMethods = array(1,4);
-        $globalOption = $this->getUser()->getGlobalOption();
-        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
-        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
-        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
-        $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
-        $html = $this->renderView('BusinessBundle:Report:cashoverviewPdf.html.twig', array(
-            'transactionCashOverviews'               => $transactionCashOverview,
-            'transactionBankCashOverviews'          => $transactionBankCashOverviews,
-            'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
-            'transactionAccountHeadCashOverviews'   => $transactionAccountHeadCashOverviews,
-            'searchForm' => $data,
-        ));
-
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='cash-summary-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-        exit;
-    }
-
-
-    public function incomeAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $sales = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->reportDebitTransactionIncome($user->getGlobalOption(), $accountHeads = array(3,10,30), $data);
-        $expenditures = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
-        $accessories = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceAccessories')->reportAccessoriesOut($user->getGlobalOption()->getBusinessConfig(), $data);
-        return $this->render('BusinessBundle:Report:income.html.twig', array(
-            'sales'             => $sales,
-            'expenditures'      => $expenditures,
-            'accessories'       => $accessories,
-            'searchForm'        => $data,
-        ));
-
-    }
-
-    public function incomePdfAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $sales = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->reportDebitTransactionIncome($user->getGlobalOption(), $accountHeads = array(3,10,30), $data);
-        $expenditures = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
-        $accessories = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceAccessories')->reportAccessoriesOut($user->getGlobalOption()->getBusinessConfig(), $data);
-        $html = $this->renderView('BusinessBundle:Report:incomePdf.html.twig', array(
-            'sales'             => $sales,
-            'expenditures'      => $expenditures,
-            'accessories'       => $accessories,
-            'searchForm'        => $data,
-        ));
-
-
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='income-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-        exit;
-
-    }
-
-    public function expenditureAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $expenditures = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(), $data);
-        return $this->render('BusinessBundle:Report:expenditure.html.twig', array(
-                'expenditures'      => $expenditures,
-                'searchForm'        => $data,
-        ));
-
-    }
-
-    public function expenditurePdfAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $expenditures = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(), $data);
-        $html = $this->renderView('BusinessBundle:Report:expenditurePdf.html.twig', array(
-            'expenditures'      => $expenditures,
-            'searchForm'        => $data,
-        ));
-
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='expense-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-        exit;
-
-    }
-
-    public function stockOutAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $stockOuts = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceAccessories')->getAccessoriesItemOut($user->getGlobalOption()->getBusinessConfig(), $data);
-        return $this->render('BusinessBundle:Report:stockout.html.twig', array(
-            'entities'      => $stockOuts,
-            'searchForm'        => $data,
-        ));
-
-    }
-
-    public function stockoutPdfAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $stockOuts = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceAccessories')->getAccessoriesItemOut($user->getGlobalOption()->getBusinessConfig(), $data);
-        $html = $this->renderView('BusinessBundle:Report:stockoutPdf.html.twig', array(
-            'entities'      => $stockOuts,
-            'searchForm'        => $data,
-        ));
-
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='stock-out-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-        exit;
-
-    }
-
-    public function stockAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getMedicineParticular($config,array('accessories'),$data)->getArrayResult();
-        return $this->render('BusinessBundle:Report:stock.html.twig', array(
-            'pagination' => $entities,
-            'searchForm'        => $data,
-        ));
-    }
-
-    public function stockPdfAction()
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getMedicineParticular($config,array('accessories'),$data)->getArrayResult();
-        $html =  $this->renderView('BusinessBundle:Report:stockPdf.html.twig', array(
-            'pagination' => $entities,
-            'searchForm'        => $data,
-        ));
-
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-        $fileName ='stock-'.date('d-m-Y').'.pdf';
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        echo $pdf;
-        return new Response('');
-        exit;
-
-    }
+	public function paginate($entities)
+	{
+		$paginator = $this->get('knp_paginator');
+		$pagination = $paginator->paginate(
+			$entities,
+			$this->get('request')->query->get('page', 1)/*page number*/,
+			25  /*limit per page*/
+		);
+		$pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+		return $pagination;
+	}
+
+	public function salesOverviewAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+
+		$salesPrice = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user,$data);
+		$purchasePrice = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesItemPurchaseSalesOverview($user,$data);
+		return $this->render('BusinessBundle:Report:sales/salesOverview.html.twig', array(
+			'option'                    => $user->getGlobalOption() ,
+			'cashOverview'              => $cashOverview ,
+			'salesPrice'                => $salesPrice ,
+			'purchasePrice'             => $purchasePrice ,
+			'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
+			'searchForm'                => $data ,
+		));
+
+	}
+
+	public function salesDetailsAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesReport($user,$data);
+		$pagination = $this->paginate($entities);
+		$salesPurchasePrice = $em->getRepository('BusinessBundle:BusinessInvoice')->salesPurchasePriceReport($user,$data,$pagination);
+		$purchaseSalesPrice = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesItemPurchaseSalesOverview($user,$data);
+		$transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+		$cashOverview = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user,$data);
+		return $this->render('BusinessBundle:Report:sales/sales.html.twig', array(
+			'option'                => $user->getGlobalOption() ,
+			'entities'              => $pagination ,
+			'purchasePrice'         => $salesPurchasePrice ,
+			'cashOverview'          => $cashOverview,
+			'purchaseSalesPrice'    => $purchaseSalesPrice,
+			'transactionMethods'    => $transactionMethods ,
+			'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
+			'searchForm'            => $data,
+		));
+	}
+
+	public function salesStockItemAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$purchaseSalesPrice = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesItemPurchaseSalesOverview($user,$data);
+		$cashOverview = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user,$data);
+		$entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportSalesStockItem($user,$data);
+		$pagination = $this->paginate($entities);
+		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
+		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+
+		return $this->render('BusinessBundle:Report:sales/salesStock.html.twig', array(
+			'option'  => $user->getGlobalOption() ,
+			'entities' => $pagination,
+			'cashOverview' => $cashOverview,
+			'purchaseSalesItem' => $purchaseSalesPrice,
+			'types' => $type,
+			'categories' => $category,
+			'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+			'searchForm' => $data,
+		));
+	}
+
+	public function customerSalesItemAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportCustomerSalesItem($user,$data);
+		$pagination = $this->paginate($entities);
+		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
+		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+
+		return $this->render('BusinessBundle:Report:sales/customerSalesItem.html.twig', array(
+			'option'  => $user->getGlobalOption() ,
+			'entities' => $pagination,
+			'types' => $type,
+			'categories' => $category,
+			'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+			'searchForm' => $data,
+		));
+	}
+
+
+	public function salesUserAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$salesPurchasePrice = $em->getRepository('BusinessBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data);
+		$entities = $em->getRepository('BusinessBundle:MedicineSales')->salesUserReport($user,$data);
+		return $this->render('BusinessBundle:Report:sales/salesUser.html.twig', array(
+			'option'  => $user->getGlobalOption() ,
+			'entities'      => $entities ,
+			'salesPurchasePrice'      => $salesPurchasePrice ,
+			'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+			'searchForm'    => $data ,
+		));
+	}
+
+	public function monthlyUserSalesAction(){
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$config = $user->getGlobalOption()->getBusinessConfig();
+		$employees = $em->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
+		$entities = $em->getRepository('BusinessBundle:MedicineSales')->monthlySales($user,$data);
+		$salesAmount = array();
+		foreach($entities as $row) {
+			$salesAmount[$row['salesBy'].$row['month']] = $row['total'];
+		}
+		return $this->render('BusinessBundle:Report:sales/salesMonthlyUser.html.twig', array(
+			'inventory'      => $config ,
+			'salesAmount'      => $salesAmount ,
+			'employees'      => $employees ,
+			'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+			'searchForm'    => $data ,
+		));
+
+	}
+
+
+	public function purchaseOverviewAction(){
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+
+		$purchaseCashOverview   = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseOverview($user,$data);
+		$transactionCash        = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseTransactionOverview($user,$data);
+		$purchaseMode           = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseModeOverview($user,$data);
+
+		return $this->render('BusinessBundle:Report:purchase/overview.html.twig', array(
+			'option'                            => $user->getGlobalOption() ,
+			'purchaseCashOverview'              => $purchaseCashOverview ,
+			'transactionCash'                   => $transactionCash ,
+			'purchaseMode'                      => $purchaseMode ,
+			'stockMode'                         => '' ,
+			'searchForm'                        => $data,
+
+		));
+	}
+
+	public function purchaseVendorAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$entities = $em->getRepository('BusinessBundle:BusinessPurchase')->purchaseVendorReport($user,$data);
+		return $this->render('BusinessBundle:Report:purchase/purchaseVendor.html.twig', array(
+			'option'                => $user->getGlobalOption() ,
+			'entities'              => $entities ,
+			'searchForm'            => $data,
+		));
+	}
+
+
+	public function purchaseVendorDetailsAction()
+	{
+		$data = $_REQUEST;
+		$globalOption = $this->getUser()->getGlobalOption();
+		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($globalOption,$data);
+		$pagination = $this->paginate($entities);
+		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($globalOption,$data);
+		$accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(5));
+		$transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+		return $this->render('BusinessBundle:Report:purchase/purchase.html.twig', array(
+			'globalOption' => $globalOption,
+			'entities' => $pagination,
+			'accountHead' => $accountHead,
+			'transactionMethods' => $transactionMethods,
+			'searchForm' => $data,
+			'overview' => $overview,
+		));
+	}
+
+
+
+	public function productPurchaseStockSalesAction()
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$config = $user->getGlobalOption()->getMedicineConfig();
+		$entities = $em->getRepository('BusinessBundle:BusinessPurchase')->productPurchaseStockSalesReport($user,$data);
+		$pagination = $this->paginate($entities);
+		$racks = $this->getDoctrine()->getRepository('BusinessBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+		$modeFor = $this->getDoctrine()->getRepository('BusinessBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+		return $this->render('BusinessBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
+			'option'                => $user->getGlobalOption() ,
+			'pagination'            => $pagination ,
+			'racks'                 => $racks,
+			'modeFor'               => $modeFor,
+			'searchForm'            => $data,
+		));
+	}
+
+
+	public function productPurchaseStockSalesPriceAction()
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$config = $user->getGlobalOption()->getMedicineConfig();
+		$entities = $em->getRepository('BusinessBundle:BusinessPurchase')->productPurchaseStockSalesPriceReport($user,$data);
+		$pagination = $this->paginate($entities);
+		$racks = $this->getDoctrine()->getRepository('BusinessBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+		$modeFor = $this->getDoctrine()->getRepository('BusinessBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+		return $this->render('BusinessBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
+			'option'                => $user->getGlobalOption() ,
+			'pagination'              => $pagination ,
+			'racks' => $racks,
+			'modeFor' => $modeFor,
+			'searchForm'            => $data,
+		));
+	}
+
+
+	public function purchaseBrandStockSalesAction()
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$entities = $em->getRepository('BusinessBundle:BusinessPurchase')->purchaseVendorStockReport($user,$data);
+		return $this->render('BusinessBundle:Report:purchase/purchaseVendorStockSales.html.twig', array(
+			'option'                => $user->getGlobalOption() ,
+			'entities'              => $entities ,
+			'searchForm'            => $data,
+		));
+	}
+
+
+	public function purchaseBrandAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$entities = $em->getRepository('BusinessBundle:BusinessPurchase')->purchaseVendorReport($user,$data);
+		return $this->render('BusinessBundle:Report:purchase/purchaseBrand.html.twig', array(
+			'option'                => $user->getGlobalOption() ,
+			'entities'              => $entities ,
+			'searchForm'            => $data,
+		));
+	}
+
+	public function purchaseDetailsAction()
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$entities = $em->getRepository('BusinessBundle:BusinessPurchase')->purchaseReport($user,$data);
+		$pagination = $this->paginate($entities);
+		$cashOverview = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseOverview($user,$data);
+		$transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+		return $this->render('BusinessBundle:Report:purchase/purchase.html.twig', array(
+			'option'                => $user->getGlobalOption() ,
+			'entities'              => $pagination ,
+			'cashOverview'          => $cashOverview,
+			'transactionMethods'    => $transactionMethods ,
+			'searchForm'            => $data,
+		));
+	}
 
 }
-

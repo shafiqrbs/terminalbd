@@ -186,9 +186,9 @@ class Builder extends ContainerAware
             $menu['Business Management']->addChild('Invoice', array('route' => 'business_invoice'))
                 ->setAttribute('icon', 'icon-th-list');
         }
-	    $menu['Business Management']->addChild('Note Pad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
 	    if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
-            $menu['Business Management']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
+		    $menu['Business Management']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
+		    $menu['Business Management']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
         }
 	    if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
 
@@ -213,47 +213,29 @@ class Builder extends ContainerAware
 		    $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))->setAttribute('icon', 'icon-cog');
 	    }
 
-        /*
+	    $menu['Business Management']->addChild('Reports')
+	                     ->setAttribute('icon', 'icon icon-bar-chart')
+	                     ->setAttribute('dropdown', true);
 
-        $menu['Business Management']->addChild('Sales Reports')
-            ->setAttribute('icon', 'icon-bar-chart')
-            ->setAttribute('dropdown', true);
-        $menu['Business Management']['Sales Reports']->addChild('Sales Summary', array('route' => 'business_report_sales_summary'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']['Sales Reports']->addChild('Sales Details', array('route' => 'business_report_sales'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']['Sales Reports']->addChild('Sales Monthly', array('route' => 'business_report_sales_monthly'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']['Sales Reports']->addChild('Sales Yearly', array('route' => 'business_report_sales_yearly'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']['Sales Reports']->addChild('All Sales Yearly', array('route' => 'business_report_sales_all_yearly'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']['Sales Reports']->addChild('Treatment Base Sales', array('route' => 'business_report_sales_treatment'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']['Sales Reports']->addChild('Purchase', array('route' => 'business_report_purchase'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Business Management']->addChild('Accounting Report')
-            ->setAttribute('icon', 'icon-bar-chart')
-            ->setAttribute('dropdown', true);
-        $menu['Business Management']['Accounting Report']->addChild('Cash in Hand', array('route' => 'business_report_cash'))
-            ->setAttribute('icon', 'icon-money');
-        $menu['Business Management']['Accounting Report']->addChild('Expenditure', array('route' => 'business_report_expenditure'))
-            ->setAttribute('icon', 'fa fa-indent');
-        $menu['Business Management']['Accounting Report']->addChild('Income', array('route' => 'business_report_income'))
-            ->setAttribute('icon', 'icon-credit-card');
-        $menu['Business Management']['Accounting Report']->addChild('Balance Sheet', array('route' => 'business_report_balance_sheet'))
-            ->setAttribute('icon', 'icon-table');
-        $menu['Business Management']->addChild('Stock Report')
-            ->setAttribute('icon', 'icon-bar-chart')
-            ->setAttribute('dropdown', true);
-        $menu['Business Management']['Stock Report']->addChild('Accessories Stock', array('route' => 'business_report_stock'))
-            ->setAttribute('icon', ' icon-inbox');
-        $menu['Business Management']['Stock Report']->addChild('Accessories Out', array('route' => 'business_report_stock_out'))
-            ->setAttribute('icon', 'icon-hdd');
+	    $menu['Business Management']['Reports']->addChild('Sales')
+	                                ->setAttribute('icon', 'icon icon-bar-chart')
+	                                ->setAttribute('dropdown', true);
 
-        */
-
-        return $menu;
+	    $menu['Business Management']['Reports']['Sales']->addChild('Sales Summary', array('route' => 'business_report_sales_summary'))
+	                                         ->setAttribute('icon', 'icon-th-list');
+	    $menu['Business Management']['Reports']['Sales']->addChild('Sales Details', array('route' => 'business_report_sales_details'))
+	                                         ->setAttribute('icon', 'icon-th-list');
+	    $menu['Business Management']['Reports']['Sales']->addChild('Customer Sales', array('route' => 'business_report_customer_sales_item'))
+	                                         ->setAttribute('icon', 'icon-th-list');
+	    $menu['Business Management']['Reports']['Sales']->addChild('Product Wise Sales', array('route' => 'business_report_sales_stock'))
+	                                         ->setAttribute('icon', 'icon-th-list');
+	    $menu['Business Management']['Reports']->addChild('Purchase')
+	                                ->setAttribute('icon', 'icon icon-bar-chart')
+	                                ->setAttribute('dropdown', true);
+	    $menu['Business Management']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'business_report_purchase_summary'))
+	                                            ->setAttribute('icon', 'icon-th-list');
+	    $menu['Business Management']['Reports']['Purchase']->addChild('Vendor Outstanding', array('route' => 'business_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
+	    return $menu;
 
     }
 
@@ -1078,7 +1060,8 @@ class Builder extends ContainerAware
                 $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
                     ->setAttribute('icon', 'icon-list');
                 if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
-                    $menu['Medicine']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
+	                $menu['Medicine']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
+	                $menu['Medicine']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
                 }
             }
             $menu['Medicine']->addChild('Manage Stock')
@@ -1130,28 +1113,40 @@ class Builder extends ContainerAware
             $menu['Medicine']['Master Data']->addChild('New Medicine', array('route' => 'medicine_user'))
                 ->setAttribute('icon', 'icon icon-cog');
         }
-            if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
+        if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
 
                 $menu['Medicine']->addChild('Reports')
                     ->setAttribute('icon', 'icon icon-bar-chart')
                     ->setAttribute('dropdown', true);
-                $menu['Medicine']['Reports']->addChild('Sales Summary', array('route' => 'medicine_report_sales_summary'))
+
+	            $menu['Medicine']['Reports']->addChild('Sales')
+                    ->setAttribute('icon', 'icon icon-bar-chart')
+                    ->setAttribute('dropdown', true);
+
+                $menu['Medicine']['Reports']['Sales']->addChild('Sales Summary', array('route' => 'medicine_report_sales_summary'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']->addChild('Sales Details', array('route' => 'medicine_report_sales_details'))
+	            $menu['Medicine']['Reports']['Sales']->addChild('Sales Details', array('route' => 'medicine_report_sales_details'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']->addChild('Product Wise Sales', array('route' => 'medicine_report_sales_stock'))
+	            $menu['Medicine']['Reports']['Sales']->addChild('Vendor base Sales', array('route' => 'medicine_report_sales_vendor_customer'))->setAttribute('icon', 'icon-th-list');
+	            $menu['Medicine']['Reports']['Sales']->addChild('Product Wise Sales', array('route' => 'medicine_report_sales_stock'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']->addChild('User Wise Sales', array('route' => 'medicine_report_sales_user'))
+	            $menu['Medicine']['Reports']['Sales']->addChild('User Wise Sales', array('route' => 'medicine_report_sales_user'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']->addChild('User Monthly Sales', array('route' => 'medicine_report_sales_user_monthly'))
+	            $menu['Medicine']['Reports']['Sales']->addChild('User Monthly Sales', array('route' => 'medicine_report_sales_user_monthly'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
+	            $menu['Medicine']['Reports']->addChild('Purchase')
+	                                        ->setAttribute('icon', 'icon icon-bar-chart')
+	                                        ->setAttribute('dropdown', true);
+                $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']->addChild('Purchase Details', array('route' => 'medicine_report_purchase_details'))
-                    ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))
-                    ->setAttribute('icon', 'icon-th-list');
-            }
+                $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Outstanding', array('route' => 'medicine_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Details', array('route' => 'medicine_report_purchase_vendor_details'))->setAttribute('icon', 'icon-th-list');
+	            $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Stock', array('route' => 'medicine_report_product_stock_sales'))->setAttribute('icon', 'icon-th-list');
+	            /*$menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))->setAttribute('icon', 'icon-th-list');*/
+	            $menu['Medicine']['Reports']->addChild('Brand', array('route' => 'medicine_report_purchase_brand_sales'))->setAttribute('icon', 'icon-th-list');
+	            $menu['Medicine']['Reports']->addChild('Brand Details', array('route' => 'medicine_report_purchase_brand_sales_details'))->setAttribute('icon', 'icon-th-list');
+
+         }
 
         return $menu;
 
