@@ -169,13 +169,13 @@ class MedicinePurchaseReturnController extends Controller
 
             $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['medicineStock']);
             $purchaseReturnItem->setMedicineStock($stock);
-            $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['medicinePurchaseItem']);
-            $purchaseReturnItem->setMedicinePurchaseItem($purchaseItem);
-            $purchaseReturnItem->setPurchasePrice($purchaseItem->getPurchasePrice());
+          //  $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['medicinePurchaseItem']);
+           // $purchaseReturnItem->setMedicinePurchaseItem($purchaseItem);
+            $purchaseReturnItem->setPurchasePrice($stock->getPurchasePrice());
             $purchaseReturnItem->setSubTotal($purchaseReturnItem->getPurchasePrice() * $purchaseReturnItem->getQuantity());
             $em->persist($purchaseReturnItem);
             $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'purchase-return');
+           // $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'purchase-return');
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'purchase-return');
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->updatePurchaseReturnTotalPrice($entity);
             $this->get('session')->getFlashBag()->add(

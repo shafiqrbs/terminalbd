@@ -53,11 +53,6 @@ class Transaction
      **/
     protected $globalOption;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="transaction" )
-     **/
-    private  $inventoryConfig;
-
 
     /**
      * @var string
@@ -202,21 +197,6 @@ class Transaction
         return $this->updated;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
 
 
     /**

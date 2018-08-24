@@ -90,4 +90,10 @@ medicine_search_form_name_complete:
     options:
             expose: true
 
+medicine_search_medicine_generic_complete:
+    path:     /search-generic-medicine-auto-complete
+    defaults: { _controller: "MedicineBundle:MedicineBrand:searchMedicineGenericNameAutoComplete" }
+    options:
+            expose: true
+
 

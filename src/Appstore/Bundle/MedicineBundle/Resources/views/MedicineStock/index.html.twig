@@ -85,6 +85,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >DAR</th>
                                     <th class="numeric" >Rack</th>
                                     <th class="numeric" >PP Tk.</th>
                                     <th class="numeric" >MRP Tk.</th>
@@ -106,6 +107,7 @@
                                         {% else %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% endif %}
+                                        <td>{% if entity.mode == 'medicine' and entity.medicineBrand is not empty %}{{ entity.medicineBrand.dar }}{% endif %}</td>
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.rackNo is not empty %}{{ entity.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</a>
                                         </td>

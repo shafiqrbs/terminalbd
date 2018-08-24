@@ -2,7 +2,10 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Doctrine\ORM\Mapping as ORM;
+use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * InventoryConfig
@@ -154,10 +157,6 @@ class InventoryConfig
      */
     protected $excelImporters;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="inventoryConfig", cascade={"persist", "remove"} )
-     **/
-    private  $transaction;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
@@ -477,7 +476,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -485,7 +484,7 @@ class InventoryConfig
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -501,7 +500,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return Category
      */
     public function getCategories()
     {
@@ -509,7 +508,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return ItemTypeGrouping
      */
     public function getItemTypeGrouping()
     {
@@ -525,7 +524,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return StockItem
      */
     public function getStockItems()
     {
@@ -533,7 +532,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return WareHouse
      */
     public function getWareHouses()
     {
@@ -541,7 +540,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return Product
      */
     public function getProducts()
     {
@@ -549,7 +548,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return Sales
      */
     public function getSales()
     {
@@ -557,7 +556,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return PurchaseReturn
      */
     public function getPurchaseReturn()
     {
@@ -581,7 +580,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return ExcelImporter
      */
     public function getExcelImporters()
     {
@@ -589,15 +588,7 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
-     */
-    public function getTransaction()
-    {
-        return $this->transaction;
-    }
-
-    /**
-     * @return mixed
+     * @return AccountPurchase
      */
     public function getAccountPurchase()
     {

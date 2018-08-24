@@ -459,8 +459,7 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setGlobalOption($global);
         $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
         $accountPurchase->setPayment($entity->getSubTotal());
-        $accountPurchase->setSourceInvoice('Pr-'.$entity->getInvoice());
-        $accountPurchase->setProcess('medicine');
+        $accountPurchase->setProcessHead('medicine');
         $accountPurchase->setProcessType('Purchase-return');
         $accountPurchase->setProcess('approved');
         $accountPurchase->setApprovedBy($entity->getApprovedBy());

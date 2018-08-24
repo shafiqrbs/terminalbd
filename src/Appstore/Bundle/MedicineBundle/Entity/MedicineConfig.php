@@ -75,6 +75,11 @@ class MedicineConfig
     private $medicinePurchases;
 
      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePrepurchase", mappedBy="medicineConfig")
+     **/
+    private $medicinePrepurchase;
+
+     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", mappedBy="medicineConfig")
      * @ORM\OrderBy({"companyName" = "ASC"})
      **/
@@ -537,6 +542,13 @@ class MedicineConfig
     {
         return $this->medicineMinimumStock;
     }
+
+	/**
+	 * @return MedicinePrepurchase
+	 */
+	public function getMedicinePrepurchase() {
+		return $this->medicinePrepurchase;
+	}
 
 }
 

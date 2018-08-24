@@ -36,6 +36,11 @@ class MedicineVendor
     protected $medicinePurchases;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePrepurchase", mappedBy="medicineVendor")
+     */
+    protected $medicinePrepurchase;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="medicineVendor")
      */
     protected $accountPurchases;
@@ -367,6 +372,13 @@ class MedicineVendor
     {
         $this->customer = $customer;
     }
+
+	/**
+	 * @return MedicinePrepurchase
+	 */
+	public function getMedicinePrepurchase() {
+		return $this->medicinePrepurchase;
+	}
 
 
 }

@@ -13,6 +13,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.medicine.prepurchase.event.listener:
+        class: Appstore\Bundle\MedicineBundle\EventListener\MedicinePrepurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.medicine.purchase.item.event.listener:
         class: Appstore\Bundle\MedicineBundle\EventListener\MedicinePurchaseItemListener
         tags:

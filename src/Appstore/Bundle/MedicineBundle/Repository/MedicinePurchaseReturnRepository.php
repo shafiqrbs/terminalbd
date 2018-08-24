@@ -29,7 +29,7 @@ class MedicinePurchaseReturnRepository extends EntityRepository
             ->getQuery()->getSingleResult();
 
         if($total['total'] > 0){
-            $entity->setSubTotal($total['total']);
+            $entity->setSubTotal(round($total['total']));
         }else{
             $entity->setSubTotal(0);
         }

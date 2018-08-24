@@ -38,6 +38,10 @@ medicine_medicine_purchase:
     resource: "@MedicineBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
 
+medicine_medicine_prepurchase:
+    resource: "@MedicineBundle/Resources/config/routing/prepurchase.yml"
+    prefix:   /pre-purchase
+
 medicine_medicine_instantpurchase:
     resource: "@MedicineBundle/Resources/config/routing/instantpurchase.yml"
     prefix:   /instant-purchase

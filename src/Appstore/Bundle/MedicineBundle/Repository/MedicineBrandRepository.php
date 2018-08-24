@@ -144,4 +144,21 @@ class MedicineBrandRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
+
+	public function searchMedicineGenericAutoComplete($q)
+	{
+		$query = $this->createQueryBuilder('e');
+		$query->join('e.medicineGeneric','g');
+		$query->join('e.medicineCompany','c');
+		$query->select('e.id as id');
+		$query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', g.name, \' \', e.strength, \' \', c.name) AS text');
+		$query->where($query->expr()->like("e.name", "'$q%'"  ));
+		$query->orWhere($query->expr()->like("g.name", "'$q%'"  ));
+		$query->groupBy('e.name');
+		$query->orderBy('e.name', 'ASC');
+		$query->setMaxResults( '50' );
+		return $query->getQuery()->getResult();
+
+	}
+
 }

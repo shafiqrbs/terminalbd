@@ -1095,6 +1095,8 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Manage Purchase']->addChild('Purchase Return', array('route' => 'medicine_purchase_return'))
                 ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Manage Purchase']->addChild('Pre-purchase', array('route' => 'medicine_prepurchase'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Manage Purchase']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
 
         }

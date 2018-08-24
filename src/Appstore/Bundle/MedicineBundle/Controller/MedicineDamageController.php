@@ -57,7 +57,7 @@ class MedicineDamageController extends Controller
         $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['damage']['medicineStock']);
       //  $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['medicinePurchaseItem']);
 
-        if ($form->isValid() and !empty($purchaseItem)) {
+        if ($form->isValid() and !empty($stock)) {
 
             $em = $this->getDoctrine()->getManager();
             $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
@@ -68,7 +68,7 @@ class MedicineDamageController extends Controller
             $entity->setSubTotal($stock->getPurchasePrice() * $entity->getQuantity());
             $em->persist($entity);
             $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
+          //  $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'damage');
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
@@ -203,9 +203,9 @@ class MedicineDamageController extends Controller
 	public function approvedAction($id)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-		$damage = $em->getRepository('BusinessBundle:BusinessDamage')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
-		if (!empty($damage) and empty($damage->getProcess() != 'Approved')) {
+		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+		$damage = $em->getRepository('MedicineBundle:MedicineDamage')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
+		if (!empty($damage) and ($damage->getProcess() == 'Created')) {
 			$em = $this->getDoctrine()->getManager();
 			$damage->setProcess('Approved');
 			$em->flush();

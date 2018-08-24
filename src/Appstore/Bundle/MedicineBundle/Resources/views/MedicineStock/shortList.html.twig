@@ -32,6 +32,15 @@
                 <div class="portlet box green ">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Stock Short List</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a  href="{{ path('medicine_prepurchase_create') }}" id="btn-create-barcode" class="btn yellow" >
+                                    Pre-Purchase Generate
+                                    <i class="icon-barcode"></i>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
@@ -96,7 +105,7 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr {% if entity.minQuantity > 0 and entity.remainingQuantity <= entity.minQuantity %} class="min" {% endif %}>
-                                        <td><input type="checkbox" class="checkbox"></td>
+                                        <td><input type="checkbox" class="checkbox stockId" id=""  value="{{ entity.id }}"></td>
                                         <td class="numeric" >{{ entity.sku }}</td>
                                         {% if entity.mode == 'medicine' %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
@@ -146,4 +155,20 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
+
+    var itemArr = $.cookie('stockIds') ? $.cookie('stockIds').split(',') : [];
+    $('body').on('change', 'input.stockId', function(el) {
+        console.log(itemArr);
+        var val = $(this).val();
+        if($(this).prop('checked')) {
+        itemArr.push(val);
+        }else{
+        var index = itemArr.indexOf(val);
+        if (index > -1) {
+        itemArr.splice(index, 1);
+        }
+        }
+        $.cookie('barcodes', itemArr, {path: '/'});
+    });
+
 {% endblock %}

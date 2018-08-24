@@ -102,6 +102,7 @@
     <img src="{{ asset_url }}" alt="" />
     {% endimage %}
 </a>
+
    {# <div class="navbar hor-menu hidden-phone hidden-tablet">
         <div class="navbar-inner">
             {{ knp_menu_render('SettingAppearanceBundle:HorizontalBuilder:mainMenu', {'template':'SettingAppearanceBundle:Menu:horizontal-menu.html.twig','currentClass': 'active'}) }}
@@ -110,7 +111,6 @@
 
     {% if is_granted('ROLE_CUSTOMER') %}
         {{ include('customer/topbar.html.twig')}}
-
     {% else %}
        {# {% render controller("SettingToolBundle:BackendWidget:topBar") %}#}
         {{ include('SettingToolBundle:Widget:common.html.twig')}}
@@ -266,6 +266,13 @@
         </div>
     {% endblock navigation %}
     <div class="page-content" >
+        <div class="container-fluid">
+            <form class="search-form" action="" method="get" name="itemSearch" style="margin-bottom:0;">
+                <div class="row-fluid">
+                    <input type="text" id="name" name="name" style="border: 5px solid #c49f47 !important; height: 50px !important; background: #ffffff !important;"  class="span12 m-wrap select2GenericMedicine" value=""  autocomplete="off" placeholder="Enter medicine or generic name ">
+                </div>
+            </form>
+        </div>
         {% block body %}{% endblock %}
     </div>
     <div id="confirm-content" style="display:none">
@@ -456,6 +463,27 @@
              $('#messenger-block').hide();
         });
 
+
+        $( ".select2GenericMedicine" ).autocomplete({
+
+            source: function( request, response ) {
+                $.ajax( {
+                    url: Routing.generate('medicine_search_medicine_generic_complete'),
+                    data: {
+                        term: request.term
+                    },
+                    success: function( data ) {
+                        response( data );
+                    }
+                } );
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                $("#medicineId").val(ui.item.id); // save selected id to hidden input
+
+            }
+        });
+
         $(document).on('click', '#calculator-close', function() {
             $('#calculator-block').hide();
         });
@@ -483,6 +511,11 @@
     .header .brand{
         width: auto!important;
     }
+    .ui-widget.ui-widget-content{
+        width: 90% !important;
+    }
+
+
 </style>
 {#{% block footer %}
     <div class="footer">
