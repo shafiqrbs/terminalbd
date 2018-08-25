@@ -220,7 +220,7 @@ class MedicineSalesItemRepository extends EntityRepository
         $i = 1;
         /* @var $entity MedicineSalesItem */
         foreach ($entities as $entity) {
-            $data .= "<tr id='remove-{$entity->getId()}>";
+            $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td class='span1' >{$i}.</td>";
             $data .= "<td class='span4' >{$entity->getMedicineStock()->getName()}</td>";
             $data .= "<td class='span2' >{$entity->getSalesPrice()}</td>";

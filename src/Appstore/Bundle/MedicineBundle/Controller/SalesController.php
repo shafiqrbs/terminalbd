@@ -248,9 +248,9 @@ class SalesController extends Controller
     public function salesItemDeleteAction(MedicineSales $invoice, MedicineSalesItem $particular){
 
         $em = $this->getDoctrine()->getManager();
-        $item = $particular->getMedicinePurchaseItem();
+     //   $item = $particular->getMedicinePurchaseItem();
         $stock = $particular->getMedicineStock();
-	    $this->get('session')->set('item', $item);
+	  //  $this->get('session')->set('item', $item);
 	    $this->get('session')->set('stock', $stock);
 
 	    if (!$particular) {
@@ -258,9 +258,9 @@ class SalesController extends Controller
         }
         $em->remove($particular);
         $em->flush();
-	    $item = $this->get('session')->get('item');
+	 //   $item = $this->get('session')->get('item');
 	    $stock = $this->get('session')->get('stock');
-	    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
+	 //   $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
         $msg = 'Medicine added successfully';
