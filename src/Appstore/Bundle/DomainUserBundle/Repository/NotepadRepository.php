@@ -24,6 +24,7 @@ class NotepadRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+	    $qb->andWhere("e.content IS NOT NULL");
 	    $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();

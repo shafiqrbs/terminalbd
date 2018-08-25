@@ -266,6 +266,7 @@
         </div>
     {% endblock navigation %}
     <div class="page-content" >
+        {% if app.user.globaloption is not empty and app.user.globaloption is defined and app.user.role == 'ROLE_MEDICINE' %}
         <div class="container-fluid">
             <form class="search-form" action="" method="get" name="itemSearch" style="margin-bottom:0;">
                 <div class="row-fluid">
@@ -273,6 +274,7 @@
                 </div>
             </form>
         </div>
+        {% endif %}
         {% block body %}{% endblock %}
     </div>
     <div id="confirm-content" style="display:none">

@@ -16,7 +16,7 @@ class MedicineImportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  color name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  medicine import file name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  file name'))
             )))

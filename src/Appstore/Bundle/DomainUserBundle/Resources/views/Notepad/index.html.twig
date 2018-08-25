@@ -39,16 +39,25 @@
                             </div>
                         </div>#}
                     </div>
-                    <div class="portlet-body">
-                        <div class="portlet-body flip-scroll">
-                            <form class="" action="" method="get" name="xxx">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <textarea rows="4" data-url="{{ path('domain_notepad_insert',{'id':notepad.id}) }}" id="notes" name="notes"  class="span12 m-wrap"   autocomplete="off" placeholder="Enter daily note">{{ notepad.content }}</textarea>
-                                        <input type="hidden" id="notepad" name="notepad" value="{{ notepad.id }}">
-                                    </div>
+                    <div class="portlet-body form">
+                        <form class="" action="" method="get" name="xxx">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <textarea rows="4"  id="notes" name="notes"  class="span12 m-wrap"   autocomplete="off" placeholder="Enter daily note">{{ notepad.content }}</textarea>
+                                    <input type="hidden" id="notepad" name="notepad" value="{{ notepad.id }}">
                                 </div>
-                            </form>
+                            </div>
+                            <div class="clearfix"><br/></div>
+                            <!--/span-->
+                            <div class="form-actions portlet box grey">
+                                <div class="pull-right">
+                                    <button type="button" data-url="{{ path('domain_notepad_insert',{'id':notepad.id}) }}" class="btn green saveBtn"><i class="icon-save"></i> Save</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="clearfix"><br/></div>
+                        <div class="portlet-body flip-scroll">
+
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span6">
@@ -83,11 +92,13 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric">{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric">{{ entity.content|raw }}</td>
+                                        <td class="numeric">{{ entity.content|truncate(120)|raw }}</td>
                                         <td class="numeric">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
                                                 <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_notepad_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
-                                             {% endif %}
+                                            {% endif %}
+                                            <a class="btn mini blue" href="{{ path('domain_notepad_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
+
                                         </td>
                                     </tr>
                                 {% endfor %}

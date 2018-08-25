@@ -23,7 +23,7 @@ var table = $('#attendance').DataTable( {
     }
 });
 
-$(document).on('keypress', '#notes', function() {
+$(document).on('click', '.saveBtn', function() {
 
     var notes = $('#notes').val();
     var url = $(this).attr("data-url");

@@ -30,7 +30,7 @@ class Excel
 	        $strength  = $item['Strength'];
 	        $dosage = $item['Dosage'];
             $name = $this->getDoctrain()->getRepository('MedicineBundle:MedicineBrand')->findOneBy(array('name' => $name,'strength' => $strength,'medicineForm' => $dosage));
-	        if(empty($name)) {
+	        if(empty($name) and !empty($item['BrandName']) ) {
 
 		        $medicine = new MedicineBrand();
 		        $medicine->setMedicineCompany( $this->getMedicineCompany( $item ) );
@@ -69,9 +69,9 @@ class Excel
 
 	private function getMedicineGeneric($item)
 	{
-		$genericName = $this->getCachedData('GenericName', $item['GenericName']);
+		$generic = $this->getCachedData('GenericName', $item['GenericName']);
 		$genericRepository = $this->getMedicineGenericRepository();
-		if($genericName == NULL) {
+		if($generic == NULL) {
 
 			$generic = $genericRepository->findOneBy(array(
 				'name'                => $item['GenericName']
