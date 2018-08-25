@@ -58,7 +58,7 @@ class MedicineImport
 	protected $path;
 
 	/**
-	 * @Assert\File(maxSize="8388608")
+	 * @Assert\File(maxSize="")
 	 */
 	protected $file;
 
