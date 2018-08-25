@@ -159,6 +159,11 @@ class GlobalOption
     protected $domainUser;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Notepad", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $notepads;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $dailyAttendance;

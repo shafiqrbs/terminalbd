@@ -25,13 +25,13 @@ class Notepad
     private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="customers")
+	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="notepads")
 	 * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	protected $globalOption;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="notePad")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="notepad")
      **/
     protected $user;
 

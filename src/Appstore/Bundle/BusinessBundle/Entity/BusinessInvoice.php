@@ -38,7 +38,7 @@ class BusinessInvoice
     private $businessConfig;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessReverse", inversedBy="businessInvoice")
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessReverse", mappedBy="businessInvoice")
      **/
     private $businessReverse;
 

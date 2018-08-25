@@ -219,6 +219,11 @@ class User extends BaseUser
     protected $domainUser;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Notepad", mappedBy="user" , cascade={"persist", "remove"})
+     **/
+    protected $notepad;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", mappedBy="replyUser" , cascade={"persist", "remove"})
      **/
 
