@@ -118,267 +118,281 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="span12 patient-info">
-                    <div class="row-fluid customer-add">
-                        <div class="span4">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <h4>Personal Information</h4>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Patient Name</span><span class="required">*</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.name) }}
-                                            {{ form_errors(form.customer.name) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Mobile no</span><span class="required">*</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.mobile) }}
-                                            {{ form_errors(form.customer.mobile) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Date of Birth & Marital Status</span></label>
-                                        <div class="controls span6">
-                                            {{ form_widget(form.customer.dob) }}
-                                            {{ form_errors(form.customer.dob) }}
-                                        </div>
-                                        <div class="controls span6">
-                                            {{ form_widget(form.customer.maritalStatus) }}
-                                            {{ form_errors(form.customer.maritalStatus) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Gender & Age</span><span class="required">*</span></label>
-                                        <div class="controls span4">
-                                            {{ form_widget(form.customer.gender) }}
-                                        </div>
-                                        <div class="controls span5">
-                                            {{ form_widget(form.customer.age) }}
-                                        </div>
-                                        <div class="controls span3">
-                                            {{ form_widget(form.customer.ageType) }}
-
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="controls">
-                                            {{ form_errors(form.customer.gender) }}
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="controls">
-                                            {{ form_errors(form.customer.age) }}
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="controls">
-                                            {{ form_errors(form.customer.ageType) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Profession</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.profession) }}
-                                            {{ form_errors(form.customer.profession) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Father/Spouse Name</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.fatherName) }}
-                                            {{ form_errors(form.customer.fatherName) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Mother Name</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.motherName) }}
-                                            {{ form_errors(form.customer.motherName) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="span4">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                   <h4>Other Information</h4>
-                                </div>
-                            </div>
-
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Nationality & Religion</span></label>
-                                        <div class="controls span6">
-                                            {{ form_widget(form.customer.nationality) }}
-                                        </div>
-                                        <div class="controls span6">
-                                            {{ form_widget(form.customer.religion) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Address</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.address) }}
-                                            {{ form_errors(form.customer.address) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Location</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.location) }}
-                                            {{ form_errors(form.customer.location) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Guardian Name<span class="required">*</span></span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.alternativeContactPerson) }}
-                                            {{ form_errors(form.customer.alternativeContactPerson) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Relationship with the Patient<span class="required">*</span></span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.alternativeRelation) }}
-                                            {{ form_errors(form.customer.alternativeRelation) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Guardian Mobile No<span class="required">*</span></span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.alternativeContactMobile) }}
-                                            {{ form_errors(form.customer.alternativeContactMobile) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="span4">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <h4>Admission Information</h4>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Blood Group</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.bloodGroup) }}
-                                            {{ form_errors(form.customer.bloodGroup) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Cabin/Ward/Bed<span class="required">*</span></span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.cabin) }}
-                                            {{ form_errors(form.cabin) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Assign Doctor</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.assignDoctor) }}
-                                            {{ form_errors(form.assignDoctor) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Department</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.department) }}
-                                            {{ form_errors(form.department) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label red" for=""><span>Disease<span class="required">*</span></span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.disease) }}
-                                            {{ form_errors(form.disease) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <button type="submit" class="btn blue span12"><i class="icon-save"></i> Add Patient Information</button>
-                                </div>
+                <div class="form-actions portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Personnel</div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="row-fluid">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Patient Name</span><span class="required">*</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.name) }}
+                                {{ form_errors(form.customer.name) }}
                             </div>
                         </div>
                     </div>
-                 </div>
-            </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Mobile no</span><span class="required">*</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.mobile) }}
+                                {{ form_errors(form.customer.mobile) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName">Age<span class="required">*</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.age) }}
+                                {{ form_widget(form.customer.ageType) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Gender</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.gender) }}
+                                {{ form_errors(form.customer.gender) }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row-fluid">
+
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Father/Spouse Name</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.fatherName) }}
+                                {{ form_errors(form.customer.fatherName) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Mother Name</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.motherName) }}
+                                {{ form_errors(form.customer.motherName) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Date of Birth</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.dob) }}
+                                {{ form_errors(form.customer.dob) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Marital Status</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.maritalStatus) }}
+                                {{ form_errors(form.customer.maritalStatus) }}
+                            </div>
+                        </div>
+                    </div>
+               </div>
+                <div class="row-fluid">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Guardian Name</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.alternativeContactPerson) }}
+                                {{ form_errors(form.customer.alternativeContactPerson) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Relationship with the Patient</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.alternativeRelation) }}
+                                {{ form_errors(form.customer.alternativeRelation) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Guardian Mobile No</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.alternativeContactMobile) }}
+                                {{ form_errors(form.customer.alternativeContactMobile) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix">&nbsp;</div>
+                <div class="form-actions portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Admission</div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="row-fluid">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Cabin/Ward/Bed<span class="required">*</span></span></label>
+                            <div class="controls">
+                                {{ form_widget(form.cabin) }}
+                                {{ form_errors(form.cabin) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Blood Group</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.bloodGroup) }}
+                                {{ form_errors(form.customer.bloodGroup) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Assign Doctor</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.assignDoctor) }}
+                                {{ form_errors(form.assignDoctor) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Department</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.department) }}
+                                {{ form_errors(form.department) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Weight</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.weight) }}
+                                {{ form_errors(form.customer.weight) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Height</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.height) }}
+                                {{ form_errors(form.customer.height) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Blood Pressure</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.bloodPressure) }}
+                                {{ form_errors(form.customer.bloodPressure) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Diabetes</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.diabetes) }}
+                                {{ form_errors(form.customer.diabetes) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label class="control-label red" for=""><span>Disease<span class="required">*</span></span></label>
+                            <div class="controls">
+                                {{ form_widget(form.disease) }}
+                                {{ form_errors(form.disease) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix">&nbsp;</div>
+                <div class="form-actions portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Address</div>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="row-fluid">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Location</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.location) }}
+                                {{ form_errors(form.customer.location) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span9">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Address</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.address) }}
+                                {{ form_errors(form.customer.address) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="row-fluid">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Profession</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.profession) }}
+                                {{ form_errors(form.customer.profession) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Nationality</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.nationality) }}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label red" for="firstName"><span>Religion</span></label>
+                            <div class="controls">
+                                {{ form_widget(form.customer.religion) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid"><br/></div>
+                <div class="form-actions portlet box grey">
+                    <div class="pull-right">
+                        <button type="submit" class="btn green"><i class="icon-save"></i>  Save & Continue</button>
+                    </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
             </div>
             <div class="clearfix">&nbsp;</div>
             <div {% if (entity.customer is defined and entity.customer is empty) or admissionForm == 'show' %} style="display:none" {% endif %}>
@@ -655,7 +669,8 @@
                             </div>
                         </div>
 
-                        #}<div class="row-fluid">
+                        #}
+                        <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName"><span class="label">Discount TK.</span>

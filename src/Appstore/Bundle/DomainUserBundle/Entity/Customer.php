@@ -302,11 +302,32 @@ class Customer
     private $age;
 
     /**
-     * @var integer
+     * @var string
      *
      * @ORM\Column(name="weight", type="string",length=50, nullable = true)
      */
     private $weight;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="bloodPressure", type="string",length=20, nullable = true)
+	 */
+	private $bloodPressure;
+
+    /**
+	 * @var string
+	 *
+	 * @ORM\Column(name="diabetes", type="string",length=30, nullable = true)
+	 */
+	private $diabetes;
+
+    /**
+	 * @var string
+	 *
+	 * @ORM\Column(name="height", type="string",length=20, nullable = true)
+	 */
+	private $height;
 
     /**
      * @var string
@@ -1005,6 +1026,48 @@ class Customer
     {
         return $this->businessInvoices;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getBloodPressure() {
+		return $this->bloodPressure;
+	}
+
+	/**
+	 * @param string $bloodPressure
+	 */
+	public function setBloodPressure( string $bloodPressure ) {
+		$this->bloodPressure = $bloodPressure;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getHeight(){
+		return $this->height;
+	}
+
+	/**
+	 * @param string $height
+	 */
+	public function setHeight( string $height ) {
+		$this->height = $height;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDiabetes(): string {
+		return $this->diabetes;
+	}
+
+	/**
+	 * @param string $diabetes
+	 */
+	public function setDiabetes( string $diabetes ) {
+		$this->diabetes = $diabetes;
+	}
 
 }
 

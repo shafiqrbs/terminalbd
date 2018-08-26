@@ -252,11 +252,7 @@
             <div class="row-fluid"><br/></div>
             <div class="form-actions portlet box grey">
                 <div class="pull-right">
-                    <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
-                    <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
-                    {% if(entity.id > 0 ) %}
-                        <a href="{{ path('hms_doctor_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
-                    {% endif %}
+                    <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
                 </div>
             </div>
             {{ form_end(form) }}

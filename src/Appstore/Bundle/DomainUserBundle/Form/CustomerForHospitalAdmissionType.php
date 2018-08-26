@@ -28,37 +28,42 @@ class CustomerForHospitalAdmissionType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 patientName','autocomplete'=>'off','placeholder'=>'Enter patient name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 patientName','autocomplete'=>'off','placeholder'=>'patient name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient name')),
+                    new NotBlank(array('message'=>'patient name')),
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 select2mobile','autocomplete'=>'off','placeholder'=>'Enter mobile no'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span8 select2mobile','autocomplete'=>'off','placeholder'=>'mobile no'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient mobile no')),
+                    new NotBlank(array('message'=>'patient mobile no')),
                 )
             ))
-            ->add('customerId','text', array('attr'=>array('class'=>'m-wrap span12 select2CustomerCode','autocomplete'=>'off','placeholder'=>'Enter customer code')))
-            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter father/spouse name'),
+            ->add('customerId','text', array('attr'=>array('class'=>'m-wrap span12 select2CustomerCode','autocomplete'=>'off','placeholder'=>'customer code')))
+            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'father/spouse name'),
 
             ))
-            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter mother name'),
+            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'mother name'),
 
             ))
-            ->add('religion','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter religion'),
+            ->add('religion','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'religion'),
 
             ))
-            ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter profession'),
+            ->add('weight','text', array('attr'=>array('class'=>'m-wrap span8','autocomplete'=>'off','placeholder'=>'weight')))
+            ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span8','autocomplete'=>'off','placeholder'=>'BP')))
+            ->add('height','text', array('attr'=>array('class'=>'m-wrap span8','autocomplete'=>'off','placeholder'=>'height')))
+            ->add('diabetes','text', array('attr'=>array('class'=>'m-wrap span8','autocomplete'=>'off','placeholder'=>'diabetes')))
+
+            ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'profession'),
 
             ))
-            ->add('nationality','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter nationality'),
+            ->add('nationality','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'nationality'),
 
             ))
-            ->add('dob','text', array('attr'=>array('class'=>'m-wrap span12 dateCalendar','placeholder'=>'Enter patient date of birth'),
+            ->add('dob','text', array('attr'=>array('class'=>'m-wrap span8 dateCalendar','placeholder'=>'patient date of birth'),
                 ))
-            ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric patientAge','placeholder'=>'Enter patient age'),
+            ->add('age','number', array('attr'=>array('class'=>'m-wrap span8 numeric patientAge','placeholder'=>'age'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient age')),
+                    new NotBlank(array('message'=>'patient age')),
             )))
             ->add('bloodGroup', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
@@ -66,49 +71,47 @@ class CustomerForHospitalAdmissionType extends AbstractType
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
             ))
             ->add('ageType', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom ageType'),
+                'attr'=>array('class'=>'m-wrap span4 select-custom ageType'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient age type')),
+                    new NotBlank(array('message'=>'patient age type')),
                 ),
                 'choices' => array('Years' => 'Years','Months' => 'Months','Day' => 'Day')
             ))
             ->add('gender', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom gender'),
+                'attr'=>array('class'=>'span8 m-wrap select-custom gender'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),
             ))
             ->add('maritalStatus', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom maritalStatus'),
+                'attr'=>array('class'=>'span8 m-wrap select-custom maritalStatus'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array('Single' => 'Single','Married' => 'Married', 'Divorced' => 'Divorced','Widow'=>'Widow'),
             ))
 
-            ->add('alternativeContactPerson','text', array('attr'=>array('class'=>'m-wrap span12 numeric patientAge','placeholder'=>'Enter guardian name'),
+            ->add('alternativeContactPerson','text', array('attr'=>array('class'=>'m-wrap span12 numeric patientAge','placeholder'=>'guardian name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter guardian name')),
+                    new NotBlank(array('message'=>'guardian name')),
             )))
 
-            ->add('alternativeContactPerson','text', array('attr'=>array('class'=>'m-wrap span12 alternativeContactPerson','placeholder'=>'Enter guardian name'),
+            ->add('alternativeContactPerson','text', array('attr'=>array('class'=>'m-wrap span12 alternativeContactPerson','placeholder'=>'guardian name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter guardian name')),
+                    new NotBlank(array('message'=>'guardian name')),
             )))
 
-            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span12 numeric mobile alternativeContactMobile','placeholder'=>'Enter guardian mobile no'),
+            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span8 numeric mobile alternativeContactMobile','placeholder'=>'guardian mobile no'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter guardian mobile no')),
+                    new NotBlank(array('message'=>'guardian mobile no')),
             )))
 
-            ->add('alternativeRelation','text', array('attr'=>array('class'=>'m-wrap span12  alternativeRelation','placeholder'=>'Enter Relationship with the Patient'),
+            ->add('alternativeRelation','text', array('attr'=>array('class'=>'m-wrap span12  alternativeRelation','placeholder'=>'Relationship with the Patient'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter Relationship with the Patient')),
+                    new NotBlank(array('message'=>'Relationship with the Patient')),
             )))
-
-
-            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize','rows'=> 4,'autocomplete'=>'off','placeholder'=>'Enter patient address')
+			->add('address','text', array('attr'=>array('class'=>'m-wrap span12 resize','rows'=> 4,'autocomplete'=>'off','placeholder'=>'patient address')
             ))
             ->add('location', 'entity', array(
                 'required'    => false,

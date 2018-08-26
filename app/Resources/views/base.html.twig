@@ -266,7 +266,12 @@
         </div>
     {% endblock navigation %}
     <div class="page-content" >
-        {% if app.user.globaloption is not empty and app.user.globaloption is defined and app.user.role == 'ROLE_MEDICINE' %}
+        {%  set modules = app.user.globaloption.siteSetting.appModules %}
+        {% set menuNames = [] %}
+        {% for key in modules %}
+            {% set menuNames = menuNames|merge([key.moduleClass]) %}
+        {% endfor %}
+        {% if app.user.globaloption is not empty and app.user.globaloption is defined and 'Miss' in menuNames|keys %}
         <div class="container-fluid">
             <form class="search-form" action="" method="get" name="itemSearch" style="margin-bottom:0;">
                 <div class="row-fluid">
@@ -513,7 +518,7 @@
     .header .brand{
         width: auto!important;
     }
-    .ui-widget.ui-widget-content{
+    .ui-autocomplete{
         width: 90% !important;
     }
 

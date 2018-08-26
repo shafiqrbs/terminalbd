@@ -97,8 +97,8 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 .form-horizontal .patient-info .control-label{
     float: left;
     text-align: left;
-    background: #8a8a8a;
-    color: #fff;
+    background: #e6e0e06e;
+    color: #000;
     margin:0!important;
     width: 100%;
     font-size: 14px;
