@@ -266,7 +266,8 @@
         </div>
     {% endblock navigation %}
     <div class="page-content" >
-        {%  set modules = app.user.globaloption.siteSetting.appModules %}
+        {% if app.user.globaloption.siteSetting.appModules is defined and app.user.globaloption.siteSetting.appModules not empty %}
+        {% set modules = app.user.globaloption.siteSetting.appModules %}
         {% set menuNames = [] %}
         {% for key in modules %}
             {% set menuNames = menuNames|merge([key.moduleClass]) %}
@@ -279,6 +280,7 @@
                 </div>
             </form>
         </div>
+        {% endif %}
         {% endif %}
         {% block body %}{% endblock %}
     </div>
