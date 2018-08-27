@@ -266,7 +266,7 @@
         </div>
     {% endblock navigation %}
     <div class="page-content" >
-        {% if app.user.globaloption.siteSetting.appModules is defined and app.user.globaloption.siteSetting.appModules not empty %}
+        {% if app.user.globaloption.siteSetting.appModules is defined and app.user.globaloption.siteSetting.appModules is not empty %}
         {% set modules = app.user.globaloption.siteSetting.appModules %}
         {% set menuNames = [] %}
         {% for key in modules %}
