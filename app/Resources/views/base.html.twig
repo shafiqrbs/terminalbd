@@ -276,13 +276,8 @@
         <div class="container-fluid">
             <form class="search-form" action="" method="get" name="itemSearch" style="margin-bottom:0;">
                 <div class="row-fluid">
-                    <div id="project-label">Select a project (type "j" for a start):</div>
-                <img id="project-icon" src="images/transparent_1x1.png" class="ui-state-default" alt="">
-                <input id="project">
-                <input type="hidden" id="project-id">
-                <p id="project-description"></p>
+                    <input type="text" id="name" name="name" style="border: 5px solid #c49f47 !important; height: 50px !important; background: #ffffff !important;"  class="span12 m-wrap select2GenericMedicine" value=""  autocomplete="off" placeholder="Enter medicine or generic name ">
                 </div>
-
             </form>
         </div>
         {% endif %}
@@ -478,9 +473,8 @@
         });
 
 
-        $( "#project" ).autocomplete({
+        $( ".select2GenericMedicine" ).autocomplete({
 
-            minLength: 0,
             source: function( request, response ) {
                 $.ajax( {
                     url: Routing.generate('medicine_search_medicine_generic_complete'),
@@ -492,25 +486,11 @@
                     }
                 } );
             },
-            focus: function( event, ui ) {
-                $( "#project" ).val( ui.item.label );
-                return false;
-            },
+            minLength: 2,
             select: function( event, ui ) {
-                $( "#project" ).val( ui.item.label );
-                $( "#project-id" ).val( ui.item.value );
-                $( "#project-description" ).html( ui.item.desc );
-                $( "#project-icon" ).attr( "src", "images/" + ui.item.icon );
+                $("#medicineId").val(ui.item.id); // save selected id to hidden input
 
-                return false;
             }
-        })
-            .autocomplete( "instance" )._renderItem = function( ul, item ) {
-            return $( "<li>" )
-                .append( "<div>" + item.label + "<br>" + item.desc + "</div>" )
-                .appendTo( ul );
-        };
-
         });
 
         $(document).on('click', '#calculator-close', function() {
@@ -636,21 +616,6 @@
         }
         .pagination ul>li>a, .pagination ul>li>span{
             padding: 4px 23px;
-        }
-
-        #project-label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 1em;
-        }
-        #project-icon {
-            float: left;
-            height: 32px;
-            width: 32px;
-        }
-        #project-description {
-            margin: 0;
-            padding: 0;
         }
     }
 

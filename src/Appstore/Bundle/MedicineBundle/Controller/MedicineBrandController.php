@@ -329,6 +329,8 @@ class MedicineBrandController extends Controller
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineGenericAutoComplete($item);
             foreach ($entities as $entity):
                 $items[] = array('id' => $entity['id'], 'value' => $entity['text']);
+	         //   $items[] = array('value' => $entity['id'], 'label' => $entity['text'], 'desc' => $entity['text'], 'icon' => 'img/avatar.png');
+
             endforeach;
         }
         return new JsonResponse($items);
@@ -367,7 +369,7 @@ class MedicineBrandController extends Controller
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineFormAutoComplete($item);
             foreach ($entities as $entity):
-				$items[] = array('value' => $entity['id'], 'label' => $entity['text'], 'desc' => $entity['text'], 'icon' => $entity['text']);
+                $items[] = array('id' => $entity['id'], 'value' => $entity['text']);
             endforeach;
         }
         return new JsonResponse($items);
