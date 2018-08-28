@@ -42,6 +42,7 @@ class MedicineImportController extends Controller
 		$entity = new MedicineImport();
 		$form = $this->createCreateForm($entity);
 		$form->handleRequest($request);
+		$data = $request->request->all();
 		if ($form->isValid()) {
 
 			$em = $this->getDoctrine()->getManager();
@@ -49,6 +50,7 @@ class MedicineImportController extends Controller
 			/** @var $file UploadedFile */
 
 			$file = $entity->getFile();
+
 			$fileName = $file->getClientOriginalName();
 			$imgName =  uniqid(). '.' .$fileName;
 			// moves the file to the directory where brochures are stored
@@ -62,6 +64,7 @@ class MedicineImportController extends Controller
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been added successfully"
 			);
+			$this->getDoctrine()->getRepository('SettingToolBundle:MedicineImport')->fileUpload($entity,$data);
 			return $this->redirect($this->generateUrl('medicine_import'));
 		}
 
@@ -105,7 +108,8 @@ class MedicineImportController extends Controller
 	public function excelDataImportAction(MedicineImport $excelImporter)
 	{
 
-		set_time_limit(0);
+		//set_time_limit(0);
+		ini_set('max_execution_time', 0);
 		ignore_user_abort(true);
 		$em = $this->getDoctrine()->getManager();
 		$importer = $this->get('appstore_medicine_importer_excel');
