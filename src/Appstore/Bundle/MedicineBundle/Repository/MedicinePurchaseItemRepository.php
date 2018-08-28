@@ -121,7 +121,26 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return  $qb;
     }
 
-    public function expiryMedicineSearch($config,$data = array(),$instant = ''){
+	public function expiryMedicineCount($user){
+
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+    	$qb = $this->createQueryBuilder('mpi');
+		$qb->join('mpi.medicinePurchase','e');
+		$qb->select('COUNT(mpi.id) as countId');
+		$qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+		$qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
+		$qb->andWhere('mpi.expirationStartDate IS NOT NULL');
+		$qb->andWhere('mpi.remainingQuantity > 0');
+		$datetime = new \DateTime();
+		$start = $datetime->format('Y-m-d 00:00:00');
+		$qb->andWhere("mpi.expirationEndDate >= :startDate");
+		$qb->setParameter('startDate', $start);
+		$count = $qb->getQuery()->getOneOrNullResult()['countId'];
+		return  $count;
+	}
+
+
+	public function expiryMedicineSearch($config,$data = array(),$instant = ''){
 
         $qb = $this->createQueryBuilder('mpi');
         $qb->join('mpi.medicinePurchase','e');

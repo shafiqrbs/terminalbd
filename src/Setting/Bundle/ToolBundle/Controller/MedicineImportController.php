@@ -5,6 +5,7 @@ namespace Setting\Bundle\ToolBundle\Controller;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Setting\Bundle\ToolBundle\Entity\MedicineImport;
 use Setting\Bundle\ToolBundle\Form\MedicineImportType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -41,10 +42,21 @@ class MedicineImportController extends Controller
 		$entity = new MedicineImport();
 		$form = $this->createCreateForm($entity);
 		$form->handleRequest($request);
-
 		if ($form->isValid()) {
+
 			$em = $this->getDoctrine()->getManager();
-			$entity->upload();
+
+			/** @var $file UploadedFile */
+
+			$file = $entity->getFile();
+			$fileName = $file->getClientOriginalName();
+			$imgName =  uniqid(). '.' .$fileName;
+			// moves the file to the directory where brochures are stored
+			$file->move(
+				$entity->getUploadDir(),
+				$imgName
+			);
+			$entity->setPath($imgName);
 			$em->persist($entity);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(

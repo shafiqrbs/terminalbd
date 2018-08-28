@@ -71,6 +71,20 @@ class MedicineStockRepository extends EntityRepository
         return  $qb;
     }
 
+	public function findMedicineShortListCount($user)
+	{
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$qb = $this->createQueryBuilder('item');
+		$qb->select('COUNT(item.id) as totalShortList');
+		$qb->where("item.medicineConfig = :config");
+		$qb->setParameter('config', $config);
+		$qb->andWhere("item.minQuantity > 0");
+		$qb->andWhere("item.minQuantity >= item.remainingQuantity");
+		$count = $qb->getQuery()->getOneOrNullResult()['totalShortList'];
+		return  $count;
+
+	}
+
     public function findWithShortListSearch($config,$data)
     {
 
@@ -78,7 +92,6 @@ class MedicineStockRepository extends EntityRepository
         $brand = isset($data['brandName'])? $data['brandName'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
         $minQnt = isset($data['minQnt'])? $data['minQnt'] :'';
-
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.medicineConfig = :config");
         $qb->setParameter('config', $config);
@@ -93,7 +106,6 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("item.brandName", "'%$brand%'"  ));
         }
         if (!empty($item)) {
-
             $qb->andWhere("item.name = :name");
             $qb->setParameter('name', $item);
         }

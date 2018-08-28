@@ -10,8 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * MedicineImport
  *
- * @ORM\Table("medicine_excel_import")
- * @ORM\Entity()
+ * @ORM\Table("tools_medicine_import")
+ * @ORM\Entity(repositoryClass="Setting\Bundle\ToolBundle\Repository\MedicineImportRepository")
  */
 class MedicineImport
 {
@@ -124,7 +124,7 @@ class MedicineImport
 		return __DIR__.'/../../../../../web/'.$this->getUploadDir();
 	}
 
-	protected function getUploadDir()
+	public function getUploadDir()
 	{
 		return 'uploads/medicine/';
 	}
@@ -203,6 +203,13 @@ class MedicineImport
 	 */
 	public function setProgress( string $progress ) {
 		$this->progress = $progress;
+	}
+
+	/**
+	 * @param mixed $path
+	 */
+	public function setPath( $path ) {
+		$this->path = $path;
 	}
 
 

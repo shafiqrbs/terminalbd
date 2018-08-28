@@ -31,7 +31,10 @@ class DefaultController extends Controller
 	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
 	    $medicineSalesMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->medicineSalesMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 	    $medicinePurchaseMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->medicinePurchaseMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
-	 //   $purchaseUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    $shortMedicineCount = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findMedicineShortListCount($user);
+	    $expiryMedicineCount = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->expiryMedicineCount($user);
+
+	    //   $purchaseUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 	  //  $userSalesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 
 	    $employees = $this->getDoctrine()->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
@@ -64,6 +67,8 @@ class DefaultController extends Controller
             'salesUserReport'           => $salesUserReport ,
             'userSalesAmount'           => $userSalesAmount ,
             'employees'                 => $employees ,
+            'shortMedicineCount'        => $shortMedicineCount ,
+            'expiryMedicineCount'       => $expiryMedicineCount ,
             'searchForm'                => $data ,
         ));
 
