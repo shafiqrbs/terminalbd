@@ -613,8 +613,8 @@ class AccountSalesRepository extends EntityRepository
 
 	    $sales = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user, $data);
 	    $purchase = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesItemPurchaseSalesOverview($user, $data);
-	    $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['purchasePrice'], 'expenditures' => $expenditures);
+	    $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
+        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
         return $data;
 
     }
@@ -634,7 +634,7 @@ class AccountSalesRepository extends EntityRepository
         $sales = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user, $data);
         $purchase = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesItemPurchaseSalesOverview($user, $data);
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['purchasePrice'], 'expenditures' => $expenditures);
+        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
         return $data;
 
     }
