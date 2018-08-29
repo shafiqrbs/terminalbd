@@ -735,7 +735,7 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
             if (empty($resInventory)) {
                 $menu['E-commerce']['Master Data']->addChild('Master Item', array('route' => 'inventory_product'))->setAttribute('icon', 'icon-th-list');
-                $menu['E-commerce']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())))->setAttribute('icon', 'icon-th-list');
+               // $menu['E-commerce']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())))->setAttribute('icon', 'icon-th-list');
                 $menu['E-commerce']['Master Data']->addChild('Custom category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-th-list');
                 $menu['E-commerce']['Master Data']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
             }
