@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 class StockItemController extends Controller
 {
 
-
-
     public function paginate($entities)
     {
 

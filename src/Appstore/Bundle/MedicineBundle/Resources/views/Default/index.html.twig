@@ -182,7 +182,7 @@
                                     <i class="icon-bar-chart"></i>
                                     <div> Stock </div>
                                 </a>
-                                <a href="{{ path('medicine_expiry_item') }}" class="icon-btn">
+                                <a href="{{ path('medicine_stock_short_item') }}" class="icon-btn">
                                     <i class="icon-signal"></i>
                                     <div> Short List </div>
                                     <span class="badge badge-important">{{ shortMedicineCount }}</span>
@@ -192,7 +192,7 @@
                                     <div> Expiration </div>
                                     <span class="badge badge-important">{{ expiryMedicineCount }}</span>
                                 </a>
-                                <a href="{{ path('medicine_stock_short_item') }}" class="icon-btn">
+                                <a href="{{ path('medicine_expiry_item') }}" class="icon-btn">
                                     <i class="icon-th"></i>
                                     <div> Stock Details </div>
                                 </a>
@@ -495,6 +495,7 @@ Dashboard Stats 2
 
         </style>
         <div class="portlet box blue">
+
                 <div class="portlet-body">
                     <div class="row-fluid" >
                         <div class="span6">
@@ -608,10 +609,11 @@ Dashboard Stats 2
     type: "column",
     yValueFormatString: "#,##0.0#"%"",
     dataPoints: [
+    {% set month = "now"|date("m") %}
         {% for employee in employees %}
-            {% set monthSales =  employee.id~'8' %}
+            {% set monthSales =  employee.id~month|number_format %}
             {% if employee.monthlySales > 0 %}
-            { label: "{{ employee.username|capitalize }}", y: {% if monthSales in userSalesAmount|keys and employee.monthlySales is not empty %} {{ ((userSalesAmount[monthSales]*100)/employee.monthlySales)|number_format }}{% endif %},indexLabel: "BDT {{ userSalesAmount[monthSales]|number_format }}" },
+            { label: "{{ employee.username|capitalize }}", y: {% if employee.monthlySales is not empty %} {{ ((userSalesAmount[monthSales]*100)/employee.monthlySales)|number_format }}{% endif %},indexLabel: "BDT {{ userSalesAmount[monthSales]|number_format }}" },
             {% endif %}
         {% endfor %}
     ]

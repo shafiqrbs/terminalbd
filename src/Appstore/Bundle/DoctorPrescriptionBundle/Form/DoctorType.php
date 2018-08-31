@@ -56,14 +56,14 @@ class DoctorType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select doctor from employee list')),
                 ),
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join('e.profile','p')
                         ->where("e.enabled = 1")
                         ->andWhere("e.globalOption =".$this->globalOption->getId())
                         ->andWhere('e.roles LIKE :roles')
-                        ->setParameter('roles', '%"ROLE_DOMAIN_DMS_DOCTOR"%')
+                        ->setParameter('roles', '%"ROLE_DPS_DOCTOR"%')
                         ->orderBy("p.name","ASC");
                 }
             ));

@@ -470,14 +470,16 @@ class SalesController extends Controller
     public function itemSerialNoUpdateAction(SalesItem  $salesItem)
     {
         $serial = $_REQUEST['serial'];
-        $ser = implode(",",$serial);
-        $em = $this->getDoctrine()->getManager();
-        $salesItem->setSerialNo($ser);
-        $salesItem->setAssuranceType($salesItem->getPurchaseItem()->getAssuranceType());
-        $salesItem->setAssuranceFromVendor($salesItem->getPurchaseItem()->getAssuranceFromVendor());
-        $salesItem->setAssuranceToCustomer($salesItem->getPurchaseItem()->getAssuranceToCustomer());
-        $salesItem->setExpiredDate($salesItem->getPurchaseItem()->getExpiredDate());
-        $em->flush();
+        if(!empty($serial)){
+	        $ser = implode(",",$serial);
+	        $em = $this->getDoctrine()->getManager();
+	        $salesItem->setSerialNo($ser);
+	        $salesItem->setAssuranceType($salesItem->getPurchaseItem()->getAssuranceType());
+	        $salesItem->setAssuranceFromVendor($salesItem->getPurchaseItem()->getAssuranceFromVendor());
+	        $salesItem->setAssuranceToCustomer($salesItem->getPurchaseItem()->getAssuranceToCustomer());
+	        $salesItem->setExpiredDate($salesItem->getPurchaseItem()->getExpiredDate());
+	        $em->flush();
+        }
         exit;
     }
 

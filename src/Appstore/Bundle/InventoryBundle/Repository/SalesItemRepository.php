@@ -278,21 +278,20 @@ class SalesItemRepository extends EntityRepository
 
                 $data .= '<tr id="remove-' . $entity->getId() . '">';
                 $data .= '<td class="numeric" >' . $i . '</td>';
-                $data .= '<td class="numeric" >' . $entity->getPurchaseItem()->getBarcode();
-                $data .= '</br><span>' . $itemName . '</span>';
-                $data .= '</td>';
+                $data .= "<td>{$entity->getPurchaseItem()->getBarcode()}</td>";
+                $data .= "<td>{$itemName}</td>";
                 if ($isAttribute == 1){
                     $data .= '<td class="numeric" >'.$option.'</td>';
                 }
                 $data .='<td class="numeric" >';
-                $data .='<input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span12 quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'">';
+                $data .='<input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="td-inline-input quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'">';
                 $data .='</td>';
                 $data .='<td class="" ><div class="input-prepend">';
-                $data .='<span class="add-on add-on-box">';
+                $data .='<span class="add-on-inline add-on-box">';
                 $data .='<input type="hidden" name="estimatePrice" id="estimatePrice-'.$entity->getId().'" value="'.$entity->getEstimatePrice().'">';
                 $data .='<input type="checkbox"  class="customPrice" value="1"  '. $checked .' rel="'.$entity->getId().'" id="customPrice-'.$entity->getId().'">';
                 $data .='</span>';
-                $data .='<input class="m-wrap span6 salesPrice"  '.$readonly.' rel="'.$entity->getId().'" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
+                $data .='<input class="td-inline-input salesPrice"  '.$readonly.' rel="'.$entity->getId().'" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
                 $data .='</div></td>';
                 $data .='<td class="numeric" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
                 $data .="<td class='numeric' >";
@@ -373,6 +372,7 @@ class SalesItemRepository extends EntityRepository
      */
 
     protected function handleSearchBetween($qb,$data)
+
     {
 
         $startDate = isset($data['startDate'])  ? $data['startDate'] : '';

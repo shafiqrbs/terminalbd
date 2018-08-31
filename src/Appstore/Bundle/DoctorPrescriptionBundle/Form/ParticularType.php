@@ -24,7 +24,6 @@ class ParticularType extends AbstractType
 
     function __construct(DpsConfig  $dpsConfig)
     {
-
         $this->dpsConfig = $dpsConfig;
     }
 
