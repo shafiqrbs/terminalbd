@@ -166,6 +166,19 @@ class UserRepository extends EntityRepository
             );
         }
 
+		$reservation = array('reservation');
+        $result = array_intersect($arrSlugs, $reservation);
+        if (!empty($result)) {
+
+            $array['Hotel & Reservation'] = array(
+                'ROLE_HOTEL'                             => 'Hotel & Reservation',
+                'ROLE_HOTEL_INVOICE'                     => 'Invoice',
+                'ROLE_HOTEL_PURCHASE'                    => 'Purchase',
+                'ROLE_HOTEL_STOCK'                       => 'Stock',
+                'ROLE_HOTEL_MANAGER'                     => 'Manager',
+            );
+        }
+
 
         $hms = array('hms');
         $result = array_intersect($arrSlugs, $hms);

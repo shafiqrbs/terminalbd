@@ -4,7 +4,7 @@ site_domain_control:
 
 hotel:
     resource: "@HotelBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /hotel-restaurant
 
 doctor_prescription:
     resource: "@DoctorPrescriptionBundle/Resources/config/routing.yml"

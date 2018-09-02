@@ -9,6 +9,7 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
+use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
@@ -296,6 +297,12 @@ class GlobalOptionRepository extends EntityRepository
         $businessConfig = $this->_em->getRepository('BusinessBundle:BusinessConfig')->findOneBy(array('globalOption'=>$globalOption));
         if(empty($businessConfig)){
             $config = new BusinessConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+        $hotelConfig = $this->_em->getRepository('HotelBundle:HotelConfig')->findOneBy(array('globalOption' => $globalOption));
+        if(empty($hotelConfig)){
+            $config = new HotelConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }

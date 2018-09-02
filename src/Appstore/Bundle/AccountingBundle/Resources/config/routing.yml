@@ -1,3 +1,7 @@
+accounting_account_sales_hotel:
+    resource: "@AccountingBundle/Resources/config/routing/accounthotel.yml"
+    prefix:   /finance/hotel
+
 accounting_account_sales_hospital:
     resource: "@AccountingBundle/Resources/config/routing/accounthospital.yml"
     prefix:   /finance/hms

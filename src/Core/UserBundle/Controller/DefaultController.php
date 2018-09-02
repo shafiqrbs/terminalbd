@@ -39,6 +39,7 @@ class DefaultController extends Controller
                 }
             }
         }
+
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
@@ -55,6 +56,8 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('medicine_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') && $enable == 1 && in_array('business',$apps) ) {
             return $this->redirect($this->generateUrl('business_homepage'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOTEL') && $enable == 1 && in_array('reservation',$apps) ) {
+            return $this->redirect($this->generateUrl('hotel_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1) {
             return $this->redirect($this->generateUrl('website'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {

@@ -42,6 +42,7 @@ class Builder extends ContainerAware
             $menu = $this->manageSystemAccountMenu($menu);
             $menu = $this->PayrollMenu($menu);
             $menu = $this->businessMenu($menu);
+            $menu = $this->reservationMenu($menu);
 
         }
 
@@ -123,6 +124,13 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_BUSINESS') or $securityContext->isGranted('ROLE_DOMAIN')){
                     $menu = $this->BusinessMenu($menu);
+                }
+            }
+
+            $result = array_intersect($menuName, array('Reservation'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_HOTEL') or $securityContext->isGranted('ROLE_DOMAIN')){
+	                $menu = $this->reservationMenu($menu);
                 }
             }
 
@@ -1230,15 +1238,74 @@ class Builder extends ContainerAware
 
     }
 
-    public function ReservationMenu($menu)
-    {
-        $menu
-            ->addChild('Reservation')
-            ->setAttribute('icon', 'fa fa-cog')
-            ->setAttribute('dropdown', true);
-        return $menu;
+	public function reservationMenu($menu)
+	{
 
-    }
+		$securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
+		$menu
+			->addChild('Hotel & Restaurant')
+			->setAttribute('icon', 'icon-briefcase')
+			->setAttribute('dropdown', true);
+
+		if ($securityContext->isGranted('ROLE_HOTEL_INVOICE')) {
+
+			$menu['Hotel & Restaurant']->addChild('Add Invoice', array('route' => 'hotel_invoice_new'))
+			                            ->setAttribute('icon', 'icon-plus-sign');
+			$menu['Hotel & Restaurant']->addChild('Invoice', array('route' => 'hotel_invoice'))
+			                            ->setAttribute('icon', 'icon-th-list');
+		}
+		if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
+			$menu['Hotel & Restaurant']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
+			$menu['Hotel & Restaurant']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
+		}
+		if ($securityContext->isGranted('ROLE_HOTEL_PURCHASE')) {
+
+			$menu['Hotel & Restaurant']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
+			$menu['Hotel & Restaurant']['Purchase']->addChild('Purchase', array('route' => 'hotel_purchase'))
+			                                        ->setAttribute('icon', 'icon-th-list');
+			$menu['Hotel & Restaurant']['Purchase']->addChild('Vendor', array('route' => 'hotel_vendor'))->setAttribute('icon', 'icon-tag');
+		}
+
+		if ($securityContext->isGranted('ROLE_HOTEL_STOCK')) {
+			$menu['Hotel & Restaurant']->addChild('Manage Stock', array('route' => 'hotel_stock'))->setAttribute('icon', 'icon-th-list');
+			$menu['Hotel & Restaurant']->addChild('Manage Damage', array('route' => 'hotel_damage'))->setAttribute('icon', 'icon-trash');
+		}
+
+		if ($securityContext->isGranted('ROLE_HOTEL_PURCHASE')) {
+
+			$menu['Hotel & Restaurant']->addChild('Master Data')
+			                            ->setAttribute('icon', 'icon icon-cog')
+			                            ->setAttribute('dropdown', true);
+			$menu['Hotel & Restaurant']['Master Data']->addChild('Category', array('route' => 'hotel_category'))->setAttribute('icon', 'icon-th-list');
+			$menu['Hotel & Restaurant']['Master Data']->addChild('Configuration', array('route' => 'hotel_config_manage'))->setAttribute('icon', 'icon-cog');
+		}
+
+		$menu['Hotel & Restaurant']->addChild('Reports')
+		                            ->setAttribute('icon', 'icon icon-bar-chart')
+		                            ->setAttribute('dropdown', true);
+
+		$menu['Hotel & Restaurant']['Reports']->addChild('Sales')
+		                                       ->setAttribute('icon', 'icon icon-bar-chart')
+		                                       ->setAttribute('dropdown', true);
+
+		$menu['Hotel & Restaurant']['Reports']['Sales']->addChild('Sales Summary', array('route' => 'hotel_report_sales_summary'))
+		                                                ->setAttribute('icon', 'icon-th-list');
+		$menu['Hotel & Restaurant']['Reports']['Sales']->addChild('Sales Details', array('route' => 'hotel_report_sales_details'))
+		                                                ->setAttribute('icon', 'icon-th-list');
+		$menu['Hotel & Restaurant']['Reports']['Sales']->addChild('Customer Sales', array('route' => 'hotel_report_customer_sales_item'))
+		                                                ->setAttribute('icon', 'icon-th-list');
+		$menu['Hotel & Restaurant']['Reports']['Sales']->addChild('Product Wise Sales', array('route' => 'hotel_report_sales_stock'))
+		                                                ->setAttribute('icon', 'icon-th-list');
+		$menu['Hotel & Restaurant']['Reports']->addChild('Purchase')
+		                                       ->setAttribute('icon', 'icon icon-bar-chart')
+		                                       ->setAttribute('dropdown', true);
+		$menu['Hotel & Restaurant']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'hotel_report_purchase_summary'))
+		                                                   ->setAttribute('icon', 'icon-th-list');
+		$menu['Hotel & Restaurant']['Reports']['Purchase']->addChild('Vendor Outstanding', array('route' => 'hotel_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
+		return $menu;
+
+	}
 
     public function InstituteSystemMenu($menu)
     {

@@ -613,7 +613,7 @@ Dashboard Stats 2
         {% for employee in employees %}
             {% set monthSales =  employee.id~month|number_format %}
             {% if employee.monthlySales > 0 %}
-            { label: "{{ employee.username|capitalize }}", y: {% if employee.monthlySales is not empty %} {{ ((userSalesAmount[monthSales]*100)/employee.monthlySales)|number_format }}{% endif %},indexLabel: "BDT {{ userSalesAmount[monthSales]|number_format }}" },
+            { label: "{{ employee.username|capitalize }}", y: {% if userSalesAmount[monthSales] is defined and userSalesAmount[monthSales] is not empty %} {{ ((userSalesAmount[monthSales]*100)/employee.monthlySales)|number_format }}{% else %}0{% endif %},indexLabel: "BDT {% if  userSalesAmount[monthSales] is defined and userSalesAmount[monthSales] is not empty %} {{ userSalesAmount[monthSales]|number_format }}{% else %}0{% endif %}" },
             {% endif %}
         {% endfor %}
     ]

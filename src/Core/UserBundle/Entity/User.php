@@ -808,15 +808,6 @@ class User extends BaseUser
 
     /*=========================== BUSINESS BUNDLE ====================================*/
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
-     */
-    protected $customerInvoiceCreatedBy;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
-     */
-    protected $customerInvoiceApprovedBy;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
@@ -838,10 +829,39 @@ class User extends BaseUser
      */
     protected $businessPurchasesApprovedBy;
 
+	/*=========================== HOTEL BUNDLE ====================================*/
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $hotelInvoiceCreatedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+	 */
+	protected $hotelInvoiceApprovedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $hotelPurchase;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="approvedBy" , cascade={"persist", "remove"})
+	 */
+	protected $hotelPurchasesApprovedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelDamage", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $hotelDamage;
 
 
 
-    public function isGranted($role)
+
+
+	public function isGranted($role)
     {
         $domain = $this->getRole();
         if('ROLE_SUPER_ADMIN' === $domain or 'ROLE_DOMAIN' === $domain) {

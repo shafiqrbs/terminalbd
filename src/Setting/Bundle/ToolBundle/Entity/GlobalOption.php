@@ -5,6 +5,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\AccountingBundle\Entity\Vendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
@@ -18,6 +19,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
+use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
@@ -614,7 +616,15 @@ class GlobalOption
     private $domainCustomerInvoice;
 
 
-    /*================================= OFFICE BUNDLE===========================================*/
+    /*================================= HOTEL BUNDLE===========================================*/
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $hotelConfig;
+
+
+     /*================================= OFFICE BUNDLE===========================================*/
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -1774,7 +1784,7 @@ class GlobalOption
     }
 
     /**
-     * @return Vendor
+     * @return AccountVendor
      */
     public function getVendors()
     {
@@ -1788,6 +1798,13 @@ class GlobalOption
     {
         return $this->medicineBrands;
     }
+
+	/**
+	 * @return HotelConfig
+	 */
+	public function getHotelConfig() {
+		return $this->hotelConfig;
+	}
 
 
 }

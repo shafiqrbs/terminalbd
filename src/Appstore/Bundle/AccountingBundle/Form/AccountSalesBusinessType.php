@@ -2,8 +2,8 @@
 
 namespace Appstore\Bundle\AccountingBundle\Form;
 
-use Appstore\Bundle\InventoryBundle\Entity\globalOption;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,7 +14,7 @@ class AccountSalesBusinessType extends AbstractType
 
     public  $globalOption;
 
-    public function __construct(\Setting\Bundle\ToolBundle\Entity\GlobalOption $globalOption)
+    public function __construct(GlobalOption $globalOption)
     {
         $this->globalOption = $globalOption;
 
