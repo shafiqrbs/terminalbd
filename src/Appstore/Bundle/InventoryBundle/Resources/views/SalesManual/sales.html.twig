@@ -56,7 +56,7 @@
                                         <div class="input-group">
                                             <span class="input-group-btn">
                                                 <button href="javascript:" class="btn btn-large black">Tk.</button>
-                                                <input type="text" style="text-align:center;" class="m-wrap span8 form-control" id="salesPrice" name="salesPrice"  value="" >
+                                                <input type="text" style="text-align:center;height: 42px!important;" class="m-wrap span8 form-control"  id="salesPrice" name="salesPrice"  value="" >
                                                 <input type="hidden" name="purchasePrice" id="purchasePrice" value="">
                                             </span>
                                         </div>
@@ -68,7 +68,7 @@
                                                    <a href="javascript:" class="btn yellow btn-large btn-qnt-particular" data-type="minus" data-field="quantity">
                                                             <span class="fa fa-minus"></span>
                                                    </a>
-                                                <input type="number" style="text-align:center; width:80px" class="m-wrap span5 form-control btn-qnt-particular" id="quantity" name="quantity" value="1" min="1" max="100">
+                                                <input type="number" style="text-align:center; width:80px; height: 42px!important;" class="m-wrap span5 form-control btn-qnt-particular" id="quantity" name="quantity" value="1" min="1" max="100">
                                                 <a href="javascript:" class="btn btn-large green btn-qnt-particular"  data-type="plus" data-field="quantity">
                                                     <span class="fa fa-plus"></span>
                                                 </a>
@@ -126,18 +126,33 @@
                                     <div class="row-fluid">
                                     <div class="span12" id="payment-info">
                                         <div class="row-fluid">
-                                            <div><span class="add-on add-on-custom span5"><strong>SUB-TOTAL TK.</strong></span><input class="m-wrap span7 numeric salesTotal disabled-field" readonly="readonly" id="subTotal" type="text" value="{{ entity.subTotal }}"></div>
+                                            <div class="span8"><strong>SUB-TOTAL TK.</strong></div>
+                                            <div class="span4"><strong id="subTotal">{{ entity.subTotal }}</strong></div>
                                         </div>
                                         <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong>VAT/TAX TK.</strong></span><input class="m-wrap span7 numeric disabled-field" readonly="readonly" name="vat" id="vat" type="text" value="{{ entity.vat }}">
-                                            <input class="m-wrap span9 numeric" name="vat" id="vat" type="hidden">
+                                            <div class="span8"><strong>VAT/TAX TK.</strong></div>
+                                            <div class="span4"><strong class="vat">{{ entity.vat }}</strong>
+                                                <input class="m-wrap span9 numeric vat" name="vat" id="vat" type="hidden">
+                                            </div>
                                         </div>
-                                       <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong>NET TOTAL TK.</strong></span><input class="m-wrap span7 numeric disabled-field salesTotal" readonly="readonly" name="netTotal" id="netTotal" type="text" value="{{ entity.total }}">
-                                       </div>
+                                        <div class="row-fluid" style="border-top: 2px solid #c49f47;padding-top: 10px;border-bottom: 2px solid #c49f47;margin-bottom: 10px;">
+                                            <div class="span8"><strong>NET-TOTAL TK.</strong></div>
+                                            <div class="span4"><strong id="netTotal">{{ entity.total }}</strong></div>
+                                        </div>
                                         <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong>DISCOUNT TK.</strong></span> {{ form_widget(form.discount) }}
-
+                                            <div class="span3"><strong>Discount</strong></div>
+                                            <div class="span5"> {{ form_widget(form.discountType) }}</div>
+                                            <div class="span4"> {{ form_widget(form.discount) }}</div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span8"><strong>RECEIVE TK.</strong></div>
+                                            <div class="span4">{{ form_widget(form.payment) }}</div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span8"><strong id="balance">DUE TK.</strong></div>
+                                            <div class="span4"><strong class="dueAmount">{{ entity.total }}</strong>
+                                                <input ty class="m-wrap span7  numeric disabled-field dueAmount" type="hidden" id="dueAmount" name="dueAmount" value="{{ entity.total }}">
+                                            </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12 input-append-border">
@@ -172,12 +187,6 @@
                                                 {{ form_widget(form.transactionId) }}
                                                 {{ form_errors(form.transactionId) }}
                                             </div>
-                                        </div>
-                                       <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong>RECEIVE TK.</strong></span>{{ form_widget(form.payment) }}
-                                        </div>
-                                        <div class="row-fluid">
-                                            <span class="add-on add-on-custom span5"><strong id="balance">DUE TK.</strong></span><input class="m-wrap span7  numeric disabled-field dueAmount" readonly="readonly" type="text" id="dueAmount" name="dueAmount" value="{{ entity.total }}">
                                         </div>
 
                                         <div class="row-fluid">
@@ -246,6 +255,9 @@
         .disabled{
             opacity: 0.5;
         }
+        #sales_process{
+            height: 42px!important;
+        }
         #payment-info{
             padding:15px;
             background-color:#E5E7E7;
@@ -280,6 +292,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
     '@InventoryBundle/Resources/public/js/sales-manual.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -287,5 +300,6 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    ApproveProcess();
     InventorySales({{ entity.id ? entity.id : 0 }});
 {% endblock %}

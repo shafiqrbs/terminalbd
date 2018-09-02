@@ -290,14 +290,14 @@ class AccountSalesRepository extends EntityRepository
             $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
         }
 
-        $salesPrice             = $this->_em->getRepository('InventoryBundle:SalesItem')->reportSalesPrice($user,$data);
-        $purchasePrice          = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($user,$data);
+        $salesPrice             = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
+        $purchasePrice          = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
         $salesVat               = $this->_em->getRepository('InventoryBundle:SalesItem')->reportProductVat($user, $data);
         $expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37,23), $data);
         $revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
         $administrative         = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(23), $data);
-        $data =  array('salesAmount' => $salesPrice ,'purchasePrice' => $purchasePrice,'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
-        return $data;
+        $data =  array('salesAmount' => $salesPrice['total'] ,'purchasePrice' => $purchasePrice['purchasePrice'],'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
+	    return $data;
 
     }
 

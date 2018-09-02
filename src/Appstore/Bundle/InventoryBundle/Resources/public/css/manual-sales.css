@@ -261,9 +261,8 @@ input.discount{
 }
 
 input[class*="span"].m-wrap , select[class*="span"].m-wrap, textarea[class*="span"].m-wrap {
-    height: 42px!important;
     background: #ffffff;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
 }
 .btn-large {

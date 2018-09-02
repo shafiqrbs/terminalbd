@@ -222,6 +222,13 @@ class Sales
     private $discount = 0;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="discountType", type="string", nullable=true)
+     */
+    private $discountType = "Flat";
+
+    /**
      * @var float
      *
      * @ORM\Column(name="vat", type="float", nullable=true)
@@ -949,6 +956,20 @@ class Sales
     {
         return $this->reverse;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getDiscountType(){
+		return $this->discountType;
+	}
+
+	/**
+	 * @param string $discountType
+	 */
+	public function setDiscountType( string $discountType ) {
+		$this->discountType = $discountType;
+	}
 
 }
 

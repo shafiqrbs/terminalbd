@@ -72,7 +72,7 @@ var InventorySales = function(sales) {
 
     });
 
-    $(document).on('change', '.itemSearch', function () {
+    $(document).on('change', '.select2AllItem', function () {
         var item = $(this).val();
         if (item == '') {
             alert('You have to select item from drop down and this not item');
@@ -116,13 +116,14 @@ var InventorySales = function(sales) {
             data: 'item=' + item + '&quantity=' + quantity + '&salesPrice=' + salesPrice + '&purchasePrice=' + purchasePrice,
             success: function (response) {
                 obj = JSON.parse(response);
-                $('#subTotal').val(obj['subTotal']);
-                $('#netTotal').val(obj['netTotal']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#netTotal').html(obj['netTotal']);
+                $('.vat').html(obj['vat']);
                 $('#vat').val(obj['vat']);
                 $('#salesItem').html(obj['salesItems']);
+                $('.dueAmount').html(obj['netTotal']);
                 $('#dueAmount').val(obj['netTotal']);
                 $('#addItem').attr("disabled", true);
-                $("#salesitem_item").select2().select2("val", "");
                 $('#salesPrice').val('');
                 $('#quantity').val('1');
             },

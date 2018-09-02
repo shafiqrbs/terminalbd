@@ -31,19 +31,8 @@ class SalesItemType extends AbstractType
     {
 
         $builder
-            ->add('item', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\Item',
-                'empty_value' => '---Choose a item ---',
-                'property' => 'itemName',
-                'attr'=>array('class'=>'span12 select2 itemSearch'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
-                        ->orderBy("p.name","ASC");
-                },
-            ));
+        ->add('item','text', array('attr'=>array('class'=>'m-wrap span12 select2AllItem inputs','placeholder'=>'Enter product name or code','data-original-title'=>'Enter payment amount','autocomplete'=>'off')));
+
     }
 
     /**

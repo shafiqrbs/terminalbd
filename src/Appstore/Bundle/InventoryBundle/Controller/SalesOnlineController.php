@@ -378,7 +378,6 @@ class SalesOnlineController extends Controller
             }
             $em->flush();
             if ($data['process'] != 'In-progress'){
-
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);

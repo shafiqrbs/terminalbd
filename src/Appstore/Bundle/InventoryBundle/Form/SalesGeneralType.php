@@ -39,8 +39,8 @@ class SalesGeneralType extends AbstractType
     {
         $builder
 
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span7 inputs','placeholder'=>'Enter payment amount','data-original-title'=>'Enter payment amount','autocomplete'=>'off')))
-            ->add('discount','text', array('attr'=>array('class'=>'m-wrap span7 inputs','placeholder'=>'Enter discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter payment amount','data-original-title'=>'Enter payment amount','autocomplete'=>'off')))
+            ->add('discount','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Add payment card/cheque no','data-original-title'=>'Add payment card/cheque no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile inputs','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
@@ -111,6 +111,14 @@ class SalesGeneralType extends AbstractType
                     'Done' => 'Done',
                 ),
             ))
+	        ->add('discountType', 'choice', array(
+		        'required'    => false,
+		        'attr'=>array('class'=>'span12 m-wrap inputs'),
+		        'choices' => array(
+			        'Flat' => 'Flat',
+			        'Percentage' => 'Percentage',
+		        ),
+	        ))
 
             ->add('accountMobileBank', 'entity', array(
                 'required'    => false,

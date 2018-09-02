@@ -216,7 +216,21 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="row-fluid">
+                                    <div class="span12 receive-empty" id="receiveChange">
+                                        <div class="input-prepend input-append input-append-border span12">
+                                            <span class="add-on add-on-custom span3">Receive TK.</span>{{ form_widget(form.payment) }}
+                                            {{ form_errors(form.payment) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="span12 input-prepend input-append input-append-border span12">
+                                            <span class="add-on add-on-custom span3" id="balance">Due TK.</span><input class="m-wrap span7 numeric disabled-field dueAmount" name="dueAmount" id="dueAmount" type="text"  readonly="readonly" value="{{ entity.due }}">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row-fluid">
                                     <div class="span12 input-append-border">
                                         {{ form_widget(form.transactionMethod) }}
@@ -269,21 +283,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row-fluid">
-                                    <div class="span12 receive-empty" id="receiveChange">
-                                        <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Receive TK.</span>{{ form_widget(form.payment) }}
-                                            {{ form_errors(form.payment) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="span12 input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3" id="balance">Due TK.</span><input class="m-wrap span7 numeric disabled-field dueAmount" name="dueAmount" id="dueAmount" type="text"  readonly="readonly" value="{{ entity.due }}">
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="row-fluid">
                                     <div class="span12 input-append-border">
                                         {{ form_widget(form.salesBy) }}
@@ -345,7 +345,7 @@
                                         <input type="hidden" name="salesId" id="salesId" value="{{ entity.id }}">
                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
-                                        {% if entity.inventoryConfig.onlineSalesPrinter == 'printer' %}
+                                        {% if entity.inventoryConfig.printer == 'printer' %}
                                             <select name="process" id="process" class="span12 m-wrap">
                                                 <option value="save">Save & Continue</option>
                                                 <option value="print">Save & Print</option>
@@ -356,6 +356,7 @@
                                         {% elseif entity.inventoryConfig.onlineSalesPrinter == 'pos'  %}
                                             <button rel="{{ path('inventory_salesonline_posprint',{'code':entity.invoice}) }}" name="onlineSalesPos"  type="button" class="btn blue" id="onlineSalesPos"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
                                         {% else %}
+                                            <input type="hidden" name="process" id="process" value="Done">
                                             <button type="submit" class="btn blue" name="saveType" value="save" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
                                         {% endif %}
                                     </div>
