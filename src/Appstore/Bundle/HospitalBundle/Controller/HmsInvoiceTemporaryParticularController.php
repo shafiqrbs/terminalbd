@@ -112,9 +112,11 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $datetime = (new \DateTime("tomorrow"))->format('d-m-Y 7:30');
         $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
         $entity->setDeliveryDateTime($datetime);
-        if($entity->getTotal() > 0){
-            $entity->setProcess('In-progress');
+        if($entity->getTotal() > 0 and $entity->getPayment() > $entity->getTotal() ){
+	        $entity->setPayment($entity->getTotal());
+	        $entity->setDue(0);
         }
+	    $entity->setProcess('In-progress');
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
         $entity->setPaymentInWord($amountInWords);
         $em->persist($entity);
