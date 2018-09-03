@@ -153,14 +153,14 @@ var InventorySales = function(sales) {
             success: function(response){
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
-                $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItems']);
+                $('#paymentSubTotal').val(obj['salesTotal']);
                 $('.salesTotal').html(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
+                $('.dueAmount').html(obj['salesTotal']);
+                $('.subTotal').html(obj['salesSubTotal']);
+                $('#vat').html(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
                 FormComponents.init();
             },
@@ -182,14 +182,15 @@ var InventorySales = function(sales) {
             success: function(response) {
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
-                $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItems']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
+                $('.salesTotal').html(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
+                $('.dueAmount').html(obj['salesTotal']);
+                $('.subTotal').html(obj['salesSubTotal']);
+                $('#vat').html(obj['salesVat']);
+                $('#discount').html(obj['discount']);
+                $('#paymentTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
                 FormComponents.init();
             },
@@ -210,16 +211,15 @@ var InventorySales = function(sales) {
             success: function(response) {
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
-                $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItems']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#vatHtml').html(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
+                $('.salesTotal').html(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
-                $('#dueHtml').html(obj['salesTotal']);
+                $('.dueAmount').html(obj['salesTotal']);
+                $('.subTotal').html(obj['salesSubTotal']);
+                $('#vat').html(obj['salesVat']);
+                $('#discount').html(obj['discount']);
+                $('#paymentTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
                 FormComponents.init();
             },
@@ -266,14 +266,14 @@ var InventorySales = function(sales) {
                 data:'salesItemId='+rel+'&quantity='+quantity+'&salesPrice='+estimatePrice+'&customPrice='+customPrice,
                 success: function(response) {
                     obj = JSON.parse(response);
-                    $('.salesTotal').html(obj['salesTotal']);
-                    $('#subTotal').val(obj['salesSubTotal']);
-                    $('#vat').val(obj['salesVat']);
-                    $('#vatHtml').html(obj['salesVat']);
-                    $('#paymentTotal').val(obj['salesTotal']);
                     $('#paymentSubTotal').val(obj['salesTotal']);
+                    $('.salesTotal').html(obj['salesTotal']);
                     $('#dueAmount').val(obj['salesTotal']);
-                    $('#dueHtml').html(obj['salesTotal']);
+                    $('.dueAmount').html(obj['salesTotal']);
+                    $('.subTotal').html(obj['salesSubTotal']);
+                    $('#vat').html(obj['salesVat']);
+                    $('#discount').html(obj['discount']);
+                    $('#paymentTotal').val(obj['salesTotal']);
                     $('#wrongBarcode').html(obj['msg']);
                 },
 
@@ -301,14 +301,14 @@ var InventorySales = function(sales) {
             data:'salesItemId='+ rel +'&quantity='+ quantity +'&salesPrice='+ price +'&customPrice='+ customPrice,
             success: function(response) {
                 obj = JSON.parse(response);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#vatHtml').html(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
+                $('.salesTotal').html(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
-                $('#dueHtml').html(obj['salesTotal']);
+                $('.dueAmount').html(obj['salesTotal']);
+                $('.subTotal').html(obj['salesSubTotal']);
+                $('#vat').html(obj['salesVat']);
+                $('#discount').html(obj['discount']);
+                $('#paymentTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
             },
 
@@ -344,14 +344,14 @@ var InventorySales = function(sales) {
                         obj = JSON.parse(response);
                         if ('success' == obj['success']) {
                             $('#remove-' + id).hide();
-                            $('.salesTotal').html(obj['salesTotal']);
-                            $('#subTotal').val(obj['salesSubTotal']);
-                            $('#vat').val(obj['salesVat']);
-                            $('#vatHtml').html(obj['salesVat']);
-                            $('#paymentTotal').val(obj['salesTotal']);
                             $('#paymentSubTotal').val(obj['salesTotal']);
+                            $('.salesTotal').html(obj['salesTotal']);
                             $('#dueAmount').val(obj['salesTotal']);
-                            $('#dueHtml').html(obj['salesTotal']);
+                            $('.dueAmount').html(obj['salesTotal']);
+                            $('.subTotal').html(obj['salesSubTotal']);
+                            $('#vat').html(obj['salesVat']);
+                            $('#discount').html(obj['discount']);
+                            $('#paymentTotal').val(obj['salesTotal']);
                             $('#wrongBarcode').html(obj['msg']);
                         }
 
@@ -371,36 +371,35 @@ var InventorySales = function(sales) {
         };
     })();
 
-    $(document).on('change', '#sales_discount', function() {
+    $(document).on('keyup', '#sales_discountCalculation', function() {
 
-        var discount = parseInt($('#sales_discount').val());
-        var total = parseInt($('#paymentTotal').val());
-        if (discount >= total) {
+        var discountType = $('#sales_discountType').val();
+        var discount = parseFloat($('#sales_discountCalculation').val());
+        var invoice = $('#salesId').val();
+        var total =  parseFloat($('#paymentTotal').val());
+        if( discount >= total ){
             $('#sales_discount').val(0);
             alert ('Discount amount less then total amount');
             return false;
         }
-        if (discount > 0){
-            $.ajax({
-                url: Routing.generate('inventory_sales_discount_update'),
-                type: 'POST',
-                data: 'discount=' + discount + '&sales=' + sales,
-                success: function (response) {
-                    obj = JSON.parse(response);
-                    $('.salesTotal').html(obj['salesTotal']);
-                    $('#subTotal').val(obj['salesSubTotal']);
-                    $('#vat').val(obj['salesVat']);
-                    $('#vatHtml').html(obj['salesVat']);
-                    $('#paymentTotal').val(obj['salesTotal']);
-                    $('#paymentSubTotal').val(obj['salesTotal']);
-                    $('#dueAmount').val(obj['salesTotal']);
-                    $('#dueHtml').html(obj['salesTotal']);
-                    $('#wrongBarcode').html(obj['msg']);
-                },
+        $.ajax({
+            url: Routing.generate('inventory_sales_discount_update'),
+            type: 'POST',
+            data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#paymentSubTotal').val(obj['salesTotal']);
+                $('.salesTotal').html(obj['salesTotal']);
+                $('#dueAmount').val(obj['salesTotal']);
+                $('.dueAmount').html(obj['salesTotal']);
+                $('.subTotal').html(obj['salesSubTotal']);
+                $('#vat').html(obj['salesVat']);
+                $('#discount').html(obj['discount']);
+                $('#paymentTotal').val(obj['salesTotal']);
+                $('#wrongBarcode').html(obj['msg']);
+            }
 
-            })
-        }
-
+        })
 
     });
 
@@ -408,15 +407,14 @@ var InventorySales = function(sales) {
 
         var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
         var total =  parseInt($('#paymentTotal').val());
-
         var dueAmount = (total-payment);
         if(dueAmount > 0){
             $('#balance').html('Due Tk.');
-            $('.dueAmount').val(dueAmount);
+            $('.dueAmount').html(dueAmount);
         }else{
             var balance =  payment - total ;
             $('#balance').html('Return TK.');
-            $('.dueAmount').val(balance);
+            $('.dueAmount').html(balance);
         }
 
     });

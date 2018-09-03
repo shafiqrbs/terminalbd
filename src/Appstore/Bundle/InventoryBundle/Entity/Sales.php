@@ -228,7 +228,14 @@ class Sales
      */
     private $discountType = "Flat";
 
-    /**
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
+	 */
+	private $discountCalculation;
+
+	/**
      * @var float
      *
      * @ORM\Column(name="vat", type="float", nullable=true)
@@ -969,6 +976,20 @@ class Sales
 	 */
 	public function setDiscountType( string $discountType ) {
 		$this->discountType = $discountType;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getDiscountCalculation(){
+		return $this->discountCalculation;
+	}
+
+	/**
+	 * @param float $discountCalculation
+	 */
+	public function setDiscountCalculation( float $discountCalculation ) {
+		$this->discountCalculation = $discountCalculation;
 	}
 
 }

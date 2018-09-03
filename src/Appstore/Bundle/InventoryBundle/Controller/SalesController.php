@@ -183,31 +183,43 @@ class SalesController extends Controller
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
 
-    public function salesDiscountUpdateAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
-        $sales = $request->request->get('sales');
-        $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
-        $total = ($sales->getSubTotal() - $discount);
-        $vat = 0;
-        if($total > 0 ){
-            if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
-                $sales->setVat($vat);
-            }
-            $sales->setDiscount($discount);
-            $sales->setTotal($total+$vat);
-            $sales->setDue($total+$vat);
-            $em->persist($sales);
-            $em->flush();
-        }
-        $data = $this->returnResultData($sales);
-        return new Response(json_encode($data));
-        exit;
-    }
+	public function salesDiscountUpdateAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$discountType = $request->request->get('discountType');
+		$discountCal = $request->request->get('discount');
+		$sales = $request->request->get('sales');
+		$sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
+		$subTotal = $sales->getSubTotal();
+		if($discountType == 'Flat'){
+			$total = ($subTotal  - $discountCal);
+			$discount = $discountCal;
+		}else{
+			$discount = ($subTotal * $discountCal)/100;
+			$total = ($subTotal  - $discount);
+		}
+		$vat = 0;
+		if($total > 0 ){
 
-    /**
+			if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+				$vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
+				$sales->setVat($vat);
+			}
+			$sales->setDiscountType($discountType);
+			$sales->setDiscountCalculation($discountCal);
+			$sales->setDiscount(round($discount));
+			$sales->setTotal(round($total + $vat));
+			$sales->setDue(round($sales->getTotal()));
+			$em->persist($sales);
+			$em->flush();
+		}
+		$data = $this->returnResultData($sales);
+		return new Response(json_encode($data));
+		exit;
+	}
+
+
+	/**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
 

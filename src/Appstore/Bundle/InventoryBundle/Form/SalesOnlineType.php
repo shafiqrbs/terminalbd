@@ -40,9 +40,10 @@ class SalesOnlineType extends AbstractType
     {
         $builder
 
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span7 amount inputs','placeholder'=>'Enter payment amount','data-original-title'=>'Enter payment amount','autocomplete'=>'off')))
-            ->add('discount','text', array('attr'=>array('class'=>'m-wrap span7 amount inputs','placeholder'=>'Enter discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
-            ->add('deliveryCharge','text', array('attr'=>array('class'=>'m-wrap amount span7 inputs','placeholder'=>'Enter delivery charge','data-original-title'=>'Enter delivery charge','autocomplete'=>'off')))
+            ->add('payment','text', array('attr'=>array('class'=>'receive-empty m-wrap span12 amount inputs','placeholder'=>'Receive amount','data-original-title'=>'Enter receive amount','autocomplete'=>'off')))
+            ->add('discount','hidden')
+            ->add('discountCalculation','text', array('attr'=>array('class'=>'m-wrap span12 amount inputs','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('deliveryCharge','text', array('attr'=>array('class'=>'m-wrap amount span12 inputs','placeholder'=>'Delivery charge','data-original-title'=>'Enter delivery charge','autocomplete'=>'off')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card/cheque no','data-original-title'=>'Add payment card/cheque no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
@@ -70,7 +71,15 @@ class SalesOnlineType extends AbstractType
                         ->orderBy("e.id","ASC");
                 }
             ))
-            ->add('salesBy', 'entity', array(
+	        ->add('discountType', 'choice', array(
+		        'required'    => false,
+		        'attr'=>array('class'=>'span12 m-wrap inputs'),
+		        'choices' => array(
+			        'Flat' => 'Flat',
+			        'Percentage' => 'Percentage',
+		        ),
+	        ))
+	        ->add('salesBy', 'entity', array(
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',

@@ -120,7 +120,7 @@
                                             {% endfor %}
                                             </tbody>
                                             <tfoot>
-                                            <tr><th class="text-right" {% if entity.inventoryConfig.isAttribute == 1 %} colspan="6" {% else %} colspan="5" {% endif %} >Sub-Total</th><th>{{ entity.subTotal }}</th><td></td></tr>
+                                            <tr><th class="text-right" {% if entity.inventoryConfig.isAttribute == 1 %} colspan="6" {% else %} colspan="5" {% endif %} >Sub-Total</th><th class="subTotal">{{ entity.subTotal }}</th><td></td></tr>
                                             </tfoot>
                                         </table>
 
@@ -190,49 +190,46 @@
                             </div>
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
-                            <div class="span4" id="payment-info">
+                            <div class="span4" id="payment-info" style="padding: 15px">
+                                <div class="payment-area">
                                 <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span7 numeric salesTotal disabled-field" readonly="readonly" id="subTotal" type="text" value="{{ entity.subTotal }}">
-
-                                        </div>
-                                    </div>
+                                    <div class="span8"><label class="control-label">Sub-Total Tk.</label></div>
+                                    <div class="span4 subTotal" id="subTotal">{{ entity.subTotal }}</div>
                                 </div>
 
                                 <div class="row-fluid">
+                                    <div class="span8"><label class="control-label">VAT/TAX Tk.</label></div>
+                                    <div class="span4 vat" id="vat">{{ entity.vat }}</div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span8"><label class="control-label">Discount Tk.</label></div>
+                                    <div class="span4 discount" id="discount">{{ entity.discount }}</div>
+                                </div>
+                                <div class="row-fluid" id="sales-total">
+                                    <div class="span8"><label class="control-label"><strong>Total Tk.</strong></label></div>
+                                    <div class="span4 salesTotal"><strong>{{ entity.total }}</strong></div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span8"><label  id="balance" class="control-label">Due Tk.</label></div>
+                                    <div class="span4 dueAmount">{{ entity.total }}</div>
+                                    <input name="dueAmount" id="dueAmount" type="hidden" value="{{ entity.due }}">
+                                </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span4"><label class="control-label">Discount</label></div>
+                                    <div class="span4"> {{ form_widget(form.discountType) }}</div>
+                                    <div class="span4"> {{ form_widget(form.discountCalculation) }}</div>
+                                </div>
+                                <div class="row-fluid" >
+                                    <div class="span6"><label class="control-label">Receive</label></div>
+                                    <div class="span6"> {{ form_widget(form.payment) }}</div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span6"><label class="control-label">Delivery Charge</label></div>
+                                    <div class="span6">{{ form_widget(form.deliveryCharge) }}</div>
+                                </div>
+                                <div class="row-fluid">
                                     <div class="span12">
-                                        <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">VAT/TAX TK.</span><input class="m-wrap span7 numeric disabled-field" name="vat" id="vat" readonly="readonly" type="text" value="{{ entity.vat }}">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 ">
-                                        <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">Discount TK.</span>  {{ form_widget(form.discount) }}
-                                            {{ form_errors(form.discount) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 receive-empty" id="receiveChange">
-                                        <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Receive TK.</span>{{ form_widget(form.payment) }}
-                                            {{ form_errors(form.payment) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="span12 input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3" id="balance">Due TK.</span><input class="m-wrap span7 numeric disabled-field dueAmount" name="dueAmount" id="dueAmount" type="text"  readonly="readonly" value="{{ entity.due }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 input-append-border">
                                         {{ form_widget(form.transactionMethod) }}
                                         {{ form_errors(form.transactionMethod) }}
                                     </div>
@@ -240,20 +237,19 @@
                                 <div id="cartMethod" class="bankHide">
                                     <div class="row-fluid">
                                         <div class="span12">
-                                            <div class="input-prepend input-append input-append-border span12">
-                                                {{ form_widget(form.cardNo) }}
-                                                {{ form_errors(form.cardNo) }}
-                                            </div>
+                                            {{ form_widget(form.cardNo) }}
+                                            {{ form_errors(form.cardNo) }}
                                         </div>
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="span12 input-append-border">
+                                        <div class="span12">
                                             {{ form_widget(form.paymentCard) }}
                                             {{ form_errors(form.paymentCard) }}
                                         </div>
+
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="span12 input-append-border">
+                                        <div class="span12">
                                             {{ form_widget(form.accountBank) }}
                                             {{ form_errors(form.accountBank) }}
                                         </div>
@@ -261,49 +257,39 @@
                                 </div>
                                 <div id="bkashMethod" class="mobileBankHide">
                                     <div class="row-fluid">
-                                        <div class="span12 input-append-border">
+                                        <div class="span12">
                                             {{ form_widget(form.accountMobileBank) }}
                                             {{ form_errors(form.accountMobileBank) }}
                                         </div>
                                     </div>
                                     <div class="row-fluid">
                                         <div class="span12">
-                                            <div class="input-prepend input-append input-append-border span12">
-                                                {{ form_widget(form.paymentMobile) }}
-                                                {{ form_errors(form.paymentMobile) }}
-                                            </div>
+                                            {{ form_widget(form.paymentMobile) }}
+                                            {{ form_errors(form.paymentMobile) }}
                                         </div>
                                     </div>
                                     <div class="row-fluid">
                                         <div class="span12">
-                                            <div class="input-prepend input-append input-append-border span12">
-                                                {{ form_widget(form.transactionId) }}
-                                                {{ form_errors(form.transactionId) }}
-                                            </div>
+                                            {{ form_widget(form.transactionId) }}
+                                            {{ form_errors(form.transactionId) }}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row-fluid">
-                                    <div class="span12 input-append-border">
+                                    <div class="span12">
                                         {{ form_widget(form.salesBy) }}
                                         {{ form_errors(form.salesBy) }}
                                     </div>
                                 </div>
 
                                 <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Delivery Charge</span>{{ form_widget(form.deliveryCharge) }}
-                                            {{ form_errors(form.deliveryCharge) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 input-append-border">
-                                        <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
+                                        <div class="input-append span12">
+                                            <div class="btn-group span12">
+                                        <input type="text" style="margin-left:0!important;width:88.2%" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
                                         <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
-                                    </div>
+                                            </div>
+                                            </div>
                                 </div>
                                 <div class="row-fluid customer" id="">
                                     <div class="span12 input-append-border">
@@ -316,49 +302,46 @@
                                     </div>
                                 </div>
                                 <div class="row-fluid customer">
-                                    <div class="span12 input-append-border">
-                                        <div class="row-fluid">
-                                            <div class="input-icon left input-height">
-                                                <i class="icon-phone"></i>
-                                                <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
-                                            </div>
-                                        </div>
+                                    <div class="span12">
+                                        <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
                                     </div>
                                 </div>
                                 <div class="row-fluid customer">
-                                    <div class="span12 input-append-border">
-                                        <div class="row-fluid">
-                                            <input style="margin-left:0!important;" type="text" id="location" name="location" class="m-wrap span12 customer-input select2Location" autocomplete="off" placeholder="Customer location" value="">
-                                        </div>
+                                    <div class="span12">
+                                        <input style="margin-left:0!important;" type="text" id="location" name="location" class="m-wrap span12 customer-input select2Location" autocomplete="off" placeholder="Customer location" value="">
                                     </div>
                                 </div>
                                 <div class="row-fluid customer">
-                                    <div class="span12 input-append-border">
-                                        <div class="row-fluid">
-                                            <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
-                                        </div>
+                                    <div class="span12">
+                                        <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="portlet box red">
-                                    <div class="pull-center">
-                                        <input type="hidden" name="salesId" id="salesId" value="{{ entity.id }}">
-                                        <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
-                                        <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
-                                        {% if entity.inventoryConfig.printer == 'printer' %}
-                                            <select name="process" id="process" class="span12 m-wrap">
-                                                <option value="save">Save & Continue</option>
-                                                <option value="print">Save & Print</option>
-                                                <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
-                                                <option {% if entity.process == 'Created' %} selected="selected" {% endif %} value="Created">Created</option>
-                                            </select>
-                                            <button type="button" id="saveType" class="btn yellow receiveBtn" name="saveType" value="save" ><i class="icon-save m-icon-white"></i>&nbsp;Process</button>
-                                        {% elseif entity.inventoryConfig.onlineSalesPrinter == 'pos'  %}
-                                            <button rel="{{ path('inventory_salesonline_posprint',{'code':entity.invoice}) }}" name="onlineSalesPos"  type="button" class="btn blue" id="onlineSalesPos"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
-                                        {% else %}
-                                            <input type="hidden" name="process" id="process" value="Done">
-                                            <button type="submit" class="btn blue" name="saveType" value="save" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
-                                        {% endif %}
+                                <div class="pull-center">
+                                    <div class="input-append span12">
+                                        <div class="btn-group span12">
+                                            {{ form_widget(form.discount) }}
+                                            <input type="hidden" name="salesId" id="salesId" value="{{ entity.id }}">
+                                            <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
+                                            <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
+                                            {% if entity.inventoryConfig.printer == 'printer' %}
+                                                <select name="process" id="process" class="span8 m-wrap">
+                                                    <option value="save">Save & Continue</option>
+                                                    <option value="print">Save & Print</option>
+                                                    <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
+                                                </select>
+                                                <button type="button" id="saveType" class="btn yellow receiveBtn" name="saveType" value="save" ><i class="icon-save m-icon-white"></i>&nbsp;Process</button>
+                                            {% elseif entity.inventoryConfig.onlineSalesPrinter == 'pos'  %}
+                                                <button rel="{{ path('inventory_salesonline_posprint',{'code':entity.invoice}) }}" name="onlineSalesPos"  type="button" class="btn blue" id="onlineSalesPos"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
+                                            {% else %}
+                                                <select name="process" id="process" class="span8 m-wrap">
+                                                    <option value="save">Save & Continue</option>
+                                                    <option value="print">Save & Print</option>
+                                                    <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
+                                                </select>
+                                                <button type="submit" class="btn blue" name="saveType" value="save" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -475,8 +458,20 @@
     </div>
     <style>
 
-        .receive-empty{
-            border: 5px solid red;
+
+        .payment-area{
+            background: #EEF1F4;
+            margin: -15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 0!important;
+        }
+        .payment-area .row-fluid [class*="span"]{
+            min-height: 28px!important;
+        }
+
+        input[class*="span"].receive-empty{
+            border: 2px solid red!important;
         }
         .amount{
             font-weight: bold!important;
@@ -484,8 +479,15 @@
             font-size: 16px!important;
         }
 
-        .receive-value{
-            border: 5px solid #4b8df8;
+        input[class*="span"].receive-value{
+            border: 2px solid #4b8df8!important;
+        }
+
+        #sales-total{
+            border-top:2px solid #26a69a!important;
+            border-bottom:2px solid #26a69a!important;
+            padding-top:3px!important;
+            margin-bottom: 5px;
         }
 
         input[class*="span"].m-wrap {
@@ -580,6 +582,7 @@
         }
 
         .td-inline-input{
+
             height: 15px!important;
             line-height: 13px!important;
             font-size: 13px!important;
@@ -587,12 +590,15 @@
             width: 50px;
             margin-bottom:0!important;
         }
+
         .td-inline-label{
+
             height: 15px!important;
             line-height: 20px!important;
             min-height: 15px!important;
             font-size: 13px!important;
         }
+
        .input-prepend .add-on-inline{
 
             display: inline-block;
