@@ -224,7 +224,7 @@ class Sales
     /**
      * @var string
      *
-     * @ORM\Column(name="discountType", type="string", nullable=true)
+     * @ORM\Column(name="discountType", type="string", length=30, nullable=true)
      */
     private $discountType = "Flat";
 
