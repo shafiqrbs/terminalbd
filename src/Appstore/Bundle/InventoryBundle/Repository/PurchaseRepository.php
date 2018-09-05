@@ -4,6 +4,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -54,7 +55,10 @@ class PurchaseRepository extends EntityRepository
 
     public function purchaseOverview($inventory,$data)
     {
-        $receiveDate = isset($data['receiveDate'])? $data['receiveDate'] :'';
+
+
+    	$receiveDate = isset($data['receiveDate'])? $data['receiveDate'] :'';
+
         $memo = isset($data['memo'])? $data['memo'] :'';
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
@@ -63,10 +67,11 @@ class PurchaseRepository extends EntityRepository
         $qb->addSelect('SUM(purchase.totalAmount) AS total ');
         $qb->addSelect('SUM(purchase.paymentAmount) AS payment');
         $qb->addSelect('SUM(purchase.dueAmount) AS due');
+        $qb->addSelect('SUM(purchase.vatAmount) AS vat');
         $qb->addSelect('SUM(purchase.commissionAmount) AS discount');
         $qb->where("purchase.inventoryConfig = :inventory");
-        $qb->andWhere("purchase.process = 'approved'");
-        $qb->setParameter('inventory', $inventory);
+	    $qb->setParameter('inventory', $inventory);
+	    $qb->andWhere("purchase.process = 'approved'");
         if (!empty($receiveDate)) {
             $compareTo = new \DateTime($receiveDate);
             $receiveDate =  $compareTo->format('Y-m-d');
@@ -93,7 +98,50 @@ class PurchaseRepository extends EntityRepository
 
     }
 
-    public  function getSumPurchase($user,$inventory){
+	public function reportTransactionOverview($inventory , $data)
+	{
+
+		$receiveDate = isset($data['receiveDate'])? $data['receiveDate'] :'';
+		$memo = isset($data['memo'])? $data['memo'] :'';
+		$grn = isset($data['grn'])? $data['grn'] :'';
+		$vendor = isset($data['vendor'])? $data['vendor'] :'';
+
+		$qb = $this->createQueryBuilder('s');
+		$qb->join('s.transactionMethod','t');
+		$qb->select('t.name as transactionName , sum(s.totalAmount) as total ,sum(s.paymentAmount) as payment , sum(s.dueAmount) as due, sum(s.commissionAmount) as discount, sum(s.vatAmount) as vat');
+		$qb->where('s.inventoryConfig = :inventory');
+		$qb->setParameter('inventory', $inventory);
+		$qb->andWhere('s.process = :process');
+		$qb->setParameter('process', 'approved');
+		if (!empty($receiveDate)) {
+			$compareTo = new \DateTime($receiveDate);
+			$receiveDate =  $compareTo->format('Y-m-d');
+			$qb->andWhere("purchase.receiveDate LIKE :receiveDate");
+			$qb->setParameter('receiveDate', $receiveDate.'%');
+
+		}
+		if (!empty($memo)) {
+			$qb->andWhere("purchase.memo = :memo");
+			$qb->setParameter('memo', $memo);
+		}
+		if (!empty($grn)) {
+			$qb->andWhere("purchase.grn LIKE :grn");
+			$qb->setParameter('grn', $grn.'%');
+		}
+		if (!empty($vendor)) {
+			$qb->join('purchase.vendor', 'v');
+			$qb->andWhere("v.companyName = :companyName");
+			$qb->setParameter('companyName', $vendor);
+		}
+		$qb->groupBy("s.transactionMethod");
+		$res = $qb->getQuery();
+		return $result = $res->getArrayResult();
+	}
+
+
+
+
+	public  function getSumPurchase($user,$inventory){
 
         $qb = $this->createQueryBuilder('p');
         $qb->join('p.purchaseVendorItems', 'pvi');
@@ -128,7 +176,21 @@ class PurchaseRepository extends EntityRepository
 
    }
 
-    public  function purchaseSimpleUpdate(Purchase $purchase){
+	public function reportPurchaseOverview(User $user ,$data = array())
+	{
+		$global =  $user->getGlobalOption()->getId();
+
+		$qb = $this->_em->createQueryBuilder();
+		$qb->from('AccountingBundle:AccountPurchase','e');
+		$qb->select('sum(e.purchaseAmount) as total ,sum(e.payment) as totalPayment');
+		$qb->where('e.globalOption = :config');
+		$qb->setParameter('config', $global);
+		$qb->andWhere('e.process = :process');
+		$qb->setParameter('process', 'approved');
+		return $qb->getQuery()->getOneOrNullResult();
+	}
+
+	public  function purchaseSimpleUpdate(Purchase $purchase){
 
 
         $qb = $this->createQueryBuilder('p');
@@ -213,4 +275,29 @@ class PurchaseRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
+
+	public function inventoryPurchaseMonthly(User $user , $data =array())
+	{
+
+		$config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+		$compare = new \DateTime();
+		$year =  $compare->format('Y');
+		$year = isset($data['year'])? $data['year'] :$year;
+		$sql = "SELECT MONTH (purchase.created) as month,SUM(purchase.totalAmount) AS total
+                FROM Purchase as purchase
+                WHERE purchase.inventoryConfig_id = :config AND purchase.process = :process  AND YEAR(purchase.updated) =:year
+                GROUP BY month ORDER BY month ASC";
+		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->bindValue('config', $config);
+		$stmt->bindValue('process', 'Approved');
+		$stmt->bindValue('year', $year);
+		$stmt->execute();
+		$result =  $stmt->fetchAll();
+		return $result;
+
+	}
+
+
+
+
 }

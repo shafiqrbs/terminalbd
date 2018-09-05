@@ -363,12 +363,13 @@ class SalesOnlineController extends Controller
 
             }
 
-            $entity->setTotal($entity->getSubTotal() - $entity->getDiscount());
+          /*  $entity->setTotal($entity->getSubTotal() - $entity->getDiscount());
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$entity->getTotal());
                 $entity->setVat($vat);
             }
             $entity->setTotal($entity->getTotal() + $entity->getVat());
+          */
             $entity->setDue($entity->getTotal() - $entity->getPayment());
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);

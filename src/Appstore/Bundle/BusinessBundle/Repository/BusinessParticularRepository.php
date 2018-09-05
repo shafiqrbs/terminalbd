@@ -341,6 +341,7 @@ class BusinessParticularRepository extends EntityRepository
         $particular = $element->getParticular();
         $qnt = $particular->getSalesQuantity() + $entity->getQuantity();
         $particular->setSalesQuantity($qnt);
+        $particular->setRemainingQuantity($particular->getRemainingQuantity() - $qnt);
         $em->persist($particular);
         $em->flush();
 

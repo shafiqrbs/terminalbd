@@ -99,7 +99,7 @@
                                             <div class="row-fluid particular-info">
                                                 <div class="span8">
                                                     <div class="form-control">
-                                                        <input type="text" id="particular" name="particular"  class="span12 m-wrap select2Particular" value=""  autocomplete="off" placeholder="Search particular name">
+                                                        <input type="text" id="customParticular" name="customParticular"  class="span12 m-wrap select2Particular" value=""  autocomplete="off" placeholder="Search particular name">
                                                     </div>
                                                 </div>
                                                 <div class="span4">
@@ -205,6 +205,27 @@
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName"><span class="label">Receive TK.</span> <span class="pull-right sales-right">{{ form_widget(form.received) }}</span></label>
+                                                <div class="controls">
+                                                    {{ form_errors(form.received) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName"><span id="balance" class="label">Due TK.</span> <span class="pull-right sales-right due" style="text-align:left;width:110px">{{ entity.due }}</span></label>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row-fluid">
                                         <div class="span12 input-append-border">
                                             {{ form_widget(form.transactionMethod) }}
                                             {{ form_errors(form.transactionMethod) }}
@@ -264,27 +285,7 @@
                                             {{ form_errors(form.salesBy) }}
                                         </div>
                                     </div>
-                                    <div class="clearfix"></div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" for="firstName"><span class="label">Receive TK.</span> <span class="pull-right sales-right">{{ form_widget(form.received) }}</span></label>
-                                                <div class="controls">
-                                                    {{ form_errors(form.received) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" for="firstName"><span id="balance" class="label">Due TK.</span> <span class="pull-right sales-right due" style="text-align:left;width:110px"  id="due" >{{ entity.due }}</span></label>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>
+
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
                                         <div class="span12 input-append-border">

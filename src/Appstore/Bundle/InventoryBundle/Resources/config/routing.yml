@@ -1,10 +1,10 @@
 inventory_report:
     resource: "@InventoryBundle/Resources/config/routing/report.yml"
-    prefix:   /inventory/report
+    prefix:   /report
 
 inventory_branch_report:
     resource: "@InventoryBundle/Resources/config/routing/branchreport.yml"
-    prefix:   /inventory/branch-report
+    prefix:   /branch-report
 
 app_setting_bank:
     resource: "@InventoryBundle/Resources/config/routing/appsetting/bankaccount.yml"
@@ -16,23 +16,23 @@ app_setting_mobile:
 
 app_setting_barnch_shop:
     resource: "@InventoryBundle/Resources/config/routing/appsetting/branchshop.yml"
-    prefix:   /inventory/branch-shop
+    prefix:   /branch-shop
 
 inventory_excelimproter:
     resource: "@InventoryBundle/Resources/config/routing/excelimporter.yml"
-    prefix:   /inventory/excelimproter
+    prefix:   /excelimproter
 
 inventory_delivery:
     resource: "@InventoryBundle/Resources/config/routing/delivery.yml"
-    prefix:   /inventory/delivery
+    prefix:   /delivery
 
 inventory_branch_invoice:
     resource: "@InventoryBundle/Resources/config/routing/branchinvoice.yml"
-    prefix:   /inventory/branch-invoice
+    prefix:   /branch-invoice
 
 inventory_salesimport:
     resource: "@InventoryBundle/Resources/config/routing/salesimport.yml"
-    prefix:   /inventory/sales-improt
+    prefix:   /sales-improt
 
 inventory_food_product:
     resource: "@InventoryBundle/Resources/config/routing/foodproduct.yml"
@@ -181,3 +181,7 @@ inventory_reverse:
 inventory_sales_user:
     resource: "@InventoryBundle/Resources/config/routing/salesuser.yml"
     prefix:   /sales-user
+
+inventory_homepage:
+    path:     /dashoard
+    defaults: { _controller: InventoryBundle:Default:index }

@@ -21,6 +21,5 @@ var EditableInit = function () {
         })
 
     })*/
-
 }
 

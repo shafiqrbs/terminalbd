@@ -1,1 +1,707 @@
-Hello {{ name }}!
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- END PAGE HEADER-->
+        <div class="portlet-body">
+            <div class="row-fluid" >
+                <div class="span1">
+                    {% if globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ globalOption.templateCustomize.webPath('logo') }}">{% endif %}
+                </div>
+                <div class="span3"></div>
+                <div class="span4">
+                    <div class="btn-group">
+                        {% if ( app.user.granted("ROLE_DOMAIN_INVENTORY_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
+                            <a class="btn blue big"  href="{{ path('inventory_salesonline_new') }}"><i class="icon-shopping-cart"></i> Add Sales</a>
+                        {% endif %}
+                        {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
+                            <a href="{{ path('account_sales_new') }}"  class="btn yellow big"><i class="icon-money"></i> Receive</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="btn-group">
+                        {% if ( app.user.granted("ROLE_DOMAIN_INVENTORY_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
+                            <a href="{{ path('medicine_purchase_new') }}"  class="btn green big"><i class="icon-truck"></i> Add Purchase</a>
+                        {% endif %}
+                        {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
+                            <a href="{{ path('account_purchase_new') }}"  class="btn yellow big"><i class="icon-money"></i> Payment</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"><br/></div>
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="row-fluid">
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-green-sharp">
+                                        <span data-counter="counterup" data-value="">{{ ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit'])-transactionCashOverviews['credit'])|number_format }}</span>
+                                        <small class="font-green-sharp">BDT</small>
+                                    </h3>
+                                    <small>BALANCE</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-bar-chart"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success green-sharp">
+                                <span class="sr-only">75% progress</span>
+                            </span>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('account_transaction_cash_overview') }}" class="btn green mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-red-haze">
+                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format }}</span>
+                                        <small class="font-red-sharp">BDT</small>
+                                    </h3>
+                                    <small>Expense</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-money"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success red-haze">
+                                <span class="sr-only">75% change</span>
+                            </span>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('account_expenditure') }}" class="btn red mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row-fluid">
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-blue-sharp">
+                                        <span data-counter="counterup" data-value="{{ purchaseCashOverview['total']|round|number_format }}">{{ purchaseCashOverview['total']|round|number_format }}</span>
+                                        <small class="font-blu-sharp">BDT</small>
+                                    </h3>
+                                    <small>Purchase</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-shopping-cart"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success blue-sharp">
+                                <span class="sr-only">75% grow</span>
+                            </span>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('inventory_purchasesimple') }}" class="btn blue mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat2 ">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-purple-soft">
+                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total']|number_format }}">{{ salesCashOverview['total'] }}</span>
+                                        <small class="font-purple-soft">BDT</small>
+                                    </h3>
+                                    <small>SALES</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-money"></i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                            <span style="width: 75%;" class="progress-bar progress-bar-success purple-soft">
+                                <span class="sr-only">75% change</span>
+                            </span>
+                                </div>
+                                <div class="status">
+                                    <div class="status-number">
+                                        <a href="{{ path('inventory_salesonline') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="span4">
+                <div class="span6" style="margin-top:-10px">
+                    <div class="portlet-body">
+                        <a href="{{ path('account_sales_outstanding') }}" class="icon-btn">
+                            <i class="fa fa-group"></i>
+                            <div> Customer </div>
+                        </a>
+                        <a href="{{ path('inventory_report_sales_overview') }}" class="icon-btn">
+                            <i class="icon-tags"></i>
+                            <div> Sales </div>
+                        </a>
+                        <a href="{{ path('account_purchase_outstanding') }}" class="icon-btn">
+                            <i class="fa fa-user"></i>
+                            <div> Vendor </div>
+                        </a>
+                        <a href="{{ path('inventory_report_purchase_overview') }}" class="icon-btn">
+                            <i class="icon-truck"></i>
+                            <div> Purchase </div>
+                        </a>
+
+                    </div>
+
+                </div>
+                <div class="span6" style="margin-top:-10px">
+                    <div class="portlet-body">
+                        <a href="{{ path('inventory_item') }}" class="icon-btn">
+                            <i class="icon-bar-chart"></i>
+                            <div> Stock </div>
+                        </a>
+                        <a href="{{ path('inventory_stockitem_short_list') }}" class="icon-btn">
+                            <i class="icon-signal"></i>
+                            <div> Short List </div>
+                            {#<span class="badge badge-important">{{ shortMedicineCount }}</span>#}
+                        </a>
+                        <a href="{{ path('inventory_damage') }}" class="icon-btn">
+                            <i class=" icon-list-ol"></i>
+                            <div> Damage </div>
+                            {#<span class="badge badge-important">{{ expiryMedicineCount }}</span>#}
+                        </a>
+                        <a href="{{ path('inventory_stockitem') }}" class="icon-btn">
+                            <i class="icon-th"></i>
+                            <div> Stock Details </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="portlet-body form">
+            <style>
+                /***
+    Dashboard Stats 2
+    ***/
+                .dashboard-stat2 {
+                    -webkit-border-radius: 4px;
+                    -moz-border-radius: 4px;
+                    -ms-border-radius: 4px;
+                    -o-border-radius: 4px;
+                    border-radius: 4px;
+                    background: #fff;
+                    padding: 15px 15px 30px 15px;
+                    margin-bottom: 20px;
+                }
+                .dashboard-stat2 .display {
+                    margin-bottom: 20px;
+                }
+                .dashboard-stat2 .display:before, .dashboard-stat2 .display:after {
+                    content: " ";
+                    display: table;
+                }
+                .dashboard-stat2 .display:after {
+                    clear: both;
+                }
+                .dashboard-stat2 .display .number {
+                    float: left;
+                    display: inline-block;
+                }
+                .dashboard-stat2 .display .number h3 {
+                    margin: 0 0 2px 0;
+                    padding: 0;
+                    font-size: 30px;
+                    font-weight: 400;
+                }
+                .dashboard-stat2 .display .number h3 > small {
+                    font-size: 23px;
+                }
+                .dashboard-stat2 .display .number small {
+                    font-size: 14px;
+                    color: #AAB5BC;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                }
+                .dashboard-stat2 .display .icon {
+                    display: inline-block;
+                    float: right;
+                    padding: 7px 0 0 0;
+                }
+                .dashboard-stat2 .display .icon > i {
+                    color: #cbd4e0;
+                    font-size: 26px;
+                }
+                .dashboard-stat2 .progress-info {
+                    clear: both;
+                }
+                .dashboard-stat2 .progress-info .progress {
+                    margin: 0;
+                    height: 4px;
+                    clear: both;
+                    display: block;
+                }
+                .dashboard-stat2 .progress-info .status {
+                    margin-top: 5px;
+                    font-size: 11px;
+                    color: #AAB5BC;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                }
+                .dashboard-stat2 .progress-info .status .status-title {
+                    float: left;
+                    display: inline-block;
+                }
+                .dashboard-stat2 .progress-info .status .status-number {
+                    float: right;
+                    display: inline-block;
+                }
+
+                /* Statistic Block */
+                .dashboard-stat.green-sharp {
+                    background-color: #4DB3A2;
+                }
+                .dashboard-stat.green-sharp.dashboard-stat-light:hover {
+                    background-color: #46a595;
+                }
+                .dashboard-stat.green-sharp .visual > i {
+                    color: #FFFFFF;
+                    opacity: 0.1;
+                    filter: alpha(opacity=10);
+                }
+                .dashboard-stat.green-sharp .details .number {
+                    color: #FFFFFF;
+                }
+                .dashboard-stat.green-sharp .details .desc {
+                    color: #FFFFFF;
+                    opacity: 1;
+                    filter: alpha(opacity=100);
+                }
+                .dashboard-stat.green-sharp .more {
+                    color: #FFFFFF;
+                    background-color: #46a595;
+                }
+
+                /* General Element */
+                .bg-green-sharp {
+                    border-color: #4DB3A2 !important;
+                    background-image: none !important;
+                    background-color: #4DB3A2 !important;
+                    color: #FFFFFF !important;
+                }
+
+                /* General Text & Icon Font Colors */
+                .font-green-sharp {
+                    color: #4DB3A2 !important;
+                }
+
+                .progress-bar.green-sharp {
+                    background: #4DB3A2 !important;
+                    color: #FFFFFF !important;
+                }
+
+                /***
+                Green Sharp
+                ***/
+                /* Button */
+                .green-soft.btn {
+                    color: #FFFFFF;
+                    background-color: #3faba4;
+                }
+                .green-soft.btn:hover, .green-soft.btn:focus, .green-soft.btn:active, .green-soft.btn.active {
+                    color: #FFFFFF;
+                    background-color: #35918b;
+                }
+                .open .green-soft.btn.dropdown-toggle {
+                    color: #FFFFFF;
+                    background-color: #35918b;
+                }
+                .green-soft.btn:active, .green-soft.btn.active {
+                    background-image: none;
+                    background-color: #2f7e79;
+                }
+                .green-soft.btn:active:hover, .green-soft.btn.active:hover {
+                    background-color: #318680;
+                }
+                .open .green-soft.btn.dropdown-toggle {
+                    background-image: none;
+                }
+                .green-soft.btn.disabled, .green-soft.btn.disabled:hover, .green-soft.btn.disabled:focus, .green-soft.btn.disabled:active, .green-soft.btn.disabled.active, .green-soft.btn[disabled], .green-soft.btn[disabled]:hover, .green-soft.btn[disabled]:focus, .green-soft.btn[disabled]:active, .green-soft.btn[disabled].active, fieldset[disabled] .green-soft.btn, fieldset[disabled] .green-soft.btn:hover, fieldset[disabled] .green-soft.btn:focus, fieldset[disabled] .green-soft.btn:active, fieldset[disabled] .green-soft.btn.active {
+                    background-color: #3faba4;
+                }
+                .green-soft.btn .badge {
+                    color: #3faba4;
+                    background-color: #FFFFFF;
+                }
+
+                /* Button Strip */
+                .btn.green-soft-stripe {
+                    border-left: 3px solid #3faba4;
+                }
+
+                /* Portlet */
+                .portlet > .portlet-body.green-soft,
+                .portlet.green-soft {
+                    background-color: #3faba4;
+                }
+
+                .portlet.solid.green-soft > .portlet-title,
+                .portlet.solid.green-soft > .portlet-body {
+                    border: 0;
+                    color: #FFFFFF;
+                }
+                .portlet.solid.green-soft > .portlet-title > .caption {
+                    font-weight: 400;
+                }
+                .portlet.solid.green-soft > .portlet-title > .caption > i {
+                    color: #FFFFFF;
+                }
+
+                .portlet.box.green-soft {
+                    border: 1px solid #5bc2bc;
+                    border-top: 0;
+                }
+                .portlet.box.green-soft > .portlet-title {
+                    background-color: #3faba4;
+                }
+                .portlet.box.green-soft > .portlet-title > .caption {
+                    color: #FFFFFF;
+                }
+                .portlet.box.green-soft > .portlet-title > .caption > i {
+                    color: #FFFFFF;
+                }
+                .portlet.box.green-soft > .portlet-title > .actions .btn-default {
+                    background: transparent !important;
+                    background-color: transparent !important;
+                    border: 1px solid #87d3ce;
+                    color: #9adad6;
+                }
+                .portlet.box.green-soft > .portlet-title > .actions .btn-default > i {
+                    color: #a5deda;
+                }
+                .portlet.box.green-soft > .portlet-title > .actions .btn-default:hover, .portlet.box.green-soft > .portlet-title > .actions .btn-default:focus, .portlet.box.green-soft > .portlet-title > .actions .btn-default:active, .portlet.box.green-soft > .portlet-title > .actions .btn-default.active {
+                    border: 1px solid #ade1dd;
+                    color: #bfe7e5;
+                }
+
+                /* Statistic Block */
+                .dashboard-stat.green-soft {
+                    background-color: #3faba4;
+                }
+                .dashboard-stat.green-soft.dashboard-stat-light:hover {
+                    background-color: #3a9c96;
+                }
+                .dashboard-stat.green-soft .visual > i {
+                    color: #FFFFFF;
+                    opacity: 0.1;
+                    filter: alpha(opacity=10);
+                }
+                .dashboard-stat.green-soft .details .number {
+                    color: #FFFFFF;
+                }
+                .dashboard-stat.green-soft .details .desc {
+                    color: #FFFFFF;
+                    opacity: 1;
+                    filter: alpha(opacity=100);
+                }
+                .dashboard-stat.green-soft .more {
+                    color: #FFFFFF;
+                    background-color: #3a9c96;
+                }
+
+                /* General Element */
+                .bg-green-soft {
+                    border-color: #3faba4 !important;
+                    background-image: none !important;
+                    background-color: #3faba4 !important;
+                    color: #FFFFFF !important;
+                }
+
+                /* General Text & Icon Font Colors */
+                .font-green-soft {
+                    color: #3faba4 !important;
+                }
+
+                .progress-bar.green-soft {
+                    background: #3faba4 !important;
+                    color: #FFFFFF !important;
+                }
+
+                .progress-bar.red-haze {
+                    background: #f36a5a!important;
+                    color: #fff!important;
+                }
+
+                .progress-bar.green-sharp {
+                    background: #2ab4c0!important;
+                    color: #FFF!important;
+                }
+
+                .progress-bar.green-sharp {
+                    background: #2ab4c0!important;
+                    color: #FFF!important;
+                }
+                .progress-bar-success {
+                    background-color: #36c6d3;
+                }
+                .progress-bar {
+                    float: left;
+                    width: 0;
+                    height: 100%;
+                    font-size: 12px;
+                    line-height: 20px;
+                    color: #fff;
+                    text-align: center;
+                    background-color: #337ab7;
+                    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+                    box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+                    -webkit-transition: width .6s ease;
+                    -o-transition: width .6s ease;
+                    transition: width .6s ease;
+                }
+
+                .font-purple-soft {
+                    color: #8877a9!important;
+                }
+                .font-red-haze {
+                    color: #f36a5a!important;
+                }
+                .font-blue-sharp {
+                    color: #5C9BD1!important;
+                }
+
+            </style>
+            <div class="portlet box blue">
+
+                <div class="portlet-body">
+                    <div class="row-fluid" >
+                        <div class="span6">
+                            <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                        </div>
+                        <div class="span6">
+                            <div id="userDailySales" style="height: 300px; width: 100%;"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="portlet box green">
+                <div class="portlet-body">
+                    <div class="row-fluid" >
+                        <div class="span12">
+                            <div id="optionsYearlyMonthlyPurchase" style="height: 330px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet box blue">
+                <div class="portlet-body">
+                    <div class="row-fluid" >
+                        <div class="span12">
+                            <div id="optionsYearlyMonthlySales" style="height: 330px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <style>
+        .icon-btn{
+            width: 100%;
+            height: 50px!important;
+        }
+        .icon-btn div{
+            font-size: 15px;
+            font-weight: bold;
+            color: #26a69a;
+        }
+        .dashboard-stat .visual{
+            width: auto;
+            float: none;
+            padding:0;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .dashboard-stat .visual:hover{
+            text-decoration: none;
+        }
+        .dashboard-stat .more {
+            clear: both;
+            display: block;
+            padding: 5px 10px 5px 10px;
+            text-transform: uppercase;
+            font-size: 16px;
+            color: #fff;
+            opacity:1;
+            font-weight: bold;
+        }
+        .unstyled{
+            height: 100px;
+        }
+    </style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@MedicineBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@MedicineBundle/Resources/public/js/temporary-sales.js'
+    '@MedicineBundle/Resources/public/js/approveProcess.js'
+    '@MedicineBundle/Resources/public/js/jquery-canvas.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+    jqueryTemporaryLoad();
+    jqueryInstantTemporaryLoad();
+    $('#salesTemporaryItem_stockName').focus();
+
+    window.onload = function () {
+
+    var optionsUserSales = {
+    animationEnabled: true,
+    title: {
+    text: "User Monthly Sales - {{ "now"|date("F,Y") }}"
+    },
+    axisY: {
+    title: "Growth Rate (in %)",
+    suffix: "%",
+    includeZero: false
+    },
+    axisX: {
+    title: "User Monthly Sales - {{ "now"|date("F,Y") }}"
+    },
+    data: [{
+    type: "column",
+    yValueFormatString: "#,##0.0#"%"",
+    dataPoints: [
+    {% set month = "now"|date("m") %}
+    {% for employee in employees %}
+        {% set monthSales =  employee.id~month|number_format %}
+        {% if employee.monthlySales > 0 %}
+            { label: "{{ employee.username|capitalize }}", y: {% if userSalesAmount[monthSales] is defined and userSalesAmount[monthSales] is not empty %} {{ ((userSalesAmount[monthSales]*100)/employee.monthlySales)|number_format }}{% else %}0{% endif %},indexLabel: "BDT {% if  userSalesAmount[monthSales] is defined and userSalesAmount[monthSales] is not empty %} {{ userSalesAmount[monthSales]|number_format }}{% else %}0{% endif %}" },
+        {% endif %}
+    {% endfor %}
+    ]
+    }]
+    };
+    $("#chartContainer").CanvasJSChart(optionsUserSales);
+
+    var userDailySales = {
+    exportEnabled: true,
+    animationEnabled: true,
+    title:{
+    text: "User Today Sales"
+    },
+    legend:{
+    horizontalAlign: "right",
+    verticalAlign: "center"
+    },
+    data: [{
+    type: "pie",
+    showInLegend: true,
+    toolTipContent: "<b>{name}</b>: ${y} (#percent%)",
+    indexLabel: "{name}",
+    legendText: "{name} (#percent%)",
+    indexLabelPlacement: "inside",
+    yValueFormatString: "BDT#,##0",
+    dataPoints: [
+    {% for entity in salesUserReport %}
+        {% if entity.total > 0  %}
+            { y: {{ entity.total }}, name: "{{ entity.salesBy|capitalize }}" },
+        {% endif %}
+    {% endfor %}
+    ]
+    }]
+    };
+    $("#userDailySales").CanvasJSChart(userDailySales);
+
+    var optionsYearlyMonthlySales = {
+    animationEnabled: true,
+    title: {
+    text: "Monthly Sales - {{ "now"|date("Y") }}"
+    },
+    axisY: {
+    title: "",
+    suffix: "",
+    includeZero: false
+    },
+    axisX: {
+    title: "Monthly Sales - {{ "now"|date("Y") }}"
+    },
+    data: [{
+    type: "column",
+    yValueFormatString: "#,##0.0#",
+    dataPoints: [
+    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
+    {% for key,month in months %}
+        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in medicineSalesMonthly|keys %}{{ medicineSalesMonthly[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in medicineSalesMonthly|keys %}{{ medicineSalesMonthly[key]|number_format }}{% endif %}" },
+    {% endfor %}
+    ]
+    }]
+    };
+    $("#optionsYearlyMonthlySales").CanvasJSChart(optionsYearlyMonthlySales);
+
+    var optionsYearlyMonthlyPurchase = {
+    animationEnabled: true,
+    title: {
+    text: "Monthly Purchase - {{ "now"|date("Y") }}"
+    },
+    axisY: {
+    title: "",
+    suffix: "",
+    includeZero: false
+    },
+    axisX: {
+    title: "Monthly Purchase - {{ "now"|date("Y") }} "
+    },
+    data: [{
+    type: "column",
+    yValueFormatString: "#,##0.0#",
+    dataPoints: [
+    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
+    {% for key,month in months %}
+        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in medicinePurchaseMonthly|keys %}{{ medicinePurchaseMonthly[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in medicinePurchaseMonthly|keys %}{{ medicinePurchaseMonthly[key]|number_format }}{% endif %}" },
+    {% endfor %}
+    ]
+    }]
+    };
+    $("#optionsYearlyMonthlyPurchase").CanvasJSChart(optionsYearlyMonthlyPurchase);
+
+    }
+
+{% endblock %}

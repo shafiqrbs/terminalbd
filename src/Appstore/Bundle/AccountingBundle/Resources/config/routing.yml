@@ -90,3 +90,8 @@ accounting_account_report:
 accounting_vendor:
     resource: "@AccountingBundle/Resources/config/routing/vendor.yml"
     prefix:   /finance/vendor
+
+accounting_print:
+    resource: "@AccountingBundle/Resources/config/routing/print.yml"
+    prefix:   /finance/print
+

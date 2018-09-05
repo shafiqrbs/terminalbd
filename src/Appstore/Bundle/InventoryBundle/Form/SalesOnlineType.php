@@ -72,7 +72,7 @@ class SalesOnlineType extends AbstractType
                 }
             ))
 	        ->add('discountType', 'choice', array(
-		        'required'    => false,
+		        'required'    => true,
 		        'attr'=>array('class'=>'span12 m-wrap inputs'),
 		        'choices' => array(
 			        'Flat' => 'Flat',

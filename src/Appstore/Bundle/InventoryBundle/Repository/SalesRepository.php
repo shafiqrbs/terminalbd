@@ -236,6 +236,7 @@ class SalesRepository extends EntityRepository
 
     }
 
+
     public function salesUserPurchasePriceReport(User $user,$data)
     {
         $userBranch = $user->getProfile()->getBranches();
@@ -264,6 +265,28 @@ class SalesRepository extends EntityRepository
         return $array;
     }
 
+	public function inventorySalesMonthly(User $user , $data =array())
+	{
+
+		$config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+		$compare = new \DateTime();
+		$year =  $compare->format('Y');
+		$year = isset($data['year'])? $data['year'] :$year;
+		$sql = "SELECT MONTH (sales.created) as month,SUM(sales.total) AS total
+                FROM Sales as sales
+                WHERE sales.inventoryConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year
+                GROUP BY month ORDER BY month ASC";
+		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->bindValue('config', $config);
+		$stmt->bindValue('process', 'Done');
+		$stmt->bindValue('year', $year);
+		$stmt->execute();
+		$result =  $stmt->fetchAll();
+		return $result;
+
+
+	}
+
     public function monthlySales(User $user , $data =array())
     {
 
@@ -288,7 +311,35 @@ class SalesRepository extends EntityRepository
 
     }
 
-    public function salesPurchasePriceReport(User $user,$data,$x)
+	public function currentMonthSales(User $user , $data =array())
+	{
+
+		$userBranch = $user->getProfile()->getBranches();
+		$config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+
+		$compare = new \DateTime();
+		$year =  $compare->format('Y');
+		$month =  $compare->format('m');
+		$year = isset($data['year'])? $data['year'] :$year;
+
+		$sql = "SELECT sales.salesBy_id as salesBy, MONTH (sales.created) as month, SUM(sales.total) AS total
+                FROM Sales as sales
+                WHERE sales.inventoryConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY month , salesBy ORDER BY salesBy ASC";
+		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->bindValue('config', $config);
+		$stmt->bindValue('process', 'Done');
+		$stmt->bindValue('year', $year);
+		$stmt->bindValue('month', $month);
+		$stmt->execute();
+		$result =  $stmt->fetchAll();
+		return $result;
+
+
+	}
+
+
+	public function salesPurchasePriceReport(User $user,$data,$x)
     {
 
         $userBranch = $user->getProfile()->getBranches();
@@ -353,16 +404,16 @@ class SalesRepository extends EntityRepository
             $sales->setPayment($total['total']);
         }
 
-        if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-            $totalAmount = ($total['total'] - $sales->getDiscount());
-            $vat = $this->getCulculationVat($sales,$totalAmount);
-            $sales->setVat($vat);
-        }
+
         if($total['total'] > 0){
+	        $subTotal = $total['total'];
             $sales->setSubTotal($total['total']);
             $sales->setTotal($total['total'] + $sales->getVat());
             $sales->setDue($total['total']+ $sales->getVat());
             $sales->setTotalItem($total['totalItem']);
+	        $sales->setDiscount($this->getUpdateDiscount($sales,$subTotal));
+	        $sales->setTotal(floor($subTotal - $sales->getDiscount()));
+	        $sales->setDue(floor($subTotal - $sales->getDiscount()));
         }else{
             $sales->setSubTotal(0);
             $sales->setTotal(0);
@@ -371,6 +422,11 @@ class SalesRepository extends EntityRepository
             $sales->setDiscount(0);
             $sales->setVat(0);
         }
+	    if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+		    $totalAmount = $sales->getTotal();
+		    $vat = $this->getCulculationVat($sales,$totalAmount);
+		    $sales->setVat($vat);
+	    }
 
         $em->persist($sales);
         $em->flush();
@@ -378,6 +434,16 @@ class SalesRepository extends EntityRepository
         return $sales;
 
     }
+
+	public function getUpdateDiscount(Sales $invoice,$subTotal)
+	{
+		if($invoice->getDiscountType() == 'Flat'){
+			$discount = $invoice->getDiscountCalculation();
+		}else{
+			$discount = ($subTotal * $invoice->getDiscountCalculation())/100;
+		}
+		return round($discount,2);
+	}
 
     public function updateSalesPaymentReceive(AccountSales $accountSales)
     {

@@ -31,6 +31,10 @@ inventory_report_purchase:
     path:     /purchase
     defaults: { _controller: "InventoryBundle:Report:purchase" }
 
+inventory_report_purchase_overview:
+    path:     /purchase-overview
+    defaults: { _controller: "InventoryBundle:Report:purchaseOverview" }
+
 inventory_report_sales_item:
     path:     /sales-item
     defaults: { _controller: "InventoryBundle:Report:salesStockItem" }

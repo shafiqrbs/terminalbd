@@ -51,3 +51,11 @@ account_sales_delete:
     defaults: { _controller: "AccountingBundle:AccountSales:delete" }
     options:
            expose: true
+
+business_receive_print:
+    path:     /{id}/sales-receive-print
+    defaults: { _controller: "AccountingBundle:AccountSales:salesPrint" }
+
+business_payment_print:
+    path:     /{id}/sales-payment-print
+    defaults: { _controller: "AccountingBundle:AccountSales:purchasePrint" }

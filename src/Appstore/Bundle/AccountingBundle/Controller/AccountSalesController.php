@@ -330,4 +330,21 @@ class AccountSalesController extends Controller
         exit;
     }
 
+    public function salesPrint(AccountSales $sales)
+    {
+    	$em = $this->getDoctrine()->getManager();
+	    $template = $sales->getGlobalOption()->getSlug();
+	    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($sales->getGlobalOption(), $data = array('mobile'=> $sales->getCustomer()->getMobile()));
+	    $balance = empty($result) ? 0 :$result[0]['customerBalance'];
+	    $amountInWords = $this->get('settong.toolManageRepo')->intToWords($sales->getAmount());
+	    return  $this->render("BusinessBundle:Print:{$template}.html.twig",
+		    array(
+			    'amountInWords' => $amountInWords,
+			    'entity' => $sales,
+			    'balance' => $balance,
+			    'print' => 'print',
+		    )
+	    );
+    }
+
 }

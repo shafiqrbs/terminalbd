@@ -105,8 +105,6 @@ class InvoiceController extends Controller
         return $form;
     }
 
-
-
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
@@ -167,7 +165,7 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+	        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
             $done = array('Done','Delivered','Chalan');
@@ -269,7 +267,7 @@ class InvoiceController extends Controller
 
     public function particularSearchAction(BusinessParticular $particular)
     {
-        $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
+	    $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
         return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1,'unit' => $unit)));
     }
 
@@ -307,7 +305,7 @@ class InvoiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $particular = $request->request->get('particular');
+        $particular = $request->request->get('customParticular');
         $price = $request->request->get('price');
         $unit = $request->request->get('unit');
         $quantity = $request->request->get('quantity');
@@ -338,7 +336,6 @@ class InvoiceController extends Controller
         return new Response(json_encode($result));
         exit;
     }
-
 
 
     /**
@@ -555,7 +552,8 @@ class InvoiceController extends Controller
         }
 
     }
-	public function invoiceChalanAction(BusinessInvoice $entity)
+
+    public function invoiceChalanAction(BusinessInvoice $entity)
 	{
 
 		$em = $this->getDoctrine()->getManager();

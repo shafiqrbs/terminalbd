@@ -333,7 +333,7 @@ class AccountBusinessController extends Controller
             $em->flush();
 	        $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
 	        if($entity->getAmount() > 0 ){
-		        $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
+		     //   $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
 		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
 	        }else{
 		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
@@ -368,6 +368,9 @@ class AccountBusinessController extends Controller
 		    'searchForm' => $data,
 	    ));
     }
+
+
+
 
 
 }

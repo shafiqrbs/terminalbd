@@ -156,8 +156,8 @@ var InventorySales = function(sales) {
                 $('#salesItem').html(obj['salesItems']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('.dueAmount').html(obj['salesTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
                 $('.subTotal').html(obj['salesSubTotal']);
                 $('#vat').html(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
@@ -185,8 +185,8 @@ var InventorySales = function(sales) {
                 $('#salesItem').html(obj['salesItems']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('.dueAmount').html(obj['salesTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
                 $('.subTotal').html(obj['salesSubTotal']);
                 $('#vat').html(obj['salesVat']);
                 $('#discount').html(obj['discount']);
@@ -214,8 +214,8 @@ var InventorySales = function(sales) {
                 $('#salesItem').html(obj['salesItems']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('.dueAmount').html(obj['salesTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
                 $('.subTotal').html(obj['salesSubTotal']);
                 $('#vat').html(obj['salesVat']);
                 $('#discount').html(obj['discount']);
@@ -268,8 +268,8 @@ var InventorySales = function(sales) {
                     obj = JSON.parse(response);
                     $('#paymentSubTotal').val(obj['salesTotal']);
                     $('.salesTotal').html(obj['salesTotal']);
-                    $('#dueAmount').val(obj['salesTotal']);
-                    $('.dueAmount').html(obj['salesTotal']);
+                    $('#due').val(obj['due']);
+                    $('.dueAmount').html(obj['due']);
                     $('.subTotal').html(obj['salesSubTotal']);
                     $('#vat').html(obj['salesVat']);
                     $('#discount').html(obj['discount']);
@@ -303,8 +303,8 @@ var InventorySales = function(sales) {
                 obj = JSON.parse(response);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('.dueAmount').html(obj['salesTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
                 $('.subTotal').html(obj['salesSubTotal']);
                 $('#vat').html(obj['salesVat']);
                 $('#discount').html(obj['discount']);
@@ -346,8 +346,8 @@ var InventorySales = function(sales) {
                             $('#remove-' + id).hide();
                             $('#paymentSubTotal').val(obj['salesTotal']);
                             $('.salesTotal').html(obj['salesTotal']);
-                            $('#dueAmount').val(obj['salesTotal']);
-                            $('.dueAmount').html(obj['salesTotal']);
+                            $('#due').val(obj['due']);
+                            $('.dueAmount').html(obj['due']);
                             $('.subTotal').html(obj['salesSubTotal']);
                             $('#vat').html(obj['salesVat']);
                             $('#discount').html(obj['discount']);
@@ -390,8 +390,40 @@ var InventorySales = function(sales) {
                 obj = JSON.parse(response);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('.dueAmount').html(obj['salesTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
+                $('.subTotal').html(obj['salesSubTotal']);
+                $('#vat').html(obj['salesVat']);
+                $('#discount').html(obj['discount']);
+                $('#paymentTotal').val(obj['salesTotal']);
+                $('#wrongBarcode').html(obj['msg']);
+            }
+
+        })
+
+    });
+
+    $(document).on('change', '#sales_discountType', function() {
+
+        var discountType = $('#sales_discountType').val();
+        var discount = parseFloat($('#sales_discountCalculation').val());
+        var invoice = $('#salesId').val();
+        var total =  parseFloat($('#paymentTotal').val());
+        if( discount >= total ){
+            $('#sales_discount').val(0);
+            alert ('Discount amount less then total amount');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_sales_discount_update'),
+            type: 'POST',
+            data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#paymentSubTotal').val(obj['salesTotal']);
+                $('.salesTotal').html(obj['salesTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
                 $('.subTotal').html(obj['salesSubTotal']);
                 $('#vat').html(obj['salesVat']);
                 $('#discount').html(obj['discount']);
@@ -411,10 +443,13 @@ var InventorySales = function(sales) {
         if(dueAmount > 0){
             $('#balance').html('Due Tk.');
             $('.dueAmount').html(dueAmount);
+            $('#due').val(dueAmount);
         }else{
             var balance =  payment - total ;
             $('#balance').html('Return TK.');
             $('.dueAmount').html(balance);
+            $('#due').html(balance);
+
         }
 
     });

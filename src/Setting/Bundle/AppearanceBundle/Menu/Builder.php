@@ -562,7 +562,6 @@ class Builder extends ContainerAware
             if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
                 $menu['Sales']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
             }
-            $menu['Sales']->addChild('Pre-purchase', array('route' => 'prepurchaseitem'))->setAttribute('icon', 'icon icon-archive');
             if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {
                 $menu['Sales']->addChild('Reports')
                     ->setAttribute('icon', 'icon-bar-chart')
@@ -601,7 +600,8 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', ' icon-reply');
             $menu['Inventory']['Manage Purchase']->addChild('Purchase Import', array('route' => 'inventory_excelimproter'))
                 ->setAttribute('icon', 'icon-upload');
-            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {
+	        $menu['Inventory']['Manage Purchase']->addChild('Pre-purchase', array('route' => 'prepurchaseitem'))->setAttribute('icon', 'icon icon-archive');
+	        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {
             $menu['Inventory']['Manage Purchase']->addChild('Reports')
                 ->setAttribute('icon', 'icon-bar-chart')
                 ->setAttribute('dropdown', true);

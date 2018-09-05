@@ -1,5 +1,12 @@
 {% extends '::base.html.twig' %}
 {% block body %}
+    <script type="text/javascript">
+        window.print();
+        setTimeout(function () {
+            window.open('', '_self', '');
+            window.close();
+        }, 2000);
+    </script>
     <div class="container-fluid" style="margin-top:{{ config.printTopMargin }}px!important;">
         <!-- BEGIN purchase_order HEADER-->
         {% if config.isPrintHeader == 1 %}
@@ -239,7 +246,12 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
-{% block documentready %}
+{% block javascriptBlock %}
     {{ parent() }}
-{#    window.print();#}
-{% endblock %}
+    {% javascripts
+    '@SettingToolBundle/Resources/public/js/print.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+

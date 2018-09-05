@@ -661,4 +661,19 @@ class ItemRepository extends EntityRepository
     }
 
 
+	public function inventoryShortListCount(User $user)
+	{
+		$config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+		$qb = $this->createQueryBuilder('item');
+		$qb->select('COUNT(item.id) as totalShortList');
+		$qb->where("item.inventoryConfig = :config");
+		$qb->setParameter('config', $config);
+		$qb->andWhere("item.minQnt > 0");
+		$qb->andWhere("item.minQnt >= item.remainingQnt");
+		$count = $qb->getQuery()->getOneOrNullResult()['totalShortList'];
+		return  $count;
+
+	}
+
+
 }

@@ -41,11 +41,12 @@ class BusinessDamageType extends AbstractType
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->where("e.status = 1")
-			                  ->andWhere("e.businessConfig =".$this->config->getId());
+			                  ->andWhere("e.businessConfig =".$this->config->getId())
+			                  ->andWhere("e.remainingQuantity > 0");
 		        },
 	        ))
 	        ->add('notes','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter notes ')))
-	        ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter medicine name'),
+	        ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter product name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )

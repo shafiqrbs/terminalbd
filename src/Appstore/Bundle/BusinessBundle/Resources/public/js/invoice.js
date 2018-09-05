@@ -89,7 +89,7 @@ var form = $("#customInvoice").validate({
 
     rules: {
 
-        "particular": {required: true},
+        "customParticular": {required: true},
         "price": {required: true},
         "quantity": {required: false},
         "unit": {required: false},
@@ -97,11 +97,11 @@ var form = $("#customInvoice").validate({
 
     messages: {
 
-        "particular":"Enter particular name",
+        "customParticular":"Enter particular name",
         "price":"Enter sales price",
     },
     tooltip_options: {
-        "particular": {placement:'top',html:true},
+        "customParticular": {placement:'top',html:true},
         "price": {placement:'top',html:true},
     },
 
@@ -118,6 +118,8 @@ var form = $("#customInvoice").validate({
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#due').val(obj['due']);
                 $('.due').html(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
@@ -143,9 +145,12 @@ $(document).on('change', '.quantity , .salesPrice', function() {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
             $('.netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#due').val(obj['due']);
             $('.due').html(obj['due']);
             $('.payment').html(obj['payment']);
             $('.discount').html(obj['discount']);
+
         },
 
     })
@@ -166,9 +171,12 @@ $(document).on('click', '.itemUpdate', function() {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
             $('.netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#due').val(obj['due']);
             $('.due').html(obj['due']);
             $('.payment').html(obj['payment']);
             $('.discount').html(obj['discount']);
+
         },
 
     })
@@ -188,9 +196,12 @@ $(document).on("click", ".particularDelete", function() {
                 $('#remove-'+id).remove();
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#due').val(obj['due']);
                 $('.due').html(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
+
 
             });
         }
@@ -301,6 +312,8 @@ var stockInvoice = $("#stockInvoice").validate({
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#due').val(obj['due']);
                 $('.due').html(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
@@ -360,7 +373,7 @@ $('form#salesForm').on('keypress', '.salesInput', function (e) {
     if (e.which === 13) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
         var idx = inputs.index(this);
-        if (idx == inputs.length - 1) {
+        if (idx == inputs.length-1) {
             inputs[0].select()
         } else {
             inputs[idx + 1].focus(); //  handles submit buttons

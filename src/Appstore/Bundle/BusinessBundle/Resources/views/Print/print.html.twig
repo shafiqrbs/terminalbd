@@ -1,5 +1,6 @@
 {% extends '::base.html.twig' %}
 {% block body %}
+
     <div class="container-fluid">
         <!-- BEGIN purchase_order HEADER-->
         {% if config.isPrintHeader == 1 %}
@@ -172,7 +173,11 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
-{% block documentready %}
+{% block javascriptBlock %}
     {{ parent() }}
-{#    window.print();#}
-{% endblock %}
+    {% javascripts
+    '@SettingToolBundle/Resources/public/js/print.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}

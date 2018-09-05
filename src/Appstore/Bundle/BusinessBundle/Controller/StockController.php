@@ -291,8 +291,16 @@ class StockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find particular entity.');
         }
-        $setField = 'set'.$data['name'];
-        $entity->$setField(abs($data['value']));
+	    if('openingQuantity' == $data['name']) {
+		    $setField = 'set' . $data['name'];
+		    $quantity = abs($data['value']);
+		    $entity->$setField($quantity);
+		    $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
+		    $entity->setRemainingQuantity($remainingQuantity);
+	    }else{
+		    $setField = 'set' . $data['name'];
+		    $entity->$setField(abs($data['value']));
+	    }
         $em->flush();
         exit;
 
@@ -325,5 +333,26 @@ class StockController extends Controller
 			'text'=> $stock
 		));
 	}
+
+	public function stockQuantityUpdateAction()
+	{
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+		$items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findBy(array('medicineConfig'=>$config));
+
+		/* @var BusinessParticular $item */
+
+		foreach ($items as $item){
+			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'');
+			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'sales');
+			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'sales-return');
+			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'purchase-return');
+			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'damage');
+		}
+		return $this->redirect($this->generateUrl('medicine_stock'));
+	}
+
 
 }

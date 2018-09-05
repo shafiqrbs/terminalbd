@@ -46,6 +46,7 @@ class ReportController extends Controller
     }
 
 
+
     public function tillStockAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -163,6 +164,25 @@ class ReportController extends Controller
             'stockOverview' => $stockOverview,
             'searchForm' => $data,
         ));
+    }
+
+    public function purchaseOverviewAction()
+    {
+	    $em = $this->getDoctrine()->getManager();
+	    $data = $_REQUEST;
+	    $user = $this->getUser();
+	    $inventory = $user->getGlobalOption()->getInventoryConfig()->getId();
+	    $cashOverview = $em->getRepository('InventoryBundle:Purchase')->purchaseOverview($inventory,$data);
+	    $transactionCash = $em->getRepository('InventoryBundle:Purchase')->reportTransactionOverview($inventory,$data);
+	    $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+	    return $this->render('InventoryBundle:Report:purchase/overview.html.twig', array(
+		    'inventory' => $inventory,
+		    'cashOverview'              => $cashOverview ,
+		    'transactionCash'           => $transactionCash ,
+		    'transactionMethods'        => $transactionMethods ,
+		    'option'                    => $this->getUser()->getGlobalOption(),
+		    'searchForm'                => $data ,
+	    ));
     }
 
 
@@ -391,10 +411,5 @@ class ReportController extends Controller
         ));
 
     }
-
-
-
-
-
 
 }
