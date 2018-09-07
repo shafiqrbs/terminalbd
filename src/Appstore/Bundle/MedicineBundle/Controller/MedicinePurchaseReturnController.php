@@ -173,6 +173,7 @@ class MedicinePurchaseReturnController extends Controller
            // $purchaseReturnItem->setMedicinePurchaseItem($purchaseItem);
             $purchaseReturnItem->setPurchasePrice($stock->getPurchasePrice());
             $purchaseReturnItem->setSubTotal($purchaseReturnItem->getPurchasePrice() * $purchaseReturnItem->getQuantity());
+            $purchaseReturnItem->setTotal($purchaseReturnItem->getPurchasePrice() * $purchaseReturnItem->getQuantity());
             $em->persist($purchaseReturnItem);
             $em->flush();
            // $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'purchase-return');
@@ -208,6 +209,42 @@ class MedicinePurchaseReturnController extends Controller
         );
         return $this->redirect($this->generateUrl('medicine_purchase_return'));
     }
+
+	public function invoiceDiscountUpdateAction(Request $request)
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		$discountType = $request->request->get('discountType');
+		$discountCal = (int)$request->request->get('discount');
+		$invoice = $request->request->get('purchase');
+		$entity = $em->getRepository('MedicineBundle:MedicinePurchaseReturn')->find($invoice);
+		$subTotal = $entity->getSubTotal();
+		if($discountCal > 0){
+			if($discountType == 'flat'){
+				$total = ($subTotal  - $discountCal);
+				$discount = $discountCal;
+			}else{
+				$discount = ($subTotal * $discountCal)/100;
+				$total = ($subTotal  - $discount);
+			}
+			if($subTotal > $discount ){
+				$entity->setDiscountType($discountType);
+				$entity->setDiscountCalculation($discountCal);
+				$entity->setDiscount(round($discount));
+				$entity->setTotal(round($total));
+				$em->flush();
+			}
+		}
+
+		$data = array(
+			'subTotal' => $entity->getSubTotal(),
+			'total' => $entity->getTotal(),
+			'discount' => $entity->getDiscount(),
+
+		);
+		return new Response(json_encode($data));
+		exit;
+	}
 
     public function approveAction(MedicinePurchaseReturn $entity)
     {

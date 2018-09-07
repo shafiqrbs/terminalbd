@@ -84,11 +84,10 @@
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
                                         <th class="numeric" >Medicine Name </th>
-
                                         <th class="numeric" >Quantity</th>
                                         <th class="numeric" >Purchase Price</th>
-                                        <th class="numeric" >SubTotal</th>
-                                        <th class="numeric" >Action</th>
+                                        <th class="numeric span2" >SubTotal</th>
+                                        <th class="numeric span2" >Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -107,7 +106,10 @@
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
-                                    <tr><th colspan="3"><span class="pull-right">Total Amount</span></th><th>{{ entity.subTotal }}</th><th></th></tr>
+                                    <tr><th colspan="3"><span class="pull-right">Sub-Total</span></th><th><span id="subTotal">{{ entity.subTotal }}</span></th><th></th></tr>
+                                    <tr><th colspan="3"><span class="pull-right">Discount</span></th><td><span id="discount">{{ entity.discount }}</span></td><td></td></tr>
+                                    <tr><th colspan="3">&nbsp;</th><td><select id="discountType" name="discountType" class="m-wrap discount-type"><option value="flat">Flat</option><option value="percentage" selected="selected">Percentage</option></select></td><td><input type="text" id="discountCalculation" name="discountCalculation" required="required" class="m-wrap salesInput" placeholder="discount" autocomplete="off"></td></tr>
+                                    <tr><th colspan="3"><span class="pull-right">Total</span></th><th><span id="total">{{ entity.total }}</span></th><th></th></tr>
                                     </tfoot>
                                 </table>
                             </div>
@@ -116,6 +118,7 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
                                     {% if entity.process != 'approved' %}
+                                        <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">
                                     <a href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('medicine_purchase_return_approve',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-ok"></i> Approve</a>
                                     {% else %}
                                         <a href="javascript:"  class="btn red"><i class="icon-ok"></i> Approve</a>
@@ -133,6 +136,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@MedicineBundle/Resources/public/js/purchase-return.js'
     '@MedicineBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -140,22 +144,6 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $(document).on("click", ".approve", function() {
-    var url = $(this).attr('data-url');
-    var id = $(this).attr('data-id');
-    $('#confirm-content').confirmModal({
-    topOffset: 0,
-    top: '25%',
-    onOkBut: function(event, el) {
-    $.get(url, function( data ) {
-    if(data ==='success'){
-    window.location.replace("/medicine/purchase-return/"+id+"/show");
-    }
-    });
-    }
-    });
-    });
-
 {% endblock %}
 
 

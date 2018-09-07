@@ -64,7 +64,7 @@ class MedicineImportController extends Controller
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been added successfully"
 			);
-			$this->getDoctrine()->getRepository('SettingToolBundle:MedicineImport')->fileUpload($entity,$data);
+		//	$this->getDoctrine()->getRepository('SettingToolBundle:MedicineImport')->fileUpload($entity,$data);
 			return $this->redirect($this->generateUrl('medicine_import'));
 		}
 

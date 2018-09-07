@@ -57,6 +57,29 @@ class MedicinePurchaseReturn
      **/
     private  $medicinePurchaseReturnItems;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="discountType", type="string", length=20, nullable=true)
+	 */
+	private $discountType ='percentage';
+
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="discount", type="float", nullable=true)
+	 */
+	private $discount;
+
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
+	 */
+	private $discountCalculation;
+
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -94,6 +117,13 @@ class MedicinePurchaseReturn
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="total", type="float", nullable=true)
+     */
+    private $total;
 
     /**
      * @var string
@@ -284,6 +314,62 @@ class MedicinePurchaseReturn
     {
         $this->code = $code;
     }
+
+	/**
+	 * @return float
+	 */
+	public function getTotal(){
+		return $this->total;
+	}
+
+	/**
+	 * @param float $total
+	 */
+	public function setTotal( float $total ) {
+		$this->total = $total;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getDiscountCalculation(){
+		return $this->discountCalculation;
+	}
+
+	/**
+	 * @param float $discountCalculation
+	 */
+	public function setDiscountCalculation( float $discountCalculation ) {
+		$this->discountCalculation = $discountCalculation;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getDiscount(){
+		return $this->discount;
+	}
+
+	/**
+	 * @param float $discount
+	 */
+	public function setDiscount( float $discount ) {
+		$this->discount = $discount;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDiscountType(){
+		return $this->discountType;
+	}
+
+	/**
+	 * @param string $discountType
+	 */
+	public function setDiscountType( string $discountType ) {
+		$this->discountType = $discountType;
+	}
 
 
 }

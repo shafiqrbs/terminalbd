@@ -224,43 +224,21 @@ class SalesManualController extends Controller
         exit;
     }
 
-    public function salesItemUpdateAction(Request $request, SalesItem $salesItem)
+    public function salesItemUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-
-        if($data['name'] == 'Quantity') {
-            $remainingQuantity = $salesItem->getItem()->getRemainingQuantity();
-            $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesItemQuantity($salesItem->getItem());
-            $currentRemainingQnt = ($remainingQuantity + $salesItem->getQuantity()) - ($checkQuantity + $data['value']);
-            if (!empty($salesItem) && $remainingQuantity > 0 && $currentRemainingQnt >= 0) {
-                $salesItem->setQuantity($data['value']);
-                $salesItem->setSubTotal($data['value'] * $salesItem->getSalesPrice());
-                $em->persist($salesItem);
-                $em->flush();
-                $this->get('session')->getFlashBag()->add(
-                    'success', "Data has been added successfully"
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error', " There is no product in our inventory"
-                );
-            }
-            $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-        }
-        if($data['name'] == 'SalesPrice' and !empty($salesItem)){
-
-            $salesItem->setSalesPrice($data['value']);
-            $salesItem->setSubTotal($salesItem->getQuantity() * $data['value']);
-            $em->persist($salesItem);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been added successfully"
-            );
-            $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-
-        }
-        exit;
+	    $salesItem = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->find($data['itemId']);
+	    $status = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->manualSalesItemUpdate($salesItem,$data);
+		if($status == 'valid'){
+	        $this->get('session')->getFlashBag()->add('success', "Data has been added successfully");
+        }else{
+			$this->get( 'session' )->getFlashBag()->add('error', " There is no product in our inventory");
+		}
+	    $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
+	    $result = $this->returnResultData($salesItem->getSales());
+	    return new Response(json_encode($result));
+		exit;
     }
 
     /**
@@ -269,27 +247,41 @@ class SalesManualController extends Controller
 
     public function salesDiscountUpdateAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
-        $sales = $request->request->get('sales');
-        /* @var $sales Sales */
-        $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
-        $total = ($sales->getSubTotal() - $discount);
-        $vat =0;
-        if($total > 0 ){
-            if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
-                $sales->setVat($vat);
-            }
-            $sales->setDiscount($discount);
-            $sales->setTotal($total + $vat);
-            $sales->setDue($total+$vat);
-            $em->persist($sales);
-            $em->flush();
-        }
-        $data = $this->returnResultData($sales);
-        return new Response(json_encode($data));
-        exit;
+
+
+	    $em = $this->getDoctrine()->getManager();
+	    $discountType = $request->request->get('discountType');
+	    $discountCal = (int)$request->request->get('discount');
+	    $sales = $request->request->get('sales');
+	    $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
+	    $subTotal = $sales->getSubTotal();
+	    $total = 0;
+	    if($discountType == 'Flat' and $discountCal > 0){
+		    $total = ($subTotal  - $discountCal);
+		    $discount = $discountCal;
+	    }elseif($discountType == 'Percentage' and $discountCal > 0){
+		    $discount = ($subTotal * $discountCal)/100;
+		    $total = ($subTotal  - $discount);
+	    }
+	    $vat = 0;
+	    if($total > 0 ){
+
+		    if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+			    $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
+			    $sales->setVat($vat);
+		    }
+		    $sales->setDiscountType($discountType);
+		    $sales->setDiscountCalculation($discountCal);
+		    $sales->setDiscount(round($discount));
+		    $sales->setTotal(round($total + $vat));
+		    $sales->setDue(round($sales->getTotal()));
+		    $em->persist($sales);
+		    $em->flush();
+	    }
+	    $data = $this->returnResultData($sales);
+	    return new Response(json_encode($data));
+	    exit;
+
     }
 
     /**
@@ -346,8 +338,8 @@ class SalesManualController extends Controller
             'netTotal' => $netTotal,
             'vat' => $vat,
             'due' => $due,
-            'payment' => $payment ,
             'discount' => $discount,
+            'payment' => $payment ,
             'salesItems' => $salesItems,
             'success' => 'success'
         );

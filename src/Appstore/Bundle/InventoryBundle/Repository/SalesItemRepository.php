@@ -309,6 +309,30 @@ class SalesItemRepository extends EntityRepository
         return $data;
     }
 
+
+    public function manualSalesItemUpdate(SalesItem $salesItem , $data)
+    {
+	    $em = $this->_em;
+	    $salesItemId = $data['itemId'];
+	    $quantity = $data['quantity'];
+	    $salesPrice =$data['salesPrice'];
+
+	    $remainingQuantity = $salesItem->getItem()->getRemainingQuantity();
+	    $checkQuantity = $this->checkSalesItemQuantity($salesItem->getItem());
+	    $currentRemainingQnt = ($remainingQuantity + $salesItem->getQuantity()) - ($checkQuantity + $quantity);
+	    if (!empty($salesItem) && $remainingQuantity > 0 && $currentRemainingQnt >= 0) {
+		    $salesItem->setQuantity($quantity);
+		    $salesItem->setSalesPrice($salesPrice);
+		    $salesItem->setSubTotal($quantity * $salesPrice);
+		    $em->persist($salesItem);
+		    $em->flush();
+		    return 'valid';
+	    } else {
+		    return 'in-valid';
+	    }
+
+    }
+
     public function getManualSalesItems(Sales $sales)
     {
         $entities = $sales->getSalesItems();
@@ -326,10 +350,10 @@ class SalesItemRepository extends EntityRepository
             $data .='<tr id="remove-'.$entity->getId().'">';
             $data .='<td class="numeric" >'.$i.'</td>';
             $data .='<td class="numeric" >'.$itemName.'</td>';
-            $data .='<td class="numeric" >'.$entity->getSalesPrice().'</td>';
-            $data .='<td class="numeric" >'.$entity->getQuantity().'</td>';
+	        $data .="<td class='numeric' ><input type='text' name='salesPrice[]' data-id='{$entity->getId()}'  id='salesPrice-{$entity->getId()}' class='td-inline-input salesPrice' value='{$entity->getSalesPrice()}'</td>";
+	        $data .="<td class='numeric' ><input type='text' name='quantity[]' data-id='{$entity->getId()}'  id='quantity-{$entity->getId()}' class='td-inline-input quantity' value='{$entity->getQuantity()}'</td>";
             $data .='<td class="numeric" >'.$unit.'</td>';
-            $data .='<td class="" >'.$entity->getSubTotal().'</td>';
+            $data .="<td class=''><span id='subTotalShow-{$entity->getId()}' ><strong>{$entity->getSubTotal()}</strong></span></td>";
             $data .='<td class="" ><a id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/inventory/sales-manual/'.$entity->getSales()->getId().'/'.$entity->getId().'/manual-item-delete" href="javascript:" class="btn red mini remove" ><i class="icon-trash"></i></a></td>';
             $data .='</tr>';
             $i++;

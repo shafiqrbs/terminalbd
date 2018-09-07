@@ -225,16 +225,12 @@ input[class*="span"].m-wrap  {
     margin: 0;
     outline: 0;
     border: 5px solid #e5e5e5;
-    webkit-appearance: none !important;
     color: #333333;
-    outline: 0;
     height: auto !important;
     min-height: 60px;
     padding: 6px 6px !important;
     line-height: 20px;
     font-size: 16px;
-    font-weight: bold;
-    font-weight: normal;
     vertical-align: top;
     background-color: #ffffff;
     filter: none !important;
@@ -257,8 +253,8 @@ input.discount{
     width: 157px;
     font-size: 16px;
     font-weight: bold;
-
 }
+
 
 input[class*="span"].m-wrap , select[class*="span"].m-wrap, textarea[class*="span"].m-wrap {
     background: #ffffff;
@@ -338,3 +334,56 @@ table.dataTable tbody th, table.dataTable tbody td {
 .add-on-custom{
     line-height: 42px;
 }
+
+.select2CustomerName .select2-choice{
+    padding: 2px 9px !important;
+    height: 28px!important;
+    font-size: 15px;
+    font-weight:normal !important;
+    width: 100%!important;
+    border: 1px solid #999;
+}
+
+.select2CustomerName .select2-choice .select2-arrow {
+    padding: 3px 7px;
+}
+
+.select2CustomerName .select2-choice abbr {
+    top: 10px;
+    right:42px;
+}
+
+.select2CustomerName .select2-search input {
+    border: 1px solid #35aa47!important;
+}
+
+.numeric input {
+    margin-bottom: 0;
+    min-height: 15px!important;
+    width: 70px;
+    height: 15px!important;
+    border: 1px solid #999;
+    font-size: 13px!important;
+    line-height: 15px!important;
+}
+
+.td-inline-input{
+
+    height: 15px!important;
+    line-height: 13px!important;
+    font-size: 13px!important;
+    border: 2px solid #4d90fe!important;
+    width: 50px;
+    margin-bottom:0!important;
+}
+
+.td-inline-label{
+
+    height: 15px!important;
+    line-height: 20px!important;
+    min-height: 15px!important;
+    font-size: 13px!important;
+}
+
+
+

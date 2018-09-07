@@ -56,12 +56,11 @@ inventory_salesmanual_empty_delete:
     path:     /delete/empty-manual-invoice
     defaults: { _controller: "InventoryBundle:SalesManual:deleteEmptyInvoice" }
 
-inventory_salesmanual_item_inline_update:
-    path:     /{salesItem}/manual-sales-item-update
+inventory_salesmanual_item_update:
+    path:     /manual-sales/item/update
     defaults: { _controller: "InventoryBundle:SalesManual:salesItemUpdate" }
     options:
            expose: true
-
 
 inventory_salesmanual_inline_process_update:
     path:     /manual-sales/inline-process-update

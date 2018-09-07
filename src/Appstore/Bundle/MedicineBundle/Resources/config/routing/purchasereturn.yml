@@ -31,3 +31,10 @@ medicine_purchase_return_delete:
 medicine_purchase_return_approve:
     path:     /{id}/approve
     defaults: { _controller: "MedicineBundle:MedicinePurchaseReturn:approve" }
+
+medicine_purchase_return_discount_update:
+    path:     /dicount-update
+    defaults: { _controller: "MedicineBundle:MedicinePurchaseReturn:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true

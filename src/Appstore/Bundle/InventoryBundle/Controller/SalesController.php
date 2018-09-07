@@ -187,14 +187,15 @@ class SalesController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$discountType = $request->request->get('discountType');
-		$discountCal = $request->request->get('discount');
+		$discountCal = (int)$request->request->get('discount');
 		$sales = $request->request->get('sales');
 		$sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
 		$subTotal = $sales->getSubTotal();
-		if($discountType == 'Flat'){
+		$total = 0;
+		if($discountType == 'Flat' and $discountCal > 0){
 			$total = ($subTotal  - $discountCal);
 			$discount = $discountCal;
-		}else{
+		}elseif($discountType == 'Percentage' and $discountCal > 0){
 			$discount = ($subTotal * $discountCal)/100;
 			$total = ($subTotal  - $discount);
 		}

@@ -89,7 +89,7 @@
                                     <th class="numeric" >Rack</th>
                                     <th class="numeric" >PP Tk.</th>
                                     <th class="numeric" >MRP Tk.</th>
-                                    <th class="numeric" >Opening</th>
+                                   {# <th class="numeric" >Opening</th>#}
                                     <th class="numeric" >Purchase Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
                                     <th class="numeric" >Stock Qnt</th>
@@ -121,11 +121,11 @@
                                                 <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
                                             {% endif %}
                                         </td>
-                                        <td class="numeric">
+                                    {#    <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
                                             {% endif %}
-                                        </td>
+                                        </td>#}
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>

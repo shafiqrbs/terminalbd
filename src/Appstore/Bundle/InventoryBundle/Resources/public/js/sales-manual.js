@@ -60,12 +60,12 @@ var InventorySales = function(sales) {
                 $.get(url, function (response) {
                     $('#remove' + id).hide();
                     obj = JSON.parse(response);
-                    $('#subTotal').val(obj['subTotal']);
-                    $('.netTotal').html(obj['netTotal']);
-                    $('#netTotal').val(obj['netTotal']);
-                    $('#salesItem').html(obj['salesItems']);
-                    $('#vat').val(obj['vat']);
-                    $('#dueAmount').val(obj['due']);
+                    $('#subTotal').html(obj['subTotal']);
+                    $('#netTotal').html(obj['netTotal']);
+                    $('#vat').html(obj['vat']);
+                    $('#discount').html(obj['discount']);
+                    $('#due').html(obj['due']);
+                    $('#total').val(obj['netTotal']);
                 });
             }
         });
@@ -116,13 +116,14 @@ var InventorySales = function(sales) {
             data: 'item=' + item + '&quantity=' + quantity + '&salesPrice=' + salesPrice + '&purchasePrice=' + purchasePrice,
             success: function (response) {
                 obj = JSON.parse(response);
+
+                $('#salesItem').html(obj['salesItems']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#netTotal').html(obj['netTotal']);
-                $('.vat').html(obj['vat']);
-                $('#vat').val(obj['vat']);
-                $('#salesItem').html(obj['salesItems']);
-                $('.dueAmount').html(obj['netTotal']);
-                $('#dueAmount').val(obj['netTotal']);
+                $('#vat').html(obj['vat']);
+                $('#discount').html(obj['discount']);
+                $('#due').html(obj['due']);
+                $('#total').val(obj['netTotal']);
                 $('#addItem').attr("disabled", true);
                 $('#salesPrice').val('');
                 $('#quantity').val('1');
@@ -132,7 +133,33 @@ var InventorySales = function(sales) {
 
     });
 
-    $(document).on('change', '#sales_discountxx', function () {
+    $(document).on('change', '.quantity , .salesPrice', function() {
+
+        var itemId = $(this).attr('data-id');
+        var quantity = parseFloat($('#quantity-'+itemId).val());
+        var price = parseFloat($('#salesPrice-'+itemId).val());
+        var subTotal  = (quantity * price);
+        $("#subTotalShow-"+itemId).html(subTotal);
+
+        $.ajax({
+            url: Routing.generate('inventory_salesmanual_item_update'),
+            type: 'POST',
+            data:'itemId='+ itemId +'&quantity='+ quantity +'&salesPrice='+ price,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#subTotal').html(obj['subTotal']);
+                $('#netTotal').html(obj['netTotal']);
+                $('#vat').html(obj['vat']);
+                $('#discount').html(obj['discount']);
+                $('#due').html(obj['due']);
+                $('#total').val(obj['netTotal']);
+                $('#wrongBarcode').html(obj['msg']);
+            },
+
+        })
+    });
+
+/*    $(document).on('change', '#sales_discountxx', function () {
 
         var discount = parseInt($('#sales_discount').val());
         var total = parseInt($('#netTotal').val());
@@ -177,51 +204,84 @@ var InventorySales = function(sales) {
             },
 
         })
+    });*/
+
+    $(document).on('keyup', '#sales_discountCalculation', function() {
+
+        var discountType = $('#sales_discountType').val();
+        var discount = parseFloat($('#sales_discountCalculation').val());
+        var invoice = $('#salesId').val();
+        var total =  parseFloat($('#total').val());
+        if( discount >= total ){
+            $('#sales_discount').val(0);
+            alert ('Discount amount less then total amount');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_salesmanual_discount_update'),
+            type: 'POST',
+            data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#salesItem').html(obj['salesItems']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#netTotal').html(obj['netTotal']);
+                $('#vat').html(obj['vat']);
+                $('#discount').html(obj['discount']);
+                $('#due').html(obj['due']);
+                $('#total').val(obj['netTotal']);
+                $('#wrongBarcode').html(obj['msg']);
+            }
+
+        })
+
+    });
+
+    $(document).on('change', '#sales_discountType', function() {
+
+        var discountType = $('#sales_discountType').val();
+        var discount = parseFloat($('#sales_discountCalculation').val());
+        var invoice = $('#salesId').val();
+        var total =  parseFloat($('#total').val());
+        if( discount >= total ){
+            $('#sales_discount').val(0);
+            alert ('Discount amount less then total amount');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_salesmanual_discount_update'),
+            type: 'POST',
+            data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#salesItem').html(obj['salesItems']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#netTotal').html(obj['netTotal']);
+                $('#vat').html(obj['vat']);
+                $('#discount').html(obj['discount']);
+                $('#due').html(obj['due']);
+                $('#total').html(obj['netTotal']);
+                $('#wrongBarcode').html(obj['msg']);
+            }
+
+        })
+
     });
 
 
     $(document).on('keyup', '#sales_payment', function () {
 
-        var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
-        var total =  parseInt($('#paymentTotal').val());
-
-        var dueAmount = (total-payment);
+        var payment     = parseInt($('#sales_payment').val() != '' ? $('#sales_payment').val() : 0 );
+        var total       =  parseInt($('#total').val());
+        var dueAmount   = (total-payment);
         if(dueAmount > 0){
             $('#balance').html('DUE TK.');
-            $('.dueAmount').val(dueAmount);
+            $('#due').html(dueAmount);
         }else{
             var balance =  payment - total ;
             $('#balance').html('RETURN TK.');
-            $('.dueAmount').val(balance);
+            $('#due').html(balance);
         }
-
-/*
-
-        if( payment >= total ){
-            var returnAmount = ( payment - total );
-            $('#returnAmount').val(returnAmount).addClass('payment-yellow');
-            $('.returnAmount').html(returnAmount).addClass('payment-yellow');
-            $('#dueAmount').val('').removeClass('payment-red');
-            $('.dueAmount').html('').removeClass('payment-red');
-
-        }else{
-
-            var dueAmount = (total-payment);
-            if(dueAmount > 0){
-                $('#returnAmount').val('').removeClass('payment-yellow');
-                $('.returnAmount').html('').removeClass('payment-yellow');
-                $('#dueAmount').val(dueAmount).addClass('payment-red');
-                $('.dueAmount').html(dueAmount).addClass('payment-red');
-            }
-        }
-
-        if(payment > 0  ){
-            $(".paymentBtn").attr("disabled", false);
-            $('#receiveChange').removeClass('receive-empty').addClass('receive-value');
-        }else{
-            $('#receiveChange').removeClass('receive-value').addClass('receive-empty');
-            $(".paymentBtn").attr("disabled", true);
-        }*/
 
     });
 
