@@ -49,8 +49,10 @@
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Vendor Name </th>
                                     <th class="numeric" >SubTotal</th>
-                                    <th class="numeric" >Created By</th>
+                                    <th class="numeric" >Discount</th>
+                                    <th class="numeric" >Total</th>
                                     <th class="numeric" >Approved By</th>
+                                    <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -62,9 +64,15 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.medicineVendor.companyName }}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
-                                        <td class="numeric" >{{ entity.createdBy }}</td>
+                                        <td class="numeric" >{{ entity.discount }}</td>
+                                        <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.approvedBy }}</td>
-                                       <td class="numeric" >
+                                        <td class="numeric" >
+                                            {% if entity.medicinePurchase is not empty %}
+                                                <a target="_blank" href="{{ path('medicine_purchase_show', { 'id': entity.medicinePurchase.id }) }}" class="btn yellow mini" >{{ entity.medicinePurchase.grn }}</a>
+                                            {% endif %}
+                                        </td>
+                                        <td class="numeric" >
                                            {% if entity.medicinePurchaseReturnItems is empty %}
                                             <a title="Are you sure went to delete ?" href="{{ path('medicine_purchase_return_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i> Delete</a>
                                            {% endif %}

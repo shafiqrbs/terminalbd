@@ -39,4 +39,18 @@ class MedicinePurchaseReturnRepository extends EntityRepository
         return $entity;
 
     }
+
+    public function updatePurchaseAdjustment(MedicinePurchaseReturn $purchase_return)
+    {
+	    $purchase_return->setAdjusted(true);
+	    $this->_em->persist($purchase_return);
+	    $this->_em->flush($purchase_return);
+    }
+
+	public function removePurchaseAdjustment(MedicinePurchaseReturn $purchase_return)
+	{
+		$purchase_return->setAdjusted(NULL);
+		$this->_em->persist($purchase_return);
+		$this->_em->flush($purchase_return);
+	}
 }

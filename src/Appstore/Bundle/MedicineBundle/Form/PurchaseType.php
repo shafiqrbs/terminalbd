@@ -42,6 +42,19 @@ class PurchaseType extends AbstractType
                         ->andWhere("wt.medicineConfig =".$this->option->getMedicineConfig()->getId());
                 },
             ))
+            ->add('medicinePurchaseReturn', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn',
+                'empty_value' => '--Adjustment return--',
+                'property' => 'invoiceAmount',
+                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('wt')
+                        ->where("wt.medicineConfig =".$this->option->getMedicineConfig()->getId())
+                        ->andWhere("wt.process ='approved'")
+                        ->andWhere("wt.adjusted is NULL");
+                },
+            ))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',

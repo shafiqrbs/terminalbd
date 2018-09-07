@@ -439,6 +439,9 @@ class PurchaseController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
+            if(!empty($purchase->getMedicinePurchaseReturn())){
+	            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->updatePurchaseAdjustment($purchase->getMedicinePurchaseReturn());
+            }
             if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
                 $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountMedicinePurchaseJournal($purchase);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
@@ -583,6 +586,9 @@ class PurchaseController extends Controller
         $purchase->setRevised(true);
         $purchase->setProcess('Created');
         $em->flush();
+	    if(!empty($purchase->getMedicinePurchaseReturn())){
+		    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->removePurchaseAdjustment($purchase->getMedicinePurchaseReturn());
+	    }
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
         $template = $this->get('twig')->render('MedicineBundle:Purchase:purchaseReverse.html.twig', array(
             'entity' => $purchase,

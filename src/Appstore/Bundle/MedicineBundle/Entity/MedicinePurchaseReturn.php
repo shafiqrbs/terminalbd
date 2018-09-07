@@ -35,6 +35,12 @@ class MedicinePurchaseReturn
     private  $medicineConfig;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="medicinePurchaseReturn" , cascade={"detach","merge"} )
+     **/
+    private  $medicinePurchase;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="medicinePurchases" , cascade={"detach","merge"} )
      **/
     private  $medicineVendor;
@@ -71,6 +77,13 @@ class MedicinePurchaseReturn
 	 * @ORM\Column(name="discount", type="float", nullable=true)
 	 */
 	private $discount;
+
+	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="adjusted", type="boolean", nullable=true)
+	 */
+	private $adjusted=false;
 
 
 	/**
@@ -369,6 +382,33 @@ class MedicinePurchaseReturn
 	 */
 	public function setDiscountType( string $discountType ) {
 		$this->discountType = $discountType;
+	}
+
+	/**
+	 * @return MedicinePurchase
+	 */
+	public function getMedicinePurchase() {
+		return $this->medicinePurchase;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isAdjusted(){
+		return $this->adjusted;
+	}
+
+	/**
+	 * @param bool $adjusted
+	 */
+	public function setAdjusted( bool $adjusted ) {
+		$this->adjusted = $adjusted;
+	}
+
+	public function getInvoiceAmount(){
+
+		$invoiceAmount = $this->getMedicineVendor()->getCompanyName().'['.$this->getInvoice().'- Tk.'.$this->getTotal().']';
+		return $invoiceAmount;
 	}
 
 

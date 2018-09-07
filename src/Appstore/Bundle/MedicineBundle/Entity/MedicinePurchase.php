@@ -39,10 +39,14 @@ class MedicinePurchase
     private  $medicineVendor;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn", inversedBy="medicinePurchase" , cascade={"detach","merge"} )
+     **/
+    private  $medicinePurchaseReturn;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineReverse", mappedBy="medicinePurchase" , cascade={"detach","merge"} )
      **/
     private  $medicineReverse;
-
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -777,6 +781,20 @@ class MedicinePurchase
     {
         $this->revised = $revised;
     }
+
+	/**
+	 * @return MedicinePurchaseReturn
+	 */
+	public function getMedicinePurchaseReturn() {
+		return $this->medicinePurchaseReturn;
+	}
+
+	/**
+	 * @param MedicinePurchaseReturn $medicinePurchaseReturn
+	 */
+	public function setMedicinePurchaseReturn( $medicinePurchaseReturn ) {
+		$this->medicinePurchaseReturn = $medicinePurchaseReturn;
+	}
 
 
 }
