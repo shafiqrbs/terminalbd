@@ -277,7 +277,7 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
-        $discountCal = $request->request->get('discount');
+        $discountCal = (int)$request->request->get('discount');
         $invoice = $request->request->get('invoice');
         $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($invoice);
         $subTotal = $entity->getSubTotal();
@@ -295,8 +295,14 @@ class SalesController extends Controller
             $entity->setDiscount(round($discount));
             $entity->setNetTotal(round($total + $vat));
             $entity->setDue(round($total + $vat));
-            $em->flush();
+        }else{
+	        $entity->setDiscountType('flat');
+	        $entity->setDiscountCalculation(0);
+	        $entity->setDiscount(0);
+	        $entity->setNetTotal(round($entity->getSubTotal() + $vat));
+	        $entity->setDue($entity->getNetTotal());
         }
+	    $em->flush();
         $msg = 'Discount successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));

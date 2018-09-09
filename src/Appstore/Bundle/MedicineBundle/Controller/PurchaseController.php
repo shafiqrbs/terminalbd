@@ -348,7 +348,7 @@ class PurchaseController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
-        $discountCal = $request->request->get('discount');
+        $discountCal = (int)$request->request->get('discount');
         $invoice = $request->request->get('purchase');
         $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->find($invoice);
         $subTotal = $entity->getSubTotal();
@@ -366,8 +366,13 @@ class PurchaseController extends Controller
             $entity->setDiscount(round($discount));
             $entity->setNetTotal(round($total + $vat));
             $entity->setDue(round($total + $vat));
-            $em->flush();
+        }else{
+		    $entity->setDiscountType('percentage');
+		    $entity->setDiscountCalculation(0);
+		    $entity->setDiscount(0);
+		    $entity->setNetTotal($entity->getSubTotal());
         }
+	    $em->flush();
 
         $result = $this->returnResultData($entity);
         return new Response(json_encode($result));

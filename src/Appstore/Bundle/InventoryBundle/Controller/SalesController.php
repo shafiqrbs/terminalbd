@@ -200,8 +200,7 @@ class SalesController extends Controller
 			$total = ($subTotal  - $discount);
 		}
 		$vat = 0;
-		if($total > 0 ){
-
+		if($total > 0  and $total > $discountCal ){
 			if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
 				$vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
 				$sales->setVat($vat);
@@ -211,9 +210,21 @@ class SalesController extends Controller
 			$sales->setDiscount(round($discount));
 			$sales->setTotal(round($total + $vat));
 			$sales->setDue(round($sales->getTotal()));
-			$em->persist($sales);
-			$em->flush();
+
+		}else{
+
+			if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+				$vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales->getSubTotal(),$total);
+				$sales->setVat($vat);
+			}
+			$sales->setDiscountType('Flat');
+			$sales->setDiscountCalculation(0);
+			$sales->setDiscount(0);
+			$sales->setTotal(round($total + $vat));
+			$sales->setDue(round($sales->getTotal()));
 		}
+		$em->persist($sales);
+		$em->flush();
 		$data = $this->returnResultData($sales);
 		return new Response(json_encode($data));
 		exit;

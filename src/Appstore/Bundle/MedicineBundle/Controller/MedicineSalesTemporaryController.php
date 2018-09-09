@@ -156,15 +156,18 @@ class MedicineSalesTemporaryController extends Controller
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $user = $this->getUser();
-        $discount = $request->request->get('discount');
+        $discount = (int)$request->request->get('discount');
         $discountType = $request->request->get('discountType');
         $subTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-        if($discountType == 'flat'){
+        if($discountType == 'flat' and $subTotal > $discount){
             $initialDiscount = round($discount);
             $initialGrandTotal =round ($subTotal  - $initialDiscount);
-        }else{
+        }elseif($discountType == 'percentage' and $subTotal > $discount){
             $initialDiscount = round(($subTotal * $discount)/100);
             $initialGrandTotal = round($subTotal  - $initialDiscount);
+        }else{
+	        $initialDiscount = 0;
+	        $initialGrandTotal = $subTotal;
         }
 
         $data = array(

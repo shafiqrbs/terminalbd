@@ -231,10 +231,15 @@ class MedicinePurchaseReturnController extends Controller
 				$entity->setDiscountCalculation($discountCal);
 				$entity->setDiscount(round($discount));
 				$entity->setTotal(round($total));
-				$em->flush();
-			}
-		}
 
+			}
+		}else{
+			$entity->setDiscountType('percentage');
+			$entity->setDiscountCalculation(0);
+			$entity->setDiscount(0);
+			$entity->setTotal($entity->getSubTotal());
+		}
+		$em->flush();
 		$data = array(
 			'subTotal' => $entity->getSubTotal(),
 			'total' => $entity->getTotal(),
