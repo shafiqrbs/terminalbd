@@ -4,8 +4,6 @@ namespace Appstore\Bundle\BusinessBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Core\UserBundle\Entity\User;
-use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -71,6 +69,11 @@ class BusinessParticular
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="businessParticular" )
 	 **/
 	private $productionElements;
+
+    /**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProduction", mappedBy="businessParticular" )
+	 **/
+	private $businessProductions;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", mappedBy="particular" )
@@ -143,6 +146,13 @@ class BusinessParticular
      * @ORM\Column(name="minQuantity", type="integer", nullable=true)
      */
     private $minQuantity;
+
+	/**
+     * @var integer
+     *
+     * @ORM\Column(name="transferQuantity", type="integer", nullable=true)
+     */
+    private $transferQuantity;
 
 
     /**
@@ -1014,6 +1024,27 @@ class BusinessParticular
 	 */
 	public function setProductionSalesPrice( float $productionSalesPrice ) {
 		$this->productionSalesPrice = $productionSalesPrice;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTransferQuantity(){
+		return $this->transferQuantity;
+	}
+
+	/**
+	 * @param int $transferQuantity
+	 */
+	public function setTransferQuantity( int $transferQuantity ) {
+		$this->transferQuantity = $transferQuantity;
+	}
+
+	/**
+	 * @return BusinessProduction
+	 */
+	public function getBusinessProductions() {
+		return $this->businessProductions;
 	}
 
 }

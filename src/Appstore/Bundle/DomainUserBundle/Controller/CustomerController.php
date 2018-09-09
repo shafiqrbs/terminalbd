@@ -63,6 +63,8 @@ class CustomerController extends Controller
             $em = $this->getDoctrine()->getManager();
             $globalOption = $this->getUser()->getGlobalOption();
             $entity->setGlobalOption($globalOption);
+	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
+	        $entity->setMobile($mobile);
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('domain_customer'));
@@ -198,6 +200,8 @@ class CustomerController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
+	        $entity->setMobile($mobile);
             $em->flush();
             return $this->redirect($this->generateUrl('domain_customer'));
         }

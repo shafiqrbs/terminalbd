@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BusinessProductionElement
  *
  * @ORM\Table(name ="business_production_expense")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\ProductionElementRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessProductionElementRepository")
  */
 class BusinessProductionExpense
 {
@@ -27,6 +27,12 @@ class BusinessProductionExpense
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessInvoiceParticular;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProduction", inversedBy="businessProductionExpense" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $businessProduction;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="businessProductionExpense" )
@@ -179,6 +185,20 @@ class BusinessProductionExpense
     {
         $this->productionElement = $productionElement;
     }
+
+	/**
+	 * @return BusinessProduction
+	 */
+	public function getBusinessProduction() {
+		return $this->businessProduction;
+	}
+
+	/**
+	 * @param BusinessProduction $businessProduction
+	 */
+	public function setBusinessProduction( $businessProduction ) {
+		$this->businessProduction = $businessProduction;
+	}
 
 
 }

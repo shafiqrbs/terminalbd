@@ -273,7 +273,7 @@ class BusinessParticularRepository extends EntityRepository
     public function remainingQnt(BusinessParticular $stock)
     {
         $em = $this->_em;
-        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity()) - ($stock->getPurchaseReturnQuantity()+$stock->getSalesQuantity()+$stock->getDamageQuantity());
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity()+$stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
         $em->persist($stock);
         $em->flush();
@@ -287,17 +287,10 @@ class BusinessParticularRepository extends EntityRepository
 
             foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
 				if(!empty($item->getBusinessParticular())) {
-					if ( $item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'production' and $invoice->getBusinessConfig()->getProductionType() == 'post-production' ) {
+					if ( $item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'post-production') {
 						$this->productionExpense( $item );
-						$particular = $item->getBusinessParticular();
-						$qnt        = $particular->getSalesQuantity() + $item->getTotalQuantity();
-						$particular->setPurchaseQuantity( $qnt );
-						$particular->setSalesQuantity( $qnt );
-						$em->persist( $particular );
-						$em->flush();
-					} else {
-						$this->getSalesUpdateQnt( $item );
 					}
+					$this->getSalesUpdateQnt( $item );
 				}
             }
         }
@@ -322,40 +315,69 @@ class BusinessParticularRepository extends EntityRepository
                    $entity->setProductionElement($element->getParticular());
                    $entity->setPurchasePrice($element->getPurchasePrice());
                    $entity->setSalesPrice($element->getSalesPrice());
-	               if(!empty($element->getParticular()->getUnit()) and ($element->getParticular()->getUnit()->getName() != 'Sft')) {
-		               $entity->setQuantity( $element->getQuantity() * $item->getQuantity());
+	               if(!empty($element->getParticular()->getUnit()) and ($element->getParticular()->getUnit()->getName() == 'Sft')) {
+		               $entity->setQuantity($item->getTotalQuantity());
 	               }else{
-		               $entity->setQuantity( $element->getQuantity() * $item->getTotalQuantity());
+		               $entity->setQuantity($element->getQuantity() * $item->getQuantity());
 	               }
                    $this->_em->persist($entity);
                    $this->_em->flush();
-                   $this->salesProductionQnt($element,$entity);
+                   $this->salesProductionQnt($element);
                }
            }
        }
     }
 
-	public function salesProductionQnt(BusinessProductionElement  $element, BusinessProductionExpense $entity){
+	public function salesProductionQnt(BusinessProductionElement  $element){
 
         $em = $this->_em;
         $particular = $element->getParticular();
-        $qnt = $particular->getSalesQuantity() + $entity->getQuantity();
+		$productionQnt = $this->getSumTotalProductionItemQuantity($particular);
+		$invoiceQnt = $this->getSumTotalInvoiceItemQuantity($particular);
+        $qnt = $productionQnt + $invoiceQnt;
         $particular->setSalesQuantity($qnt);
-        $particular->setRemainingQuantity($particular->getRemainingQuantity() - $qnt);
         $em->persist($particular);
         $em->flush();
+		$this->remainingQnt($particular);
+    }
+
+    public function getSumTotalProductionItemQuantity(BusinessParticular $particular){
+
+	    $qb = $this->_em->createQueryBuilder();
+	    $qb->from('BusinessBundle:BusinessProductionExpense','e');
+	    $qb->select('SUM(e.quantity) AS quantity');
+	    $qb->where('e.productionElement = :particular')->setParameter('particular', $particular->getId());
+	    $qnt = $qb->getQuery()->getOneOrNullResult();
+	    $productionQnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
+	    return $productionQnt;
 
     }
 
-    public function getSalesUpdateQnt(BusinessInvoiceParticular  $item){
+	public function getSumTotalInvoiceItemQuantity($particular){
+
+		$qb = $this->_em->createQueryBuilder();
+		$qb->from('BusinessBundle:BusinessInvoiceParticular','e');
+		$qb->select('SUM(e.totalQuantity) AS quantity');
+		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
+		$qnt = $qb->getQuery()->getOneOrNullResult();
+		$invoiceQnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
+		return $invoiceQnt;
+
+	}
+
+
+
+	public function getSalesUpdateQnt(BusinessInvoiceParticular  $item){
 
         $em = $this->_em;
         $particular = $item->getBusinessParticular();
-        $qnt = $particular->getSalesQuantity() + $item->getTotalQuantity();
-        $particular->setSalesQuantity($qnt);
+		$productionQnt = $this->getSumTotalProductionItemQuantity($particular);
+		$invoiceQnt = $this->getSumTotalInvoiceItemQuantity($particular);
+		$qnt = $productionQnt + $invoiceQnt;
+		$particular->setSalesQuantity($qnt);
         $em->persist($particular);
         $em->flush();
-
+	    $this->remainingQnt($particular);
     }
 
 

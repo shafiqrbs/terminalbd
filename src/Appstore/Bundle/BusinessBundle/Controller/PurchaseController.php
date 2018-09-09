@@ -158,6 +158,23 @@ class PurchaseController extends Controller
         exit;
     }
 
+    public function sawmillParticularAction(Request $request, BusinessPurchase $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $particularId = $request->request->get('particularId');
+        $width = $request->request->get('width');
+        $height = $request->request->get('height');
+        $length = $request->request->get('length');
+        $particularType = $request->request->get('particularType');
+        $price = $request->request->get('purchasePrice');
+        $invoiceItems = array('particularId' => $particularId ,'particularType' => $particularType, 'width' => $width,'height' => $height,'length' => $length,'price' => $price);
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertSawmillPurchaseItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
+        exit;
+    }
+
     public function invoiceParticularDeleteAction(BusinessPurchase $invoice, BusinessPurchaseItem $particular){
 
         $em = $this->getDoctrine()->getManager();

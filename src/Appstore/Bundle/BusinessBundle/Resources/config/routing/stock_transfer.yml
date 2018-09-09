@@ -1,4 +1,4 @@
-business_production:
+business_stock_transfer:
     path:     /
     defaults: { _controller: "BusinessBundle:Production:index" }
 
@@ -25,8 +25,8 @@ business_pre_production_update:
     defaults: { _controller: "BusinessBundle:Production:preProductionUpdate" }
     methods:  [POST, PUT]
 
-business_pre_production_delete:
-    path:     /{id}/delete
+business_production_delete:
+    path:     /{particular}/{id}/delete
     defaults: { _controller: "BusinessBundle:Production:delete" }
 
 business_production_particular_search:
@@ -38,12 +38,6 @@ business_production_particular_add:
     path:     /{id}/particular-add
     defaults: { _controller: "BusinessBundle:Production:addParticular" }
     methods:  POST
-    options:
-            expose: true
-
-business_production_approve:
-    path:     /{id}/approve
-    defaults: { _controller: "BusinessBundle:Production:approved" }
     options:
             expose: true
 

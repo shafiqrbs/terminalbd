@@ -45,11 +45,11 @@
         <div class="portlet-body form">
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
-            <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('business_purchase_particular_add',{'invoice':entity.id}) }}">
+            <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('business_purchase_particular_sawmill',{'invoice':entity.id}) }}">
             <div class="row-fluid">
                 <div class="span12">
                     <div class="row-fluid particular-info" >
-                        <div class="span7" style="margin-left:15px">
+                        <div class="span4" style="margin-left:15px">
                             <select id="particular" name="particular" class="span12 select2">
                                 <option value="">--- Select product name ---</option>
                                 {% for particular in particulars %}
@@ -57,11 +57,17 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="span3">
+                        <div class="span7">
                             <div class="input-append">
                                 <div class="input-group">
-                                    <input type="text" class="m-wrap span8" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
-                                    <input type="number" class="m-wrap span4 form-control input-number" id="quantity" name="quantity" value="1" min="1" autocomplete="off">
+                                    <select id="particularType" name="particularType" class="m-wrap span3">
+                                        <option value="round">Round</option>
+                                        <option value="square">Square</option>
+                                    </select>
+                                    <input type="text" class="m-wrap span2" id="height"  name="height" placeholder="height/round1" value="" maxlength="8" autocomplete="off">
+                                    <input type="text" class="m-wrap span2" id="width"  name="width" placeholder="width/round2" value="" maxlength="8" autocomplete="off">
+                                    <input type="text" class="m-wrap span2 form-control" id="length" name="length" value="" min="" autocomplete="off">
+                                    <input type="text" class="m-wrap span3" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
                                     <input type="hidden" id="particularId" name="particularId" value="">
                                     <button type="button" class="btn yellow"  id="unit" >Unit</button>
                                     <button type="submit" class="btn blue" id="addParticular" ><i class="icon-save"></i> Add</button>
@@ -81,8 +87,8 @@
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                             <th class="span1">Code</th>
                             <th class="span3">Name</th>
-                            <th class="span1">Sales Price</th>
-                            <th class="span1">Receive Price</th>
+                            <th class="span1">Sales</th>
+                            <th class="span1">Receive</th>
                             <th class="span1">Qnt</th>
                             <th class="span1">Unit</th>
                             <th class="span1">Sub Total</th>

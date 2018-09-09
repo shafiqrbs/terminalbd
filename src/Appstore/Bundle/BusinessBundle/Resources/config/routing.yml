@@ -34,6 +34,10 @@ business_product_production:
     resource: "@BusinessBundle/Resources/config/routing/production.yml"
     prefix:   /product-production
 
+business_stock_transfer:
+    resource: "@BusinessBundle/Resources/config/routing/stock_transfer.yml"
+    prefix:   /stock-transfer
+
 business_damage:
     resource: "@BusinessBundle/Resources/config/routing/damage.yml"
     prefix:   /damage

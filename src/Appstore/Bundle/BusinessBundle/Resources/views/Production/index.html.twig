@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_stock') }}">Manage Stock</a>
+                        <a href="{{ path('business_stock') }}">Manage Production Stock</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">View Lists</a></li>
+                    <li><a href="#">Manage Production Stock</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -33,10 +33,7 @@
                 <div class="portlet box green ">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Stock</div>
-                        <div class="actions">
-                            <a href="{{ path('business_stock_new') }}" class=" btn red"><i class="icon-plus"></i> Add Stock</a>
-                        </div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Production Stock</div>
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
@@ -80,76 +77,51 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
+                                    <th class="numeric" >Created</th>
                                     <th class="numeric" >SKU</th>
                                     <th class="numeric" >Name</th>
                                     {% if 'wearhouse' in config.stockFormat %}
-                                    <th class="numeric" >Wearhouse</th>
+                                        <th class="numeric" >Wearhouse</th>
                                     {% endif %}
                                     <th class="numeric" >Category</th>
-                                    <th class="numeric" >PP</th>
-                                    <th class="numeric" >Price</th>
-                                    <th class="numeric" >Opening</th>
                                     <th class="numeric" >Receive Qnt</th>
-                                    <th class="numeric" >Sales Qnt</th>
-                                    <th class="numeric" >Stock Qnt</th>
-                                    <th class="numeric" >Min. Qnt</th>
                                     <th class="numeric" >Unit</th>
-                                    <th class="numeric" >Product Mode</th>
+                                    <th class="numeric" >PP</th>
+                                    <th class="numeric" >SubTotal</th>
+                                    <th class="numeric" >Sales</th>
+                                    <th class="numeric" >SubTotal</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.particularCode }}</td>
-                                        <td class="numeric" ><a href="{{ path('business_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.businessParticular.particularCode }}</td>
+                                        <td class="numeric" >{{ entity.businessParticular.name }}</td>
                                         {% if 'wearhouse' in config.stockFormat %}
-                                        <td class="numeric" >{% if entity.wearHouse is not empty %}{{ entity.wearHouse.name }}{% endif %}</td>
+                                            <td class="numeric" >{% if entity.businessParticular.wearHouse is not empty %}{{ entity.businessParticular.wearHouse.name }}{% endif %}</td>
                                         {% endif %}
-                                       <td class="numeric" >{% if entity.Category is not empty %}{{ entity.category.name }}{% endif %}</td>
-                                        <td class="numeric">
-                                                <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
-                                        </td>
-                                        <td class="numeric">
-                                                <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
-
-                                        </td>
-                                        <td class="numeric">
-                                                <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
-                                       </td>
-                                        <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
-                                        <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
-                                        <td class="numeric" >{{ entity.remainingQuantity }}</td>
-                                        <td class="numeric">
-                                          <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
-                                        </td>
-                                        <td class="numeric">{% if  entity.unit is defined and  entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.businessParticularType.name }}</td>
+                                        <td class="numeric" >{% if entity.businessParticular.category is not empty %}{{ entity.businessParticular.category.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.quantity|number_format }}</td>
+                                        <td class="numeric">{% if  entity.businessParticular.unit is defined and  entity.businessParticular.unit is not empty %}{{ entity.businessParticular.unit.name|default('---') }}{% endif %}</td>
+                                        <td class="numeric">{{ entity.purchasePrice }}</td>
+                                        <td class="numeric" >{{ entity.purchaseSubTotal|number_format }}</td>
+                                        <td class="numeric"> {{ entity.salesPrice }}</td>
+                                        <td class="numeric" >{{ entity.salesSubTotal }}</td>
                                         <td class="numeric" >
-                                            {% if( entity.status == 1) %}
-                                                <a class="btn mini blue btn-action" href="{{ path('business_stock_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
-                                            {% else %}
-                                                <a class="btn mini red btn-action" href="{{ path('business_stock_status', { 'id': entity.id}) }}">x</a>
+                                            {% if entity.process == 'created' %}
+                                            <a href="javascript:" data-url="{{ path('business_pre_production_delete', { 'id': entity.id }) }}" class="btn red mini confirm" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            <a href="{{ path('business_stock_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            {% if entity.purchaseQuantity is empty or entity.salesQuantity is empty %}
-                                                <a title="Are you sure went to delete ?" href="{{ path('business_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            {% if entity.process == 'created' and entity.quantity > 0 %}
+                                                <a href="javascript:" data-url="{{ path('business_production_approve', { 'id': entity.id }) }}" class="btn yellow mini confirm" ><i class="icon-ok"></i> Approve</a>
                                             {% endif %}
-                                            {% if entity.businessParticularType.slug == "post-production" %}
-                                                <a href="{{ path('business_post_production', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-plus"></i> Production</a>
+                                            {% if entity.process == 'approved' %}
+                                                <a href="javascript:"  class="btn blue mini" ><i class="icon-ok"></i> Approved</a>
                                             {% endif %}
-                                            {% if entity.businessParticularType.slug == "pre-production" %}
-                                                <a href="{{ path('business_pre_production', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-plus"></i> Production</a>
-                                            {% endif %}
-                                            {% if 'wearhouse' in config.stockFormat %}
-                                                <a href="{{ path('business_stock_transfer', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-retweet"></i> Transfer</a>
-                                            {% endif %}
-
                                         </td>
                                     </tr>
-
                                 {% endfor %}
-
                                 </tbody>
                             </table>
                             <div class="pagination pull-center" >
@@ -168,7 +140,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/editable.js'
     '@BusinessBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -176,5 +147,4 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableWithOutReloadInit();
 {% endblock %}

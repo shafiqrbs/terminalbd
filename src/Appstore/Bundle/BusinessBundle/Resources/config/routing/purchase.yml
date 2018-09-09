@@ -44,6 +44,13 @@ business_purchase_particular_add:
     options:
             expose: true
 
+business_purchase_particular_sawmill:
+    path:     /{invoice}/particular-sawmill
+    defaults: { _controller: "BusinessBundle:Purchase:sawmillParticular" }
+    methods:  POST
+    options:
+            expose: true
+
 business_purchase_discount_update:
     path:     /purchase/dicount-update
     defaults: { _controller: "BusinessBundle:Purchase:invoiceDiscountUpdate" }

@@ -60,10 +60,8 @@ class InvoiceType extends AbstractType
                 'multiple'      =>false,
                 'empty_value' => '---Choose process---',
                 'choices' => array(
-                    'Created' => 'Created',
                     'Hold' => 'Hold',
                     'Delivered' => 'Delivered',
-                    'Chalan' => 'Chalan',
                     'Done' => 'Done',
                     'Canceled' => 'Canceled',
                 ),

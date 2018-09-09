@@ -53,6 +53,33 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
     }
 
+    public function insertSawmillPurchaseItems($invoice, $data)
+    {
+	    $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
+	    $em = $this->_em;
+	    $entity = new BusinessPurchaseItem();
+	    $quantity = 0;
+	    $purchasePrice = 0;
+	    if($data['particularType'] == 'round'){
+		    $quantity = round((($data['height'] * $data['width'] * $data['length'])/2304),2);
+		    $purchasePrice = round(($data['price']/$quantity),2);
+	    }elseif ($data['particularType'] == 'square'){
+		    $quantity = round((($data['height'] * $data['width'] * $data['length'])/144),2);
+		    $purchasePrice = round(($data['price']/$quantity),2);
+	    }
+	    $entity->setBusinessPurchase($invoice);
+	    $entity->setBusinessParticular($particular);
+	    if(!empty($particular->getPrice())){
+		    $entity->setSalesPrice($particular->getPrice());
+	    }
+	    $entity->setPurchasePrice($purchasePrice);
+	    $entity->setActualPurchasePrice($purchasePrice);
+	    $entity->setQuantity($quantity);
+	    $entity->setPurchaseSubTotal($data['price']);
+	    $em->persist($entity);
+	    $em->flush();
+    }
+
     public function getPurchaseItems(BusinessPurchase $sales)
     {
         $entities = $sales->getPurchaseItems();
@@ -63,6 +90,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
+	        $unit = !empty($entity->getBusinessParticular()->getUnit()) ? $entity->getBusinessParticular()->getUnit()->getName():'';
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getParticularCode()}</td>";
@@ -70,6 +98,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
             $data .= "<td>{$entity->getSalesPrice()}</td>";
             $data .= "<td>{$entity->getPurchasePrice()}</td>";
             $data .= "<td>{$entity->getQuantity()}</td>";
+            $data .= "<td>{$unit}</td>";
             $data .= "<td>{$entity->getPurchaseSubTotal()}</td>";
             $data .= "<td><a id='{$entity->getId()}'  data-url='/business/purchase/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
             $data .= '</tr>';

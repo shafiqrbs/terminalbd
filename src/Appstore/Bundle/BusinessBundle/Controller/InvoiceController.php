@@ -122,7 +122,7 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('production','stock','service','virtual'));
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('post-production','pre-production','stock','service','virtual'));
 	    $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
         return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
@@ -168,7 +168,7 @@ class InvoiceController extends Controller
 	        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            $done = array('Done','Delivered','Chalan');
+            $done = array('Done','Delivered');
             if (in_array($entity->getProcess(), $done)) {
 	          //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($invoiceItem,'sales');
 	            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);

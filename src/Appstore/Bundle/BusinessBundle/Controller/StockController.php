@@ -103,11 +103,6 @@ class StockController extends Controller
         if ($form->isValid() and empty($checkName)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setBusinessConfig($config);
-            if($entity->getBusinessParticularType() == 'production' ){
-               if(!empty($config->getProductionType())){
-                   $entity->setProductionType($config->getProductionType());
-               }
-            }
             $entity->upload();
             $em->persist($entity);
             $em->flush();
@@ -295,8 +290,9 @@ class StockController extends Controller
 		    $setField = 'set' . $data['name'];
 		    $quantity = abs($data['value']);
 		    $entity->$setField($quantity);
-		    $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
-		    $entity->setRemainingQuantity($remainingQuantity);
+		   // $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
+		    $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->remainingQnt($entity);
+		   // $entity->setRemainingQuantity($remainingQuantity);
 	    }else{
 		    $setField = 'set' . $data['name'];
 		    $entity->$setField(abs($data['value']));

@@ -208,6 +208,8 @@ class Builder extends ContainerAware
 
         if ($securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
 	        $menu['Business Management']->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
+	        $menu['Business Management']->addChild('Pre-production', array('route' => 'business_production'))->setAttribute('icon', 'icon-th-list');
+	        $menu['Business Management']->addChild('Stock Transfer', array('route' => 'business_stock_transfer'))->setAttribute('icon', 'icon-th-list');
 	        $menu['Business Management']->addChild('Manage Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-trash');
         }
 
