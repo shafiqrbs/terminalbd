@@ -11,7 +11,7 @@ $(document).on('change', '#discountCalculation , #discountType', function() {
         success: function(response) {
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);
-            $('#total').html(obj['netTotal']);
+            $('#total').html(obj['total']);
             $('#discount').html(obj['discount']);
 
         }

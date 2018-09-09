@@ -173,7 +173,6 @@ class MedicinePurchaseReturnController extends Controller
            // $purchaseReturnItem->setMedicinePurchaseItem($purchaseItem);
             $purchaseReturnItem->setPurchasePrice($stock->getPurchasePrice());
             $purchaseReturnItem->setSubTotal($purchaseReturnItem->getPurchasePrice() * $purchaseReturnItem->getQuantity());
-            $purchaseReturnItem->setTotal($purchaseReturnItem->getPurchasePrice() * $purchaseReturnItem->getQuantity());
             $em->persist($purchaseReturnItem);
             $em->flush();
            // $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'purchase-return');
