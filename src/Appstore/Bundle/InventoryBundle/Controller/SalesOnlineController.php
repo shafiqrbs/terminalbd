@@ -254,7 +254,7 @@ class SalesOnlineController extends Controller
 	        $sales->setDiscountType('Flat');
 	        $sales->setDiscountCalculation(0);
 	        $sales->setDiscount(0);
-	        $sales->setTotal(round($total + $vat));
+	        $sales->setTotal(round($subTotal + $vat));
 	        $sales->setDue(round($sales->getTotal()));
         }
 	    $em->persist($sales);

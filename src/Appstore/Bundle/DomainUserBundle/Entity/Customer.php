@@ -8,6 +8,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
@@ -114,6 +115,13 @@ class Customer
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
     protected $sales;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="customer" , cascade={"remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    protected $hotelInvoices;
+
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="customer" , cascade={"persist", "remove"})
@@ -423,6 +431,13 @@ class Customer
     public function getMobile()
     {
         return $this->mobile;
+    }
+
+    public function getNameMobile()
+    {
+
+	    $nameMobile = $this->getMobile().' - '.$this->getName();
+    	return $nameMobile;
     }
 
     /**
@@ -1067,6 +1082,13 @@ class Customer
 	 */
 	public function setDiabetes( string $diabetes ) {
 		$this->diabetes = $diabetes;
+	}
+
+	/**
+	 * @return HotelInvoice
+	 */
+	public function getHotelInvoices() {
+		return $this->hotelInvoices;
 	}
 
 }

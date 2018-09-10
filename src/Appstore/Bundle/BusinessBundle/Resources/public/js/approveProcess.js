@@ -61,6 +61,15 @@ $(document).on("click", ".confirm", function() {
 });
 
 
+$(document).on("change", "#mobile", function() {
+    var customer = $(this).val();
+    $.get( Routing.generate('domain_customer_ledger'),{ customer:customer} )
+        .done(function( data ) {
+            $('#outstanding').html(data);
+        });
+
+ });
+
 /*
 $(document).on("click", ".delete", function() {
     var id = $(this).attr("data-id");

@@ -8,6 +8,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\DmsBundle\Entity\DmsVendor;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
+use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
@@ -60,6 +61,12 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\JoinColumn(name="hmsPurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $hmsPurchase;
+
+        /**
+         * @ORM\OneToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", inversedBy="accountPurchase" )
+         * @ORM\JoinColumn(name="hotelPurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+         **/
+        private  $hotelPurchase;
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsVendor", inversedBy="accountPurchase" )
@@ -846,6 +853,20 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         {
             $this->accountVendor = $accountVendor;
         }
+
+	    /**
+	     * @return HotelPurchase
+	     */
+	    public function getHotelPurchase() {
+		    return $this->hotelPurchase;
+	    }
+
+	    /**
+	     * @param HotelPurchase $hotelPurchase
+	     */
+	    public function setHotelPurchase( $hotelPurchase ) {
+		    $this->hotelPurchase = $hotelPurchase;
+	    }
 
     }
 

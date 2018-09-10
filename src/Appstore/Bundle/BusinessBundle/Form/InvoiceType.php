@@ -132,6 +132,8 @@ class InvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+	        ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter narration')))
+
         ;
     }
 

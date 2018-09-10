@@ -219,8 +219,17 @@ class InvoiceController extends Controller
 			$entity->setDiscount(round($discount));
 			$entity->setTotal(round($total + $vat));
 			$entity->setDue(round($total + $vat));
-			$em->flush();
+
+		}else{
+
+			$entity->setDiscountType('flat');
+			$entity->setDiscountCalculation(0);
+			$entity->setDiscount(round($discount));
+			$entity->setTotal(round($entity->getSubTotal() + $vat));
+			$entity->setDue(round($entity->getTotal()));
 		}
+
+		$em->flush();
 		$msg = 'Discount successfully';
 		$result = $this->returnResultData($entity,$msg);
 		return new Response(json_encode($result));
@@ -568,7 +577,7 @@ class InvoiceController extends Controller
 			}else{
 				$template = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'print';
 			}
-			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($businessConfig->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
+			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($businessConfig->getGlobalOption(), $data = array('mobile' => $entity->getCustomer()->getMobile()));
 			$balance = empty($result) ? 0 :$result[0]['customerBalance'];
 			return  $this->render("BusinessBundle:Print:{$template}.html.twig",
 				array(

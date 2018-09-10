@@ -111,6 +111,7 @@ class AccountSalesRepository extends EntityRepository
             $customer =    isset($data['customer'])? $data['customer'] :'';
             $invoice =    isset($data['invoice'])? $data['invoice'] :'';
             $medicineInvoice =    isset($data['medicineInvoice'])? $data['medicineInvoice'] :'';
+            $businessInvoice =    isset($data['businessInvoice'])? $data['businessInvoice'] :'';
             $transaction =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
             $account =    isset($data['accountHead'])? $data['accountHead'] :'';
             $sales =    isset($data['sales'])? $data['sales'] :'';
@@ -149,6 +150,12 @@ class AccountSalesRepository extends EntityRepository
                 $qb->join('e.medicineSales','ms');
                 $qb->andWhere("ms.invoice = :invoice");
                 $qb->setParameter('invoice', $medicineInvoice);
+            }
+
+            if (!empty($businessInvoice)) {
+                $qb->join('e.businessInvoice','ms');
+                $qb->andWhere("ms.invoice = :invoice");
+                $qb->setParameter('invoice', $businessInvoice);
             }
 
             if (!empty($sales)) {

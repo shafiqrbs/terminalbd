@@ -8,6 +8,7 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -123,6 +124,12 @@ class AccountSales
      * @ORM\JoinColumn(name="business_invoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $businessInvoice;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="business_invoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $hotelInvoice;
 
 
     /**
@@ -727,6 +734,20 @@ class AccountSales
     {
         $this->processType = $processType;
     }
+
+	/**
+	 * @return HotelInvoice
+	 */
+	public function getHotelInvoice() {
+		return $this->hotelInvoice;
+	}
+
+	/**
+	 * @param HotelInvoice $hotelInvoice
+	 */
+	public function setHotelInvoice( $hotelInvoice ) {
+		$this->hotelInvoice = $hotelInvoice;
+	}
 
 
 }

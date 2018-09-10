@@ -44,21 +44,41 @@
                             {% include('flash-message.html.twig') %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span4">
-                                        <select class="search-input span12 m-wrap" id="accountHead" name="accountHead">
-                                            <option value="">--Select method--</option>
+                                    <div class="span2">
+                                        <select class="search-input span12 m-wrap" id="transactionMethod" name="transactionMethod">
+                                            <option value="">--Method--</option>
                                             {% for method in transactionMethods %}
-                                                <option value="{{ method.id }}">{{ method.name }}</option>
+                                                <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}">{{ method.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
+                                        <select class="search-input span12 m-wrap" id="accountHead" name="accountHead">
+                                            <option value="">--Account Head--</option>
+                                            {% for head in heads %}
+                                                <optgroup label="{{ head.name }}">
+                                                    {% for child in head.children %}
+                                                        <option {% if searchForm.accountHead is defined and searchForm.accountHead == child.id %} selected="selected" {% endif %} value="{{ child.id }}">{{ child.name }}</option>
+                                                    {% endfor %}
+                                                </optgroup>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span2">
+                                        <select class="search-input span12 m-wrap" id="category" name="category">
+                                            <option value="">--Category--</option>
+                                            {% for cat in categories %}
+                                                <option {% if searchForm.category is defined and searchForm.category == cat.id %} selected="selected" {% endif %} value="{{ cat.id }}">{{ cat.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span2">
                                         <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin" value="{% if searchForm.toUser is defined and searchForm.toUser is not empty %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
                                     </div>
                                     <div class="span2">
                                         <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  date-picker" value="{% if searchForm.startDate is defined and searchForm.startDate is not empty %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
                                         <div class="controls">
                                             <div class="input-append span11">
                                                 <input type="text" id="endDate" name="endDate"  class="span10 search-input m-wrap  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined and searchForm.endDate is not empty %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">

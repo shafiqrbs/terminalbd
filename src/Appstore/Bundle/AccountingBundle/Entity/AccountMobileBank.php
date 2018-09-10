@@ -13,6 +13,8 @@ use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
+use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
@@ -197,6 +199,16 @@ class AccountMobileBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="accountMobileBank" )
      */
     protected $businessInvoice;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="accountMobileBank" )
+     */
+    protected $hotelPurchases;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="accountMobileBank" )
+     */
+    protected $hotelInvoice;
 
     /**
      * @var string
@@ -589,6 +601,20 @@ class AccountMobileBank
     {
         return $this->businessInvoice;
     }
+
+	/**
+	 * @return HotelInvoice
+	 */
+	public function getHotelInvoice() {
+		return $this->hotelInvoice;
+	}
+
+	/**
+	 * @return HotelPurchase
+	 */
+	public function getHotelPurchases() {
+		return $this->hotelPurchases;
+	}
 
 
 }

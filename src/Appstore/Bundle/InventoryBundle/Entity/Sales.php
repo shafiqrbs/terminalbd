@@ -233,7 +233,7 @@ class Sales
 	 *
 	 * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
 	 */
-	private $discountCalculation;
+	private $discountCalculation = 0;
 
 	/**
      * @var float
@@ -266,13 +266,6 @@ class Sales
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
-    private $comment;
-
-    /**
      * @var float
      *
      * @ORM\Column(name="due", type="float", nullable=true)
@@ -282,9 +275,16 @@ class Sales
     /**
      * @var string
      *
-     * @ORM\Column(name="mobile", type="text", nullable=true)
+     * @ORM\Column(name="mobile", type="string", nullable=true)
      */
     private $mobile;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="remark", type="text", nullable=true)
+	 */
+	private $remark;
 
     /**
      * @var boolean
@@ -410,21 +410,6 @@ class Sales
         $this->total = $total;
     }
 
-    /**
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
-     * @param string $comment
-     */
-    public function setComment($comment)
-    {
-        $this->comment = $comment;
-    }
 
     /**
      * @return float
@@ -988,8 +973,22 @@ class Sales
 	/**
 	 * @param float $discountCalculation
 	 */
-	public function setDiscountCalculation( float $discountCalculation ) {
+	public function setDiscountCalculation($discountCalculation ) {
 		$this->discountCalculation = $discountCalculation;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRemark(){
+		return $this->remark;
+	}
+
+	/**
+	 * @param string $remark
+	 */
+	public function setRemark($remark ) {
+		$this->remark = $remark;
 	}
 
 }

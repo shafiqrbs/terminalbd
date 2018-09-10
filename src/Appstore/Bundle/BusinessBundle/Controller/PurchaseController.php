@@ -211,9 +211,18 @@ class PurchaseController extends Controller
         if($total > $discount ){
             $entity->setDiscountType($discountType);
             $entity->setDiscountCalculation($discountCal);
-            $em->flush();
-        }
-        $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($entity);
+	        $entity->setDiscount(round($discount));
+	        $entity->setNetTotal(round($entity->getSubTotal() + $vat));
+	        $entity->setDue(round($entity->getTotal()));
+        }else{
+			$entity->setDiscountType('flat');
+			$entity->setDiscountCalculation(0);
+			$entity->setDiscount(round($discount));
+			$entity->setNetTotal(round($entity->getSubTotal() + $vat));
+			$entity->setDue(round($entity->getTotal()));
+		}
+	    $em->flush();
+    //    $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($entity);
         $msg = 'Discount successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));

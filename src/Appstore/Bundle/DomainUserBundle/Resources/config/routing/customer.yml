@@ -84,8 +84,10 @@ domain_customer_auto_name_search:
     options:
            expose: true
 
-domain_customer_auto_mobile_search:
-    path:     /customer-auto-mobile-search
-    defaults: { _controller: "DomainUserBundle:Customer:searchAutoCompleteMobile" }
+domain_customer_ledger:
+    path:     /customer-ledger
+    defaults: { _controller: "AccountingBundle:AccountSales:getCustomerLedger" }
     options:
            expose: true
+
+

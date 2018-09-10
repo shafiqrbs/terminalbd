@@ -347,4 +347,24 @@ class AccountSalesController extends Controller
 	    );
     }
 
+    public function getCustomerLedgerAction()
+    {
+
+	    $customerId = $_REQUEST['customer'];
+	    $globalOption = $this->getUser()->getGlobalOption();
+	    $balance = 0;
+	    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'id'=> $customerId));
+	    $customerMobile = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile'=> $customerId));
+	    if(!empty($customer)){
+		    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption, $data = array('mobile' => $customer->getMobile()));
+		    $balance = empty($result) ? 0 : $result[0]['customerBalance'];
+	    }elseif (!empty($customerMobile)){
+		    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption, $data = array('mobile' => $customerMobile->getMobile()));
+		    $balance = empty($result) ? 0 : $result[0]['customerBalance'];
+	    }
+	    return new Response($balance);
+	    exit;
+
+    }
+
 }

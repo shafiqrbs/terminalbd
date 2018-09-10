@@ -53,8 +53,8 @@ class AccountSalesMedicineType extends AbstractType
                 'required'    => true,
                 'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Customer',
                 'empty_value' => '---Choose a customer---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'property' => 'nameMobile',
+                'attr'=>array('class'=>'span12 select2 customer-ledger'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.globalOption =".$this->globalOption->getId());

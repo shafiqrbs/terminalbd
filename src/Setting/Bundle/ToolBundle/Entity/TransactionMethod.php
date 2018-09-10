@@ -17,6 +17,8 @@ use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
+use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
@@ -67,6 +69,18 @@ class TransactionMethod
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $serviceSales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="transactionMethod" , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $hotelInvoice;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="transactionMethod" , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $hotelPurchase;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -511,5 +525,19 @@ class TransactionMethod
     {
         return $this->businessInvoice;
     }
+
+	/**
+	 * @return HotelInvoice
+	 */
+	public function getHotelInvoice() {
+		return $this->hotelInvoice;
+	}
+
+	/**
+	 * @return HotelPurchase
+	 */
+	public function getHotelPurchase() {
+		return $this->hotelPurchase;
+	}
 }
 

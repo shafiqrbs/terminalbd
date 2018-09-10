@@ -58,4 +58,21 @@ class AccountHeadRepository extends EntityRepository
 
     }
 
+	public function getExpenseAccountHead(){
+
+		$ret = array();
+		$parent = array(23,37);
+		$query = $this->createQueryBuilder('e');
+		$query->select('e');
+		$query->where("e.id IN (:parent)");
+		$query->setParameter('parent', $parent);
+		$query->orderBy('e.name', 'ASC');
+		$accountHeads =  $query->getQuery()->getResult();
+     	return $accountHeads;
+
+		//\Doctrine\Common\Util\Debug::dump($ret);
+		//exit;
+
+	}
+
 }

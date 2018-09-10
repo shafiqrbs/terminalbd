@@ -57,7 +57,7 @@ class ExpenditureRepository extends EntityRepository
             $qb->setParameter('transactionMethod', $transactionMethod);
         }
         if (!empty($category)) {
-            $qb->andWhere("e.category = :category");
+            $qb->andWhere("e.expenseCategory = :category");
             $qb->setParameter('category', $category);
         }
     }

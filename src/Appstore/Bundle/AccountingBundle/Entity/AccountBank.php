@@ -14,6 +14,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Bank;
@@ -42,7 +43,6 @@ class AccountBank
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountBank")
      **/
-
     protected $globalOption;
 
     /**
@@ -157,14 +157,24 @@ class AccountBank
     protected $businessPurchases;
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="accountBank" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="accountBank" )
      */
-    protected $medicinePurchases;
+    protected $hotelPurchases;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="accountBank" )
+     */
+    protected $hotelInvoice;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="accountBank" )
      */
     protected $medicineSales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="accountBank" )
+     */
+    protected $medicinePurchases;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="accountBank" )
@@ -627,6 +637,13 @@ class AccountBank
     {
         return $this->dpsTreatmentPlans;
     }
+
+	/**
+	 * @return MedicinePurchase
+	 */
+	public function getMedicinePurchases() {
+		return $this->medicinePurchases;
+	}
 
 }
 

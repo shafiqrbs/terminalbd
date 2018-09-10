@@ -107,7 +107,6 @@ class ReportController extends Controller
 
     public function expenditureCategoryAction()
     {
-
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
@@ -122,14 +121,19 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+	    $option = $this->getUser()->getGlobalOption();
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview( $this->getUser(),$data);
         $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $categories = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption'=> $option, 'status'=>1),array('name'=>'asc'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getExpenseAccountHead();
         return $this->render('AccountingBundle:Report/Expenditure:expenditure.html.twig', array(
             'overview' => $overview,
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
+            'heads' => $heads,
+            'categories' => $categories,
             'searchForm' => $data,
         ));
     }

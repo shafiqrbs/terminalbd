@@ -43,8 +43,10 @@ class ExpenditureController extends Controller
         $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch($user,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-        //$flatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions();
+     //   $flatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions( $user->getGlobalOption());
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+	    $categories = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption'=> $user->getGlobalOption(), 'status'=>1),array('name'=>'asc'));
+	    $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getExpenseAccountHead();
         return $this->render('AccountingBundle:Expenditure:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
@@ -52,6 +54,8 @@ class ExpenditureController extends Controller
             'transactionMethods' => $transactionMethods,
             'overview' => $overview,
             'entity' => $entity,
+            'heads' => $heads,
+            'categories' => $categories,
             'form'   => $form->createView(),
         ));
     }

@@ -35,6 +35,11 @@ class AccountVendor
      */
     protected $accountPurchases;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="vendor")
+     */
+    protected $hotelPurchases;
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="vendors")
      */

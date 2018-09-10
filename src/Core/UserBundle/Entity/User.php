@@ -27,6 +27,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
+use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -186,8 +187,6 @@ class User extends BaseUser
      */
     protected $syndicateContents;
 
-
-
     /**
      * @ORM\OneToOne(targetEntity="Profile", mappedBy="user", cascade={"persist", "remove"})
      *
@@ -242,7 +241,16 @@ class User extends BaseUser
      */
     protected $branches;
 
-    /* ----------------------------------inventory------------------*/
+    /* ----------------------------------CustomerInvoice --------------------------*/
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 **/
+	protected $customerInvoice;
+
+
+	/* ----------------------------------inventory------------------*/
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ExcelImporter", mappedBy="createdBy" , cascade={"persist", "remove"})
@@ -1640,6 +1648,13 @@ class User extends BaseUser
     {
         return $this->domainUser;
     }
+
+	/**
+	 * @return CustomerInvoice
+	 */
+	public function getCustomerInvoice() {
+		return $this->customerInvoice;
+	}
 
 
 }

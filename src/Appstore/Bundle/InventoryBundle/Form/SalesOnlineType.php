@@ -119,8 +119,10 @@ class SalesOnlineType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+	        ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter narration')))
+
         ;
-            //$builder->add('customer', new SalesOnlineCustomerType($this->location));
+           // $builder->add('customer', new SalesOnlineCustomerType($this->location));
 
     }
 

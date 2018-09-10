@@ -134,7 +134,7 @@
                                         <td class="numeric" >
                                             {% if entity.businessInvoice is not empty %}{{ entity.businessInvoice.invoice }} {% endif %}
                                         </td>
-                                        <td class="numeric" >{{ entity.processHead }}</td>
+                                        <td class="numeric" >{{ entity.processHead|capitalize }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                          <td class="numeric" >
                                              {% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}
