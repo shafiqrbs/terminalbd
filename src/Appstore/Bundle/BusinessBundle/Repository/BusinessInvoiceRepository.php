@@ -404,7 +404,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $config = $user->getGlobalOption()->getBusinessConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
-   //     $this->handleSearchBetween($qb,$data);
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;

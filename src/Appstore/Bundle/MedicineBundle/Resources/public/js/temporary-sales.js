@@ -577,9 +577,8 @@ function jqueryInstantTemporaryLoad(){
 
     });
 
-
-
     $( ".select2Vendor" ).autocomplete({
+
         source: function( request, response ) {
             $.ajax( {
                 url: Routing.generate('medicine_vendor_search'),

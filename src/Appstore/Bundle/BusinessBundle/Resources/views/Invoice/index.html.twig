@@ -114,7 +114,7 @@
                                         <td class="numeric" >{{ entity.due }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >  {% if entity.isReversed == 1 %}
-                                                <a href="{{ path('business_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
+                                                <a href="{{ path('business_reverse_show', { 'id': entity.businessReverse.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
                                             {% endif %}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
@@ -146,13 +146,6 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/jquery-ui.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

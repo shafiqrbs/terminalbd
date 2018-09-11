@@ -214,6 +214,7 @@ class InvoiceController extends Controller
 		}
 		$vat = 0;
 		if($total > $discount ){
+
 			$entity->setDiscountType($discountType);
 			$entity->setDiscountCalculation($discountCal);
 			$entity->setDiscount(round($discount));
@@ -351,30 +352,45 @@ class InvoiceController extends Controller
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
 
-    public function invoiceReverseAction(BusinessInvoice $invoice)
-    {
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entity = $this->getDoctrine()->getRepository('BusinessBundle:HmsReverse')->findOneBy(array('businessConfig' => $businessConfig, 'hmsInvoice' => $invoice));
-        return $this->render('BusinessBundle:Reverse:show.html.twig', array(
-            'entity' => $entity,
-        ));
+	public function invoiceReverseAction(BusinessInvoice $sales)
+	{
 
-    }
+		/*
+		 * Item Remove Total quantity
+		 * Stock Details
+		 * Purchase Item
+		 * Purchase Vendor Item
+		 * Purchase
+		 * Account Purchase
+		 * Account Journal
+		 * Transaction
+		 * Delete Journal & Account Purchase
+		 */
 
-    /**
-     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
-     */
+		set_time_limit(0);
+		$em = $this->getDoctrine()->getManager();
+		$this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
+		$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountBusinessSalesReverse($sales);
+		$sales->setIsReversed(true);
+		$sales->setProcess('Created');
+		$em->flush();
+		$template = $this->get('twig')->render('BusinessBundle:Invoice:reverse.html.twig', array(
+			'entity' => $sales,
+			'config' => $sales->getBusinessConfig(),
+		));
+		$em->getRepository('BusinessBundle:BusinessReverse')->salesReverse($sales, $template);
+		return $this->redirect($this->generateUrl('business_invoice_edit',array('id' => $sales->getId())));
+	}
 
+	public function invoiceReverseShowAction($id)
+	{
+		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+		$entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessReverse')->findOneBy(array('businessConfig' => $config, 'businessInvoice' => $id));
+		return $this->render('BusinessBundle:Reverse:sales.html.twig', array(
+			'entity' => $entity,
+		));
 
-    public function invoiceReverseShowAction(BusinessInvoice $invoice)
-    {
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entity = $this->getDoctrine()->getRepository('BusinessBundle:HmsReverse')->findOneBy(array('businessConfig' => $businessConfig, 'hmsInvoice' => $invoice));
-        return $this->render('BusinessBundle:Reverse:show.html.twig', array(
-            'entity' => $entity,
-        ));
-
-    }
+	}
 
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");

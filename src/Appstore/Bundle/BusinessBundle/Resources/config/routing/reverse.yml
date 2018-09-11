@@ -8,7 +8,7 @@ business_purchase_reverse:
 
 business_sales_reverse:
     path:     /{id}/
-    defaults: { _controller: "BusinessBundle:Sales:reverse" }
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceReverse" }
 
 business_reverse_show:
     path:     /{id}/show

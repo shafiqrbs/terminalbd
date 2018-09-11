@@ -78,10 +78,6 @@ business_invoice_delete:
     path:     /{id}/delete
     defaults: { _controller: "BusinessBundle:Invoice:delete" }
 
-business_invoice_reverse_show:
-    path:     /{id}/invoice-reverse-show
-    defaults: { _controller: "BusinessBundle:Invoice:InvoiceReverseShow" }
-
 
 business_invoice_particular_delete:
     path:     /{invoice}/{id}/particular-delete
@@ -94,7 +90,6 @@ business_invoice_print:
 business_invoice_chalan:
     path:     /{id}/chalan
     defaults: { _controller: "BusinessBundle:Invoice:invoiceChalan" }
-
 
 
 business_invoice_empty_delete:

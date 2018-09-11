@@ -646,6 +646,28 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+
+	public function accountBusinessSalesReverse(BusinessInvoice $entity)
+	{
+		$em = $this->_em;
+		if(!empty($entity->getAccountSales())){
+			/* @var AccountSales $sales*/
+			foreach ($entity->getAccountSales() as $sales ){
+				$globalOption = $sales->getGlobalOption()->getId();
+				$accountRefNo = $sales->getAccountRefNo();
+				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+				$transaction->execute();
+				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+				$accountCash->execute();
+			}
+		}
+		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.businessInvoice = '.$entity->getId());
+		if(!empty($accountCash)){
+			$accountCash->execute();
+		}
+	}
+
+
 	public function accountReverse(AccountSales $entity)
 	{
 		$em = $this->_em;
