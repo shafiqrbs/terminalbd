@@ -139,7 +139,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $user = $this->getUser();
-        $discount = $request->request->get('discount');
+        $discount = (float)$request->request->get('discount');
         $discountType = $request->request->get('discountType');
         $subTotal = $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->getSubTotalAmount($user);
         if($discountType == 'flat'){

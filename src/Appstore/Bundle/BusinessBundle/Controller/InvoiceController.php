@@ -201,7 +201,7 @@ class InvoiceController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$discountType = $request->request->get('discountType');
-		$discountCal = $request->request->get('discount');
+		$discountCal = (float)$request->request->get('discount');
 		$invoice = $request->request->get('invoice');
 		$entity = $em->getRepository('BusinessBundle:BusinessInvoice')->find($invoice);
 		$subTotal = $entity->getSubTotal();

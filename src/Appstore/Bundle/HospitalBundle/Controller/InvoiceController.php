@@ -195,7 +195,7 @@ class InvoiceController extends Controller
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
+        $discount = (float)$request->request->get('discount');
         $invoice = $request->request->get('invoice');
 
         $entity = $em->getRepository('HospitalBundle:Invoice')->find($invoice);
@@ -393,7 +393,7 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $payment = $request->request->get('payment');
-        $discount = $request->request->get('discount');
+        $discount = (float)$request->request->get('discount');
         $discount = $discount !="" ? $discount : 0 ;
         $process = $request->request->get('process');
 

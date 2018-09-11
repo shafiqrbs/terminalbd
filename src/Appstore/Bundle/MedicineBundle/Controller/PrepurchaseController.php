@@ -275,7 +275,7 @@ class PrepurchaseController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
-        $discountCal = $request->request->get('discount');
+        $discountCal = (float)$request->request->get('discount');
         $invoice = $request->request->get('purchase');
         $entity = $em->getRepository('MedicineBundle:MedicinePrepurchase')->find($invoice);
         $subTotal = $entity->getSubTotal();

@@ -184,7 +184,7 @@ class PurchaseController extends Controller
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
+        $discount = (float)$request->request->get('discount');
         $purchase = $request->request->get('invoice');
 
         $purchase = $em->getRepository('HospitalBundle:HmsPurchase')->find($purchase);

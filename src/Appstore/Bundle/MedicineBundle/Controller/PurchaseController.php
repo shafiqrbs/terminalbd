@@ -348,7 +348,7 @@ class PurchaseController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
-        $discountCal = (int)$request->request->get('discount');
+        $discountCal = (float)$request->request->get('discount');
         $invoice = $request->request->get('purchase');
         $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->find($invoice);
         $subTotal = $entity->getSubTotal();

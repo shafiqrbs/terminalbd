@@ -277,7 +277,7 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
-        $discountCal = (int)$request->request->get('discount');
+        $discountCal = (float)$request->request->get('discount');
         $invoice = $request->request->get('invoice');
         $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($invoice);
         $subTotal = $entity->getSubTotal();

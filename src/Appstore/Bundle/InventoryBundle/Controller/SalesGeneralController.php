@@ -166,7 +166,7 @@ class SalesGeneralController extends Controller
     public function salesDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
+        $discount = (float)$request->request->get('discount');
         $sales = $request->request->get('sales');
 
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);

@@ -239,7 +239,7 @@ class InvoiceAdmissionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $payment = $request->request->get('payment');
-        $discount = $request->request->get('discount');
+        $discount = (float)$request->request->get('discount');
         $discount = $discount !="" ? $discount : 0 ;
         $process = $request->request->get('process');
 

@@ -251,7 +251,7 @@ class SalesManualController extends Controller
 
 	    $em = $this->getDoctrine()->getManager();
 	    $discountType = $request->request->get('discountType');
-	    $discountCal = (int)$request->request->get('discount');
+	    $discountCal = (float)$request->request->get('discount');
 	    $sales = $request->request->get('sales');
 	    $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
 	    $subTotal = $sales->getSubTotal();
