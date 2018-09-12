@@ -72,6 +72,15 @@ class AccountSalesType extends AbstractType
                        ->orderBy("b.name", "ASC");
                },
            ))
+            ->add('processHead', 'choice', array(
+		        'attr'=>array('class'=>'span12 m-wrap'),
+		        'expanded'      =>false,
+		        'multiple'      =>false,
+		        'choices' => array(
+			        'Due' => 'Due',
+			        'Advance' => 'Advance',
+		        ),
+	        ))
             ->add('accountMobileBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',

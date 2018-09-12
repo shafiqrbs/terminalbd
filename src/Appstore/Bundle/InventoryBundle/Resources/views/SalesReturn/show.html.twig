@@ -38,17 +38,7 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_salesreturn') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('inventory_salesreturn_edit',{'id':salesReturn.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('inventory_salesreturn_show',{'id':salesReturn.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="btn black" href="{{ path('inventory_salesreturn') }}"><i class="icon-th-list"></i>&nbsp;Sales Return</a>
                             </div>
                         </div>
 
@@ -84,6 +74,7 @@
                                 <div class="span4">
                                     <h4>Return Info:</h4>
                                     <ul class="unstyled">
+                                        <li><strong>Mode:</strong>&nbsp;{{ salesReturn.mode|capitalize }}</li>
                                         <li><strong>Total Amount:</strong>&nbsp;{{ salesReturn.total }}</li>
                                         {% if salesReturn.totalItem is not empty %}<li><strong>Item:</strong>&nbsp;{{ salesReturn.totalItem }}{% endif %}</li>
                                         {% if salesReturn.totalQuantity is not empty %}<li><strong>Quantity:</strong>&nbsp;{{ salesReturn.totalQuantity }}</li>{% endif %}
@@ -154,9 +145,9 @@
                             <div class="clearfix">&nbsp;</div>
                            <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if entity.paymentStatus == 'pendig' %}
-                                        <span  class="btn green"><i class="icon-random"></i>&nbsp;Pending</span>
-                                    {% else %}
+                                    {% if salesReturn.process == 'complete' %}
+                                        <a  class="btn yellow  approve" data-url="{{ path('inventory_salesreturn_approve',{'id':salesReturn.id}) }}"><i class="icon-random"></i>&nbsp;Complete</a>
+                                    {% elseif salesReturn.process == 'approved' %}
                                         <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
                                     {% endif %}
                                 </div>
@@ -175,4 +166,12 @@
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/salesReturn.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock  %}

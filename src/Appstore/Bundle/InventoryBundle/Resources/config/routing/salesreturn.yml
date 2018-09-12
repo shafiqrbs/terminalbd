@@ -23,6 +23,12 @@ inventory_salesreturn_item:
     options:
             expose: true
 
+inventory_salesreturn_approve:
+    path:     /{id}/sales-return-approve
+    defaults: { _controller: "InventoryBundle:SalesReturn:approve" }
+    options:
+            expose: true
+
 inventory_salesreturn_item_delete:
     path:     /{id}/item-delete
     defaults: { _controller: "InventoryBundle:SalesReturn:itemDelete" }

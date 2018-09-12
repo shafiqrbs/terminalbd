@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,7 +35,6 @@ class SalesReturn implements CodeAwareEntity
      **/
     private  $branches;
 
-
     /**
      * @var integer
      *
@@ -48,6 +48,13 @@ class SalesReturn implements CodeAwareEntity
      * @ORM\Column(name="invoice", type="string", length=100, nullable=true)
      */
     private $invoice = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="journal", type="string", length=100, nullable=true)
+     */
+    private $journal;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="salesReturn" )
@@ -99,9 +106,16 @@ class SalesReturn implements CodeAwareEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="process", type="string", length=100, nullable=true)
+     * @ORM\Column(name="process", type="string", length=50, nullable=true)
      */
     private $process = 'created';
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=20, nullable=true)
+     */
+    private $mode = 'adjustment';
 
 
     /**
@@ -352,6 +366,34 @@ class SalesReturn implements CodeAwareEntity
     {
         $this->branches = $branches;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getMode(){
+		return $this->mode;
+	}
+
+	/**
+	 * @param string $mode
+	 */
+	public function setMode( string $mode ) {
+		$this->mode = $mode;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getJournal(){
+		return $this->journal;
+	}
+
+	/**
+	 * @param string $journal
+	 */
+	public function setJournal( string $journal ) {
+		$this->journal = $journal;
+	}
 
 
 }

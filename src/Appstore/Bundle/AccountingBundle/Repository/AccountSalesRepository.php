@@ -256,7 +256,7 @@ class AccountSalesRepository extends EntityRepository
         if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
         }
-        $accountSales->setProcessHead('inventory');
+        $accountSales->setProcessHead('Inventory');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
@@ -266,6 +266,28 @@ class AccountSalesRepository extends EntityRepository
         return $accountSalesClose;
 
     }
+
+	public function insertInventoryAccountSalesReturn(SalesReturn $entity)
+	{
+		$global = $entity->getInventoryConfig()->getGlobalOption();
+		$sales = $entity->getSales();
+		$em = $this->_em;
+		$accountSales = new AccountSales();
+		$accountSales->setGlobalOption($global);
+		$accountSales->setCustomer($sales->getCustomer());
+		$accountSales->setAmount($entity->getTotal());
+		$accountSales->setProcessHead('Sales-Return');
+		$accountSales->setProcessType('Sales');
+		$accountSales->setProcess('approved');
+		$accountSales->setApprovedBy($entity->getCreatedBy());
+		$accountSales->setSales($sales);
+		$accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+		$em->persist($accountSales);
+		$em->flush();
+		$this->updateCustomerBalance($accountSales);
+		return $accountSales;
+
+	}
 
     public function reportSalesIncome(User $user,$data)
     {

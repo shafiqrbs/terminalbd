@@ -19,10 +19,36 @@ class InventoryConfigType extends AbstractType
     {
 
         $builder
-            ->add('vatRegNo','text', array('attr'=>array('class'=>'m-wrap span8 ','placeholder'=>'Enter vat registration no.')))
-            ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'m-wrap numeric')))
+            ->add('vatRegNo','text', array('attr'=>array('class'=>'m-wrap span10 ','placeholder'=>'Registration no.')))
+            ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('shopName','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Barcode code print shop name')))
-            ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span4')))
+            ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span10')))
+            ->add('usingBarcode',
+                'choice', array(
+                'attr'=>array('class'=>'m-wrap  span12'),
+                'choices' => array(
+                    '' => 'Using Barcode',
+                    'item'  => 'Stock Item',
+                    'purchase-item'   => 'Purchase-item',
+                ),
+                'required'    => false,
+                'multiple'    => false,
+                'expanded'  => false,
+                'empty_data'  => null,
+            ))
+           ->add('usingSalesPrice',
+                'choice', array(
+                'attr'=>array('class'=>'m-wrap  span12'),
+                'choices' => array(
+                    '' => 'Using Sales Price',
+                    'item'  => 'Stock Item',
+                    'purchase-item'   => 'Purchase Item',
+                ),
+                'required'    => false,
+                'multiple'    => false,
+                'expanded'  => false,
+                'empty_data'  => null,
+            ))
             ->add('deliveryProcess',
                 'choice', array(
                 'attr'=>array('class'=>'m-wrap  span12'),

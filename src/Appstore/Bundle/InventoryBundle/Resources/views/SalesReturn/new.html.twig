@@ -38,17 +38,7 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_salesreturn') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('inventory_salesreturn_edit',{'id':salesReturn.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('inventory_salesreturn_show',{'id':salesReturn.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="btn black" href="{{ path('inventory_salesreturn') }}"><i class="icon-th-list"></i>&nbsp;Sales Return</a>
                             </div>
                         </div>
 
@@ -112,8 +102,9 @@
                                             <thead class="flip-content ">
                                             <tr class="head-green">
                                                 <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                                {#<th class="numeric" >Item</th>#}
+                                                <th class="numeric" >Item</th>
                                                 <th class="numeric" >Item SKU</th>
+                                                <th class="numeric" >Barcode</th>
                                                 <th class="numeric" >Sales price</th>
                                                 <th class="numeric" >Sub-total</th>
                                                 <th class="numeric" >Qnt</th>
@@ -128,8 +119,9 @@
                                                 {% for salesItem in entity.salesItems %}
                                                     <tr>
                                                         <td class="numeric" >{{ loop.index }}</td>
-                        {#                                <td class="numeric" >{{ salesItem.item.name }}</td>#}
+                                                        <td class="numeric" >{{ salesItem.item.name }}</td>
                                                         <td class="numeric" >{{ salesItem.item.sku }}</td>
+                                                        <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
                                                         <td class="numeric" ><input type="hidden" name="salesPrice" id="salesPrice-{{ salesItem.id }}" value="{{ salesItem.salesPrice }}">{{ salesItem.salesPrice|default|number_format() }}</td>
                                                         <td class="numeric" >{{ salesItem.subTotal }}</td>
                                                         <td class="numeric" ><input type="hidden" name="salesQuantity" id="salesQuantity-{{ salesItem.id }}" value="{{ salesItem.quantity }}">{{ salesItem.quantity }}</td>
@@ -162,7 +154,7 @@
 
                                                     </tr>
                                                 {% endfor %}
-                                                <tr><td colspan="7"><span class="pull-right"><strong>Total Amount</strong></span></td><td><span class="pull-left"><strong id="totalAmount">{{ salesReturn.total|number_format }}</strong></span></td><td></td></tr>
+                                                <tr><td colspan="9"><span class="pull-right"><strong>Total Amount</strong></span></td><td><span class="pull-left"><strong id="totalAmount">{{ salesReturn.total|number_format }}</strong></span></td><td></td></tr>
                                             {% endif %}
                                             </tbody>
                                         </table>
@@ -174,12 +166,13 @@
                             {{ form_row(form._token) }}
 
                             <div class="form-actions portlet grey box">
-                                <div class="span6" id="message"></div>
-                                <div class="span6 pull-right" id="action-{{ entity.id }}">
+                                <div class="span5" id="message"></div>
+                                <div class="span7 pull-right" id="action-{{ entity.id }}">
                                     {% if salesReturn.process == 'created' %}
                                         <div class="controls" style="margin-top: 10px">
-                                            <div class="input-append span11">
-                                                <input style="height: 34px!important; border:1px solid #fff; color: #fff" type="text" id="salesAdjustmentInvoice" name="salesAdjustmentInvoice"  class="span8 m-wrap" value=""  autocomplete="off" placeholder="Sales adjustment invoice">
+                                            <div class="input-append pull-right">
+                                                <select id="mode" name="mode" class="m-wrap span3"><option value="adjustment">Adjustment</option><option value="payment">Payment</option></select>
+                                                <input style="height: 34px!important; border:1px solid #fff;background-color: #ffffff" type="text" id="salesAdjustmentInvoice" name="salesAdjustmentInvoice"  class="span4 m-wrap" value=""  autocomplete="off" placeholder="Sales adjustment invoice">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit" disabled="disabled" id="paymentBtn"  type="submit"><i class="icon-ok"></i>&nbsp;Submit</button>
                                                     <a href="{{ path('inventory_salesreturn_delete',{id : salesReturn.id}) }}" class="btn red"><i class="icon-remove"></i>&nbsp;Cancel</a>

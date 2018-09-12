@@ -354,7 +354,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-money')
                 ->setAttribute('dropdown', true);
 
-            $menu['Accounting']['Transaction & Report']->addChild('Transaction Overview', array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');
+           // $menu['Accounting']['Transaction & Report']->addChild('Transaction Overview', array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');
             $accounting = array('inventory');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {

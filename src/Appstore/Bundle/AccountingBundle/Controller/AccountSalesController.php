@@ -101,7 +101,6 @@ class AccountSalesController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption( $this->getUser()->getGlobalOption());
-            $entity->setProcessHead('Account Sales');
             if(!empty($this->getUser()->getProfile()->getBranches())){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }

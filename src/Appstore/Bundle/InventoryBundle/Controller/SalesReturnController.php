@@ -143,25 +143,28 @@ class SalesReturnController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        $data = $request->request->get('salesAdjustmentInvoice');
-        if ($editForm->isValid()) {
-            $invoice = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('invoice' => $data));
-            if(!empty($invoice)){
-                $entity->setSalesAdjustmentInvoice($invoice);
+        $mode = $request->request->get('mode');
+        $invoice = $request->request->get('salesAdjustmentInvoice');
+	    $sales = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('invoice' => $invoice));
+
+	    if ($editForm->isValid() and $mode == 'adjustment' and !empty($sales)) {
+            if(!empty($sales)){
+                $entity->setSalesAdjustmentInvoice($sales);
             }
+            $entity->setMode($mode);
             $entity->setProcess('complete');
             $em->flush();
             $this->getDoctrine()->getRepository('InventoryBundle:SalesReturn')->updateSalesReturn($entity);
-            $em->getRepository('InventoryBundle:StockItem')->insertSalesReturnStockItem($entity);
-            $em->getRepository('InventoryBundle:Item')->getItemSalesReturnUpdate($entity);
-            $em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesReturnItem($entity);
-            $accountSalesReturn = $em->getRepository('AccountingBundle:AccountSalesReturn')->insertAccountSalesReturn($entity);
-            $em->getRepository('AccountingBundle:AccountCash')->insertSalesCashReturn($accountSalesReturn);
-            $em->getRepository('AccountingBundle:Transaction')->salesReturnTransaction($entity,$accountSalesReturn);
             return $this->redirect($this->generateUrl('inventory_salesreturn_edit', array('id' => $entity->getId())));
+        }elseif ($editForm->isValid() and $mode == 'payment') {
+		    $entity->setMode($mode);
+		    $entity->setProcess('complete');
+		    $em->flush();
+		    $this->getDoctrine()->getRepository('InventoryBundle:SalesReturn')->updateSalesReturn($entity);
+		    return $this->redirect($this->generateUrl('inventory_salesreturn_edit', array('id' => $entity->getId())));
         }
 
-        return $this->render('InventoryBundle:SalesReturn:edit.html.twig', array(
+        return $this->render('InventoryBundle:SalesReturn:new.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
         ));
@@ -240,4 +243,33 @@ class SalesReturnController extends Controller
         exit;
 
     }
+
+
+	public function approveAction(SalesReturn $entity)
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		if (!empty($entity) and $entity->getProcess() !='approved') {
+			$em = $this->getDoctrine()->getManager();
+			$entity->setProcess('approved');
+			if($entity->getMode() == 'payment'){
+				$journal = $em->getRepository('AccountingBundle:AccountJournal')->insertInventoryAccountSalesReturn($entity);
+				$entity->setJournal($journal);
+			}
+			$em->flush();
+			$em->getRepository('InventoryBundle:StockItem')->insertSalesReturnStockItem($entity);
+			$em->getRepository('InventoryBundle:Item')->getItemSalesReturnUpdate($entity);
+			$em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesReturnItem($entity);
+			if($entity->getMode() == 'adjustment') {
+				$accountSales = $em->getRepository( 'AccountingBundle:AccountSales' )->insertInventoryAccountSalesReturn( $entity );
+				$em->getRepository( 'AccountingBundle:Transaction' )->salesReturnTransaction( $entity, $accountSales );
+			}
+		    return new Response('success');
+		} else {
+			return new Response('failed');
+		}
+		exit;
+
+	}
+
 }

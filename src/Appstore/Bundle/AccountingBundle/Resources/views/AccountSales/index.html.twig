@@ -105,6 +105,7 @@
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Receive Mode</th>
                                     <th class="numeric" >Ref No.</th>
                                     <th class="numeric" >Trans. Method</th>
                                     <th class="numeric" >Sales</th>
@@ -122,6 +123,7 @@
                                         <td class="numeric" >
                                             {% if entity.sales is not empty %}{{ entity.sales.invoice }} {% endif %}
                                         </td>
+                                        <td class="numeric" >{{ entity.processHead|capitalize }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                          <td class="numeric" >
                                              {% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}

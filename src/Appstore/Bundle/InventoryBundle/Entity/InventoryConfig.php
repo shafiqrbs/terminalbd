@@ -378,7 +378,22 @@ class InventoryConfig
     /**
      * @var string
      *
-     * @ORM\Column(name="barcodeText", type="string", length=255,nullable = true)
+     * @ORM\Column(name="usingBarcode", type="string", length=30,nullable = true)
+     */
+    private $usingBarcode='purchase-item';
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="usingSalesPrice", type="string", length=100,nullable = true)
+     */
+    private $usingSalesPrice = 'purchase-item';
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="barcodeText", type="string", length=100,nullable = true)
      */
     private $barcodeText;
 
@@ -1305,6 +1320,34 @@ class InventoryConfig
     {
         return $this->prePurchaseItem;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getUsingBarcode(){
+		return $this->usingBarcode;
+	}
+
+	/**
+	 * @param string $usingBarcode
+	 */
+	public function setUsingBarcode($usingBarcode ) {
+		$this->usingBarcode = $usingBarcode;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUsingSalesPrice(){
+		return $this->usingSalesPrice;
+	}
+
+	/**
+	 * @param string $usingSalesPrice
+	 */
+	public function setUsingSalesPrice($usingSalesPrice ) {
+		$this->usingSalesPrice = $usingSalesPrice;
+	}
 
 
 }

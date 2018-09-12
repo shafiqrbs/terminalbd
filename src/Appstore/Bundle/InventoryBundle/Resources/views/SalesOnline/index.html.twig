@@ -110,6 +110,7 @@
                                     <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Revised</th>
+                                    <th class="numeric" >Return Adj.</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -128,6 +129,7 @@
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric"> {{ entity.process|capitalize }}</td>
                                         <td class="numeric"> {% if entity.revised == 1  %}<a class="btn yellow mini" href="{{ path('inventory_online_sales_reverse',{'invoice':entity.invoice}) }}">Revised</a>{% endif %}</td>
+                                        <td class="numeric"> {% if entity.salesReturn is not empty %}Return{% endif %}</td>
 
                                         <td class="numeric" >
                                             {% if entity.salesItems is defined and  entity.salesItems is not empty  %}

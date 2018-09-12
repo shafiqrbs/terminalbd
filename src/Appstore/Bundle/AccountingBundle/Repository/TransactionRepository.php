@@ -625,20 +625,20 @@ class TransactionRepository extends EntityRepository
 
     }
 
-    public function salesReturnTransaction(SalesReturn $entity, AccountSalesReturn $accountSalesReturn)
+    public function salesReturnTransaction(SalesReturn $entity, AccountSales $accountSales)
     {
-        $this->insertSalesReturnDebit($entity,$accountSalesReturn);
-        $this->insertSalesReturnCredit($entity,$accountSalesReturn);
+        $this->insertSalesReturnDebit($entity,$accountSales);
+        $this->insertSalesReturnCredit($entity,$accountSales);
     }
 
-    private function insertSalesReturnDebit(SalesReturn $entity, AccountSalesReturn $accountSalesReturn)
+    private function insertSalesReturnDebit(SalesReturn $entity, AccountSales $accountSales)
     {
 
         $transaction = new Transaction();
-        $transaction->setGlobalOption($accountSalesReturn->getGlobalOption());
-        $transaction->setAccountRefNo($accountSalesReturn->getAccountRefNo());
-        if(!empty($accountSalesReturn->getBranches())){
-            $transaction->setBranches($accountSalesReturn->getBranches());
+        $transaction->setGlobalOption($accountSales->getGlobalOption());
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
         }
         $transaction->setProcessHead('SalesReturn');
         $transaction->setProcess('Goods');
@@ -651,14 +651,14 @@ class TransactionRepository extends EntityRepository
 
     }
 
-    private function insertSalesReturnCredit(SalesReturn $entity, AccountSalesReturn $accountSalesReturn)
+    private function insertSalesReturnCredit(SalesReturn $entity, AccountSales $accountSales)
     {
         $transaction = new Transaction();
-        $transaction->setGlobalOption($accountSalesReturn->getGlobalOption());
-        if(!empty($accountSalesReturn->getBranches())){
-            $transaction->setBranches($accountSalesReturn->getBranches());
+        $transaction->setGlobalOption($accountSales->getGlobalOption());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
         }
-        $transaction->setAccountRefNo($accountSalesReturn->getAccountRefNo());
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
         $transaction->setProcessHead('SalesReturn');
         $transaction->setProcess('Cash');
         /* Cash - Sales Return Payment Account */
