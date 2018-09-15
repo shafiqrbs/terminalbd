@@ -146,7 +146,7 @@
                            <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if salesReturn.process == 'complete' %}
-                                        <a  class="btn yellow  approve" data-url="{{ path('inventory_salesreturn_approve',{'id':salesReturn.id}) }}"><i class="icon-random"></i>&nbsp;Complete</a>
+                                        <a  class="btn yellow  approve" data-url="{{ path('inventory_salesreturn_approve',{'id':salesReturn.id}) }}"><i class="icon-random"></i>&nbsp;Approve</a>
                                     {% elseif salesReturn.process == 'approved' %}
                                         <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
                                     {% endif %}

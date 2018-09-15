@@ -147,7 +147,7 @@ class SalesReturnController extends Controller
         $invoice = $request->request->get('salesAdjustmentInvoice');
 	    $sales = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('invoice' => $invoice));
 
-	    if ($editForm->isValid() and $mode == 'adjustment' and !empty($sales)) {
+	    if ($editForm->isValid() and $mode == 'adjustment') {
             if(!empty($sales)){
                 $entity->setSalesAdjustmentInvoice($sales);
             }
@@ -256,14 +256,16 @@ class SalesReturnController extends Controller
 				$journal = $em->getRepository('AccountingBundle:AccountJournal')->insertInventoryAccountSalesReturn($entity);
 				$entity->setJournal($journal);
 			}
+			if($entity->getMode() == 'adjustment') {
+				$accountSales = $em->getRepository( 'AccountingBundle:AccountSales' )->insertInventoryAccountSalesReturn( $entity );
+				$em->getRepository( 'AccountingBundle:Transaction' )->salesReturnTransaction( $entity, $accountSales );
+				$entity->setSalesAccount($accountSales->getAccountRefNo());
+			}
 			$em->flush();
 			$em->getRepository('InventoryBundle:StockItem')->insertSalesReturnStockItem($entity);
 			$em->getRepository('InventoryBundle:Item')->getItemSalesReturnUpdate($entity);
 			$em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesReturnItem($entity);
-			if($entity->getMode() == 'adjustment') {
-				$accountSales = $em->getRepository( 'AccountingBundle:AccountSales' )->insertInventoryAccountSalesReturn( $entity );
-				$em->getRepository( 'AccountingBundle:Transaction' )->salesReturnTransaction( $entity, $accountSales );
-			}
+
 		    return new Response('success');
 		} else {
 			return new Response('failed');

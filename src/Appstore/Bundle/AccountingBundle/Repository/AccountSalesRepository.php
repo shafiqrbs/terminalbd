@@ -281,7 +281,7 @@ class AccountSalesRepository extends EntityRepository
 		$accountSales->setProcess('approved');
 		$accountSales->setApprovedBy($entity->getCreatedBy());
 		$accountSales->setSales($sales);
-		$accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+	//	$accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
 		$em->persist($accountSales);
 		$em->flush();
 		$this->updateCustomerBalance($accountSales);

@@ -41,7 +41,6 @@
                                 {% include('flash-message.html.twig')  %}
                                 <form action="{{ path('inventory_salesreturn_search') }}" method="post" name="itemSearch" id="itemSearch"  >
                                     <div class="row-fluid">
-
                                         <div class="span12">
                                             <div class="controls">
                                                 <div class="input-append span12">
@@ -62,6 +61,7 @@
                                         <th class="numeric" >Invoice</th>
                                         <th class="numeric" >Process Invoice</th>
                                         <th class="numeric" >Mode</th>
+                                        <th class="numeric" >Account</th>
                                         <th class="numeric" >Journal</th>
                                         <th class="numeric" >Adjustment</th>
                                         <th class="numeric" >Item</th>
@@ -79,6 +79,7 @@
                                             <td class="numeric" >{{ entity.invoice }}</td>
                                             <td class="numeric" >{{ entity.sales.invoice }}</td>
                                             <td class="numeric" >{{ entity.mode|capitalize }}</td>
+                                            <td class="numeric" >{{ entity.salesAccount }}</td>
                                             <td class="numeric" >{{ entity.journal }}</td>
                                             <td class="numeric" >{% if entity.salesAdjustmentInvoice is not empty %}{{ entity.salesAdjustmentInvoice.invoice }}{% endif %}</td>
                                             <td class="numeric" >{{ entity.totalItem }}</td>

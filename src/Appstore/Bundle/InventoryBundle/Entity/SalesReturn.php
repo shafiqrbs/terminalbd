@@ -52,9 +52,16 @@ class SalesReturn implements CodeAwareEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="journal", type="string", length=100, nullable=true)
+     * @ORM\Column(name="journal", type="string", length=50, nullable=true)
      */
     private $journal;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="salesAccount", type="string", length=50, nullable=true)
+     */
+    private $salesAccount;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="salesReturn" )
@@ -393,6 +400,20 @@ class SalesReturn implements CodeAwareEntity
 	 */
 	public function setJournal( string $journal ) {
 		$this->journal = $journal;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSalesAccount() {
+		return $this->salesAccount;
+	}
+
+	/**
+	 * @param string $salesAccount
+	 */
+	public function setSalesAccount( $salesAccount ) {
+		$this->salesAccount = $salesAccount;
 	}
 
 
