@@ -676,4 +676,24 @@ class ItemRepository extends EntityRepository
 	}
 
 
+	public function getBarcodeForPrint($inventory,$data)
+	{
+
+		$qb = $this->createQueryBuilder('item');
+		$qb->join('item.inventoryConfig', 'ic');
+		$qb->select('item.barcode');
+		$qb->addSelect('item.id');
+		$qb->addSelect('item.sku');
+		$qb->addSelect('item.name');
+		$qb->addSelect('item.salesPrice');
+		$qb->addSelect('item.remainingQnt');
+		$qb->where($qb->expr()->in("item.id", $data ));
+		$qb->andWhere("item.inventoryConfig = :inventory");
+		$qb->setParameter('inventory', $inventory->getId());
+		$qb->orderBy('item.name','ASC');
+		return $qb->getQuery()->getArrayResult();
+
+	}
+
+
 }

@@ -35,12 +35,11 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Stock Item lists</div>
                         <div class="actions">
+                            <div class="btn-group">
                             <a class="btn red" href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
                            {# <a class="btn black" href="{{ path('item_purcahse_stock_update') }}"><i class="icon-refresh"></i>&nbsp; Update Stock</a>#}
-                            <a href="{{ path('barcode_new') }}" id="btn-create-barcode" class="btn yellow"  onclick="return prepareBarCode()" >
-                                Barcode
-                                <i class="icon-barcode"></i>
-                            </a>
+                            <a href="{{ path('barcode_item_add') }}" id="btn-create-barcode" class="btn yellow"  onclick="return prepareBarCode()" >Barcode <i class="icon-barcode"></i></a>
+                            </div>
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -110,7 +109,7 @@
                                         <td>{% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.sku }}</td>
                                         <td class="numeric" >
-                                            <input id="action-{{ entity.id }}" {% if  entity.remainingQnt ==  0  %} disabled="disabled" {% endif %} data-id="{{ entity.id }}" class="barcode"   type="checkbox" name="item[]" value="{{ entity.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;
+                                            <input id="action-{{ entity.id }}" {% if  entity.remainingQnt ==  0  %} disabled="disabled" {% endif %} data-id="{{ entity.id }}" class="itemBarcode"   type="checkbox" name="item[]" value="{{ entity.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;
                                             <a class="editable" data-name="Barcode" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Add product barcode">{{ entity.barcode }}</a></td>
                                         <td class="numeric" ><a href="javascript:" data-url="{{ path('inventory_item_sku_update',{'item':entity.id}) }}" id="sku-{{ entity.id }}" data-id="{{ entity.id }}" class="skuUpdate" >{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>

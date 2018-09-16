@@ -49,34 +49,32 @@ class BarcodeController extends Controller
     public function barCoder(PurchaseItem $barcoder,InventoryConfig $config)
     {
 
+        if ((!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1)) {
 
-
-        if ((!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1)) {
-
-            if ($barcoder->getItem()->getColor()->getName() != 'Default'){
-                $color = $barcoder->getItem()->getColor()->getName();
+            if ($barcoder->getColor()->getName() != 'Default'){
+                $color = $barcoder->getColor()->getName();
             }else{
                 $color ='';
             }
-            if ($barcoder->getItem()->getSize()->getName() != 'Default'){
-                $size = '-'.$barcoder->getItem()->getSize()->getName();
+            if ($barcoder->getSize()->getName() != 'Default'){
+                $size = '-'.$barcoder->getSize()->getName();
             }else{
                 $size ='';
             }
             $sizeColor =  $color.$size;
 
-        } elseif (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1 and $barcoder->getItem()->getSize()->getName() != 'Default') {
-            $sizeColor = $barcoder->getItem()->getSize()->getName();
-        } elseif (!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1 and $barcoder->getItem()->getColor()->getName() != 'Default') {
-            $sizeColor = $barcoder->getItem()->getColor()->getName();
+        } elseif (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1 and $barcoder->getSize()->getName() != 'Default') {
+            $sizeColor = $barcoder->getSize()->getName();
+        } elseif (!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1 and $barcoder->getColor()->getName() != 'Default') {
+            $sizeColor = $barcoder->getColor()->getName();
         }else {
             $sizeColor = '';
         }
 
-        if (!empty($barcoder->getItem()->getVendor()) and $config->getBarcodeBrandVendor() == 2 ){
+        if (!empty($barcoder->getVendor()) and $config->getBarcodeBrandVendor() == 2 ){
             $vendorBrand = $barcoder->getPurchase()->getVendor()->getVendorCode();
-        }elseif(!empty($barcoder->getItem()->getBrand()) and $config->getBarcodeBrandVendor() == 1){
-            $vendorBrand = $barcoder->getItem()->getBrand()->getBrandCode();
+        }elseif(!empty($barcoder->getBrand()) and $config->getBarcodeBrandVendor() == 1){
+            $vendorBrand = $barcoder->getBrand()->getBrandCode();
         }else{
             $vendorBrand = '';
         }
@@ -136,13 +134,109 @@ class BarcodeController extends Controller
         return $data;
     }
 
+	public function itemBarcoder(Item $barcoder,InventoryConfig $config)
+	{
+
+		if ((!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1)) {
+
+			if ($barcoder->getColor()->getName() != 'Default'){
+				$color = $barcoder->getColor()->getName();
+			}else{
+				$color ='';
+			}
+			if ($barcoder->getSize()->getName() != 'Default'){
+				$size = '-'.$barcoder->getSize()->getName();
+			}else{
+				$size ='';
+			}
+			$sizeColor =  $color.$size;
+
+		} elseif (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1 and $barcoder->getSize()->getName() != 'Default') {
+			$sizeColor = $barcoder->getSize()->getName();
+		} elseif (!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1 and $barcoder->getColor()->getName() != 'Default') {
+			$sizeColor = $barcoder->getColor()->getName();
+		}else {
+			$sizeColor = '';
+		}
+		$barcodeWidth = $config->getBarcodeWidth().'px';
+		$barcodeHeight = $config->getBarcodeHeight().'px';
+		$barcodeMargin = $config->getBarcodeMargin();
+		if($barcodeMargin == 0 ){
+			$margin = 0;
+		}else{
+			$margin = $barcodeMargin.'px';
+		}
+		$barcodePadding = $config->getBarcodePadding();
+		if($barcodePadding == 0 ){
+			$padding = 0;
+		}else{
+			$padding = $barcodePadding.'px';
+		}
+		$barcodeBorder = $config->getBarcodeBorder();
+		if($barcodeBorder > 0 ){
+			$border = $barcodeBorder.'px';
+		}else{
+			$border = 0;
+		}
+
+		$shopName = $config->getShopName();
+		if($config->getBarcodePriceHide() == 1){
+			$price ='';
+		}else{
+			$price ="TK. {$barcoder->getSalesPrice()} ";
+		}
+		$scale = $config->getBarcodeScale();
+		$fontsize = $config->getBarcodeFontSize();
+		$thickness = $config->getBarcodeThickness();
+
+		$barcode = new BarcodeGenerator();
+		$barcode->setText($barcoder->getBarcode());
+		$barcode->setType(BarcodeGenerator::Code128);
+		$barcode->setScale($scale);
+		$barcode->setThickness($thickness);
+		$barcode->setFontSize($fontsize);
+		$code = $barcode->generate();
+		$data = '';
+		$data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
+		$data .='<div class="centered">';
+		if($shopName){
+			$data .='<p><span class="center">'.$shopName.'</span></p>';
+		}
+		if($sizeColor !="") {
+			$data .= '<p><span class="left">' . $sizeColor . '</span></p>';
+		}
+		$data .='<div class="clearfix"></div>';
+		$data .='<img src="data:image/png;base64,'.$code.'" />';
+		$data .='<p><span class="center">'.$price.$config->getBarcodeText().'</span></p>';
+		$data .='</div>';
+		$data .='</div>';
+		return $data;
+	}
+
     public function createBarcodeAction(Request $request)
     {
         $id = $request->request->get('item');
         $this->getResponse()->setCookie('barcode', $id);
     }
 
-    public function addAction(Request $request)
+
+	public function addItemBarcodeAction(Request $request)
+	{
+		$data = explode(',',$request->cookies->get('itemBarcode'));
+
+		if(is_null($data)) {
+			return $this->redirect($this->generateUrl('inventory_item'));
+		}
+		$inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+		$entities = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getBarcodeForPrint($inventory,$data);
+		return $this->render('InventoryBundle:Barcode:item.html.twig', array(
+			'entities'      => $entities
+		));
+
+	}
+
+
+	public function addAction(Request $request)
     {
         $data = explode(',',$request->cookies->get('barcodes'));
 
@@ -185,6 +279,26 @@ class BarcodeController extends Controller
             $barcode = $em->getRepository('InventoryBundle:PurchaseItem')->find($row);
             for ($i = 0; $data['barcodeQnt'][$x] > $i; $i++){
                 $barCoder[] = $this->barCoder($barcode,$config);
+            }
+            $x++;
+        }
+        $this->get('session')->set('barcodeQ',$barCoder);
+        return $this->render('InventoryBundle:Barcode:barcode.html.twig', array(
+            'barCoder'      => $barCoder
+        ));
+
+    }
+
+    public function createItemBarcodeAction(Request $request)
+    {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $x = 0;
+        foreach ($data['item'] as $row) {
+            $barcode = $em->getRepository('InventoryBundle:Item')->find($row);
+            for ($i = 0; $data['barcodeQnt'][$x] > $i; $i++){
+                $barCoder[] = $this->itemBarcoder($barcode,$config);
             }
             $x++;
         }

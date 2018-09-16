@@ -165,14 +165,13 @@ input[class*="span"].m-wrap  {
 }
 .select2-container.req_place .select2-default .select2-chosen {
     color:#FFF !important;
-    height: 60px!important;
+    height: 45px!important;
 }
 
 .select2-container .select2-choice {
     padding: 5px 10px;
-    height: 60px;
-    font-size: 16px;
-    font-weight: bold;
+    height: 45px;
+    font-size: 12px;
     width: 100%!important;
 }
 
@@ -227,10 +226,10 @@ input[class*="span"].m-wrap  {
     border: 5px solid #e5e5e5;
     color: #333333;
     height: auto !important;
-    min-height: 60px;
+    min-height:42px;
     padding: 6px 6px !important;
     line-height: 20px;
-    font-size: 16px;
+    font-size: 13px;
     vertical-align: top;
     background-color: #ffffff;
     filter: none !important;

@@ -263,8 +263,7 @@ class PurchaseItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('pi');
         $qb->join('pi.item', 'item');
-        $qb->join('pi.purchase', 'purchase');
-        $qb->join('purchase.inventoryConfig', 'ic');
+        $qb->join('item.inventoryConfig', 'ic');
         $qb->select('pi');
         $qb->where($qb->expr()->in("pi.id", $data ));
         $qb->andWhere("ic.id = :inventory");

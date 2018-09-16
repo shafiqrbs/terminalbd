@@ -21,6 +21,13 @@ inventory_salesmanual_new:
     path:     /new
     defaults: { _controller: "InventoryBundle:SalesManual:new" }
 
+inventory_salesmanual_item_barcode_search:
+    path:     /add-barcode-item
+    defaults: { _controller: "InventoryBundle:SalesManual:searchBarcode" }
+    methods:  POST
+    options:
+            expose: true
+
 inventory_salesmanual_item_search:
     path:     /search
     defaults: { _controller: "InventoryBundle:SalesManual:search" }

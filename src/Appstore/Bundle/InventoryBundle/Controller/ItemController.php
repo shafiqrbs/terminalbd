@@ -371,7 +371,6 @@ class ItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
         }
-
         $status = $entity->isStatus();
         if($status == 1){
             $entity->setStatus(0);
@@ -449,9 +448,19 @@ class ItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
-        $process = 'set'.$data['name'];
-        $entity->$process($data['value']);
-        $em->flush();
+
+	    if($data['name'] == 'Barcode'){
+		    $existBarcode = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('barcode' => $data['value']));
+		    if(empty($existBarcode)){
+			    $entity->setBarcode($data['value']);
+			    $em->flush();
+		    }
+	    }else{
+		    $process = 'set'.$data['name'];
+		    $entity->$process($data['value']);
+		    $em->flush();
+	    }
+
         exit;
     }
 
@@ -531,6 +540,48 @@ class ItemController extends Controller
         }
         return $this->redirect($this->generateUrl('item'));
     }
+
+	public function inlineUpdateAction(Request $request)
+	{
+		$data = $request->request->all();
+		$em = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('InventoryBundle:PurchaseItem')->find($data['pk']);
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+		}
+		if($data['name'] == 'SalesPrice' and 0 < (float)$data['value']){
+			$process = 'set'.$data['name'];
+			$entity->$process((float)$data['value']);
+			$entity->setSalesSubTotal((float)$data['value'] * $entity->getQuantity());
+			$em->flush();
+		}
+
+		if($data['name'] == 'PurchasePrice' and 0 < (float)$data['value']){
+			$entity->setPurchasePrice((float)$data['value']);
+			$entity->setPurchaseSubTotal((float)$data['value'] * $entity->getQuantity());
+			$em->flush();
+			$em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($entity->getPurchase());
+		}
+		$salesQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getPurchaseItemQuantity($entity,array('sales','damage','purchaseReturn'));
+		if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
+			$entity->setQuantity((int)$data['value']);
+			$entity->setPurchaseSubTotal((int)$data['value'] * $entity->getPurchasePrice());
+			$entity->setSalesSubTotal((int)$data['value'] * $entity->getSalesPrice());
+			$em->flush();
+			$em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($entity->getPurchase());
+		}
+
+		if($data['name'] == 'Barcode'){
+			$existBarcode = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findBy(array('barcode' => $data['value']));
+			if(empty($existBarcode)){
+				$process = 'set'.$data['name'];
+				$entity->$process($data['value']);
+				$em->flush();
+			}
+		}
+		exit;
+
+	}
 
 
 }

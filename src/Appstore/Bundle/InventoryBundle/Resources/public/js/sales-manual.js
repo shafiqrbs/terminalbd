@@ -72,6 +72,36 @@ var InventorySales = function(sales) {
 
     });
 
+    $(document).on('change', '#barcode', function() {
+
+        var barcode = $('#barcode').val();
+        var sales  = $(this).attr('data-id');
+        if(barcode === ''){
+            $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_salesmanual_item_barcode_search'),
+            type: 'POST',
+            data:'barcode='+barcode+'&sales='+ sales,
+            success: function(response){
+                $('#barcode').focus().val('');
+                obj = JSON.parse(response);
+                $('#salesItem').html(obj['salesItems']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#netTotal').html(obj['netTotal']);
+                $('#vat').html(obj['vat']);
+                $('#discount').html(obj['discount']);
+                $('#due').html(obj['due']);
+                $('#total').val(obj['netTotal']);
+                $('#addItem').attr("disabled", true);
+                $('#salesPrice').val('');
+                $('#quantity').val('1');
+            },
+
+        })
+    });
+
     $(document).on('change', '.select2AllItem', function () {
         var item = $(this).val();
         if (item == '') {
@@ -116,7 +146,6 @@ var InventorySales = function(sales) {
             data: 'item=' + item + '&quantity=' + quantity + '&salesPrice=' + salesPrice + '&purchasePrice=' + purchasePrice,
             success: function (response) {
                 obj = JSON.parse(response);
-
                 $('#salesItem').html(obj['salesItems']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#netTotal').html(obj['netTotal']);

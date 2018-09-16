@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('item') }}">item</a>
+                        <a href="{{ path('item') }}">Stock</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Product Barcode print list</a></li>
@@ -34,21 +34,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Product Barcode print lists</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp;Create</a></li>
-                                    <li><a href="{{ path('item') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn"  href="{{ path('barcode_print') }}" >
-                                    Print
-                                    <i class="icon-print"></i>
+                                <a class="btn black" href="{{ path('item') }}"><i class="icon-th-list"></i>&nbsp;Stock</a>
+                                <a class="btn red" target="_blank"  href="{{ path('barcode_print') }}" > Print <i class="icon-print"></i>
                                 </a>
                             </div>
                         </div>

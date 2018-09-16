@@ -1,5 +1,12 @@
 {% extends '::print.html.twig' %}
 {% block body %}
+    <script type="text/javascript">
+    window.print();
+    setTimeout(function () {
+        window.open('', '_self', '');
+        window.close();
+    }, 2000);
+</script>
 <div style="margin-left:{{ barcodePageLeftMargin }}px;margin-top:{{ barcodePageTopMargin }}px">
     {% for barcode in barCoder %}
         {{ barcode|raw }}

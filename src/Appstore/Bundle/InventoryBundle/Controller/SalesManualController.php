@@ -224,6 +224,32 @@ class SalesManualController extends Controller
         exit;
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
+    public function searchBarcodeAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $salesId = $request->request->get('sales');
+	    $barcode = trim($request->request->get('barcode'));
+	    $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->find($salesId);
+	    $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $stock = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config,'barcode' => $barcode));
+        $data = array('quantity' => 1 ,'salesPrice' => $stock->getSalesPrice(),'purchasePrice' => $stock->getAvgPurchasePrice());
+        $remainingQuantity = $stock->getRemainingQuantity();
+        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesItemQuantity($stock);
+	    $salesItemStock =  $checkQuantity + 1;
+        if (!empty($stock) && $remainingQuantity >= $salesItemStock and $stock->getSalesPrice() > 0 ) {
+            $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesManualItems($sales, $stock ,$data);
+            $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+            $this->get('session')->getFlashBag()->add('success', 'Product added successfully.');
+        }
+        $result = $this->returnResultData($sales);
+        return new Response(json_encode($result));
+        exit;
+    }
+
     public function salesItemUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();

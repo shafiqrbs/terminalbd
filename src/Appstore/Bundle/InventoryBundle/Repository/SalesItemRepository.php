@@ -158,7 +158,8 @@ class SalesItemRepository extends EntityRepository
 
     public function insertSalesManualItems(Sales $sales,Item $item,$data)
     {
-        $em = $this->_em;
+
+    	$em = $this->_em;
         $existEntity = $this->findOneBy(array('sales'=> $sales,'item'=> $item));
         if(!empty($existEntity)){
 
