@@ -105,7 +105,7 @@ class AccountBusinessController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data =$_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorBusinessOutstanding($globalOption,'business',$data);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorBusinessOutstanding($globalOption,$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:AccountBusiness:purchaseOutstanding.html.twig', array(
             'entities' => $pagination,
@@ -119,7 +119,7 @@ class AccountBusinessController extends Controller
         $entity = new AccountPurchase();
         $form   = $this->createCreateForm($entity);
         $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
-        return $this->render('AccountingBundle:AccountBusiness:purchaseNew.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:payment.html.twig', array(
             'entity'    => $entity,
             'banks'     => $banks,
             'form'      => $form->createView(),
@@ -134,8 +134,6 @@ class AccountBusinessController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setProcessHead('business');
-            $entity->setProcessType('Payment');
             if($entity->getPayment() < 0){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
@@ -149,7 +147,7 @@ class AccountBusinessController extends Controller
             return $this->redirect($this->generateUrl('account_purchase_business'));
         }
 
-        return $this->render('AccountingBundle:AccountBusiness:purchaseNew.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:payment.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -189,7 +187,7 @@ class AccountBusinessController extends Controller
         $entity = new AccountSales();
         $form   = $this->salesCreateForm($entity);
         $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
-        return $this->render('AccountingBundle:AccountBusiness:new.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:receive.html.twig', array(
             'entity' => $entity,
             'banks' => $banks,
             'form'   => $form->createView(),
@@ -220,7 +218,7 @@ class AccountBusinessController extends Controller
             return $this->redirect($this->generateUrl('account_sales_business'));
         }
 
-        return $this->render('AccountingBundle:AccountBusiness:new.html.twig', array(
+        return $this->render('AccountingBundle:AccountBusiness:receive.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -326,24 +324,29 @@ class AccountBusinessController extends Controller
 
     public function salesApproveAction(AccountSales $entity)
     {
-        if (!empty($entity)) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess('approved');
-            $entity->setApprovedBy($this->getUser());
-            $em->flush();
-	        $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
-	        if($entity->getAmount() > 0 ){
-		     //   $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
-		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
-	        }else{
-		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
+	    if (!empty($entity) and $entity->getProcess() != 'approved') {
+		    $em = $this->getDoctrine()->getManager();
+		    $entity->setProcess('approved');
+		    $entity->setApprovedBy($this->getUser());
+		    if(in_array($entity->getProcessHead(),array( 'Due','Advance'))){
+			    $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+			    $entity->setTransactionMethod($method);
+		    }
+		    $em->flush();
+		    $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
+		    if($entity->getProcessHead() == 'Outstanding'){
+			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
+		    }elseif($entity->getProcessHead() == 'Discount'){
+			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertCustomerDiscountTransaction($entity);
+		    }elseif($entity->getAmount() > 0 ){
+			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
+		    }
+		    return new Response('success');
 
+	    } else {
 
-	        }
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
+		    return new Response('failed');
+	    }
         exit;
 
     }

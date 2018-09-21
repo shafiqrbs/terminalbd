@@ -85,32 +85,69 @@ $(".addCustomer").click(function(){
     $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
 });
 
-var form = $("#customInvoice").validate({
+$(document).on('change', '#particular', function() {
+
+    var particular = $('#particular').val();
+    var startDate = $('#startDate').val();
+    var endDate = $('#endDate').val();
+    $.ajax({
+        url: Routing.generate('hotel_particular_search',{'id':particular,'startDate':startDate,'endDate':endDate}),
+        type: 'POST',
+        success: function (response) {
+            obj = JSON.parse(response);
+            if(obj['msg'] === 'valid'){
+                $('#unit').html(obj['unit']);
+                $('#salesPrice').val(obj['salesPrice']);
+                $('#subTotal').html(obj['salesPrice']);
+            }else{
+                $("#particular").select2().select2("val","");
+                alert(obj['msg']);
+            }
+
+
+        }
+    })
+
+});
+
+
+var form = $("#stockInvoice").validate({
 
     rules: {
 
         "particular": {required: true},
-        "price": {required: true},
-        "quantity": {required: false},
-        "unit": {required: false},
+        "startDate": {required: true},
+        "endDate": {required: true},
+        "adult": {required: true},
+        "child": {required: false},
+        "guestName": {required: true},
+        "guestMobile": {required: true},
     },
 
     messages: {
 
-        "particular":"Enter particular name",
-        "price":"Enter sales price",
+        "particular":"Enter select room name/no",
+        "startDate": "Enter start date",
+        "endDate":"Enter end date",
+        "adult": "Select no of adult",
+        "guestName": "Enter specific room gust name",
+        "guestMobile": "Enter specific room gust mobile no",
     },
     tooltip_options: {
         "particular": {placement:'top',html:true},
-        "price": {placement:'top',html:true},
+        "startDate": {placement:'top',html:true},
+        "endDate": {placement:'top',html:true},
+        "adult": {placement:'top',html:true},
+        "guestName": {placement:'top',html:true},
+        "guestMobile": {placement:'top',html:true},
     },
 
     submitHandler: function(form) {
 
         $.ajax({
-            url         : $('form#customInvoice').attr( 'action' ),
-            type        : $('form#customInvoice').attr( 'method' ),
-            data        : new FormData($('form#customInvoice')[0]),
+            url         : $('form#stockInvoice').attr( 'action' ),
+            type        : $('form#stockInvoice').attr( 'method' ),
+            data        : new FormData($('form#stockInvoice')[0]),
             processData : false,
             contentType : false,
             success: function(response){
@@ -121,7 +158,8 @@ var form = $("#customInvoice").validate({
                 $('.due').html(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
-                $('#customInvoice')[0].reset();
+                $("#particular").select2().select2("val","");
+                $('#stockInvoice')[0].reset();
             }
         });
     }
@@ -216,38 +254,7 @@ $(document).on("click", ".approve", function() {
     });
 });
 
-$(document).on('change', '#particular', function() {
 
-    var particular = $('#particular').val();
-    $.ajax({
-        url: Routing.generate('business_particular_search',{'id':particular}),
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#unit').html(obj['unit']);
-            $('#salesPrice').val(obj['salesPrice']);
-            $('#subTotal').html(obj['salesPrice']);
-        }
-    })
-
-});
-
-$(document).on('keyup', '#width , #height ', function() {
-
-    var width = parseFloat($('#width').val());
-    var height = parseFloat($('#height').val());
-    var salesPrice = parseFloat($('#salesPrice').val());
-    var quantity = parseInt($('#quantity').val());
-
-    if((!isNaN(width) && jQuery.isNumeric(width)) && !isNaN(height) && jQuery.isNumeric(height)) {
-
-        $('#subQuantity').html(width * height);
-        var total = (width * height) * quantity;
-        $('#subTotal').html(total * salesPrice);
-
-    }
-
-});
 
 $(document).on('keyup', '#quantity , #salesPrice ', function() {
 
@@ -264,50 +271,6 @@ $(document).on('keyup', '#quantity , #salesPrice ', function() {
         $('#subTotal').html(total * salesPrice);
     }
 
-});
-
-var stockInvoice = $("#stockInvoice").validate({
-
-    rules: {
-
-        "particular": {required: true},
-        "quantity": {required: true},
-        "salesPrice": {required: true}
-    },
-
-    messages: {
-
-        "particular":"Enter particular name",
-        "salesPrice":"Enter sales price",
-        "quantity":"Enter sales quantity"
-    },
-
-    tooltip_options: {
-        "particular": {placement:'top',html:true},
-        "salesPrice": {placement:'top',html:true},
-        "quantity": {placement:'top',html:true}
-    },
-
-    submitHandler: function(stockInvoice) {
-
-        $.ajax({
-            url         : $('form#stockInvoice').attr( 'action' ),
-            type        : $('form#stockInvoice').attr( 'method' ),
-            data        : new FormData($('form#stockInvoice')[0]),
-            processData : false,
-            contentType : false,
-            success: function(response){
-                obj = JSON.parse(response);
-                $('#invoiceParticulars').html(obj['invoiceParticulars']);
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('.due').html(obj['due']);
-                $('.payment').html(obj['payment']);
-                $('.discount').html(obj['discount']);
-                $('#stockInvoice')[0].reset();
-            }
-        });
-    }
 });
 
 
@@ -380,6 +343,45 @@ $('form#salesForm').on('keypress', '.salesInput', function (e) {
     }
 });
 
+var invoiceForm = $("#invoiceForm").validate({
+
+    rules: {
+
+        "firstName": {required: true},
+        "lastName": {required: true},
+        "mobile": {required: true},
+        "email": {required: false},
+        "profession": {required: false},
+        "organization": {required: false},
+        "address": {required: true},
+        "location": {required: false},
+        "postalCode": {required: false},
+        "businessInvoice[discountCalculation]": {required: false},
+        "businessInvoice[received]": {required: false},
+        "remark": {required: false}
+    },
+
+    messages: {
+
+        "firstName":"Enter first name",
+        "lastName": "Enter last name",
+        "mobile":"Enter guest mobile no",
+        "address":"Enter guest address"
+
+    },
+    tooltip_options: {
+        "firstName": {placement:'top',html:true},
+        "lastName": {placement:'top',html:true},
+        "mobile": {placement:'top',html:true}
+    },
+
+    submitHandler: function(invoiceForm) {
+        $('form#invoiceForm').submit();
+    }
+});
+
+
+/*
 $(document).on("click", "#receiveBtn", function() {
     $('#confirm-content').confirmModal({
         topOffset: 0,
@@ -388,4 +390,4 @@ $(document).on("click", "#receiveBtn", function() {
             $('form#invoiceForm').submit();
         }
     });
-});
+});*/

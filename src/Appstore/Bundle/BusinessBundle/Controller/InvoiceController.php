@@ -203,6 +203,9 @@ class InvoiceController extends Controller
 		$discountType = $request->request->get('discountType');
 		$discountCal = (float)$request->request->get('discount');
 		$invoice = $request->request->get('invoice');
+
+		/* @var $entity BusinessInvoice */
+
 		$entity = $em->getRepository('BusinessBundle:BusinessInvoice')->find($invoice);
 		$subTotal = $entity->getSubTotal();
 		if($discountType == 'flat'){

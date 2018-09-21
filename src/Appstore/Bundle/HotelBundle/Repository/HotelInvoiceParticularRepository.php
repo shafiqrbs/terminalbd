@@ -45,84 +45,84 @@ class HotelInvoiceParticularRepository extends EntityRepository
     }
 
 
-    public function insertInvoiceParticular(HotelInvoice $invoice, $data)
-    {
-        $em = $this->_em;
-        $entity = new HotelInvoiceParticular();
-        $entity->setHotelInvoice($invoice);
-        $entity->setParticular($data['particular']);
-        $entity->setPrice($data['price']);
-        $entity->setQuantity($data['quantity']);
-        if(!empty($data['quantity'])){
-            $entity->setSubTotal($data['price'] * $data['quantity']);
-        }else{
-            $entity->setSubTotal($data['price']);
-        }
-        if($data['unit']) {
-            $unit = $this->_em->getRepository('SettingToolBundle:ProductUnit')->find($data['unit']);
-            $entity->setUnit($unit);
-        }
-        $em->persist($entity);
-        $em->flush();
-
-    }
-
     public function insertStockItem(HotelInvoice $invoice, $data)
     {
 
-        $em = $this->_em;
-        $entity = new HotelInvoiceParticular();
-        $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
-        $entity->setQuantity($quantity);
-        $accessoriesId = $data['accessories'];
-        $price = $data['price'];
-        $stock = $em->getRepository('HotelBundle:HotelParticular')->find($accessoriesId);
-        $entity->setParticular($stock->getName());
-        $entity->setHotelParticular($stock);
-        $entity->setPrice($price);
-        $entity->setPurchasePrice($stock->getPurchasePrice());
-        $entity->setSubTotal($quantity * $price);
-        $entity->setHotelInvoice($invoice);
-        $em->persist($entity);
-        $em->flush();
+	    $start = strtotime($data['startDate']);
+	    $end = strtotime($data['endDate']);
+	    $quantity = ceil(abs($end - $start) / 86400);
+    	$em = $this->_em;
+	    $particular = $data['particular'];
+	    $price = $data['salesPrice'];
+	    $stock = $em->getRepository('HotelBundle:HotelParticular')->find($particular);
 
+	    $period = new \DatePeriod(
+		    new \DateTime($data['startDate']),
+		    new \DateInterval('P1D'),
+		    new \DateTime($data['endDate'])
+	    );
+
+	    $bookingDate =array();
+	    foreach ($period as $key => $date) {
+		    $bookingDate[] = (string)$date->format('Y-m-d');
+	    }
+	    if(!empty($stock)){
+		    $entity = new HotelInvoiceParticular();
+		    $quantity = !empty($quantity) and $quantity > 0 ? $quantity :1;
+		    $entity->setQuantity($quantity);
+		    $entity->setParticular($stock->getName());
+		    $entity->setHotelParticular($stock);
+		    $entity->setGuestName($data['guestName']);
+		    $entity->setGuestMobile($data['guestMobile']);
+		    $entity->setChild($data['child']);
+		    $entity->setAdult($data['adult']);
+		    $entity->setStartDate((new \DateTime( $data['startDate'])));
+		    $entity->setEndDate((new \DateTime( $data['endDate'])));
+		    $entity->setBookingDate($bookingDate);
+		    $entity->setPrice($price);
+		    $entity->setPurchasePrice($stock->getPurchasePrice());
+		    $entity->setSubTotal($quantity * $price);
+		    $entity->setHotelInvoice($invoice);
+		    $em->persist($entity);
+		    $em->flush();
+	    }
     }
 
-    public function insertBannerSignItem(HotelInvoice $invoice, $data)
-    {
+	public function checkBooking(HotelParticular $particular,$data)
+	{
 
-        $em = $this->_em;
-        $entity = new HotelInvoiceParticular();
-        $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
-        $salesPrice = !empty($data['salesPrice']) ? $data['salesPrice'] :0;
-        $width = !empty($data['width']) ? $data['width'] :'';
-        $height = !empty($data['height']) ? $data['height'] :'';
-        $entity->setQuantity($quantity);
-        $particular = $data['particular'];
-        $stock = $em->getRepository('HotelBundle:HotelParticular')->find($particular);
-        $entity->setParticular($stock->getName());
-        $entity->setHotelParticular($stock);
-        if(!empty($stock->getUnit())) {
-            $entity->setUnit($stock->getUnit()->getName());
-        }
-        $entity->setPrice($salesPrice);
-        $entity->setPurchasePrice($stock->getPurchasePrice());
-        if(!empty($width) and !empty($height)){
-            $entity->setWidth($width);
-            $entity->setHeight($height);
-            $entity->setSubQuantity($width * $height);
-            $entity->setTotalQuantity($entity->getSubQuantity() * $quantity);
-            $entity->setSubTotal(($quantity * $entity->getSubQuantity()) * $salesPrice);
-        }else{
-            $entity->setTotalQuantity($quantity);
-            $entity->setSubTotal($quantity * $salesPrice);
-        }
-        $entity->setHotelInvoice($invoice);
-        $em->persist($entity);
-        $em->flush();
-        return $entity;
+		$period = new \DatePeriod(
+			new \DateTime($data['startDate']),
+			new \DateInterval('P1D'),
+			new \DateTime($data['endDate'])
+		);
+		$bookingDate =array();
+		foreach ($period as $key => $date) {
+			$bookingDate[] = $date->format('Y-m-d');
+		}
 
-    }
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.hotelInvoice','h');
+		$qb->join('e.hotelParticular','p');
+		$qb->join('p.hotelParticularType','hpt');
+		$qb->select('e.bookingDate AS bookingDate');
+		$qb->where('e.hotelParticular = :particular')->setParameter('particular', $particular->getId());
+		$qb->andWhere('e.process = :process')->setParameter('process','booked');
+		$qb->andWhere('hpt.slug IN (:slugs)')->setParameter('slugs', array('room','package'));
+		$result = $qb->getQuery()->getArrayResult();
+		$booked =array();
+		foreach ($result as $row){
+			$period = $row['bookingDate'];
+			foreach ($period as $key => $date) {
+				$booked[] = $date;
+			}
+		}
+		$booked = array_unique($booked);
+		$result = array_intersect($booked,$bookingDate);
+		return empty($result) ? 'valid':'in-valid';
+
+	}
+
 
 	public function salesStockItemProduction(HotelInvoiceParticular $invoice_particular,HotelProductionElement $element)
 	{
@@ -160,28 +160,21 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
-            $subQuantity ='';
-            if (!empty($entity->getSubQuantity())) {
-                $subQuantity = $entity->getHeight().' x '.$entity->getWidth().' = '.$entity->getSubQuantity();
-            }
+	        $startDate =  $entity->getStartDate()->format('d-m-Y');
+	        $endDate =  $entity->getEndDate()->format('d-m-Y');
 
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
             $data .= "<td>{$entity->getParticular()}</td>";
-            if($sales->getHotelConfig()->getInvoiceType() == 'banner-print') {
-            $data .= "<td>{$subQuantity}</td>";
-            }
+            $data .= "<td>{$startDate}To{$endDate}</td>";
+            $data .= "<td>{$entity->getGuestName()}/{$entity->getGuestMobile()}</td>";
+            $data .= "<td>{$entity->getAdult()}</td>";
+            $data .= "<td>{$entity->getChild()}</td>";
+            $data .= "<td>{$entity->getPrice()}</td>";
+            $data .= "<td>{$entity->getQuantity()}</td>";
+            $data .= "<td>{$entity->getSubTotal()}</td>";
             $data .= "<td>";
-            $data .= "<input type='hidden' name='salesItem[]' value='{$entity->getId()}'>";
-            $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getId()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getPrice()}'>";
-            $data .= "</td>";
-            $data .= "<td>";
-            $data .= "<input type='text' class='numeric td-inline-input-qnt quantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='quantity-{$entity->getId()}' name='quantity[]' value='{$entity->getQuantity()}' placeholder='Qnt'>";
-            $data .= "</td>";
-            $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
-            $data .= "<td>";
-            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/medicine/sales-temporary/sales-item-update' href='javascript:' class='btn blue mini itemUpdate' ><i class='icon-save'></i></a>";
-            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
+            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/hotel/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
             $data .= "</td>";
             $data .= '</tr>';
             $i++;

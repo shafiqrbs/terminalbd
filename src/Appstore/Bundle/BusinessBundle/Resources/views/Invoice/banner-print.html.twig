@@ -169,11 +169,12 @@
                                                     <td  class="">{{ loop.index }}.</td>
                                                     <td class="">{{ item.particular }}</td>
                                                     <td class="">
-                                                        {% if item.subQuantity is not empty %}
+                                                        {% if item.height is not empty and item.width is not empty %}
                                                             {{ item.height }}x{{ item.width }}={{ item.subQuantity }}
                                                         {% endif %}
                                                     </td>
                                                     <td class="">
+                                                        <input type="hidden" name="subQuantity-{{ item.id }}" id="subQuantity-{{ item.id }}" value="{% if item.subQuantity is not empty %}{{ item.subQuantity }}{% else %}1{% endif %}" >
                                                         <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
                                                         <input type="text" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.price }}" >
                                                     </td>

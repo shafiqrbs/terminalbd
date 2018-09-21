@@ -16,6 +16,7 @@ class BusinessPurchaseRepository extends EntityRepository
 {
 
 
+
 	protected function handleSearchBetween($qb,$data)
 	{
 
@@ -41,26 +42,38 @@ class BusinessPurchaseRepository extends EntityRepository
 			$qb->andWhere($qb->expr()->like("ms.mode", "'%$mode%'"  ));
 		}
 		if(!empty($vendor)){
-			$qb->join('e.businessVendor','v');
-			$qb->andWhere("v.companyName = :vendor")->setParameter('vendor', $vendor);
+			$qb->join('e.vendor','v');
+			$qb->andWhere($qb->expr()->like("v.companyName", "'%$vendor%'"  ));
 		}
 		if(!empty($vendorId)){
-			$qb->join('e.businessVendor','v');
+			$qb->join('e.vendor','v');
 			$qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
 		}
 		if (!empty($startDate) ) {
 			$datetime = new \DateTime($data['startDate']);
 			$start = $datetime->format('Y-m-d 00:00:00');
-			$qb->andWhere("e.created >= :startDate");
+			$qb->andWhere("e.receiveDate >= :startDate");
 			$qb->setParameter('startDate', $start);
 		}
 
 		if (!empty($endDate)) {
 			$datetime = new \DateTime($data['endDate']);
 			$end = $datetime->format('Y-m-d 23:59:59');
-			$qb->andWhere("e.created <= :endDate");
+			$qb->andWhere("e.receiveDate <= :endDate");
 			$qb->setParameter('endDate', $end);
 		}
+	}
+
+
+	public function findWithSearch(User $user, $data)
+	{
+		$config = $user->getGlobalOption()->getBusinessConfig()->getId();
+		$qb = $this->createQueryBuilder('e');
+		$qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+		$this->handleSearchBetween($qb,$data);
+		$qb->orderBy('e.receiveDate','DESC');
+		$qb->getQuery();
+		return  $qb;
 	}
 
 

@@ -142,53 +142,6 @@ class HotelInvoiceTransactionRepository extends EntityRepository
         return $entity;
 
     }
-
-    public function admissionPaymentTransaction(HotelInvoice $invoice,$data){
-
-        $code = $this->getLastCode($invoice);
-        $entity = New HotelInvoiceTransaction();
-        $entity->setHotelInvoice($invoice);
-        $entity->setCode($code + 1);
-        $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
-        $entity->setTransactionCode($transactionCode);
-        $entity->setDiscount($data['discount']);
-        $entity->setPayment($data['payment']);
-        $entity->setProcess('In-progress');
-        $transactionMethod = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
-        $this->_em->persist($entity);
-        $this->_em->flush($entity);
-        return $entity;
-
-    }
-
-
-
-    public function insertAdmissionTransaction(HotelInvoiceTransaction $entity, $data)
-    {
-
-        $process = $data['process'];
-        $invoice = $entity->getHotelInvoice();
-        $entity->setProcess($process);
-        $entity->setPayment($data['discount']);
-        $entity->setPayment($data['payment']);
-        $entity->setTransactionMethod($invoice->getTransactionMethod());
-        $entity->setAccountBank($invoice->getAccountBank());
-        $entity->setPaymentCard($invoice->getPaymentCard());
-        $entity->setCardNo($invoice->getCardNo());
-        $entity->setBank($invoice->getBank());
-        $entity->setAccountMobileBank($invoice->getAccountMobileBank());
-        $entity->setPaymentMobile($invoice->getPaymentMobile());
-        $entity->setTransactionId($invoice->getTransactionId());
-        $entity->setComment($invoice->getComment());
-        if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getHotelConfig()->getVatPercentage() > 0) {
-            $vat = $this->getCulculationVat($invoice, $entity->getPayment());
-            $entity->setVat($vat);
-        }
-        $this->_em->persist($entity);
-        $this->_em->flush($entity);
-
-    }
     public function insertTransaction(HotelInvoice $invoice)
     {
             $entity = New HotelInvoiceTransaction();
@@ -252,24 +205,7 @@ class HotelInvoiceTransactionRepository extends EntityRepository
 
     }
 
-    public function admissionHotelInvoiceTransactionUpdate(HotelInvoiceTransaction $entity )
-    {
-        $invoice = $entity->getHotelInvoice();
-        if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getHotelConfig()->getVatPercentage() > 0) {
-            $vat = $this->getCulculationVat($invoice, $entity->getPayment());
-            $entity->setVat($vat);
-        }
-        if(empty($entity->getTransactionMethod())){
-            $entity->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
-        }
-        $this->_em->persist($entity);
-        $this->_em->flush($entity);
-        $accountHotelInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountHotelInvoice($entity);
-        $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountHotelInvoice);
-
-    }
-
-    public function hmsSalesTransactionReverse(HotelInvoice $entity)
+	public function hmsSalesTransactionReverse(HotelInvoice $entity)
     {
 
 
@@ -410,7 +346,7 @@ class HotelInvoiceTransactionRepository extends EntityRepository
         $qb = $this->_em->getRepository('HotelBundle:HotelInvoiceTransaction')->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-            ->where('s.businessHotelInvoice = :invoice')
+            ->where('s.hotelInvoice = :invoice')
             ->setParameter('invoice', $invoice->getId());
             $lastCode = $qb->getQuery()->getSingleScalarResult();
         if (empty($lastCode)) {

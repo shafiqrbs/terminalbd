@@ -281,14 +281,22 @@ class AccountPurchaseController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
+	        if(in_array($entity->getProcessHead(),array( 'Due Payment','Advance'))){
+		        $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+		        $entity->setTransactionMethod($method);
+	        }
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($entity);
-            if($entity ->getPurchaseAmount() ==  0 and $entity ->getPayment() > 0 ){
-                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
-            }else{
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorOpeningTransaction($accountPurchase);
-            }
+
+	        if($entity->getProcessType() == 'Outstanding'){
+		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertVendorOpeningTransaction($entity);
+	        }elseif($entity->getProcessType() == 'Discount'){
+		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorDiscountTransaction($entity);
+	        }elseif($entity->getPayment() > 0 ){
+		        $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
+	        }
+
             return new Response('success');
         } else {
             return new Response('failed');

@@ -6,10 +6,19 @@ use Knp\Snappy\Pdf;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+
+	/**
+	 *
+	 * @Secure(roles="ROLE_HOTEL,ROLE_DOMAIN");
+	 *
+	 */
+
+	public function indexAction()
     {
 
         /* @var GlobalOption $globalOption */

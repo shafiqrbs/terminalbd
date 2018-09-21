@@ -203,6 +203,8 @@ class Builder extends ContainerAware
 		    $menu['Business Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
 		    $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'))
 		                                            ->setAttribute('icon', 'icon-th-list');
+		    $menu['Business Management']['Purchase']->addChild('Purchase Item', array('route' => 'business_purchase_item'))
+		                                            ->setAttribute('icon', 'icon-th-list');
 		    $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'))->setAttribute('icon', 'icon-tag');
 	    }
 

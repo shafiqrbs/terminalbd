@@ -437,13 +437,17 @@ class AccountCashRepository extends EntityRepository
             /* Cash - Cash Debit */
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
         }
-
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountSales($entity);
         if(!empty($entity->getBranches())){
             $cash->setBranches($entity->getBranches());
         }
-        $cash->setTransactionMethod($entity->getTransactionMethod());
+        if(!empty($entity->getTransactionMethod())){
+	        $cash->setTransactionMethod($entity->getTransactionMethod());
+        }else{
+	        $method = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+	        $cash->setTransactionMethod($method);
+        }
         $cash->setProcessHead('Sales');
         $cash->setAccountRefNo($entity->getAccountRefNo());
         $cash->setUpdated($entity->getUpdated());

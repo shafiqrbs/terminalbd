@@ -43,9 +43,30 @@ class HotelInvoiceParticular
     /**
      * @var string
      *
-     * @ORM\Column(name="unit", type="string", length=225, nullable=true)
+     * @ORM\Column(name="guestName", type="string", length=225, nullable=true)
      */
-    private $unit;
+    private $guestName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="guestMobile", type="string", length=225, nullable=true)
+     */
+    private $guestMobile;
+
+	/**
+	 * @var integer
+	 *
+	 * @ORM\Column(name="adult", type="smallint", length = 2, nullable=true)
+	 */
+	private $adult = 0;
+
+    /**
+	 * @var integer
+	 *
+	 * @ORM\Column(name="child", type="smallint", length = 2, nullable=true)
+	 */
+	private $child = 0;
 
     /**
      * @var string
@@ -53,6 +74,13 @@ class HotelInvoiceParticular
      * @ORM\Column(name="particular", type="text", nullable=true)
      */
     private $particular;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="process", type="text", nullable=true)
+	 */
+	private $process = 'booked';
 
     /**
      * @var integer
@@ -97,7 +125,6 @@ class HotelInvoiceParticular
      */
     private $totalQuantity;
 
-
     /**
      * @var float
      *
@@ -105,13 +132,31 @@ class HotelInvoiceParticular
      */
     private $purchasePrice;
 
-
     /**
      * @var float
      *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
+
+	/**
+     * @var array
+     *
+     * @ORM\Column(name="bookingDate", type="array", nullable=true)
+     */
+    private $bookingDate;
+
+	/**
+	 * @var \DateTime
+	 * @ORM\Column(name="startDate", type="datetime", nullable=true)
+	 */
+	private $startDate;
+
+	/**
+	 * @var \DateTime
+	 * @ORM\Column(name="endDate", type="datetime", nullable=true)
+	 */
+	private $endDate;
 
 
     /**
@@ -324,6 +369,118 @@ class HotelInvoiceParticular
     {
         $this->totalQuantity = $totalQuantity;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getGuestName(){
+		return $this->guestName;
+	}
+
+	/**
+	 * @param string $guestName
+	 */
+	public function setGuestName($guestName ) {
+		$this->guestName = $guestName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGuestMobile(){
+		return $this->guestMobile;
+	}
+
+	/**
+	 * @param string $guestMobile
+	 */
+	public function setGuestMobile($guestMobile ) {
+		$this->guestMobile = $guestMobile;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAdult(){
+		return $this->adult;
+	}
+
+	/**
+	 * @param int $adult
+	 */
+	public function setAdult($adult ) {
+		$this->adult = $adult;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getChild() {
+		return $this->child;
+	}
+
+	/**
+	 * @param int $child
+	 */
+	public function setChild($child ) {
+		$this->child = $child;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getStartDate(){
+		return $this->startDate;
+	}
+
+	/**
+	 * @param \DateTime $startDate
+	 */
+	public function setStartDate( $startDate ) {
+		$this->startDate = $startDate;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getEndDate(): \DateTime {
+		return $this->endDate;
+	}
+
+	/**
+	 * @param \DateTime $endDate
+	 */
+	public function setEndDate($endDate ) {
+		$this->endDate = $endDate;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getProcess(): string {
+		return $this->process;
+	}
+
+	/**
+	 * @param string $process
+	 */
+	public function setProcess( string $process ) {
+		$this->process = $process;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getBookingDate(): array {
+		return $this->bookingDate;
+	}
+
+	/**
+	 * @param array $bookingDate
+	 */
+	public function setBookingDate( array $bookingDate ) {
+		$this->bookingDate = $bookingDate;
+	}
 
 
 }

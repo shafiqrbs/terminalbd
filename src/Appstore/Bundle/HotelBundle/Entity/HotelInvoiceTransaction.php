@@ -17,10 +17,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Invoice
  *
- * @ORM\Table( name ="hotel_invoice")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HotelBundle\Repository\HotelInvoiceRepository")
+ * @ORM\Table( name ="hotel_invoice_transaction")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HotelBundle\Repository\HotelInvoiceTransactionRepository")
  */
-class HotelInvoice
+class HotelInvoiceTransaction
 {
     /**
      * @var integer
@@ -37,26 +37,10 @@ class HotelInvoice
      **/
     private $hotelConfig;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelReverse", mappedBy="hotelInvoice")
+   /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", inversedBy="hotelInvoice")
      **/
-    private $hotelReverse;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction", mappedBy="hotelInvoice")
-     **/
-    private $hotelInvoiceTransactions;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceParticular", mappedBy="hotelInvoice" , cascade={"remove"} )
-     * @ORM\OrderBy({"id" = "ASC"})
-     **/
-    private  $hotelInvoiceParticulars;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="hotelInvoices" ,cascade={"persist"} )
-     **/
-    private  $customer;
+    private $hotelInvoice;
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -143,9 +127,9 @@ class HotelInvoice
     /**
      * @var string
      *
-     * @ORM\Column(name="invoice", type="string", length=50, nullable=true)
+     * @ORM\Column(name="transactionCode", type="string", length=50, nullable=true)
      */
-    private $invoice;
+    private $transactionCode;
 
     /**
      * @var integer
@@ -849,10 +833,31 @@ class HotelInvoice
 	}
 
 	/**
-	 * @return HotelInvoiceTransaction
+	 * @return HotelInvoice
 	 */
-	public function getHotelInvoiceTransactions() {
-		return $this->hotelInvoiceTransactions;
+	public function getHotelInvoice() {
+		return $this->hotelInvoice;
+	}
+
+	/**
+	 * @param HotelInvoice $hotelInvoice
+	 */
+	public function setHotelInvoice( $hotelInvoice ) {
+		$this->hotelInvoice = $hotelInvoice;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTransactionCode(): string {
+		return $this->transactionCode;
+	}
+
+	/**
+	 * @param string $transactionCode
+	 */
+	public function setTransactionCode( string $transactionCode ) {
+		$this->transactionCode = $transactionCode;
 	}
 
 }

@@ -2,6 +2,10 @@ business_purchase:
     path:     /
     defaults: { _controller: "BusinessBundle:Purchase:index" }
 
+business_purchase_item:
+    path:     /purchase-item
+    defaults: { _controller: "BusinessBundle:Purchase:purchaseItem" }
+
 business_purchase_show:
     path:     /{id}/show
     defaults: { _controller: "BusinessBundle:Purchase:show" }
@@ -22,11 +26,6 @@ business_purchase_update:
 business_purchase_status:
     path:     /{id}/status
     defaults: { _controller: "BusinessBundle:Purchase:edit" }
-
-
-business_purchase_approve:
-    path:     /{id}/approve
-    defaults: { _controller: "BusinessBundle:Purchase:approve" }
 
 business_purchase_delete:
     path:     /{id}/delete
@@ -51,6 +50,13 @@ business_purchase_particular_sawmill:
     options:
             expose: true
 
+business_purchase_particular_sign:
+    path:     /{invoice}/particular-digital-sign
+    defaults: { _controller: "BusinessBundle:Purchase:signParticular" }
+    methods:  POST
+    options:
+            expose: true
+
 business_purchase_discount_update:
     path:     /purchase/dicount-update
     defaults: { _controller: "BusinessBundle:Purchase:invoiceDiscountUpdate" }
@@ -62,6 +68,9 @@ business_purchase_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "BusinessBundle:Purchase:approved" }
 
+business_purchase_item_approve:
+    path:     /{id}/item-approve
+    defaults: { _controller: "BusinessBundle:Purchase:itemApprove" }
 
 business_purchase_particular_delete:
     path:     /{invoice}/{id}/particular-delete

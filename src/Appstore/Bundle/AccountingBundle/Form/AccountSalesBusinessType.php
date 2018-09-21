@@ -37,10 +37,8 @@ class AccountSalesBusinessType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
+                'empty_value' => '---Choose a method---',
                 'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -56,7 +54,9 @@ class AccountSalesBusinessType extends AbstractType
                 'attr'=>array('class'=>'span12 select2 customer-ledger'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->globalOption->getId());
+                        ->where("e.globalOption =".$this->globalOption->getId())
+	                    ->orderBy('e.name','ASC')
+	                    ;
                 },
             ))
             ->add('accountBank', 'entity', array(
@@ -78,6 +78,7 @@ class AccountSalesBusinessType extends AbstractType
                 'choices' => array(
                     'Due' => 'Due',
                     'Advance' => 'Advance',
+                    'Discount' => 'Discount',
                     'Outstanding' => 'Outstanding',
                 ),
             ))

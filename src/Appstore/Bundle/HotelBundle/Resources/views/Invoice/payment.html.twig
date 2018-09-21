@@ -44,6 +44,44 @@
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
                         <!-- BEGIN FORM-->
+                        <div class="row-fluid">
+
+                            <div class="span4">
+                                <h4>About:</h4>
+                                <ul class="unstyled">
+                                    {% if entity.customer is not empty %}<li><strong>Customer #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
+                                    {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
+                                    {% if entity.customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address }}</li>{% endif %}
+                                    {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
+                                    <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
+                                </ul>
+                            </div>
+
+                            <div class="span4 invoice-payment">
+                                <h4>Payment Details:</h4>
+                                <ul class="unstyled">
+                                    <li><strong>Total BDT:</strong>&nbsp;{{ entity.total|number_format() }}</li>
+                                    <li><strong>Received BDT:</strong>&nbsp;{{ entity.received|number_format() }}</li>
+                                    {% if entity.discount %}<li><strong>Discount BDT:</strong>&nbsp;{{ entity.discount|number_format() }}</li>{% endif %}
+                                    {% if entity.due %}<li><strong>Due BDT:</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}
+                                    <li><strong>Payment status</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
+                                </ul>
+                            </div>
+                            <div class="span4">
+                                <h4>Payment Method:</h4>
+                                <ul class="unstyled">
+                                    <li><strong>Payment Method:</strong>&nbsp;{{ entity.transactionMethod.name }}</li>
+                                    {% if entity.accountMobileBank is not empty %}<li><strong>Received Mobile:</strong>&nbsp;{{ entity.accountMobileBank.name }}</li>{% endif %}
+                                    {% if entity.paymentMobile is not empty %}<li><strong>Mobile/Transaction:</strong>&nbsp;{{ entity.paymentMobile }}/{{ entity.transactionId }}</li>{% endif %}
+                                    {% if entity.accountBank is not empty %}<li><strong>Received Bank:</strong>&nbsp;{{ entity.accountBank.name }}</li>{% endif %}
+                                    {% if entity.paymentCard is not empty %}<li><strong>Payment Card/No:</strong>&nbsp;{{ entity.paymentCard.name }}/{{ entity.cardNo }}</li>{% endif %}
+                                    {% if entity.bank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.bank.name  }}</li>{% endif %}
+                                    <li><strong>Sales By:</strong>&nbsp;{% if entity.salesBy is defined and entity.salesBy is not empty %}{{ entity.salesBy }}{% endif %}</li>
+                                    <li><strong>Received By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
                         <div class="row-fluid" style="background:#f9f9f9;">
                             <form class="" id="stockInvoice" name="stockInvoice" action="{{ path('hotel_invoice_particular_add',{'invoice':entity.id}) }}" method="post">
                                 <div class="span12">
@@ -186,130 +224,84 @@
                         <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
-                                <div class="caption"><i class="icon-reorder"></i>Guest Booking Information</div>
+                                <div class="caption"><i class="icon-reorder"></i>Guest Transaction Information</div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <table class="table table-bordered table-striped table-condensed table-fixed">
+                                    <thead>
+                                    <tr class="head-green">
+                                        <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
+                                        <th class="numeric">Created</th>
+                                        <th class="numeric">Created By</th>
+                                        <th class="numeric">Process</th>
+                                        <th class="numeric">Payment Method</th>
+                                        <th class="numeric">Discount</th>
+                                        <th class="numeric">Vat/Tax</th>
+                                        <th class="numeric">Total</th>
+                                        <th class="numeric">Payment</th>
+                                        <th class="numeric"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="invoiceTransaction">
+                                    {% for transaction in entity.hotelInvoiceTransactions %}
+                                        <tr id="delete-{{ transaction.id }}" {% if transaction.process in ['Pending','In-progress'] %} class="yellow-alert" {% endif %}  >
+                                            <td  class="numeric">{{ transaction.transactionCode }}</td>
+                                            <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
+                                            <td class="numeric">{{ transaction.createdBy }}</td>
+                                            <td class="numeric">{{ transaction.process }}</td>
+                                            <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
+                                            <td class="numeric">{{ transaction.discount }}</td>
+                                            <td class="numeric">{{ transaction.vat }}</td>
+                                            <td class="numeric" id="total-{{ transaction.id }}">{{ transaction.total }}</td>
+                                            <td class="numeric">{{ transaction.payment }}</td>
+                                            <td class="numeric">
+                                                {% if entity.paymentStatus != 'Paid' and entity.process !='Done' %}
+                                                    {% set processArr = ['Created','Pending','In-progress'] %}
+                                                    {% if transaction.process in  processArr %}
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                    {% endif %}
+                                                    {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
+                                                    {% endif %}
+                                                    {% if (transaction.process in  processArr and transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty ) %}
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
+                                                    {% endif %}
+                                                    {% if transaction.process not in processArr %}
+                                                        <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
+                                                    {% endif %}
+                                                    {% if transaction.process == 'In-progress' or ( transaction.process == 'Pending' and transaction.total > 0 ) %}
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
+                                                    {% endif %}
+                                                {% endif %}
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td class="numeric" colspan="5"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                        <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
+                                        <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
+                                        <td class="numeric"><strong class="">{{ entity.total|number_format }}</strong></td>
+                                        <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                                        <td class="numeric"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="numeric" colspan="8"><span class="pull-right"><strong>Due</strong></span></td>
+                                        <td class="numeric"><strong>{{ entity.due|number_format }}</strong></td>
+                                        <td class="numeric"></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
-                        <div class="clearfix"></div>
-                        <div class="row-fluid">
-                            <div class="span12 guest-info">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Title</span>
-                                                <span><input type="checkbox" id="title" value="1" name="namePrefix[]"> Mr.</span>
-                                                <span><input type="checkbox" id="title" value="2" name="namePrefix[]"> Mrs.</span>
-                                                <span><input type="checkbox" id="title" value="3" name="namePrefix[]"> Dr.</span>
-                                                <span><input type="checkbox" id="title" value="4" name="namePrefix[]"> Prof.</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">First Name</span> <span class="pull-right input-right">
-                                                       <input type="text" id="firstName" name="firstName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="* First name" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Last Name</span> <span class="pull-right input-right">
-                                                        <input type="text" id="lastName" name="lastName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="* Last name" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Mobile no</span> <span class="pull-right input-right">
-                                                       <input type="text" id="mobile" name="mobile" class="m-wrap span12 customer-input" autocomplete="off" placeholder="* Enter mobile no" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Email</span> <span class="pull-right input-right">
-                                                        <input type="text" id="email" name="email" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Enter e-mail address" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Profession</span> <span class="pull-right input-right">
-                                                       <input type="text" id="profession" name="profession" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Enter profession" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Organization</span> <span class="pull-right input-right">
-                                                        <input type="text" id="organization" name="organization" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Enter organization name" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Mailing Address</span>
-                                                <span class="pull-right input-right" style="width:84% !important;">
-                                                        <input type="text" style="width: 100% !important;" id="address" name="address" class="m-wrap span12 customer-input" autocomplete="off" placeholder="* Enter mailing address" value="">
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Location</span> <span class="pull-right input-right">
-                                                       <input type="text" id="location" name="location" class="m-wrap span12 customer-input select2Location" autocomplete="off" placeholder="Enter city/state name" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Postal Code</span> <span class="pull-right input-right">
-                                                        <input type="text" id="postalCode" name="postalCode" class="m-wrap span12 customer-input " autocomplete="off" placeholder="Enter postal code" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Remark</span>
-                                                <span class="pull-right input-right" style="width: 84% !important;">
-                                                        <input type="text" style="width: 100% !important;" id="remark" name="remark" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Enter reason or remarks" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
                         <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box green">
                             <div class="portlet-title">

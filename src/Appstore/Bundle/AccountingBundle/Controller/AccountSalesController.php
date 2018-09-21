@@ -294,17 +294,23 @@ class AccountSalesController extends Controller
     public function approveAction(AccountSales $entity)
     {
 	    if (!empty($entity) and $entity->getProcess() != 'approved') {
-
-	    	$em = $this->getDoctrine()->getManager();
-            $entity->setProcess('approved');
-            $entity->setApprovedBy($this->getUser());
-            $em->flush();
-            $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
-            if($entity->getSales()){
-                $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesPaymentReceive($entity);
-            }
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
-            return new Response('success');
+		    $em = $this->getDoctrine()->getManager();
+		    $entity->setProcess('approved');
+		    $entity->setApprovedBy($this->getUser());
+		    if(in_array($entity->getProcessHead(),array( 'Due','Advance'))){
+			    $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+			    $entity->setTransactionMethod($method);
+		    }
+		    $em->flush();
+		    $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
+		    if($entity->getProcessHead() == 'Outstanding'){
+			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
+		    }elseif($entity->getProcessHead() == 'Discount'){
+			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertCustomerDiscountTransaction($entity);
+		    }elseif($entity->getAmount() > 0 ){
+			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
+		    }
+		    return new Response('success');
 
         } else {
 
@@ -361,7 +367,8 @@ class AccountSalesController extends Controller
 		    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption, $data = array('mobile' => $customerMobile->getMobile()));
 		    $balance = empty($result) ? 0 : $result[0]['customerBalance'];
 	    }
-	    return new Response($balance);
+	    $taka = number_format($balance).' Taka';
+	    return new Response($taka);
 	    exit;
 
     }

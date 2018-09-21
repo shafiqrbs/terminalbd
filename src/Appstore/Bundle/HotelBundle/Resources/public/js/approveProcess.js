@@ -211,6 +211,41 @@ $(".select2User").select2({
     minimumInputLength: 1
 });
 
+$(".select2Location").select2({
+
+    placeholder: "Search location name",
+    ajax: {
+        url: Routing.generate('inventory_location_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function(item){
+        return item.text
+
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function(item){return item.text}, // omitted for brevity, see the source of this page
+    initSelection: function(element, callback) {
+        var id = $(element).val();
+    },
+    allowClear: true,
+    minimumInputLength:1
+});
+
 $(".select2Customer").select2({
 
     ajax: {

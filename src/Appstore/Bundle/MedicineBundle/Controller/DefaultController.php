@@ -4,10 +4,20 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+
+	/**
+	 * Lists all HotelCategory entities.
+	 *
+	 * @Secure(roles="ROLE_MEDICINE,ROLE_DOMAIN");
+	 *
+	 */
+
+	public function indexAction()
     {
 
         /* @var GlobalOption $globalOption */

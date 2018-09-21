@@ -46,16 +46,17 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span4">
-                                        <select name="transactionMethod" id="transactionMethod" class="select2 leftMargin span12">
+                                        <input type="text" id="accountVendor" name="accountVendor"  class="leftMargin span12 select2AccountVendor" value="{% if searchForm.accountVendor is defined %}{{ searchForm.accountVendor }}{% endif %}"  autocomplete="off" >
+                                    </div>
+                                    <div class="span3">
+                                        <select name="transactionMethod" id="transactionMethod" class="m-wrap span12">
                                             <option value="" >--Transaction Method--</option>
                                             {% for method in transactionMethods %}
                                                 <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="span3">
-                                        <input type="text" id="accountVendor" name="accountVendor"  class="leftMargin span12 select2MedicineVendor" value="{% if searchForm.accountVendor is defined %}{{ searchForm.accountVendor }}{% endif %}"  autocomplete="off" >
-                                    </div>
+
                                     <div class="span2">
                                         <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>

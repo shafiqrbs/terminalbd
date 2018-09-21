@@ -1621,7 +1621,7 @@ Box portlet
 }
 
 .portlet.box.blue > .portlet-title {
-  background-color: #3598dc;
+  background-color: #0378ad;
 }
 
 .portlet.box.blue {
@@ -1648,11 +1648,11 @@ Box portlet
 }
 
 .portlet.box.green > .portlet-title {
-  background-color: #26a69a;
+  background-color: #1e7b85;
 }
 
 .portlet.box.green {
-  border: 1px solid #77e588;
+  border: 1px solid #26a69a;
   border-top: 0;
 }
 

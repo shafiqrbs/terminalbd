@@ -93,7 +93,47 @@ class CustomerRepository extends EntityRepository
         }
     }
 
-    public function newExistingRestaurantCustomer($globalOption,$mobile,$name)
+	public function newExistingCustomerForHotel($globalOption,$mobile,$data)
+	{
+		$em = $this->_em;
+		$namePrefix = $data['namePrefix'];
+		$email = $data['email'];
+		$firstName = $data['firstName'];
+		$lastName = $data['lastName'];
+		$address = $data['address'];
+		$profession = $data['profession'];
+		$organization = $data['organization'];
+		$postalCode = $data['postalCode'];
+		$remark = $data['remark'];
+		$entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
+		if($entity){
+			return $entity;
+		}else{
+			$entity = new Customer();
+			$entity->setNamePrefix($namePrefix);
+			$entity->setMobile($mobile);
+			$entity->setEmail($email);
+			$entity->setFirstName($firstName);
+			$entity->setLastName($lastName);
+			$entity->setAddress($address);
+			$entity->setProfession($profession);
+			$entity->setCompany($organization);
+			$entity->setPostalCode($postalCode);
+			$entity->setRemark($remark);
+			$entity->setName($entity->getFirstName().' '.$entity->getLastName());
+			$entity->setGlobalOption($globalOption);
+			if(!empty($data['location'])){
+				$location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
+				$entity->setLocation($location);
+			}
+			$em->persist($entity);
+			$em->flush($entity);
+			return $entity;
+		}
+	}
+
+
+	public function newExistingRestaurantCustomer($globalOption,$mobile,$name)
     {
         $em = $this->_em;
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));

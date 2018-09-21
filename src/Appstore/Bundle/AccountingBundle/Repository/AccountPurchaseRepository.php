@@ -161,8 +161,7 @@ class AccountPurchaseRepository extends EntityRepository
 
         $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
         $amount =   isset($data['amount'])  ? $data['amount'] : '';
-        $vendor =   isset($data['vendor'])  ? $data['vendor'] : '';
-
+        $vendor =   isset($data['accountVendor'])  ? $data['accountVendor'] : '';
         $outstanding = '';
         $company = '';
         if($vendor){
@@ -174,7 +173,7 @@ class AccountPurchaseRepository extends EntityRepository
         if($mode == 'Payable' and $amount !=""){
             $outstanding ="AND purchase.balance >= {$amount}";
         }
-        $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName,purchase.balance as customerBalance
+        $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName, purchase.balance as customerBalance
                 FROM account_purchase as purchase
                 JOIN account_vendor as vendor ON purchase.accountVendor_id = vendor.id
                 WHERE purchase.id IN (
@@ -193,6 +192,36 @@ class AccountPurchaseRepository extends EntityRepository
         return $result;
 
     }
+
+	public function vendorSingleOutstanding($globalOption,$head,$vendor)
+	{
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('e.balance As balance');
+		$qb->where("e.globalOption = :globalOption");
+		$qb->setParameter('globalOption', $globalOption);
+		$qb->andWhere("e.process = :process");
+		$qb->setParameter('process', 'approved');
+		if(in_array($head,array('business','hotel','school'))){
+			$qb->andWhere("e.accountVendor = :vendor");
+		}elseif($head == 'medicine'){
+			$qb->andWhere("e.medicineVendor = :vendor");
+		}elseif($head == 'dental'){
+			$qb->andWhere("e.dmsVendor = :vendor");
+		}elseif($head == 'restaurant'){
+			$qb->andWhere("e.restaurantVendor = :vendor");
+		}elseif($head == 'hospital'){
+			$qb->andWhere("e.hmsVendor = :vendor");
+		}else{
+			$qb->andWhere("e.vendor = :vendor");
+		}
+		$qb->setParameter('vendor', $vendor);
+		$qb->orderBy('e.id', 'DESC');
+		$qb->setMaxResults(1);
+		$result = $qb->getQuery()->getOneOrNullResult()['balance'];
+		return $result;
+
+	}
 
 
     public function vendorOutstanding($globalOption,$head,$data)
@@ -244,6 +273,7 @@ class AccountPurchaseRepository extends EntityRepository
                 $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $inventoryVendor =    isset($data['vendor'])? $data['vendor'] :'';
+                $accountVendor =    isset($data['accountVendor'])? $data['accountVendor'] :'';
                 $hmsVendor =    isset($data['hmsVendor'])? $data['hmsVendor'] :'';
                 $medicineVendor =    isset($data['medicineVendor'])? $data['medicineVendor'] :'';
                 $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
@@ -272,6 +302,12 @@ class AccountPurchaseRepository extends EntityRepository
                     $qb->leftJoin('e.medicineVendor','v');
                     $qb->andWhere("v.companyName = :vendor");
                     $qb->setParameter('vendor', $medicineVendor);
+                }
+
+                if (!empty($accountVendor)) {
+                    $qb->leftJoin('e.accountVendor','v');
+                    $qb->andWhere("v.companyName = :vendor");
+                    $qb->setParameter('vendor', $accountVendor);
                 }
 
                 if (!empty($transactionMethod)) {

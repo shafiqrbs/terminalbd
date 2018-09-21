@@ -14,6 +14,17 @@ hotel_invoice_edit:
     path:     /{id}/edit
     defaults: { _controller: "HotelBundle:Invoice:edit" }
 
+hotel_invoice_payment:
+    path:     /{id}/payment
+    defaults: { _controller: "HotelBundle:Invoice:payment" }
+
+hotel_invoice_payment_receive:
+    path:     /{id}/payment-receive
+    defaults: { _controller: "HotelBundle:Invoice:paymentReceive" }
+    methods:  POST
+    options:
+            expose: true
+
 hotel_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "HotelBundle:Invoice:particularSearch" }

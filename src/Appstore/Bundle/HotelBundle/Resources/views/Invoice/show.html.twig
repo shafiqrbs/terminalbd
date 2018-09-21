@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_invoice') }}"> Invoice</a>
+                        <a href="{{ path('hotel_invoice') }}"> Invoice</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="javascript:">Manage Invoice Details</a></li>
@@ -38,8 +38,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('business_invoice_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
-                                <a class="btn black" href="{{ path('business_invoice') }}"><i class="icon-th-list"></i> Invoice</a>
+                                <a class="btn red" href="{{ path('hotel_invoice_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
+                                <a class="btn black" href="{{ path('hotel_invoice') }}"><i class="icon-th-list"></i> Invoice</a>
                             </div>
                         </div>
 
@@ -89,66 +89,51 @@
                                 <table class="table table-bordered table-striped table-condensed table-fixed">
                                     <thead>
                                     <tr>
-                                        <th class="span1"> Si/No</th>
-                                        <th class="span4">Particular</th>
-                                        {% if entity.businessConfig.invoiceType == 'banner-print' %}
-                                        <th class="span1">Size</th>
-                                        {% endif %}
-                                        <th class="span1">Qnt</th>
-                                        <th class="span1">Unit</th>
-                                        <th class="span1">Unit Price</th>
-                                        <th class="span1">Amount</th>
+                                        <th class="">Si/No</th>
+                                        <th class="">Particular</th>
+                                        <th class="">Booking Date</th>
+                                        <th class="">Guest</th>
+                                        <th class="">Adult</th>
+                                        <th class="">Child</th>
+                                        <th class="">Unit</th>
+                                        <th class="">Days</th>
+                                        <th class="">Amount</th>
                                     </tr>
                                     </thead>
                                     <tbody id="invoiceParticulars">
-                                    {% for item in entity.businessInvoiceParticulars %}
+                                    {% for item in entity.hotelInvoiceParticulars %}
                                         <tr id="remove-{{ item.id }}">
                                             <td  class="">{{ loop.index }}.</td>
                                             <td class="">{{ item.particular }}</td>
-                                            {% if entity.businessConfig.invoiceType == 'banner-print' %}
-                                            <td>
-                                            {% if item.subQuantity is not empty %}
-                                                {{ item.height }} x {{ item.width }} = {{ item.subQuantity }}
-                                            {% endif %}
-                                            </td>
-                                            {% endif %}
-                                            <td class="">{{ item.quantity }}</td>
-                                            <td class="">{{ item.unit }}</td>
+                                            <td class="">{{ item.startDate|date('d-m-Y') }} To {{ item.endDate|date('d-m-Y') }}</td>
+                                            <td class="">{{ item.guestName }}/{{ item.guestMobile }}</td>
+                                            <td class="">{{ item.adult }}</td>
+                                            <td class="">{{ item.child }}</td>
                                             <td class="">{{ item.price }}</td>
-                                            <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
+                                            <td class="">{{ item.quantity }}</td>
+                                            <td class="">{{ item.subTotal|number_format }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
-                                    {% if entity.businessConfig.invoiceType == 'banner-print' %}
-                                        {% set colspan = 7 %}
-                                        {% set panCol = 6 %}
-                                    {% else %}
-                                        {% set colspan = 6 %}
-                                        {% set panCol = 5 %}
-                                    {% endif %}
                                     <tr>
-                                        <td colspan="{{ colspan }}" class="span12" style="border: 1px double #000"></td>
+                                        <td colspan="9" class="span12" style="border: 1px double #000"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                        <td colspan="8" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                                         <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                   </tr>
+                                    </tr>
                                     <tr>
-                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                                        <td colspan="8" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
                                         <td class="span1"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                        <td colspan="8" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                         <td class="span1"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
-                                        <td class="span1"><strong class="netTotal">{{ entity.received|number_format }}</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="{{ panCol }}" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
-                                        <td class="span1"><strong class="netTotal">{{ entity.due|number_format }}</strong></td>
+                                        <td colspan="8" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                                        <td class="span1"><strong class="netTotal">{{ entity.total|number_format }}</strong></td>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -159,10 +144,9 @@
                         <div class="form-actions portlet box grey">
                             <div class="pull-right">
                                 {% if (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) or (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_REVERSE_SALES"))  %}
-                                    <a  href="javascript:"  data-url="{{ path('business_sales_reverse',{'id':entity.id}) }}" class="btn black"><i class="icon-retweet"></i>&nbsp;Reverse</a>
+                                    <a  href="javascript:"  data-url="{{ path('hotel_sales_reverse',{'id':entity.id}) }}" class="btn black"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                 {% endif %}
-                                <a class="btn yellow" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id}) }}"><i class="icon-print"></i> Print Invoice</a>
-                                <a class="btn black" target="_blank" href="{{ path('business_invoice_chalan',{'id':entity.id}) }}"><i class="icon-print"></i> Print Chalan</a>
+                                <a class="btn yellow" target="_blank" href="{{ path('hotel_invoice_print',{'id':entity.id}) }}"><i class="icon-print"></i> Print Invoice</a>
                                 <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                             </div>
                         </div>

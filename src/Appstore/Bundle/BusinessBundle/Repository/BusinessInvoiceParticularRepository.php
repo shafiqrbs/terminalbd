@@ -52,7 +52,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $entity->setBusinessInvoice($invoice);
         $entity->setParticular($data['particular']);
         $entity->setPrice($data['price']);
-        $entity->setQuantity($data['quantity']);
+        $entity->setSubQuantity($data['quantity']);
+        $entity->setTotalQuantity($data['quantity']);
         if(!empty($data['quantity'])){
             $entity->setSubTotal($data['price'] * $data['quantity']);
         }else{
@@ -164,6 +165,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             if (!empty($entity->getSubQuantity())) {
                 $subQuantity = $entity->getHeight().' x '.$entity->getWidth().' = '.$entity->getSubQuantity();
             }
+	        $subQnt = ( $subQuantity == '' ) ? 1 : $subQuantity;
 
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
@@ -172,6 +174,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $data .= "<td>{$subQuantity}</td>";
             }
             $data .= "<td>";
+	        $data .= "<input type='hidden' name='subQuantity-{$entity->getId()}' id='subQuantity-{$entity->getId()}' value='{$subQnt}'>";
             $data .= "<input type='hidden' name='salesItem[]' value='{$entity->getId()}'>";
             $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getId()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getPrice()}'>";
             $data .= "</td>";
@@ -317,10 +320,18 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $em = $this->_em;
         $invoiceParticular = $this->find($data['itemId']);
         if(!empty($invoiceParticular)) {
-            $entity = $invoiceParticular;
-            $entity->setQuantity($data['quantity']);
-            $entity->setPrice($data['salesPrice']);
-            $entity->setSubTotal($entity->getPrice() * $entity->getQuantity());
+	        /* @var $entity BusinessInvoiceParticular */
+	        $entity = $invoiceParticular;
+	        $entity->setQuantity( $data['quantity'] );
+	        $entity->setPrice( $data['salesPrice'] );
+	        if (!empty($entity->getSubQuantity())) {
+		        $entity->setTotalQuantity($data['quantity'] * $entity->getSubQuantity() );
+		        $entity->setSubTotal( $entity->getPrice() * $entity->getTotalQuantity() );
+	        }else{
+		        $entity->setTotalQuantity( $data['quantity']);
+		        $entity->setSubTotal( $entity->getPrice() * $entity->getTotalQuantity() );
+	        }
+
         }
         $em->persist($entity);
         $em->flush();

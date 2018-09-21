@@ -117,6 +117,14 @@ class BusinessConfig
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="businessModel", type="string",  nullable=true)
+     */
+    private $businessModel='general';
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="vatEnable", type="boolean",  nullable=true)
@@ -325,7 +333,7 @@ class BusinessConfig
      */
      private $showStock = false;
 
-/**
+	/**
      * @var boolean
      *
      * @ORM\Column(name="isPowered", type="boolean",  nullable=true)
@@ -1154,6 +1162,20 @@ class BusinessConfig
 	 */
 	public function setIsPowered( bool $isPowered ) {
 		$this->isPowered = $isPowered;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getBusinessModel(){
+		return $this->businessModel;
+	}
+
+	/**
+	 * @param string $businessModel
+	 */
+	public function setBusinessModel( string $businessModel ) {
+		$this->businessModel = $businessModel;
 	}
 
 

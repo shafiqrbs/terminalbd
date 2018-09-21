@@ -27,7 +27,7 @@
 }
 
 div.checker {
-    border: 3px solid red;
+    border: 1px solid red;
     margin-top: -4px;
 }
 
@@ -40,7 +40,7 @@ div.checker {
 }
 
 input.m-wrap.input-error , select.m-wrap.input-error{
-    border: 1px solid red !important;
+    border: 1px solid #26a69a !important;
 }
 
 .input-error{
@@ -79,10 +79,10 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     width: 190px;
 }
 .sales-right input[class*="span"].m-wrap{
-    font-weight: bold;
+    font-weight: normal;
     margin-top: -1px;
-    text-align: right;
-    border: 2px solid #4b8df8!important;
+    text-align: left;
+    border: 1px solid #4b8df8!important;
     height: 23px!important;
 }
 .select2-search{
@@ -95,45 +95,55 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 .patient-info{
 
 }
-.form-horizontal .patient-info .control-group{
-    margin-bottom: 0!important;
-}
-.form-horizontal .patient-info .control-label{
-    float: left;
-    text-align: left;
-    background: #8a8a8a;
-    color: #fff;
-    margin:0!important;
-    width: 99.5%;
-    font-size: 14px;
-    border: 1px solid #888888;
-}
 
-.referred-info{
-    border: 1px solid #D7EAE5;
-}
-.form-horizontal .referred-info .control-group{
+
+.form-horizontal .guest-info .control-group{
     margin-bottom: 0!important;
 }
-.form-horizontal .referred-info .control-label{
+.form-horizontal .guest-info .control-label{
     float: left;
     text-align: left;
-    background: #F1F9F7;
     color: #000;
-    line-height:20px;
-    height: 25px;
+    font-weight: bold;
+    line-height: 32px;
+    height: 33px;
     margin:0!important;
     width: 100%;
     font-size: 14px;
 }
+
+.form-horizontal .guest-info .control-label .label {
+    padding-left: 8px!important;
+    background: none;
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+    float: left;
+    width: 150px;
+}
+
+.form-horizontal .guest-info .input-right{
+    padding-right: 10px;
+    float: left;
+    text-align: left;
+    width: 280px;
+}
+.form-horizontal .guest-info .input-right input[class*="span"].m-wrap{
+    font-weight: normal;
+    margin-top: -1px;
+    text-align: left;
+    border: 1px solid #1e7b85!important;
+    height: 23px!important;
+}
+
+
+
 .form-horizontal .payment-info .control-group{
     margin-bottom: 0!important;
-    border-bottom: 1px solid #2e2e2e;
 }
 .form-horizontal .payment-info .control-label{
     float: left;
     text-align: left;
-    background: #f9f9f9;
     color: #000;
     font-weight: bold;
     line-height: 32px;
@@ -169,7 +179,7 @@ input[class*="span"].m-wrap  {
 }
 
 .payment-info{
-    border: 1px solid #222;
+    border: 1px solid #ddd;
 }
 
 .select2-container .select2-choice {

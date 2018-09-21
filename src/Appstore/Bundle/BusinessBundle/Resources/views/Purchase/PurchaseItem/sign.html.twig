@@ -83,36 +83,42 @@
                                 </form>
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Created</th>
-                                    <th class="numeric" >GRN</th>
-                                    <th class="numeric" >Vendor Name</th>
-                                    <th class="numeric" >Total</th>
-                                    <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Due</th>
-                                    <th class="numeric" >Reversed</th>
-                                    <th class="numeric" >Action</th>
+                                    <td class="">&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                    <th class="">Code</th>
+                                    <th class="">Particular</th>
+                                    <th class="">Received</th>
+                                    <th class="">GRN</th>
+                                    <th class="">Height</th>
+                                    <th class="">Width</th>
+                                    <th class="">Qnt</th>
+                                    <th class="">Unit</th>
+                                    <th class="">Purchase Price</th>
+                                    <th class="">Sub-Total</th>
+                                    <th class="">Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
-                                {% for entity in entities %}
-                                    <tr id="delete-{{ entity.id }}">
-                                        <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.grn }}</td>
-                                        <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.netTotal|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
-                                        <td class="numeric" >{{ entity.payment|number_format }}</td>
-                                        <td class="numeric" >{% if entity.isReversed == 1 %}<a href="{{ path('business_reverse_show',{'id':entity.businessReverse.id}) }}">Reversed</a>{% endif %}</td>
-                                        <td class="numeric" >
-                                            {% if entity.process == 'created' or entity.process == 'pending' %}
-                                            <a href="{{ path('business_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
-                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('business_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                {% for item in entities %}
+                                    <tr id="remove-{{ item.id }}">
+                                        <td  class="">{{ loop.index }}</td>
+                                        <td  class="">{{ item.businessParticular.particularCode }}</td>
+                                        <td class="">{{ item.businessParticular.name }}</td>
+                                        <td class="">{{ item.businessPurchase.receiveDate|date('d-m-Y') }}</td>
+                                        <td class="">{{ item.businessPurchase.grn }}</td>
+                                        <td class="">{{ item.height }}</td>
+                                        <td class="">{{ item.width }}</td>
+                                        <td class="">{{ item.quantity }}</td>
+                                        <td class="">{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
+                                        <td class="">{{ item.purchasePrice }}</td>
+                                        <td class="">{{ item.purchaseSubTotal|number_format }}</td>
+                                        <td class="">
+                                            {% if item.businessPurchase.process == 'Approved' and item.status == 0 %}
+                                                <a  id="{{ item.id }}" data-url="{{ path('business_purchase_item_approve', { 'id': item.id }) }}" href="javascript:" class="btn green mini approve tooltips" data-trigger = "hover" data-original-title ="Approve" ><i class="icon-refresh"></i> In-progress</a>
+                                            {% else %}
+                                                <a  href="javascript:" class="btn blue mini" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-ok"></i> Done</a>
                                             {% endif %}
-                                            <a href="{{ path('business_purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

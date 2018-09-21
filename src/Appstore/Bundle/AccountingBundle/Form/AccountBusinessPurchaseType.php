@@ -34,14 +34,23 @@ class AccountBusinessPurchaseType extends AbstractType
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
 
             )))
+	        ->add('processType', 'choice', array(
+		        'attr'=>array('class'=>'span12 m-wrap'),
+		        'expanded'      =>false,
+		        'multiple'      =>false,
+		        'choices' => array(
+			        'Due Payment' => 'Due Payment',
+			        'Advance' => 'Advance',
+			        'Discount' => 'Discount',
+			        'Outstanding' => 'Outstanding',
+		        ),
+	        ))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 transactionMethod'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
+                'empty_value' => '---Choose a method---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -54,7 +63,7 @@ class AccountBusinessPurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 select2 vendor-ledger-business'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),

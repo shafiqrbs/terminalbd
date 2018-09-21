@@ -154,7 +154,63 @@ class BusinessPurchaseItem
     private $barcode;
 
 
-    /**
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="height", type="float", nullable=true)
+	 */
+	private $height;
+
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="width", type="float", nullable=true)
+	 */
+	private $width;
+
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="particularType", type="float", nullable=true)
+	 */
+	private $particularType;
+
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="length", type="float", nullable=true)
+	 */
+	private $length;
+
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="subQuantity", type="float", nullable=true)
+	 */
+	private $subQuantity;
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="totalQuantity", type="float", nullable=true)
+	 */
+	private $totalQuantity;
+
+	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="status", type="boolean")
+	 */
+	private $status=false;
+
+
+
+
+	/**
      * Get id
      *
      * @return integer
@@ -464,6 +520,104 @@ class BusinessPurchaseItem
     {
         return $this->businessDamages;
     }
+
+	/**
+	 * @return float
+	 */
+	public function getHeight(){
+		return $this->height;
+	}
+
+	/**
+	 * @param float $height
+	 */
+	public function setHeight( float $height ) {
+		$this->height = $height;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getWidth(){
+		return $this->width;
+	}
+
+	/**
+	 * @param float $width
+	 */
+	public function setWidth( float $width ) {
+		$this->width = $width;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getParticularType(): float {
+		return $this->particularType;
+	}
+
+	/**
+	 * @param float $particularType
+	 */
+	public function setParticularType( float $particularType ) {
+		$this->particularType = $particularType;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getLength(): float {
+		return $this->length;
+	}
+
+	/**
+	 * @param float $length
+	 */
+	public function setLength( float $length ) {
+		$this->length = $length;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getSubQuantity(): float {
+		return $this->subQuantity;
+	}
+
+	/**
+	 * @param float $subQuantity
+	 */
+	public function setSubQuantity( float $subQuantity ) {
+		$this->subQuantity = $subQuantity;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getTotalQuantity(): float {
+		return $this->totalQuantity;
+	}
+
+	/**
+	 * @param float $totalQuantity
+	 */
+	public function setTotalQuantity(  $totalQuantity ) {
+		$this->totalQuantity = $totalQuantity;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isStatus(){
+		return $this->status;
+	}
+
+	/**
+	 * @param bool $status
+	 */
+	public function setStatus( bool $status ) {
+		$this->status = $status;
+	}
 
 
 }

@@ -223,6 +223,47 @@ $( ".date-picker" ).datepicker({
 
     });
 
+    $(".select2AccountVendor").select2({
+
+    ajax: {
+
+        url: Routing.generate('account_vendor_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var name = $(element).val();
+        $.ajax(Routing.generate('account_vendor_name', { name : name}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 2
+});
+
     $(".select2Customer").select2({
 
     ajax: {

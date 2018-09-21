@@ -61,10 +61,9 @@ class InvoiceType extends AbstractType
                 'empty_value' => '---Choose process---',
                 'choices' => array(
                     'Created' => 'Created',
-                    'Hold' => 'Hold',
-                    'Delivered' => 'Delivered',
-                    'Chalan' => 'Chalan',
-                    'Done' => 'Done',
+                    'Booking' => 'Booking',
+                    'Check-in' => 'Check-in',
+                    'Check-out' => 'Check-out',
                     'Canceled' => 'Canceled',
                 ),
             ))
@@ -75,7 +74,7 @@ class InvoiceType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 transactionMethod'),
+                'attr'=>array('class'=>'span12 transactionMethod m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")

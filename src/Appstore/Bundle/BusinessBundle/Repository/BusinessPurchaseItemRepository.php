@@ -4,6 +4,7 @@ namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -16,7 +17,68 @@ use Doctrine\ORM\EntityRepository;
 class BusinessPurchaseItemRepository extends EntityRepository
 {
 
-    public function getPurchaseAveragePrice(BusinessParticular $particular)
+	protected function handleSearchBetween($qb,$data)
+	{
+
+		$grn = isset($data['grn'])? $data['grn'] :'';
+		$vendor = isset($data['vendor'])? $data['vendor'] :'';
+		$business = isset($data['name'])? $data['name'] :'';
+		$brand = isset($data['brandName'])? $data['brandName'] :'';
+		$mode = isset($data['mode'])? $data['mode'] :'';
+		$vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
+		$startDate = isset($data['startDate'])? $data['startDate'] :'';
+		$endDate = isset($data['endDate'])? $data['endDate'] :'';
+
+		if (!empty($grn)) {
+			$qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
+		}
+		if(!empty($business)){
+			$qb->andWhere($qb->expr()->like("ms.name", "'%$business%'"  ));
+		}
+		if(!empty($brand)){
+			$qb->andWhere($qb->expr()->like("ms.brandName", "'%$brand%'"  ));
+		}
+		if(!empty($mode)){
+			$qb->andWhere($qb->expr()->like("ms.mode", "'%$mode%'"  ));
+		}
+		if(!empty($vendor)){
+			$qb->join('e.vendor','v');
+			$qb->andWhere($qb->expr()->like("v.companyName", "'%$vendor%'"  ));
+		}
+		if(!empty($vendorId)){
+			$qb->join('e.vendor','v');
+			$qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
+		}
+		if (!empty($startDate) ) {
+			$datetime = new \DateTime($data['startDate']);
+			$start = $datetime->format('Y-m-d 00:00:00');
+			$qb->andWhere("e.receiveDate >= :startDate");
+			$qb->setParameter('startDate', $start);
+		}
+
+		if (!empty($endDate)) {
+			$datetime = new \DateTime($data['endDate']);
+			$end = $datetime->format('Y-m-d 23:59:59');
+			$qb->andWhere("e.receiveDate <= :endDate");
+			$qb->setParameter('endDate', $end);
+		}
+	}
+
+
+	public function findWithSearch(User $user, $data)
+	{
+		$config = $user->getGlobalOption()->getBusinessConfig()->getId();
+		$qb = $this->createQueryBuilder('pi');
+		$qb->join('pi.businessPurchase','e');
+		$qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+		$this->handleSearchBetween($qb,$data);
+		$qb->orderBy('e.receiveDate','DESC');
+		$qb->getQuery();
+		return  $qb;
+	}
+
+
+	public function getPurchaseAveragePrice(BusinessParticular $particular)
     {
 
         $qb = $this->_em->createQueryBuilder();
@@ -76,6 +138,33 @@ class BusinessPurchaseItemRepository extends EntityRepository
 	    $entity->setActualPurchasePrice($purchasePrice);
 	    $entity->setQuantity($quantity);
 	    $entity->setPurchaseSubTotal($data['price']);
+	    $em->persist($entity);
+	    $em->flush();
+    }
+
+    public function insertSignPurchaseItems($invoice, $data)
+    {
+	    $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
+	    $em = $this->_em;
+	    $entity = new BusinessPurchaseItem();
+	    $purchasePrice = $data['purchasePrice'];
+	    $quantity = 0;
+	    if(!empty($data['height']) and !empty($data['width'])){
+		    $entity->setHeight($data['height']);
+		    $entity->setWidth($data['width']);
+		    $quantity = round((($entity->getHeight() * $entity->getWidth()) * $data['quantity']),2);
+		    $entity->setQuantity($quantity);
+	    }else{
+		    $entity->setQuantity($data['quantity']);
+	    }
+		$entity->setBusinessPurchase($invoice);
+	    $entity->setBusinessParticular($particular);
+	    if(!empty($particular->getPrice())){
+		    $entity->setSalesPrice($particular->getPrice());
+	    }
+	    $entity->setPurchasePrice($purchasePrice);
+	    $entity->setActualPurchasePrice($purchasePrice);
+	    $entity->setPurchaseSubTotal($entity->getQuantity() * $purchasePrice);
 	    $em->persist($entity);
 	    $em->flush();
     }

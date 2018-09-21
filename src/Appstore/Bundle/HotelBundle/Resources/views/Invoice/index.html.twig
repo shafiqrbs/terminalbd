@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_invoice') }}"> Invoice</a>
+                        <a href="{{ path('hotel_invoice') }}"> Invoice</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -35,8 +35,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Invoice</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn yellow" href="{{ path('business_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
-                                <a class="btn red" href="{{ path('business_invoice_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
+                                <a class="btn yellow" href="{{ path('hotel_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
+                                <a class="btn red" href="{{ path('hotel_invoice_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
                             </div>
                         </div>
                     </div>
@@ -114,21 +114,22 @@
                                         <td class="numeric" >{{ entity.due }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >  {% if entity.isReversed == 1 %}
-                                                <a href="{{ path('business_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
+                                                <a href="{{ path('hotel_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
                                             {% endif %}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% set processIntArr = ['Hold','Created','Revised'] %}
-                                                {% set processDone = ['Done','Delivered','Chalan'] %}
+                                                {% set processIntArr = ['Booking','Created','Revised'] %}
+                                                {% set processDone = ['Booking','Check-in','Check-out'] %}
                                                 {% if entity.process in  processIntArr %}
-                                                <a href="{{ path('business_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Edit</a>
+                                                <a href="{{ path('hotel_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Edit</a>
                                                 {% endif %}
                                                 {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
-                                                <a  id="{{ entity.id }}" data-url="{{ path('business_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
+                                                <a  id="{{ entity.id }}" data-url="{{ path('hotel_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
                                                 {% if entity.process in  processDone %}
-                                                <a target="_blank"  href="{{ path('business_invoice_print',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
-                                                <a href="{{ path('business_invoice_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
+                                                <a href="{{ path('hotel_invoice_payment',{'id':entity.id}) }}"  class="btn purple mini"><i class="icon-money"></i> Payment</a>
+                                                <a target="_blank"  href="{{ path('hotel_invoice_print',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
+                                                <a href="{{ path('hotel_invoice_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
                                                 {% endif %}
                                             </div>
                                         </td>

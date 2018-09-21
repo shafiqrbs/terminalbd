@@ -520,6 +520,66 @@ class TransactionRepository extends EntityRepository
 
 	}
 
+	public function insertCustomerDiscountTransaction(AccountSales $entity)
+	{
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($entity->getGlobalOption());
+		$transaction->setAccountRefNo($entity->getAccountRefNo());
+		$transaction->setProcessHead('Customer Discounts');
+		$transaction->setUpdated($entity->getUpdated());
+		$transaction->setProcess('Miscellaneous');
+		/* Current Current Asset - Account Receivable */
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(56));
+		$transaction->setAmount($entity->getAmount());
+		$transaction->setDebit($entity->getAmount());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($entity->getGlobalOption());
+		$transaction->setAccountRefNo($entity->getAccountRefNo());
+		$transaction->setProcessHead('Customer Discounts');
+		$transaction->setUpdated($entity->getUpdated());
+		$transaction->setProcess('Current Asset');
+		/* Current Current Asset - Account Receivable */
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(21));
+		$transaction->setAmount('-'.$entity->getAmount());
+		$transaction->setCredit($entity->getAmount());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+	}
+
+	public function insertVendorDiscountTransaction(AccountPurchase $entity)
+	{
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($entity->getGlobalOption());
+		$transaction->setAccountRefNo($entity->getAccountRefNo());
+		$transaction->setProcessHead('Discount form Vendor');
+		$transaction->setUpdated($entity->getUpdated());
+		$transaction->setProcess('Current Liabilities');
+		/* Current Current Asset - Account Receivable */
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(58));
+		$transaction->setAmount($entity->getPayment());
+		$transaction->setDebit($entity->getPayment());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($entity->getGlobalOption());
+		$transaction->setAccountRefNo($entity->getAccountRefNo());
+		$transaction->setProcessHead('Discount form Vendor');
+		$transaction->setUpdated($entity->getUpdated());
+		$transaction->setProcess('Current Liabilities');
+		/* Current Current Asset - Account Receivable */
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(59));
+		$transaction->setAmount('-'.$entity->getPayment());
+		$transaction->setCredit($entity->getPayment());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+	}
+
     private function insertSalesItem(Sales $entity , AccountSales $accountSales)
     {
         $amount =  $entity->getTotal() - $entity->getVat();

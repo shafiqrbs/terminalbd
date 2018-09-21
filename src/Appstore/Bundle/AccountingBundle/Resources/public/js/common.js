@@ -50,7 +50,7 @@ function CommonJs(){
     });
 
 
-    $(document).on("change", "customer-ledger", function() {
+    $(document).on("change", ".customer-ledger", function() {
 
         var customer = $(this).val();
         $.get( Routing.generate('domain_customer_ledger'),{ customer:customer} )
@@ -58,6 +58,15 @@ function CommonJs(){
                 $('#outstanding').html(data);
         });
 
+    });
+
+    $(document).on("change", ".vendor-ledger-business", function() {
+
+        var vendor = $(this).val();
+        $.get( Routing.generate('account_single_vendor_ledger'),{ vendor:vendor,'type':'business'} )
+            .done(function( data ) {
+                $('#outstanding').html(data);
+            });
     });
 
 

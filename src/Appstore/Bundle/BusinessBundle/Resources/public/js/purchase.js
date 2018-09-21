@@ -85,7 +85,7 @@ var form = $("#purchaseItem").validate({
                 $('#due').html(obj['due']);
                 $('#purchasePrice').val('');
                 $("#particular").select2().select2("val","");
-                $('#price').val('');
+                $('form#purchaseItem').reset(0);
                 $('#unit').html('Unit');
                 $('#quantity').val('1');
             }

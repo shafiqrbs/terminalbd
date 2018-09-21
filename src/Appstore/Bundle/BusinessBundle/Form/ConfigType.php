@@ -34,9 +34,24 @@ class ConfigType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12'),
                 'choices' => array('' => '-- Select Production --', 'pre-production' => 'Pre Production',  'post-production' => 'Post Production'),
             ))
-            ->add('invoiceType', 'choice', array(
+	        ->add('businessModel', 'choice', array(
+		        'attr'=>array('class'=>'m-wrap span12'),
+		        'choices' => array(
+			        '' => '-- Select business model --',
+			        'general' => 'General',
+			        'sign' => 'Digital-Sign',
+			        'electrical' => 'Electrical',
+			        'stationary' => 'Stationary',
+			        'bricks' => 'Bricks',
+			        'sawmill' => 'Sawmill',
+		        ),
+	        ))
+	        ->add('invoiceType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
-                'choices' => array('' => '-- Select invoice type --', 'new' => 'General',  'banner-print' => 'Banner-Print'),
+                'choices' => array(
+                	'' => '-- Select invoice type --',
+	                'new' => 'General',
+	                'banner-print' => 'Banner-Print'),
             ))
 	        ->add('stockFormat',
 		        'choice', array(

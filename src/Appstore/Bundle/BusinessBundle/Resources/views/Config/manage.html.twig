@@ -49,6 +49,18 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
+                                                    <label class="control-label " for="vatPercentage">Business Model</label>
+                                                    <div class="control">
+                                                        {{ form_widget(form.businessModel) }}
+                                                        {{ form_errors(form.businessModel) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
                                                     <label class="control-label " for="vatPercentage">Invoice Type</label>
                                                     <div class="control">
                                                         {{ form_widget(form.invoiceType) }}

@@ -159,13 +159,40 @@ class Customer
      */
     private $customerId;
 
-
     /**
+     * @var string
+     *
+     * @ORM\Column(name="postalCode", type="string", length=30, nullable =true)
+     */
+    private $postalCode;
+
+     /**
+     * @var array
+     *
+     * @ORM\Column(name="namePrefix", type="array", nullable =true)
+     */
+    private $namePrefix;
+
+     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100, nullable =true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="firstName", type="string", length=100, nullable =true)
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastName", type="string", length=100, nullable =true)
+     */
+    private $lastName;
 
     /**
      * @var string
@@ -245,6 +272,13 @@ class Customer
     private $facebookId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="text", nullable =true)
+     */
+    private $remark;
+
+     /**
      * @var string
      *
      * @ORM\Column(name="address", type="text", nullable =true)
@@ -1089,6 +1123,76 @@ class Customer
 	 */
 	public function getHotelInvoices() {
 		return $this->hotelInvoices;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFirstName(): string {
+		return $this->firstName;
+	}
+
+	/**
+	 * @param string $firstName
+	 */
+	public function setFirstName( string $firstName ) {
+		$this->firstName = $firstName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLastName(): string {
+		return $this->lastName;
+	}
+
+	/**
+	 * @param string $lastName
+	 */
+	public function setLastName( string $lastName ) {
+		$this->lastName = $lastName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPostalCode(): string {
+		return $this->postalCode;
+	}
+
+	/**
+	 * @param string $postalCode
+	 */
+	public function setPostalCode( string $postalCode ) {
+		$this->postalCode = $postalCode;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRemark(): string {
+		return $this->remark;
+	}
+
+	/**
+	 * @param string $remark
+	 */
+	public function setRemark( string $remark ) {
+		$this->remark = $remark;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getNamePrefix(): array {
+		return $this->namePrefix;
+	}
+
+	/**
+	 * @param array $namePrefix
+	 */
+	public function setNamePrefix( array $namePrefix ) {
+		$this->namePrefix = $namePrefix;
 	}
 
 }
