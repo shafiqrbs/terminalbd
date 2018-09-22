@@ -286,6 +286,7 @@ class InvoiceController extends Controller
            'invoiceParticulars' => $invoiceParticulars ,
            'invoiceTransactions' => $invoiceTransactions ,
            'msg' => $msg ,
+           'process' => $entity->getProcess(),
            'success' => 'success'
        );
 
@@ -350,6 +351,9 @@ class InvoiceController extends Controller
 			$data = $request->request->all();
 			$em->flush();
 			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertPaymentTransaction($entity,$data);
+			if($entity->getProcess() == 'Check-out' and $entity->getDue() == 0 ){
+				$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updatePaymentReceive($entity);
+			}
 		}
 		if ((!empty($entity)) ) {
 			$result = $this->returnResultData($entity);

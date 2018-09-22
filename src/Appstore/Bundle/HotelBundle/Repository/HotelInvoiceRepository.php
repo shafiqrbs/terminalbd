@@ -486,7 +486,7 @@ class HotelInvoiceRepository extends EntityRepository
 		echo $payment = !empty($res['payment']) ? $res['payment'] :0;
 		$invoice->setReceived($payment);
 		$invoice->setDue($invoice->getTotal() - $invoice->getReceived());
-		if($invoice->getPayment() >= $invoice->getTotal()){
+		if($invoice->getReceived() >= $invoice->getTotal()){
 			$invoice->setPaymentStatus('Paid');
 		}else{
 			$invoice->setPaymentStatus('Due');
@@ -536,7 +536,11 @@ class HotelInvoiceRepository extends EntityRepository
 		$transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
 		$entity->setTransactionCode($transactionCode);
 		$entity->setPayment($data['received']);
-		$entity->setProcess('In-progress');
+		if($entity->getProcess() == 'Check-out'){
+			$entity->setProcess('Done');
+		}else{
+			$entity->setProcess('In-progress');
+		}
 		$entity->setTransactionMethod($invoice->getTransactionMethod());
 		$entity->setAccountBank($invoice->getAccountBank());
 		$entity->setPaymentCard($invoice->getPaymentCard());

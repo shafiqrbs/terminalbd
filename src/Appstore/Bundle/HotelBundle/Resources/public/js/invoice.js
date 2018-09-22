@@ -240,7 +240,6 @@ $(document).on("click", ".approve", function() {
 
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
-
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
@@ -417,6 +416,9 @@ var invoicePaymentForm = $("#invoicePaymentForm").validate({
                 $('#paymentTotal').val(obj['netTotal']);
                 $('#discount').html(obj['discount']);
                 $('businessInvoice[received]').val('');
+                if(obj['discount'] === 'Check-out'){
+                    location.reload();
+                }
             }
         });
     }

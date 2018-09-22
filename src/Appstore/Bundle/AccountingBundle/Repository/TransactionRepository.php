@@ -1379,7 +1379,7 @@ class TransactionRepository extends EntityRepository
     public function insertGlobalGoodsCredit(AccountSales $accountSales)
     {
 
-        $amount = $accountSales->getAmount();
+        $amount = $accountSales->getTotalAmount();
         $transaction = new Transaction();
         $transaction->setGlobalOption($accountSales->getGlobalOption());
         if(!empty($accountSales->getBranches())){
@@ -1598,18 +1598,15 @@ class TransactionRepository extends EntityRepository
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
                 $transaction->setProcess('Cash');
             }
-
             $transaction->setAmount('-' . $amount);
             $transaction->setCredit($amount);
             $this->_em->persist($transaction);
             $this->_em->flush();
-
         }
     }
 
     private function insertGlobalPurchaseAccountPayable(AccountPurchase $accountPurchase)
     {
-
         $amount = ($accountPurchase->getPurchaseAmount() - $accountPurchase->getPayment());
         if($amount > 0){
             $transaction = new Transaction();

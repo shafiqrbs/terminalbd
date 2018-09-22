@@ -146,7 +146,6 @@ class AccountBusinessController extends Controller
             );
             return $this->redirect($this->generateUrl('account_purchase_business'));
         }
-
         return $this->render('AccountingBundle:AccountBusiness:payment.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
