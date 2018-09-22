@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\HotelBundle\Repository;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
 use Appstore\Bundle\HotelBundle\HotelBundle;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
@@ -454,7 +455,7 @@ class HotelInvoiceRepository extends EntityRepository
             $invoice->setSubTotal($subTotal);
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-            $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
+            $invoice->setDue($invoice->getTotal() - $invoice->getReceived() );
 
         }else{
 
@@ -471,7 +472,101 @@ class HotelInvoiceRepository extends EntityRepository
 
     }
 
-    public function getUpdateDiscount(HotelInvoice $invoice,$subTotal)
+	public function updatePaymentReceive(HotelInvoice $invoice)
+	{
+		$em = $this->_em;
+		$res = $em->createQueryBuilder()
+		          ->from('HotelBundle:HotelInvoiceTransaction','si')
+		          ->select('sum(si.payment) as payment')
+		          ->where('si.hotelInvoice = :invoice')
+		          ->setParameter('invoice', $invoice ->getId())
+		          ->andWhere('si.process = :process')
+		          ->setParameter('process', 'Done')
+		          ->getQuery()->getOneOrNullResult();
+		echo $payment = !empty($res['payment']) ? $res['payment'] :0;
+		$invoice->setReceived($payment);
+		$invoice->setDue($invoice->getTotal() - $invoice->getReceived());
+		if($invoice->getPayment() >= $invoice->getTotal()){
+			$invoice->setPaymentStatus('Paid');
+		}else{
+			$invoice->setPaymentStatus('Due');
+		}
+		$em->flush();
+		return $invoice;
+
+
+	}
+
+	public function insertTransaction(HotelInvoice $invoice)
+	{
+		$entity = New HotelInvoiceTransaction();
+		$code = $this->getLastCode($invoice);
+		$entity->setHotelInvoice($invoice);
+		$entity->setCode($code + 1);
+		$transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+		$entity->setTransactionCode($transactionCode);
+		$entity->setProcess('Done');
+		$entity->setPayment($invoice->getReceived());
+		$entity->setTransactionMethod($invoice->getTransactionMethod());
+		$entity->setAccountBank($invoice->getAccountBank());
+		$entity->setPaymentCard($invoice->getPaymentCard());
+		$entity->setCardNo($invoice->getCardNo());
+		$entity->setBank($invoice->getBank());
+		$entity->setAccountMobileBank($invoice->getAccountMobileBank());
+		$entity->setPaymentMobile($invoice->getPaymentMobile());
+		$entity->setTransactionId($invoice->getTransactionId());
+		$entity->setComment($invoice->getComment());
+		$this->_em->persist($entity);
+		$this->_em->flush($entity);
+
+		/*if($invoice->getPayment() > 0){
+			$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
+			$this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
+		}*/
+
+
+	}
+
+	public function insertPaymentTransaction(HotelInvoice $invoice,$data)
+	{
+		$entity = New HotelInvoiceTransaction();
+		$code = $this->getLastCode($invoice);
+		$entity->setHotelInvoice($invoice);
+		$entity->setCode($code + 1);
+		$transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+		$entity->setTransactionCode($transactionCode);
+		$entity->setPayment($data['received']);
+		$entity->setProcess('In-progress');
+		$entity->setTransactionMethod($invoice->getTransactionMethod());
+		$entity->setAccountBank($invoice->getAccountBank());
+		$entity->setPaymentCard($invoice->getPaymentCard());
+		$entity->setCardNo($invoice->getCardNo());
+		$entity->setBank($invoice->getBank());
+		$entity->setAccountMobileBank($invoice->getAccountMobileBank());
+		$entity->setPaymentMobile($invoice->getPaymentMobile());
+		$entity->setTransactionId($invoice->getTransactionId());
+		$entity->setComment($invoice->getComment());
+		$this->_em->persist($entity);
+		$this->_em->flush($entity);
+
+	}
+
+	public function getLastCode(HotelInvoice $invoice)
+	{
+		$qb = $this->_em->getRepository('HotelBundle:HotelInvoiceTransaction')->createQueryBuilder('s');
+		$qb
+			->select('MAX(s.code)')
+			->where('s.hotelInvoice = :invoice')
+			->setParameter('invoice', $invoice->getId());
+		$lastCode = $qb->getQuery()->getSingleScalarResult();
+		if (empty($lastCode)) {
+			return 0;
+		}
+		return $lastCode;
+	}
+
+
+	public function getUpdateDiscount(HotelInvoice $invoice,$subTotal)
     {
         if($invoice->getDiscountType() == 'flat'){
             $discount = $invoice->getDiscountCalculation();

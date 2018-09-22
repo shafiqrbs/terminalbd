@@ -151,9 +151,7 @@ class HotelInvoiceTransactionRepository extends EntityRepository
             $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
             $entity->setTransactionCode($transactionCode);
             $entity->setProcess('Done');
-            $entity->setDiscount($invoice->getDiscount());
             $entity->setPayment($invoice->getPayment());
-            $entity->setTotal($invoice->getSubTotal());
             $entity->setTransactionMethod($invoice->getTransactionMethod());
             $entity->setAccountBank($invoice->getAccountBank());
             $entity->setPaymentCard($invoice->getPaymentCard());
@@ -163,10 +161,6 @@ class HotelInvoiceTransactionRepository extends EntityRepository
             $entity->setPaymentMobile($invoice->getPaymentMobile());
             $entity->setTransactionId($invoice->getTransactionId());
             $entity->setComment($invoice->getComment());
-            if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getHotelConfig()->getVatPercentage() > 0) {
-                $vat = $this->getCulculationVat($invoice, $entity->getPayment());
-                $entity->setVat($vat);
-            }
             $this->_em->persist($entity);
             $this->_em->flush($entity);
             if($invoice->getPayment() > 0){
@@ -176,7 +170,7 @@ class HotelInvoiceTransactionRepository extends EntityRepository
 
 
     }
-    public function insertPaymentTransaction(HotelInvoice $invoice, $data)
+    public function insertPaymentTransaction(HotelInvoice $invoice)
     {
         $entity = New HotelInvoiceTransaction();
         $code = $this->getLastCode($invoice);
@@ -184,9 +178,8 @@ class HotelInvoiceTransactionRepository extends EntityRepository
         $entity->setCode($code + 1);
         $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
         $entity->setTransactionCode($transactionCode);
-        $entity->setProcess($data['process']);
-        $entity->setDiscount($data['discount']);
-        $entity->setPayment($data['payment']);
+        $entity->setProcess('In-progress');
+        $entity->setPayment($invoice->getTransactionMethod());
         $entity->setTransactionMethod($invoice->getTransactionMethod());
         $entity->setAccountBank($invoice->getAccountBank());
         $entity->setPaymentCard($invoice->getPaymentCard());
@@ -196,10 +189,6 @@ class HotelInvoiceTransactionRepository extends EntityRepository
         $entity->setPaymentMobile($invoice->getPaymentMobile());
         $entity->setTransactionId($invoice->getTransactionId());
         $entity->setComment($invoice->getComment());
-        if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getHotelConfig()->getVatPercentage() > 0) {
-            $vat = $this->getCulculationVat($invoice, $entity->getPayment());
-            $entity->setVat($vat);
-        }
         $this->_em->persist($entity);
         $this->_em->flush($entity);
 
@@ -327,16 +316,22 @@ class HotelInvoiceTransactionRepository extends EntityRepository
             if(!empty($transaction->getTransactionMethod())){
                 $transactionMethod = $transaction->getTransactionMethod()->getName();
             }
-            $data .= '<tr>';
-            $data .= '<td class="numeric" >' . $i . '</td>';
-            $data .= '<td class="numeric" >' . $date . '</td>';
-            $data .= '<td class="numeric" >' . $transactionMethod. '</td>';
-            $data .= '<td class="numeric" >' . $transaction->getDiscount() . '</td>';
-            $data .= '<td class="numeric" >' . $transaction->getVat() . '</td>';
-            $data .= '<td class="numeric" >' . $transaction->getPayment() . '</td>';
-            $data .= '<td class="numeric" >' . $transaction->getCreatedBy() . '</td>';
-
-            $i++;
+            $data .= "<tr>";
+            $data .= "<td class='numeric' >{$i}</td>";
+            $data .= "<td class='numeric' >{$date}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getCreatedBy()}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getProcess()}</td>";
+	        $data .= "<td class='numeric' >{$transactionMethod}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getPayment()}</td>";
+	        $data .= "<td> <span id='approved-{$transaction->getId()}'>";
+	        if($transaction->getProcess() != 'approved'){
+		        $data .= "<a id='{$transaction->getId()}' data-id='{$transaction->getId()}' data-url='/hotel-restaurant/invoice/{$transaction->getId()}/payment-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";
+		        $data .= "<a id='{$transaction->getId()}' data-id='{$transaction->getId()}' data-url='/hotel-restaurant/invoice/{$transaction->getId()}/payment-approved' href='javascript:' class='btn blue mini approve' ><i class='icon-ok'></i> Approve</a>";
+	        }else{
+		        $data .= "<a id='{$transaction->getId()}' data-id='{$transaction->getId()}' target='_blank'  href='/hotel-restaurant/invoice/{$transaction->getId()}/payment-print' class='btn purple mini' ><i class='icon-print'></i> Print</a>";
+	        }
+	        $data .= "</span></td>";
+	        $i++;
         }
         return $data;
     }

@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\HotelBundle\Controller;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
+use Appstore\Bundle\HotelBundle\Form\InvoiceTransactionType;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceParticular;
@@ -133,50 +135,6 @@ class InvoiceController extends Controller
         ));
     }
 
-	/**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
-     */
-
-    public function paymentAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $hotelConfig = $this->getUser()->getGlobalOption()->getHotelConfig();
-        $entity = $em->getRepository('HotelBundle:HotelInvoice')->findOneBy(array('hotelConfig' => $hotelConfig , 'id' => $id));
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
-        $editForm = $this->createEditForm($entity);
-        if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
-            return $this->redirect($this->generateUrl('hotel_invoice_show', array('id' => $entity->getId())));
-        }
-        $particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('room','package','post-production','pre-production','stock','service','virtual'));
-	    return $this->render("HotelBundle:Invoice:payment.html.twig", array(
-            'entity' => $entity,
-            'particulars' => $particulars,
-            'form' => $editForm->createView(),
-        ));
-    }
-
-	public function paymentReceiveAction(Request $request, HotelInvoice $entity)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$data = $request->request->all();
-		if ((!empty($entity)) ) {
-			$treatmentPlan = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$data);
-			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updateInvoiceTotalPrice($entity);
-			if($treatmentPlan->getPayment() > 0){
-				$em->getRepository('AccountingBundle:AccountCash')->dmsInsertSalesCash($treatmentPlan);
-				$em->getRepository('AccountingBundle:Transaction')->dmsTransaction($treatmentPlan);
-			}
-			$result = $this->returnResultData($entity);
-			return new Response(json_encode($result));
-		} else {
-			return new Response(json_encode(array('success'=>'failed')));
-		}
-		exit;
-
-	}
 
 
 	/**
@@ -212,17 +170,16 @@ class InvoiceController extends Controller
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            $done = array('Booked');
-            if (in_array($entity->getProcess(), $done)) {
+            $done = array('Check-in');
+            if (in_array($entity->getProcess(), $done) and $entity->getTotal() > 0) {
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->insertInvoiceProductItem($entity);
-                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
-            }
-            $inProgress = array('Booking', 'Created');
+	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertTransaction($entity);
+	        }
+            $inProgress = array('Booking');
             if (in_array($entity->getProcess(), $inProgress)) {
                 return $this->redirect($this->generateUrl('hotel_invoice_new'));
             } else {
-                return $this->redirect($this->generateUrl('hotel_invoice_show', array('id' => $entity->getId())));
+                return $this->redirect($this->generateUrl('hotel_invoice_payment', array('id' => $entity->getId())));
             }
         }
 
@@ -249,14 +206,14 @@ class InvoiceController extends Controller
 		$entity = $em->getRepository('HotelBundle:HotelInvoice')->find($invoice);
 		$subTotal = $entity->getSubTotal();
 		if($discountType == 'flat'){
-			$total = ($subTotal  - $discountCal);
+			$total = ($subTotal - $discountCal);
 			$discount = $discountCal;
 		}else{
-			$discount = ($subTotal*$discountCal)/100;
+			$discount = ($subTotal * $discountCal)/100;
 			$total = ($subTotal  - $discount);
 		}
 		$vat = 0;
-		if($total > $discount ){
+		if($subTotal > $discount ){
 			$entity->setDiscountType($discountType);
 			$entity->setDiscountCalculation($discountCal);
 			$entity->setDiscount(round($discount));
@@ -264,6 +221,7 @@ class InvoiceController extends Controller
 			$entity->setDue(round($total + $vat));
 			$em->flush();
 		}
+
 		$msg = 'Discount successfully';
 		$result = $this->returnResultData($entity,$msg);
 		return new Response(json_encode($result));
@@ -307,27 +265,26 @@ class InvoiceController extends Controller
         exit;
     }
 
-
-
-
     public function returnResultData(HotelInvoice $entity, $msg=''){
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getSalesItems($entity);
+        $invoiceTransactions = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceTransaction')->getHotelInvoiceTransactionItems($entity);
 
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
-        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $received = $entity->getReceived() > 0 ? $entity->getReceived() : 0;
         $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
         $due = $entity->getDue() > 0 ? $entity->getDue() : 0;
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
         $data = array(
            'subTotal' => $subTotal,
            'netTotal' => $netTotal,
-           'payment' => $payment ,
+           'payment' => $received ,
            'due' => $due,
            'vat' => $vat,
            'discount' => $discount,
            'invoiceParticulars' => $invoiceParticulars ,
+           'invoiceTransactions' => $invoiceTransactions ,
            'msg' => $msg ,
            'success' => 'success'
        );
@@ -335,6 +292,127 @@ class InvoiceController extends Controller
        return $data;
 
     }
+
+
+	private function createPaymentReceiveForm(HotelInvoice $entity)
+	{
+		$globalOption = $this->getUser()->getGlobalOption();
+		$form = $this->createForm(new InvoiceTransactionType($globalOption), $entity, array(
+			'action' => $this->generateUrl('hotel_invoice_payment_receive', array('id' => $entity->getId())),
+			'method' => 'PUT',
+			'attr' => array(
+				'class' => 'form-horizontal',
+				'id' => 'invoicePaymentForm',
+				'novalidate' => 'novalidate',
+				'enctype' => 'multipart/form-data',
+
+			)
+		));
+		return $form;
+	}
+
+
+	/**
+	 * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+	 */
+
+	public function paymentAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$hotelConfig = $this->getUser()->getGlobalOption()->getHotelConfig();
+		$entity = $em->getRepository('HotelBundle:HotelInvoice')->findOneBy(array('hotelConfig' => $hotelConfig , 'id' => $id));
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Invoice entity.');
+		}
+		$editForm = $this->createPaymentReceiveForm($entity);
+		if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
+			return $this->redirect($this->generateUrl('hotel_invoice_show', array('id' => $entity->getId())));
+		}
+		$particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('room','package','post-production','pre-production','stock','service','virtual'));
+		return $this->render("HotelBundle:Invoice:payment.html.twig", array(
+			'entity' => $entity,
+			'particulars' => $particulars,
+			'form' => $editForm->createView(),
+		));
+	}
+
+	public function paymentReceiveAction(Request $request, HotelInvoice $entity)
+	{
+		$em = $this->getDoctrine()->getManager();
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Hotel Ivoice entity.');
+		}
+		$editForm = $this->createPaymentReceiveForm($entity);
+		$editForm->handleRequest($request);
+
+		if ($editForm->isValid()) {
+			$data = $request->request->all();
+			$em->flush();
+			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertPaymentTransaction($entity,$data);
+		}
+		if ((!empty($entity)) ) {
+			$result = $this->returnResultData($entity);
+			return new Response(json_encode($result));
+		} else {
+			return new Response(json_encode(array('success'=>'failed')));
+		}
+		exit;
+
+	}
+
+
+
+	public function paymentApproveAction(HotelInvoiceTransaction $entity)
+	{
+		$em = $this->getDoctrine()->getManager();
+		if(!empty($entity) and $entity->getProcess() == 'In-progress' and $entity->getPayment() > 0) {
+			$entity->setProcess('Done');
+			$em->flush();
+			$invoice = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updatePaymentReceive($entity->getHotelInvoice());
+			$result = $this->returnResultData($invoice);
+			return new Response(json_encode($result));
+		}else{
+			return new Response('failed');
+		}
+		exit;
+	}
+
+	public function paymentDeleteAction(HotelInvoiceTransaction $entity)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($entity);
+		$em->flush();
+		exit;
+	}
+
+	public function paymentPrintAction(HotelInvoiceTransaction $entity)
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		/* @var $hotelConfig HotelConfig */
+
+		$hotelConfig = $this->getUser()->getGlobalOption()->getHotelConfig();
+		if ($hotelConfig->getId() == $entity->getHotelConfig()->getId()) {
+
+			if($hotelConfig->isCustomInvoicePrint() == 1){
+				$template = $hotelConfig->getGlobalOption()->getSlug();
+			}else{
+				$template = !empty($hotelConfig->getInvoiceType()) ? $hotelConfig->getInvoiceType():'print';
+			}
+			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($hotelConfig->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
+			$balance = empty($result) ? 0 :$result[0]['customerBalance'];
+			return  $this->render("HotelBundle:Print:{$template}.html.twig",
+				array(
+					'config' => $hotelConfig,
+					'entity' => $entity,
+					'balance' => $balance,
+					'print' => 'print',
+				)
+			);
+
+		}
+	}
 
 	public function particularSearchAction(HotelParticular $particular)
 	{
@@ -356,7 +434,6 @@ class InvoiceController extends Controller
 
     public function addParticularAction(Request $request, HotelInvoice $invoice)
     {
-
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
 	    $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->insertStockItem($invoice, $data);
@@ -395,7 +472,7 @@ class InvoiceController extends Controller
     public function invoiceReverseAction(HotelInvoice $invoice)
     {
         $hotelConfig = $this->getUser()->getGlobalOption()->getHotelConfig();
-        $entity = $this->getDoctrine()->getRepository('HotelBundle:HmsReverse')->findOneBy(array('hotelConfig' => $hotelConfig, 'hmsInvoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository('HotelBundle:HotelReverse')->findOneBy(array('hotelConfig' => $hotelConfig, 'hmsInvoice' => $invoice));
         return $this->render('HotelBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
@@ -494,38 +571,6 @@ class InvoiceController extends Controller
 
     }
 
-    public function autoUnitSearchAction()
-    {
-        $q = $_REQUEST['term'];
-        $config = $this->getUser()->getGlobalOption()->getHotelConfig();
-        $entities = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->searchAutoComplete($config,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('value' => $entity['id']);
-        endforeach;
-        return new JsonResponse($items);
-
-    }
-
-    public function addAccessoriesAction(Request $request, HotelInvoice $invoice)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $particular = $request->request->get('particular');
-        $quantity = $request->request->get('quantity');
-        $price = $request->request->get('salesPrice');
-        if(!empty($particular)){
-            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'price' => $price);
-            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->insertStockItem($invoice,$invoiceItems);
-            $invoice = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updateInvoiceTotalPrice($invoice);
-            $msg = 'Particular added successfully';
-            $result = $this->returnResultData($invoice,$msg);
-            return new Response(json_encode($result));
-        }
-        exit;
-
-    }
-
     public function bannerSignAction(Request $request, HotelInvoice $invoice)
     {
 
@@ -602,6 +647,7 @@ class InvoiceController extends Controller
         }
 
     }
+
 	public function invoiceChalanAction(HotelInvoice $entity)
 	{
 

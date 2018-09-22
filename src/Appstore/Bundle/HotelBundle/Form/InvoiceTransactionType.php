@@ -20,16 +20,12 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class InvoiceTransactionType extends AbstractType
 {
 
-    /** @var  LocationRepository */
-    private $location;
-
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption ,  LocationRepository $location)
+    function __construct(GlobalOption $globalOption)
     {
-        $this->location         = $location;
         $this->globalOption     = $globalOption;
     }
 
@@ -52,8 +48,6 @@ class InvoiceTransactionType extends AbstractType
                     'percentage' => 'Percentage',
                 ),
             ))
-           /* ->add('discount','hidden')*/
-            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Payment amount')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
@@ -80,19 +74,6 @@ class InvoiceTransactionType extends AbstractType
                         ->orderBy("e.id","ASC");
                 }
             ))
-            ->add('salesBy', 'entity', array(
-                'required'    => true,
-                'class' => 'Core\UserBundle\Entity\User',
-                'property' => 'userFullName',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('u')
-                        ->where("u.isDelete != 1")
-                        ->andWhere("u.globalOption =".$this->globalOption->getId())
-                        ->orderBy("u.username", "ASC");
-                }
-            ))
-
             ->add('accountBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
@@ -107,7 +88,21 @@ class InvoiceTransactionType extends AbstractType
                 }
             ))
 
-            ->add('accountMobileBank', 'entity', array(
+	        ->add('process', 'choice', array(
+		        'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
+		        'expanded'      =>false,
+		        'multiple'      =>false,
+		        'empty_value' => '---Choose process---',
+		        'choices' => array(
+			        'Created' => 'Created',
+			        'Booking' => 'Booking',
+			        'Check-in' => 'Check-in',
+			        'Check-out' => 'Check-out',
+			        'Canceled' => 'Canceled',
+		        ),
+	        ))
+
+	        ->add('accountMobileBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',

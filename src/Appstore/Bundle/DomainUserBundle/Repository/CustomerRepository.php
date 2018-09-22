@@ -96,7 +96,7 @@ class CustomerRepository extends EntityRepository
 	public function newExistingCustomerForHotel($globalOption,$mobile,$data)
 	{
 		$em = $this->_em;
-		$namePrefix = $data['namePrefix'];
+		$namePrefix = isset($data['namePrefix']) ? $data['namePrefix']:array();
 		$email = $data['email'];
 		$firstName = $data['firstName'];
 		$lastName = $data['lastName'];

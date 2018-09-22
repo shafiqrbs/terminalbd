@@ -240,15 +240,22 @@ $(document).on("click", ".approve", function() {
 
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
-    $('#treatment-approved-'+id).hide();
+
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                if(data == 'success'){
-                    location.reload();
-                }
+                $('#approved-'+id).hide();
+                obj = JSON.parse(response);
+                $('#subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.payment').html(obj['payment']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#sales_discount').val(obj['discount']);
+                $('.discount').html(obj['discount']);
+                $('#due').val(obj['due']);
+                $('.due').html(obj['due']);
             });
         }
     });
@@ -274,7 +281,8 @@ $(document).on('keyup', '#quantity , #salesPrice ', function() {
 });
 
 
-$(document).on('keyup', '#businessInvoice_discountCalculation', function() {
+
+$(document).on('keyup', '#businessInvoice_discountCalculation', function(e) {
 
     var discountType = $('#businessInvoice_discountType').val();
     var discount = parseInt($('#businessInvoice_discountCalculation').val() !="" ? $('#businessInvoice_discountCalculation').val() : 0);
@@ -285,7 +293,7 @@ $(document).on('keyup', '#businessInvoice_discountCalculation', function() {
         return false;
     }
     $.ajax({
-        url: Routing.generate('business_invoice_discount_update'),
+        url: Routing.generate('hotel_invoice_discount_update'),
         type: 'POST',
         data:'discount=' + discount+'&discountType='+discountType+'&invoice='+invoice,
         success: function(response) {
@@ -380,14 +388,38 @@ var invoiceForm = $("#invoiceForm").validate({
     }
 });
 
+var invoicePaymentForm = $("#invoicePaymentForm").validate({
 
-/*
-$(document).on("click", "#receiveBtn", function() {
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $('form#invoiceForm').submit();
-        }
-    });
-});*/
+    rules: {
+        "received": {required: true}
+    },
+
+    messages: {
+        "received":"Enter receive amount"
+    },
+    tooltip_options: {
+        "received": {placement:'top',html:true},
+    },
+
+    submitHandler: function(invoicePaymentForm) {
+
+        $.ajax({
+            url         : $('form#invoicePaymentForm').attr( 'action' ),
+            type        : $('form#invoicePaymentForm').attr( 'method' ),
+            data        : new FormData($('form#invoicePaymentForm')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#invoiceTransaction').html(obj['invoiceTransactions']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#netTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#discount').html(obj['discount']);
+                $('businessInvoice[received]').val('');
+            }
+        });
+    }
+});
+
+

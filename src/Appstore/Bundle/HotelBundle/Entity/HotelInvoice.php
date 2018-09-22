@@ -207,12 +207,6 @@ class HotelInvoice
      */
     private $total;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="payment", type="decimal", nullable=true)
-     */
-    private $payment;
 
     /**
      * @var string
@@ -452,25 +446,6 @@ class HotelInvoice
     {
         $this->invoice = $invoice;
     }
-
-
-    /**
-     * @return string
-     */
-    public function getPayment()
-    {
-        return $this->payment;
-    }
-
-    /**
-     * @param string $payment
-     */
-    public function setPayment($payment)
-    {
-        $this->payment = $payment;
-    }
-
-
 
     /**
      * @return Customer

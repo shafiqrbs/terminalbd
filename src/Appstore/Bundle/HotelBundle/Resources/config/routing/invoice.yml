@@ -14,17 +14,6 @@ hotel_invoice_edit:
     path:     /{id}/edit
     defaults: { _controller: "HotelBundle:Invoice:edit" }
 
-hotel_invoice_payment:
-    path:     /{id}/payment
-    defaults: { _controller: "HotelBundle:Invoice:payment" }
-
-hotel_invoice_payment_receive:
-    path:     /{id}/payment-receive
-    defaults: { _controller: "HotelBundle:Invoice:paymentReceive" }
-    methods:  POST
-    options:
-            expose: true
-
 hotel_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "HotelBundle:Invoice:particularSearch" }
@@ -36,14 +25,6 @@ hotel_invoice_particular_search:
     defaults: { _controller: "HotelBundle:Invoice:autoParticularSearch" }
     options:
             expose: true
-
-
-hotel_item_unit_search:
-    path:     /item-unit-search
-    defaults: { _controller: "HotelBundle:Invoice:autoUnitSearch" }
-    options:
-            expose: true
-
 
 hotel_invoice_particular_add:
     path:     /{invoice}/particular-add
@@ -59,23 +40,9 @@ hotel_invoice_discount_update:
     options:
             expose: true
 
-hotel_invoice_accessories_add:
-    path:     /{invoice}/stock-accessories
-    defaults: { _controller: "HotelBundle:Invoice:addAccessories" }
-    methods:  POST
-    options:
-            expose: true
-
 hotel_invoice_banner_sign:
     path:     /{invoice}/stock-banner-sign
     defaults: { _controller: "HotelBundle:Invoice:bannerSign" }
-    methods:  POST
-    options:
-            expose: true
-
-hotel_invoice_approved:
-    path:     /{id}/invoice-approved
-    defaults: { _controller: "HotelBundle:Invoice:approve" }
     methods:  POST
     options:
             expose: true
@@ -119,3 +86,31 @@ hotel_invoice_item_update:
     methods:  POST
     options:
             expose: true
+
+hotel_invoice_payment:
+    path:     /{id}/payment
+    defaults: { _controller: "HotelBundle:Invoice:payment" }
+
+
+hotel_invoice_payment_receive:
+    path:     /{id}/payment-receive
+    defaults: { _controller: "HotelBundle:Invoice:paymentReceive" }
+    methods:  [POST, PUT]
+    options:
+            expose: true
+
+hotel_invoice_payment_delete:
+    path:     /{id}/payment-delete
+    defaults: { _controller: "HotelBundle:Invoice:paymentDelete" }
+
+hotel_invoice_payment_print:
+    path:     /{id}/payment-print
+    defaults: { _controller: "HotelBundle:Invoice:paymentPrint" }
+
+
+hotel_invoice_payment_approve:
+    path:     /{id}/payment-approved
+    defaults: { _controller: "HotelBundle:Invoice:paymentApprove" }
+    options:
+            expose: true
+
