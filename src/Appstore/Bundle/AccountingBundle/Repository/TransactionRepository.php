@@ -1684,6 +1684,7 @@ class TransactionRepository extends EntityRepository
 		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(48);
 		$transaction->setGlobalOption($globalOption);
 		$transaction->setAccountHead($accountHead);
+		$transaction->setProcessHead('Damage');
 		$transaction->setProcess('Long Term Liabilities');
 		/* Cash - Cash various */
 		$transaction->setAmount($damage->getSubTotal());
@@ -1698,6 +1699,7 @@ class TransactionRepository extends EntityRepository
 		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(47);
 		$transaction->setGlobalOption($globalOption);
 		$transaction->setAccountHead($accountHead);
+		$transaction->setProcessHead('Damage');
 		$transaction->setProcess('Inventory Assets');
 		/* Cash - Long Term Liabilities	 */
 		$transaction->setAmount('-'.$damage->getSubTotal());

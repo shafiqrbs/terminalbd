@@ -7,7 +7,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class BusinessReportController extends Controller
 {
-    public function balanceAction()
+
+
+	public function balanceSheetAction()
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportBusinessMonthlyIncome($this->getUser(),$data);
+		$accountHeads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent'=>1),array('sorting'=>'ASC'));
+		$accountHeads = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->findBy(array('isParent'=>1),array('sorting'=>'ASC'));
+		return $this->render('AccountingBundle:Report/Business:balanceSheet.html.twig', array(
+			'overview' => $overview,
+			'accountHeads' => $accountHeads,
+			'searchForm' => $data,
+		));
+	}
+
+
+	public function balanceAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -76,6 +94,8 @@ class BusinessReportController extends Controller
             'searchForm' => $data,
         ));
     }
+
+
 
 
 }

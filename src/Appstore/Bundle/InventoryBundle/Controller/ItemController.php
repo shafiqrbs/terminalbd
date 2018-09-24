@@ -442,17 +442,24 @@ class ItemController extends Controller
 
     public function updateWebPriceAction(Request $request)
     {
-        $data = $request->request->all();
+	    $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+    	$data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('InventoryBundle:Item')->find($data['pk']);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
 
-	    if($data['name'] == 'Barcode'){
-		    $existBarcode = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('barcode' => $data['value']));
-		    if(empty($existBarcode)){
-			    $entity->setBarcode($data['value']);
+	    if($data['name'] == 'Barcode') {
+		    $existBarcode = $this->getDoctrine()->getRepository( 'InventoryBundle:Item' )->findBy( array('inventoryConfig'=>$config, 'barcode' => $data['value'] ) );
+		    if ( empty( $existBarcode ) ) {
+			    $entity->setBarcode( $data['value'] );
+			    $em->flush();
+		    }
+	    }elseif($data['name'] == 'Sku'){
+		    $existSku = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$config,'sku' => $data['value']));
+		    if(empty($existSku)){
+			    $entity->setSku($data['value']);
 			    $em->flush();
 		    }
 	    }else{

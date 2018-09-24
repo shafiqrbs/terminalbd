@@ -151,6 +151,8 @@ class ItemRepository extends EntityRepository
     public function findWithSearch($inventory,$data)
     {
 
+        $sort = isset($data['sort'])? $data['sort'] :'item.name';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
         $item = isset($data['item'])? $data['item'] :'';
         $color = isset($data['color'])? $data['color'] :'';
         $size = isset($data['size'])? $data['size'] :'';
@@ -210,8 +212,7 @@ class ItemRepository extends EntityRepository
             $qb->andWhere("u.name = :unit");
             $qb->setParameter('unit', $unit);
         }
-
-        $qb->orderBy('m.name','ASC');
+        $qb->orderBy("{$sort}",$direction);
         $qb->getQuery();
         return  $qb;
 

@@ -33,25 +33,49 @@
                     </div>
                     <div class="portlet-body">
                         <div class="portlet-body form">
+                            <div class="row-fluid">
+                                <div class="span6">
+                                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                                        <tr>
+                                            <th class="numeric" >Current Stock</th>
+                                            <td class="numeric" >{{ priceOverview.quantity }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="numeric" >Purchase Price</th>
+                                            <td class="numeric" >{{ priceOverview.purchasePrice|number_format}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="numeric" >Sales Price</th>
+                                            <td class="numeric" >{{ priceOverview.salesPrice|number_format }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="numeric" >Approximately Profit</th>
+                                            <th class="numeric" >{{ (priceOverview.salesPrice - priceOverview.purchasePrice)|number_format }}</th>
+                                        </tr>
+                                    </table>
 
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
-                                <tr>
-                                    <th class="numeric" >Current Stock</th>
-                                    <td class="numeric" >{{ priceOverview.quantity }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Purchase Price</th>
-                                    <td class="numeric" >{{ priceOverview.purchasePrice}}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Sales Price</th>
-                                    <td class="numeric" >{{ priceOverview.salesPrice }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Approximately Profit</th>
-                                    <th class="numeric" >{{ (priceOverview.salesPrice - priceOverview.purchasePrice) }}</th>
-                                </tr>
-                            </table>
+                                </div>
+                                <div class="span6">
+                                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                                        <tr>
+                                            <th class="numeric" colspan="2" >Total Purchase & Sales</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="numeric" >Total Purchase</th>
+                                            <td class="numeric" >{{ purchaseOverview.total|number_format}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="numeric" >Total Sales</th>
+                                            <td class="numeric" >{{ salesPurchasePrice|number_format }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="numeric" >Profit</th>
+                                            <th class="numeric" >{{ (purchaseOverview.total - salesPurchasePrice)|number_format }}</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
 
                             <div class="form-actions portlet box green">
                                 <div class="portlet-title">

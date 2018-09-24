@@ -167,6 +167,24 @@ class SalesRepository extends EntityRepository
 
     }
 
+
+	public function searchAutoComplete($q, InventoryConfig $inventory)
+	{
+
+		$query = $this->createQueryBuilder('e');
+		$query->join('e.inventoryConfig', 'ic');
+		$query->select('e.invoice as id');
+		$query->addSelect('e.invoice as text');
+		$query->where($query->expr()->like("e.invoice", "'$q%'"  ));
+		$query->andWhere("ic.id = :inventory");
+		$query->setParameter('inventory', $inventory->getId());
+		$query->groupBy('e.id');
+		$query->orderBy('e.companyName', 'ASC');
+		$query->setMaxResults( '30' );
+		return $query->getQuery()->getResult();
+
+	}
+
     public function salesReport( User $user , $data)
     {
 

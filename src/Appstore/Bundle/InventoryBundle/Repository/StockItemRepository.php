@@ -176,6 +176,8 @@ class StockItemRepository extends EntityRepository
         $qb->addSelect('SUM(e.quantity * pi.salesPrice) AS salesPrice');
         $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
+    //    $qb->andWhere("e.process = :process");
+     //   $qb->setParameter('process', 'process');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 

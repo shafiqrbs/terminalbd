@@ -674,7 +674,7 @@ class SalesController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->searchAutoComplete($item,$inventory);
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->searchAutoComplete($item,$inventory);
         }
         return new JsonResponse($item);
         exit;

@@ -2,6 +2,10 @@ account_sales_business:
     path:     /sales
     defaults: { _controller: "AccountingBundle:AccountBusiness:sales" }
 
+account_business_balancesheet:
+    path:     /balance-sheet
+    defaults: { _controller: "AccountingBundle:BusinessReport:balanceSheet" }
+
 account_business_income:
     path:     /income
     defaults: { _controller: "AccountingBundle:BusinessReport:income" }

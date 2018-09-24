@@ -89,6 +89,30 @@ class ReportController extends Controller
         ));
     }
 
+    public function cashReceivePaymentAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:A')->reportMonthlyIncome( $this->getUser(),$data);
+        return $this->render('AccountingBundle:Report:monthlyIncome.html.twig', array(
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
+    }
+
+	public function cashReceivePaymentDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyIncome( $this->getUser(),$data);
+        return $this->render('AccountingBundle:Report:monthlyIncome.html.twig', array(
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
+    }
+
+
+
 
     public function expenditureSummaryAction()
     {

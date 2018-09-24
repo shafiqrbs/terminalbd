@@ -26,7 +26,7 @@ class DefaultController extends Controller
         $purchaseCashOverview = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseOverview($user,$data);
 	    $transactionMethods = array(1,2,3,4);
 	    $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
-	    $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->reportForExpenditure($user->getGlobalOption(),$data);
+	    $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
 
 	    $startMonthDate = $datetime->format('Y-m-01 00:00:00');
 	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
@@ -41,7 +41,6 @@ class DefaultController extends Controller
 	    foreach($monthlyPurchase as $row) {
 		    $monthlyPurchaseArr[$row['month']] = $row['total'];
 	    }
-
 	    return $this->render('BusinessBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,

@@ -81,7 +81,7 @@ class AccountHead
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=255, nullable= true)
+     * @ORM\Column(name="code", type="string", length=20, nullable= true)
      */
     private $code;
 
@@ -102,9 +102,17 @@ class AccountHead
     /**
      * @var string
      *
-     * @ORM\Column(name="toIncrease", type="string", length=255)
+     * @ORM\Column(name="toIncrease", type="string", length=20)
      */
     private $toIncrease;
+
+
+	/**
+	 * @var integer
+	 *
+	 * @ORM\Column(name="sorting", type="integer", length=10, nullable=true)
+	 */
+	private $sorting;
 
     /**
      * @var boolean
@@ -347,6 +355,20 @@ class AccountHead
     {
         return $this->expenseCategory;
     }
+
+	/**
+	 * @return int
+	 */
+	public function getSorting(){
+		return $this->sorting;
+	}
+
+	/**
+	 * @param int $sorting
+	 */
+	public function setSorting( int $sorting ) {
+		$this->sorting = $sorting;
+	}
 
 }
 

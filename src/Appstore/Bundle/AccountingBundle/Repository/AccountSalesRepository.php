@@ -110,6 +110,7 @@ class AccountSalesRepository extends EntityRepository
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
             $customer =    isset($data['customer'])? $data['customer'] :'';
             $invoice =    isset($data['invoice'])? $data['invoice'] :'';
+            $accountRefNo =    isset($data['accountRefNo'])? $data['accountRefNo'] :'';
             $medicineInvoice =    isset($data['medicineInvoice'])? $data['medicineInvoice'] :'';
             $businessInvoice =    isset($data['businessInvoice'])? $data['businessInvoice'] :'';
             $transaction =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
@@ -127,10 +128,16 @@ class AccountSalesRepository extends EntityRepository
                 $qb->setParameter('endDate',$end);
             }
 
+            if (!empty($accountRefNo)) {
+                $qb->andWhere("e.accountRefNo = :accountRefNo");
+                $qb->setParameter('accountRefNo', $accountRefNo);
+            }
+
             if (!empty($transaction)) {
                 $qb->andWhere("e.transactionMethod = :transaction");
                 $qb->setParameter('transaction', $transaction);
             }
+
             if (!empty($mobile)) {
                 $qb->join('e.customer','c');
                 $qb->andWhere("c.mobile = :mobile");
@@ -143,8 +150,7 @@ class AccountSalesRepository extends EntityRepository
             }
             if (!empty($invoice)) {
                 $qb->join('e.sales','s');
-                $qb->andWhere("s.invoice = :invoice");
-                $qb->setParameter('invoice', $invoice);
+	            $qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
             }
             if (!empty($medicineInvoice)) {
                 $qb->join('e.medicineSales','ms');

@@ -93,7 +93,7 @@ class PurchaseRepository extends EntityRepository
             $qb->setParameter('companyName', $vendor);
         }
 
-        $data = $qb->getQuery()->getSingleResult();
+        $data = $qb->getQuery()->getOneOrNullResult();
         return $data;
 
     }
