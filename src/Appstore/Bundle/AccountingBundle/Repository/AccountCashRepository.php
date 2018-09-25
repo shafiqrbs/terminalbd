@@ -250,6 +250,29 @@ class AccountCashRepository extends EntityRepository
 
     }
 
+	public function cashReceivePayment(User $user,$data = '')
+	{
+
+		$globalOption = $user->getGlobalOption();
+		$branch = $user->getProfile()->getBranches();
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.transactionMethod','t');
+		$qb->where("e.globalOption = :globalOption");
+		$qb->setParameter('globalOption', $globalOption);
+		if (!empty($branch)){
+			$qb->andWhere("e.branches = :branch");
+			$qb->setParameter('branch', $branch);
+		}
+		//$qb->andWhere("t.id IN(:transactionMethod)");
+		//$qb->setParameter('transactionMethod',array_values($transactionMethods));
+		$this->handleSearchBetween($qb,$data);
+		$qb->orderBy('e.updated','DESC');
+		$result = $qb->getQuery();
+		return $result;
+
+	}
+
     public function findWithSearch(User $user,$transactionMethods,$data = '')
     {
 

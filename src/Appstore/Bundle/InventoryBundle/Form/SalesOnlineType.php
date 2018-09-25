@@ -41,7 +41,6 @@ class SalesOnlineType extends AbstractType
         $builder
 
             ->add('payment','text', array('attr'=>array('class'=>'receive-empty m-wrap span12 amount inputs','placeholder'=>'Receive amount','data-original-title'=>'Enter receive amount','autocomplete'=>'off')))
-            ->add('discount','hidden')
             ->add('discountCalculation','text', array('attr'=>array('class'=>'m-wrap span12 amount inputs','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
             ->add('deliveryCharge','text', array('attr'=>array('class'=>'m-wrap amount span12 inputs','placeholder'=>'Delivery charge','data-original-title'=>'Enter delivery charge','autocomplete'=>'off')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card/cheque no','data-original-title'=>'Add payment card/cheque no','autocomplete'=>'off')))

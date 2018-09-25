@@ -131,7 +131,7 @@ class SalesOnlineController extends Controller
         if( $detect->isMobile() || $detect->isTablet() ) {
             $theme = 'm-sales';
         }else{
-            $theme = 'sales-backup';
+            $theme = 'sales';
         }
         return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
             'entity' => $entity,
@@ -224,8 +224,11 @@ class SalesOnlineController extends Controller
         $em = $this->getDoctrine()->getManager();
 	    $discountType = $request->request->get('discountType');
 	    $discountCal = (float)$request->request->get('discount');
-        $sales = $request->request->get('sales');
-	    $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
+        $salesId = $request->request->get('sales');
+
+        /* @var $sales Sales */
+
+        $sales = $em->getRepository('InventoryBundle:Sales')->find($salesId);
 	    $subTotal = $sales->getSubTotal();
 	    if($discountType == 'Flat'){
 		    $total = ($subTotal  - $discountCal);
@@ -372,13 +375,6 @@ class SalesOnlineController extends Controller
                 $entity->setCustomer($customer);
 
             }
-          /*  $entity->setTotal($entity->getSubTotal() - $entity->getDiscount());
-            if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$entity->getTotal());
-                $entity->setVat($vat);
-            }
-            $entity->setTotal($entity->getTotal() + $entity->getVat());
-          */
             $entity->setDue($entity->getTotal() - $entity->getPayment());
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);

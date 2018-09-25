@@ -389,7 +389,6 @@ class SalesController extends Controller
             }
             $due = $data['dueAmount'] == '' ? 0 :$data['dueAmount'];
             $entity->setDue($due);
-            $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
             $entity->setPayment($entity->getTotal() - $entity->getDue());
 

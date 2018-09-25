@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+    {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
         <!-- BEGIN PAGE HEADER-->
@@ -32,15 +32,9 @@
                         <div class="caption"><i class="icon-reorder"></i>Account Cash</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('account_transaction_cash') }}"><i class="icon-plus-sign"></i>&nbsp;Account of Cash</a></li>
-                                    <li><a href="{{ path('account_transaction_bank') }}"><i class="icon-th-list"></i>&nbsp;Account of Bank</a></li>
-                                    <li><a href="{{ path('account_transaction_mobilebank') }}"><i class="icon-th-list"></i>&nbsp;Account of Mobile</a></li>
-                                </ul>
+                                <a class="btn mini blue" href="{{ path('account_transaction_cash') }}"><i class="icon-plus-sign"></i>&nbsp;Account of Monthly</a>
+                                <a class="btn mini blue" href="{{ path('account_transaction_cash') }}"><i class="icon-plus-sign"></i>&nbsp;Account of Daily</a>
+                                <a class="btn mini blue"  href="{{ path('account_transaction_cash') }}"><i class="icon-plus-sign"></i>&nbsp;Account of Details</a>
                             </div>
                         </div>
                     </div>
@@ -50,17 +44,7 @@
                             {% include('flash-message.html.twig') %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span3">
-                                        <select name="processHead" id="processHead" class="leftMargin select2 span12">
-                                            <option value="" >--Select Process--</option>
-                                            {% for process in processHeads %}
-                                                <option {% if searchForm.processHead is defined and searchForm.processHead == process.slug %} selected="selected" {% endif %} value="{{ process.slug }}" >{{ process.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="span3">
-                                        <input type="text" id="accountRefNo" name="accountRefNo"  class="m-wrap span12 search-input" value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="Enter reference No">
-                                    </div>
+                                    <div class="span6"></div>
                                     <div class="span3">
                                         <input type="text" id="startDate" name="startDate"  class="m-wrap span12 dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
@@ -134,11 +118,11 @@
             </div>
         </div>
     </div>
-    <style>
-        .leftMargin {
-            margin-left: 0!important;
-        }
-    </style>
+ <style>
+     .leftMargin {
+         margin-left: 0!important;
+     }
+ </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
