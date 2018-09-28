@@ -7,6 +7,7 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionLocation;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,6 +39,18 @@ class Location
      * @ORM\OneToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Education", mappedBy="location")
      */
     protected $educations;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", mappedBy="district")
+     */
+    protected $election;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", mappedBy="district")
+     */
+    protected $electionLocations;
 
 
     /**
@@ -357,5 +370,12 @@ class Location
     {
         return $this->dpsParticulars;
     }
+
+	/**
+	 * @return ElectionLocation
+	 */
+	public function getElectionLocations() {
+		return $this->electionLocations;
+	}
 
 }

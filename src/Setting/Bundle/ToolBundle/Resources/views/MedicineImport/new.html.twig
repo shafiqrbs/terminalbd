@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="title">
-                    Medicine
+                    Member Import
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,9 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('medicine_import') }}">Purchase Import</a>
+                        <a href="{{ path('medicine_import') }}">Member Import</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Medicine new/edit</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -34,10 +33,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Medicine Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Member Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a href="{{ path('medicine_import') }}"><i class="icon-th-list"></i>&nbsp;Medicine</a>
+                                <a href="{{ path('medicine_import') }}"><i class="icon-th-list"></i>&nbsp;Member</a>
                             </div>
                         </div>
 
@@ -50,9 +49,7 @@
                             <!-- BEGIN FORM-->
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
-
                             <div class="row-fluid">
-
                                 <div class="span6">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Name</label>

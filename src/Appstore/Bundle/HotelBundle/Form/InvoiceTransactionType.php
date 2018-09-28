@@ -87,21 +87,6 @@ class InvoiceTransactionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
-
-	        ->add('process', 'choice', array(
-		        'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
-		        'expanded'      =>false,
-		        'multiple'      =>false,
-		        'empty_value' => '---Choose process---',
-		        'choices' => array(
-			        'Created' => 'Created',
-			        'Booking' => 'Booking',
-			        'Check-in' => 'Check-in',
-			        'Check-out' => 'Check-out',
-			        'Canceled' => 'Canceled',
-		        ),
-	        ))
-
 	        ->add('accountMobileBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',

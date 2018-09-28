@@ -1,0 +1,35 @@
+election_particular:
+    resource: "@ElectionBundle/Resources/config/routing/particular.yml"
+    prefix:   /setting-option
+
+election_committee:
+    resource: "@ElectionBundle/Resources/config/routing/committee.yml"
+    prefix:   /committee
+
+election_organizationcommittee:
+    resource: "@ElectionBundle/Resources/config/routing/organizationcommittee.yml"
+    prefix:   /organization-committee
+
+election_location:
+    resource: "@ElectionBundle/Resources/config/routing/location.yml"
+    prefix:   /setting-location
+
+election_member_import:
+    resource: "@ElectionBundle/Resources/config/routing/import.yml"
+    prefix:   /member-import
+
+election_member:
+    resource: "@ElectionBundle/Resources/config/routing/member.yml"
+    prefix:   /member
+
+election_voter:
+    resource: "@ElectionBundle/Resources/config/routing/voter.yml"
+    prefix:   /voter
+
+election_config:
+    resource: "@ElectionBundle/Resources/config/routing/config.yml"
+    prefix:   /config
+
+election_homepage:
+    path:     /
+    defaults: { _controller: ElectionBundle:Default:index }

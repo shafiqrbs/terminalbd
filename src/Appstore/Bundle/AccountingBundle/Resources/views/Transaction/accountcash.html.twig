@@ -50,18 +50,10 @@
                             {% include('flash-message.html.twig') %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span3">
-                                        <select name="processHead" id="processHead" class="leftMargin select2 span12">
-                                            <option value="" >--Select Process--</option>
-                                            {% for process in processHeads %}
-                                                <option {% if searchForm.processHead is defined and searchForm.processHead == process.slug %} selected="selected" {% endif %} value="{{ process.slug }}" >{{ process.name }}</option>
-                                            {% endfor %}
-                                        </select>
+                                    <div class="span6">
+
                                     </div>
-                                    <div class="span3">
-                                        <input type="text" id="accountRefNo" name="accountRefNo"  class="m-wrap span12 search-input" value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="Enter reference No">
-                                    </div>
-                                    <div class="span3">
+                                   <div class="span3">
                                         <input type="text" id="startDate" name="startDate"  class="m-wrap span12 dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">
@@ -121,15 +113,21 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{% if entity.accountHead is not empty %}{{ entity.accountHead.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.processHead }}</td>
-                                        <td class="numeric" >{{ entity.accountRefNo }}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not defined and entity.transactionMethod.slug == 'cash'  %}{{ entity.debit|number_format }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not empty and entity.transactionMethod.slug == 'bank'  %}{{ entity.debit|number_format }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not empty and entity.transactionMethod.slug == 'mobile'  %}{{ entity.debit|number_format }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not empty and entity.transactionMethod.slug == 'cash'  %}{{ entity.credit|number_format }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not empty and entity.transactionMethod.slug == 'bank'  %}{{ entity.credit|number_format }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not empty and entity.transactionMethod.slug == 'mobile'  %}{{ entity.credit|number_format }}{% endif %}</td>
+                                        <td class="numeric" >
+                                            {% if entity.processHead == 'Expenditure' %}
+                                                {{ entity.expenditure.id }}
+                                            {% elseif entity.processHead == 'Sales' %}
+                                               {# {{ entity.expenditure.category.accountHead.name }}#}
+                                            {% endif %}
+
+                                            {{ entity.accountRefNo }}</td>
+                                        <td class="numeric" >{% if entity.debit > 0 and entity.transactionMethod.slug == 'cash'  %}{{ entity.debit|number_format }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.debit > 0 and entity.transactionMethod.slug == 'bank'  %}{{ entity.debit|number_format }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.debit > 0 and entity.transactionMethod.slug == 'mobile'  %}{{ entity.debit|number_format }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.credit > 0 and entity.transactionMethod.slug == 'cash'  %}{{ entity.credit|number_format }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.credit > 0 and entity.transactionMethod.slug == 'bank'  %}{{ entity.credit|number_format }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.credit > 0 and entity.transactionMethod.slug == 'mobile'  %}{{ entity.credit|number_format }}{% endif %}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

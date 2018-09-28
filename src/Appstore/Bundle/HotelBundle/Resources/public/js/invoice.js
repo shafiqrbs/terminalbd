@@ -31,16 +31,6 @@ $("[id^=startPicker]").each(function() {
     bindDatePicker(this);
 });
 
-$(document).on("click", ".sms-confirm", function() {
-    var url = $(this).attr('data-url');
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url);
-        }
-    });
-});
 
 $( "#mobile" ).autocomplete({
 
@@ -121,7 +111,7 @@ var form = $("#stockInvoice").validate({
         "adult": {required: true},
         "child": {required: false},
         "guestName": {required: true},
-        "guestMobile": {required: true},
+        "guestMobile": {required: true}
     },
 
     messages: {
@@ -131,7 +121,7 @@ var form = $("#stockInvoice").validate({
         "endDate":"Enter end date",
         "adult": "Select no of adult",
         "guestName": "Enter specific room gust name",
-        "guestMobile": "Enter specific room gust mobile no",
+        "guestMobile": "Enter specific room gust mobile no"
     },
     tooltip_options: {
         "particular": {placement:'top',html:true},
@@ -158,6 +148,7 @@ var form = $("#stockInvoice").validate({
                 $('.due').html(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
+                $('#paymentTotal').val(obj['due']);
                 $("#particular").select2().select2("val","");
                 $('#stockInvoice')[0].reset();
             }
@@ -182,29 +173,7 @@ $(document).on('change', '.quantity , .salesPrice', function() {
             $('.subTotal').html(obj['subTotal']);
             $('.netTotal').html(obj['netTotal']);
             $('.due').html(obj['due']);
-            $('.payment').html(obj['payment']);
-            $('.discount').html(obj['discount']);
-        },
-
-    })
-});
-
-$(document).on('click', '.itemUpdate', function() {
-
-    var id = $(this).attr('data-id');
-    var quantity = parseFloat($('#quantity-'+id).val());
-    var price = parseFloat($('#salesPrice-'+id).val());
-    var subTotal  = (quantity * price);
-    $("#subTotal-"+id).html(subTotal);
-    $.ajax({
-        url: Routing.generate('medicine_sales_temporary_item_update'),
-        type: 'POST',
-        data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
-        success: function(response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('.due').html(obj['due']);
+            $('#paymentTotal').val(obj['due']);
             $('.payment').html(obj['payment']);
             $('.discount').html(obj['discount']);
         },
@@ -227,6 +196,7 @@ $(document).on("click", ".particularDelete", function() {
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
                 $('.due').html(obj['due']);
+                $('#paymentTotal').val(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
 
@@ -244,13 +214,13 @@ $(document).on("click", ".approve", function() {
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.get(url, function( data ) {
+            $.get(url, function( response ) {
                 $('#approved-'+id).hide();
                 obj = JSON.parse(response);
                 $('#subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
                 $('.payment').html(obj['payment']);
-                $('#paymentTotal').val(obj['netTotal']);
+                $('#paymentTotal').val(obj['due']);
                 $('#sales_discount').val(obj['discount']);
                 $('.discount').html(obj['discount']);
                 $('#due').val(obj['due']);
@@ -299,7 +269,7 @@ $(document).on('keyup', '#businessInvoice_discountCalculation', function(e) {
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);
             $('.netTotal').html(obj['netTotal']);
-            $('#paymentTotal').val(obj['netTotal']);
+            $('#paymentTotal').val(obj['due']);
             $('#sales_discount').val(obj['discount']);
             $('.discount').html(obj['discount']);
             $('#due').val(obj['due']);
@@ -390,7 +360,11 @@ var invoiceForm = $("#invoiceForm").validate({
 var invoicePaymentForm = $("#invoicePaymentForm").validate({
 
     rules: {
-        "received": {required: true}
+        "received": {required: true},
+        "businessInvoice[discountCalculation]": {required: false},
+        "businessInvoice[cardNo]": {required: false},
+        "businessInvoice[paymentMobile]": {required: false},
+        "businessInvoice[transactionId]": {required: false}
     },
 
     messages: {
@@ -413,12 +387,9 @@ var invoicePaymentForm = $("#invoicePaymentForm").validate({
                 $('#invoiceTransaction').html(obj['invoiceTransactions']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#netTotal').html(obj['netTotal']);
-                $('#paymentTotal').val(obj['netTotal']);
+                $('#paymentTotal').val(obj['due']);
                 $('#discount').html(obj['discount']);
                 $('businessInvoice[received]').val('');
-                if(obj['discount'] === 'Check-out'){
-                    location.reload();
-                }
             }
         });
     }

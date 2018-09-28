@@ -1,0 +1,25 @@
+services:
+#    medicine.example:
+#        class: Appstore\Bundle\MedicineBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    appstore.election.particular.event.listener:
+        class: Appstore\Bundle\ElectionBundle\EventListener\ParticularListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.election.committee.event.listener:
+        class: Appstore\Bundle\MedicineBundle\EventListener\MedicinePurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.election.vote.center.event.listener:
+        class: Appstore\Bundle\MedicineBundle\EventListener\MedicinePurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.election.vote.count.event.listener:
+        class: Appstore\Bundle\MedicineBundle\EventListener\MedicinePurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+

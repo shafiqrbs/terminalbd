@@ -216,6 +216,11 @@
                                             <td class="span1"><strong class="payment">{{ entity.received|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
+                                        <tr>
+                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                            <td class="span1"><strong class="payment">{{ entity.due|number_format }}</strong></td>
+                                            <td class="span1"></td>
+                                        </tr>
                                         </tfoot>
                                     </table>
                                     <div class="clearfix">&nbsp;</div>
@@ -257,14 +262,12 @@
                                             <td class="numeric">{{ transaction.payment }}</td>
                                             <td class="numeric">
                                                 <span id="approved-{{ transaction.id }}">
-                                                    {% if entity.paymentStatus != 'Paid' and entity.process !='Done' %}
-                                                        {% set processArr = ['Created','Pending','In-progress'] %}
-                                                        {% if transaction.process in  processArr %}
-                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hotel_invoice_payment_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
-                                                            <a href="javascript:"  data-id="{{ transaction.id }}" data-url="{{ path('hotel_invoice_payment_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
-                                                        {% else %}
-                                                            <a target="_blank" href="{{ path('hotel_invoice_payment_print',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
-                                                        {% endif %}
+                                                    {% set processArr = ['Created','Pending','In-progress'] %}
+                                                    {% if transaction.process in  processArr %}
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hotel_invoice_payment_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                        <a href="javascript:"  data-id="{{ transaction.id }}" data-url="{{ path('hotel_invoice_payment_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
+                                                    {% else %}
+                                                        <a target="_blank" href="{{ path('hotel_invoice_payment_print',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
                                                     {% endif %}
                                                 </span>
 
@@ -393,13 +396,13 @@
                             <div class="pull-right">
                                 <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">
                                 <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
-                                <input type="hidden" class="netTotal" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
+                                <input type="hidden" class="" name="paymentTotal" id="paymentTotal" value="{{ entity.due }}">
                                 <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
-                                <div class="action"> <strong>Invoice For: </strong>
-                                    {{ form_widget(form.process) }}
-                                    {{ form_errors(form.process) }}
+                                <div class="action">
                                     <div class="btn-group">
-                                        <button type="submit" class="btn blue" id="receiveBtn" ><i class="icon-print"></i>&nbsp; Save</button>
+                                        <a target="_blank" href="{{ path('hotel_invoice_print',{'id':entity.id}) }}"  class="btn purple" ><i class="icon-print"></i>&nbsp; Print</a>
+                                        <a href="javascript:" data-url="{{ path('hotel_invoice_checkout',{'id':entity.id}) }}"  class="btn green approve" ><i class="icon-refresh"></i>&nbsp; Check-out</a>
+                                        <button type="submit" class="btn blue" id="receiveBtn" ><i class="icon-save"></i>&nbsp; Save</button>
                                     </div>
                                 </div>
                             </div>

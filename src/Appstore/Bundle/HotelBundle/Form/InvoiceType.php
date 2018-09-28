@@ -132,8 +132,7 @@ class InvoiceType extends AbstractType
                         ->andWhere("b.globalOption =".$this->globalOption->getId())
                         ->orderBy("b.name", "ASC");
                 }
-            ))
-        ;
+            ));
     }
 
     /**

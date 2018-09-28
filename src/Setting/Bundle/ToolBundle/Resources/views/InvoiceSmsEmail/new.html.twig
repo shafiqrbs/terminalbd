@@ -37,14 +37,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Invoice Sms Bundle</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('invoicesmsemail_new',{option: entity.getGlobalOption.id}) }}"><i class="icon-plus-sign"></i>&nbsp;New invoice </a></li>
-                                    <li><a href="{{ path('invoicesmsemail') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn black" href="{{ path('invoicesmsemail',{option:globalOption.id}) }}"><i class="icon-plus-sign"></i>&nbsp;SMS invoice </a></li>
                             </div>
                         </div>
 

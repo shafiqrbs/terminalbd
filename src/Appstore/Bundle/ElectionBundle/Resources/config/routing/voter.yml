@@ -1,0 +1,28 @@
+election_voter:
+    path:     /
+    defaults: { _controller: "ElectionBundle:Member:index" }
+
+election_voter_new:
+    path:     /new
+    defaults: { _controller: "ElectionBundle:Member:new" }
+
+election_voter_create:
+    path:     /create
+    defaults: { _controller: "ElectionBundle:Member:create" }
+    methods:  POST
+
+election_voter_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ElectionBundle:Member:edit" }
+
+election_voter_update:
+    path:     /{id}/update
+    defaults: { _controller: "ElectionBundle:Member:update" }
+    methods:  [POST, PUT]
+
+election_voter_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ElectionBundle:Member:delete" }
+
+
+

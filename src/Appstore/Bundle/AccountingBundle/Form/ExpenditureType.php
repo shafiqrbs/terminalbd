@@ -47,7 +47,7 @@ class ExpenditureType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'empty_value' => '---Choose a transaction method---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -63,7 +63,7 @@ class ExpenditureType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.globalOption =".$this->globalOption->getId());
@@ -75,7 +75,7 @@ class ExpenditureType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a bkash---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.globalOption =".$this->globalOption->getId());
@@ -99,7 +99,7 @@ class ExpenditureType extends AbstractType
                 'class' => 'Core\UserBundle\Entity\User',
                 'empty_value' => '---Choose a user---',
                 'property' => 'username',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),

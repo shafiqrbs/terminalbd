@@ -135,8 +135,6 @@ class InvoiceController extends Controller
         ));
     }
 
-
-
 	/**
      * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
      */
@@ -149,7 +147,7 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Hotel Ivoice entity.');
         }
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createPaymentReceiveForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
         if ($editForm->isValid()) {
@@ -157,7 +155,6 @@ class InvoiceController extends Controller
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForHotel($globalOption, $mobile, $data);
                 $entity->setCustomer($customer);
-
             }
             if ($entity->getTotal() <= $entity->getReceived()) {
                 $entity->setReceived($entity->getTotal());
@@ -167,16 +164,24 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
             $done = array('Check-in');
             if (in_array($entity->getProcess(), $done) and $entity->getTotal() > 0) {
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->insertInvoiceProductItem($entity);
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertTransaction($entity);
-	        }
+	            if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+		            $dispatcher = $this->container->get('event_dispatcher');
+		            $dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
+	            }
+            }
             $inProgress = array('Booking');
             if (in_array($entity->getProcess(), $inProgress)) {
+	            if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+		            $dispatcher = $this->container->get('event_dispatcher');
+		            $dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
+	            }
                 return $this->redirect($this->generateUrl('hotel_invoice_new'));
             } else {
                 return $this->redirect($this->generateUrl('hotel_invoice_payment', array('id' => $entity->getId())));
@@ -232,8 +237,6 @@ class InvoiceController extends Controller
     /**
      * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
      */
-
-
     public function showAction(HotelInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -247,14 +250,13 @@ class InvoiceController extends Controller
         }
 
     }
+
     /**
      * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
      */
 
-
     public function deleteAction(HotelInvoice $entity)
     {
-
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -294,7 +296,6 @@ class InvoiceController extends Controller
 
     }
 
-
 	private function createPaymentReceiveForm(HotelInvoice $entity)
 	{
 		$globalOption = $this->getUser()->getGlobalOption();
@@ -327,7 +328,7 @@ class InvoiceController extends Controller
 			throw $this->createNotFoundException('Unable to find Invoice entity.');
 		}
 		$editForm = $this->createPaymentReceiveForm($entity);
-		if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
+		if (in_array($entity->getProcess(), array('Cancel','Check-out'))) {
 			return $this->redirect($this->generateUrl('hotel_invoice_show', array('id' => $entity->getId())));
 		}
 		$particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('room','package','post-production','pre-production','stock','service','virtual'));
@@ -351,9 +352,6 @@ class InvoiceController extends Controller
 			$data = $request->request->all();
 			$em->flush();
 			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertPaymentTransaction($entity,$data);
-			if($entity->getProcess() == 'Check-out' and $entity->getDue() == 0 ){
-				$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updatePaymentReceive($entity);
-			}
 		}
 		if ((!empty($entity)) ) {
 			$result = $this->returnResultData($entity);
@@ -365,8 +363,6 @@ class InvoiceController extends Controller
 
 	}
 
-
-
 	public function paymentApproveAction(HotelInvoiceTransaction $entity)
 	{
 		$em = $this->getDoctrine()->getManager();
@@ -376,6 +372,23 @@ class InvoiceController extends Controller
 			$invoice = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updatePaymentReceive($entity->getHotelInvoice());
 			$result = $this->returnResultData($invoice);
 			return new Response(json_encode($result));
+		}else{
+			return new Response('failed');
+		}
+		exit;
+	}
+
+	public function checkoutAction(HotelInvoice $entity)
+	{
+		$em = $this->getDoctrine()->getManager();
+		if(!empty($entity) and $entity->getProcess() == 'Check-in' and $entity->getReceived() == $entity->getTotal()) {
+			$entity->setProcess('Check-out');
+			$em->flush();
+			if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+				$dispatcher = $this->container->get('event_dispatcher');
+				$dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
+			}
+			return new Response('success');
 		}else{
 			return new Response('failed');
 		}

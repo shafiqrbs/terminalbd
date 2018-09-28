@@ -200,7 +200,6 @@ services:
           tags:
             - { name: kernel.event_listener, event: setting_tool.post.hms_invoice_delivered_sms , method: sendSalesConfirmSms }
 
-
   setting_tool.listener.dms_invoice_sms:
           class: Setting\Bundle\ToolBundle\EventListener\DmsInvoiceSmsListener
           arguments: [@doctrine ,@setting_tool.sms_gateWay]
@@ -212,3 +211,10 @@ services:
           arguments: [@doctrine ,@setting_tool.sms_gateWay]
           tags:
             - { name: kernel.event_listener, event: setting_tool.post.dms_treatment_plan_sms , method: sendPlanConfirmSms }
+
+  setting_tool.listener.hotel_invoice_sms:
+          class: Setting\Bundle\ToolBundle\EventListener\HotelInvoiceSmsListener
+          arguments: [@doctrine ,@setting_tool.sms_gateWay]
+          tags:
+            - { name: kernel.event_listener, event: setting_tool.post.hotel_invoice_sms , method: sendSms }
+

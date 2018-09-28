@@ -8,6 +8,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
@@ -303,6 +304,12 @@ class GlobalOptionRepository extends EntityRepository
         $hotelConfig = $this->_em->getRepository('HotelBundle:HotelConfig')->findOneBy(array('globalOption' => $globalOption));
         if(empty($hotelConfig)){
             $config = new HotelConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+        $electionConfig = $this->_em->getRepository('ElectionBundle:ElectionConfig')->findOneBy(array('globalOption' => $globalOption));
+        if(empty($electionConfig)){
+            $config = new ElectionConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }

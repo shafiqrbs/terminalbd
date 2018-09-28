@@ -31,15 +31,17 @@ class DefaultController extends Controller
 
         $apps = array();
         if (!empty($globalOption ->getSiteSetting())) {
-            $modules = $globalOption->getSiteSetting()->getAppModules();
+
+        	$modules = $globalOption->getSiteSetting()->getAppModules();
+
             /* @var AppModule $mod */
+
             foreach ($modules as $mod) {
                 if (!empty($mod->getModuleClass())) {
                     $apps[] = $mod->getSlug();
                 }
             }
         }
-
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
@@ -57,7 +59,9 @@ class DefaultController extends Controller
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') && $enable == 1 && in_array('business',$apps) ) {
             return $this->redirect($this->generateUrl('business_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOTEL') && $enable == 1 && in_array('reservation',$apps) ) {
-            return $this->redirect($this->generateUrl('hotel_homepage'));
+            return $this->redirect( $this->generateUrl('hotel_homepage'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ELECTION') && $enable == 1 && in_array('election',$apps) ) {
+        	return $this->redirect($this->generateUrl('election_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 ) {
         	return $this->redirect($this->generateUrl('inventory_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1) {

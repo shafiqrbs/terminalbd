@@ -3,6 +3,7 @@
 namespace Setting\Bundle\LocationBundle\Repository;
 
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
+use Setting\Bundle\LocationBundle\Entity\Location;
 
 /**
  *

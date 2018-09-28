@@ -12,6 +12,7 @@ namespace Setting\Bundle\ToolBundle\Repository;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -259,6 +260,25 @@ class SmsSenderRepository extends EntityRepository {
             $this->totalSendSms($globalOption);
         }
     }
+
+	public function insertHotelInvoiceSenderSms(HotelInvoice $invoice,$status)
+	{
+		$globalOption = $invoice->getHotelConfig()->getGlobalOption();
+
+		$remark = 'Invoice no '.$invoice->getInvoice().', Amount BDT. '.$invoice->getTotal().', Process- '.$invoice->getProcess();
+		$entity = new SmsSender();
+		$entity->setMobile($invoice->getCustomer()->getMobile());
+		$entity->setGlobalOption($globalOption);
+		$entity->setStatus($status);
+		$entity->setProcess($invoice->getProcess());
+		$entity->setReceiver('Customer');
+		$entity->setRemark($remark);
+		$this->_em->persist($entity);
+		$this->_em->flush();
+		if($status == 'success'){
+			$this->totalSendSms($globalOption);
+		}
+	}
 
     public function insertCustomerSenderSms()
     {

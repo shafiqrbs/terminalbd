@@ -130,9 +130,16 @@ class Builder extends ContainerAware
             $result = array_intersect($menuName, array('Reservation'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_HOTEL') or $securityContext->isGranted('ROLE_DOMAIN')){
-	                $menu = $this->reservationMenu($menu);
+	                $menu = $this->ReservationMenu($menu);
                 }
             }
+
+		    $result = array_intersect($menuName, array('Election'));
+		    if (!empty($result)) {
+			    if ($securityContext->isGranted('ROLE_ELECTION')){
+				    $menu = $this->ElectionMenu($menu);
+			    }
+		    }
 
             $result = array_intersect($menuName, array('Accounting'));
             if (!empty($result)) {
@@ -1243,7 +1250,7 @@ class Builder extends ContainerAware
 
     }
 
-	public function reservationMenu($menu)
+	public function ReservationMenu($menu)
 	{
 
 		$securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
@@ -1308,6 +1315,33 @@ class Builder extends ContainerAware
 		$menu['Hotel & Restaurant']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'hotel_report_purchase_summary'))
 		                                                   ->setAttribute('icon', 'icon-th-list');
 		$menu['Hotel & Restaurant']['Reports']['Purchase']->addChild('Vendor Outstanding', array('route' => 'hotel_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
+		return $menu;
+
+	}
+
+	public function ElectionMenu($menu)
+	{
+
+		$securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
+		$menu
+			->addChild('Election & Committee')
+			->setAttribute('icon', 'icon-briefcase')
+			->setAttribute('dropdown', true);
+		$menu['Election & Committee']->addChild('Committee')
+		                           ->setAttribute('icon', 'icon-th-list')
+		                           ->setAttribute('dropdown', true);
+		$menu['Election & Committee']['Committee']->addChild('Election', array('route' => 'election_committee'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']['Committee']->addChild('Organization', array('route' => 'election_organizationcommittee'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']->addChild('Manage Members', array('route' => 'election_member'))->setAttribute('icon', 'icon-users');
+		$menu['Election & Committee']->addChild('Manage Voters', array('route' => 'election_voter'))->setAttribute('icon', 'icon-users');
+		$menu['Election & Committee']->addChild('Master Data')
+		                           ->setAttribute('icon', 'icon icon-cog')
+		                           ->setAttribute('dropdown', true);
+		$menu['Election & Committee']['Master Data']->addChild('Setting Option', array('route' => 'election_particular'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']['Master Data']->addChild('Setting Location', array('route' => 'election_location'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']['Master Data']->addChild('Member Import', array('route' => 'election_member_import'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']['Master Data']->addChild('Configuration', array('route' => 'election_config_manage'))->setAttribute('icon', 'icon-cog');
 		return $menu;
 
 	}

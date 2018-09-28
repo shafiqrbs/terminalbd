@@ -45,7 +45,7 @@ class HotelConfigController extends Controller
 
         $config = $this->getUser()->getGlobalOption()->getHotelConfig();
         $form = $this->createForm(new ConfigType($config), $entity, array(
-            'action' => $this->generateUrl('business_config_update'),
+            'action' => $this->generateUrl('hotel_config_update'),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -81,7 +81,7 @@ class HotelConfigController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Report has been created successfully"
             );
-            return $this->redirect($this->generateUrl('business_config_manage'));
+            return $this->redirect($this->generateUrl('hotel_config_manage'));
         }
 
         return $this->render('HotelBundle:Config:manage.html.twig', array(

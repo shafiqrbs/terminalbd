@@ -69,7 +69,7 @@
                                                 <div class="input-append span12">
                                                     <select name="process" id="process" class="m-wrap span5">
                                                         <option value="" >--Process--</option>
-                                                        {% set processes =['Created','Hold','Delivered','Done','Canceled'] %}
+                                                        {% set processes =['Check-in','Check-out','Booking','Created','Canceled'] %}
                                                         {% for pro in processes %}
                                                             <option value="{{ pro }}" {% if searchForm.process is defined and searchForm.process == pro %} selected="selected" {% endif %} >{{ pro }}</option>
                                                         {% endfor %}
@@ -119,7 +119,7 @@
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processIntArr = ['Booking','Created','Revised'] %}
-                                                {% set processDone = ['Booking','Check-in','Check-out'] %}
+                                                {% set processDone = ['Booking','Check-in'] %}
                                                 {% if entity.process in  processIntArr %}
                                                 <a href="{{ path('hotel_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Edit</a>
                                                 {% endif %}
@@ -128,9 +128,9 @@
                                                 {% endif %}
                                                 {% if entity.process in  processDone %}
                                                 <a href="{{ path('hotel_invoice_payment',{'id':entity.id}) }}"  class="btn purple mini"><i class="icon-money"></i> Payment</a>
-                                                <a target="_blank"  href="{{ path('hotel_invoice_print',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
-                                                <a href="{{ path('hotel_invoice_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
                                                 {% endif %}
+                                                <a target="_blank"  href="{{ path('hotel_invoice_print',{'id':entity.id}) }}"  class="btn purple mini"><i class="icon-print"></i> Print</a>
+                                                <a href="{{ path('hotel_invoice_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
                                             </div>
                                         </td>
                                     </tr>

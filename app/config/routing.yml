@@ -2,6 +2,10 @@ site_domain_control:
     resource: "dynamic/sites.yml"
     type:     rest
 
+election:
+    resource: "@ElectionBundle/Resources/config/routing.yml"
+    prefix:   /election
+
 hotel:
     resource: "@HotelBundle/Resources/config/routing.yml"
     prefix:   /hotel-restaurant
@@ -12,7 +16,7 @@ doctor_prescription:
 
 education:
     resource: "@EducationBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /education
 
 business:
     resource: "@BusinessBundle/Resources/config/routing.yml"

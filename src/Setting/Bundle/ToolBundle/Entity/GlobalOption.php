@@ -18,6 +18,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
@@ -630,6 +631,14 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $businessConfig;
+
+
+     /*================================= OFFICE BUNDLE===========================================*/
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $electionConfig;
 
 
     /*================================= PRESCRIPTION BUNDLE===========================================*/
@@ -1804,6 +1813,13 @@ class GlobalOption
 	 */
 	public function getHotelConfig() {
 		return $this->hotelConfig;
+	}
+
+	/**
+	 * @return ElectionConfig
+	 */
+	public function getElectionConfig() {
+		return $this->electionConfig;
 	}
 
 

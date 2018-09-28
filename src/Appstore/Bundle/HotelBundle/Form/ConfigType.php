@@ -62,8 +62,12 @@ class ConfigType extends AbstractType
             ->add('removeImage')
             ->add('file')
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
-            ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
-            ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+	        ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+	        ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+	        ->add('notification')
+	        ->add('invoiceBookingsms','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter booking sms text')))
+            ->add('invoiceCheckinsms','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter check in sms text')))
+            ->add('invoiceCheckoutsms','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter check out sms')))
 
         ;
     }

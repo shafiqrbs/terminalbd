@@ -865,8 +865,39 @@ class User extends BaseUser
 	 */
 	protected $hotelDamage;
 
+	/**
+	 *  =========================================== Election System============================================
+	 */
 
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="createdBy"  )
+	 **/
+	private  $electionMembers;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="createdBy"  )
+	 **/
+	private  $committeeCreatedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="approvedBy"  )
+	 **/
+	private  $committeeApprovedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="createdBy"  )
+	 **/
+	private  $voteCenterCreatedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="createdBy"  )
+	 **/
+	private  $voteCountCreatedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="approvedBy"  )
+	 **/
+	private  $voteCenterApprovedBy;
 
 
 	public function isGranted($role)

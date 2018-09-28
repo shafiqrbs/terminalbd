@@ -82,6 +82,35 @@ class HotelConfig
      */
     private $address;
 
+	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="notification", type="boolean",  nullable=true)
+	 */
+	private $notification = false;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceBookingsms", type="text", nullable = true)
+     */
+    private $invoiceBookingsms;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceCheckinsms", type="text", nullable = true)
+     */
+    private $invoiceCheckinsms;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceCheckoutsms", type="text", nullable = true)
+     */
+    private $invoiceCheckoutsms;
+
+
     /**
      * @var smallint
      *
@@ -1142,6 +1171,62 @@ class HotelConfig
 	 */
 	public function setIsPowered( bool $isPowered ) {
 		$this->isPowered = $isPowered;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getInvoiceBookingsms(){
+		return $this->invoiceBookingsms;
+	}
+
+	/**
+	 * @param string $invoiceBookingsms
+	 */
+	public function setInvoiceBookingsms( string $invoiceBookingsms ) {
+		$this->invoiceBookingsms = $invoiceBookingsms;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getInvoiceCheckinsms(){
+		return $this->invoiceCheckinsms;
+	}
+
+	/**
+	 * @param string $invoiceCheckinsms
+	 */
+	public function setInvoiceCheckinsms( string $invoiceCheckinsms ) {
+		$this->invoiceCheckinsms = $invoiceCheckinsms;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getInvoiceCheckoutsms(){
+		return $this->invoiceCheckoutsms;
+	}
+
+	/**
+	 * @param string $invoiceCheckoutsms
+	 */
+	public function setInvoiceCheckoutsms( string $invoiceCheckoutsms ) {
+		$this->invoiceCheckoutsms = $invoiceCheckoutsms;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isNotification(){
+		return $this->notification;
+	}
+
+	/**
+	 * @param bool $notification
+	 */
+	public function setNotification( bool $notification ) {
+		$this->notification = $notification;
 	}
 
 

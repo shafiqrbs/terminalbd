@@ -107,6 +107,10 @@ hotel_invoice_payment_print:
     path:     /{id}/payment-print
     defaults: { _controller: "HotelBundle:Invoice:paymentPrint" }
 
+hotel_invoice_checkout:
+    path:     /{id}/check-out
+    defaults: { _controller: "HotelBundle:Invoice:checkout" }
+
 
 hotel_invoice_payment_approve:
     path:     /{id}/payment-approved

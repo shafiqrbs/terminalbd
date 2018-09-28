@@ -38,13 +38,7 @@
                         {% if globalOption is not empty %}
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('invoicesmsemail_new',{option:globalOption.id}) }}"><i class="icon-plus-sign"></i>&nbsp;New invoice </a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('invoicesmsemail_new',{option:globalOption.id}) }}"><i class="icon-plus-sign"></i>&nbsp;Add invoice </a></li>
                             </div>
                         </div>
                         {% endif %}
@@ -55,7 +49,7 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
+                                <tr class="head-blue">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Name</th>

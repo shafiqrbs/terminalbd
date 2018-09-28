@@ -60,8 +60,6 @@ $(document).on("click", ".confirm", function() {
     });
 });
 
-
-/*
 $(document).on("click", ".delete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
@@ -70,7 +68,7 @@ $(document).on("click", ".delete", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+                $('#delete-'+id).remove();
             });
         }
     });
@@ -78,7 +76,6 @@ $(document).on("click", ".delete", function() {
 
 
 $(document).on("click", ".approve", function() {
-    $(this).removeClass('approve');
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
     $('#confirm-content').confirmModal({
@@ -86,13 +83,13 @@ $(document).on("click", ".approve", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+                if(data == 'success'){
+                    location.reload();
+                }
             });
         }
     });
 });
-*/
-
 
 $( ".select2Particular" ).autocomplete({
     source: function( request, response ) {

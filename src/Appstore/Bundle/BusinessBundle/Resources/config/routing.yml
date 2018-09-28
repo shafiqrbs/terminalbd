@@ -1,11 +1,3 @@
-business_expense:
-    resource: "@BusinessBundle/Resources/config/routing/expenditure.yml"
-    prefix:   /business-expense
-
-business_expensecategory:
-    resource: "@BusinessBundle/Resources/config/routing/expensecategory.yml"
-    prefix:   /business-expense-category
-
 business_report:
     resource: "@BusinessBundle/Resources/config/routing/report.yml"
     prefix:   /report

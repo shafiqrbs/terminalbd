@@ -60,7 +60,7 @@ class TransactionController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$user = $this->getUser();
-		$transactionMethods = array(1,4);
+		$transactionMethods = array(1,2,3,4);
 		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
 		$pagination = $this->paginate($entities);
 		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);

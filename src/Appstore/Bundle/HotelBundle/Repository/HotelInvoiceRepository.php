@@ -536,11 +536,7 @@ class HotelInvoiceRepository extends EntityRepository
 		$transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
 		$entity->setTransactionCode($transactionCode);
 		$entity->setPayment($data['received']);
-		if($entity->getProcess() == 'Check-out'){
-			$entity->setProcess('Done');
-		}else{
-			$entity->setProcess('In-progress');
-		}
+		$entity->setProcess('In-progress');
 		$entity->setTransactionMethod($invoice->getTransactionMethod());
 		$entity->setAccountBank($invoice->getAccountBank());
 		$entity->setPaymentCard($invoice->getPaymentCard());
