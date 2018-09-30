@@ -142,18 +142,18 @@ class MedicineConfig
     private $vatPercentage;
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="instantVendorPercentage", type = "smallint",  nullable=true)
+     * @ORM\Column(name="instantVendorPercentage", type = "float",  nullable=true)
      */
-    private $instantVendorPercentage;
+    private $instantVendorPercentage = 12.5;
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="vendorPercentage", type = "smallint",  nullable=true)
+     * @ORM\Column(name="vendorPercentage", type = "float",  nullable=true)
      */
-    private $vendorPercentage;
+    private $vendorPercentage = 8;
 
 
 
@@ -504,7 +504,7 @@ class MedicineConfig
     }
 
     /**
-     * @return smallint
+     * @return float
      */
     public function getInstantVendorPercentage()
     {
@@ -512,7 +512,7 @@ class MedicineConfig
     }
 
     /**
-     * @param smallint $instantVendorPercentage
+     * @param float $instantVendorPercentage
      */
     public function setInstantVendorPercentage($instantVendorPercentage)
     {
@@ -520,7 +520,7 @@ class MedicineConfig
     }
 
     /**
-     * @return smallint
+     * @return int
      */
     public function getVendorPercentage()
     {
@@ -528,7 +528,7 @@ class MedicineConfig
     }
 
     /**
-     * @param smallint $vendorPercentage
+     * @param float $vendorPercentage
      */
     public function setVendorPercentage($vendorPercentage)
     {

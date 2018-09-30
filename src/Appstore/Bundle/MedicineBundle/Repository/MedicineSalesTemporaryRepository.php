@@ -76,6 +76,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 
     public function insertInstantSalesTemporaryItem(User $user , MedicinePurchaseItem $item,$data){
 
+
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
         $entity->setUser($user);
@@ -85,6 +86,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         $entity->setQuantity($data['salesQuantity']);
         $entity->setSubTotal($item->getSalesPrice() * $data['salesQuantity']);
         $entity->setSalesPrice($item->getSalesPrice());
+        $entity->setPurchasePrice($item->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
 
