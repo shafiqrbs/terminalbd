@@ -47,7 +47,6 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content">
                                 <tr class="head-red">
-                                    <th class="numeric" ><strong>Transaction Method</strong></th>
                                     <th class="numeric" ><strong>Received Mode</strong></th>
                                     <th class="numeric" ><strong>Count</strong></th>
                                     <th class="numeric" ><strong>Total</strong></th>
@@ -64,15 +63,6 @@
                                     {% set netTotal = netTotal+ overview.total  %}
                                     {% set netReceive = netReceive+ overview.receive  %}
                                 <tr>
-                                    <td class="numeric" ><strong>
-                                            {% if overview.processHead == 'Inventory' and overview.receive == 0 %}
-                                                Account Receivable
-                                            {% elseif overview.processHead == 'Sales-Return' and overview.total == 0 %}
-                                                Adjustment
-                                            {% else %}
-                                                {{ overview.transactionName }}
-                                            {% endif %}
-                                        </strong></td>
                                     <td class="numeric" ><strong>{{ overview.processHead }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.totalCount }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.total|number_format }}</strong></td>
@@ -81,7 +71,7 @@
                                 </tr>
                                 {% endfor %}
                                 </tbody>
-                                <tr><th colspan="2">Summary</th><th>{{ countInvoice }}</th><th>{{ netTotal|number_format }}</th><th>{{ netReceive|number_format }}</th><th>{{ (netTotal-netReceive)|number_format }}</th></tr>
+                                <tr><th>Summary</th><th>{{ countInvoice }}</th><th>{{ netTotal|number_format }}</th><th>{{ netReceive|number_format }}</th><th>{{ (netTotal-netReceive)|number_format }}</th></tr>
                             </table>
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">

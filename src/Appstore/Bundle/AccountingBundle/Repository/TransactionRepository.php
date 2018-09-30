@@ -64,6 +64,12 @@ class TransactionRepository extends EntityRepository
         }
     }
 
+    public function removeTransaction($option,$process)
+    {
+	    $transaction = $this->_em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = {$option->getId()} AND e.processHead ='{$process}'");
+	    $transaction->execute();
+    }
+
 	public function finalTransaction($globalOption,$accountHead = '')
 	{
 
@@ -511,10 +517,7 @@ class TransactionRepository extends EntityRepository
 
     public function resetSalesTransaction($option , $entity, $accountSales)
     {
-	    $transaction = $this->_em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = {$option->getId()} AND e.processHead ='Sales'");
-	    $transaction->execute();
 	    $this->salesTransaction($entity,$accountSales);
-
     }
 
 

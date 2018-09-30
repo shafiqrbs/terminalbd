@@ -167,6 +167,15 @@ class SalesRepository extends EntityRepository
 
     }
 
+    public function findArrayIds($ids){
+
+	    $query = $this->createQueryBuilder('e');
+	    $query->select('e');
+	    $query->andWhere("e.id IN(:ids)");
+	    $query->setParameter('ids', $ids);
+	    return $query->getQuery()->getResult();
+    }
+
 
 	public function searchAutoComplete($q, InventoryConfig $inventory)
 	{

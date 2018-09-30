@@ -202,7 +202,6 @@ class ReportController extends Controller
         $entities       = $em->getRepository('InventoryBundle:StockItem')->getProcessStock($inventory,$data);
         $pagination = $this->paginate($entities);
         $purchaseQuantity   = $em->getRepository('InventoryBundle:StockItem')->getGroupPurchaseItemStock($inventory,$data);
-
         return $this->render('InventoryBundle:Report:purchase.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
@@ -235,6 +234,7 @@ class ReportController extends Controller
             'searchForm'                => $data ,
         ));
     }
+
     public function salesTransactionAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -289,7 +289,6 @@ class ReportController extends Controller
         $inventory = $user->getGlobalOption()->getInventoryConfig();
         $entities = $em->getRepository('InventoryBundle:Sales')->reportSalesItemDetails($user,$data);
         $pagination = $this->paginate($entities);
-
         return $this->render('InventoryBundle:Report:sales/salesItemDetails.html.twig', array(
             'option'                    => $this->getUser()->getGlobalOption(),
             'inventory' => $inventory,

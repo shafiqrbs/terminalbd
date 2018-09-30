@@ -101,13 +101,16 @@ class DefaultController extends Controller
 	    ignore_user_abort(true);
     	$em = $this->getDoctrine()->getManager();
 	    $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+		$this->getDoctrine()->getRepository('AccountingBundle:Transaction')->removeTransaction($this->getUser()->getGlobalOption(),'Sales');
 	    $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig'=> $config, 'process'=>'Done'));
+
 	    foreach ($entities as $entity){
 
 	    	$purchaseAmount = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getItemPurchasePrice($entity);
 		    $entity->setPurchasePrice($purchaseAmount);
 		    $profit = ( $entity->getTotal()-($entity->getVat() + $purchaseAmount));
 		    $entity->setProfit($profit);
+		    $entity->setDue($entity->getTotal() - $entity->getPayment());
 		    if(empty($entity->getPayment())){
 		    	 $entity->setTransactionMethod(NULL);
 		    }
@@ -115,6 +118,7 @@ class DefaultController extends Controller
 		    $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->resetAccountSales($entity);
 		    $em->getRepository('AccountingBundle:Transaction')->resetSalesTransaction($this->getUser()->getGlobalOption() , $entity, $accountSales);
 	    }
+	    exit;
 	    return $this->redirect($this->generateUrl('homepage'));
     }
 }

@@ -111,7 +111,7 @@ class AccountSalesRepository extends EntityRepository
 		$branch = $user->getProfile()->getBranches();
 		$qb = $this->createQueryBuilder('e');
 		$qb->leftJoin('e.transactionMethod','t');
-		$qb->select('t.name as transactionName , e.processHead, SUM(e.totalAmount) AS total, SUM(e.amount) AS receive, count(e.id) AS totalCount');
+		$qb->select('e.processHead, SUM(e.totalAmount) AS total, SUM(e.amount) AS receive, count(e.id) AS totalCount');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
 		if (!empty($branch)){
@@ -120,7 +120,7 @@ class AccountSalesRepository extends EntityRepository
 		}
 		$qb->andWhere("e.process = 'approved'");
 		$this->handleSearchBetween($qb,$data);
-		$qb->groupBy('e.processHead, e.transactionMethod');
+		$qb->groupBy('e.processHead');
 		$result = $qb->getQuery()->getArrayResult();
 		return $result;
 
@@ -316,7 +316,7 @@ class AccountSalesRepository extends EntityRepository
 			$em->flush();
 			$accountSalesClose = $this->updateCustomerBalance($accountSales);
 			if($accountSales->getAmount() > 0 ){
-				//$this->_em->getRepository('AccountingBundle:AccountCash')->resetSalesCash($accountSales);
+				$this->_em->getRepository('AccountingBundle:AccountCash')->resetSalesCash($accountSales);
 			}
 			return $accountSalesClose;
 		}else{
