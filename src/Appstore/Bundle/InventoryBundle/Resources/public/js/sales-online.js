@@ -518,7 +518,7 @@ var InventorySales = function(sales) {
             return item.name
 
         }, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.name}, // omitted for brevity, see the source of this page
         initSelection: function(element, callback) {
             var id = $(element).val();
         },
@@ -591,7 +591,6 @@ var InventorySales = function(sales) {
         initSelection: function(element, callback) {
             var id = $(element).val();
         },
-        allowClear: true,
         minimumInputLength:1
     });
 

@@ -185,3 +185,14 @@ inventory_sales_user:
 inventory_homepage:
     path:     /dashoard
     defaults: { _controller: InventoryBundle:Default:index }
+
+
+inventory_stock_reset:
+    path:     /stock-reset
+    defaults: { _controller: InventoryBundle:Default:stockReset }
+
+inventory_sales_reset:
+    path:     /sales-reset
+    defaults: { _controller: InventoryBundle:Default:salesReset }
+
+

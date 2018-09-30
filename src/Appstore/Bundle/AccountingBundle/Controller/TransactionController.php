@@ -61,14 +61,24 @@ class TransactionController extends Controller
 		$data = $_REQUEST;
 		$user = $this->getUser();
 		$transactionMethods = array(1,2,3,4);
-		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
-		$pagination = $this->paginate($entities);
-		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
-		$processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
-		return $this->render('AccountingBundle:Transaction:accountcash.html.twig', array(
-			'entities' => $pagination,
-			'overview' => $overview,
-			'processHeads' => $processHeads,
+	//	$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+	//	$pagination = $this->paginate($entities);
+	//	$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+	//	$processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
+
+	//	$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+		$globalOption = $this->getUser()->getGlobalOption();
+		$globalOption->getId();
+		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->finalTransaction($globalOption);
+		$accountPurchase = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Purchase');
+		$accountSales = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Sales');
+		$accountExpenditure = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Expenditure');
+
+		return $this->render('AccountingBundle:Transaction:finalAccount.html.twig', array(
+			'entities' => $overview,
+			'purchases' => $accountPurchase,
+			'sales' => $accountSales,
+			'expenditures' => $accountExpenditure,
 			'searchForm' => $data,
 		));
 	}

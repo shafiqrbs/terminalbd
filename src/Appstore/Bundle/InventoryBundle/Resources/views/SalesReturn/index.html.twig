@@ -53,6 +53,55 @@
                                         </div>
                                     </div>
                                 </form>
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span4">
+                                            <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
+                                        </div>
+                                        <div class="span4">
+                                            <input type="text" id="toUser" name="toUser"  class="span12 m-wrap select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Enter sales user">
+                                        </div>
+                                        <div class="span2">
+                                            <select class="span12 m-wrap">
+                                                <option>Select Mode </option>
+                                                <option value="adjustment">Adjustment</option>
+                                                <option value="payment">Payment</option>
+                                            </select>
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="invoice" name="invoice"  class="span11 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
+                                        </div>
+
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span2">
+                                            <input type="text" id="sales" name="sales"  class="span12 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="salesAccount" name="salesAccount"  class="span12 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="journal" name="journal"  class="span12 m-wrap" value="{% if searchForm.journal is defined %}{{ searchForm.journal }}{% endif %}"  autocomplete="off" placeholder="Enter journal no ">
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="adjustment" name="adjustment"  class="span12 m-wrap" value="{% if searchForm.adjustment is defined %}{{ searchForm.adjustment }}{% endif %}"  autocomplete="off" placeholder="Enter adjustment">
+                                        </div>
+
+                                        <div class="span2">
+                                            <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        </div>
+                                        <div class="span2">
+                                            <div class="controls">
+                                                <div class="input-append span10">
+                                                    <input type="text" id="endDate"  name="endDate"  class="span10 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
                                     <thead>
                                     <tr class="head-blue">
@@ -61,7 +110,7 @@
                                         <th class="numeric" >Invoice</th>
                                         <th class="numeric" >Process Invoice</th>
                                         <th class="numeric" >Mode</th>
-                                        <th class="numeric" >Account</th>
+                                        <th class="numeric" >AccountSales</th>
                                         <th class="numeric" >Journal</th>
                                         <th class="numeric" >Adjustment</th>
                                         <th class="numeric" >Item</th>

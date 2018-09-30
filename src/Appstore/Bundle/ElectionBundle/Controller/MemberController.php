@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -66,6 +67,7 @@ class MemberController extends Controller
             $entity->setElectionConfig($config);
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
+	        $entity->upload();
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('election_member'));
@@ -85,8 +87,9 @@ class MemberController extends Controller
      */
     private function createCreateForm(ElectionMember $entity)
     {
+	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
         $location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation');
-        $form = $this->createForm(new MemberType($location), $entity, array(
+        $form = $this->createForm(new MemberType($config,$location), $entity, array(
             'action' => $this->generateUrl('election_member_create'),
             'method' => 'POST',
             'attr' => array(
@@ -124,16 +127,17 @@ class MemberController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('ElectionBundle:ElectionMember')->find($id);
-
+	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
+        $entity = $em->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('electionConfig' => $config,'id'=>$id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ElectionMember entity.');
         }
+	    $html = $this->renderView('ElectionBundle:Member:profile.html.twig',
+		    array('entity' => $entity)
+	    );
+	    return New Response($html);
+		exit;
 
-        return $this->render('ElectionBundle:Member:show.html.twig', array(
-            'entity'      => $entity,
-        ));
     }
 
     /**
@@ -162,7 +166,7 @@ class MemberController extends Controller
         ));
     }
 
-    /**
+	/**
     * Creates a form to edit a ElectionMember entity.
     *
     * @param ElectionMember $entity The entity
@@ -171,9 +175,10 @@ class MemberController extends Controller
     */
     private function createEditForm(ElectionMember $entity)
     {
+	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
 	    $location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation');
-	    $form = $this->createForm(new MemberType($location), $entity, array(
-            'action' => $this->generateUrl('election_member_update', array('id' => $entity->getId())),
+	    $form = $this->createForm(new MemberType($config,$location), $entity, array(
+		    'action' => $this->generateUrl('election_member_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -349,5 +354,23 @@ class MemberController extends Controller
         return new JsonResponse($items);
 
     }
+
+	public function familyAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('ElectionBundle:ElectionMember')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+		}
+		$editForm = $this->createEditForm($entity);
+		return $this->render('ElectionBundle:Member:family.html.twig', array(
+			'entity'      => $entity,
+			'form'   => $editForm->createView(),
+		));
+	}
+
+
 
 }

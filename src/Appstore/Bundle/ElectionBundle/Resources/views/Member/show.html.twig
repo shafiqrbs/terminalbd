@@ -55,19 +55,49 @@
                     <div class="portlet-body">
                         <div class="portlet-body form">
                             <div class="row-fluid">
-
-                                <div class="span4">
+                                <div class="span3">
                                     <h4>About:</h4>
                                     <ul class="unstyled">
-                                        <li><strong>Customer #</strong>&nbsp;{{ entity.name }}</li>
-                                       <li><strong>Mobile #</strong>&nbsp;{{ entity.mobile }}</li>
-                                        <li><strong>Address #</strong>&nbsp;{{ entity.address }}</li>
-                                       <li><strong>Location #</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.name }}, {{ entity.location.parent.name }}{% endif %}</li>
+                                        {% if entity is not empty %}<li><strong>ID:</strong>&nbsp;{{ entity.memberId }}</li>{% endif %}
+                                        {% if entity is not empty %}<li><strong>Name #:</strong>&nbsp;{{ entity.name }}</li>{% endif %}
+                                        {% if entity is not empty %}<li><strong>Mobile #:</strong>&nbsp;<a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></li>{% endif %}
+                                        {% if entity is not empty %}<li><strong>Gender:</strong>&nbsp;{{ entity.gender }}, &nbsp; <strong>Age</strong> {{ entity.age }} yrs.</li>{% endif %}
+                                        {% if entity is not empty %}<li><strong>Father Name</strong>&nbsp;{{ entity.fatherName }}</li>{% endif %}
+                                        {% if entity is not empty %}<li><strong>Mother Name:</strong>&nbsp;{{ entity.motherName }}</li>{% endif %}
                                     </ul>
+                                </div>
+
+                                <div class="span3 invoice-payment">
+                                    <h4>Political:</h4>
+                                    <ul class="unstyled">
+                                        <li><strong>Reference Member:</strong>&nbsp;{% if entity.referenceMember is not empty %}{{ entity.referenceMember.name }}{% endif %}</li>
+                                        <li><strong>Family Political Status:</strong>&nbsp;{% if entity.politicalStatus is not empty %}{{ entity.politicalStatus.name }}{% endif %}</li>
+                                        <li><strong>Previous Political Party:</strong>&nbsp;{% if entity.oldPoliticalParty is not empty %}{{ entity.oldPoliticalParty.name }}{% endif %}</li>
+                                        <li><strong>Political Designation:</strong>&nbsp;{% if entity.politicalDesignation is not empty %}{{ entity.politicalDesignation.name }}{% endif %}</li>
+                                        <li><strong>Profession:</strong>&nbsp;{% if entity.profession is not empty %}{{ entity.profession.name }}{% endif %}</li>
+                                        <li><strong>Education:</strong>&nbsp;{% if entity.education is not empty %}{{ entity.education.name }}{% endif %}</li>
+                                    </ul>
+                                </div>
+                                <div class="span3">
+                                    <h4>Location Information:</h4>
+                                    <ul class="unstyled">
+                                        <li><strong>Parliament Seat :</strong>&nbsp;{% if entity.electionConfig.parliament is not empty %}{{ entity.electionConfig.parliament.name }}{% endif %}</li>
+                                        <li><strong>Village/Unit :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</li>
+                                        <li><strong>Vote Center :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.voteCenter.name }}{% endif %}</li>
+                                        <li><strong>Ward :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.wardName }}{% endif %}</li>
+                                        <li><strong>Union :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.unionName }}{% endif %}</li>
+                                        <li><strong>Thana/Upazila :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.thanaName }}{% endif %}</li>
+                                        <li><strong>District :</strong>&nbsp;{% if entity.electionConfig.district is not empty %}{{ entity.electionConfig.district.name }}{% endif %}</li>
+                                    </ul>
+                                </div>
+                                <div class="span3">
+                                    {% if entity.webPath is not empty %}
+                                        <img src="{{ image(entity.webPath).resize(500,500, 'white') }}"/>
+                                    {% endif %}
                                 </div>
                             </div>
                             {% include('flash-message.html.twig')  %}
-                            {% if entity.sales is not empty %}
+                            {% if entity.familyMember is not empty %}
                                 <tr id="show-{{ entity.id }}" class="showing-overview">
                                     <td colspan="7">
                                         <table class="table table-bordered table-striped table-condensed flip-content ">
@@ -85,7 +115,7 @@
                                             </tr>
                                             </thead>
                                             <tbody id="sales">
-                                            {% for sales in entity.sales %}
+                                            {% for family in entity.familyMember %}
                                                 <tr id="salesRemove-{{ entity.id }}">
                                                     <td> {% if sales.salesItems is defined and  sales.salesItems is not empty  %}<span class="badge badge-success toggle badge-custom" id="{{ sales.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                                     <td class="numeric" >{{ sales.invoice }}</td>

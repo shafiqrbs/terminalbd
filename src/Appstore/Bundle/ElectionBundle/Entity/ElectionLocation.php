@@ -353,5 +353,45 @@ class ElectionLocation
 	}
 
 
+	public function villageName(){
+
+		$ward = $this->getParent();
+		$union = $ward->getParent()->getName();
+		$name = $union.' => '.$ward->getName().' => '.$this->getName();
+		return $name;
+	}
+
+	public function voteCenterName(){
+
+		$union = $this->getParent()->getName();
+		$name = $union.' => '.$this->getName();
+		return $name;
+	}
+
+	public function wardName()
+	{
+		$ward = $this->getParent();
+		$name = $ward->getName();
+		return $name;
+	}
+
+	public function unionName()
+	{
+		$name =  $this->getParent()->getParent()->getName();
+		return $name;
+	}
+
+	public function thanaName()
+	{
+
+		$name =  $this->getParent()->getParent()->getParent()->getName();
+		return $name;
+	}
+
+
+
+
+
+
 }
 

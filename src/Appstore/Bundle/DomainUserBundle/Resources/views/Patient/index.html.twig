@@ -35,14 +35,9 @@
                         <div class="caption"><i class="icon-reorder"></i>Patient list</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('hms_customer_new') }}"><i class="icon-th-list"></i>&nbsp;New Patient</a></li>
-                                    <li><a href="{{ path('hms_customer') }}"><i class="icon-th-list"></i>&nbsp;List</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('hms_customer_new') }}"><i class="icon-th-list"></i>&nbsp;New Patient</a>
+                                <a class="btn black" href="{{ path('hms_customer') }}"><i class="icon-th-list"></i>&nbsp;List</a>
+
                             </div>
                         </div>
                     </div>

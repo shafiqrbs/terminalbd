@@ -9,7 +9,7 @@ var InventorySalesReturnItem = function(salesReturn) {
 
     $('#paymentBtn').attr("disabled", false);
 
-    $(document).on('change', '.quantity , .price ', function () {
+    $(document).on('keyup', '.quantity , .price ', function () {
 
         var rel = $(this).attr('rel');
         var salesReturn = $('#salesReturn-' + rel).val();

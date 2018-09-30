@@ -413,9 +413,9 @@
                                                 <a title="Are you sure went to delete ?" data-id="{{ dailySales.id }}" data-url="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         {% endif %}
-                                        {% if dailySales.paymentStatus == "Due" %}
+                                        {#{% if dailySales.paymentStatus == "Due" %}
                                             <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
-                                        {% endif %}
+                                        {% endif %}#}
                                     </td>
                                 </tr>
                                 <tr id="show-{{ dailySales.id }}" class="showing-overview">

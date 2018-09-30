@@ -1,0 +1,127 @@
+    {% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Account of Cash
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="javascript:">Account of Cash</a>
+                    </li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Account Cash</div>
+                    </div>
+                    <div class="portlet-body flip-scroll">
+
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                            <thead class="flip-content ">
+                            <tr class="head-blue">
+                                <th class="numeric" >Name</th>
+                                <th class="numeric" >Amount</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr><td colspan="2">Journal</td></tr>
+                            {% for entity in entities %}
+                                <tr>
+                                    <td class="numeric" >
+                                        {% if entity.type == 'Debit' %}
+                                            {{ entity.creditName }}
+                                        {% else %}
+                                            {{ entity.debitName }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="numeric" >
+                                        {% if entity.type == 'Debit' %}
+                                            {{ entity.amount|number_format }}
+                                        {% else %}
+                                            ({{ entity.amount|number_format }})
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr><td colspan="2">Purchase</td></tr>
+                            {% for purchase in purchases %}
+                                {% if purchase.credit > 0 %}
+                                    <tr>
+                                        <td class="numeric" > {{ purchase.name }}</td>
+                                        <td class="numeric" > ({{ purchase.credit|number_format }})</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr><td colspan="2">Sales</td></tr>
+                            {% for sales in sales %}
+                                {% if sales.debit > 0 %}
+                                    <tr>
+                                        <td class="numeric" >{{ sales.name }}</td>
+                                        <td class="numeric" >{{ sales.debit|number_format }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr><td colspan="2">Expenditures</td></tr>
+                            {% for expenditure in expenditures %}
+                                {% if expenditure.debit > 0 %}
+                                    <tr>
+                                        <td class="numeric" > {{ expenditure.name }}</td>
+                                        <td class="numeric" > ({{ expenditure.debit|number_format }})</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+ <style>
+     .leftMargin {
+         margin-left: 0!important;
+     }
+ </style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@AccountingBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    AccountingApproveProcess();
+{% endblock %}
+
+

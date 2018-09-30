@@ -34,7 +34,7 @@ class PurchaseItemSimpleType extends AbstractType
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Item',
                 'empty_value' => '---Choose a item ---',
-                'property' => 'name',
+                'property' => 'getItemSKUName',
                 'attr'=>array('class'=>'span12 select2 itemInput'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))

@@ -66,6 +66,55 @@ class DefaultController extends Controller
 
 	    ));
 
+    }
 
+	public function stockResetAction()
+	{
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$em = $this->getDoctrine()->getManager();
+		$inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+		$items = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findItemWithPurchaseQuantity($inventory);
+		foreach ($items as $row){
+			$item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($row['itemId']);
+			$salesQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'sales');
+			$salesReturnQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'salesReturn');
+			$purchaseReturnQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'purchaseReturn');
+			$damageQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'damage');
+			$item->setPurchaseQuantity($row['quantity']);
+			$item->setSalesQuantity($salesQnt);
+			$item->setSalesQuantityReturn($salesReturnQnt);
+			$item->setPurchaseQuantityReturn($purchaseReturnQnt);
+			$item->setPurchaseQuantityReturn($damageQnt);
+			$remainingQnt = ($item->getPurchaseQuantity() + $item->getSalesQuantityReturn()) - ($item->getSalesQuantity() + $item->getPurchaseQuantityReturn()+$item->getDamageQuantity());
+			$item->setRemainingQnt($remainingQnt);
+			$em->flush();
+		}
+		return $this->redirect($this->generateUrl('homepage'));
+	}
+
+
+    public function salesResetAction()
+    {
+
+	    set_time_limit(0);
+	    ignore_user_abort(true);
+    	$em = $this->getDoctrine()->getManager();
+	    $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+	    $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig'=> $config, 'process'=>'Done'));
+	    foreach ($entities as $entity){
+
+	    	$purchaseAmount = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getItemPurchasePrice($entity);
+		    $entity->setPurchasePrice($purchaseAmount);
+		    $profit = ( $entity->getTotal()-($entity->getVat() + $purchaseAmount));
+		    $entity->setProfit($profit);
+		    if(empty($entity->getPayment())){
+		    	 $entity->setTransactionMethod(NULL);
+		    }
+		    $em->flush();
+		    $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->resetAccountSales($entity);
+		    $em->getRepository('AccountingBundle:Transaction')->resetSalesTransaction($this->getUser()->getGlobalOption() , $entity, $accountSales);
+	    }
+	    return $this->redirect($this->generateUrl('homepage'));
     }
 }

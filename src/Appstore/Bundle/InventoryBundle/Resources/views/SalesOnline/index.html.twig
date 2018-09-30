@@ -146,10 +146,10 @@
                                                     <a href="{{ path('inventory_salesonline_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
                                                     <a title="Are you sure went to delete ?" data-id="{{ entity.id }}" data-url="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            {% if entity.paymentStatus == "Due" %}
+                                           {# {% if entity.paymentStatus == "Due" %}
                                                 <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                             {% endif %}
-
+#}
                                         </td>
                                     </tr>
                                 {% endfor %}

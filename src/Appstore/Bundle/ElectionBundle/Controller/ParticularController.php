@@ -118,7 +118,8 @@ class ParticularController extends Controller
     */
     private function createEditForm(ElectionParticular $entity)
     {
-        $form = $this->createForm(new ParticularType(), $entity, array(
+	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
+    	$form = $this->createForm(new ParticularType($config), $entity, array(
             'action' => $this->generateUrl('election_particular_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

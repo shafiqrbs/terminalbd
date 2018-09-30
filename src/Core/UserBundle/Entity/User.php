@@ -875,6 +875,11 @@ class User extends BaseUser
 	private  $electionMembers;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="approvedBy"  )
+	 **/
+	private  $electionMemberApprove;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="createdBy"  )
 	 **/
 	private  $committeeCreatedBy;

@@ -15,6 +15,10 @@ election_member_edit:
     path:     /{id}/edit
     defaults: { _controller: "ElectionBundle:Member:edit" }
 
+election_member_show:
+    path:     /{id}/show
+    defaults: { _controller: "ElectionBundle:Member:show" }
+
 election_member_update:
     path:     /{id}/update
     defaults: { _controller: "ElectionBundle:Member:update" }
@@ -24,5 +28,15 @@ election_member_delete:
     path:     /{id}/delete
     defaults: { _controller: "ElectionBundle:Member:delete" }
 
+election_member_family:
+    path:     /{id}/add-family
+    defaults: { _controller: "ElectionBundle:Member:family" }
 
+election_member_family_delete:
+    path:     /{id}/add-family
+    defaults: { _controller: "ElectionBundle:Member:familyMemberDelete" }
+
+election_member_family_add:
+    path:     /{id}/add-family
+    defaults: { _controller: "ElectionBundle:Member:familyMemberAdd" }
 

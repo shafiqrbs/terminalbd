@@ -11,18 +11,6 @@ $( ".dateCalendar" ).datepicker({
 });
 
 
-var table = $('#attendance').DataTable( {
-    scrollY:        "auto",
-    scrollX:        true,
-    scrollCollapse: true,
-    paging:         false,
-    bInfo : false,
-    fixedColumns:   {
-        leftColumns: 1,
-        rightColumns: 1
-    }
-});
-
 $(document).on('click', '.saveBtn', function() {
 
     var notes = $('#notes').val();

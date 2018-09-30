@@ -138,7 +138,7 @@ class LocationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->findBy(array('electionConfig' => $config),array('particularType'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->findBy(array('electionConfig' => $config),array('locationType'=>'ASC'));
 
         $entity = $em->getRepository('ElectionBundle:ElectionLocation')->find($id);
 

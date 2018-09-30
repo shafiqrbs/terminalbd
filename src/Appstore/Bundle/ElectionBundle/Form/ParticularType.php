@@ -41,7 +41,7 @@ class ParticularType extends AbstractType
 		        'empty_value' => '---Choose a settings type ---',
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span12 inputs'),
-		        'constraints' =>array( new NotBlank(array('message'=>'Select particular type')) ),
+		        'constraints' =>array( new NotBlank(array('message'=>'Select setting type')) ),
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('wt')
 			                  ->where("wt.status = 1");

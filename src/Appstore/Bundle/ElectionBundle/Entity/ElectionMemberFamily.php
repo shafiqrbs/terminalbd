@@ -28,11 +28,6 @@ class ElectionMemberFamily
      **/
     private  $electionMember;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberRelation" , cascade={"detach","merge"} )
-     **/
-    private  $relation;
-
 
 	/**
 	 * @var string
@@ -129,20 +124,6 @@ class ElectionMemberFamily
 	 */
 	public function setElectionMember( $electionMember ) {
 		$this->electionMember = $electionMember;
-	}
-
-	/**
-	 * @return ElectionParticular
-	 */
-	public function getRelation() {
-		return $this->relation;
-	}
-
-	/**
-	 * @param ElectionParticular $relation
-	 */
-	public function setRelation( $relation ) {
-		$this->relation = $relation;
 	}
 
 	/**

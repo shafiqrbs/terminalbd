@@ -443,11 +443,9 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
                 $menu['Accounting']['Sales & Purchase']->addChild('Sales', array('route' => 'account_sales'));
-                $menu['Accounting']['Sales & Purchase']->addChild('Sales Return', array('route' => 'account_sales_return'));
             }
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
                 $menu['Accounting']['Sales & Purchase']->addChild('Purchase', array('route' => 'account_purchase'));
-                $menu['Accounting']['Sales & Purchase']->addChild('Purchase Return', array('route' => 'account_purchase_return'));
             }
         }
         $accounting = array('e-commerce');
@@ -867,7 +865,8 @@ class Builder extends ContainerAware
             $menu['Hospital & Diagnostic']['Master Data']->addChild('Other Service', array('route' => 'hms_other_service'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Hospital & Diagnostic']['Master Data']->addChild('Service Group', array('route' => 'hms_service_group'))->setAttribute('icon', 'icon-tag');
-            $menu['Hospital & Diagnostic']['Master Data']->addChild('Category', array('route' => 'hms_category'))->setAttribute('icon', 'icon-tag');
+           /* $menu['Hospital & Diagnostic']['Master Data']->addChild('Category', array('route' => 'hms_category'))->setAttribute('icon', 'icon-tag');
+           */
             $menu['Hospital & Diagnostic']['Master Data']->addChild('Commission', array('route' => 'hms_commission'))->setAttribute('icon', 'icon-tag');
             if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_CONFIG')) {
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Configuration', array('route' => 'hms_config_manage'))
@@ -897,8 +896,6 @@ class Builder extends ContainerAware
             $menu['Hospital & Diagnostic']['Reports']->addChild('Sales Details', array('route' => 'hms_report_sales_details'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Hospital & Diagnostic']['Reports']->addChild('Service Wise Sales', array('route' => 'hms_report_sales_service'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Hospital & Diagnostic']['Reports']->addChild('Purchase', array('route' => 'hms_pathology'))
                 ->setAttribute('icon', 'icon-th-list');
         }
         return $menu;

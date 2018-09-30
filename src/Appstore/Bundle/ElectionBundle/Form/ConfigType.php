@@ -46,7 +46,7 @@ class ConfigType extends AbstractType
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")
 			                  ->where("e.status = 1")
-			                  ->andWhere("p.slug = 'parliament-seat'");
+			                  ->andWhere("p.slug = 'parliament'");
 		        },
 	        ))
 

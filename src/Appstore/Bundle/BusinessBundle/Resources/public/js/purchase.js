@@ -85,9 +85,10 @@ var form = $("#purchaseItem").validate({
                 $('#due').html(obj['due']);
                 $('#purchasePrice').val('');
                 $("#particular").select2().select2("val","");
-                $('form#purchaseItem').reset(0);
+                $('form#purchaseItem')[0].reset();
                 $('#unit').html('Unit');
                 $('#quantity').val('1');
+
             }
         });
     }

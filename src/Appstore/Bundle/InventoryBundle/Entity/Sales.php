@@ -213,6 +213,20 @@ class Sales
      */
     private $subTotal = 0;
 
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="purchasePrice", type="float", nullable=true)
+	 */
+	private $purchasePrice = 0;
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="profit", type="float", nullable=true)
+	 */
+	private $profit = 0;
+
 
     /**
      * @var float
@@ -989,6 +1003,34 @@ class Sales
 	 */
 	public function setRemark($remark ) {
 		$this->remark = $remark;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getPurchasePrice(){
+		return $this->purchasePrice;
+	}
+
+	/**
+	 * @param float $purchasePrice
+	 */
+	public function setPurchasePrice( float $purchasePrice ) {
+		$this->purchasePrice = $purchasePrice;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getProfit(){
+		return $this->profit;
+	}
+
+	/**
+	 * @param float $profit
+	 */
+	public function setProfit( float $profit ) {
+		$this->profit = $profit;
 	}
 
 }

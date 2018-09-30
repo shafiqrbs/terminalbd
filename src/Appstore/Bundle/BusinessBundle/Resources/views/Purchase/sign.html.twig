@@ -49,7 +49,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="row-fluid particular-info" >
-                        <div class="span7" style="margin-left:15px">
+                        <div class="span6" style="margin-left:15px">
                             <select id="particular" name="particular" class="span12 select2">
                                 <option value="">--- Select product name ---</option>
                                 {% for particular in particulars %}
@@ -57,12 +57,13 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="span4">
+                        <div class="span5">
                             <div class="input-append">
                                 <div class="input-group">
                                     <input type="text" class="m-wrap span3" id="height"  name="height" placeholder="height" value="" maxlength="8" autocomplete="off">
                                     <input type="text" class="m-wrap span3" id="width"  name="width" placeholder="width" value="" maxlength="8" autocomplete="off">
-                                    <input type="text" class="m-wrap span4" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
+                                    <input type="text" class="m-wrap span3" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
+                                    <input type="text" class="m-wrap span2" id="quantity"  name="quantity" placeholder="Quantity" value="" maxlength="8" autocomplete="off">
                                     <input type="hidden" id="particularId" name="particularId" value="">
                                     <button type="button" class="btn yellow"  id="unit" >Unit</button>
                                     <button type="submit" class="btn blue" id="addParticular" ><i class="icon-save"></i> Add</button>

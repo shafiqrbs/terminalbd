@@ -50,6 +50,41 @@ class ElectionParticular
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="politicalStatus")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $memberPoliticalStatus;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="politicalDesignation")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $memberPoliticalDesignation;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="profession")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $memberProfession;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="education")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $memberEducation;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="oldPoliticalParty")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $memberPoliticalParty;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", mappedBy="locationType")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
@@ -316,6 +351,55 @@ class ElectionParticular
 	 */
 	public function getParliaments() {
 		return $this->parliaments;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getMemberPoliticalStatus() {
+		return $this->memberPoliticalStatus;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getMemberPoliticalDesignation() {
+		return $this->memberPoliticalDesignation;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getMemberPoliticalParty() {
+		return $this->memberPoliticalParty;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getMemberEducation() {
+		return $this->memberEducation;
+	}
+
+	/**
+	 * @param ElectionMember $memberEducation
+	 */
+	public function setMemberEducation( $memberEducation ) {
+		$this->memberEducation = $memberEducation;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getMemberProfession() {
+		return $this->memberProfession;
+	}
+
+	/**
+	 * @param ElectionMember $memberProfession
+	 */
+	public function setMemberProfession( $memberProfession ) {
+		$this->memberProfession = $memberProfession;
 	}
 
 

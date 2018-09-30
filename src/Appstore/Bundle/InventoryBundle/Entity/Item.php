@@ -1032,6 +1032,10 @@ class Item
        return $this->getSku().'-'.$this->getMasterItem()->getName().'-'.$this->getRemainingQuantity().' '.$unit;
     }
 
+    public function getItemSKUName(){
+       return $this->getSku().'-'.$this->getMasterItem()->getName();
+    }
+
     /**
      * @return string
      */

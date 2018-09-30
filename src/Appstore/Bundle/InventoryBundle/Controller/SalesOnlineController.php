@@ -394,6 +394,13 @@ class SalesOnlineController extends Controller
                 $datetime = new \DateTime("now");
                 $entity->setCreated($datetime);
             }
+            if(empty($entity->getPayment()) AND $entity->getProcess() =="Done"){
+	            $entity->setTransactionMethod(NULL);
+            }
+            $purchaseAmount = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getItemPurchasePrice($entity);
+            $entity->setPurchasePrice($purchaseAmount);
+            $profit = ( $entity->getTotal()-($entity->getVat() + $purchaseAmount));
+            $entity->setProfit($profit);
             $em->flush();
             if ($data['process'] != 'In-progress'){
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);

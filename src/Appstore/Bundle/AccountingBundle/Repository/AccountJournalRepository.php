@@ -38,6 +38,24 @@ class AccountJournalRepository extends EntityRepository
         return $result;
     }
 
+	public function finalTransaction($globalOption)
+	{
+		//$globalOption = $user->getGlobalOption();
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.accountHeadDebit','d');
+		$qb->join('e.accountHeadCredit','c');
+		$qb->select('d.name as debitName ,c.name as creditName,e.transactionType as type , SUM(e.amount) AS amount');
+		$qb->where("e.globalOption = :globalOption");
+		$qb->setParameter('globalOption', $globalOption);
+		$qb->andWhere("e.process = 'approved'");
+		$qb->groupBy("e.accountHeadDebit,e.accountHeadCredit");
+		//$qb->groupBy("e.transactionType,e.accountHeadDebit,e.accountHeadCredit");
+		$result = $qb->getQuery()->getArrayResult();
+		return $result;
+
+	}
+
     public function accountCashOverview(User $user,$type,$data)
     {
         $globalOption = $user->getGlobalOption();

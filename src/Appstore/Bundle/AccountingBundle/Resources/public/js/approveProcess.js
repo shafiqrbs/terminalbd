@@ -43,7 +43,7 @@ $( ".date-picker" ).datepicker({
             url: url,
             type: 'GET',
             success: function (response) {
-                if ('success' == response ) {
+                if ('success' === response ) {
                     $('#remove-' + id).remove();
                 }
             },
@@ -261,10 +261,10 @@ $( ".date-picker" ).datepicker({
         });
     },
     allowClear: true,
-    minimumInputLength: 2
+    minimumInputLength: 1
 });
 
-    $(".select2Customer").select2({
+$(".select2Customer").select2({
 
     ajax: {
 
@@ -302,7 +302,7 @@ $( ".date-picker" ).datepicker({
         });
     },
     allowClear: true,
-    minimumInputLength: 3
+    minimumInputLength: 1
 });
 
     $(".select2CustomerName").select2({
@@ -343,7 +343,7 @@ $( ".date-picker" ).datepicker({
         });
     },
     allowClear: true,
-    minimumInputLength: 3
+    minimumInputLength: 1
 });
 
     $(".select2Invoice").select2({

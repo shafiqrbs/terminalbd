@@ -22,33 +22,6 @@ class SalesItemRepository extends EntityRepository
     public function salesItems($inventory,$data)
     {
         $item = isset($data['item'])? $data['item'] :'';
-
-/*        $qb = $this->createQueryBuilder('salesItem');
-        $qb->join('salesItem.item','item');
-        $qb->join('salesItem.sales','sales');
-        $qb->select('item.sku as sku');
-        $qb->addSelect('item.name as name');
-        $qb->addSelect('item.purchaseQuantity as purchaseQuantity');
-        $qb->addSelect('item.salesQuantity as salesQuantity');
-        $qb->addSelect('item.purchaseQuantityReturn as purchaseQuantityReturn');
-        $qb->addSelect('item.salesQuantityReturn as salesQuantityReturn');
-        $qb->addSelect('item.onlineOrderQuantity as onlineOrderQuantity');
-        $qb->addSelect('item.onlineOrderQuantityReturn as onlineOrderQuantityReturn');
-        $qb->addSelect('item.damageQuantity as damageQuantity');
-        $qb->addSelect('SUM(salesItem.quantity) as salesOngoingQuantity ');
-        $qb->where("sales.inventoryConfig = :inventoryConfig");
-        $qb->setParameter('inventoryConfig',$inventory);
-        $qb->andWhere('sales.process IN(:process)');
-        $qb->setParameter('process',array_values(array('In-progress','Courier')));
-        if (!empty($item)) {
-            $qb->join('item.masterItem', 'm');
-            $qb->andWhere("m.name = :name");
-            $qb->setParameter('name', $item);
-        }
-        $qb->groupBy("salesItem.item");
-        $result =  $qb->getQuery();
-        return $result;*/
-
         $sql = "SELECT SUM(SalesItem.quantity) as salesOngoingQuantity,
                 item.sku as sku,item.name as product,item.purchaseQuantity as purchaseQuantity,item.purchaseQuantityReturn as purchaseQuantityReturn,
                 item.salesQuantityReturn as salesQuantityReturn,item.onlineOrderQuantityReturn as onlineOrderQuantityReturn,
@@ -65,6 +38,17 @@ class SalesItemRepository extends EntityRepository
         $stmt->execute();
         $result =  $stmt->fetchAll();
         return $result;
+
+    }
+
+    public function getItemPurchasePrice(Sales $sales)
+    {
+	    $qb = $this->createQueryBuilder('si');
+	    $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
+	    $qb->where("si.sales = :sales");
+	    $qb->setParameter('sales', $sales->getId());
+	    $result = $qb->getQuery()->getOneOrNullResult()['totalPurchaseAmount'];
+	    return $result;
 
     }
 

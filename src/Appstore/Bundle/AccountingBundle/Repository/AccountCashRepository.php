@@ -320,7 +320,7 @@ class AccountCashRepository extends EntityRepository
             $qb->setParameter('accountRefNo', $accountRefNo);
         }
 
-        $compareStart = new \DateTime();
+/*        $compareStart = new \DateTime();
         if (!empty($startDate) ) {
         $compareStart = new \DateTime($startDate);
         }
@@ -334,7 +334,7 @@ class AccountCashRepository extends EntityRepository
         }
         $end =  $compareEnd->format('Y-m-d 23:59:59');
         $qb->andWhere("e.updated <= :endDate");
-        $qb->setParameter('endDate', $end);
+        $qb->setParameter('endDate', $end);*/
 
         if (!empty($accountBank)) {
 
@@ -356,15 +356,10 @@ class AccountCashRepository extends EntityRepository
         $em = $this->_em;
 
         if($entity->getTransactionMethod()->getId() == 2){
-
             $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountBank' => $entity->getAccountBank(), 'processHead' => $processHead );
-
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
-
             $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountMobileBank' => $entity->getAccountMobileBank(), 'processHead' => $processHead );
-
         }else{
-
             $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(), 'processHead' => $processHead );
         }
 
@@ -479,6 +474,36 @@ class AccountCashRepository extends EntityRepository
         $em->persist($cash);
         $em->flush();
     }
+
+    public function resetSalesCash(AccountSales $entity)
+    {
+
+	    $exist = $this->findOneBy(array('processHead'=>'Sales','accountSales'=> $entity));
+	    if($exist) {
+		    $balance = $this->lastInsertCash( $entity, 'Sales' );
+		    $em      = $this->_em;
+		    $cash    = $exist;
+
+		    $cash->setGlobalOption( $entity->getGlobalOption() );
+		    $cash->setAccountSales( $entity );
+		    if ( ! empty( $entity->getBranches() ) ) {
+			    $cash->setBranches( $entity->getBranches() );
+		    }
+		    $cash->setProcessHead( 'Sales' );
+		    $cash->setAccountRefNo( $entity->getAccountRefNo() );
+		    $cash->setUpdated( $entity->getUpdated() );
+		    $cash->setBalance( $balance + $entity->getAmount() );
+		    $cash->setDebit( $entity->getAmount() );
+		    $em->persist( $cash );
+		    $em->flush();
+
+	    }else{
+
+		    $this->insertSalesCash($entity);
+	    }
+    }
+
+
 
     public function insertSalesCashReturn(AccountSalesReturn $entity)
     {

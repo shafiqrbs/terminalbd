@@ -39,6 +39,11 @@ class ElectionMember
 	private  $createdBy;
 
     /**
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="electionMemberApprove" )
+	 **/
+	private  $approvedBy;
+
+    /**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMemberFamily", inversedBy="electionMember")
 	 **/
 	private $familyMembers;
@@ -62,18 +67,60 @@ class ElectionMember
     protected $voteCenter;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberPoliticalStatus")
+     **/
+
+    protected $politicalStatus;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberPoliticalDesignation")
+     **/
+
+    protected $politicalDesignation;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberPoliticalParty")
+     **/
+    protected $oldPoliticalParty;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberProfession")
+     **/
+    protected $profession;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberEducation")
+     **/
+    protected $education;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="reference")
+     **/
+    protected $referenceMember;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="code", type="integer",  nullable=true)
      */
     private $code;
 
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="process", type="string", length=20, nullable =true)
+	 */
+	private $process='Created';
+
+
     /**
      * @var string
      *
-     * @ORM\Column(name="customerId", type="string",  nullable=true)
+     * @ORM\Column(name="memberId", type="string",  nullable=true)
      */
-    private $customerId;
+    private $memberId;
 
     /**
      * @var string
@@ -129,20 +176,6 @@ class ElectionMember
     /**
      * @var string
      *
-     * @ORM\Column(name="profession", type="string", length=100, nullable =true)
-     */
-    private $profession;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="education", type="string", length=100, nullable =true)
-     */
-    private $education;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="nationality", type="string", length=100, nullable =true)
      */
     private $nationality = 'Bangladeshi';
@@ -185,6 +218,13 @@ class ElectionMember
     /**
      * @var string
      *
+     * @ORM\Column(name="biography", type="text", nullable =true)
+     */
+    private $biography;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="bloodGroup", type="string", length=20, nullable =true)
      */
     private $bloodGroup;
@@ -203,15 +243,6 @@ class ElectionMember
      * @ORM\Column(name="maritalStatus", type="string",length=30 , nullable = true)
      */
     private $maritalStatus;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="politicalStatus", type="string",length=100 , nullable = true)
-     */
-    private $politicalStatus;
-
 
     /**
      * @var integer
@@ -252,9 +283,9 @@ class ElectionMember
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="union", type="string", length=50, nullable = true)
+	 * @ORM\Column(name="memberUnion", type="string", length=50, nullable = true)
 	 */
-	private $union;
+	private $memberUnion;
 
 	/**
 	 * @var string
@@ -279,13 +310,6 @@ class ElectionMember
     private $status = true;
 
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime")
-     */
-    private $created;
-
 	/**
 	 * @var boolean
 	 *
@@ -302,6 +326,21 @@ class ElectionMember
 	 * @Assert\File(maxSize="8388608")
 	 */
 	protected $file;
+
+
+	/**
+	 * @var \DateTime
+	 * @Gedmo\Timestampable(on="create")
+	 * @ORM\Column(name="created", type="datetime")
+	 */
+	private $created;
+
+	/**
+	 * @var \DateTime
+	 * @Gedmo\Timestampable(on="update")
+	 * @ORM\Column(name="updated", type="datetime")
+	 */
+	private $updated;
 
 
 	/**
@@ -525,6 +564,21 @@ class ElectionMember
     }
 
 
+	/**
+	 * @return \DateTime
+	 */
+	public function getUpdated(): \DateTime {
+		return $this->updated;
+	}
+
+	/**
+	 * @param \DateTime $updated
+	 */
+	public function setUpdated( \DateTime $updated ) {
+		$this->updated = $updated;
+	}
+
+
     /**
      * @return string
      */
@@ -558,23 +612,7 @@ class ElectionMember
         $this->code = $code;
     }
 
-    /**
-     * @return string
-     */
-    public function getElectionMemberId()
-    {
-        return $this->customerId;
-    }
-
-    /**
-     * @param string $customerId
-     */
-    public function setElectionMemberId($customerId)
-    {
-        $this->customerId = $customerId;
-    }
-
-    /**
+	/**
      * @return int
      */
     public function getAge()
@@ -639,21 +677,6 @@ class ElectionMember
         $this->religion = $religion;
     }
 
-    /**
-     * @return string
-     */
-    public function getProfession()
-    {
-        return $this->profession;
-    }
-
-    /**
-     * @param string $profession
-     */
-    public function setProfession($profession)
-    {
-        $this->profession = $profession;
-    }
 
     /**
      * @return string
@@ -710,7 +733,7 @@ class ElectionMember
 	/**
 	 * @return string
 	 */
-	public function getPostalCode(): string {
+	public function getPostalCode(){
 		return $this->postalCode;
 	}
 
@@ -724,7 +747,7 @@ class ElectionMember
 	/**
 	 * @return string
 	 */
-	public function getRemark(): string {
+	public function getRemark(){
 		return $this->remark;
 	}
 
@@ -830,19 +853,6 @@ class ElectionMember
 		$this->removeImage = $removeImage;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getPoliticalStatus(){
-		return $this->politicalStatus;
-	}
-
-	/**
-	 * @param string $politicalStatus
-	 */
-	public function setPoliticalStatus( string $politicalStatus ) {
-		$this->politicalStatus = $politicalStatus;
-	}
 
 	/**
 	 * @return string
@@ -930,89 +940,220 @@ class ElectionMember
 		$this->voteCenter = $voteCenter;
 	}
 
+
 	/**
 	 * @return string
-	 */
-	public function getEducation(){
-		return $this->education;
-	}
-
-	/**
-	 * @param string $education
-	 */
-	public function setEducation( string $education ) {
-		$this->education = $education;
-	}
-
-	/**
-	 * @return mixed
 	 */
 	public function getVillage() {
 		return $this->village;
 	}
 
 	/**
-	 * @param mixed $village
+	 * @param string $village
 	 */
 	public function setVillage( $village ) {
 		$this->village = $village;
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getWard() {
 		return $this->ward;
 	}
 
 	/**
-	 * @param mixed $ward
+	 * @param string $ward
 	 */
 	public function setWard( $ward ) {
 		$this->ward = $ward;
 	}
 
 	/**
-	 * @return mixed
-	 */
-	public function getUnion() {
-		return $this->union;
-	}
-
-	/**
-	 * @param mixed $union
-	 */
-	public function setUnion( $union ) {
-		$this->union = $union;
-	}
-
-	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getThana() {
 		return $this->thana;
 	}
 
 	/**
-	 * @param mixed $thana
+	 * @param string $thana
 	 */
 	public function setThana( $thana ) {
 		$this->thana = $thana;
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getDistrict() {
 		return $this->district;
 	}
 
 	/**
-	 * @param mixed $district
+	 * @param string $district
 	 */
 	public function setDistrict( $district ) {
 		$this->district = $district;
 	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getReferenceMember() {
+		return $this->referenceMember;
+	}
+
+	/**
+	 * @param ElectionMember $referenceMember
+	 */
+	public function setReferenceMember( $referenceMember ) {
+		$this->referenceMember = $referenceMember;
+	}
+
+	/**
+	 * @return ElectionParticular
+	 */
+	public function getOldPoliticalParty() {
+		return $this->oldPoliticalParty;
+	}
+
+	/**
+	 * @param ElectionParticular $oldPoliticalParty
+	 */
+	public function setOldPoliticalParty( $oldPoliticalParty ) {
+		$this->oldPoliticalParty = $oldPoliticalParty;
+	}
+
+	/**
+	 * @return ElectionParticular
+	 */
+	public function getPoliticalDesignation() {
+		return $this->politicalDesignation;
+	}
+
+	/**
+	 * @param ElectionParticular $politicalDesignation
+	 */
+	public function setPoliticalDesignation( $politicalDesignation ) {
+		$this->politicalDesignation = $politicalDesignation;
+	}
+
+	/**
+	 * @return ElectionParticular
+	 */
+	public function getPoliticalStatus() {
+		return $this->politicalStatus;
+	}
+
+	/**
+	 * @param ElectionParticular $politicalStatus
+	 */
+	public function setPoliticalStatus( $politicalStatus ) {
+		$this->politicalStatus = $politicalStatus;
+	}
+
+	/**
+	 * @return ElectionParticular
+	 */
+	public function getProfession() {
+		return $this->profession;
+	}
+
+	/**
+	 * @param ElectionParticular $profession
+	 */
+	public function setProfession( $profession ) {
+		$this->profession = $profession;
+	}
+
+	/**
+	 * @return ElectionParticular
+	 */
+	public function getEducation() {
+		return $this->education;
+	}
+
+	/**
+	 * @param ElectionParticular $education
+	 */
+	public function setEducation( $education ) {
+		$this->education = $education;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMemberId(){
+		return $this->memberId;
+	}
+
+	/**
+	 * @param string $memberId
+	 */
+	public function setMemberId( string $memberId ) {
+		$this->memberId = $memberId;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMemberUnion(): string {
+		return $this->memberUnion;
+	}
+
+	/**
+	 * @param string $memberUnion
+	 */
+	public function setMemberUnion( string $memberUnion ) {
+		$this->memberUnion = $memberUnion;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getBiography(){
+		return $this->biography;
+	}
+
+	/**
+	 * @param string $biography
+	 */
+	public function setBiography( string $biography ) {
+		$this->biography = $biography;
+	}
+
+	/**
+	 * @return User
+	 */
+	public function getApprovedBy() {
+		return $this->approvedBy;
+	}
+
+	/**
+	 * @param User $approvedBy
+	 */
+	public function setApprovedBy( $approvedBy ) {
+		$this->approvedBy = $approvedBy;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getProcess(){
+		return $this->process;
+	}
+
+	/**
+	 * @param string $process
+	 * In-progress
+	 * Approved
+	 * Hold
+	 */
+	public function setProcess( string $process ) {
+		$this->process = $process;
+	}
+
 
 }
 

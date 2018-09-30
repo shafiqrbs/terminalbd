@@ -174,3 +174,26 @@ td, th {
     margin-left: -50px;
 }
 .rest-columns > .thead > :first-child {margin-left: 0px;}
+
+
+.tooltip-inner{
+    background-color: #d12610;
+}
+.tooltip.top .tooltip-arrow{
+    color: #d12610 !important;
+}
+.close{
+    background-image: none!important;
+}
+.dialogModal .dialogModal_top .dialogModal_header{
+    width: 100%!important;
+}
+.dialogModal .dialogModal_body{
+    width: 100%!important;
+}
+.dialogModal .dialogModal_content{
+
+}
+.dialogModal_content .mini{
+    height: 20px!important;
+}

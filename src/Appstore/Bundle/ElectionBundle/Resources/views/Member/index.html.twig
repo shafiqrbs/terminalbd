@@ -67,24 +67,35 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i> Name</td>
-                                    <th class="numeric">NID</th>
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i> ID</td>
+                                    <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
-                                    <th class="numeric">Location</th>
+                                    <th class="numeric">Village</th>
+                                    <th class="numeric">Vote Center</th>
+                                    <th class="numeric">Ward</th>
+                                    <th class="numeric">Union/Pourasava</th>
+                                    <th class="numeric">Thana/Upazila</th>
                                     <th class="numeric">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in entities %}
                                     <tr>
+                                        <td>{{ entity.memberId }}</td>
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
-                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.voteCenter.name }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.wardName }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.unionName }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.thanaName }}{% endif %}</td>
                                         <td class="numeric">
-                                            {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
+                                            {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_ELECTION_MANAGER"))  %}
                                                 <a class="btn mini green" href="{{ path('election_member_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                                                 <a class="btn mini delete red" href="javascript:" data-url="{{ path('election_member_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
+                                                <a class="btn mini yellow" href="{{ path('election_member_family', { 'id': entity.id }) }}" >&nbsp;<i class="icon-plus"></i> Add Family</a>
                                              {% endif %}
+                                            <a class="btn mini view blue" href="javascript:" data-url="{{ path('election_member_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -100,12 +111,18 @@
             </div>
         </div>
     </div>
-    <link href="{{ asset('assets/css/pages/timeline.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@ElectionBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@DomainUserBundle/Resources/public/js/approveProcess.js'
+    '@ElectionBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
