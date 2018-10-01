@@ -320,7 +320,7 @@ class AccountCashRepository extends EntityRepository
             $qb->setParameter('accountRefNo', $accountRefNo);
         }
 
-/*        $compareStart = new \DateTime();
+        $compareStart = new \DateTime();
         if (!empty($startDate) ) {
         $compareStart = new \DateTime($startDate);
         }
@@ -334,7 +334,7 @@ class AccountCashRepository extends EntityRepository
         }
         $end =  $compareEnd->format('Y-m-d 23:59:59');
         $qb->andWhere("e.updated <= :endDate");
-        $qb->setParameter('endDate', $end);*/
+        $qb->setParameter('endDate', $end);
 
         if (!empty($accountBank)) {
 
@@ -489,6 +489,7 @@ class AccountCashRepository extends EntityRepository
 		    if ( ! empty( $entity->getBranches() ) ) {
 			    $cash->setBranches( $entity->getBranches() );
 		    }
+		    $cash->setUpdated($cash->getCreated());
 		    $cash->setProcessHead( 'Sales' );
 		    $cash->setAccountRefNo( $entity->getAccountRefNo() );
 		    $cash->setUpdated( $entity->getUpdated() );

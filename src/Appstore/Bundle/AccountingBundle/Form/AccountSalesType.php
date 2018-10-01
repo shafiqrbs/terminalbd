@@ -39,9 +39,6 @@ class AccountSalesType extends AbstractType
                 'empty_value' => '---Choose a Transaction Method---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -79,6 +76,8 @@ class AccountSalesType extends AbstractType
 		        'choices' => array(
 			        'Due' => 'Due',
 			        'Advance' => 'Advance',
+			        'Discount' => 'Discount',
+			        'Outstanding' => 'Outstanding',
 		        ),
 	        ))
             ->add('accountMobileBank', 'entity', array(

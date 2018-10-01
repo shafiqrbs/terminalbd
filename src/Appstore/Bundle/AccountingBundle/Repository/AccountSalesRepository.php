@@ -310,6 +310,7 @@ class AccountSalesRepository extends EntityRepository
 			$accountSales = $exist;
 			$accountSales->setTotalAmount( $entity->getTotal() );
 			$accountSales->setAmount( $entity->getPayment() );
+			$accountSales->setUpdated($accountSales->getCreated());
 			if($entity->getPayment() > 0 ) {
 				$accountSales->setTransactionMethod( $entity->getTransactionMethod() );
 			}

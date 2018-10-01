@@ -39,7 +39,7 @@ class AccountBusinessPurchaseType extends AbstractType
 		        'expanded'      =>false,
 		        'multiple'      =>false,
 		        'choices' => array(
-			        'Due Payment' => 'Due Payment',
+			        'Due' => 'Due',
 			        'Advance' => 'Advance',
 			        'Discount' => 'Discount',
 			        'Outstanding' => 'Outstanding',

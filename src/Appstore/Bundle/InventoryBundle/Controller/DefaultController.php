@@ -111,6 +111,7 @@ class DefaultController extends Controller
 		    $profit = ( $entity->getTotal()-($entity->getVat() + $purchaseAmount));
 		    $entity->setProfit($profit);
 		    $entity->setDue($entity->getTotal() - $entity->getPayment());
+		    $entity->setUpdated($entity->getCreated());
 		    if(empty($entity->getPayment())){
 		    	 $entity->setTransactionMethod(NULL);
 		    }

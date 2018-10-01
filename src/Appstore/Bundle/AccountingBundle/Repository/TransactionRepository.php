@@ -697,7 +697,7 @@ class TransactionRepository extends EntityRepository
 		$transaction = new Transaction();
 		$transaction->setGlobalOption($entity->getGlobalOption());
 		$transaction->setAccountRefNo($entity->getAccountRefNo());
-		$transaction->setProcessHead('Customer Outstanding');
+		$transaction->setProcessHead('Sales');
 		$transaction->setUpdated($entity->getUpdated());
 		$transaction->setProcess('Current Asset');
 		/* Current Current Asset - Account Receivable */
@@ -711,7 +711,7 @@ class TransactionRepository extends EntityRepository
 		$transaction = new Transaction();
 		$transaction->setGlobalOption($entity->getGlobalOption());
 		$transaction->setAccountRefNo($entity->getAccountRefNo());
-		$transaction->setProcessHead('Customer Outstanding');
+		$transaction->setProcessHead('Sales');
 		$transaction->setUpdated($entity->getUpdated());
 		$transaction->setProcess('Inventory Assets');
 		/* Current Current Asset - Account Receivable */
@@ -728,7 +728,7 @@ class TransactionRepository extends EntityRepository
 		$transaction = new Transaction();
 		$transaction->setGlobalOption($entity->getGlobalOption());
 		$transaction->setAccountRefNo($entity->getAccountRefNo());
-		$transaction->setProcessHead('Customer Discounts');
+		$transaction->setProcessHead('Sales');
 		$transaction->setUpdated($entity->getUpdated());
 		$transaction->setProcess('Miscellaneous');
 		/* Current Current Asset - Account Receivable */
@@ -741,7 +741,7 @@ class TransactionRepository extends EntityRepository
 		$transaction = new Transaction();
 		$transaction->setGlobalOption($entity->getGlobalOption());
 		$transaction->setAccountRefNo($entity->getAccountRefNo());
-		$transaction->setProcessHead('Customer Discounts');
+		$transaction->setProcessHead('Sales');
 		$transaction->setUpdated($entity->getUpdated());
 		$transaction->setProcess('Current Asset');
 		/* Current Current Asset - Account Receivable */

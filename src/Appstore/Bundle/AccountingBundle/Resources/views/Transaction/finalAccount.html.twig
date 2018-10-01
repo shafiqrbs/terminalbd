@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Account of Cash
+                    Capital & Profit/Loss Accounting
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="javascript:">Account of Cash</a>
+                        <a href="javascript:">Capital & Profit/Loss Accounting</a>
                     </li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
@@ -29,7 +29,7 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Account Cash</div>
+                        <div class="caption"><i class="icon-reorder"></i>Module Base Accounting</div>
                     </div>
                     <div class="portlet-body flip-scroll">
 
@@ -43,8 +43,14 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr><td colspan="2">Journal</td></tr>
+                            <tr><th colspan="2">JOURNAL</th></tr>
+                            {% set journalBalance = 0 %}
                             {% for entity in entities %}
+                                {% if entity.type == 'Debit' %}
+                                    {% set journalBalance = journalBalance + entity.amount %}
+                                {% else %}
+                                    {% set journalBalance = journalBalance - entity.amount %}
+                                {% endif %}
                                 <tr>
                                     <td class="numeric" >
                                         {% if entity.type == 'Debit' %}
@@ -62,33 +68,42 @@
                                     </td>
                                 </tr>
                             {% endfor %}
-                            <tr><td colspan="2">Purchase</td></tr>
+                            <tr><td><strong class="pull-right">Sub-Total</strong></td><td><strong>{{ journalBalance|number_format }}</strong></td></tr>
+                            <tr><th colspan="2">PURCHASE</th></tr>
+                            {% set purchaseBalance = 0 %}
                             {% for purchase in purchases %}
                                 {% if purchase.credit > 0 %}
+                                    {% set purchaseBalance = purchaseBalance + purchase.credit %}
                                     <tr>
                                         <td class="numeric" > {{ purchase.name }}</td>
                                         <td class="numeric" > ({{ purchase.credit|number_format }})</td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
-                            <tr><td colspan="2">Sales</td></tr>
+                            <tr><td><strong class="pull-right">Sub-Total</strong></td><td><strong>{{ purchaseBalance|number_format }}</strong></td></tr>
+                            <tr><th colspan="2">SALES</th></tr>
+                            {% set salesBalance = 0 %}
                             {% for sales in sales %}
-                                {% if sales.debit > 0 %}
+                                {% set salesBalance = salesBalance + sales.debit %}
                                     <tr>
                                         <td class="numeric" >{{ sales.name }}</td>
-                                        <td class="numeric" >{{ sales.debit|number_format }}</td>
+                                        <td class="numeric" >{% if sales.debit > 0 %}{{ sales.debit|number_format }}{% else %}{{ sales.credit|number_format }}{% endif %}</td>
                                     </tr>
-                                {% endif %}
+
                             {% endfor %}
-                            <tr><td colspan="2">Expenditures</td></tr>
+                            <tr><td><strong class="pull-right">Sub-Total</strong></td><td><strong>{{ salesBalance|number_format }}</strong></td></tr>
+                            <tr><th colspan="2">Expense</th></tr>
+                            {% set expenditureBalance = 0 %}
                             {% for expenditure in expenditures %}
                                 {% if expenditure.debit > 0 %}
+                                    {% set expenditureBalance = expenditureBalance + expenditure.debit %}
                                     <tr>
                                         <td class="numeric" > {{ expenditure.name }}</td>
                                         <td class="numeric" > ({{ expenditure.debit|number_format }})</td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
+                            <tr><td><strong class="pull-right">Sub-Total</strong></td><td><strong>{{ expenditureBalance|number_format }}</strong></td></tr>
                             </tbody>
                         </table>
 

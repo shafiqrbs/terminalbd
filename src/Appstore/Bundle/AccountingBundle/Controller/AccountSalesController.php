@@ -104,6 +104,11 @@ class AccountSalesController extends Controller
             if(!empty($this->getUser()->getProfile()->getBranches())){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
+	        if($entity->getProcessHead() == 'Outstanding'){
+		        $entity->setTotalAmount(abs($entity->getAmount()));
+		        $entity->setAmount(0);
+		        $entity->setTransactionMethod(null);
+	        }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
