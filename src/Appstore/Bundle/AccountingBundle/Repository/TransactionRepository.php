@@ -110,12 +110,12 @@ class TransactionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.accountHead','accountHead');
         $qb->join('accountHead.parent','parent');
-        $qb->select('sum(e.amount) as amount, sum(e.debit) as debit , sum(e.credit) as credit, accountHead.name as name , parent.name as parentName, accountHead.id, accountHead.toIncrease, accountHead.code');
+        $qb->select('sum(e.amount) as amount, sum(e.debit) as debit , sum(e.credit) as credit, accountHead.name as name , parent.name as parentName,parent.id as parentId, accountHead.id, accountHead.toIncrease, accountHead.code as code');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption->getId());
         $qb->groupBy('e.accountHead');
-        $qb->orderBy('e.accountHead','ASC');
-        $result = $qb->getQuery()->getResult();
+        $qb->orderBy('parent.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
 

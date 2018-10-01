@@ -61,72 +61,26 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
-                                <tr>
-                                    <th class="numeric" colspan="2" ><strong class="pull-right">Grand Total</strong></th>
-                                    <td class="numeric" ><strong>{{ overview.debit|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.credit|number_format }}</strong></td>
-                                </tr>
                                 <tr class="head-blue">
-                                    <th class="numeric" >Account Head</th>
                                     <th class="numeric" >Parent Head</th>
-                                    <th class="numeric" >Debit</th>
-                                    <th class="numeric" >Credit</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for entity in entities %}
-                                   <tr>
-                                        <td class="numeric" >{{ entity.code }} - {{ entity.name }}</td>
-                                        <td class="numeric" >{{ entity.parentName }}</td>
-                                        <td class="numeric" >
-                                            {% if entity.toIncrease == 'Debit' %}
-                                                   {{ entity.debit|number_format }}
-                                            {% endif %}
-                                        </td>
-                                        <td class="numeric" >
-                                            {% if entity.toIncrease == 'Credit' %}
-                                                  {{ entity.credit|trim('-')|number_format }}
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                                <thead class="flip-content ">
-                                <tr>
-                                    <th class="numeric" colspan="2" ><strong class="pull-right">Grand Total</strong></th>
-                                    <td class="numeric" ><strong>{{ overview.debit|number_format }}</strong></td>
-                                </tr>
-                                <tr class="head-blue">
                                     <th class="numeric" >Account Head</th>
-                                    <th class="numeric" >Parent Head</th>
                                     <th class="numeric" >Amount</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for entity in entities %}
-                                    <tr>
-                                        <td class="numeric" >{{ entity.code }} - {{ entity.name }}</td>
-                                        <td class="numeric" >{{ entity.parentName }}</td>
-                                        <td class="numeric" >
-                                            {% if entity.toIncrease == 'Debit' %}
-                                                {{ entity.debit|number_format }}
-                                            {% elseif entity.toIncrease == 'Credit' %}
-                                               ({{ entity.credit|number_format }})
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-
+                                {% for key, entity in entities %}
+                                  <tr><td colspan="3" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
+                                    {% set total = 'total'~key  %}
+                                    {% set total =  0   %}
+                                    {% for val in  entities[key] %}
+                                        {% set total = total + val.amount %}
+                                         <tr><td>&nbsp;</td><td> {{ val.code }} - {{ val.name }}</td><td> {{ val.amount }}</td></tr>
+                                    {% endfor %}
+                                   <tr><td>&nbsp;</td><td>Total</td><td> {{ total }}</td></tr>
                                 {% endfor %}
-                                </tbody>
+                              </tbody>
                             </table>
 
-                            <div class="pagination pull-center"  >
-                                {{ knp_pagination_render(entities) }}
-                            </div>
                         </div>
                     </div>
                 </div>

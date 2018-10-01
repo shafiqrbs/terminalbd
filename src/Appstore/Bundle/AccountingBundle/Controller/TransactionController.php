@@ -41,11 +41,18 @@ class TransactionController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption);
-        $pagination = $this->paginate($entities);
+
+	    $invoiceDetails = [];
+	   // $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+
+	    foreach ($entities as $key => $item) {
+		    $serviceName = $item['parentName'];
+		    $invoiceDetails[$serviceName][$key] = $item;
+		}
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->transactionOverview($globalOption);
         $accountHead = $em->getRepository('AccountingBundle:AccountHead')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:Transaction:balancesheet.html.twig', array(
-            'entities' => $pagination,
+            'entities' => $invoiceDetails,
             'accountHead' => $accountHead,
             'overview' => $overview,
         ));
@@ -61,24 +68,25 @@ class TransactionController extends Controller
 		$data = $_REQUEST;
 		$user = $this->getUser();
 		$transactionMethods = array(1,2,3,4);
-	//	$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
-	//	$pagination = $this->paginate($entities);
+		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+		$pagination = $this->paginate($entities);
 	//	$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
 	//	$processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
 
-	//	$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
 		$globalOption = $this->getUser()->getGlobalOption();
 		$globalOption->getId();
-		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->finalTransaction($globalOption);
-		$accountPurchase = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Purchase');
-		$accountSales = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Sales');
-		$accountExpenditure = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Expenditure');
+	//	$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->finalTransaction($globalOption);
+	//	$accountPurchase = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Purchase');
+	//	$accountSales = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Sales');
+	//	$accountExpenditure = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Expenditure');
 
-		return $this->render('AccountingBundle:Transaction:finalAccount.html.twig', array(
-			'entities' => $overview,
-			'purchases' => $accountPurchase,
-			'sales' => $accountSales,
-			'expenditures' => $accountExpenditure,
+		return $this->render('AccountingBundle:Transaction:accountcash.html.twig', array(
+			'entities' => $pagination,
+			'overview' => $overview,
+		//	'purchases' => $accountPurchase,
+		//	'sales' => $accountSales,
+		//	'expenditures' => $accountExpenditure,
 			'searchForm' => $data,
 		));
 	}
