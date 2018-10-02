@@ -49,32 +49,32 @@ class BarcodeController extends Controller
     public function barCoder(PurchaseItem $barcoder,InventoryConfig $config)
     {
 
-        if ((!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1)) {
+        if ((!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1)) {
 
-            if ($barcoder->getColor()->getName() != 'Default'){
-                $color = $barcoder->getColor()->getName();
+            if ($barcoder->getItem()->getColor()->getName() != 'Default'){
+                $color = $barcoder->getItem()->getColor()->getName();
             }else{
                 $color ='';
             }
-            if ($barcoder->getSize()->getName() != 'Default'){
-                $size = '-'.$barcoder->getSize()->getName();
+            if ($barcoder->getItem()->getSize()->getName() != 'Default'){
+                $size = '-'.$barcoder->getItem()->getSize()->getName();
             }else{
                 $size ='';
             }
             $sizeColor =  $color.$size;
 
-        } elseif (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1 and $barcoder->getSize()->getName() != 'Default') {
-            $sizeColor = $barcoder->getSize()->getName();
-        } elseif (!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1 and $barcoder->getColor()->getName() != 'Default') {
-            $sizeColor = $barcoder->getColor()->getName();
+        } elseif (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1 and $barcoder->getSize()->getName() != 'Default') {
+            $sizeColor = $barcoder->getItem()->getSize()->getName();
+        } elseif (!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1 and $barcoder->getColor()->getName() != 'Default') {
+            $sizeColor = $barcoder->getItem()->getColor()->getName();
         }else {
             $sizeColor = '';
         }
 
-        if (!empty($barcoder->getVendor()) and $config->getBarcodeBrandVendor() == 2 ){
+        if (!empty($barcoder->getItem()->getVendor()) and $config->getBarcodeBrandVendor() == 2 ){
             $vendorBrand = $barcoder->getPurchase()->getVendor()->getVendorCode();
-        }elseif(!empty($barcoder->getBrand()) and $config->getBarcodeBrandVendor() == 1){
-            $vendorBrand = $barcoder->getBrand()->getBrandCode();
+        }elseif(!empty($barcoder->getItem()->getBrand()) and $config->getBarcodeBrandVendor() == 1){
+            $vendorBrand = $barcoder->getItem()->getBrand()->getBrandCode();
         }else{
             $vendorBrand = '';
         }

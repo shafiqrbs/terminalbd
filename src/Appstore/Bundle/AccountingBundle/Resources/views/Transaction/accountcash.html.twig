@@ -116,14 +116,29 @@
                                         <td class="numeric" >
                                             {% if entity.processHead == 'Expenditure' %}
                                                Expense: {% if entity.expenditure.category is not empty %} {{ entity.expenditure.category.accountHead.name }}{% endif %}: {{ entity.accountRefNo }}
+                                               {% if entity.expenditure.remark is not empty  %}
+                                                <br/> {{ entity.expenditure.remark }}
+                                               {% endif %}
                                             {% elseif entity.processHead == 'Sales' %}
                                                 Account Sales : {{ entity.accountRefNo }}
+                                                {% if entity.accountSales.remark is not empty  %}
+                                                    <br/> {{ entity.accountSales.remark }}
+                                                {% endif %}
                                             {% elseif entity.processHead == 'Purchase' %}
                                                 Account Purchase : {{ entity.accountRefNo }}
+                                                {% if entity.accountPurchase.remark is not empty  %}
+                                                    <br/> {{ entity.accountPurchase.remark }}
+                                                {% endif %}
                                             {% elseif entity.processHead == 'Journal' and  entity.debit > 0 %}
                                                 Journal: {% if entity.journal.accountHeadCredit is not empty %} {{ entity.journal.accountHeadCredit.name }}{% endif %}: {{ entity.accountRefNo }}
+                                                {% if entity.journal.remark is not empty  %}
+                                                    <br/> {{ entity.journal.remark }}
+                                                {% endif %}
                                             {% elseif entity.processHead == 'Journal' and  entity.credit > 0 %}
                                                 Journal: {% if entity.journal.accountHeadDebit is not empty %} {{ entity.journal.accountHeadDebit.name }}{% endif %}: {{ entity.accountRefNo }}
+                                                {% if entity.expenditure.remark is not empty  %}
+                                                    <br/> {{ entity.journal.remark }}
+                                                {% endif %}
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >{% if entity.debit > 0 and entity.transactionMethod.slug == 'cash'  %}{{ entity.debit|number_format }}{% endif %}</td>
