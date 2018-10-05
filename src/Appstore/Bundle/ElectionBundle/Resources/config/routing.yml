@@ -2,6 +2,22 @@ election_particular:
     resource: "@ElectionBundle/Resources/config/routing/particular.yml"
     prefix:   /setting-option
 
+election_event:
+    resource: "@ElectionBundle/Resources/config/routing/event.yml"
+    prefix:   /event
+
+election_votecenter:
+    resource: "@ElectionBundle/Resources/config/routing/votecenter.yml"
+    prefix:   /vote-center
+
+election_sms:
+    resource: "@ElectionBundle/Resources/config/routing/sms.yml"
+    prefix:   /sms
+
+election_campaign:
+    resource: "@ElectionBundle/Resources/config/routing/campaign.yml"
+    prefix:   /campaign
+
 election_committee:
     resource: "@ElectionBundle/Resources/config/routing/committee.yml"
     prefix:   /committee

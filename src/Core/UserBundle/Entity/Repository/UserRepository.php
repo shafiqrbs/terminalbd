@@ -87,10 +87,12 @@ class UserRepository extends EntityRepository
             $array['Inventory'] = array(
                 'ROLE_INVENTORY'                                    => 'Inventory',
                 'ROLE_DOMAIN_INVENTORY_SALES'                       => 'Inventory Sales',
+                'ROLE_DOMAIN_INVENTORY_DUE'                         => 'Inventory Due Receive',
                 'ROLE_DOMAIN_INVENTORY'                             => 'Inventory Domain',
                 'ROLE_DOMAIN_INVENTORY_PURCHASE'                    => 'Inventory Purchase',
                 'ROLE_DOMAIN_INVENTORY_CUSTOMER'                    => 'Inventory Customer',
                 'ROLE_DOMAIN_INVENTORY_APPROVAL'                    => 'Inventory Approval',
+                'ROLE_DOMAIN_INVENTORY_REVERSE'                     => 'Purchase/Sales Reverse',
                 'ROLE_DOMAIN_INVENTORY_STOCK'                       => 'Inventory Stock',
                 'ROLE_DOMAIN_INVENTORY_REPORT'                      => 'Inventory Report',
                 'ROLE_DOMAIN_INVENTORY_BRANCH'                      => 'Inventory Branch',

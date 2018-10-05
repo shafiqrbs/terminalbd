@@ -1,4 +1,3 @@
-
 {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
@@ -6,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage Particular
+                    Manage Committee
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Particular</a></li>
+                    <li><a href="#">Manage Committee</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,10 +28,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i> Import Information</div>
+                        <div class="caption"><i class="icon-reorder"></i> Committee Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_committee_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a class="btn red" href="{{ path('election_committee_new') }}"><i class="icon-plus-sign"></i>&nbsp;Committee Create</a>
                             </div>
                         </div>
                     </div>
@@ -51,6 +50,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Name </th>
                                     <th class="numeric" >Location</th>
+                                    <th class="numeric" >Location Type</th>
                                     <th class="numeric" >Date Duration</th>
                                     <th class="numeric" >Expiration</th>
                                     <th class="numeric" >Created By</th>
@@ -62,13 +62,16 @@
 
                                 {% for entity in entities %}
                                     <tr>
-
-                                        <td class="numeric" >{{ entity.created }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
-                                        <td class="numeric" >{{ entity.electionLocation.name }}</td>
+                                        <td class="numeric" >{% if entity.electionLocation is not empty %}{{ entity.electionLocation.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.electionLocation is not empty %}{{ entity.electionLocation.locationType.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.startDate|date('d-m-Y') }} To {{ entity.endDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >Expiration</td>
+                                        <td class="numeric" >{{ entity.createdBy }}</td>
+                                        <td class="numeric" >{{ entity.approvedBy }}</td>
                                         <td class="numeric" >
+                                            <div class="btn-group">
                                             {% if( entity.status == 1) %}
                                                 <a href="{{ path('election_committee_status', { 'id': entity.id}) }}" class="btn yellow mini"><i class="icon-ok"></i></a>
                                             {% else %}
@@ -76,6 +79,10 @@
                                             {% endif %}
                                             <a href="{{ path('election_committee_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                             <a title="Are you sure went to delete ?" href="{{ path('election_committee_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a class="btn mini yellow" href="{{ path('election_committee_member_new', { 'id': entity.id }) }}" ><i class="icon-plus"></i> Member</a>
+                                            <a data-title="{{ entity.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('election_committee_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
+                                                <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_committee_sms', { 'id': entity.id }) }}" >SMS</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -89,6 +96,28 @@
             </div>
         </div>
     </div>
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@ElectionBundle/Resources/public/css/style.css'
+    '@ElectionBundle/Resources/public/css/messagebox.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@ElectionBundle/Resources/public/js/election.js'
+    '@ElectionBundle/Resources/public/js/messagebox.js'
+    '@ElectionBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
 {% endblock %}
 
 

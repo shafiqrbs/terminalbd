@@ -2,6 +2,10 @@
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionLocation;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\EntityRepository;
@@ -15,10 +19,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class ElectionMemberRepository extends EntityRepository
 {
-    public function checkDuplicateCustomer(GlobalOption $config, $mobile)
+    public function checkDuplicateCustomer(ElectionConfig $config, $mobile)
     {
         $em = $this->_em;
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config,'mobile' => $mobile));
+        $entity = $em->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('config' => $config,'mobile' => $mobile));
         if($entity) {
             return false;
         }else{
@@ -26,250 +30,62 @@ class ElectionMemberRepository extends EntityRepository
         }
 
     }
-
-    public function defaultCustomer($global)
+    public function getLocationBaseMembers(ElectionCommittee $committee)
     {
+	    /* @var $location ElectionLocation */
+    	$location = $committee->getElectionLocation();
 
-        $mobile = $global->getMobile();
-        $em = $this->_em;
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $global ,'mobile' => $mobile));
-        if($entity){
-            return $entity;
-        }else{
-            $entity = new Customer();
-            $entity->setMobile($mobile);
-            $entity->setName('Default');
-            $entity->setGlobalOption($global);
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
+	    $config = $committee->getElectionConfig()->getId();
+	    $qb = $this->createQueryBuilder('e');
+	    $orX = $qb->expr()->orX();
+	    $orX->add("node.path like '%" .$location->getId(). "/%'");
+	    $orX->add("center.path like '%" .$location->getId(). "/%'");
+	    $qb->leftJoin('e.location','node');
+	    $qb->leftJoin('e.voteCenter','center');
+		$qb->orderBy('node.level, node.name', 'ASC');
+		$qb->where('e.electionConfig='.$config);
+		$qb->andWhere($orX);
+	    $results = $qb->getQuery()->getResult();
+	    $choices = [];
+	    foreach ($results as $product) {
+		    $choices[$product->getId()] =  $product->getName().' [ '.$product->getLocation()->villageName().' ]';
+	    }
+	    return $choices;
     }
 
-    public function newExistingCustomer($config,$mobile,$data)
-    {
-        $em = $this->_em;
-        $name = $data['sales_online']['e']['name'];
-        $location = $data['sales_online']['e']['location'];
-        $address = $data['sales_online']['e']['address'];
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config ,'mobile' => $mobile));
-        if($entity){
-            return $entity;
-        }else{
-            $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-            $entity = new Customer();
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setLocation($location);
-            $entity->setAddress($address);
-            $entity->setGlobalOption($config);
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
-    }
-
-    public function newExistingCustomerForSales($config,$mobile,$data)
-    {
-        $em = $this->_em;
-        $name = $data['eName'];
-        $address = $data['eAddress'];
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config ,'mobile' => $mobile));
-        if($entity){
-            return $entity;
-        }else{
-            $entity = new Customer();
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setAddress($address);
-            $entity->setGlobalOption($config);
-            if(!empty($data['location'])){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
-                $entity->setLocation($location);
-            }
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
-    }
-
-	public function newExistingCustomerForHotel($config,$mobile,$data)
+	public function getVotecenterBaseMembers(ElectionVoteCenter $committee)
 	{
-		$em = $this->_em;
-		$namePrefix = isset($data['namePrefix']) ? $data['namePrefix']:array();
-		$email = $data['email'];
-		$firstName = $data['firstName'];
-		$lastName = $data['lastName'];
-		$address = $data['address'];
-		$profession = $data['profession'];
-		$organization = $data['organization'];
-		$postalCode = $data['postalCode'];
-		$remark = $data['remark'];
-		$entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config ,'mobile' => $mobile));
-		if($entity){
-			return $entity;
-		}else{
-			$entity = new Customer();
-			$entity->setNamePrefix($namePrefix);
-			$entity->setMobile($mobile);
-			$entity->setEmail($email);
-			$entity->setFirstName($firstName);
-			$entity->setLastName($lastName);
-			$entity->setAddress($address);
-			$entity->setProfession($profession);
-			$entity->setCompany($organization);
-			$entity->setPostalCode($postalCode);
-			$entity->setRemark($remark);
-			$entity->setName($entity->getFirstName().' '.$entity->getLastName());
-			$entity->setGlobalOption($config);
-			if(!empty($data['location'])){
-				$location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
-				$entity->setLocation($location);
-			}
-			$em->persist($entity);
-			$em->flush($entity);
-			return $entity;
+		/* @var $location ElectionLocation */
+		$location = $committee->getLocation();
+
+		$config = $committee->getElectionConfig()->getId();
+		$qb = $this->createQueryBuilder('e');
+		$orX = $qb->expr()->orX();
+		$orX->add("center.path like '%" .$location->getId(). "/%'");
+		$qb->leftJoin('e.location','node');
+		$qb->leftJoin('e.voteCenter','center');
+		$qb->orderBy('node.level, node.name', 'ASC');
+		$qb->where('e.electionConfig='.$config);
+		$qb->andWhere($orX);
+		$results = $qb->getQuery()->getResult();
+		$choices = [];
+		foreach ($results as $product) {
+			$choices[$product->getId()] =  $product->getName().' [ '.$product->getLocation()->villageName().' ]';
 		}
+		return $choices;
 	}
-
-
-	public function newExistingRestaurantCustomer($config,$mobile,$name)
-    {
-        $em = $this->_em;
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config ,'mobile' => $mobile));
-        if($entity){
-            $entity->setName($name);
-            $em->flush($entity);
-            return $entity;
-
-        }else{
-
-            $entity = new Customer();
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setGlobalOption($config);
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
-    }
-
-    public function findExistingCustomer(Sales $sales, $mobile)
-    {
-        $em = $this->_em;
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $sales->getInventoryConfig()->getGlobalOption(),'mobile'=>$mobile));
-        if($entity){
-            return $entity;
-        }else{
-            $entity = new Customer();
-            $entity->setMobile($mobile);
-            $entity->setName($mobile);
-            $entity->setGlobalOption($sales->getInventoryConfig()->getGlobalOption());
-            $em->persist($entity);
-            $em->flush();
-            return $entity;
-        }
-    }
-
-    public function findHmsExistingCustomer($config, $mobile,$data)
-    {
-        $em = $this->_em;
-
-        $name = $data['e']['name'];
-        $gender = $data['e']['gender'];
-        $age = $data['e']['age'];
-        $ageType = $data['e']['ageType'];
-        $location = $data['e']['location'];
-        $profession = $data['e']['profession'];
-        $maritalStatus = $data['e']['maritalStatus'];
-        $dob = $data['e']['dob'];
-        $fatherName = $data['e']['fatherName'];
-        $motherName = $data['e']['motherName'];
-        $nationality = $data['e']['nationality'];
-        $bloodGroup = $data['e']['bloodGroup'];
-        $address = $data['e']['address'];
-        $religion = $data['e']['religion'];
-
-        $alternativeContactPerson = $data['e']['alternativeContactPerson'];
-        $alternativeRelation = $data['e']['alternativeRelation'];
-        $alternativeContactMobile = $data['e']['alternativeContactMobile'];
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
-        if($entity){
-            return $entity;
-        }else{
-
-            $entity = new Customer();
-            if(!empty($location)){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setGender($gender);
-            $entity->setAge($age);
-            $entity->setAgeType($ageType);
-            $entity->setDob($dob);
-            $entity->setFatherName($fatherName);
-            $entity->setMotherName($motherName);
-            $entity->setNationality($nationality);
-            $entity->setReligion($religion);
-            $entity->setBloodGroup($bloodGroup);
-            $entity->setMaritalStatus($maritalStatus);
-            $entity->setProfession($profession);
-            $entity->setAddress($address);
-            $entity->setAlternativeContactPerson($alternativeContactPerson);
-            $entity->setAlternativeRelation($alternativeRelation);
-            $entity->setAlternativeContactMobile($alternativeContactMobile);
-            $entity->setGlobalOption($config);
-            $em->persist($entity);
-            $em->flush($entity);
-
-            return $entity;
-        }
-
-    }
-    public function findHmsExistingCustomerDiagnostic($config, $mobile,$data)
-    {
-        $em = $this->_em;
-
-        $name = $data['e']['name'];
-        $gender = $data['e']['gender'];
-        $age = $data['e']['age'];
-        $ageType = $data['e']['ageType'];
-        $location = $data['e']['location'];
-        $address = $data['e']['address'];
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
-        if($entity){
-            return $entity;
-        }else{
-
-            $entity = new Customer();
-            if(!empty($location)){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setGender($gender);
-            $entity->setAge($age);
-            $entity->setAgeType($ageType);
-            $entity->setAddress($address);
-            $entity->setGlobalOption($config);
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
-
-    }
 
     public function findWithSearch($config,$data)
     {
-
+	    $sort = isset($data['sort'])? $data['sort'] :'e.name';
+	    $direction = isset($data['direction'])? $data['direction'] :'ASC';
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.electionConfig = :config");
         $qb->setParameter('config', $config);
-        $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.created','DESC');
+	    $qb->leftJoin('e.location','node');
+	    $qb->leftJoin('e.voteCenter','center');
+	    $this->handleSearchBetween($qb,$data);
+	    $qb->orderBy("{$sort}",$direction);
         $qb->getQuery();
         return  $qb;
 
@@ -281,94 +97,56 @@ class ElectionMemberRepository extends EntityRepository
         {
 
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
-            $e =    isset($data['name'])? $data['name'] :'';
-            $location =    isset($data['location'])? $data['location'] :'';
-            $eId =    isset($data['eId'])? $data['eId'] :'';
-
+            $name =    isset($data['name'])? $data['name'] :'';
+            $thana =    isset($data['thana'])? $data['thana'] :'';
+            $union =    isset($data['union'])? $data['union'] :'';
+            $ward =    isset($data['ward'])? $data['ward'] :'';
+            $village =    isset($data['village'])? $data['village'] :'';
+            $voteCenter =    isset($data['voteCenter'])? $data['voteCenter'] :'';
+            $district =    isset($data['district'])? $data['district'] :'';
             if (!empty($mobile)) {
                 $qb->andWhere("e.mobile = :mobile");
                 $qb->setParameter('mobile', $mobile);
             }
-            if (!empty($location)) {
-                $qb->leftJoin('e.location','l');
-                $qb->andWhere("l.name = :location");
-                $qb->setParameter('location', $location);
+
+	        if (!empty($name)) {
+		        $qb->andWhere("e.mobile LIKE :name");
+		        $qb->setParameter('name','%'. $name.'%');
+	        }
+
+	        if (!empty($district)) {
+                $qb->andWhere("e.district LIKE :district");
+                $qb->setParameter('district','%'. $district.'%');
             }
 
-            if (!empty($e)) {
-                $qb->andWhere("e.name LIKE :name");
-                $qb->setParameter('name','%'. $e.'%');
+	        if (!empty($thana)) {
+                $qb->andWhere("e.thana LIKE :thana");
+                $qb->setParameter('thana','%'. $thana.'%');
             }
-            if (!empty($eId)) {
-                $qb->andWhere("e.eId LIKE :eId");
-                $qb->setParameter('eId','%'. $eId.'%');
-            }
+
+	        if (!empty($union)) {
+		        $qb->andWhere("e.memberUnion LIKE :union");
+		        $qb->setParameter('union','%'. $union.'%');
+	        }
+
+            if (!empty($ward)) {
+		        $qb->andWhere("e.ward LIKE :ward");
+		        $qb->setParameter('ward','%'. $ward.'%');
+	        }
+
+            if (!empty($village)) {
+		        $qb->andWhere("e.village LIKE :village");
+		        $qb->setParameter('village','%'. $village.'%');
+	        }
+	        if (!empty($voteCenter)) {
+		        $qb->andWhere("e.voteCenterName LIKE :voteCenter");
+		        $qb->setParameter('voteCenter','%'.$voteCenter.'%');
+	        }
+
         }
 
     }
 
-
-    public function insertContactCustomer($config,$data,$mobile='')
-    {
-        $em = $this->_em;
-        $entity  ='';
-
-        if(!empty($mobile)){
-            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config, 'mobile' => $mobile));
-        }elseif(isset($data['email']) && $data['email'] !=""){
-            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' =>$config, 'email' => $data['email']));
-        }
-
-        if(!empty($entity)){
-            return $data = array('e' => $entity, 'status'=>'invalid');
-        }else {
-            $entity = new Customer();
-            if(isset($data['email']) && $data['email'] !=""){
-                $entity->setEmail($data['email']);
-            }
-            if(!empty($mobile)) {
-                $entity->setMobile($mobile);
-            }
-            if(isset($data['name']) && $data['name'] !=""){
-                $entity->setName($data['name']);
-            }
-            $entity->setGlobalOption($config);
-            $entity->setCustomerType('contact');
-            $em->persist($entity);
-            $em->flush();
-            return $data = array('e' => $entity, 'status'=>'valid');
-        }
-
-    }
-
-    public function insertNewsLetterCustomer($config,$data,$mobile='')
-    {
-        $em = $this->_em;
-        $entity  ='';
-
-        if(!empty($mobile)){
-            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' => $config, 'mobile' => $mobile));
-        }elseif(isset($data['email']) && $data['email'] !=""){
-            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config' =>$config, 'email' => $data['email']));
-        }
-        if(!empty($entity)){
-            return $entity;
-        }else {
-            $entity = new Customer();
-            if(isset($data['email']) && $data['email'] !=""){
-                $entity->setEmail($data['email']);
-            }
-            if(!empty($mobile)) {
-                $entity->setMobile($mobile);
-            }
-            $entity->setGlobalOption($config);
-            $entity->setCustomerType('news-letter');
-            $em->persist($entity);
-            $em->flush();
-            return $entity;
-        }
-
-    }
 
     public function insertSMSCustomer($data)
     {
@@ -390,20 +168,18 @@ class ElectionMemberRepository extends EntityRepository
 
     }
 
-    public function searchAutoComplete(GlobalOption $config, $q, $type = 'NULL')
+    public function searchAutoComplete(ElectionConfig $config, $q)
     {
         $query = $this->createQueryBuilder('e');
-
         $query->select('e.mobile as id');
-        $query->addSelect('e.id as e');
         $query->addSelect('CONCAT(e.mobile, \' - \', e.name) AS text');
         $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
         $query->orWhere($query->expr()->like("e.name", "'%$q%'"  ));
-        $query->andWhere("e.config = :config");
+        $query->andWhere("e.electionConfig = :config");
         $query->setParameter('config', $config->getId());
         $query->orderBy('e.name', 'ASC');
         $query->groupBy('e.mobile');
-        $query->setMaxResults( '10' );
+        $query->setMaxResults( '20' );
         return $query->getQuery()->getResult();
 
     }
@@ -471,91 +247,5 @@ class ElectionMemberRepository extends EntityRepository
         $query->orderBy('e.eId', 'ASC');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
-
     }
-
-    public function patientInsertUpdate($data,Invoice $invoice)
-    {
-        $em = $this->_em;
-        $e = $data['appstore_bundle_hospitalbundle_invoice']['e'];
-        $patient = $data['patient'];
-        $option = $invoice->getHospitalConfig()->getGlobalOption();
-        if($patient){
-            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('config'=> $option ,'id' => $patient));
-        }else{
-            $location = $e['location'];
-            $entity = new Customer();
-            if(!empty($location)){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
-            if($e['mobile']){
-                $entity->setMobile($e['mobile']);
-            }
-            if($e['name']){
-                $entity->setName($e['name']);
-            }
-            if($e['gender']){
-                $entity->setGender($e['gender']);
-            }
-            if($e['age']){
-                $entity->setAge($e['age']);
-            }
-            if($e['ageType']){
-                $entity->setAgeType($e['ageType']);
-            }
-            if($e['profession']){
-                $entity->setProfession($e['profession']);
-            }
-            if($e['fatherName']){
-                $entity->setFatherName($e['fatherName']);
-            }
-            if($e['motherName']){
-                $entity->setMotherName($e['motherName']);
-            }
-            if($e['nationality']){
-                $entity->setNationality($e['nationality']);
-            }
-            if($e['religion']){
-                $entity->setReligion($e['religion']);
-            }
-            if($e['address']){
-                $entity->setAddress($e['address']);
-            }
-            if($e['bloodGroup']){
-                $entity->setBloodGroup($e['bloodGroup']);
-            }
-            if($e['motherName']){
-                $entity->setMotherName($e['motherName']);
-            }
-            if($e['nationality']){
-                $entity->setNationality($e['nationality']);
-            }
-            if($e['maritalStatus']){
-                $entity->setMaritalStatus($e['maritalStatus']);
-            }
-            if($e['dob']){
-                $entity->setDob($e['dob']);
-            }
-            if($e['alternativeRelation']){
-                $entity->setAlternativeRelation($e['alternativeRelation']);
-            }
-            if($e['alternativeContactMobile']){
-                $entity->setAlternativeContactMobile($e['alternativeContactMobile']);
-            }
-            if($e['alternativeContactPerson']){
-                $entity->setAlternativeContactPerson($e['alternativeContactPerson']);
-            }
-            $entity->setGlobalOption($option);
-            $em->persist($entity);
-            $em->flush($entity);
-        }
-        $em->getRepository('HospitalBundle:Invoice')->updatePatientInfo($invoice, $entity);
-        return $entity;
-
-    }
-
-
-
-
 }

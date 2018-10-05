@@ -31,9 +31,102 @@ class ElectionVoteCenter
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="electionCommittees")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="votecenters")
 	 **/
-	protected $electionLocation;
+	protected $location;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="votecenters")
+	 **/
+	protected $electionType;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="votecenters")
+	 **/
+	protected $representative;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenterMember", mappedBy="voteCenter")
+	 **/
+	protected $centerMembers;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="voteCenterName", type="string", length=200, nullable = true)
+	 */
+	private $voteCenterName;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="presiding", type="string", length=200, nullable = true)
+	 */
+	private $presiding;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="presidingDesignation", type="string", length=200, nullable = true)
+	 */
+	private $presidingDesignation;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="presidingMobile", type="string", length=200, nullable = true)
+	 */
+	private $presidingMobile;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="representativeMobile", type="string", length=200, nullable = true)
+	 */
+	private $representativeMobile;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="presidingAddress", type="string", length=200, nullable = true)
+	 */
+	private $presidingAddress;
+
+	/**
+	 * @var \DateTime
+	 * @ORM\Column(name="electionDate", type="datetime", nullable=true)
+	 */
+	private $electionDate;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="ward", type="string", length=200, nullable = true)
+	 */
+	private $ward;
+
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="memberUnion", type="string", length=200, nullable = true)
+	 */
+	private $memberUnion;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="thana", type="string", length=200, nullable = true)
+	 */
+	private $thana;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="district", type="string", length=200, nullable = true)
+	 */
+	private $district;
+
 
 	/**
 	 * @Gedmo\Blameable(on="create")
@@ -46,7 +139,12 @@ class ElectionVoteCenter
 	 **/
 	private  $approvedBy;
 
-
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="address", type="text",  nullable=true)
+	 */
+	private $address;
 
 	/**
      * @var int
@@ -77,6 +175,21 @@ class ElectionVoteCenter
      */
     private $status= true;
 
+
+	/**
+	 * @var \DateTime
+	 * @Gedmo\Timestampable(on="create")
+	 * @ORM\Column(name="created", type="datetime")
+	 */
+	private $created;
+
+	/**
+	 * @var \DateTime
+	 * @Gedmo\Timestampable(on="update")
+	 * @ORM\Column(name="updated", type="datetime")
+	 */
+	private $updated;
+
     /**
      * Get id
      *
@@ -86,25 +199,6 @@ class ElectionVoteCenter
     {
         return $this->id;
     }
-
-
-
-    /**
-     * @return mixed
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param mixed $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-    }
-
 
     /**
      * @return bool
@@ -122,54 +216,7 @@ class ElectionVoteCenter
         $this->status = $status;
     }
 
-    /**
-     * @return int
-     */
-    public function getSorting()
-    {
-        return $this->sorting;
-    }
-
-    /**
-     * @param int $sorting
-     */
-    public function setSorting($sorting)
-    {
-        $this->sorting = $sorting;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * @param string $slug
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
-
-	/**
-	 * @return string
-	 */
-	public function getName(){
-		return $this->name;
-	}
-
-	/**
-	 * @param string $name
-	 */
-	public function setName( string $name ) {
-		$this->name = $name;
-	}
-
-	/**
+  	/**
 	 * @return ElectionConfig
 	 */
 	public function getElectionConfig() {
@@ -182,21 +229,6 @@ class ElectionVoteCenter
 	public function setElectionConfig( $electionConfig ) {
 		$this->electionConfig = $electionConfig;
 	}
-
-	/**
-	 * @return ElectionParticular
-	 */
-	public function getCommitteeType() {
-		return $this->committeeType;
-	}
-
-	/**
-	 * @param ElectionParticular $committeeType
-	 */
-	public function setCommitteeType( $committeeType ) {
-		$this->committeeType = $committeeType;
-	}
-
 
 	/**
 	 * @return int
@@ -268,6 +300,250 @@ class ElectionVoteCenter
 		$this->approvedBy = $approvedBy;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getMemberUnion() {
+		return $this->memberUnion;
+	}
+
+	/**
+	 * @param mixed $memberUnion
+	 */
+	public function setMemberUnion( $memberUnion ) {
+		$this->memberUnion = $memberUnion;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getThana(): string {
+		return $this->thana;
+	}
+
+	/**
+	 * @param string $thana
+	 */
+	public function setThana( string $thana ) {
+		$this->thana = $thana;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDistrict(): string {
+		return $this->district;
+	}
+
+	/**
+	 * @param string $district
+	 */
+	public function setDistrict( string $district ) {
+		$this->district = $district;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getWard() {
+		return $this->ward;
+	}
+
+	/**
+	 * @param mixed $ward
+	 */
+	public function setWard( $ward ) {
+		$this->ward = $ward;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getVoteCenterName() {
+		return $this->voteCenterName;
+	}
+
+	/**
+	 * @param mixed $voteCenterName
+	 */
+	public function setVoteCenterName( $voteCenterName ) {
+		$this->voteCenterName = $voteCenterName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAddress(){
+		return $this->address;
+	}
+
+	/**
+	 * @param string $address
+	 */
+	public function setAddress( string $address ) {
+		$this->address = $address;
+	}
+
+	/**
+	 * @return ElectionLocation
+	 */
+	public function getLocation() {
+		return $this->location;
+	}
+
+	/**
+	 * @param ElectionLocation $location
+	 */
+	public function setLocation( $location ) {
+		$this->location = $location;
+	}
+
+	/**
+	 * @return ElectionParticular
+	 */
+	public function getElectionType() {
+		return $this->electionType;
+	}
+
+	/**
+	 * @param ElectionParticular $electionType
+	 */
+	public function setElectionType( $electionType ) {
+		$this->electionType = $electionType;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getElectionDate(){
+		return $this->electionDate;
+	}
+
+	/**
+	 * @param \DateTime $electionDate
+	 */
+	public function setElectionDate( \DateTime $electionDate ) {
+		$this->electionDate = $electionDate;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getRepresentative() {
+		return $this->representative;
+	}
+
+	/**
+	 * @param ElectionMember $representative
+	 */
+	public function setRepresentative( $representative ) {
+		$this->representative = $representative;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPresidingAddress(){
+		return $this->presidingAddress;
+	}
+
+	/**
+	 * @param string $presidingAddress
+	 */
+	public function setPresidingAddress( string $presidingAddress ) {
+		$this->presidingAddress = $presidingAddress;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPresidingMobile() {
+		return $this->presidingMobile;
+	}
+
+	/**
+	 * @param string $presidingMobile
+	 */
+	public function setPresidingMobile( string $presidingMobile ) {
+		$this->presidingMobile = $presidingMobile;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPresidingDesignation(){
+		return $this->presidingDesignation;
+	}
+
+	/**
+	 * @param string $presidingDesignation
+	 */
+	public function setPresidingDesignation( string $presidingDesignation ) {
+		$this->presidingDesignation = $presidingDesignation;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPresiding(){
+		return $this->presiding;
+	}
+
+	/**
+	 * @param string $presiding
+	 */
+	public function setPresiding( string $presiding ) {
+		$this->presiding = $presiding;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getCreated(): \DateTime {
+		return $this->created;
+	}
+
+	/**
+	 * @param \DateTime $created
+	 */
+	public function setCreated( \DateTime $created ) {
+		$this->created = $created;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getUpdated(): \DateTime {
+		return $this->updated;
+	}
+
+	/**
+	 * @param \DateTime $updated
+	 */
+	public function setUpdated( \DateTime $updated ) {
+		$this->updated = $updated;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRepresentativeMobile(){
+		return $this->representativeMobile;
+	}
+
+	/**
+	 * @param string $representativeMobile
+	 */
+	public function setRepresentativeMobile( string $representativeMobile ) {
+		$this->representativeMobile = $representativeMobile;
+	}
+
+	/**
+	 * @return ElectionVoteCenterMember
+	 */
+	public function getCenterMembers() {
+		return $this->centerMembers;
+	}
 
 
 }

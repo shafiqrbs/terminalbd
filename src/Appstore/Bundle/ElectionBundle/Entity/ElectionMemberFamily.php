@@ -40,6 +40,14 @@ class ElectionMemberFamily
 	/**
 	 * @var string
 	 *
+	 * @ORM\Column(name="relation", type="string", length=100, nullable=true)
+	 */
+	private $relation;
+
+
+	/**
+	 * @var string
+	 *
 	 * @ORM\Column(name="nid", type="string", length=50, nullable=true)
 	 */
 	private $nid;
@@ -52,9 +60,9 @@ class ElectionMemberFamily
 	private $mobile;
 
 	/**
-	 * @var int
+	 * @var string
 	 *
-	 * @ORM\Column(name="age", type="smallint", length=3, nullable=true)
+	 * @ORM\Column(name="age", type="string", length=10, nullable=true)
 	 */
 	private $age;
 
@@ -154,17 +162,32 @@ class ElectionMemberFamily
 		$this->mobile = $mobile;
 	}
 
+
 	/**
-	 * @return int
+	 * @return string
 	 */
-	public function getAge(){
+	public function getRelation(){
+		return $this->relation;
+	}
+
+	/**
+	 * @param string $relation
+	 */
+	public function setRelation( string $relation ) {
+		$this->relation = $relation;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAge(): string {
 		return $this->age;
 	}
 
 	/**
-	 * @param int $age
+	 * @param string $age
 	 */
-	public function setAge( int $age ) {
+	public function setAge( string $age ) {
 		$this->age = $age;
 	}
 

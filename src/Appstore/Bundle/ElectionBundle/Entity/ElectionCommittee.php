@@ -35,7 +35,7 @@ class ElectionCommittee
 	protected $electionLocation;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", inversedBy="committee")
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="committee")
 	 **/
 	protected $members;
 
@@ -105,6 +105,13 @@ class ElectionCommittee
      * @ORM\Column(name="code", type="string", length=10, nullable=true)
      */
     private $code;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="process", type="string", length=20, nullable=true)
+     */
+    private $process='Created';
 
     /**
      * @var int
@@ -387,6 +394,20 @@ class ElectionCommittee
 	 */
 	public function getMembers() {
 		return $this->members;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getProcess() {
+		return $this->process;
+	}
+
+	/**
+	 * @param string $process
+	 */
+	public function setProcess( string $process ) {
+		$this->process = $process;
 	}
 
 

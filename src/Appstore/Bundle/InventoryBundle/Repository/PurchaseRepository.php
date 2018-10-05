@@ -16,7 +16,47 @@ use Doctrine\ORM\EntityRepository;
 class PurchaseRepository extends EntityRepository
 {
 
-    public function findWithSearch($inventory,$data)
+	protected function handleSearchBetween($qb,$data)
+	{
+		if(!empty($data))
+		{
+
+			$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+			$endDate = isset($data['endDate'])  ? $data['endDate'] : '';
+			$grn =    isset($data['grn'])? $data['grn'] :'';
+			$vendor =    isset($data['vendor'])? $data['vendor'] :'';
+
+			if (!empty($startDate)) {
+				$datetime = new \DateTime($startDate);
+				$start = $datetime->format('Y-m-d 00:00:00');
+				$qb->andWhere("e.created >= :startDate")->setParameter('startDate',$start);
+			}
+
+			if (!empty($endDate)) {
+				$datetime = new \DateTime($endDate);
+				$end = $datetime->format('Y-m-d 23:59:59');
+				$qb->andWhere("e.created <= :endDate")->setParameter('endDate',$end);
+			}
+
+			if (!empty($memo)) {
+				$qb->andWhere("e.memo = :memo");
+				$qb->setParameter('memo', $memo);
+			}
+			if (!empty($grn)) {
+				$qb->andWhere("e.grn LIKE :grn");
+				$qb->setParameter('grn', $grn.'%');
+			}
+			if (!empty($vendor)) {
+				$qb->join('e.vendor', 'v');
+				$qb->andWhere("v.companyName = :companyName");
+				$qb->setParameter('companyName', $vendor);
+			}
+
+		}
+
+	}
+
+	public function findWithSearch($inventory,$data)
     {
 
         $receiveDate = isset($data['receiveDate']) ? $data['receiveDate'] :'';
@@ -138,9 +178,6 @@ class PurchaseRepository extends EntityRepository
 		return $result = $res->getArrayResult();
 	}
 
-
-
-
 	public  function getSumPurchase($user,$inventory){
 
         $qb = $this->createQueryBuilder('p');
@@ -187,6 +224,7 @@ class PurchaseRepository extends EntityRepository
 		$qb->setParameter('config', $global);
 		$qb->andWhere('e.process = :process');
 		$qb->setParameter('process', 'approved');
+		$this->handleSearchBetween($qb,$data);
 		return $qb->getQuery()->getOneOrNullResult();
 	}
 

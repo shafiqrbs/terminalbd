@@ -30,7 +30,7 @@ class CommitteeController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$entity = new ElectionCommittee();
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findBy(array('electionConfig' => $config,'committeeType'=>'election'),array('created'=>'DESC'));
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findBy(array('electionConfig' => $config),array('created'=>'DESC'));
 		return $this->render('ElectionBundle:Committee:index.html.twig', array(
 			'entities' => $entities,
 			'entity' => $entity,
@@ -54,73 +54,27 @@ class CommitteeController extends Controller
 
 	}
 
-
-
 	/**
-	 * Creates a new Committee entity.
+	 * Finds and displays a ElectionMember entity.
 	 *
 	 */
-	public function createAction(Request $request)
+	public function showAction($id)
 	{
-		$entity = new ElectionCommittee();
+		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$form = $this->createCreateForm($entity);
-		$form->handleRequest($request);
-
-		if ($form->isValid()) {
-			$em = $this->getDoctrine()->getManager();
-			$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-			$entity->setElectionConfig($config);
-			$entity->setCommitteeType('election');
-			$em->persist($entity);
-			$em->flush();
-			$this->get('session')->getFlashBag()->add(
-				'success',"Data has been inserted successfully"
-			);
-			return $this->redirect($this->generateUrl('election_committee', array('id' => $entity->getId())));
+		$entity = $em->getRepository('ElectionBundle:ElectionCommittee')->findOneBy(array('electionConfig' => $config,'id'=>$id));
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find ElectionMember entity.');
 		}
+		$html = $this->renderView('ElectionBundle:Committee:show.html.twig',
+			array('entity' => $entity)
+		);
+		return New Response($html);
+		exit;
 
-		return $this->render('ElectionBundle:Committee:index.html.twig', array(
-			'entity' => $entity,
-			'form'   => $form->createView(),
-		));
 	}
 
-	/**
-	 * Creates a form to create a Committee entity.
-	 *
-	 * @param ElectionCommittee $entity The entity
-	 *
-	 * @return \Symfony\Component\Form\Form The form
-	 */
-	private function createCreateForm(ElectionCommittee $entity)
-	{
-		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation');
-		$form = $this->createForm(new CommitteeType($config,$location), $entity, array(
-			'action' => $this->generateUrl('election_committee_create'),
-			'method' => 'POST',
-			'attr' => array(
-				'class' => 'horizontal-form',
-				'novalidate' => 'novalidate',
-			)
-		));
-		return $form;
-	}
 
-	private function createCommitteeForm(ElectionCommitteeMember $entity)
-	{
-		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$form = $this->createForm(new CommitteeMemberType($config), $entity, array(
-			'action' => $this->generateUrl('election_committee_member_create'),
-			'method' => 'POST',
-			'attr' => array(
-				'class' => 'horizontal-form',
-				'novalidate' => 'novalidate',
-			)
-		));
-		return $form;
-	}
 
 	/**
 	 * Displays a form to edit an existing Committee entity.
@@ -135,7 +89,6 @@ class CommitteeController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find Committee entity.');
 		}
-
 		$editForm = $this->createEditForm($entity);
 		return $this->render('ElectionBundle:Committee:new.html.twig', array(
 			'entity'      => $entity,
@@ -159,7 +112,7 @@ class CommitteeController extends Controller
 			'action' => $this->generateUrl('election_committee_update', array('id' => $entity->getId())),
 			'method' => 'PUT',
 			'attr' => array(
-				'class' => 'horizontal-form',
+				'class' => 'form-horizontal',
 				'novalidate' => 'novalidate',
 			)
 		));
@@ -173,8 +126,6 @@ class CommitteeController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findBy(array('electionConfig' => $config),array('particularType'=>'ASC'));
-
 		$entity = $em->getRepository('ElectionBundle:ElectionCommittee')->find($id);
 
 		if (!$entity) {
@@ -183,7 +134,7 @@ class CommitteeController extends Controller
 
 		$editForm = $this->createEditForm($entity);
 		$editForm->handleRequest($request);
-
+		$data = $request->request->all();
 		if ($editForm->isValid()) {
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
@@ -193,61 +144,12 @@ class CommitteeController extends Controller
 		}
 
 		return $this->render('ElectionBundle:Committee:index.html.twig', array(
-			'entities'      => $entities,
 			'entity'      => $entity,
 			'form'   => $editForm->createView(),
 		));
 	}
 
-	public function returnResultData(ElectionCommittee $entity, $msg=''){
 
-		$invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->getSalesItems($entity);
-
-		$subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
-		$netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
-		$payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
-		$vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
-		$due = $entity->getDue() > 0 ? $entity->getDue() : 0;
-		$discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
-		$data = array(
-			'subTotal' => $subTotal,
-			'netTotal' => $netTotal,
-			'payment' => $payment ,
-			'due' => $due,
-			'vat' => $vat,
-			'discount' => $discount,
-			'invoiceParticulars' => $invoiceParticulars ,
-			'msg' => $msg ,
-			'success' => 'success'
-		);
-
-		return $data;
-
-	}
-
-
-	public function addMemberAction(Request $request)
-	{
-
-		$em = $this->getDoctrine()->getManager();
-		$data = $request->request->all();
-		$committeeId = $data['committeeId'];
-		$memberId = $data['member'];
-		$designationId = $data['designation'];
-		$committee = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->find($committeeId);
-		$member = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->find($memberId);
-		$designation = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->find($designationId);
-		$entity = new ElectionCommitteeMember();
-		$entity->setCommittee($committee);
-		$entity->setMember($member);
-		$entity->setDesignation($designation);
-		$em->persist($entity);
-		$em->flush();
-		$result = $this->returnResultData($entity);
-		return new Response(json_encode($result));
-		exit;
-
-	}
 
 	/**
 	 * Deletes a Committee entity.
@@ -329,6 +231,68 @@ class CommitteeController extends Controller
 		));
 	}
 
+	public function returnResultData(ElectionCommittee $entity, $msg=''){
+
+		$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommitteeMember')->getMemberLists($entity);
+		return $data;
+
+	}
+
+	private function createCommitteeForm(ElectionCommittee $committee , ElectionCommitteeMember $entity)
+	{
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$memberRep = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember');
+		$form = $this->createForm(new CommitteeMemberType($config,$committee,$memberRep), $entity, array(
+			'action' => $this->generateUrl('election_committee_member_create',array('id' => $committee->getId())),
+			'method' => 'POST',
+			'attr' => array(
+				'class' => 'horizontal-form',
+				'id' => 'memberCommittee',
+				'novalidate' => 'novalidate',
+			)
+		));
+		return $form;
+	}
+
+	public function newMemberAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$entity = $em->getRepository('ElectionBundle:ElectionCommittee')->findOneBy(array('electionConfig'=>$config,'id'=>$id));
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Committee entity.');
+		}
+		$committeeForm = $this->createCommitteeForm($entity, New ElectionCommitteeMember());
+		return $this->render('ElectionBundle:Committee:member.html.twig', array(
+			'entity'      => $entity,
+			'form'   => $committeeForm->createView(),
+		));
+	}
+
+	public function createMemberAction(Request $request, ElectionCommittee $committee )
+	{
+		$em = $this->getDoctrine()->getManager();
+		$entity = new ElectionCommitteeMember();
+		$form = $this->createCommitteeForm($committee,$entity);
+		$form->handleRequest($request);
+		$member = $request->request->all();
+		$memberId = $member['committee']['member'];
+		$member = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->find($memberId);
+		$existMember = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommitteeMember')->findOneBy(array('committee' => $committee,'member' => $member));
+		if ($form->isValid() and empty($existMember)) {
+			$member = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->find($memberId);
+			$entity->setCommittee($committee);
+			$entity->setMember($member);
+			$em->persist($entity);
+			$em->flush();
+			$result = $this->returnResultData($committee);
+			return new Response($result);
+		}
+		return new Response('invalid');
+		exit;
+
+	}
+
 	public function memberDeleteAction(ElectionCommitteeMember $entity)
 	{
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
@@ -336,7 +300,7 @@ class CommitteeController extends Controller
 			$em = $this->getDoctrine()->getManager();
 			$em->remove($entity);
 			$em->flush();
-			return new Response('valid');
+			return new Response('success');
 		}else{
 			return new Response('in-valid');
 		}

@@ -1,0 +1,122 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Manage Vote Center
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Manage Vote Center</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i> Vote Center Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn red" href="{{ path('election_votecenter_new') }}"><i class="icon-plus-sign"></i>&nbsp;Vote Center Create</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body form">
+                        {% include('flash-message.html.twig')  %}
+                        <!-- BEGIN FORM-->
+
+                        <div class="clearfix"><br/></div>
+                        <div class="portlet-body flip-scroll">
+
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                <thead class="flip-content ">
+                                <tr class="head-blue">
+                                    <th class="numeric" >Created</th>
+                                    <th class="numeric" >Location</th>
+                                    <th class="numeric" >Election</th>
+                                    <th class="numeric" >Representative</th>
+                                    <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Presiding</th>
+                                    <th class="numeric" >Presiding Mobile</th>
+                                    <th class="numeric" >Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for entity in entities %}
+                                    <tr>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.electionDate|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.representative.name }}</td>
+                                        <td class="numeric" >{{ entity.representative.mobile }}</td>
+                                        <td class="numeric" >{{ entity.presiding }}</td>
+                                        <td class="numeric" >{{ entity.presidingMobile }}</td>
+                                        <td class="numeric" >
+                                            <div class="btn-group">
+                                            {% if( entity.status == 1) %}
+                                                <a href="{{ path('election_votecenter_status', { 'id': entity.id}) }}" class="btn yellow mini"><i class="icon-ok"></i></a>
+                                            {% else %}
+                                                <a  href="{{ path('election_votecenter_status', { 'id': entity.id}) }}" class="btn yellow mini" >x</a>
+                                            {% endif %}
+                                            <a href="{{ path('election_votecenter_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                            <a title="Are you sure went to delete ?" href="{{ path('election_votecenter_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a class="btn mini yellow" href="{{ path('election_votecenter_member_new', { 'id': entity.id }) }}" ><i class="icon-plus"></i> Member</a>
+                                            <a data-title="{{ entity.location.name }}: {{ entity.electionDate|date('d-m-Y') }}" class="btn mini view blue" href="javascript:" data-url="{{ path('election_votecenter_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
+                                            <a data-title="{{ entity.location.name }}: {{ entity.electionDate|date('d-m-Y') }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_votecenter_sms', { 'id': entity.id }) }}" >SMS</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@ElectionBundle/Resources/public/css/style.css'
+    '@ElectionBundle/Resources/public/css/messagebox.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@ElectionBundle/Resources/public/js/election.js'
+    '@ElectionBundle/Resources/public/js/messagebox.js'
+    '@ElectionBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}
+
+
+

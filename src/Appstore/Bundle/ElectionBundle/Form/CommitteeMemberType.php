@@ -2,8 +2,10 @@
 
 namespace Appstore\Bundle\ElectionBundle\Form;
 
+use Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\ElectionBundle\Repository\ElectionLocationRepository;
+use Appstore\Bundle\ElectionBundle\Repository\ElectionMemberRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
@@ -18,10 +20,20 @@ class CommitteeMemberType extends AbstractType
 
 	private $config;
 
+	/** @var  ElectionCommittee */
 
-	function __construct(ElectionConfig $config)
+	private $committee;
+
+	/** @var  ElectionMemberRepository */
+	private $memRep;
+
+
+	function __construct(ElectionConfig $config, ElectionCommittee $committee, ElectionMemberRepository $memRep)
 	{
 		$this->config         = $config;
+		$this->memRep         = $memRep;
+		$this->committee      = $committee;
+
 	}
 
 	/**
@@ -35,9 +47,8 @@ class CommitteeMemberType extends AbstractType
 	        ->add('designation', 'entity', array(
 		        'required'    => true,
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
-		        'empty_value' => '--- Choose the member designation ---',
 		        'property' => 'name',
-		        'attr'=>array('class'=>'m-wrap span6 inputs'),
+		        'attr'=>array('class'=>'m-wrap span9 inputs'),
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")
@@ -45,13 +56,10 @@ class CommitteeMemberType extends AbstractType
 			                  ->andWhere("p.slug = 'designation'");
 		        },
 	        ))
-	        ->add('electionMember', 'entity', array(
-		        'required'    => true,
-		        'attr'=>array('class'=>'category m-wrap span6 select2'),
-		        'constraints' =>array( new NotBlank(array('message'=>'Choose member for committee')) ),
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionMember',
-		        'property' => 'nestedLabel',
-		        'choices'=> $this->locationChoiceList()
+	        ->add('member', 'choice', array(
+		        'label' => 'Choose member',
+		        'attr'=>array('class'=>'m-wrap span12 select2 inputs'),
+		        'choices' => $this->locationBaseMembers(),
 	        ));
 
     }
@@ -74,14 +82,12 @@ class CommitteeMemberType extends AbstractType
         return 'committee';
     }
 
-	/**
-	 * @return mixed
-	 */
-	protected function locationChoiceList()
-	{
-		return $categoryTree = $this->location->getLocationGroup($this->config->getId());
+    public function locationBaseMembers(){
 
-	}
+    	return $this->memRep->getLocationBaseMembers($this->committee);
+
+    }
+
 
 
 

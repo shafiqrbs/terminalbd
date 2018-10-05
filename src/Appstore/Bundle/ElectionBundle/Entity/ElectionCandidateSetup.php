@@ -42,12 +42,17 @@ class ElectionCandidateSetup
 
 
 	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCount", mappedBy="candidate" , cascade={"detach","merge"} )
+     **/
+    private  $voterCounts;
+
+
+	/**
 	 * @var string
 	 *
 	 * @ORM\Column(name="name", type="string", length=100, nullable=true)
 	 */
 	private $name;
-
 
 
     /**
@@ -56,7 +61,6 @@ class ElectionCandidateSetup
      * @ORM\Column(name="totalVote", type="smallint",  length = 6, nullable=true)
      */
     private $totalVote = 0;
-
 
     /**
      * @var int
@@ -71,16 +75,6 @@ class ElectionCandidateSetup
      * @ORM\Column(name="femaleVote", type="smallint",  length = 6, nullable=true)
      */
     private $femaleVote = 0;
-
-
-	/**
-     * @var string
-     *
-     * @ORM\Column(name="sorting", type="string",  length=2, nullable=true)
-     */
-    private $sorting = 0;
-
-
 
     /**
      * @var boolean
@@ -118,22 +112,6 @@ class ElectionCandidateSetup
         $this->status = $status;
     }
 
-    /**
-     * @return int
-     */
-    public function getSorting()
-    {
-        return $this->sorting;
-    }
-
-    /**
-     * @param int $sorting
-     */
-    public function setSorting($sorting)
-    {
-        $this->sorting = $sorting;
-    }
-
 
 	/**
 	 * @return string
@@ -164,60 +142,80 @@ class ElectionCandidateSetup
 	}
 
 	/**
-	 * @return ElectionParticular
+	 * @return mixed
 	 */
-	public function getCommitteeType() {
-		return $this->committeeType;
+	public function getPoliticalParty() {
+		return $this->politicalParty;
 	}
 
 	/**
-	 * @param ElectionParticular $committeeType
+	 * @param mixed $politicalParty
 	 */
-	public function setCommitteeType( $committeeType ) {
-		$this->committeeType = $committeeType;
-	}
-
-
-	/**
-	 * @return int
-	 */
-	public function getTotalVoter() {
-		return $this->totalVoter;
+	public function setPoliticalParty( $politicalParty ) {
+		$this->politicalParty = $politicalParty;
 	}
 
 	/**
-	 * @param int $totalVoter
+	 * @return mixed
 	 */
-	public function setTotalVoter( $totalVoter ) {
-		$this->totalVoter = $totalVoter;
+	public function getMarka() {
+		return $this->marka;
 	}
 
 	/**
-	 * @return int
+	 * @param mixed $marka
 	 */
-	public function getMaleVoter(){
-		return $this->maleVoter;
-	}
-
-	/**
-	 * @param int $maleVoter
-	 */
-	public function setMaleVoter( int $maleVoter ) {
-		$this->maleVoter = $maleVoter;
+	public function setMarka( $marka ) {
+		$this->marka = $marka;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getFemaleVoter(){
-		return $this->femaleVoter;
+	public function getTotalVote(): int {
+		return $this->totalVote;
 	}
 
 	/**
-	 * @param int $femaleVoter
+	 * @param int $totalVote
 	 */
-	public function setFemaleVoter( int $femaleVoter ) {
-		$this->femaleVoter = $femaleVoter;
+	public function setTotalVote( int $totalVote ) {
+		$this->totalVote = $totalVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMaleVote(): int {
+		return $this->maleVote;
+	}
+
+	/**
+	 * @param int $maleVote
+	 */
+	public function setMaleVote( int $maleVote ) {
+		$this->maleVote = $maleVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFemaleVote(): int {
+		return $this->femaleVote;
+	}
+
+	/**
+	 * @param int $femaleVote
+	 */
+	public function setFemaleVote( int $femaleVote ) {
+		$this->femaleVote = $femaleVote;
+	}
+
+	/**
+	 * @return ElectionVoteCount
+	 */
+	public function getVoterCounts() {
+		return $this->voterCounts;
 	}
 
 

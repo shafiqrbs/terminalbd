@@ -175,6 +175,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@ElectionBundle/Resources/public/js/election.js'
     '@ElectionBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

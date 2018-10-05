@@ -44,7 +44,8 @@ class ElectionMember
 	private  $approvedBy;
 
     /**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMemberFamily", inversedBy="electionMember")
+     *
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMemberFamily", mappedBy="electionMember")
 	 **/
 	private $familyMembers;
 
@@ -52,6 +53,11 @@ class ElectionMember
 	 * @ORM\OneTomany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="member")
 	 **/
 	private $committees;
+
+    /**
+	 * @ORM\OneTomany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="member")
+	 **/
+	private $votecenters;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="electionMember")
@@ -272,32 +278,39 @@ class ElectionMember
 	 */
 	private $village;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="voteCenterName", type="string", length=200, nullable = true)
+	 */
+	private $voteCenterName;
+
 
     /**
 	 * @var string
 	 *
-	 * @ORM\Column(name="ward", type="string", length=50, nullable = true)
+	 * @ORM\Column(name="ward", type="string", length=150, nullable = true)
 	 */
 	private $ward;
 
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="memberUnion", type="string", length=50, nullable = true)
+	 * @ORM\Column(name="memberUnion", type="string", length=150, nullable = true)
 	 */
 	private $memberUnion;
 
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="thana", type="string", length=50, nullable = true)
+	 * @ORM\Column(name="thana", type="string", length=150, nullable = true)
 	 */
 	private $thana;
 
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="district", type="string", length=50, nullable = true)
+	 * @ORM\Column(name="district", type="string", length=150, nullable = true)
 	 */
 	private $district;
 
@@ -728,8 +741,6 @@ class ElectionMember
         $this->dob = $dob;
     }
 
-
-
 	/**
 	 * @return string
 	 */
@@ -801,7 +812,7 @@ class ElectionMember
 
 	protected function getUploadDir()
 	{
-		return 'uploads/domain/'.$this->getGlobalOption()->getId().'/election';
+		return 'uploads/domain/'.$this->getElectionConfig()->getGlobalOption()->getId().'/election';
 	}
 
 	public function removeUpload()
@@ -1152,6 +1163,27 @@ class ElectionMember
 	 */
 	public function setProcess( string $process ) {
 		$this->process = $process;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVoteCenterName(){
+		return $this->voteCenterName;
+	}
+
+	/**
+	 * @param string $voteCenterName
+	 */
+	public function setVoteCenterName( string $voteCenterName ) {
+		$this->voteCenterName = $voteCenterName;
+	}
+
+	/**
+	 * @return ElectionVoteCenter
+	 */
+	public function getVotecenters() {
+		return $this->votecenters;
 	}
 
 

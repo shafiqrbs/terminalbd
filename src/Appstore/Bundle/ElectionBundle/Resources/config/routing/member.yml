@@ -2,6 +2,19 @@ election_member:
     path:     /
     defaults: { _controller: "ElectionBundle:Member:index" }
 
+
+election_member_search:
+    path:     /search
+    defaults: { _controller: "ElectionBundle:Member:autoSearch" }
+    options:
+            expose: true
+
+election_member_name:
+    path:      /{name}/name
+    defaults: { _controller: "ElectionBundle:Member:searchName" }
+    options:
+            expose: true
+
 election_member_new:
     path:     /new
     defaults: { _controller: "ElectionBundle:Member:new" }
@@ -19,6 +32,10 @@ election_member_show:
     path:     /{id}/show
     defaults: { _controller: "ElectionBundle:Member:show" }
 
+election_member_sms:
+    path:     /{id}/sms
+    defaults: { _controller: "ElectionBundle:Member:sms" }
+
 election_member_update:
     path:     /{id}/update
     defaults: { _controller: "ElectionBundle:Member:update" }
@@ -33,10 +50,13 @@ election_member_family:
     defaults: { _controller: "ElectionBundle:Member:family" }
 
 election_member_family_delete:
-    path:     /{id}/add-family
+    path:     /{id}/family-member-delete
     defaults: { _controller: "ElectionBundle:Member:familyMemberDelete" }
 
-election_member_family_add:
-    path:     /{id}/add-family
-    defaults: { _controller: "ElectionBundle:Member:familyMemberAdd" }
+election_member_family_create:
+    path:     /{id}/family-member-create
+    defaults: { _controller: "ElectionBundle:Member:addFamilyMember" }
+    methods:  POST
+    options:
+            expose: true
 

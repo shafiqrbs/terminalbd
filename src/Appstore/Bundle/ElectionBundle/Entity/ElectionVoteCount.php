@@ -31,9 +31,9 @@ class ElectionVoteCount
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidateSetup", inversedBy="electionVoterCounts")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidateSetup", inversedBy="voterCounts")
 	 **/
-	protected $electionCandidate;
+	protected $candidate;
 
 
 	/**

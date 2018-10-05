@@ -1,0 +1,19 @@
+election_sms:
+    path:     /
+    defaults: { _controller: "ElectionBundle:Sms:member" }
+
+election_member_sms:
+    path:     /{id}/member
+    defaults: { _controller: "ElectionBundle:Sms:member" }
+
+election_event_sms:
+    path:     /{id}/event
+    defaults: { _controller: "ElectionBundle:Sms:event" }
+
+election_committee_sms:
+    path:     /{id}/committee
+    defaults: { _controller: "ElectionBundle:Sms:committee" }
+
+election_votecenter_sms:
+    path:     /{id}/vote-center
+    defaults: { _controller: "ElectionBundle:Sms:votecenter" }

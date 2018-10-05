@@ -10,7 +10,7 @@ election_location_type_wise_search:
             expose: true
 
 election_location_search:
-    path:     /search
+    path:     /{type}/search
     defaults: { _controller: "ElectionBundle:Location:autoSearch" }
     options:
             expose: true

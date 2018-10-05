@@ -28,11 +28,52 @@ class ElectionVoteCenterMember
      **/
     private  $electionConfig;
 
-
 	/**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="electionVoteCenterMembers" , cascade={"detach","merge"} )
      **/
-    private  $electionMember;
+    private  $member;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", inversedBy="centerMembers" , cascade={"detach","merge"} )
+     **/
+    private  $voteCenter;
+
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="agentMobile", type="string",  length =100, nullable=true)
+	 */
+	private $agentMobile;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="personType", type="string",  length =50, nullable=true)
+	 */
+	private $personType;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="poolingOfficer", type="string",  length =150, nullable=true)
+	 */
+	private $poolingOfficer;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="poolingMobile", type="string",  length =150, nullable=true)
+	 */
+	private $poolingMobile;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="boothNo", type="string",  length =10, nullable=true)
+	 */
+	private $boothNo = 0;
+
 
     /**
      * @var boolean
@@ -92,6 +133,106 @@ class ElectionVoteCenterMember
 	 */
 	public function setElectionMember( $electionMember ) {
 		$this->electionMember = $electionMember;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPersonType(){
+		return $this->personType;
+	}
+
+	/**
+	 * @param string $personType
+	 * Agent
+	 * Pooling
+	 */
+	public function setPersonType( string $personType ) {
+		$this->personType = $personType;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAgentMobile(){
+		return $this->agentMobile;
+	}
+
+	/**
+	 * @param string $agentMobile
+	 */
+	public function setAgentMobile( string $agentMobile ) {
+		$this->agentMobile = $agentMobile;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPoolingOfficer(){
+		return $this->poolingOfficer;
+	}
+
+	/**
+	 * @param string $poolingOfficer
+	 */
+	public function setPoolingOfficer( string $poolingOfficer ) {
+		$this->poolingOfficer = $poolingOfficer;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPoolingMobile() {
+		return $this->poolingMobile;
+	}
+
+	/**
+	 * @param string $poolingMobile
+	 */
+	public function setPoolingMobile( string $poolingMobile ) {
+		$this->poolingMobile = $poolingMobile;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getBoothNo(){
+		return $this->boothNo;
+	}
+
+	/**
+	 * @param string $boothNo
+	 */
+	public function setBoothNo( string $boothNo ) {
+		$this->boothNo = $boothNo;
+	}
+
+	/**
+	 * @return ElectionVoteCenter
+	 */
+	public function getVoteCenter() {
+		return $this->voteCenter;
+	}
+
+	/**
+	 * @param ElectionVoteCenter $voteCenter
+	 */
+	public function setVoteCenter( $voteCenter ) {
+		$this->voteCenter = $voteCenter;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getMember() {
+		return $this->member;
+	}
+
+	/**
+	 * @param ElectionMember $member
+	 */
+	public function setMember( $member ) {
+		$this->member = $member;
 	}
 
 

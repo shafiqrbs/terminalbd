@@ -144,7 +144,6 @@
                             <div class="clearfix">&nbsp;</div>
                            <div class="form-actions portlet box grey">
                                 <div class="span8" id="message"></div>
-
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if inventoryConfig.onlineSalesPrinter == 'pos'  %}
                                         <a href="javascript:" data-url="{{ path('inventory_online_pos_print_individual',{'id':entity.id}) }}"  class="btn green onlinePosPrintIndividual" ><i class="icon-print"></i> Pos Print</a>
@@ -154,11 +153,10 @@
                                     {#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
+                                    {% if ( (entity.process == 'Done' and app.user.granted("ROLE_DOMAIN_INVENTORY_REVERSE")) or (entity.process == 'Done' and app.user.granted("ROLE_DOMAIN"))) %}
                                     <a href="{{ path('inventory_online_sales_reverse',{'invoice':entity.invoice}) }}"  class="btn red" ><i class="icon-refresh"></i> Reverse Sales</a>
-
+                                    {% endif %}
                                 </div>
-
-
                             </div>
                         </div>
                     </div>

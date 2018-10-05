@@ -253,7 +253,7 @@ class Builder extends ContainerAware
 	                                ->setAttribute('dropdown', true);
 	    $menu['Business Management']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'business_report_purchase_summary'))
 	                                            ->setAttribute('icon', 'icon-th-list');
-	    $menu['Business Management']['Reports']['Purchase']->addChild('Vendor Outstanding', array('route' => 'business_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
+	    $menu['Business Management']['Reports']['Purchase']->addChild('Vendor Ledger', array('route' => 'business_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
 	    return $menu;
 
     }
@@ -368,8 +368,8 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Transaction & Report']->addChild('Customer Outstanding', array('route' => 'account_sales_outstanding'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Transaction & Report']->addChild('Vendor Outstanding',        array('route' => 'account_purchase_outstanding'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Customer Ledger', array('route' => 'account_sales_outstanding'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Vendor Ledger',        array('route' => 'account_purchase_outstanding'))->setAttribute('icon', 'icon-th-list');
 
             }
             $accounting = array('e-commerce');
@@ -391,8 +391,8 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'account_medicine_income'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'account_medicine_income_monthly'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Transaction & Report']->addChild('Customer Outstanding', array('route' => 'account_sales_medicine_outstanding'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Transaction & Report']->addChild('Vendor Outstanding',        array('route' => 'account_purchase_medicine_outstanding'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Customer Ledger', array('route' => 'account_sales_medicine_outstanding'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Vendor Ledger',        array('route' => 'account_purchase_medicine_outstanding'))->setAttribute('icon', 'icon-th-list');
 
             }
             $accounting = array('business');
@@ -400,9 +400,9 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'account_business_income'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'account_business_income_monthly'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Transaction & Report']->addChild('Customer Outstanding', array('route' => 'account_sales_business_outstanding'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Customer Ledger', array('route' => 'account_sales_business_outstanding'))->setAttribute('icon', 'icon-th-list');
                 $menu['Accounting']['Transaction & Report']->addChild('Customer Ledger', array('route' => 'account_sales_business_ledger'))->setAttribute('icon', 'icon-money');
-                $menu['Accounting']['Transaction & Report']->addChild('Vendor Outstanding',        array('route' => 'account_purchase_business_outstanding'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Vendor Ledger',        array('route' => 'account_purchase_business_outstanding'))->setAttribute('icon', 'icon-th-list');
 
             }
             $menu['Accounting']['Transaction & Report']->addChild('Expenditure Summary',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
@@ -1120,7 +1120,7 @@ class Builder extends ContainerAware
             $menu['Medicine']->addChild('Master Data')
                 ->setAttribute('icon', 'icon icon-cog')
                 ->setAttribute('dropdown', true);
-            $menu['Medicine']['Master Data']->addChild('Particular', array('route' => 'medicine_particular'))
+            $menu['Medicine']['Master Data']->addChild('Setting', array('route' => 'medicine_particular'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Medicine']['Master Data']->addChild('Minimum Stock Setup', array('route' => 'medicine_minimum'))
                 ->setAttribute('icon', 'icon-th-list');
@@ -1157,7 +1157,7 @@ class Builder extends ContainerAware
 	                                        ->setAttribute('dropdown', true);
                 $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
                     ->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Outstanding', array('route' => 'medicine_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Ledger', array('route' => 'medicine_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Details', array('route' => 'medicine_report_purchase_vendor_details'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Stock', array('route' => 'medicine_report_product_stock_sales'))->setAttribute('icon', 'icon-th-list');
 	            /*$menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))->setAttribute('icon', 'icon-th-list');*/
@@ -1310,7 +1310,7 @@ class Builder extends ContainerAware
 		                                       ->setAttribute('dropdown', true);
 		$menu['Hotel & Restaurant']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'hotel_report_purchase_summary'))
 		                                                   ->setAttribute('icon', 'icon-th-list');
-		$menu['Hotel & Restaurant']['Reports']['Purchase']->addChild('Vendor Outstanding', array('route' => 'hotel_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
+		$menu['Hotel & Restaurant']['Reports']['Purchase']->addChild('Vendor Ledger', array('route' => 'hotel_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
 		return $menu;
 
 	}
@@ -1329,8 +1329,12 @@ class Builder extends ContainerAware
 		                           ->setAttribute('dropdown', true);
 		$menu['Election & Committee']['Committee']->addChild('Election', array('route' => 'election_committee'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']['Committee']->addChild('Organization', array('route' => 'election_organizationcommittee'))->setAttribute('icon', 'icon-th-list');
-		$menu['Election & Committee']->addChild('Manage Members', array('route' => 'election_member'))->setAttribute('icon', 'icon-users');
-		$menu['Election & Committee']->addChild('Manage Voters', array('route' => 'election_voter'))->setAttribute('icon', 'icon-users');
+		$menu['Election & Committee']['Committee']->addChild('Vote Center', array('route' => 'election_votecenter'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']->addChild('Manage Members', array('route' => 'election_member'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']->addChild('Manage Voters', array('route' => 'election_voter'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']->addChild('Manage Event', array('route' => 'election_event'))->setAttribute('icon', 'icon-calendar');
+		$menu['Election & Committee']->addChild('Manage Campaign', array('route' => 'election_campaign'))->setAttribute('icon', 'icon-refresh');
+		$menu['Election & Committee']->addChild('Manage SMS', array('route' => 'election_sms'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']->addChild('Master Data')
 		                           ->setAttribute('icon', 'icon icon-cog')
 		                           ->setAttribute('dropdown', true);

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\ElectionBundle\Controller;
 
 use Appstore\Bundle\ElectionBundle\Entity\ElectionMember;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionMemberFamily;
 use Appstore\Bundle\ElectionBundle\Form\MemberType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,7 +36,7 @@ class MemberController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
      */
 
     public function indexAction()
@@ -67,6 +68,12 @@ class MemberController extends Controller
             $entity->setElectionConfig($config);
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
+	        $entity->setVillage($entity->getLocation()->getName());
+	        $entity->setVoteCenterName($entity->getVoteCenter()->getName());
+	        $entity->setWard($entity->getLocation()->wardName());
+	        $entity->setMemberUnion($entity->getLocation()->unionName());
+	        $entity->setThana($entity->getLocation()->thanaName());
+	        $entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
 	        $entity->upload();
             $em->persist($entity);
             $em->flush();
@@ -106,7 +113,7 @@ class MemberController extends Controller
      */
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
      */
 
     public function newAction()
@@ -140,13 +147,14 @@ class MemberController extends Controller
 
     }
 
+
     /**
      * Displays a form to edit an existing ElectionMember entity.
      *
      */
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
      */
 
     public function editAction($id)
@@ -207,7 +215,17 @@ class MemberController extends Controller
         if ($editForm->isValid()) {
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
-            $em->flush();
+	        $entity->setVillage($entity->getLocation()->getName());
+	        $entity->setVoteCenterName($entity->getVoteCenter()->getName());
+	        $entity->setWard($entity->getLocation()->wardName());
+	        $entity->setMemberUnion($entity->getLocation()->unionName());
+	        $entity->setThana($entity->getLocation()->thanaName());
+	        $entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
+	        if($entity->getRemoveImage() == 1){
+		        $entity->removeUpload();
+	        }
+	        $entity->upload();
+	        $em->flush();
             return $this->redirect($this->generateUrl('election_member'));
         }
 
@@ -216,13 +234,10 @@ class MemberController extends Controller
             'form'   => $editForm->createView(),
         ));
     }
-    /**
-     * Deletes a ElectionMember entity.
-     *
-     */
+
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
      */
 
     public function deleteAction($id)
@@ -254,13 +269,13 @@ class MemberController extends Controller
 
         $item = $_REQUEST['q'];
         if ($item) {
-            $go = $this->getUser()->getGlobalOption();
+            $go = $this->getUser()->getGlobalOption()->getElectionConfig();
             $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->searchAutoComplete($go,$item);
         }
         return new JsonResponse($item);
     }
 
-    public function searchElectionMemberNameAction($customer)
+    public function searchNameAction($customer)
     {
         return new JsonResponse(array(
             'id'=> $customer,
@@ -369,6 +384,57 @@ class MemberController extends Controller
 			'entity'      => $entity,
 			'form'   => $editForm->createView(),
 		));
+	}
+
+	public function addFamilyMemberAction(Request $request , ElectionMember $member)
+	{
+
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $request->request->all();
+		if(!empty($data['name'])){
+			$entity = new ElectionMemberFamily();
+			$entity->setElectionMember($member);
+			$entity->setName($data['name']);
+			$entity->setMobile($data['mobile']);
+			$entity->setNid($data['nid']);
+			$entity->setAge($data['age']);
+			$entity->setRelation($data['relation']);
+			$em->persist($entity);
+			$em->flush();
+		}
+		$result = $this->returnResultData($member);
+		return new Response($result);
+		exit;
+	}
+
+	public function returnResultData(ElectionMember $entity,$msg=''){
+
+		$familyMembers = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMemberFamily')->getFamilyMember($entity);
+		return $familyMembers;
+
+	}
+
+	public function familyMemberDeleteAction(ElectionMemberFamily $entity)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		if($config == $entity->getElectionMember()->getElectionConfig()){
+			if (!$entity) {
+				throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+			}
+			$em->remove($entity);
+			$em->flush();
+			$this->get('session')->getFlashBag()->add(
+				'error',"Data has been deleted successfully"
+			);
+			return new Response('success');
+		}else{
+			return new Response('invalid');
+		}
+
+		exit;
+
 	}
 
 

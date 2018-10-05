@@ -235,12 +235,12 @@ class LocationController extends Controller
         return new JsonResponse($item);
     }
 
-    public function autoSearchAction(Request $request)
+    public function autoSearchAction(Request $request,$type)
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getElectionConfig();
-            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->searchAutoComplete($item,$inventory);
+            $config = $this->getUser()->getGlobalOption()->getElectionConfig();
+            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->searchAutoComplete($config,$type,$item);
         }
         return new JsonResponse($item);
     }

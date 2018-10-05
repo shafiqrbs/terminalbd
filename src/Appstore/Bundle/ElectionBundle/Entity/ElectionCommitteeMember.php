@@ -28,7 +28,6 @@ class ElectionCommitteeMember
      **/
     private  $committee;
 
-
 	/**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="committees" , cascade={"detach","merge"} )
      **/

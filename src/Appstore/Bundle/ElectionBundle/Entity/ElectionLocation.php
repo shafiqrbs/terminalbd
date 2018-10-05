@@ -40,11 +40,24 @@ class ElectionLocation
      **/
     private $electionMembers;
 
+
 	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="voteCenter")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="location")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
-    private $voters;
+    private $votecenters;
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCampaignAnalysis", mappedBy="location")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $campaignAnalysis;
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEvent", mappedBy="location")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $events;
 
 	/**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="electionLocations")
@@ -388,9 +401,26 @@ class ElectionLocation
 		return $name;
 	}
 
+	/**
+	 * @return ElectionCampaignAnalysis
+	 */
+	public function getCampaignAnalysis() {
+		return $this->campaignAnalysis;
+	}
 
+	/**
+	 * @return ElectionEvent
+	 */
+	public function getEvents() {
+		return $this->events;
+	}
 
-
+	/**
+	 * @return ElectionVoteCenter
+	 */
+	public function getVotecenters() {
+		return $this->votecenters;
+	}
 
 
 }
