@@ -19,7 +19,7 @@ $(document).on('keyup', '.voteCount', function() {
     $('#totalVoter-' + id).val(totalVoter);
     if (totalVoter > 0){
         var url = Routing.generate('election_matrix_update',{'matrixId':id,'maleVoter':maleVoter,'femaleVoter':femaleVoter,'otherVoter':otherVoter});
-        setTimeout(submitCountVote(url),10000)
+        setTimeout(submitCountVote(url),3000)
     }
 });
 
