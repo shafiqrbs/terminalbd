@@ -52,16 +52,21 @@ class MedicineReverseController extends Controller
         ));
     }
 
-    public function reverseShowAction($id)
+    public function reversePurchaseAction($id)
     {
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineReverse')->findOneBy(array('medicineConfig' => $config, 'id' => $id));
-        $twig = 'sales';
-        if($entity->getProcess() == 'purchase'){
-          $twig = 'purchase';
-        }
-        return $this->render("MedicineBundle:MedicineReverse:{$twig}.html.twig", array(
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineReverse')->findOneBy(array('medicineConfig' => $config, 'medicinePurchase' => $id));
+        return $this->render("MedicineBundle:MedicineReverse:purchase.html.twig", array(
             'entity' => $entity,
         ));
     }
+
+	public function reverseSalesAction($id)
+	{
+		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+		$entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineReverse')->findOneBy(array('medicineConfig' => $config, 'medicineSales' => $id));
+		return $this->render("MedicineBundle:MedicineReverse:sales.html.twig", array(
+			'entity' => $entity,
+		));
+	}
 }

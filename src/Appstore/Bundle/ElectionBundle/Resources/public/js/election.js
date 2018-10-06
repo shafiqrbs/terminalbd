@@ -2,6 +2,15 @@
  * Created by rbs on 2/9/16.
  */
 
+$(document).on('keyup', '.vote', function() {
+    var maleVoter       = parseInt($('#votecenter_maleVoter').val()  != '' ? $('#votecenter_maleVoter').val() : 0 );
+    var femaleVoter     = parseInt($('#votecenter_femaleVoter').val()  != '' ? $('#votecenter_femaleVoter').val() : 0 );
+    var otherVoter      = parseInt($('#votecenter_otherVoter').val()  != '' ? $('#votecenter_otherVoter').val() : 0 );
+    var totalVote       = (maleVoter + femaleVoter + otherVoter);
+    $('#totalVote').val(totalVote);
+
+});
+
 $('form').on('keypress', '.inputs', function (e) {
 
     if (e.which === 13) {

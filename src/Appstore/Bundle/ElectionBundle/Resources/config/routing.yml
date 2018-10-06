@@ -6,6 +6,14 @@ election_event:
     resource: "@ElectionBundle/Resources/config/routing/event.yml"
     prefix:   /event
 
+election_setup:
+    resource: "@ElectionBundle/Resources/config/routing/setup.yml"
+    prefix:   /election-setup
+
+election_candidate:
+    resource: "@ElectionBundle/Resources/config/routing/candidate.yml"
+    prefix:   /election-candidate
+
 election_votecenter:
     resource: "@ElectionBundle/Resources/config/routing/votecenter.yml"
     prefix:   /vote-center

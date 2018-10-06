@@ -1,0 +1,32 @@
+election_setup:
+    path:     /
+    defaults: { _controller: "ElectionBundle:ElectionSetup:index" }
+
+election_setup_create:
+    path:     /create
+    defaults: { _controller: "ElectionBundle:ElectionSetup:create" }
+    methods:  POST
+
+election_setup_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ElectionBundle:ElectionSetup:edit" }
+
+election_setup_show:
+    path:     /{id}/show
+    defaults: { _controller: "ElectionBundle:ElectionSetup:show" }
+
+election_setup_update:
+    path:     /{id}/update
+    defaults: { _controller: "ElectionBundle:ElectionSetup:update" }
+    methods:  [POST, PUT]
+
+election_setup_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ElectionBundle:ElectionSetup:delete" }
+
+election_setup_matrix:
+    path:     /{id}/matrix
+    defaults: { _controller: "ElectionBundle:ElectionSetup:matrix" }
+
+
+

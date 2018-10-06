@@ -33,6 +33,11 @@ class ElectionLocation
      **/
     private  $electionConfig;
 
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="location" , cascade={"detach","merge"} )
+     **/
+    private  $candidates;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="location")
@@ -420,6 +425,13 @@ class ElectionLocation
 	 */
 	public function getVotecenters() {
 		return $this->votecenters;
+	}
+
+	/**
+	 * @return ElectionCandidate
+	 */
+	public function getCandidates() {
+		return $this->candidates;
 	}
 
 

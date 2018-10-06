@@ -8,10 +8,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * ElectionCandidateSetup
  *
- * @ORM\Table( name ="election_candidate_setup")
+ * @ORM\Table( name ="election_candidate")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionCandidateSetupRepository")
  */
-class ElectionCandidateSetup
+class ElectionCandidate
 {
     /**
      * @var integer
@@ -24,9 +24,25 @@ class ElectionCandidateSetup
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="electionParticulars" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="ElectionCandidates" , cascade={"detach","merge"} )
      **/
     private  $electionConfig;
+
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="candidates" , cascade={"detach","merge"} )
+     **/
+    private  $location;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="candidates" , cascade={"detach","merge"} )
+     **/
+    private  $electionSetup;
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteMatrix", mappedBy="candidate" , cascade={"detach","merge"} )
+     **/
+    private  $voteMatrix;
 
 
 	/**
@@ -40,19 +56,19 @@ class ElectionCandidateSetup
      **/
     private  $marka;
 
-
-	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCount", mappedBy="candidate" , cascade={"detach","merge"} )
-     **/
-    private  $voterCounts;
-
-
 	/**
 	 * @var string
 	 *
 	 * @ORM\Column(name="name", type="string", length=100, nullable=true)
 	 */
 	private $name;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="mobile", type="string", length=100, nullable=true)
+	 */
+	private $mobile;
 
 
     /**
@@ -216,6 +232,55 @@ class ElectionCandidateSetup
 	 */
 	public function getVoterCounts() {
 		return $this->voterCounts;
+	}
+
+	/**
+	 * @return ElectionSetup
+	 */
+	public function getElectionSetup() {
+		return $this->electionSetup;
+	}
+
+	/**
+	 * @param ElectionSetup $electionSetup
+	 */
+	public function setElectionSetup( $electionSetup ) {
+		$this->electionSetup = $electionSetup;
+	}
+
+	/**
+	 * @return ElectionVoteMatrix
+	 */
+	public function getVoteMatrix() {
+		return $this->voteMatrix;
+	}
+
+	/**
+	 * @return ElectionLocation
+	 */
+	public function getLocation() {
+		return $this->location;
+	}
+
+	/**
+	 * @param ElectionLocation $location
+	 */
+	public function setLocation( $location ) {
+		$this->location = $location;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMobile(){
+		return $this->mobile;
+	}
+
+	/**
+	 * @param string $mobile
+	 */
+	public function setMobile( string $mobile ) {
+		$this->mobile = $mobile;
 	}
 
 

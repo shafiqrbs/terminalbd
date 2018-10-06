@@ -36,19 +36,24 @@ class ElectionVoteCenter
 	protected $location;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="votecenters")
-	 **/
-	protected $electionType;
-
-	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="votecenters")
 	 **/
 	protected $representative;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="votecenters")
+	 **/
+	protected $electionSetup;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenterMember", mappedBy="voteCenter")
 	 **/
 	protected $centerMembers;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteMatrix", mappedBy="voteCenter")
+	 **/
+	protected $voterMatrix;
 
 	/**
 	 * @var string
@@ -151,21 +156,28 @@ class ElectionVoteCenter
      *
      * @ORM\Column(name="totalVoter", type="smallint",  length = 6, nullable=true)
      */
-    private $totalVoter = 0;
+    private $totalVoter;
 
     /**
      * @var int
      *
      * @ORM\Column(name="maleVoter", type="smallint",  length = 6, nullable=true)
      */
-    private $maleVoter = 0;
+    private $maleVoter;
 
     /**
      * @var int
      *
      * @ORM\Column(name="femaleVoter", type="smallint",  length = 6, nullable=true)
      */
-    private $femaleVoter = 0;
+    private $femaleVoter;
+
+	/**
+     * @var int
+     *
+     * @ORM\Column(name="otherVoter", type="smallint",  length = 6, nullable=true)
+     */
+    private $otherVoter;
 
 
     /**
@@ -543,6 +555,34 @@ class ElectionVoteCenter
 	 */
 	public function getCenterMembers() {
 		return $this->centerMembers;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getOtherVoter(){
+		return $this->otherVoter;
+	}
+
+	/**
+	 * @param int $otherVoter
+	 */
+	public function setOtherVoter( int $otherVoter ) {
+		$this->otherVoter = $otherVoter;
+	}
+
+	/**
+	 * @return ElectionSetup
+	 */
+	public function getElectionSetup() {
+		return $this->electionSetup;
+	}
+
+	/**
+	 * @param ElectionSetup $electionSetup
+	 */
+	public function setElectionSetup( $electionSetup ) {
+		$this->electionSetup = $electionSetup;
 	}
 
 

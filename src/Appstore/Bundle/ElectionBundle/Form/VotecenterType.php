@@ -36,20 +36,6 @@ class VotecenterType extends AbstractType
     {
         $builder
 
-	        ->add('electionType', 'entity', array(
-		        'required'    => true,
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
-		        'empty_value' => '--- Choose the type of election ---',
-		        'property' => 'name',
-		        'attr'=>array('class'=>'m-wrap span12 inputs'),
-		        'constraints' =>array( new NotBlank(array('message'=>'Choose the type of election')) ),
-		        'query_builder' => function(EntityRepository $er){
-			        return $er->createQueryBuilder('e')
-			                  ->join("e.particularType","p")
-			                  ->where("e.status = 1")
-			                  ->andWhere("p.slug = 'election-type'");
-		        },
-	        ))
 	        ->add('location', 'entity', array(
 		        'required'    => true,
 		        'property' => 'voteCenterName',
@@ -62,6 +48,18 @@ class VotecenterType extends AbstractType
 			                  ->where("e.status = 1")
 			                  ->andWhere("e.electionConfig =". $this->config->getId())
 			                  ->andWhere("p.slug = 'vote-center'");
+		        },
+	        ))
+	        ->add('electionSetup', 'entity', array(
+		        'required'    => true,
+		        'property' => 'electionName',
+		        'attr'=>array('class'=>'m-wrap span12 select2'),
+		        'constraints' =>array( new NotBlank(array('message'=>'Choose election year')) ),
+		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionSetup',
+		        'query_builder' => function(EntityRepository $er){
+			        return $er->createQueryBuilder('e')
+			                  ->where("e.status = 1")
+			                  ->andWhere("e.electionConfig =". $this->config->getId());
 		        },
 	        ))
 	        ->add('representative', 'entity', array(
@@ -78,11 +76,13 @@ class VotecenterType extends AbstractType
 		        },
 	        ))
 	        ->add('representativeMobile','text', array('attr'=>array('class'=>'m-wrap span12 inputs', 'autocomplete'=>'off','placeholder'=>'Enter representative mobile no')))
-	        ->add('electionDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter election date')))
 	        ->add('presiding','text', array('attr'=>array('class'=>'m-wrap span12 inputs ','autocomplete'=>'off','placeholder'=>'Enter presiding officer name')))
 	        ->add('presidingDesignation','text', array('attr'=>array('class'=>'m-wrap span12 inputs ','autocomplete'=>'off','placeholder'=>'Enter presiding designation')))
 	        ->add('presidingAddress','textarea', array('attr'=>array('class'=>'m-wrap span12 inputs','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter presiding address')))
 	        ->add('presidingMobile','text', array('attr'=>array('class'=>'m-wrap span12 inputs', 'autocomplete'=>'off','placeholder'=>'Enter presiding mobile')))
+	        ->add('maleVoter','number', array('attr'=>array('class'=>'m-wrap span3 inputs vote', 'autocomplete'=>'off','placeholder'=>'Male voter')))
+	        ->add('femaleVoter','number', array('attr'=>array('class'=>'m-wrap span3 inputs vote', 'autocomplete'=>'off','placeholder'=>'Female voter')))
+	        ->add('otherVoter','number', array('attr'=>array('class'=>'m-wrap span3 inputs vote', 'autocomplete'=>'off','placeholder'=>'Other voter')))
 	        ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 inputs', 'rows'=> 4,'autocomplete'=>'off','placeholder'=>'Enter center addree')))
 	       ;
 
@@ -94,7 +94,7 @@ class VotecenterType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionVotecenter'
+            'data_class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter'
         ));
     }
 

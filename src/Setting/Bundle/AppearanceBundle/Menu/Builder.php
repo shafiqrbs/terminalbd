@@ -1070,7 +1070,7 @@ class Builder extends ContainerAware
             ->addChild('Medicine')
             ->setAttribute('icon', 'icon icon-th-large')
             ->setAttribute('dropdown', true);
-            if ($securityContext->isGranted('ROLE_MEDICINE_SALES')) {
+        if ($securityContext->isGranted('ROLE_MEDICINE_SALES')) {
                 $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
                     ->setAttribute('icon', 'icon-list');
                 $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
@@ -1080,11 +1080,27 @@ class Builder extends ContainerAware
 	                $menu['Medicine']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
                 }
             }
-            $menu['Medicine']->addChild('Manage Stock')
-                ->setAttribute('icon', 'icon icon-truck')
-                ->setAttribute('dropdown', true);
-            if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
+	    if ($securityContext->isGranted('ROLE_MEDICINE_PURCHASE')) {
 
+		    $menu['Medicine']->addChild('Manage Purchase')
+		                     ->setAttribute('icon', 'icon icon-truck')
+		                     ->setAttribute('dropdown', true);
+
+		    $menu['Medicine']['Manage Purchase']->addChild('Purchase', array('route' => 'medicine_purchase'))
+		                                        ->setAttribute('icon', 'icon-th-list');
+		    $menu['Medicine']['Manage Purchase']->addChild('Instant Purchase', array('route' => 'medicine_instantpurchase'))
+		                                        ->setAttribute('icon', 'icon-th-list');
+		    $menu['Medicine']['Manage Purchase']->addChild('Purchase Return', array('route' => 'medicine_purchase_return'))
+		                                        ->setAttribute('icon', 'icon-th-list');
+		    $menu['Medicine']['Manage Purchase']->addChild('Pre-purchase', array('route' => 'medicine_prepurchase'))
+		                                        ->setAttribute('icon', 'icon-th-list');
+		    $menu['Medicine']['Manage Purchase']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
+
+	    }
+        if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
+	            $menu['Medicine']->addChild('Manage Stock')
+	                             ->setAttribute('icon', 'icon icon-truck')
+	                             ->setAttribute('dropdown', true);
                 $menu['Medicine']['Manage Stock']->addChild('Stock Item', array('route' => 'medicine_stock'))
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Manage Stock']->addChild('Stock Item Details', array('route' => 'medicine_purchase_item'))
@@ -1099,23 +1115,6 @@ class Builder extends ContainerAware
 	            }
 
             }
-         if ($securityContext->isGranted('ROLE_MEDICINE_PURCHASE')) {
-
-            $menu['Medicine']->addChild('Manage Purchase')
-            ->setAttribute('icon', 'icon icon-truck')
-            ->setAttribute('dropdown', true);
-
-            $menu['Medicine']['Manage Purchase']->addChild('Purchase', array('route' => 'medicine_purchase'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Purchase']->addChild('Instant Purchase', array('route' => 'medicine_instantpurchase'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Purchase']->addChild('Purchase Return', array('route' => 'medicine_purchase_return'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Purchase']->addChild('Pre-purchase', array('route' => 'medicine_prepurchase'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Medicine']['Manage Purchase']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
-
-        }
         if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
             $menu['Medicine']->addChild('Master Data')
                 ->setAttribute('icon', 'icon icon-cog')
@@ -1166,7 +1165,7 @@ class Builder extends ContainerAware
 
          }
 
-        return $menu;
+            return $menu;
 
     }
 
@@ -1329,7 +1328,12 @@ class Builder extends ContainerAware
 		                           ->setAttribute('dropdown', true);
 		$menu['Election & Committee']['Committee']->addChild('Election', array('route' => 'election_committee'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']['Committee']->addChild('Organization', array('route' => 'election_organizationcommittee'))->setAttribute('icon', 'icon-th-list');
-		$menu['Election & Committee']['Committee']->addChild('Vote Center', array('route' => 'election_votecenter'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']->addChild('Election')
+		                           ->setAttribute('icon', 'icon-th-list')
+		                           ->setAttribute('dropdown', true);
+		$menu['Election & Committee']['Election']->addChild('Election Setup', array('route' => 'election_setup'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']['Election']->addChild('Election Candidate', array('route' => 'election_candidate'))->setAttribute('icon', 'icon-user');
+		$menu['Election & Committee']['Election']->addChild('Vote Center', array('route' => 'election_votecenter'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']->addChild('Manage Members', array('route' => 'election_member'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']->addChild('Manage Voters', array('route' => 'election_voter'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']->addChild('Manage Event', array('route' => 'election_event'))->setAttribute('icon', 'icon-calendar');

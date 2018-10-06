@@ -98,14 +98,14 @@ class ElectionParticular
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidateSetup", mappedBy="politicalParty")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="politicalParty")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $electionCandidateParty;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidateSetup", mappedBy="marka")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="marka")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $electionCandidateMarka;
@@ -282,14 +282,14 @@ class ElectionParticular
 	}
 
 	/**
-	 * @return ElectionCandidateSetup
+	 * @return ElectionCandidate
 	 */
 	public function getElectionCandidateParty() {
 		return $this->electionCandidateParty;
 	}
 
 	/**
-	 * @return ElectionCandidateSetup
+	 * @return ElectionCandidate
 	 */
 	public function getElectionCandidateMarka() {
 		return $this->electionCandidateMarka;
