@@ -300,5 +300,52 @@ class ElectionSetupController extends Controller
 		));
 	}
 
+	public function voteUpdateAction(Request $request)
+	{
+		$data = $_REQUEST;
+		$matrixId = (int)$data['matrixId'];
+		$maleVoter = (int)$data['maleVoter'];
+		$femaleVoter = (int)$data['femaleVoter'];
+		$otherVoter = (int)$data['otherVoter'];
+		$totalVoter = ($maleVoter + $femaleVoter + $otherVoter);
+		$em = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('ElectionBundle:ElectionVoteMatrix')->find($matrixId);
+		if(!empty($entity)){
+			$entity->setMaleVoter($maleVoter);
+			$entity->setFemaleVoter($femaleVoter);
+			$entity->setOtherVoter($otherVoter);
+			$entity->setTotalVoter($totalVoter);
+			$em->flush();
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteMatrix')->updateTotalVote($entity->getCandidate());
+			$res = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCandidate')->updateTotalVote($entity->getCandidate(),$data);
+			$result = array(
+				'candidateId'   =>  $res->getId(),
+				'maleVote'      =>  $res->getMaleVote(),
+				'femaleVote'    =>  $res->getFemaleVote(),
+				'otherVote'     =>  $res->getOtherVote(),
+				'totalVote'     =>  $res->getTotalVote()
+			);
+			return new Response(json_encode($result));
+		}
+
+
+		exit;
+	}
+
+	public function resultGenerate($id)
+	{
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$em = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('ElectionBundle:ElectionSetup')->findOneBy(array('electionConfig'=>$config,'id'=>$id));
+		$html = $this->renderView('ElectionBundle:Setup:generate.html.twig',
+			array('entity' => $entity)
+		);
+		return New Response($html);
+		exit;
+
+	}
+
 
 }

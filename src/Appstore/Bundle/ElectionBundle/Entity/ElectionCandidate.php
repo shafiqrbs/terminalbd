@@ -9,7 +9,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * ElectionCandidateSetup
  *
  * @ORM\Table( name ="election_candidate")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionCandidateSetupRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionCandidateRepository")
  */
 class ElectionCandidate
 {
@@ -91,6 +91,13 @@ class ElectionCandidate
      * @ORM\Column(name="femaleVote", type="smallint",  length = 6, nullable=true)
      */
     private $femaleVote = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="otherVote", type="smallint",  length = 6, nullable=true)
+     */
+    private $otherVote = 0;
 
     /**
      * @var boolean
@@ -227,12 +234,6 @@ class ElectionCandidate
 		$this->femaleVote = $femaleVote;
 	}
 
-	/**
-	 * @return ElectionVoteCount
-	 */
-	public function getVoterCounts() {
-		return $this->voterCounts;
-	}
 
 	/**
 	 * @return ElectionSetup
@@ -281,6 +282,20 @@ class ElectionCandidate
 	 */
 	public function setMobile( string $mobile ) {
 		$this->mobile = $mobile;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getOtherVote(){
+		return $this->otherVote;
+	}
+
+	/**
+	 * @param int $otherVote
+	 */
+	public function setOtherVote( int $otherVote ) {
+		$this->otherVote = $otherVote;
 	}
 
 

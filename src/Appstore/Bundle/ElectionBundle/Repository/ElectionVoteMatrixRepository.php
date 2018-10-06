@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionSetup;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteMatrix;
 use Doctrine\ORM\EntityRepository;
@@ -56,5 +57,18 @@ class ElectionVoteMatrixRepository extends EntityRepository
 		return $result;
 
 
+	}
+
+	public function updateTotalVote(ElectionCandidate $candidate)
+	{
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->addSelect('SUM(e.maleVoter) as maleVoter');
+		$qb->addSelect('SUM(e.femaleVoter) as femaleVoter');
+		$qb->addSelect('SUM(e.otherVoter) as otherVoter');
+		$qb->addSelect('SUM(e.totalVoter) as totalVoter');
+		$qb->where('e.candidate ='.$candidate->getId());
+		$result  = $qb->getQuery()->getOneOrNullResult();
+		return $result;
 	}
 }

@@ -8,8 +8,36 @@ $(document).on('keyup', '.vote', function() {
     var otherVoter      = parseInt($('#votecenter_otherVoter').val()  != '' ? $('#votecenter_otherVoter').val() : 0 );
     var totalVote       = (maleVoter + femaleVoter + otherVoter);
     $('#totalVote').val(totalVote);
-
 });
+
+$(document).on('keyup', '.voteCount', function() {
+    var id = $(this).attr("data-id");
+    var maleVoter       = parseInt($('#maleVoter-' + id).val()  != '' ? $('#maleVoter-' + id).val() : 0 );
+    var femaleVoter     = parseInt($('#femaleVoter-' + id).val()  != '' ? $('#femaleVoter-' + id).val() : 0 );
+    var otherVoter      = parseInt($('#otherVoter-' + id).val()  != '' ? $('#otherVoter-' + id).val() : 0 );
+    var totalVoter = (maleVoter + femaleVoter + otherVoter);
+    $('#totalVoter-' + id).val(totalVoter);
+    if (totalVoter > 0){
+        var url = Routing.generate('election_matrix_update',{'matrixId':id,'maleVoter':maleVoter,'femaleVoter':femaleVoter,'otherVoter':otherVoter});
+        setTimeout(submitCountVote(url),10000)
+    }
+});
+
+function submitCountVote(url) {
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#totalMaleVote-'+ obj['candidateId']).html(obj['maleVote']);
+            $('#totalFemaleVote-'+ obj['candidateId']).html(obj['femaleVote']);
+            $('#totalOtherVote-'+ obj['candidateId']).html(obj['otherVote']);
+            $('#totalCandidateVote-'+ obj['candidateId']).html(obj['totalVote']);
+        },
+    });
+    
+}
 
 $('form').on('keypress', '.inputs', function (e) {
 
