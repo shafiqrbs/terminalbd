@@ -41,6 +41,7 @@ class ElectionSetup
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="electionSetup")
+	 * @ORM\OrderBy({"totalVote" = "DESC"})
 	 **/
 	protected $candidates;
 

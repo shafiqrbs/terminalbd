@@ -28,15 +28,17 @@
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Election Result Matrix Information</div>
-                        <div class="actions">
+                        <div class="pull-right">
                             <div class="btn-group">
-                                <a class="red btn" href="{{ path('election_setup') }}"><i class="icon-th-list"></i>&nbsp; Election Result</a>
-                                <a class="red btn" href="javascript:" data-url="{{ path('election_setup_result_generate',{'id':entity.id}) }}"><i class="icon-refresh"></i>&nbsp; Result Generate</a>
+                                <input type="text"  class="m-wrap inline-input" style="width: 250px; background-color: #FFFFff; text-align: left; height: 20px!important;" autocomplete="on" id="search" name="search" value="" >
+                                <a class="red btn" href="{{ path('election_setup') }}"><i class="icon-th-list"></i>&nbsp; Election</a>
+                                <a class="yellow btn view" href="javascript:" data-url="{{ path('election_setup_result_generate',{'id':entity.id}) }}"><i class="icon-refresh"></i>&nbsp; Result</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="portlet-body flip-scroll">
-                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                        <table id="list-data" class="table table-bordered table-striped table-condensed flip-content ">
                         <thead class="head-yellow">
                             <tr>
                                 <th class="numeric" >Name of Vote Center</th>
@@ -55,7 +57,7 @@
                                 {% endfor %}
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody >
                             {% for center in entity.votecenters %}
                                 <tr>
                                     <th class="">{{ center.location.voteCenterName }}</th>
@@ -121,6 +123,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@ElectionBundle/Resources/public/js/quicksearch.js'
     '@ElectionBundle/Resources/public/js/election.js'
     '@ElectionBundle/Resources/public/js/approveProcess.js'
     %}
@@ -129,6 +132,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+
 {% endblock %}
 
 

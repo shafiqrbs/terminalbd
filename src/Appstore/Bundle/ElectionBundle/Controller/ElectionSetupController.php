@@ -332,7 +332,7 @@ class ElectionSetupController extends Controller
 		exit;
 	}
 
-	public function resultGenerate($id)
+	public function resultGenerateAction($id)
 	{
 		set_time_limit(0);
 		ignore_user_abort(true);

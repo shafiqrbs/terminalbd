@@ -2,6 +2,26 @@
  * Created by rbs on 2/9/16.
  */
 
+$('input#search').quicksearch('table#list-data tbody tr', {
+    'delay': 300,
+    'selector': 'th',
+    'stripeRows': ['odd', 'even'],
+    'loader': 'span.loading',
+    'bind': 'keyup click',
+    'show': function () {
+        this.style.color = '';
+    },
+    'hide': function () {
+        this.style.color = '#ccc';
+    },
+    'prepareQuery': function (val) {
+        return new RegExp(val, "i");
+    },
+    'testQuery': function (query, txt, _row) {
+        return query.test(txt);
+    }
+});
+
 $(document).on('keyup', '.vote', function() {
     var maleVoter       = parseInt($('#votecenter_maleVoter').val()  != '' ? $('#votecenter_maleVoter').val() : 0 );
     var femaleVoter     = parseInt($('#votecenter_femaleVoter').val()  != '' ? $('#votecenter_femaleVoter').val() : 0 );
