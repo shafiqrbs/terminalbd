@@ -35,6 +35,11 @@ class BusinessConfig
      **/
     private $businessInvoices;
 
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessReverse", mappedBy="businessConfig")
+     **/
+    private $businessReverses;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Category", mappedBy="businessConfig")

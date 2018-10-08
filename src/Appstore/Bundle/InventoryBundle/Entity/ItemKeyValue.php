@@ -30,6 +30,12 @@ class ItemKeyValue
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="itemKeyValues" )
+     **/
+    private  $product;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="metaKey", type="string", length=255, nullable = true)
@@ -125,6 +131,20 @@ class ItemKeyValue
     {
         $this->sorting = $sorting;
     }
+
+	/**
+	 * @return Product
+	 */
+	public function getProduct() {
+		return $this->product;
+	}
+
+	/**
+	 * @param Product $product
+	 */
+	public function setProduct( $product ) {
+		$this->product = $product;
+	}
 
 
 }

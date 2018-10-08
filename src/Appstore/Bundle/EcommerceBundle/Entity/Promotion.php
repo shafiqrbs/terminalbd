@@ -40,10 +40,21 @@ class Promotion
      */
     protected $purchaseVendorItems;
 
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="promotion")
+     * @ORM\OrderBy({"updated" = "DESC"})
+     */
+    protected $products;
+
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="tag")
      */
     protected $itemTags;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="tag")
+     */
+    protected $productTags;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="promotion"  , cascade={"persist", "remove"} )

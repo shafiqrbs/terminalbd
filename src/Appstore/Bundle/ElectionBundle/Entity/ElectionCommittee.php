@@ -24,20 +24,26 @@ class ElectionCommittee
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="electionParticulars" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="committees" , cascade={"detach","merge"} )
      **/
     private  $electionConfig;
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="electionCommittees")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="committees")
 	 **/
-	protected $electionLocation;
+	protected $location;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="committee")
 	 **/
 	protected $members;
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSms", mappedBy="committee")
+	 **/
+	protected $sms;
 
 
 	/**
@@ -376,20 +382,6 @@ class ElectionCommittee
 	}
 
 	/**
-	 * @return ElectionLocation
-	 */
-	public function getElectionLocation() {
-		return $this->electionLocation;
-	}
-
-	/**
-	 * @param ElectionLocation $electionLocation
-	 */
-	public function setElectionLocation( $electionLocation ) {
-		$this->electionLocation = $electionLocation;
-	}
-
-	/**
 	 * @return ElectionCommitteeMember
 	 */
 	public function getMembers() {
@@ -408,6 +400,20 @@ class ElectionCommittee
 	 */
 	public function setProcess( string $process ) {
 		$this->process = $process;
+	}
+
+	/**
+	 * @return ElectionLocation
+	 */
+	public function getLocation() {
+		return $this->location;
+	}
+
+	/**
+	 * @param ElectionLocation $location
+	 */
+	public function setLocation( $location ) {
+		$this->location = $location;
 	}
 
 

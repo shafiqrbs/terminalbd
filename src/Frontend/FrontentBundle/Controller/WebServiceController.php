@@ -25,7 +25,9 @@ class WebServiceController extends Controller
             $siteEntity = $globalOption->getSiteSetting();
             $themeName = $siteEntity->getTheme()->getFolderName();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'home'));
+
             /* Device Detection code desktop or mobile */
+
             $detect = new MobileDetect();
             if( $detect->isMobile() ||  $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
@@ -54,7 +56,6 @@ class WebServiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('SettingContentBundle:'.$module)->find($id);
-
         echo '<img class="responsive-image" src="/'.$entity->getWebpath().'">';
         echo $entity->getContent();
         exit;

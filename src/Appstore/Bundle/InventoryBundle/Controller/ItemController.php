@@ -567,5 +567,4 @@ class ItemController extends Controller
 
 	}
 
-
 }

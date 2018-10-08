@@ -37,6 +37,12 @@ class HotelConfig
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelReverse", mappedBy="hotelConfig")
+     **/
+    private $hotelReverses;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\Category", mappedBy="hotelConfig")
      **/
     private $categories;

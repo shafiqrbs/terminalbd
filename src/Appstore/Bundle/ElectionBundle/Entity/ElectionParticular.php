@@ -43,78 +43,82 @@ class ElectionParticular
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="electionParticular")
-     * @ORM\OrderBy({"sorting" = "ASC"})
-     **/
-    private $electionMember;
-
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="politicalStatus")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $memberPoliticalStatus;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="politicalDesignation")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $memberPoliticalDesignation;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="profession")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $memberProfession;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="education")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $memberEducation;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="oldPoliticalParty")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $memberPoliticalParty;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", mappedBy="locationType")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $locations;
 
 	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="committeeType")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $electionCommittees;
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="designation")
+     **/
+    private $committeeMember;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="politicalParty")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $electionCandidateParty;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="marka")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $electionCandidateMarka;
 
 	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMemberFamily", mappedBy="relation")
-     * @ORM\OrderBy({"sorting" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", mappedBy="electionType")
      **/
-    private $memberRelation;
+    private $electionSetup;
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCampaignAnalysis", mappedBy="priority")
+     **/
+    private $campaignAnalysisPriority;
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCampaignAnalysis", mappedBy="analysisType")
+     **/
+    private $campaignAnalysisType;
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEvent", mappedBy="eventType")
+     **/
+    private $event;
 
 
     /**

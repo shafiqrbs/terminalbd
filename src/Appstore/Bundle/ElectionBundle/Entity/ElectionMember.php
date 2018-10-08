@@ -28,18 +28,18 @@ class ElectionMember
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="electionMembers")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="members")
 	 **/
 	private $electionConfig;
 
 	/**
 	 * @Gedmo\Blameable(on="create")
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="electionMembers" )
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="members" )
 	 **/
 	private  $createdBy;
 
     /**
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="electionMemberApprove" )
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="memberApprove" )
 	 **/
 	private  $approvedBy;
 
@@ -55,22 +55,25 @@ class ElectionMember
 	private $committees;
 
     /**
-	 * @ORM\OneTomany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="member")
+	 * @ORM\OneTomany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEvent", mappedBy="organiser")
+	 **/
+	private $events;
+
+    /**
+	 * @ORM\OneTomany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="representative")
 	 **/
 	private $votecenters;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="electionMember")
+	 * @ORM\OneTomany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenterMember", mappedBy="member")
+	 **/
+	private $voteCenterMembers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="electionMembers")
      **/
 
     protected $location;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="voters")
-     **/
-
-    protected $voteCenter;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberPoliticalStatus")
@@ -100,12 +103,15 @@ class ElectionMember
     protected $education;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="reference")
-     **/
-    protected $referenceMember;
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="reference")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="referenceMember", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+	 * })
+	 */
+	private $referenceMember;
 
 
-    /**
+	/**
      * @var integer
      *
      * @ORM\Column(name="code", type="integer",  nullable=true)
@@ -1184,6 +1190,20 @@ class ElectionMember
 	 */
 	public function getVotecenters() {
 		return $this->votecenters;
+	}
+
+	/**
+	 * @return ElectionEvent
+	 */
+	public function getEvents() {
+		return $this->events;
+	}
+
+	/**
+	 * @return ElectionVoteCenterMember
+	 */
+	public function getVoteCenterMembers() {
+		return $this->voteCenterMembers;
 	}
 
 

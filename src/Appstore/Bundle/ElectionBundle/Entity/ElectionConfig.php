@@ -28,21 +28,21 @@ class ElectionConfig
     private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="electionConfig")
+	 * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="electionConfig")
 	 * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	protected $globalOption;
 
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="electionConfig")
-	 **/
-	private $electionMembers;
-
-	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMemberImport", mappedBy="electionConfig")
 	 **/
 	private $imports;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", mappedBy="electionConfig")
+	 **/
+	private $locations;
 
 
     /**
@@ -55,6 +55,47 @@ class ElectionConfig
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="parliaments")
 	 **/
 	private $parliament;
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSms", mappedBy="electionConfig")
+	 **/
+	private $sms;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCampaignAnalysis", mappedBy="electionConfig")
+	 **/
+	private $campaignAnalysis;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="electionConfig")
+	 **/
+	private $candidates;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", mappedBy="electionConfig")
+	 **/
+	private $electionSetups;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="electionConfig")
+	 **/
+	private $committees;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEvent", mappedBy="electionConfig")
+	 **/
+	private $events;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="electionConfig")
+	 **/
+	private $members;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="electionConfig")
+	 **/
+	private $voteCenters;
 
 
 	/**
@@ -317,6 +358,69 @@ class ElectionConfig
 	 */
 	public function setDistrict( $district ) {
 		$this->district = $district;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getMembers() {
+		return $this->members;
+	}
+
+	/**
+	 * @return ElectionSms
+	 */
+	public function getSms() {
+		return $this->sms;
+	}
+
+	/**
+	 * @return ElectionCampaignAnalysis
+	 */
+	public function getCampaignAnalysis() {
+		return $this->campaignAnalysis;
+	}
+
+	/**
+	 * @return ElectionCandidate
+	 */
+	public function getCandidates() {
+		return $this->candidates;
+	}
+
+	/**
+	 * @return ElectionSetup
+	 */
+	public function getElectionSetups() {
+		return $this->electionSetups;
+	}
+
+	/**
+	 * @return ElectionCommittee
+	 */
+	public function getCommittees() {
+		return $this->committees;
+	}
+
+	/**
+	 * @return ElectionEvent
+	 */
+	public function getEvents() {
+		return $this->events;
+	}
+
+	/**
+	 * @return ElectionVoteCenter
+	 */
+	public function getVoteCenters() {
+		return $this->voteCenters;
+	}
+
+	/**
+	 * @return ElectionLocation
+	 */
+	public function getLocations() {
+		return $this->locations;
 	}
 
 

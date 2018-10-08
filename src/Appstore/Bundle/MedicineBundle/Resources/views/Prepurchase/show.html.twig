@@ -63,6 +63,7 @@
                                 <div class="span4 invoice-payment">
                                     <h4>Payment Details:</h4>
                                     <ul class="unstyled">
+                                        <li><strong>Sub-Total BDT:</strong>&nbsp;{{ entity.subTotal|number_format() }}</li>
                                         <li><strong>Total BDT:</strong>&nbsp;{{ entity.netTotal|number_format() }}</li>
                                         <li><strong>Payment BDT:</strong>&nbsp;{{ entity.payment|number_format() }}</li>
                                         {% if entity.discount %}<li><strong>Discount BDT:</strong>&nbsp;{{ entity.discount|number_format() }}</li>{% endif %}
@@ -104,8 +105,12 @@
                                             <td colspan="5" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td colspan="4" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
                                             <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                        </tr>
+                                         <tr>
+                                            <td colspan="4" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="subTotal">{{ entity.netTotal|number_format }}</strong></td>
                                         </tr>
                                         </tfoot>
                                     </table>

@@ -53,6 +53,11 @@ class ItemSize
      */
     protected $purchaseVendorItems;
 
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="size")
+     */
+    protected $products;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="size")
      */

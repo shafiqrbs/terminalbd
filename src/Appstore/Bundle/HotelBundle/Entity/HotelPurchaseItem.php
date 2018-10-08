@@ -51,12 +51,6 @@ class HotelPurchaseItem
     private  $hotelDamages;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="hotelPurchaseItems" )
-     **/
-    private  $unit;
-
-
-    /**
      * @var float
      *
      * @ORM\Column(name="quantity", type="float")
@@ -319,22 +313,6 @@ class HotelPurchaseItem
     public function setHotelParticular($hotelParticular)
     {
         $this->hotelParticular = $hotelParticular;
-    }
-
-    /**
-     * @return ProductUnit
-     */
-    public function getUnit()
-    {
-        return $this->unit;
-    }
-
-    /**
-     * @param ProductUnit $unit
-     */
-    public function setUnit($unit)
-    {
-        $this->unit = $unit;
     }
 
     /**

@@ -32,13 +32,8 @@ class HotelInvoiceTransaction
     private $id;
 
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelConfig", inversedBy="hotelInvoices")
-     **/
-    private $hotelConfig;
-
    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", inversedBy="hotelInvoice")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", inversedBy="hotelInvoiceTransactions")
      **/
     private $hotelInvoice;
 

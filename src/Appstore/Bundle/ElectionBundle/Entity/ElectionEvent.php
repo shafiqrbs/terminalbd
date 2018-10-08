@@ -25,7 +25,7 @@ class ElectionEvent
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="campaignAnalysis" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="events" , cascade={"detach","merge"} )
      **/
     private  $electionConfig;
 
@@ -35,7 +35,7 @@ class ElectionEvent
 	protected $location;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="event")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="events")
 	 **/
 	protected $organiser;
 
@@ -49,6 +49,12 @@ class ElectionEvent
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEventMember", mappedBy="event")
 	 **/
 	protected $eventMembers;
+
+	/**
+	 *
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSms", mappedBy="event")
+	 **/
+	protected $sms;
 
 	/**
 	 * @var \DateTime

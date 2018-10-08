@@ -64,8 +64,8 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
-                                        <td class="numeric" >{% if entity.electionLocation is not empty %}{{ entity.electionLocation.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.electionLocation is not empty %}{{ entity.electionLocation.locationType.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.location is not empty %}{{ entity.location.locationType.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.startDate|date('d-m-Y') }} To {{ entity.endDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >Expiration</td>
                                         <td class="numeric" >{{ entity.createdBy }}</td>

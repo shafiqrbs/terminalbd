@@ -55,7 +55,7 @@ class CommitteeType extends AbstractType
                     new NotBlank(array('message'=>'Enter committee name')),
                 )
             ))
-	        ->add('electionLocation', 'entity', array(
+	        ->add('location', 'entity', array(
 		        'required'    => true,
 		        'attr'=>array('class'=>'category m-wrap span6 select2'),
 		        'constraints' =>array( new NotBlank(array('message'=>'Choose location for committee')) ),

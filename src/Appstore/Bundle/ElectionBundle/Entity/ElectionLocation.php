@@ -29,7 +29,7 @@ class ElectionLocation
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="electionLocations" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="locations" , cascade={"detach","merge"} )
      **/
     private  $electionConfig;
 
@@ -40,41 +40,56 @@ class ElectionLocation
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="location" , cascade={"detach","merge"} )
+     **/
+    private  $committees;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="location")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $electionMembers;
 
 
 	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="location")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $votecenters;
 
 	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCampaignAnalysis", mappedBy="location")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $campaignAnalysis;
 
 	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEvent", mappedBy="location")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $events;
 
 	/**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="electionLocations")
-     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $district;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="locations")
-	 * @ORM\OrderBy({"sorting" = "ASC"})
 	 **/
 	private $locationType;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", mappedBy="location")
+	 **/
+	private $electionSetup;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSms", mappedBy="locationMember")
+	 **/
+	private $memberSms;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSms", mappedBy="locationVoter")
+	 **/
+	private $voterSms;
 
 	/**
 	 * @Gedmo\TreeParent
@@ -433,6 +448,14 @@ class ElectionLocation
 	public function getCandidates() {
 		return $this->candidates;
 	}
+
+	/**
+	 * @return ElectionSetup
+	 */
+	public function getElectionSetup() {
+		return $this->electionSetup;
+	}
+
 
 
 }

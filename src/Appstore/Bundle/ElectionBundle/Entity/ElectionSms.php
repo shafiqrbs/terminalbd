@@ -9,10 +9,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * ElectionSetup
  *
- * @ORM\Table( name ="election_setup")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionSetupRepository")
+ * @ORM\Table( name ="election_sms")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionSmsRepository")
  */
-class ElectionSetup
+class ElectionSms
 {
 	/**
 	 * @var integer
@@ -25,79 +25,64 @@ class ElectionSetup
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="electionSetups" , cascade={"detach","merge"} )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="sms" , cascade={"detach","merge"} )
 	 **/
 	private  $electionConfig;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="electionSetup")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="memberSms")
 	 **/
-	protected $location;
+	protected $locationMember;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteMatrix", mappedBy="electionSetup")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="voterSms")
 	 **/
-	protected $voteMatrix;
+	protected $locationVoter;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="electionSetup")
-	 * @ORM\OrderBy({"totalVote" = "DESC"})
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", inversedBy="sms")
 	 **/
-	protected $candidates;
+	protected $committee;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="electionSetup")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", inversedBy="sms")
 	 **/
-	protected $votecenters;
+	protected $voteCenter;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="electionSetup")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEvent", inversedBy="sms")
 	 **/
-	protected $electionType;
-
-
-	/**
-	 * @var \DateTime
-	 * @ORM\Column(name="electionDate", type="datetime", nullable=true)
-	 */
-	private $electionDate;
+	protected $event;
 
 
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="district", type="string", length=200, nullable = true)
+	 * @ORM\Column(name="name", type="string",  length = 255, nullable=true)
 	 */
-	private $district;
+	private $name;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="content", type="string",  length = 255, nullable=true)
+	 */
+	private $content;
 
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="totalVoter", type="smallint",  length = 6, nullable=true)
+	 * @ORM\Column(name="send", type="smallint",  length = 6, nullable=true)
 	 */
-	private $totalVoter;
+	private $send;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="maleVoter", type="smallint",  length = 6, nullable=true)
+	 * @ORM\Column(name="invalid", type="smallint",  length = 6, nullable=true)
 	 */
-	private $maleVoter;
-
-	/**
-	 * @var int
-	 *
-	 * @ORM\Column(name="femaleVoter", type="smallint",  length = 6, nullable=true)
-	 */
-	private $femaleVoter;
-
-	/**
-	 * @var int
-	 *
-	 * @ORM\Column(name="otherVoter", type="smallint",  length = 6, nullable=true)
-	 */
-	private $otherVoter;
+	private $invalid;
 
 
 	/**

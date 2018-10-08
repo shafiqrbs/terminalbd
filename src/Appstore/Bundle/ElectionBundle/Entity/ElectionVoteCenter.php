@@ -25,15 +25,20 @@ class ElectionVoteCenter
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="electionParticulars" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="voteCenters" , cascade={"detach","merge"} )
      **/
     private  $electionConfig;
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="votecenters")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="votecenters")
 	 **/
 	protected $location;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSms", mappedBy="voteCenter")
+	 **/
+	protected $sms;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="votecenters")
@@ -53,7 +58,7 @@ class ElectionVoteCenter
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteMatrix", mappedBy="voteCenter")
 	 **/
-	protected $voterMatrix;
+	protected $voteMatrix;
 
 	/**
 	 * @var string

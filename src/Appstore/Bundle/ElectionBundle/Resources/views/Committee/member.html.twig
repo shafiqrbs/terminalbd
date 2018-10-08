@@ -48,8 +48,8 @@
                                     <h4>About:</h4>
                                     <ul class="unstyled">
                                         <li><strong>Committee Name:</strong>&nbsp;{{ entity.name }}</li>
-                                        <li><strong>Location:</strong>&nbsp;{% if entity.electionLocation is not empty %}{{ entity.electionLocation.name }}{% endif %}</li>
-                                        <li><strong>Location Type:</strong>&nbsp;{% if entity.electionLocation is not empty %}{{ entity.electionLocation.locationType.name }}{% endif %}</li>
+                                        <li><strong>Location:</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</li>
+                                        <li><strong>Location Type:</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.locationType.name }}{% endif %}</li>
                                         <li><strong>Duration of committee:</strong>&nbsp;{{ entity.startDate|date('d-m-Y') }} To {{ entity.endDate|date('d-m-Y') }}</li>
                                     </ul>
                                 </div>

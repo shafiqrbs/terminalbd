@@ -178,7 +178,7 @@
                                     <td class="span1">
                                         <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                     </td>
-                                    <td class="" id="subTotal-{{ item.id }}">{{ item.purchaseSubTotal|number_format }}</td>
+                                    <td class="" id="subTotal-{{ item.id }}">{{ (item.actualPurchasePrice * item.quantity)|number_format }}</td>
                                     <td class="span1">
                                         <input type="hidden" id="purchaseQuantity-{{ item.id }}"  value="{{ item.quantity }}" >
                                         <input type="hidden" id="salesQuantity-{{ item.id }}"  value="{{ item.salesQuantity }}" >

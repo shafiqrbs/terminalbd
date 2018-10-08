@@ -28,6 +28,12 @@ class ItemGallery
      **/
     protected $purchaseVendorItem;
 
+	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="itemGalleries" )
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    protected $product;
+
 
     /**
      * @var text
@@ -262,6 +268,20 @@ class ItemGallery
     {
         $this->purchaseVendorItem = $purchaseVendorItem;
     }
+
+	/**
+	 * @return Product
+	 */
+	public function getProduct() {
+		return $this->product;
+	}
+
+	/**
+	 * @param Product $product
+	 */
+	public function setProduct( $product ) {
+		$this->product = $product;
+	}
 
 
 }

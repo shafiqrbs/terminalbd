@@ -55,6 +55,11 @@ class ItemColor
     protected $purchaseVendorItems;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="colors")
+     */
+    protected $products;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

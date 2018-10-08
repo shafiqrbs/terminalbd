@@ -48,6 +48,11 @@ class ItemBrand  implements CodeAwareEntity
     protected $purchaseVendorItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="brand")
+     */
+    protected $products;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="brands")
      */
     protected $ecommerceMenu;
@@ -302,6 +307,13 @@ class ItemBrand  implements CodeAwareEntity
     {
         return $this->featureBrand;
     }
+
+	/**
+	 * @return Product
+	 */
+	public function getProducts() {
+		return $this->products;
+	}
 
 
 }

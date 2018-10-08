@@ -872,12 +872,12 @@ class User extends BaseUser
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="createdBy"  )
 	 **/
-	private  $electionMembers;
+	private  $members;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="approvedBy"  )
 	 **/
-	private  $electionMemberApprove;
+	private  $memberApprove;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="createdBy"  )
@@ -889,20 +889,7 @@ class User extends BaseUser
 	 **/
 	private  $committeeApprovedBy;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="createdBy"  )
-	 **/
-	private  $voteCenterCreatedBy;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="createdBy"  )
-	 **/
-	private  $voteCountCreatedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="approvedBy"  )
-	 **/
-	private  $voteCenterApprovedBy;
 
 
 	public function isGranted($role)

@@ -40,6 +40,11 @@ class Discount
     protected $purchaseVendorItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="discount" )
+     */
+    protected $products;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="discount" , cascade={"remove"})
      **/
     private  $featureWidgets;

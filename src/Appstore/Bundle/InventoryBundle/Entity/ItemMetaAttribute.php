@@ -29,6 +29,11 @@ class ItemMetaAttribute
     private  $purchaseVendorItem;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="itemMetaAttributes" )
+     **/
+    private  $product;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemAttribute", inversedBy="itemMetaAttributes" )
      **/
     private  $itemAttribute;
@@ -114,5 +119,19 @@ class ItemMetaAttribute
     {
         return $this->status;
     }
+
+	/**
+	 * @return Product
+	 */
+	public function getProduct() {
+		return $this->product;
+	}
+
+	/**
+	 * @param Product $product
+	 */
+	public function setProduct( $product ) {
+		$this->product = $product;
+	}
 }
 

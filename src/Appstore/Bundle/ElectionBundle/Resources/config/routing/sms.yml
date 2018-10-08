@@ -1,6 +1,6 @@
 election_sms:
     path:     /
-    defaults: { _controller: "ElectionBundle:Sms:member" }
+    defaults: { _controller: "ElectionBundle:Sms:index" }
 
 election_member_sms:
     path:     /{id}/member

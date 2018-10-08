@@ -254,7 +254,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $percentage = $purchase->getDiscountCalculation();
             $purchasePrice = $this->stockInstantPurchaseItemPrice($percentage,$item->getActualPurchasePrice());
             $item->setPurchasePrice($purchasePrice);
-            $item->setPurchaseSubTotal($purchasePrice * $item->getQuantity());
+            $item->setPurchaseSubTotal($item->getActualPurchasePrice() * $item->getQuantity());
             $em->persist($item);
             $em->flush();
 

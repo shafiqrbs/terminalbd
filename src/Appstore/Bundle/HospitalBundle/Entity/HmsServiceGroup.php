@@ -40,7 +40,7 @@ class HmsServiceGroup
     private $service;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="hmsServiceGroup")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="serviceGroup")
      **/
     private $particulars;
 

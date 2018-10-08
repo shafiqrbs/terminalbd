@@ -24,7 +24,7 @@ class ElectionCandidate
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="ElectionCandidates" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="candidates" , cascade={"detach","merge"} )
      **/
     private  $electionConfig;
 

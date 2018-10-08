@@ -23,13 +23,8 @@ class ElectionVoteCenterMember
     private $id;
 
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="electionParticulars" , cascade={"detach","merge"} )
-     **/
-    private  $electionConfig;
-
 	/**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="electionVoteCenterMembers" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="voteCenterMembers" , cascade={"detach","merge"} )
      **/
     private  $member;
 

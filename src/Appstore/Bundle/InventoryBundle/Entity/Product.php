@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Discount;
+use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
@@ -31,11 +33,15 @@ class Product implements CodeAwareEntity
      **/
     private  $inventoryConfig;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", mappedBy="masterItem")
      */
     protected $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="masterItem")
+     */
+    protected $purchaseVendorItem;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PrePurchaseItem", mappedBy="masterItem")
@@ -47,12 +53,6 @@ class Product implements CodeAwareEntity
      */
     protected $stockItems;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="masterItem")
-     */
-    protected $purchaseVendorItem;
-
     /**
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="masterProducts" )
      **/
@@ -63,7 +63,61 @@ class Product implements CodeAwareEntity
      **/
     private  $productUnit;
 
-    /**
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemMetaAttribute", mappedBy="product" , cascade={"remove"}  )
+	 **/
+	private  $itemMetaAttributes;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue", mappedBy="product" , cascade={"remove"}  )
+	 * @ORM\OrderBy({"sorting" = "ASC"})
+	 **/
+	private  $itemKeyValues;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemGallery", mappedBy="product" , cascade={"remove"} )
+	 */
+	protected $itemGalleries;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="products")
+	 */
+	protected $country;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="products")
+	 */
+	protected $brand;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="products" )
+	 * @ORM\OrderBy({"id" = "ASC"})
+	 **/
+	private  $colors;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="products" )
+	 **/
+	private  $size;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="products" )
+	 **/
+	private  $discount;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="productTags" )
+	 **/
+	private  $tag;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="products" )
+	 **/
+	private  $promotion;
+
+
+
+	/**
      * @Gedmo\Slug(fields={"name"}, updatable=false, separator="-")
      * @ORM\Column(length=255, unique=true)
      */
@@ -121,8 +175,71 @@ class Product implements CodeAwareEntity
      */
     private $gender;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="warningLabel", type="string", length=10 , nullable = true)
+	 */
+	private $warningLabel;
 
-    /**
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="warningText", type="string", length=255 , nullable = true)
+	 */
+	private $warningText;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="webName", type="string", length=255, nullable = true)
+	 */
+	private $webName;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="source", type="string", length=20 , nullable = true)
+	 */
+	private $source;
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="purchasePrice", type="float", nullable = true)
+	 */
+	private $purchasePrice;
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="salesPrice", type="float", nullable = true)
+	 */
+	private $salesPrice;
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="webPrice", type="float", nullable = true)
+	 */
+	private $webPrice;
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="wholeSalesPrice", type="float", nullable = true)
+	 */
+	private $wholeSalesPrice;
+
+	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="overHeadCost", type="float", nullable = true)
+	 */
+	private $overHeadCost;
+
+
+	/**
      * @var text
      *
      * @ORM\Column(name="content", type="text", nullable=true)
@@ -355,7 +472,7 @@ class Product implements CodeAwareEntity
      */
     public function getPurchaseVendorItem()
     {
-        return $this->purchaseVendorItem;
+        return $this->product;
     }
 
     /**
@@ -527,6 +644,232 @@ class Product implements CodeAwareEntity
     {
         return $this->prePurchaseItems;
     }
+
+	/**
+	 * @return ItemMetaAttribute
+	 */
+	public function getItemMetaAttributes() {
+		return $this->itemMetaAttributes;
+	}
+
+	/**
+	 * @param ItemMetaAttribute $itemMetaAttributes
+	 */
+	public function setItemMetaAttributes( $itemMetaAttributes ) {
+		$this->itemMetaAttributes = $itemMetaAttributes;
+	}
+
+	/**
+	 * @return ItemKeyValue
+	 */
+	public function getItemKeyValues() {
+		return $this->itemKeyValues;
+	}
+
+	/**
+	 * @param ItemKeyValue $itemKeyValues
+	 */
+	public function setItemKeyValues( $itemKeyValues ) {
+		$this->itemKeyValues = $itemKeyValues;
+	}
+
+	/**
+	 * @return ItemColor
+	 */
+	public function getColors() {
+		return $this->colors;
+	}
+
+	/**
+	 * @param ItemColor $colors
+	 */
+	public function setColors( $colors ) {
+		$this->colors = $colors;
+	}
+
+	/**
+	 * @return ItemSize
+	 */
+	public function getSize() {
+		return $this->size;
+	}
+
+	/**
+	 * @param ItemSize $size
+	 */
+	public function setSize( $size ) {
+		$this->size = $size;
+	}
+
+	/**
+	 * @return Discount
+	 */
+	public function getDiscount() {
+		return $this->discount;
+	}
+
+	/**
+	 * @param Discount $discount
+	 */
+	public function setDiscount( $discount ) {
+		$this->discount = $discount;
+	}
+
+	/**
+	 * @return Promotion
+	 */
+	public function getTag() {
+		return $this->tag;
+	}
+
+	/**
+	 * @param Promotion $tag
+	 */
+	public function setTag( $tag ) {
+		$this->tag = $tag;
+	}
+
+	/**
+	 * @return Promotion
+	 */
+	public function getPromotion() {
+		return $this->promotion;
+	}
+
+	/**
+	 * @param Promotion $promotion
+	 */
+	public function setPromotion( $promotion ) {
+		$this->promotion = $promotion;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getWarningLabel(): string {
+		return $this->warningLabel;
+	}
+
+	/**
+	 * @param string $warningLabel
+	 */
+	public function setWarningLabel( string $warningLabel ) {
+		$this->warningLabel = $warningLabel;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getWarningText(): string {
+		return $this->warningText;
+	}
+
+	/**
+	 * @param string $warningText
+	 */
+	public function setWarningText( string $warningText ) {
+		$this->warningText = $warningText;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getWebName(): string {
+		return $this->webName;
+	}
+
+	/**
+	 * @param string $webName
+	 */
+	public function setWebName( string $webName ) {
+		$this->webName = $webName;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSource() {
+		return $this->source;
+	}
+
+	/**
+	 * @param mixed $source
+	 * Inventory
+	 * Non-inventory
+	 */
+	public function setSource( $source ) {
+		$this->source = $source;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getPurchasePrice(){
+		return $this->purchasePrice;
+	}
+
+	/**
+	 * @param float $purchasePrice
+	 */
+	public function setPurchasePrice( float $purchasePrice ) {
+		$this->purchasePrice = $purchasePrice;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getSalesPrice() {
+		return $this->salesPrice;
+	}
+
+	/**
+	 * @param float $salesPrice
+	 */
+	public function setSalesPrice( $salesPrice ) {
+		$this->salesPrice = $salesPrice;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getWebPrice() {
+		return $this->webPrice;
+	}
+
+	/**
+	 * @param float $webPrice
+	 */
+	public function setWebPrice( $webPrice ) {
+		$this->webPrice = $webPrice;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getWholeSalesPrice() {
+		return $this->wholeSalesPrice;
+	}
+
+	/**
+	 * @param float $wholeSalesPrice
+	 */
+	public function setWholeSalesPrice( $wholeSalesPrice ) {
+		$this->wholeSalesPrice = $wholeSalesPrice;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getOverHeadCost() {
+		return $this->overHeadCost;
+	}
+
+	/**
+	 * @param float $overHeadCost
+	 */
+	public function setOverHeadCost( $overHeadCost ) {
+		$this->overHeadCost = $overHeadCost;
+	}
 
 
 }

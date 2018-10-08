@@ -20,6 +20,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SmsController extends Controller
 {
+
+
+	public function indexAction()
+	{
+		
+	}
+
 	/**
 	 * Finds and displays a ElectionMember entity.
 	 *

@@ -72,17 +72,31 @@ class ProductUnit
      **/
     private $medicineMinimumStock;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePrepurchaseItem", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $medicinePrepurchaseItems;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $businessParticulars;
 
-/**
+	 /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $businessPurchaseItems;
+
+	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $dpsParticulars;
 
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $hotelParticulars;
 
 
 
