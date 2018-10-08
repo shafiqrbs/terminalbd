@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ElectionSetup
+ * ElectionSms
  *
  * @ORM\Table( name ="election_sms")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionSmsRepository")
@@ -73,16 +73,30 @@ class ElectionSms
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="send", type="smallint",  length = 6, nullable=true)
+	 * @ORM\Column(name="total", type="smallint",  length = 6, nullable=true)
 	 */
-	private $send;
+	private $total;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="invalid", type="smallint",  length = 6, nullable=true)
+	 * @ORM\Column(name="success", type="smallint",  length = 6, nullable=true)
 	 */
-	private $invalid;
+	private $success;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="failed", type="smallint",  length = 6, nullable=true)
+	 */
+	private $failed;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="process", type="string",  length = 20, nullable=true)
+	 */
+	private $process;
 
 
 	/**
@@ -146,106 +160,7 @@ class ElectionSms
 	public function setElectionConfig( $electionConfig ) {
 		$this->electionConfig = $electionConfig;
 	}
-
-	/**
-	 * @return int
-	 */
-	public function getTotalVoter() {
-		return $this->totalVoter;
-	}
-
-	/**
-	 * @param int $totalVoter
-	 */
-	public function setTotalVoter( $totalVoter ) {
-		$this->totalVoter = $totalVoter;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getMaleVoter(){
-		return $this->maleVoter;
-	}
-
-	/**
-	 * @param int $maleVoter
-	 */
-	public function setMaleVoter( int $maleVoter ) {
-		$this->maleVoter = $maleVoter;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getFemaleVoter(){
-		return $this->femaleVoter;
-	}
-
-	/**
-	 * @param int $femaleVoter
-	 */
-	public function setFemaleVoter( int $femaleVoter ) {
-		$this->femaleVoter = $femaleVoter;
-	}
-
-
-	/**
-	 * @return string
-	 */
-	public function getDistrict(): string {
-		return $this->district;
-	}
-
-	/**
-	 * @param string $district
-	 */
-	public function setDistrict( string $district ) {
-		$this->district = $district;
-	}
-
-	/**
-	 * @return ElectionLocation
-	 */
-	public function getLocation() {
-		return $this->location;
-	}
-
-	/**
-	 * @param ElectionLocation $location
-	 */
-	public function setLocation( $location ) {
-		$this->location = $location;
-	}
-
-	/**
-	 * @return ElectionParticular
-	 */
-	public function getElectionType() {
-		return $this->electionType;
-	}
-
-	/**
-	 * @param ElectionParticular $electionType
-	 */
-	public function setElectionType( $electionType ) {
-		$this->electionType = $electionType;
-	}
-
-	/**
-	 * @return \DateTime
-	 */
-	public function getElectionDate(){
-		return $this->electionDate;
-	}
-
-	/**
-	 * @param \DateTime $electionDate
-	 */
-	public function setElectionDate( \DateTime $electionDate ) {
-		$this->electionDate = $electionDate;
-	}
-
+	
 
 	/**
 	 * @return \DateTime
@@ -259,21 +174,6 @@ class ElectionSms
 	 */
 	public function setCreated( \DateTime $created ) {
 		$this->created = $created;
-	}
-
-
-	/**
-	 * @return int
-	 */
-	public function getOtherVoter(){
-		return $this->otherVoter;
-	}
-
-	/**
-	 * @param int $otherVoter
-	 */
-	public function setOtherVoter( int $otherVoter ) {
-		$this->otherVoter = $otherVoter;
 	}
 
 	/**
@@ -291,33 +191,162 @@ class ElectionSms
 	}
 
 	/**
-	 * @return ElectionVoteMatrix
+	 * @return string
 	 */
-	public function getVoteMatrix() {
-		return $this->voteMatrix;
+	public function getName(){
+		return $this->name;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName( string $name ) {
+		$this->name = $name;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getContent(){
+		return $this->content;
+	}
+
+	/**
+	 * @param string $content
+	 */
+	public function setContent( string $content ) {
+		$this->content = $content;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSuccess(){
+		return $this->success;
+	}
+
+	/**
+	 * @param int $success
+	 */
+	public function setSuccess( int $success ) {
+		$this->success = $success;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFailed(){
+		return $this->failed;
+	}
+
+	/**
+	 * @param int $failed
+	 */
+	public function setFailed( int $failed ) {
+		$this->failed = $failed;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getLocationMember() {
+		return $this->locationMember;
+	}
+
+	/**
+	 * @param ElectionMember $locationMember
+	 */
+	public function setLocationMember( $locationMember ) {
+		$this->locationMember = $locationMember;
+	}
+
+	/**
+	 * @return ElectionMember
+	 */
+	public function getLocationVoter() {
+		return $this->locationVoter;
+	}
+
+	/**
+	 * @param ElectionMember $locationVoter
+	 */
+	public function setLocationVoter( $locationVoter ) {
+		$this->locationVoter = $locationVoter;
+	}
+
+	/**
+	 * @return ElectionCommittee
+	 */
+	public function getCommittee() {
+		return $this->committee;
+	}
+
+	/**
+	 * @param ElectionCommittee $committee
+	 */
+	public function setCommittee( $committee ) {
+		$this->committee = $committee;
 	}
 
 	/**
 	 * @return ElectionVoteCenter
 	 */
-	public function getVotecenters() {
-		return $this->votecenters;
+	public function getVoteCenter() {
+		return $this->voteCenter;
 	}
 
 	/**
-	 * @return ElectionCandidate
+	 * @param ElectionVoteCenter $voteCenter
 	 */
-	public function getCandidates() {
-		return $this->candidates;
+	public function setVoteCenter( $voteCenter ) {
+		$this->voteCenter = $voteCenter;
 	}
 
-	public function getElectionName(){
+	/**
+	 * @return ElectionEvent
+	 */
+	public function getEvent() {
+		return $this->event;
+	}
 
-		$year = $this->getElectionDate()->format('y');
-		$type = $this->getElectionType()->getName();
-		$data = $type.' - '.$year.' => '.$this->getLocation()->getName();
-		return $data;
+	/**
+	 * @param ElectionEvent $event
+	 */
+	public function setEvent( $event ) {
+		$this->event = $event;
+	}
 
+	/**
+	 * @return int
+	 */
+	public function getTotal(){
+		return $this->total;
+	}
+
+	/**
+	 * @param int $total
+	 */
+	public function setTotal( int $total ) {
+		$this->total = $total;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getProcess(){
+		return $this->process;
+	}
+
+	/**
+	 * @param string $process
+	 * Member
+	 * Voter
+	 * Committee
+	 * VoteCenter
+	 * Event
+	 */
+	public function setProcess( string $process ) {
+		$this->process = $process;
 	}
 
 

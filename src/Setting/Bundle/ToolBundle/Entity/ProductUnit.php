@@ -99,7 +99,6 @@ class ProductUnit
     private $hotelParticulars;
 
 
-
     /**
      * @var string
      *

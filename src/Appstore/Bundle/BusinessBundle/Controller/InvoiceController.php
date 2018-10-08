@@ -124,7 +124,7 @@ class InvoiceController extends Controller
         }
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('post-production','pre-production','stock','service','virtual'));
 	    $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
-        return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
+	    return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'particulars' => $particulars,
             'form' => $editForm->createView(),

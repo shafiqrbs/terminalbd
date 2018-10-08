@@ -139,17 +139,6 @@ class ElectionVoteCenter
 
 
 	/**
-	 * @Gedmo\Blameable(on="create")
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="voteCenterCreatedBy" )
-	 **/
-	private  $createdBy;
-
-	/**
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="voteCenterApprovedBy" )
-	 **/
-	private  $approvedBy;
-
-	/**
 	 * @var string
 	 *
 	 * @ORM\Column(name="address", type="text",  nullable=true)

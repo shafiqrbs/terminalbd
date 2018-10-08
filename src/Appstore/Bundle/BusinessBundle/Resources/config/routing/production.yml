@@ -25,6 +25,10 @@ business_pre_production_update:
     defaults: { _controller: "BusinessBundle:Production:preProductionUpdate" }
     methods:  [POST, PUT]
 
+business_pre_production_show:
+    path:     /{id}/show
+    defaults: { _controller: "BusinessBundle:Production:show" }
+
 business_pre_production_delete:
     path:     /{id}/delete
     defaults: { _controller: "BusinessBundle:Production:delete" }

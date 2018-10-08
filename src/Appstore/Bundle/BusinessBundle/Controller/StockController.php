@@ -43,7 +43,7 @@ class StockController extends Controller
         $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
-        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig' => $config ,'status'=>1));
         return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'pagination' => $pagination,
             'types' => $type,

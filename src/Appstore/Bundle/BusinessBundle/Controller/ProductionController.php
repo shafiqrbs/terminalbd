@@ -41,12 +41,12 @@ class ProductionController extends Controller
 
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
-		$data['type']= 7;
+	//	$data['type']= 7;
 		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
 		$entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessProduction')->findWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
 		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
-		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig'=>$config,'status'=>1));
 		return $this->render('BusinessBundle:Production:index.html.twig', array(
 			'pagination' => $pagination,
 			'types' => $type,
@@ -280,6 +280,15 @@ class ProductionController extends Controller
         exit;
 
 
+    }
+
+    public function showAction($id)
+    {
+	    $em = $this->getDoctrine()->getManager();
+	    $entity = $em->getRepository('BusinessBundle:BusinessProduction')->find($id);
+	    return $this->render('BusinessBundle:Production:show.html.twig', array(
+		    'entity'      => $entity,
+	    ));
     }
 
 	public function approvedAction($id)
