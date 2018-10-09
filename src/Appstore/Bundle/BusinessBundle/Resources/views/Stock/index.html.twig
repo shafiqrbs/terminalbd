@@ -88,7 +88,7 @@
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >PP</th>
                                     <th class="numeric" >Price</th>
-                                    <th class="numeric" >Opening</th>
+                                   {# <th class="numeric" >Opening</th>#}
                                     <th class="numeric" >Receive Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
                                     <th class="numeric" >Stock Qnt</th>
@@ -114,9 +114,9 @@
                                                 <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
 
                                         </td>
-                                        <td class="numeric">
+                                        {#<td class="numeric">
                                                 <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
-                                       </td>
+                                       </td>#}
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>

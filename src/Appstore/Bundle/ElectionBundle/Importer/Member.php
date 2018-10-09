@@ -5,7 +5,7 @@ use Appstore\Bundle\ElectionBundle\Entity\ElectionParticular;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 
-class Excel
+class Member
 {
     use ContainerAwareTrait;
 
@@ -29,7 +29,7 @@ class Excel
 
           	$name = trim($item['Name']);
 	        $mobile  = '0'.trim($item['MobileNo']);
-            $entity = $this->getDoctrain()->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('electionConfig' => $this->getElectionConfig(),'name' => $name,'mobile' => $mobile));
+            $entity = $this->getDoctrain()->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('electionConfig' => $this->getElectionConfig(),'memberType'=>'member','name' => $name,'mobile' => $mobile));
 	        if(empty($entity) and !empty($name) and !empty($mobile) ) {
 		        $member = new ElectionMember();
 		        $member->setElectionConfig($this->getElectionConfig());

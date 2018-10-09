@@ -4,7 +4,7 @@ namespace Appstore\Bundle\ElectionBundle\Importer;
 use Liuggio\ExcelBundle\Factory;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class ExcelDataReader
+class VoterDataReader
 {
 
     use ContainerAwareTrait;
@@ -56,10 +56,8 @@ class ExcelDataReader
                 foreach ($headingsArray as $columnKey => $columnHeading) {
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
-                $key = $dataArray['Name'].$dataArray['FatherName']. $dataArray['MotherName'].$dataArray['NID'].$dataArray['MobileNo'].$dataArray['Age'].$dataArray['Gender']
-                       .$dataArray['Nationality'].$dataArray['Education'].$dataArray['Profession'].$dataArray['Email'].$dataArray['FacebookID'].$dataArray['Address']
-                       .$dataArray['Village'].$dataArray['Ward'].$dataArray['VoteCenter'].$dataArray['Union'].$dataArray['Thana'].$dataArray['District'].$dataArray['PostOffice'].$dataArray['PostalCode']
-                       .$dataArray['BloodGroup'].$dataArray['Birthday'].$dataArray['Religion'].$dataArray['FamilyMember'].$dataArray['PoliticalStatus'];
+                $key = $dataArray['Name'].$dataArray['MobileNo'].$dataArray['FatherName']. $dataArray['MotherName'].$dataArray['NID'].$dataArray['Address']
+                       .$dataArray['Village'].$dataArray['PostOffice'].$dataArray['PostalCode'].$dataArray['BloodGroup'].$dataArray['Birthday'];
                 $namedDataArray[$key] = $dataArray;
 
             }

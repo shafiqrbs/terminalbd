@@ -1,11 +1,11 @@
 {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
-        <!-- BEGIN inventory_customer HEADER-->
+        <!-- BEGIN inventory_member HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="inventory_customer-title">
-                    Create new customer
+                <h3 class="inventory_member-title">
+                    Create new member
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('election_member') }}">Customer List</a>
+                        <a href="{{ path('election_member') }}">Member List</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Create new customer</a></li>
+                    <li><a href="#">Create new member</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -25,17 +25,17 @@
                 </ul>
             </div>
         </div>
-        <!-- END inventory_customer HEADER-->
-        <!-- BEGIN inventory_customer CONTENT-->
+        <!-- END inventory_member HEADER-->
+        <!-- BEGIN inventory_member CONTENT-->
         <div class="row-fluid">
             <div class="span12">
 
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Customer Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Member Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <li><a class="btn black" href="{{ path('election_member') }}"><i class="icon-th-list"></i>&nbsp;Customer</a></li>
+                                <li><a class="btn black" href="{{ path('election_member') }}"><i class="icon-th-list"></i>&nbsp;Member</a></li>
                             </div>
                         </div>
 
@@ -390,8 +390,6 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
                                     <button type="submit" class="btn green"><i class="icon-save"></i> Save & Continue</button>
-                                    <button type="submit" class="btn blue"><i class="icon-search"></i> Save & Preview</button>
-                                    <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
                                 </div>
                             </div>
                             {{ form_end(form) }}

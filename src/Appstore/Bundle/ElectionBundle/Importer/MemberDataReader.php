@@ -4,7 +4,7 @@ namespace Appstore\Bundle\ElectionBundle\Importer;
 use Liuggio\ExcelBundle\Factory;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class ExcelDataReader
+class MemberDataReader
 {
 
     use ContainerAwareTrait;

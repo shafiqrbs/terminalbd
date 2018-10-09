@@ -228,7 +228,7 @@ class CustomerRepository extends EntityRepository
         }
 
     }
-    public function findHmsExistingCustomerDiagnostic($globalOption, $mobile,$data)
+    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$data)
     {
         $em = $this->_em;
 
@@ -308,7 +308,6 @@ class CustomerRepository extends EntityRepository
         }
 
     }
-
 
     public function insertContactCustomer($globalOption,$data,$mobile='')
     {
@@ -556,8 +555,5 @@ class CustomerRepository extends EntityRepository
         return $entity;
 
     }
-
-
-
 
 }

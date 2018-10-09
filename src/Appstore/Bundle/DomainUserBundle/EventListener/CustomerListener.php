@@ -18,13 +18,9 @@ class CustomerListener
 
         // perhaps you only want to act on some "Purchase" entity
         if ($entity instanceof Customer) {
-
             $lastCode = $this->getLastCode($args,$entity);
-           // if(!empty($lastCode)){
-                $entity->setCode($lastCode + 1);
-                $entity->setCustomerId(sprintf("%s%s", $entity->getGlobalOption()->getId(), str_pad($entity->getCode(), 6, '0', STR_PAD_LEFT)));
-           // }
-
+	        $entity->setCode($lastCode + 1);
+            $entity->setCustomerId(sprintf("%s%s", $entity->getGlobalOption()->getId(), str_pad($entity->getCode(), 6, '0', STR_PAD_LEFT)));
         }
     }
 

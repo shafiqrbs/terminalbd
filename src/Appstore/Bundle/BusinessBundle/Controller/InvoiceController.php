@@ -65,13 +65,13 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new BusinessInvoice();
         $option = $this->getUser()->getGlobalOption();
-        $businessConfig = $option->getBusinessConfig();
+        $config = $option->getBusinessConfig();
         $entity->setCreatedBy($this->getUser());
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($this->getUser()->getGlobalOption());
         $entity->setCustomer($customer);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
-        $entity->setBusinessConfig($businessConfig);
+        $entity->setBusinessConfig($config);
         $entity->setPaymentStatus('Pending');
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
@@ -112,8 +112,8 @@ class InvoiceController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entity = $em->getRepository('BusinessBundle:BusinessInvoice')->findOneBy(array('businessConfig' => $businessConfig , 'id' => $id));
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entity = $em->getRepository('BusinessBundle:BusinessInvoice')->findOneBy(array('businessConfig' => $config , 'id' => $id));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -122,8 +122,8 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('post-production','pre-production','stock','service','virtual'));
-	    $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
+	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
 	    return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'particulars' => $particulars,
@@ -183,9 +183,9 @@ class InvoiceController extends Controller
             }
         }
 
-        $businessConfig = $entity->getBusinessConfig();
-	    $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($businessConfig, $type = array('production','stock','service','virtual'));
-	    $view = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'new';
+        $config = $entity->getBusinessConfig();
+	    $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual'));
+	    $view = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'new';
         return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'particulars' => $particulars,
@@ -249,8 +249,8 @@ class InvoiceController extends Controller
     public function showAction(BusinessInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        if ($config->getId() == $entity->getBusinessConfig()->getId()) {
             return $this->render('BusinessBundle:Invoice:show.html.twig', array(
                 'entity' => $entity,
             ));
@@ -401,8 +401,8 @@ class InvoiceController extends Controller
 
     public function deleteEmptyInvoiceAction()
     {
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->findBy(array('businessConfig' => $businessConfig, 'process' => 'Created'));
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->findBy(array('businessConfig' => $config, 'process' => 'Created'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);
@@ -414,8 +414,8 @@ class InvoiceController extends Controller
     public function invoicePrintPdfAction(BusinessInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        if ($config->getId() == $entity->getBusinessConfig()->getId()) {
 
             /** @var  $invoiceParticularArr */
             $invoiceParticularArr = array();
@@ -429,11 +429,11 @@ class InvoiceController extends Controller
                 endforeach;
             }
 
-            $services = $em->getRepository('BusinessBundle:BusinessService')->findBy(array('businessConfig' => $businessConfig, 'serviceShow' => 1, 'status' => 1), array('serviceSorting' => 'ASC'));
-            $treatmentSchedule = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->findTodaySchedule($businessConfig);
+            $services = $em->getRepository('BusinessBundle:BusinessService')->findBy(array('businessConfig' => $config, 'serviceShow' => 1, 'status' => 1), array('serviceSorting' => 'ASC'));
+            $treatmentSchedule = $em->getRepository('BusinessBundle:BusinessTreatmentPlan')->findTodaySchedule($config);
 
-            if ($businessConfig->isCustomPrescription() == 1) {
-                $template = $businessConfig->getGlobalOption()->getSlug();
+            if ($config->isCustomPrescription() == 1) {
+                $template = $config->getGlobalOption()->getSlug();
             } else {
                 $template = 'print';
             }
@@ -556,21 +556,21 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        /* @var $businessConfig BusinessConfig */
+        /* @var $config BusinessConfig */
 
-        $businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        if ($config->getId() == $entity->getBusinessConfig()->getId()) {
 
-            if($businessConfig->isCustomInvoicePrint() == 1){
-                $template = $businessConfig->getGlobalOption()->getSlug();
+            if($config->isCustomInvoicePrint() == 1){
+                $template = $config->getGlobalOption()->getSlug();
 	        }else{
-                $template = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'print';
+                $template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
             }
-	        $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($businessConfig->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
+	        $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($config->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
 	        $balance = empty($result) ? 0 :$result[0]['customerBalance'];
             return  $this->render("BusinessBundle:Print:{$template}.html.twig",
                 array(
-                    'config' => $businessConfig,
+                    'config' => $config,
                     'entity' => $entity,
                     'balance' => $balance,
                     'print' => 'print',
@@ -586,21 +586,21 @@ class InvoiceController extends Controller
 
 		$em = $this->getDoctrine()->getManager();
 
-		/* @var $businessConfig BusinessConfig */
+		/* @var $config BusinessConfig */
 
-		$businessConfig = $this->getUser()->getGlobalOption()->getBusinessConfig();
-		if ($businessConfig->getId() == $entity->getBusinessConfig()->getId()) {
+		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+		if ($config->getId() == $entity->getBusinessConfig()->getId()) {
 
-			if($businessConfig->isCustomInvoicePrint() == 1){
-				$template = $businessConfig->getGlobalOption()->getSlug();
+			if($config->isCustomInvoicePrint() == 1){
+				$template = $config->getGlobalOption()->getSlug();
 			}else{
-				$template = !empty($businessConfig->getInvoiceType()) ? $businessConfig->getInvoiceType():'print';
+				$template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
 			}
-			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($businessConfig->getGlobalOption(), $data = array('mobile' => $entity->getCustomer()->getMobile()));
+			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($config->getGlobalOption(), $data = array('mobile' => $entity->getCustomer()->getMobile()));
 			$balance = empty($result) ? 0 :$result[0]['customerBalance'];
 			return  $this->render("BusinessBundle:Print:{$template}.html.twig",
 				array(
-					'config' => $businessConfig,
+					'config' => $config,
 					'entity' => $entity,
 					'balance' => $balance,
 					'print' => 'chalan',

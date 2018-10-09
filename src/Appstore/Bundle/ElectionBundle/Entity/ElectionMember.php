@@ -76,6 +76,12 @@ class ElectionMember
     protected $location;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="centerMembers")
+     **/
+
+    protected $voteCenter;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberPoliticalStatus")
      **/
 
@@ -109,6 +115,14 @@ class ElectionMember
 	 * })
 	 */
 	private $referenceMember;
+
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="memberType", type="string", length=20,  nullable=true)
+     */
+    private $memberType = 'member';
 
 
 	/**
@@ -319,6 +333,13 @@ class ElectionMember
 	 * @ORM\Column(name="district", type="string", length=150, nullable = true)
 	 */
 	private $district;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="postOffice", type="string", length=150, nullable = true)
+	 */
+	private $postOffice;
 
 
     /**
@@ -1204,6 +1225,34 @@ class ElectionMember
 	 */
 	public function getVoteCenterMembers() {
 		return $this->voteCenterMembers;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPostOffice(){
+		return $this->postOffice;
+	}
+
+	/**
+	 * @param string $postOffice
+	 */
+	public function setPostOffice( string $postOffice ) {
+		$this->postOffice = $postOffice;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMemberType(){
+		return $this->memberType;
+	}
+
+	/**
+	 * @param string $memberType
+	 */
+	public function setMemberType( string $memberType ) {
+		$this->memberType = $memberType;
 	}
 
 

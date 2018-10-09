@@ -52,6 +52,12 @@ class ElectionLocation
 
 
 	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="voteCenter")
+     **/
+    private $centerMembers;
+
+
+	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="location")
      **/
     private $votecenters;
@@ -378,14 +384,6 @@ class ElectionLocation
 		$this->district = $district;
 	}
 
-	/**
-	 * @return ElectionMember
-	 */
-	public function getVoters() {
-		return $this->voters;
-	}
-
-
 	public function villageName(){
 
 		$ward = $this->getParent();
@@ -456,6 +454,12 @@ class ElectionLocation
 		return $this->electionSetup;
 	}
 
+	/**
+	 * @return ElectionMember
+	 */
+	public function getCenterMembers() {
+		return $this->centerMembers;
+	}
 
 
 }

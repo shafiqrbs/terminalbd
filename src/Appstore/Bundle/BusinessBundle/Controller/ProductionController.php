@@ -99,10 +99,6 @@ class ProductionController extends Controller
         ));
     }
 
-
-
-
-
     public function productionUpdateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();

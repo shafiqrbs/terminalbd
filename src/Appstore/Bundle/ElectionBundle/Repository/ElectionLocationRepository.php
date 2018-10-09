@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionMember;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionLocation;
 
@@ -274,6 +275,38 @@ class ElectionLocationRepository extends MaterializedPathRepository{
 		$query->orderBy('e.name', 'ASC');
 		$query->setMaxResults( '10' );
 		return $query->getQuery()->getResult();
+
+
+	}
+
+	public function getVillageMemberName(ElectionConfig $config,$q = ''){
+
+		if(!empty($q)) {
+			$qb = $this->createQueryBuilder( 'e' );
+			$qb->join( 'e.locationType', 'p' );
+			$qb->where( 'e.electionConfig =' . $config->getId() );
+			$qb->andWhere( "p.slug = :slug" )->setParameter( 'slug', 'village' );
+			$qb->andWhere( $qb->expr()->like( "e.name", "'$q%'" ) );
+			$result = $qb->getQuery()->getOneOrNullResult();
+
+			return $result;
+		}
+		return false;
+
+	}
+
+	public function getMemberVoteCenter(ElectionConfig $config,$q = ''){
+
+		if(!empty($q)){
+			$qb = $this->createQueryBuilder('e');
+			$qb->join('e.locationType','p');
+			$qb->where('e.electionConfig ='.$config->getId());
+			$qb->andWhere("p.slug = :slug")->setParameter('slug','vote-center');
+			$qb->andWhere($qb->expr()->like("e.name", "'$q%'"  ));
+			$result  = $qb->getQuery()->getOneOrNullResult();
+			return $result;
+		}
+		return false;
 
 
 	}

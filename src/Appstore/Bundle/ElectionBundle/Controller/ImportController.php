@@ -93,17 +93,28 @@ class ImportController extends Controller
 		));
 	}
 
-	public function excelDataImportAction(ElectionMemberImport $excelElectionMemberImporter)
-	{
+	public function excelDataImportAction(ElectionMemberImport $excelElectionMemberImporter) {
 
 		//set_time_limit(0);
-		ini_set('max_execution_time', 0);
-		ignore_user_abort(true);
-		$em = $this->getDoctrine()->getManager();
-		$importer = $this->get('appstore_election_member_importer_excel');
-		$reader = $this->get('appstore_medicine.importer.excel_data_reader');
-		$file =  realpath($excelElectionMemberImporter->getAbsolutePath());
-		$data = $reader->getData($file);
+		ini_set( 'max_execution_time', 0 );
+		ignore_user_abort( true );
+
+		$em     = $this->getDoctrine()->getManager();
+		$config = $excelElectionMemberImporter->getElectionConfig();
+		if ( $excelElectionMemberImporter->getVoterType() == 'member' ) {
+			$importer = $this->get( 'appstore_election_member_import' );
+			$importer->setElectionConfig( $config->getId() );
+			$reader = $this->get( 'appstore_election.importer.member_import' );
+			$file   = realpath( $excelElectionMemberImporter->getAbsolutePath() );
+			$data   = $reader->getData( $file );
+		}else{
+			$importer = $this->get( 'appstore_election_voter_import' );
+			$importer->setElectionConfig( $config->getId() );
+			$reader = $this->get( 'appstore_election.importer.voter_import' );
+			$file   = realpath( $excelElectionMemberImporter->getAbsolutePath() );
+			$data   = $reader->getData( $file );
+		}
+
 		if($importer->isValid($data)) {
 			$importer->import($data);
 			$excelElectionMemberImporter->setProgress('migrated');

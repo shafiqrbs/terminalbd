@@ -5,7 +5,7 @@ use Appstore\Bundle\ElectionBundle\Entity\ElectionParticular;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 
-class Excel
+class Voter
 {
     use ContainerAwareTrait;
 
@@ -23,52 +23,27 @@ class Excel
     {
         $this->data = $data;
 
-
-
         foreach($this->data as $key => $item) {
 
           	$name = trim($item['Name']);
-	        $mobile  = '0'.trim($item['MobileNo']);
-            $entity = $this->getDoctrain()->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('electionConfig' => $this->getElectionConfig(),'name' => $name,'mobile' => $mobile));
-	        if(empty($entity) and !empty($name) and !empty($mobile) ) {
+	        $fatherName = trim($item['FatherName']);
+	        $nid = trim($item['NID']);
+            $entity = $this->getDoctrain()->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('electionConfig' => $this->getElectionConfig(),'memberType'=>'voter','name' => $name,'fatherName' => $fatherName,'nid'=>$nid));
+	        if(empty($entity) and !empty($name) and !empty($fatherName) ) {
 		        $member = new ElectionMember();
 		        $member->setElectionConfig($this->getElectionConfig());
 		        $member->setName($name);
-		        $member->setMobile($mobile);
+		        $member->setMobile(trim($item['MobileNo']));
 		        $member->setFatherName(trim($item['FatherName']));
 		        $member->setMotherName(trim($item['MotherName']));
 		        $member->setNid(trim($item['NID']));
-		        $member->setAge(trim($item['Age']));
-		        $member->setGender(trim($item['Gender']));
-		        $member->setNationality(trim($item['Nationality']));
-				if(!empty(trim($item['Education']))){
-					$particular = $this->getParticular(trim($item['Education']));
-					$member->setEducation($particular);
-				}
-		        if(!empty(trim($item['Profession']))){
-				    $particular = $this->getParticular(trim($item['Profession']));
-					$member->setProfession($particular);
-				}
-		        $member->setEmail(trim($item['Email']));
-		        $member->setFacebookId(trim($item['FacebookID']));
 		        $member->setAddress(trim($item['Address']));
 		        $member->setVillage(trim($item['Village']));
-		        $member->setWard(trim($item['Ward']));
-		        $member->setVoteCenterName(trim($item['VoteCenter']));
-		        $member->setMemberUnion(trim($item['Union']));
-		        $member->setThana(trim($item['Thana']));
-		        $member->setDistrict(trim($item['District']));
 		        $member->setPostOffice(trim($item['PostOffice']));
 		        $member->setPostalCode(trim($item['PostalCode']));
 		        $member->setBloodGroup(trim($item['BloodGroup']));
-		        $member->setReligion(trim($item['Religion']));
-		        $member->setFamilyMember(trim($item['FamilyMember']));
-		        if(!empty(trim($item['PoliticalStatus']))){
-			        $particular = $this->getParticular(trim($item['PoliticalStatus']));
-			        $member->setPoliticalStatus($particular);
-		        }
 		        $member->setProcess('Import');
-		        $member->setMemberType('member');
+		        $member->setMemberType('voter');
 		        $this->persist( $member );
 		        $this->flush();
 	        }

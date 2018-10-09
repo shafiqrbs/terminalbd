@@ -84,32 +84,31 @@ class InvoiceController extends Controller
         $entity = new DmsInvoice();
         $dmsConfig = $this->getUser()->getGlobalOption()->getDmsConfig();
         $lastObject = $em->getRepository('DmsBundle:DmsInvoice')->getLastInvoice($dmsConfig);
-        $form = $this->createInvoiceCustomerForm($entity);
-        $form->handleRequest($request);
+      //  $form = $this->createInvoiceCustomerForm($entity);
+       // $form->handleRequest($request);
+
         $data = $request->request->all();
-        if ($form->isValid()) {
-
-            $entity->setDmsConfig($dmsConfig);
-            $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-            $entity->setTransactionMethod($transactionMethod);
-            $entity->setProcess('Created');
-            $entity->setCreatedBy($this->getUser());
-            $em->persist($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been added successfully"
-            );
-            if (!empty($data['customer']['name'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-                $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $data);
-            }
-
-            if($dmsConfig->getIsDefaultMedicine() == 1 ){
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->defaultDmsBeforeMedicine($entity,$lastObject);
-            }
-            return new Response($entity->getId());
-        //    return $this->redirect($this->generateUrl('dms_invoice_edit', array('id' => $entity->getId())));
-        }
+        $customer = $data['appstore_bundle_dmsinvoice'];
+	    if (!empty($customer['customer']['name'])) {
+		    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer['customer']['mobile']);
+		    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $customer);
+	    }
+	    $entity->setDmsConfig($dmsConfig);
+	    $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+	    $entity->setTransactionMethod($transactionMethod);
+	    $entity->setProcess('Created');
+	    $entity->setCreatedBy($this->getUser());
+	    $entity->setCustomer($customer);
+	    $entity->setMobile($customer->getMobile());
+	    $em->persist($entity);
+	    $em->flush();
+	    $this->get('session')->getFlashBag()->add(
+		    'success',"Data has been added successfully"
+	    );
+	    if($dmsConfig->getIsDefaultMedicine() == 1 ){
+		    $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->defaultDmsBeforeMedicine($entity,$lastObject);
+	    }
+	    return new Response($entity->getId());
 
     }
 

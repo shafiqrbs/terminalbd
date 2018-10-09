@@ -30,6 +30,20 @@ class ElectionMemberRepository extends EntityRepository
         }
 
     }
+
+
+    public function getImportCount(ElectionConfig $config,$process){
+
+
+	    $qb = $this->createQueryBuilder('e');
+	    $qb->select('COUNT(e.id) as countId');
+	    $qb->where('e.electionConfig='.$config->getId());
+	    $qb->andWhere("e.process = :process");
+	    $qb->setParameter('process', $process);
+	    $results = $qb->getQuery()->getOneOrNullResult();
+	    return $results['countId'];
+	}
+
     public function getLocationBaseMembers(ElectionCommittee $committee)
     {
 	    /* @var $location ElectionLocation */
@@ -75,13 +89,15 @@ class ElectionMemberRepository extends EntityRepository
 		return $choices;
 	}
 
-    public function findWithSearch($config,$data)
+    public function findWithSearch( $config , $data , $type = 'member')
     {
 	    $sort = isset($data['sort'])? $data['sort'] :'e.name';
 	    $direction = isset($data['direction'])? $data['direction'] :'ASC';
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.electionConfig = :config");
         $qb->setParameter('config', $config);
+	    $qb->andWhere("e.memberType = :type");
+        $qb->setParameter('type', $type);
 	    $qb->leftJoin('e.location','node');
 	    $qb->leftJoin('e.voteCenter','center');
 	    $this->handleSearchBetween($qb,$data);

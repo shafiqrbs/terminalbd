@@ -2,7 +2,7 @@ business_report_purchase_summary:
     path:     /purchase-overview
     defaults: { _controller: "BusinessBundle:Report:purchaseOverview" }
 
-business_report_purchase_vendor:
+business_report_purchase_ledger:
     path:     /purchase-vendor-outstanding
     defaults: { _controller: "BusinessBundle:Report:purchaseVendor" }
 
@@ -10,9 +10,19 @@ business_report_purchase_vendor_details:
     path:     /purchase-vendor-details
     defaults: { _controller: "BusinessBundle:Report:purchaseVendorDetails" }
 
-business_report_purchase_vendor_sales:
-    path:     /purchase-vendor-sales
+business_report_purchase_stock_price:
+    path:     /purchase-stock-price
     defaults: { _controller: "BusinessBundle:Report:purchaseVendorSales" }
+
+business_report_item_stock_price:
+    path:     /purchase-stock-price
+    defaults: { _controller: "BusinessBundle:Report:purchaseVendorSales" }
+
+business_report_item_stock:
+    path:     /purchase-stock-price
+    defaults: { _controller: "BusinessBundle:Report:purchaseVendorSales" }
+
+
 
 business_report_sales_vendor_customer:
     path:     /vendor-base-sales

@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Member list
+                    Voter list
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('domain') }}">Member list</a>
+                        <a href="{{ path('domain') }}">Voter list</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -32,12 +32,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Member list</div>
+                        <div class="caption"><i class="icon-reorder"></i>Voter list</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_member_new') }}"><i class="icon-th-list"></i>&nbsp;New Member</a>
+                                <a class="btn red" href="{{ path('election_voter_new') }}"><i class="icon-th-list"></i>&nbsp;New Voter</a>
                                 {% if importCount > 0 %}
-                                <a class="btn yellow" href="{{ path('election_member_import_updated') }}"><i class="icon-th-list"></i>&nbsp;Import Updated</a>
+                                <a class="btn yellow" href="{{ path('election_voter_import_updated') }}"><i class="icon-th-list"></i>&nbsp;Import Updated</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                                         <input type="text" id="voteCenter" name="voteCenter"  class="span12 m-wrap select2VoteCenter" value="{% if searchForm.voteCenter is defined %}{{ searchForm.voteCenter }}{% endif %}"  autocomplete="off" placeholder="Search Vote Center">
                                     </div>
                                     <div class="span6">
-                                        <input type="text" id="member" name="member"  class="span12 m-wrap select2Member" value="{% if searchForm.member is defined %}{{ searchForm.member }}{% endif %}"  autocomplete="off" placeholder="Search Member mobile/name">
+                                        <input type="text" id="member" name="member"  class="span12 m-wrap select2Voter" value="{% if searchForm.member is defined %}{{ searchForm.member }}{% endif %}"  autocomplete="off" placeholder="Search Voter mobile/name">
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
@@ -112,11 +112,9 @@
                                         <td class="numeric">
                                             <div class="btn-group">
                                              {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_ELECTION_MANAGER"))  %}
-                                                <a class="btn mini green" href="{{ path('election_member_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
-                                                <a class="btn mini delete red" href="javascript:" data-url="{{ path('election_member_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
-                                                <a class="btn mini yellow" href="{{ path('election_member_family', { 'id': entity.id }) }}" >&nbsp;<i class="icon-plus"></i> Family</a>
+                                                <a class="btn mini green" href="{{ path('election_voter_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn mini delete red" href="javascript:" data-url="{{ path('election_voter_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
                                              {% endif %}
-                                            <a data-title="{{ entity.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('election_member_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
                                             <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_member_sms', { 'id': entity.id }) }}" >SMS</a>
                                             </div>
                                         </td>

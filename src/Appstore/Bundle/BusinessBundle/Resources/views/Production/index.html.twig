@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="span4">
                                         <div class="controls">
-                                            <div class="input-append span12">
+                                            <div class="input-append span10">
                                                 <select name="category" id="category" class="m-wrap span12">
                                                     <option value="" >--Category--</option>
                                                     {% for cat in categories %}
@@ -115,7 +115,7 @@
                                             {% if entity.process == 'approved' %}
                                                 <a href="javascript:"  class="btn blue mini" ><i class="icon-ok"></i> Approved</a>
                                             {% endif %}
-                                            <a href="{{ path('business_pre_production_show', { 'id': entity.id }) }}"  class="btn blue mini" ><i class="icon-eye-open"></i></a>
+                                            <a href="{{ path('business_pre_production_show', { 'id': entity.id }) }}"  class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

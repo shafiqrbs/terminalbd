@@ -13,18 +13,21 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
-    appstore.election.committee.event.listener:
-        class: Appstore\Bundle\MedicineBundle\EventListener\MedicinePurchaseListener
-        tags:
-            - { name: doctrine.event_listener, event: prePersist }
+    appstore_election_member_import:
+        class: Appstore\Bundle\ElectionBundle\Importer\Member
+        calls:
+              - [ setContainer, [ @service_container ] ]
 
-    appstore.election.vote.center.event.listener:
-        class: Appstore\Bundle\MedicineBundle\EventListener\MedicinePurchaseListener
-        tags:
-            - { name: doctrine.event_listener, event: prePersist }
+    appstore_election.importer.member_import:
+        class: Appstore\Bundle\ElectionBundle\Importer\MemberDataReader
+        arguments: [ @phpexcel ]
 
-    appstore.election.vote.count.event.listener:
-        class: Appstore\Bundle\MedicineBundle\EventListener\MedicinePurchaseListener
-        tags:
-            - { name: doctrine.event_listener, event: prePersist }
+    appstore_election_voter_import:
+        class: Appstore\Bundle\ElectionBundle\Importer\Voter
+        calls:
+              - [ setContainer, [ @service_container ] ]
+
+    appstore_election.importer.voter_import:
+        class: Appstore\Bundle\ElectionBundle\Importer\VoterDataReader
+        arguments: [ @phpexcel ]
 

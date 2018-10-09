@@ -406,6 +406,13 @@ class ElectionParticular
 		$this->memberProfession = $memberProfession;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getCommitteeMember() {
+		return $this->committeeMember;
+	}
+
 
 }
 

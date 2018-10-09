@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+
+	public function indexAction()
     {
 
         $em = $this->getDoctrine()->getManager();

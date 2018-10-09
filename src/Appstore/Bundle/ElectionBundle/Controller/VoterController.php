@@ -5,6 +5,7 @@ namespace Appstore\Bundle\ElectionBundle\Controller;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionMember;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionMemberFamily;
 use Appstore\Bundle\ElectionBundle\Form\MemberType;
+use Appstore\Bundle\ElectionBundle\Form\VoterType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  * ElectionMember controller.
  *
  */
-class MemberController extends Controller
+class VoterController extends Controller
 {
 
 
@@ -44,10 +45,11 @@ class MemberController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
 	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data);
+	    $type = 'voter';
+        $entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data,$type);
         $pagination = $this->paginate($entities);
         $importCount = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getImportCount($config,'Import');
-        return $this->render('ElectionBundle:Member:index.html.twig', array(
+        return $this->render('ElectionBundle:Voter:index.html.twig', array(
             'entities' => $pagination,
             'importCount' => $importCount,
             'searchForm' => $data,
@@ -79,9 +81,9 @@ class MemberController extends Controller
 	        $entity->upload();
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('election_member'));
+            return $this->redirect($this->generateUrl('election_voter'));
         }
-        return $this->render('ElectionBundle:Member:new.html.twig', array(
+        return $this->render('ElectionBundle:Voter:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -98,8 +100,8 @@ class MemberController extends Controller
     {
 	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
         $location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation');
-        $form = $this->createForm(new MemberType($config,$location), $entity, array(
-            'action' => $this->generateUrl('election_member_create'),
+        $form = $this->createForm(new VoterType($config,$location), $entity, array(
+            'action' => $this->generateUrl('election_voter_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -123,31 +125,12 @@ class MemberController extends Controller
         $entity = new ElectionMember();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('ElectionBundle:Member:new.html.twig', array(
+        return $this->render('ElectionBundle:Voter:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
-    /**
-     * Finds and displays a ElectionMember entity.
-     *
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entity = $em->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('electionConfig' => $config,'id'=>$id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ElectionMember entity.');
-        }
-	    $html = $this->renderView('ElectionBundle:Member:profile.html.twig',
-		    array('entity' => $entity)
-	    );
-	    return New Response($html);
-		exit;
-
-    }
 
 
     /**
@@ -170,7 +153,7 @@ class MemberController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('ElectionBundle:Member:new.html.twig', array(
+        return $this->render('ElectionBundle:Voter:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -187,8 +170,8 @@ class MemberController extends Controller
     {
 	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
 	    $location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation');
-	    $form = $this->createForm(new MemberType($config,$location), $entity, array(
-		    'action' => $this->generateUrl('election_member_update', array('id' => $entity->getId())),
+	    $form = $this->createForm(new VoterType($config,$location), $entity, array(
+		    'action' => $this->generateUrl('election_voter_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -228,7 +211,7 @@ class MemberController extends Controller
 	        }
 	        $entity->upload();
 	        $em->flush();
-            return $this->redirect($this->generateUrl('election_member'));
+            return $this->redirect($this->generateUrl('election_voter'));
         }
 
         return $this->render('ElectionBundle:Member:new.html.twig', array(
@@ -263,7 +246,7 @@ class MemberController extends Controller
                 'notice',"Data has been relation another Table"
             );
         }
-        return $this->redirect($this->generateUrl('election_member'));
+        return $this->redirect($this->generateUrl('election_voter'));
     }
 
     public function autoSearchAction(Request $request)
@@ -372,74 +355,7 @@ class MemberController extends Controller
 
     }
 
-	public function familyAction($id)
-	{
-		$em = $this->getDoctrine()->getManager();
-
-		$entity = $em->getRepository('ElectionBundle:ElectionMember')->find($id);
-
-		if (!$entity) {
-			throw $this->createNotFoundException('Unable to find ElectionMember entity.');
-		}
-		$editForm = $this->createEditForm($entity);
-		return $this->render('ElectionBundle:Member:family.html.twig', array(
-			'entity'      => $entity,
-			'form'   => $editForm->createView(),
-		));
-	}
-
-	public function addFamilyMemberAction(Request $request , ElectionMember $member)
-	{
-
-
-		$em = $this->getDoctrine()->getManager();
-		$data = $request->request->all();
-		if(!empty($data['name'])){
-			$entity = new ElectionMemberFamily();
-			$entity->setElectionMember($member);
-			$entity->setName($data['name']);
-			$entity->setMobile($data['mobile']);
-			$entity->setNid($data['nid']);
-			$entity->setAge($data['age']);
-			$entity->setRelation($data['relation']);
-			$em->persist($entity);
-			$em->flush();
-		}
-		$result = $this->returnResultData($member);
-		return new Response($result);
-		exit;
-	}
-
-	public function returnResultData(ElectionMember $entity,$msg=''){
-
-		$familyMembers = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMemberFamily')->getFamilyMember($entity);
-		return $familyMembers;
-
-	}
-
-	public function familyMemberDeleteAction(ElectionMemberFamily $entity)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		if($config == $entity->getElectionMember()->getElectionConfig()){
-			if (!$entity) {
-				throw $this->createNotFoundException('Unable to find ElectionMember entity.');
-			}
-			$em->remove($entity);
-			$em->flush();
-			$this->get('session')->getFlashBag()->add(
-				'error',"Data has been deleted successfully"
-			);
-			return new Response('success');
-		}else{
-			return new Response('invalid');
-		}
-
-		exit;
-
-	}
-
-	public function memberImportUpdatedAction()
+	public function voterImportUpdatedAction()
 	{
 
 		ini_set( 'max_execution_time', 0 );
@@ -447,26 +363,29 @@ class MemberController extends Controller
 
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->findBy(array('electionConfig'=>$config,'process'=>'Import'));
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->findBy(array('electionConfig'=>$config,'memberType'=>'voter','process'=>'Import'));
 		foreach ($entities as $entity):
-			$location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->getVillageMemberName($config ,$entity->getVillage());
-			$voteCenter = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->getMemberVoteCenter($config ,$entity->getVoteCenterName());
-			if(!empty($location)){
-				$entity->setLocation($location);
-				$entity->setVillage($entity->getLocation()->getName());
-				$entity->setWard($entity->getLocation()->wardName());
-				$entity->setMemberUnion($entity->getLocation()->unionName());
-				$entity->setThana($entity->getLocation()->thanaName());
-				$entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
-				if(!empty($voteCenter)){
-					$entity->setVoteCenter($voteCenter);
-					$entity->setVoteCenterName($entity->getVoteCenter()->getName());
+			if(!empty($entity->getVillage())){
+				$location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->getVillageMemberName($config ,$entity->getVillage());
+				$voteCenter = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->getMemberVoteCenter($config ,$entity->getVoteCenterName());
+				if(!empty($location)){
+					$entity->setLocation($location);
+					$entity->setVillage($entity->getLocation()->getName());
+					$entity->setWard($entity->getLocation()->wardName());
+					$entity->setMemberUnion($entity->getLocation()->unionName());
+					$entity->setThana($entity->getLocation()->thanaName());
+					$entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
+					if(!empty($voteCenter)){
+						$entity->setVoteCenter($voteCenter);
+						$entity->setVoteCenterName($entity->getVoteCenter()->getName());
+					}
+					$entity->setProcess('Approved');
+					$em->flush();
 				}
-				$entity->setProcess('Approved');
-				$em->flush();
 			}
+
 		endforeach;
-		return $this->redirect($this->generateUrl('election_member'));
+		return $this->redirect($this->generateUrl('election_voter'));
 
 	}
 
