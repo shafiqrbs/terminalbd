@@ -99,7 +99,7 @@
                                         <td class="numeric" >{{ entity.medicineSales.salesBy }}</td>
                                         <td class="numeric" >{{ entity.medicineSales.process|capitalize }}</td>
                                         <td class="numeric" >
-                                            {% if entity.medicineSalesReturns is empty and entity.process == 'Done' %}
+                                            {% if entity.medicineSalesReturns is empty and entity.medicineSales.process == 'Done' %}
                                             <a href="{{ path('medicine_sales_return_new', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-retweet"></i> Return</a>
                                             {% endif %}
                                         </td>
