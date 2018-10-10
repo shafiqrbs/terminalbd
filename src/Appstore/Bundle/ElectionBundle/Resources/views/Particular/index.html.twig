@@ -91,7 +91,7 @@
                                     <tr>
 
                                         <td class="numeric" >{{ entity.sku }}</td>
-                                        <td class="numeric" >{{ entity.particularType.name }}</td>
+                                        <td class="numeric" >{% if entity.particularType is not empty %}{{ entity.particularType.name }}{% endif %}</td>
                                         <td class="numeric" ><a href="{{ path('election_particular_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}

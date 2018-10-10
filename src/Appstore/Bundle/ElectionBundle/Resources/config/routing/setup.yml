@@ -35,6 +35,14 @@ election_matrix_update:
     options:
             expose: true
 
+election_matrix_cenetrvoteupdate:
+    path:     /matrix-center-vote-update
+    defaults: { _controller: "ElectionBundle:ElectionSetup:centerVoteUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+
 election_setup_result_generate:
     path:     /{id}/result-generate
     defaults: { _controller: "ElectionBundle:ElectionSetup:resultGenerate" }

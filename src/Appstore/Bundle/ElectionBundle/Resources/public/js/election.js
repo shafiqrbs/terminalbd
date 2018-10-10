@@ -36,8 +36,36 @@ function submitCountVote(url) {
             $('#totalCandidateVote-'+ obj['candidateId']).html(obj['totalVote']);
         },
     });
-    
+
 }
+
+$(document).on('keyup', 'resultTotalVote , .resultInvalidVote , .holdCenter', function() {
+
+    var id = $(this).attr("data-id");
+
+    var resultTotalVote     = parseInt($('#resultTotalVote-' + id).val()  != '' ? $('#resultTotalVote-' + id).val() : 0 );
+    var resultInvalidVote   = parseInt($('#resultInvalidVote-' + id).val()  != '' ? $('#resultInvalidVote-' + id).val() : 0 );
+    var process             = $('#process-' + id).val()  != '' ? $('#process-' + id).val() : '' ;
+
+    var url = Routing.generate('election_matrix_cenetrvoteupdate', {
+        'centerId': id,
+        'resultTotalVote': resultTotalVote,
+        'resultInvalidVote': resultInvalidVote,
+        'process': process
+    });
+    $.ajax({
+        url: url,
+        type: 'POST',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('.totalCastVote').html(obj['totalCastVote']);
+            $('.totalInvalidVote').html(obj['femaleVote']);
+            $('.activeVoteCenter').html(obj['activeVoteCenter']);
+            $('.holdVoteCenter').html(obj['holdVoteCenter']);
+            $('.rejectedVoteCenter').html(obj['rejectedVoteCenter']);
+        }
+    });
+});
 
 $('form').on('keypress', '.inputs', function (e) {
 

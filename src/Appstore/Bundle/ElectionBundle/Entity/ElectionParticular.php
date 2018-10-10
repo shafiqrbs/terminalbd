@@ -299,15 +299,9 @@ class ElectionParticular
 		return $this->electionCandidateMarka;
 	}
 
-	/**
-	 * @return ElectionMemberFamily
-	 */
-	public function getMemberRelation() {
-		return $this->memberRelation;
-	}
 
 	/**
-	 * @return mixed
+	 * @return ParticularType
 	 */
 	public function getParticularType() {
 		return $this->particularType;
@@ -315,15 +309,6 @@ class ElectionParticular
 
 	/**
 	 * @param ParticularType $particularType
-	 * ParliamentSeat
-	 * Committee
-	 * PoliticalStatus
-	 * Designation
-	 * Profession
-	 * PoliticalParty
-	 * Marka
-	 * Relation
-	 * Religion
 	 */
 	public function setParticularType( $particularType ) {
 		$this->particularType = $particularType;

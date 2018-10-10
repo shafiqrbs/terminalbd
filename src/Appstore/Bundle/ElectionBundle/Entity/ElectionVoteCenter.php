@@ -111,7 +111,7 @@ class ElectionVoteCenter
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="ward", type="string", length=200, nullable = true)
+	 * @ORM\Column(name="ward", type="string", length=100, nullable = true)
 	 */
 	private $ward;
 
@@ -173,6 +173,56 @@ class ElectionVoteCenter
      */
     private $otherVoter;
 
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultTotalVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultTotalVote;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultMaleVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultMaleVote;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultFemaleVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultFemaleVote;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultOtherVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultOtherVote;
+
+
+	/**
+     * @var int
+     *
+     * @ORM\Column(name="resultInvalidVote", type="smallint",  length = 6, nullable = true)
+     */
+    private $resultInvalidVote;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="process", type="string",  length = 20, nullable = true)
+     */
+    private $process;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="holdCenter", type="boolean" )
+     */
+    private $holdCenter = false;
 
     /**
      * @var boolean
@@ -404,19 +454,7 @@ class ElectionVoteCenter
 		$this->location = $location;
 	}
 
-	/**
-	 * @return ElectionParticular
-	 */
-	public function getElectionType() {
-		return $this->electionType;
-	}
 
-	/**
-	 * @param ElectionParticular $electionType
-	 */
-	public function setElectionType( $electionType ) {
-		$this->electionType = $electionType;
-	}
 
 	/**
 	 * @return \DateTime
@@ -577,6 +615,104 @@ class ElectionVoteCenter
 	 */
 	public function setElectionSetup( $electionSetup ) {
 		$this->electionSetup = $electionSetup;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isHoldCenter(){
+		return $this->holdCenter;
+	}
+
+	/**
+	 * @param bool $holdCenter
+	 */
+	public function setHoldCenter( bool $holdCenter ) {
+		$this->holdCenter = $holdCenter;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultTotalVote(){
+		return $this->resultTotalVote;
+	}
+
+	/**
+	 * @param int $resultTotalVote
+	 */
+	public function setResultTotalVote( int $resultTotalVote ) {
+		$this->resultTotalVote = $resultTotalVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultMaleVote(){
+		return $this->resultMaleVote;
+	}
+
+	/**
+	 * @param int $resultMaleVote
+	 */
+	public function setResultMaleVote( int $resultMaleVote ) {
+		$this->resultMaleVote = $resultMaleVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultFemaleVote(){
+		return $this->resultFemaleVote;
+	}
+
+	/**
+	 * @param int $resultFemaleVote
+	 */
+	public function setResultFemaleVote( int $resultFemaleVote ) {
+		$this->resultFemaleVote = $resultFemaleVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultOtherVote(){
+		return $this->resultOtherVote;
+	}
+
+	/**
+	 * @param int $resultOtherVote
+	 */
+	public function setResultOtherVote( int $resultOtherVote ) {
+		$this->resultOtherVote = $resultOtherVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultInvalidVote(){
+		return $this->resultInvalidVote;
+	}
+
+	/**
+	 * @param int $resultInvalidVote
+	 */
+	public function setResultInvalidVote( int $resultInvalidVote ) {
+		$this->resultInvalidVote = $resultInvalidVote;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getProcess(){
+		return $this->process;
+	}
+
+	/**
+	 * @param string $process
+	 */
+	public function setProcess( string $process ) {
+		$this->process = $process;
 	}
 
 

@@ -32,12 +32,8 @@ class ElectionVoteMatrixRepository extends EntityRepository
 					$this->_em->persist($entity);
 					$this->_em->flush();
 				}
-
 			}
-
 		}
-
-
 	}
 
 	public function getMatrixValue(ElectionSetup $setup)
@@ -55,13 +51,28 @@ class ElectionVoteMatrixRepository extends EntityRepository
 		$qb->where('e.electionSetup ='.$setup->getId());
 		$result  = $qb->getQuery()->getArrayResult();
 		return $result;
-
-
 	}
+
+	public function getMatrixTotalValue(ElectionSetup $setup)
+	{
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.voteCenter','v');
+		$qb->join('e.candidate','c');
+		$qb->select('v.id as centerId');
+		$qb->addSelect('c.id as candidateId');
+		$qb->addSelect('e.id as matrixId');
+		$qb->addSelect('e.maleVoter as maleVoter');
+		$qb->addSelect('e.femaleVoter as femaleVoter');
+		$qb->addSelect('e.otherVoter as otherVoter');
+		$qb->addSelect('e.totalVoter as totalVoter');
+		$qb->where('e.electionSetup ='.$setup->getId());
+		$result  = $qb->getQuery()->getArrayResult();
+		return $result;
+	}
+
 
 	public function updateTotalVote(ElectionCandidate $candidate)
 	{
-
 		$qb = $this->createQueryBuilder('e');
 		$qb->addSelect('SUM(e.maleVoter) as maleVoter');
 		$qb->addSelect('SUM(e.femaleVoter) as femaleVoter');

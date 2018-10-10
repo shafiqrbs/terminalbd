@@ -61,6 +61,8 @@ class SetupType extends AbstractType
 	        ->add('maleVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'autocomplete'=>'off','placeholder'=>'Male voter')))
 	        ->add('femaleVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'autocomplete'=>'off','placeholder'=>'Female voter')))
 	        ->add('otherVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'autocomplete'=>'off','placeholder'=>'Other voter')))
+	        ->add('voteCenter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'autocomplete'=>'off','placeholder'=>'Vote center')))
+	        ->add('currentElection')
 	       ;
 
     }

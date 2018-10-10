@@ -20,7 +20,8 @@ class ElectionCandidateRepository extends EntityRepository
     	$entity->setTotalVote($data['totalVoter']);
 	    $this->_em->persist($entity);
 	    $this->_em->flush();
-
 	    return $entity;
     }
+
+
 }

@@ -54,6 +54,8 @@ class ElectionSetupController extends Controller
 			$em = $this->getDoctrine()->getManager();
 			$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 			$entity->setElectionConfig($config);
+			$totalVoter = ($entity->getMaleVoter() + $entity->getFemaleVoter() + $entity->getOtherVoter());
+			$entity->setTotalVoter($totalVoter);
 			$em->persist($entity);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
@@ -179,6 +181,8 @@ class ElectionSetupController extends Controller
 		$editForm->handleRequest($request);
 
 		if ($editForm->isValid()) {
+			$totalVoter = ($entity->getMaleVoter() + $entity->getFemaleVoter() + $entity->getOtherVoter());
+			$entity->setTotalVoter($totalVoter);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been changed successfully"
@@ -300,6 +304,31 @@ class ElectionSetupController extends Controller
 		));
 	}
 
+	public function centerVoteUpdateAction(Request $request)
+	{
+		$data = $_REQUEST;
+		$centerId = (int)$data['centerId'];
+		$resultTotalVote = (int)$data['resultTotalVote'];
+		$resultInvalidVote = (int)$data['resultInvalidVote'];
+		$process = $data['process'];
+		$em = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('ElectionBundle:ElectionVoteCenter')->find($centerId);
+		if(!empty($entity)){
+			$entity->setResultTotalVote($resultTotalVote);
+			$entity->setResultInvalidVote($resultInvalidVote);
+			$entity->setProcess($process);
+			$em->flush();
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->updateTotalVote($entity->getElectionSetup());
+			$castVoteCenter = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->castVoteCenter($entity->getElectionSetup());
+			$res = $this->getDoctrine()->getRepository('ElectionBundle:ElectionSetup')->updateTotalVote($entity->getElectionSetup(),$castVoteCenter,$data);
+			$result = array(
+				'resultTotalVote'       =>  $res->getResultTotalVote(),
+			);
+			return new Response(json_encode($result));
+		}
+		exit;
+	}
+
 	public function voteUpdateAction(Request $request)
 	{
 		$data = $_REQUEST;
@@ -318,6 +347,7 @@ class ElectionSetupController extends Controller
 			$em->flush();
 			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteMatrix')->updateTotalVote($entity->getCandidate());
 			$res = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCandidate')->updateTotalVote($entity->getCandidate(),$data);
+			$this->getDoctrine()->getRepository('ElectionBundle:ElectionSetup')->updateTotalVote($entity->getCandidate(),$data);
 			$result = array(
 				'candidateId'   =>  $res->getId(),
 				'maleVote'      =>  $res->getMaleVote(),

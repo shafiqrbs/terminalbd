@@ -99,6 +99,83 @@ class ElectionSetup
 	 */
 	private $otherVoter;
 
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="voteCenter", type="smallint",  length = 4, nullable=true)
+	 */
+	private $voteCenter;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultTotalVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultTotalVote;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultMaleVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultMaleVote;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultFemaleVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultFemaleVote;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultOtherVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultOtherVote;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultInvalidVote", type="smallint",  length = 6, nullable=true)
+	 */
+	private $resultInvalidVote;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="resultVoteCenter", type="smallint",  length = 4, nullable=true)
+	 */
+	private $resultVoteCenter;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="activeVoteCenter", type="smallint",  length = 4, nullable=true)
+	 */
+	private $activeVoteCenter;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="holdVoteCenter", type="smallint",  length = 4, nullable=true)
+	 */
+	private $holdVoteCenter;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="rejectedVoteCenter", type="smallint",  length = 4, nullable=true)
+	 */
+	private $rejectedVoteCenter;
+
+
+	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="currentElection", type="boolean" )
+	 */
+	private $currentElection = true;
 
 	/**
 	 * @var boolean
@@ -335,6 +412,163 @@ class ElectionSetup
 
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getVoteCenter(){
+		return $this->voteCenter;
+	}
+
+	/**
+	 * @param int $voteCenter
+	 */
+	public function setVoteCenter( int $voteCenter ) {
+		$this->voteCenter = $voteCenter;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getCurrentElection(){
+		return $this->currentElection;
+	}
+
+	/**
+	 * @param bool $currentElection
+	 */
+	public function setCurrentElection( bool $currentElection ) {
+		$this->currentElection = $currentElection;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getResultOtherVote(){
+		return $this->resultOtherVote;
+	}
+
+	/**
+	 * @param int $resultOtherVote
+	 */
+	public function setResultOtherVote( int $resultOtherVote ) {
+		$this->resultOtherVote = $resultOtherVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultFemaleVote(){
+		return $this->resultFemaleVote;
+	}
+
+	/**
+	 * @param int $resultFemaleVote
+	 */
+	public function setResultFemaleVote( int $resultFemaleVote ) {
+		$this->resultFemaleVote = $resultFemaleVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultMaleVote(){
+		return $this->resultMaleVote;
+	}
+
+	/**
+	 * @param int $resultMaleVote
+	 */
+	public function setResultMaleVote( int $resultMaleVote ) {
+		$this->resultMaleVote = $resultMaleVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultTotalVote(){
+		return $this->resultTotalVote;
+	}
+
+	/**
+	 * @param int $resultTotalVote
+	 */
+	public function setResultTotalVote( int $resultTotalVote ) {
+		$this->resultTotalVote = $resultTotalVote;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getResultInvalidVote(){
+		return $this->resultInvalidVote;
+	}
+
+	/**
+	 * @param int $resultInvalidVote
+	 */
+	public function setResultInvalidVote( int $resultInvalidVote ) {
+		$this->resultInvalidVote = $resultInvalidVote;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getActiveVoteCenter(){
+		return $this->activeVoteCenter;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResultVoteCenter(){
+		return $this->resultVoteCenter;
+	}
+
+	/**
+	 * @param int $resultVoteCenter
+	 */
+	public function setResultVoteCenter( int $resultVoteCenter ) {
+		$this->resultVoteCenter = $resultVoteCenter;
+	}
+
+
+
+	/**
+	 * @param int $activeVoteCenter
+	 */
+	public function setActiveVoteCenter( int $activeVoteCenter ) {
+		$this->activeVoteCenter = $activeVoteCenter;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getHoldVoteCenter(){
+		return $this->holdVoteCenter;
+	}
+
+	/**
+	 * @param int $holdVoteCenter
+	 */
+	public function setHoldVoteCenter( int $holdVoteCenter ) {
+		$this->holdVoteCenter = $holdVoteCenter;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRejectedVoteCenter(){
+		return $this->rejectedVoteCenter;
+	}
+
+	/**
+	 * @param int $rejectedVoteCenter
+	 */
+	public function setRejectedVoteCenter( int $rejectedVoteCenter ) {
+		$this->rejectedVoteCenter = $rejectedVoteCenter;
+	}
 
 }
 

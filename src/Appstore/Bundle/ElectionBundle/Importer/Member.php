@@ -42,11 +42,11 @@ class Member
 		        $member->setGender(trim($item['Gender']));
 		        $member->setNationality(trim($item['Nationality']));
 				if(!empty(trim($item['Education']))){
-					$particular = $this->getParticular(trim($item['Education']));
+					$particular = $this->getParticular(trim($item['Education']),'education');
 					$member->setEducation($particular);
 				}
 		        if(!empty(trim($item['Profession']))){
-				    $particular = $this->getParticular(trim($item['Profession']));
+				    $particular = $this->getParticular(trim($item['Profession']),'profession');
 					$member->setProfession($particular);
 				}
 		        $member->setEmail(trim($item['Email']));
@@ -64,7 +64,7 @@ class Member
 		        $member->setReligion(trim($item['Religion']));
 		        $member->setFamilyMember(trim($item['FamilyMember']));
 		        if(!empty(trim($item['PoliticalStatus']))){
-			        $particular = $this->getParticular(trim($item['PoliticalStatus']));
+			        $particular = $this->getParticular(trim($item['PoliticalStatus']),'political');
 			        $member->setPoliticalStatus($particular);
 		        }
 		        $member->setProcess('Import');
@@ -75,20 +75,22 @@ class Member
         }
     }
 
-	private function getParticular($particular)
+	private function getParticular($particular,$type)
 	{
 		$entity = $this->getCachedData($particular, $particular);
 		$particularRepository = $this->getElectionParticularRepository();
+		$particularTypeRepository = $this->getElectionParticularTypeRepository();
 		if($entity == NULL) {
 
 			$entity = $particularRepository->findOneBy(array(
 				'electionConfig'   => $this->getElectionConfig(),
 				'name'              => $particular
 			));
-
+			$particularType = $particularTypeRepository->findOneBy(array('slug'=> $type));
 			if($entity == null) {
 				$entity = new ElectionParticular();
 				$entity->setName($particular);
+				$entity->setParticularType($particularType);
 				$entity->setElectionConfig($this->getElectionConfig());
 				$entity = $this->save($entity);
 			}
@@ -132,6 +134,14 @@ class Member
     private function getElectionParticularRepository()
     {
         return $this->getDoctrain()->getRepository('ElectionBundle:ElectionParticular');
+    }
+
+	/**
+     * @return \Appstore\Bundle\ElectionBundle\Repository\ElectionParticularTypeRepository;
+     */
+    private function getElectionParticularTypeRepository()
+    {
+        return $this->getDoctrain()->getRepository('ElectionBundle:ElectionParticularType');
     }
 
 

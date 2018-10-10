@@ -1,9 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
-use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionSetup;
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+
 
 /**
  * ElectionVoteCenterRepository
@@ -13,4 +13,40 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class ElectionVoteCenterRepository extends EntityRepository
 {
+	public function updateTotalVote(ElectionSetup $setup)
+	{
+		$qb = $this->createQueryBuilder('e');
+		$qb->addSelect('SUM(e.resultTotalVote) as resultTotalVote');
+		$qb->addSelect('SUM(e.resultInvalidVote) as resultInvalidVote');
+		$qb->addSelect('SUM(e.resultMaleVote) as resultMaleVote');
+		$qb->addSelect('SUM(e.resultFemaleVote) as resultFemaleVote');
+		$qb->addSelect('SUM(e.resultOtherVote) as resultOtherVote');
+		$qb->where('e.electionSetup ='.$setup->getId());
+		$result  = $qb->getQuery()->getOneOrNullResult();
+		return $result;
+	}
+
+	public function castVoteCenter(ElectionSetup $setup)
+	{
+		$process = array('Active','Hold');
+		$qb = $this->createQueryBuilder('e');
+		$qb->addSelect('process, COUNT(e.process) as totalVoteCenter');
+		$qb->where('e.electionSetup ='.$setup->getId());
+		$qb->groupBy('e.process');
+		$result  = $qb->getQuery()->getArrayResult();
+		return $result;
+	}
+
+	public function castVoteCenterCount(ElectionSetup $setup)
+	{
+		$process = array('Hold','Rejected','Active');
+		$qb = $this->createQueryBuilder('e');
+		$qb->addSelect('COUNT(e.process) as process');
+		$qb->where('e.electionSetup ='.$setup->getId());
+		$qb->andWhere("e.process IN (:process)");
+		$qb->setParameter('process', $process);
+		$result  = $qb->getQuery()->getOneOrNullResult();
+		return $result['process'];
+
+	}
 }
