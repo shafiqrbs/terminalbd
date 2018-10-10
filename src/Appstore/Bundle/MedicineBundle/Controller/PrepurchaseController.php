@@ -75,7 +75,9 @@ class PrepurchaseController extends Controller
 	    $em->flush();
 	    foreach ($data as $key => $value ){
 		    $stock = $em->getRepository('MedicineBundle:MedicineStock')->find($value);
-		    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->insertShortList($entity,$stock);
+		    if(!empty($stock)){
+			    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->insertShortList($entity,$stock);
+		    }
 	    }
 	    return $this->redirect($this->generateUrl('medicine_prepurchase_edit', array('id' => $entity->getId())));
 
