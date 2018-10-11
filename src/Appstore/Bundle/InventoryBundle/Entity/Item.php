@@ -1033,7 +1033,7 @@ class Item
     }
 
     public function getItemSKUName(){
-       return $this->getSku().'-'.$this->getMasterItem()->getName();
+       return $this->getSku().' => '.$this->getName();
     }
 
     /**
