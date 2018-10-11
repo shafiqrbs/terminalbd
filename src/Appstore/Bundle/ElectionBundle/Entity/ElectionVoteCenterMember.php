@@ -75,7 +75,7 @@ class ElectionVoteCenterMember
      *
      * @ORM\Column(name="isMaster", type="boolean" )
      */
-    private $isMaster = true;
+    private $isMaster = false;
 
     /**
      * Get id

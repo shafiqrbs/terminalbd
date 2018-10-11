@@ -307,7 +307,11 @@ class AccountSalesController extends Controller
 			    $entity->setTransactionMethod($method);
 		    }
 		    $em->flush();
+		    if(!empty($entity->getSales()) and $entity->getProcessHead() == 'Due'){
+		    	$this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesPaymentReceive($entity);
+		    }
 		    $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
+
 		    if($entity->getProcessHead() == 'Outstanding'){
 			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
 		    }elseif($entity->getProcessHead() == 'Discount'){

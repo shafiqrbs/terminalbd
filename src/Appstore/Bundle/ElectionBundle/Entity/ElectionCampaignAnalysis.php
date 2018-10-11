@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * ElectionParticular
  *
  * @ORM\Table( name ="election_campaign_analysis")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionParticularRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionCampaignAnalysisRepository")
  */
 class ElectionCampaignAnalysis
 {

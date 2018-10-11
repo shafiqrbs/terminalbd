@@ -31,6 +31,49 @@ class ElectionMemberRepository extends EntityRepository
 
     }
 
+    public function getGenderBaseMember(ElectionConfig $config){
+
+	    $qb = $this->createQueryBuilder('e');
+	    $qb->select('e.gender as gender, COUNT(e.id) as countId');
+	    $qb->where('e.electionConfig='.$config->getId());
+	    $qb->andWhere("e.memberType = :type");
+	    $qb->setParameter('type', 'member');
+	    $qb->andWhere("e.status = :status");
+	    $qb->setParameter('status', 1);
+	    $qb->groupBy('e.gender');
+	    $results = $qb->getQuery()->getArrayResult();
+	    return $results;
+    }
+
+    public function getUnionWiseMember(ElectionConfig $config){
+
+	    $qb = $this->createQueryBuilder('e');
+	    $qb->select('e.memberUnion as unionName,COUNT(e.id) as countId');
+	    $qb->where('e.electionConfig='.$config->getId());
+	    $qb->andWhere("e.memberType = :type");
+	    $qb->setParameter('type', 'member');
+	    $qb->andWhere("e.status = :status");
+	    $qb->setParameter('status', 1);
+	    $qb->groupBy('e.memberUnion');
+	    $results = $qb->getQuery()->getArrayResult();
+	    return $results;
+    }
+
+	public function getWardWiseMember(ElectionConfig $config){
+
+	    $qb = $this->createQueryBuilder('e');
+	    $qb->select('e.ward as wardName,e.memberUnion as unionName,COUNT(e.id) as countId');
+	    $qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.memberType = :type");
+		$qb->setParameter('type', 'member');
+	    $qb->andWhere("e.status = :status");
+	    $qb->setParameter('status', 1);
+		$qb->groupBy('e.ward, e.memberUnion');
+	    $results = $qb->getQuery()->getArrayResult();
+	    return $results;
+
+    }
+
 
     public function getImportCount(ElectionConfig $config,$process){
 
@@ -47,7 +90,7 @@ class ElectionMemberRepository extends EntityRepository
     public function getLocationBaseMembers(ElectionCommittee $committee)
     {
 	    /* @var $location ElectionLocation */
-    	$location = $committee->getElectionLocation();
+    	$location = $committee->getLocation();
 
 	    $config = $committee->getElectionConfig()->getId();
 	    $qb = $this->createQueryBuilder('e');
@@ -184,7 +227,7 @@ class ElectionMemberRepository extends EntityRepository
 
     }
 
-    public function searchAutoComplete(ElectionConfig $config, $q)
+    public function searchAutoComplete(ElectionConfig $config, $q , $type='member')
     {
         $query = $this->createQueryBuilder('e');
         $query->select('e.mobile as id');
@@ -193,6 +236,8 @@ class ElectionMemberRepository extends EntityRepository
         $query->orWhere($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("e.electionConfig = :config");
         $query->setParameter('config', $config->getId());
+        $query->andWhere("e.memberType = :type");
+        $query->setParameter('type', $type);
         $query->orderBy('e.name', 'ASC');
         $query->groupBy('e.mobile');
         $query->setMaxResults( '20' );
@@ -200,7 +245,7 @@ class ElectionMemberRepository extends EntityRepository
 
     }
 
-     public function searchMobileAutoComplete(GlobalOption $config, $q, $type = 'NULL')
+     public function searchMobileAutoComplete(GlobalOption $config, $q, $type = 'member')
     {
         $query = $this->createQueryBuilder('e');
 
@@ -210,6 +255,8 @@ class ElectionMemberRepository extends EntityRepository
         $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
         $query->andWhere("e.config = :config");
         $query->setParameter('config', $config->getId());
+	    $query->andWhere("e.memberType = :type");
+	    $query->setParameter('type', $type);
         $query->orderBy('e.mobile', 'ASC');
         $query->groupBy('e.mobile');
         $query->setMaxResults( '10' );
@@ -217,7 +264,7 @@ class ElectionMemberRepository extends EntityRepository
 
     }
 
-    public function searchCustomerAutoComplete(GlobalOption $config, $q, $type = 'NULL')
+    public function searchCustomerAutoComplete(GlobalOption $config, $q, $type = 'member')
     {
         $query = $this->createQueryBuilder('e');
         $query->select('e.name as id');
@@ -226,6 +273,8 @@ class ElectionMemberRepository extends EntityRepository
         $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
         $query->andWhere("e.config = :config");
         $query->setParameter('config', $config->getId());
+	    $query->andWhere("e.memberType = :type");
+	    $query->setParameter('type', $type);
         $query->orderBy('e.name', 'ASC');
         $query->groupBy('e.mobile');
         $query->setMaxResults( '10' );
@@ -264,4 +313,7 @@ class ElectionMemberRepository extends EntityRepository
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
     }
+
+
+
 }

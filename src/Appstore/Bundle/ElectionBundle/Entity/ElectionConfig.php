@@ -78,6 +78,12 @@ class ElectionConfig
 	private $electionSetups;
 
 	/**
+	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="dashboard")
+	 **/
+	private $setup;
+
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="electionConfig")
 	 **/
 	private $committees;
@@ -421,6 +427,20 @@ class ElectionConfig
 	 */
 	public function getLocations() {
 		return $this->locations;
+	}
+
+	/**
+	 * @return ElectionSetup
+	 */
+	public function getSetup() {
+		return $this->setup;
+	}
+
+	/**
+	 * @param ElectionSetup $setup
+	 */
+	public function setSetup( $setup ) {
+		$this->setup = $setup;
 	}
 
 

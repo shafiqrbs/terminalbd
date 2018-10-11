@@ -234,7 +234,7 @@ class VotecenterController extends Controller
 
 	public function returnResultData(ElectionVoteCenter $entity, $msg=''){
 
-		$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenterMember')->getMemberLists($entity);
+		$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->getMemberLists($entity);
 		return $data;
 
 	}
@@ -258,7 +258,7 @@ class VotecenterController extends Controller
 	private function createVotecenterPoolingForm(ElectionVoteCenter $committee , ElectionVoteCenterMember $entity)
 	{
 		$form = $this->createForm(new VotecenterPoolingType(), $entity, array(
-			'action' => $this->generateUrl('election_votecenter_member_create',array('id' => $committee->getId())),
+			'action' => $this->generateUrl('election_votecenter_pooling_create',array('id' => $committee->getId())),
 			'method' => 'POST',
 			'attr' => array(
 				'class' => 'horizontal-form',
@@ -286,29 +286,52 @@ class VotecenterController extends Controller
 		));
 	}
 
-	public function createMemberAction(Request $request, ElectionVoteCenter $committee )
+	public function createMemberAction(Request $request, ElectionVoteCenter $center )
 	{
 		$em = $this->getDoctrine()->getManager();
 		$entity = new ElectionVoteCenterMember();
-		$form = $this->createVotecenterForm($committee,$entity);
+		$form = $this->createVotecenterForm($center,$entity);
 		$form->handleRequest($request);
 		$member = $request->request->all();
 		$memberId = $member['committee']['member'];
+
 		$member = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->find($memberId);
-		$existMember = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenterMember')->findOneBy(array('committee' => $committee,'member' => $member));
+		$existMember = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenterMember')->findOneBy(array('voteCenter' => $center,'member' => $member));
 		if ($form->isValid() and empty($existMember)) {
-			$member = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->find($memberId);
-			$entity->setVotecenter($committee);
+			$entity->setVotecenter($center);
 			$entity->setMember($member);
+			$entity->setPersonType('agent');
 			$em->persist($entity);
 			$em->flush();
-			$result = $this->returnResultData($committee);
-			return new Response($result);
 		}
-		return new Response('invalid');
+		$result = $this->returnResultData($center);
+		return new Response($result);
 		exit;
 
 	}
+
+	public function createPoolingAction(Request $request, ElectionVoteCenter $center )
+	{
+		$em = $this->getDoctrine()->getManager();
+		$entity = new ElectionVoteCenterMember();
+		$form = $this->createVotecenterPoolingForm($center,$entity);
+		$form->handleRequest($request);
+		$member = $request->request->all();
+		$mobile = $member['committee']['poolingMobile'];
+		$name = $member['committee']['poolingOfficer'];
+		$existMember = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenterMember')->findOneBy(array('voteCenter' => $center,'poolingMobile' => $mobile , 'poolingOfficer' => $name));
+		if ($form->isValid() and empty($existMember)) {
+			$entity->setVotecenter($center);
+			$entity->setPersonType('pooling');
+			$em->persist($entity);
+			$em->flush();
+		}
+		$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->getPoolingLists($center);
+		return new Response($data);
+		exit;
+
+	}
+
 
 	public function memberDeleteAction(ElectionVoteCenterMember $entity)
 	{

@@ -165,7 +165,7 @@ $(document).on('click', '.itemUpdate', function() {
     var subTotal  = (quantity * price);
     $("#subTotal-"+id).html(subTotal);
     $.ajax({
-        url: Routing.generate('medicine_sales_temporary_item_update'),
+        url: Routing.generate('business_invoice_item_update'),
         type: 'POST',
         data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
         success: function(response) {

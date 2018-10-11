@@ -146,8 +146,8 @@
                                                     <a href="{{ path('inventory_salesonline_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
                                                     <a title="Are you sure went to delete ?" data-id="{{ entity.id }}" data-url="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            {% if ((entity.paymentStatus == "Due" and app.user.granted("ROLE_DOMAIN_INVENTORY_DUE")) or (entity.process == 'Done' and app.user.granted("ROLE_DOMAIN"))) %}
-                                                <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                            {% if ((entity.paymentStatus == "Due" and entity.due > 0 and app.user.granted("ROLE_DOMAIN_INVENTORY_DUE")) or (entity.process == 'Done' and entity.due > 0  and app.user.granted("ROLE_DOMAIN"))) %}
+                                                <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini yellow" ><i class="icon-money"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>

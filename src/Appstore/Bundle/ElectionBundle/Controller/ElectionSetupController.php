@@ -319,10 +319,13 @@ class ElectionSetupController extends Controller
 			$entity->setProcess($process);
 			$em->flush();
 			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->updateTotalVote($entity->getElectionSetup());
-			$castVoteCenter = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->castVoteCenter($entity->getElectionSetup());
-			$res = $this->getDoctrine()->getRepository('ElectionBundle:ElectionSetup')->updateTotalVote($entity->getElectionSetup(),$castVoteCenter,$data);
+			$res = $this->getDoctrine()->getRepository('ElectionBundle:ElectionSetup')->updateTotalVote($entity->getElectionSetup(),$data);
 			$result = array(
-				'resultTotalVote'       =>  $res->getResultTotalVote(),
+				'resultTotalVote'           =>  $res->getResultTotalVote(),
+				'resultInvalidVote'         =>  $res->getResultInvalidVote(),
+				'activeVoteCenter'          =>  $res->getActiveVoteCenter(),
+				'holdVoteCenter'            =>  $res->getHoldVoteCenter(),
+				'rejectedVoteCenter'        =>  $res->getRejectedVoteCenter(),
 			);
 			return new Response(json_encode($result));
 		}
@@ -340,6 +343,7 @@ class ElectionSetupController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$entity = $em->getRepository('ElectionBundle:ElectionVoteMatrix')->find($matrixId);
 		if(!empty($entity)){
+
 			$entity->setMaleVoter($maleVoter);
 			$entity->setFemaleVoter($femaleVoter);
 			$entity->setOtherVoter($otherVoter);
@@ -347,7 +351,6 @@ class ElectionSetupController extends Controller
 			$em->flush();
 			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteMatrix')->updateTotalVote($entity->getCandidate());
 			$res = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCandidate')->updateTotalVote($entity->getCandidate(),$data);
-			$this->getDoctrine()->getRepository('ElectionBundle:ElectionSetup')->updateTotalVote($entity->getCandidate(),$data);
 			$result = array(
 				'candidateId'   =>  $res->getId(),
 				'maleVote'      =>  $res->getMaleVote(),

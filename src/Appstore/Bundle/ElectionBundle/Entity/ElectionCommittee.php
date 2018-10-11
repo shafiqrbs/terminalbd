@@ -47,9 +47,9 @@ class ElectionCommittee
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="electionCommittees")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="electionCommittees")
 	 **/
-	protected $committeeType;
+	protected $electionSetup;
 
 	/**
 	 * @Gedmo\Blameable(on="create")
@@ -414,6 +414,20 @@ class ElectionCommittee
 	 */
 	public function setLocation( $location ) {
 		$this->location = $location;
+	}
+
+	/**
+	 * @return ElectionSetup
+	 */
+	public function getElectionSetup() {
+		return $this->electionSetup;
+	}
+
+	/**
+	 * @param ElectionSetup $electionSetup
+	 */
+	public function setElectionSetup( $electionSetup ) {
+		$this->electionSetup = $electionSetup;
 	}
 
 

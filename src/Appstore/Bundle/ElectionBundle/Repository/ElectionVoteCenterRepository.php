@@ -1,7 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionSetup;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenterMember;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -13,15 +16,39 @@ use Doctrine\ORM\EntityRepository;
  */
 class ElectionVoteCenterRepository extends EntityRepository
 {
+
+
+	public function getUnionBaseVoteCenter(ElectionConfig $config)
+	{
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.location','t');
+		$qb->leftJoin('e.centerMembers','members');
+		$qb->join('t.parent','parent');
+		$qb->select('parent.name as locationName , COUNT(e.id) as countCenter, COUNT(members.id) as countMember');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->andWhere("members.personType = :person");
+		$qb->setParameter('person', 'agent');
+		$qb->groupBy('parent.name');
+		$results = $qb->getQuery()->getArrayResult();
+		return $results;
+
+	}
+
+
 	public function updateTotalVote(ElectionSetup $setup)
 	{
+
 		$qb = $this->createQueryBuilder('e');
-		$qb->addSelect('SUM(e.resultTotalVote) as resultTotalVote');
+		$qb->select('SUM(e.resultTotalVote) as resultTotalVote');
 		$qb->addSelect('SUM(e.resultInvalidVote) as resultInvalidVote');
 		$qb->addSelect('SUM(e.resultMaleVote) as resultMaleVote');
 		$qb->addSelect('SUM(e.resultFemaleVote) as resultFemaleVote');
 		$qb->addSelect('SUM(e.resultOtherVote) as resultOtherVote');
-		$qb->where('e.electionSetup ='.$setup->getId());
+		$qb->where('e.electionSetup = :electionSetup');
+		$qb->setParameter('electionSetup', $setup->getId());
 		$result  = $qb->getQuery()->getOneOrNullResult();
 		return $result;
 	}
@@ -48,5 +75,61 @@ class ElectionVoteCenterRepository extends EntityRepository
 		$result  = $qb->getQuery()->getOneOrNullResult();
 		return $result['process'];
 
+	}
+
+
+	public function getMemberLists(ElectionVoteCenter $committee)
+	{
+		$entities = $committee->getCenterMembers();
+		$data = '';
+		$i = 1;
+
+		/* @var $entity ElectionVoteCenterMember */
+
+		foreach ($entities as $entity) {
+			if ( $entity->getPersonType() == 'agent' ) {
+				$data .= "<tr id='remove-{$entity->getId()}'>";
+				$data .= "<td>{$entity->getBoothNo()}</td>";
+				$data .= "<td>{$entity->getMember()->getNid()}</td>";
+				$data .= "<td>{$entity->getMember()->getName()}</td>";
+				$data .= "<td><a href='tel:+88 {$entity->getMember()->getMobile()}'>{$entity->getMember()->getMobile()}</a></td>";
+				$data .= "<td>{$entity->getMember()->getLocation()->getName()}</td>";
+				$data .= "<td>{$entity->getMember()->getVoteCenter()->getName()}</td>";
+				$data .= "<td>{$entity->getMember()->getLocation()->wardName()}</td>";
+				$data .= "<td>{$entity->getMember()->getLocation()->unionName()}</td>";
+				$data .= "<td>{$entity->getMember()->getLocation()->thanaName()}</td>";
+				$data .= "<td>";
+				$data .= "<a data-id='{$entity->getId()}' data-url='/election/vote-center/{$entity->getId()}/member-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
+				if ( $entity->isMaster() == 1) {
+				$data .= "<a  href='javascript:' class='btn blue mini' ><i class='icon-user'></i> Lead</a>";
+				}
+				$data .= "</td>";
+				$data .= "</tr>";
+				$i ++;
+			}
+		}
+		return $data;
+	}
+
+	public function getPoolingLists(ElectionVoteCenter $committee)
+	{
+		$entities = $committee->getCenterMembers();
+		$data = '';
+		$i = 1;
+
+		/* @var $entity ElectionVoteCenterMember */
+
+		foreach ($entities as $entity) {
+			if ( $entity->getPersonType() == 'pooling' ) {
+				$data .= "<tr id='remove-{$entity->getId()}'>";
+				$data .= "<td>{$entity->getBoothNo()}</td>";
+				$data .= "<td>{$entity->getPoolingOfficer()}</td>";
+				$data .= "<td>{$entity->getPoolingMobile()}</td>";
+				$data .= "<td><a data-id='{$entity->getId()}' data-url='/election/vote-center/{$entity->getId()}/member-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
+				$data .= '</tr>';
+				$i ++;
+			}
+		}
+		return $data;
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -13,4 +14,34 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class ElectionCommitteeRepository extends EntityRepository
 {
+
+	public function getTypeBaseCommittee(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.electionSetup','t');
+		$qb->join('t.electionType','type');
+		$qb->select('type.name as committeeName , COUNT(e.id) as countId');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->groupBy('type.name');
+		$results = $qb->getQuery()->getArrayResult();
+		return $results;
+	}
+
+	public function getLocationBaseCommittee(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.location','t');
+		$qb->select('t.name as locationName , COUNT(e.id) as countId');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->groupBy('t.name');
+		$results = $qb->getQuery()->getArrayResult();
+		return $results;
+	}
+
+
+
 }

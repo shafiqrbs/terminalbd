@@ -1,34 +1,48 @@
 <div class="portlet box green">
     <div class="portlet-title">
         <div class="caption"><i class="icon-reorder"></i>Committee Information</div>
-        {#<div class="pull-right">
-            <div class="btn-group">
-                <input type="text" class="m-wrap span4 committee2Select"  name="member" id="member" value=""  autocomplete="off" placeholder="">
-                <a class="btn yellow instantPopup" href="javascript:" data-url="" id="instantPurchasePopup" ><i class="icon-search"></i> Search</a>
-            </div>
-        </div>#}
     </div>
     <div class="portlet-body form">
         <div class="loader loader-double" ></div>
         <div id="memberLoad">
         <div class="clearfix">&nbsp;</div>
             <div class="row-fluid">
-                <div class="span9">
+                <div class="span3">
                     <h4>About:</h4>
                     <ul class="unstyled">
-                        <li><strong>Committee Name:</strong>&nbsp;{{ entity.name }}</li>
-                        <li><strong>Location:</strong>&nbsp;{% if entity.electionLocation is not empty %}{{ entity.electionLocation.name }}{% endif %}</li>
-                        <li><strong>Location Type:</strong>&nbsp;{% if entity.electionLocation is not empty %}{{ entity.electionLocation.locationType.name }}{% endif %}</li>
-                        <li><strong>Duration of committee:</strong>&nbsp;{{ entity.startDate|date('d-m-Y') }} To {{ entity.endDate|date('d-m-Y') }}</li>
+                        <li><strong>Location:</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</li>
+                        <li><strong>Representative:</strong>&nbsp;{{ entity.representative.name }}</li>
+                        <li><strong>Mobile:</strong>&nbsp;{{ entity.representativeMobile }}</li>
+                        <li><strong>Address:</strong>&nbsp;{{ entity.address|raw }}</li>
+
                     </ul>
                 </div>
                 <div class="span3">
-                    <h4>&nbsp;</h4>
+                    <h4>Presiding:</h4>
+                    <ul class="unstyled">
+                        <li><strong>Name:</strong>&nbsp;{{ entity.presiding }}</li>
+                        <li><strong>Designation:</strong>&nbsp;{{ entity.presidingDesignation }}</li>
+                        <li><strong>Mobile:</strong>&nbsp;{{ entity.presidingMobile }}</li>
+                        <li><strong>Address:</strong>&nbsp;{{ entity.presidingAddress|raw }}</li>
+
+                    </ul>
+                </div>
+                <div class="span3">
+                    <h4>Election Information</h4>
                     <ul class="unstyled">
                         <li><strong>Created Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
-                        <li><strong>Process Status:</strong>&nbsp;{{ entity.process }}</li>
-                        <li><strong>Created By:</strong>&nbsp;{{ entity.createdBy }}</li>
-                        <li><strong>Approved By:</strong>&nbsp;{% if entity.approvedBy is not empty %}{{ entity.approvedBy }}{% endif %}</li>
+                        <li><strong>Election Type:</strong>&nbsp;{{ entity.electionSetup.electionName }}</li>
+                        <li><strong>Election Date:</strong>&nbsp;{{ entity.electionDate|date('d-m-y') }}</li>
+                    </ul>
+                </div>
+
+                <div class="span3">
+                    <h4>Voter Information</h4>
+                    <ul class="unstyled">
+                        <li><strong>Total Voter:</strong>&nbsp;{{ entity.totalVoter }}</li>
+                        <li><strong>Male Voter:</strong>&nbsp;{{ entity.maleVoter }}</li>
+                        <li><strong>Female Voter:</strong>&nbsp;{{ entity.femaleVoter }}</li>
+                        <li><strong>Other Voter:</strong>&nbsp;{{ entity.otherVoter }}</li>
                     </ul>
                 </div>
 
@@ -41,6 +55,7 @@
                     <tr class="head-blue">
                         <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                         <th class="numeric">Id</th>
+                        <th class="numeric">Booth</th>
                         <th class="numeric">Name</th>
                         <th class="numeric">Designation</th>
                         <th class="numeric">Mobile</th>
@@ -49,21 +64,23 @@
                         <th class="numeric">Ward</th>
                         <th class="numeric">Union/Pourasava</th>
                         <th class="numeric">Thana/Upazila</th>
+                        <th class="numeric" >Action</th>
                     </tr>
                     </thead>
                     <tbody id="memberCommittees">
-                    {% for committe in entity.members %}
+                    {% for committe in entity.centerMembers %}
                         <tr id="remove-{{ committe.id }}">
                             <td class="numeric">{{ loop.index }}.</td>
-                            <td class="numeric">{{ committe.member.memberId }}</td>
+                            <td class="numeric">{{ committe.boothNo }}</td>
                             <td class="numeric">{{ committe.member.name }}</td>
                             <td class="numeric">{{ committe.designation.name }}</td>
-                            <td class="numeric"><a href="tel:+88 {{ committe.member.mobile }}"> {{ committe.member.mobile }}</a></td>
+                            <td class="numeric"><a href="tel:+88 {% if  committe.mobile is empty %} {{ committe.member.mobile }}{% else %}{{ committe.mobile }}{% endif %}">{% if  committe.mobile is empty %} {{ committe.member.mobile }}{% else %}{{ committe.mobile }}{% endif %}</a></td>
                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.name }}{% endif %}</td>
                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.voteCenter.name }}{% endif %}</td>
                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.wardName }}{% endif %}</td>
                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.unionName }}{% endif %}</td>
                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.thanaName }}{% endif %}</td>
+                            <td><a data-id="{{ committe.id }}" class="btn mini delete red" href="javascript:" data-url="{{ path('election_committee_member_delete', { 'id': committe.id }) }}" >&nbsp;<i class="icon-trash"></i> </a></td>
                         </tr>
                     {% endfor %}
                     </tbody>

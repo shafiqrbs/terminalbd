@@ -1338,17 +1338,17 @@ class Builder extends ContainerAware
 			->addChild('Election & Committee')
 			->setAttribute('icon', 'icon-briefcase')
 			->setAttribute('dropdown', true);
-		$menu['Election & Committee']->addChild('Committee')
-		                           ->setAttribute('icon', 'icon-th-list')
-		                           ->setAttribute('dropdown', true);
-		$menu['Election & Committee']['Committee']->addChild('Election', array('route' => 'election_committee'))->setAttribute('icon', 'icon-th-list');
-		$menu['Election & Committee']['Committee']->addChild('Organization', array('route' => 'election_organizationcommittee'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']->addChild('Election')
 		                           ->setAttribute('icon', 'icon-th-list')
 		                           ->setAttribute('dropdown', true);
 		$menu['Election & Committee']['Election']->addChild('Election Setup', array('route' => 'election_setup'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']['Election']->addChild('Election Candidate', array('route' => 'election_candidate'))->setAttribute('icon', 'icon-user');
+		$menu['Election & Committee']['Election']->addChild('Committee', array('route' => 'election_committee'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']['Election']->addChild('Vote Center', array('route' => 'election_votecenter'))->setAttribute('icon', 'icon-th-list');
+/*		$menu['Election & Committee']->addChild('Organization')
+		                             ->setAttribute('icon', 'icon-th-list')
+		                             ->setAttribute('dropdown', true);
+		$menu['Election & Committee']['Committee']->addChild('Committee Setup', array('route' => 'election_organizationcommittee'))->setAttribute('icon', 'icon-th-list');*/
 		$menu['Election & Committee']->addChild('Manage Members', array('route' => 'election_member'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']->addChild('Manage Voters', array('route' => 'election_voter'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']->addChild('Manage Event', array('route' => 'election_event'))->setAttribute('icon', 'icon-calendar');

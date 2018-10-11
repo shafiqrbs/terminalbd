@@ -105,9 +105,9 @@
                                                 <div class="span4">
                                                     <div class="input-group input-append input-group">
                                                         <span class="input-group-btn">
-                                                           <input type="text" style="text-align: center; font-weight: bold" class="m-wrap span3 form-control" autocomplete="off" id="quantity" name="quantity" placeholder="Qnt" value="" min="" >
+                                                           <input type="number" style="text-align: center; font-weight: bold" class="m-wrap span3 form-control" autocomplete="off" id="quantity" name="quantity" placeholder="Qnt" value="" min="" >
                                                            <input type="text" class="m-wrap span4 con select2Unit" name="unit" id="unit" placeholder="Item unit">
-                                                            <input type="text" class="m-wrap span3 con" name="price" id="price" placeholder="Price" autocomplete="off">
+                                                            <input type="number" class="m-wrap span3 con" name="price" id="price" placeholder="Price" autocomplete="off">
                                                         </span>
                                                         <button type="submit" class="btn blue"  id="addParticular" data-url="" ><i class="icon-save"></i> Add </button>
                                                     </div>
@@ -143,6 +143,7 @@
                                                     <td class="">{{ item.particular }}</td>
                                                     <td class="">
                                                         <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
+                                                        <input type="hidden" id="subQuantity-{{ item.id }}" name="subQuantity[]" value="{{ item.subQuantity }}" >
                                                         <input type="text" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.price }}" >
                                                     </td>
                                                     <td class="">
@@ -150,7 +151,7 @@
                                                     </td>
                                                     <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
                                                     <td class="">
-                                                        <a data-id="{{ item.id }}" title="" data-url="{{ path('medicine_sales_temporary_item_update') }}" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
+                                                        <a data-id="{{ item.id }}" title="" data-url="" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
                                                         <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
                                                     </td>
                                                 </tr>
@@ -321,8 +322,17 @@
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            {{ form_widget(form.comment) }}
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
                                 </div>
+                                <div class="clearfix"></div>
+
                             </div>
+
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box yellow">
                                 <div class="pull-right">

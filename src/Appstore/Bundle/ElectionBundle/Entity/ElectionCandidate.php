@@ -74,28 +74,28 @@ class ElectionCandidate
     /**
      * @var int
      *
-     * @ORM\Column(name="totalVote", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="totalVote", type="integer",  length = 10, nullable=true)
      */
     private $totalVote = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="maleVote", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="maleVote", type="integer",  length = 10, nullable=true)
      */
     private $maleVote = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="femaleVote", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="femaleVote", type="integer",  length = 10, nullable=true)
      */
     private $femaleVote = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="otherVote", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="otherVote", type="integer",  length = 10, nullable=true)
      */
     private $otherVote = 0;
 

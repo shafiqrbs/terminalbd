@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionEvent;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionEventMember;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
@@ -17,6 +18,35 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class ElectionEventRepository extends EntityRepository
 {
+
+
+	public function getTypeBaseEvent(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.eventType','t');
+		$qb->select('t.name as eventName , COUNT(e.id) as countId');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->groupBy('t.name');
+		$results = $qb->getQuery()->getArrayResult();
+		return $results;
+	}
+
+	public function getLocationBaseEvent(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.location','t');
+		$qb->select('t.name as locationName , COUNT(e.id) as countId');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->groupBy('t.name');
+		$results = $qb->getQuery()->getArrayResult();
+		return $results;
+	}
+
+
 	public function getMemberLists(ElectionEvent $committee)
 	{
 		$entities = $committee->getEventMembers();

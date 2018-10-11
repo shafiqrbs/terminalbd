@@ -30,23 +30,22 @@ function submitCountVote(url) {
         type: 'POST',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#totalMaleVote-'+ obj['candidateId']).html(obj['maleVote']);
-            $('#totalFemaleVote-'+ obj['candidateId']).html(obj['femaleVote']);
-            $('#totalOtherVote-'+ obj['candidateId']).html(obj['otherVote']);
-            $('#totalCandidateVote-'+ obj['candidateId']).html(obj['totalVote']);
+            $('.totalMaleVote-'+ obj['candidateId']).html(obj['maleVote']);
+            $('.totalFemaleVote-'+ obj['candidateId']).html(obj['femaleVote']);
+            $('.totalOtherVote-'+ obj['candidateId']).html(obj['otherVote']);
+            $('.totalCandidateVote-'+ obj['candidateId']).html(obj['totalVote']);
         },
     });
 
 }
 
-$(document).on('keyup', 'resultTotalVote , .resultInvalidVote , .holdCenter', function() {
+$(document).on('keyup', '.resultTotalVote , .resultInvalidVote', function() {
 
     var id = $(this).attr("data-id");
 
     var resultTotalVote     = parseInt($('#resultTotalVote-' + id).val()  != '' ? $('#resultTotalVote-' + id).val() : 0 );
     var resultInvalidVote   = parseInt($('#resultInvalidVote-' + id).val()  != '' ? $('#resultInvalidVote-' + id).val() : 0 );
     var process             = $('#process-' + id).val()  != '' ? $('#process-' + id).val() : '' ;
-
     var url = Routing.generate('election_matrix_cenetrvoteupdate', {
         'centerId': id,
         'resultTotalVote': resultTotalVote,
@@ -58,11 +57,39 @@ $(document).on('keyup', 'resultTotalVote , .resultInvalidVote , .holdCenter', fu
         type: 'POST',
         success: function (response) {
             obj = JSON.parse(response);
-            $('.totalCastVote').html(obj['totalCastVote']);
-            $('.totalInvalidVote').html(obj['femaleVote']);
+            $('.totalCastVote').html(obj['resultTotalVote']);
+            $('.totalInvalidVote').html(obj['resultInvalidVote']);
             $('.activeVoteCenter').html(obj['activeVoteCenter']);
             $('.holdVoteCenter').html(obj['holdVoteCenter']);
             $('.rejectedVoteCenter').html(obj['rejectedVoteCenter']);
+        }
+    });
+});
+
+$(document).on('change', '.process', function() {
+
+    var id = $(this).attr("data-id");
+
+    var resultTotalVote     = parseInt($('#resultTotalVote-' + id).val()  != '' ? $('#resultTotalVote-' + id).val() : 0 );
+    var resultInvalidVote   = parseInt($('#resultInvalidVote-' + id).val()  != '' ? $('#resultInvalidVote-' + id).val() : 0 );
+    var process             = $('#process-' + id).val()  != '' ? $('#process-' + id).val() : '' ;
+    var url = Routing.generate('election_matrix_cenetrvoteupdate', {
+        'centerId': id,
+        'resultTotalVote': resultTotalVote,
+        'resultInvalidVote': resultInvalidVote,
+        'process': process
+    });
+    $.ajax({
+        url: url,
+        type: 'POST',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('.totalCastVote').html(obj['resultTotalVote']);
+            $('.totalInvalidVote').html(obj['resultInvalidVote']);
+            $('.activeVoteCenter').html(obj['activeVoteCenter']);
+            $('.holdVoteCenter').html(obj['holdVoteCenter']);
+            $('.rejectedVoteCenter').html(obj['rejectedVoteCenter']);
+
         }
     });
 });
@@ -155,6 +182,38 @@ var event = $("#memberEvent").validate({
             success: function(response){
                 $('#memberEvents').html(response);
                 $('form#memberEvent')[0].reset();
+            }
+        });
+    }
+});
+
+var memberVotecenter = $("#memberVotecenter").validate({
+     submitHandler: function(memberVotecenter) {
+        $.ajax({
+            url         : $('form#memberVotecenter').attr( 'action' ),
+            type        : $('form#memberVotecenter').attr( 'method' ),
+            data        : new FormData($('form#memberVotecenter')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                $('#memberCommittees').html(response);
+                $('form#memberVotecenter')[0].reset();
+            }
+        });
+    }
+});
+
+var memberPooling = $("#memberPooling").validate({
+     submitHandler: function(memberPooling) {
+        $.ajax({
+            url         : $('form#memberPooling').attr( 'action' ),
+            type        : $('form#memberPooling').attr( 'method' ),
+            data        : new FormData($('form#memberPooling')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                $('#memberPoolings').html(response);
+                $('form#memberPooling')[0].reset();
             }
         });
     }

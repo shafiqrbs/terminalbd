@@ -184,7 +184,7 @@
                                                     <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
                                                     <td class="">
                                                         <div class="input-group">
-                                                        <a data-id="{{ item.id }}" title="" data-url="{{ path('medicine_sales_temporary_item_update') }}" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
+                                                        <a data-id="{{ item.id }}" title="" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
                                                         <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
                                                         </div>
                                                     </td>

@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Election Committee</a></li>
+                    <li><a href="{{ path('election_committee') }}">Manage Election Committee</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -32,7 +32,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Election Committee Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_committee') }}"><i class="icon-th-list"></i>&nbsp; Create</a>
+                                <a class="btn red" href="{{ path('election_committee') }}"><i class="icon-th-list"></i>&nbsp; Committee</a>
                             </div>
                         </div>
                     </div>
@@ -49,8 +49,8 @@
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Committee Type</label>
                                         <div class="controls">
-                                            {{ form_widget(form.committeeType) }}
-                                            {{ form_errors(form.committeeType) }}
+                                            {{ form_widget(form.electionSetup) }}
+                                            {{ form_errors(form.electionSetup) }}
                                         </div>
                                     </div>
                                 </div>
@@ -143,10 +143,9 @@
                                     </div>
                                 </div>
                                 <div class="span4">
-                                    <label class="control-label" for="firstName">&nbsp;</label>
                                     <div class="input-append span12" style="margin-bottom:0!important">
                                         <div class="input-group">
-                                            <select class="m-wrap span8">
+                                            <select class="m-wrap span9">
                                                 <option>Designation</option>
                                                 <option>President</option>
                                                 <option>Secretary</option>

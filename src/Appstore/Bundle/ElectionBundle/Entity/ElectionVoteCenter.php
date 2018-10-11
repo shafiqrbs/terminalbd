@@ -148,66 +148,66 @@ class ElectionVoteCenter
 	/**
      * @var int
      *
-     * @ORM\Column(name="totalVoter", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="totalVoter", type="integer",  length = 10, nullable=true)
      */
-    private $totalVoter;
+    private $totalVoter = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="maleVoter", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="maleVoter", type="integer",  length = 10, nullable=true)
      */
-    private $maleVoter;
+    private $maleVoter = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="femaleVoter", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="femaleVoter", type="integer",  length = 10, nullable=true)
      */
-    private $femaleVoter;
+    private $femaleVoter = 0;
 
 	/**
      * @var int
      *
-     * @ORM\Column(name="otherVoter", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="otherVoter", type="integer",  length = 10, nullable=true)
      */
-    private $otherVoter;
+    private $otherVoter = 0;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="resultTotalVote", type="smallint",  length = 6, nullable=true)
+	 * @ORM\Column(name="resultTotalVote", type="integer",  length = 10, nullable=true)
 	 */
-	private $resultTotalVote;
+	private $resultTotalVote = 0;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="resultMaleVote", type="smallint",  length = 6, nullable=true)
+	 * @ORM\Column(name="resultMaleVote", type="integer",  length = 10, nullable=true)
 	 */
-	private $resultMaleVote;
+	private $resultMaleVote = 0;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="resultFemaleVote", type="smallint",  length = 6, nullable=true)
+	 * @ORM\Column(name="resultFemaleVote", type="integer",  length = 10, nullable=true)
 	 */
-	private $resultFemaleVote;
+	private $resultFemaleVote = 0;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(name="resultOtherVote", type="smallint",  length = 6, nullable=true)
+	 * @ORM\Column(name="resultOtherVote", type="integer",  length = 10, nullable=true)
 	 */
-	private $resultOtherVote;
+	private $resultOtherVote = 0;
 
 
 	/**
      * @var int
      *
-     * @ORM\Column(name="resultInvalidVote", type="smallint",  length = 6, nullable = true)
+     * @ORM\Column(name="resultInvalidVote", type="integer",  length = 10, nullable = true)
      */
-    private $resultInvalidVote;
+    private $resultInvalidVote = 0;
 
 	/**
      * @var string

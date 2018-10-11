@@ -50,6 +50,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Vote Center</th>
                                     <th class="numeric" >Election</th>
+                                    <th class="numeric" >Total Voter</th>
                                     <th class="numeric" >Representative</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Presiding</th>
@@ -63,7 +64,8 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.electionSetup is not empty %}{{ entity.electionSetup.electionType.name }}-{{ entity.electionSetup.electionDate|date('Y') }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.electionSetup is not empty %}{{ entity.electionSetup.electionName }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.totalVoter }}</td>
                                         <td class="numeric" >{% if entity.representative is not empty %}{{ entity.representative.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.representative is not empty %}{{ entity.representative.mobile }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.presiding }}</td>

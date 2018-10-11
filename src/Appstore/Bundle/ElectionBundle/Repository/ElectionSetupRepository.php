@@ -16,15 +16,14 @@ class ElectionSetupRepository extends EntityRepository
 {
 	public function updateTotalVote(ElectionSetup $entity,$data)
 	{
-
-		$entity->setResultTotalVote($data['resultTotalVote']);
-		$entity->setResultInvalidVote($data['resultInvalidVote']);
-		$entity->setResultMaleVote($data['resultMaleVote']);
-		$entity->setResultFemaleVote($data['resultFemaleVote']);
-		$entity->setResultOtherVote($data['resultOtherVote']);
-		$entity->setActiveVoteCenter($this->castVoteCenter($entity),'Active');
-		$entity->setHoldVoteCenter($this->castVoteCenter($entity),'Hold');
-		$entity->setRejectedVoteCenter($this->castVoteCenter($entity),'Rejected');
+		$entity->setResultTotalVote((int)$data['resultTotalVote']);
+		$entity->setResultInvalidVote((int)$data['resultInvalidVote']);
+		$entity->setResultMaleVote((int)$data['resultMaleVote']);
+		$entity->setResultFemaleVote((int)$data['resultFemaleVote']);
+		$entity->setResultOtherVote((int)$data['resultOtherVote']);
+		$entity->setActiveVoteCenter($this->castVoteCenter($entity,'Active'));
+		$entity->setHoldVoteCenter($this->castVoteCenter($entity,'Hold'));
+		$entity->setRejectedVoteCenter($this->castVoteCenter($entity,'Rejected'));
 		$entity->setResultVoteCenter($entity->getActiveVoteCenter() + $entity->getHoldVoteCenter() + $entity->getRejectedVoteCenter());
 		$this->_em->persist($entity);
 		$this->_em->flush();
@@ -36,12 +35,12 @@ class ElectionSetupRepository extends EntityRepository
 	{
 		$qb = $this->_em->createQueryBuilder();
 		$qb->from('ElectionBundle:ElectionVoteCenter','e');
-		$qb->addSelect('process, COUNT(e.process) as totalVoteCenter');
+		$qb->addSelect('COUNT(e.process) as totalVoteCenter');
 		$qb->where('e.electionSetup ='.$setup->getId());
-		$qb->andWhere("e.process = :process");
+		$qb->andWhere('e.process = :process');
 		$qb->setParameter('process', $process);
 		$result  = $qb->getQuery()->getOneOrNullResult();
-		return $result['process'];
+		return $result['totalVoteCenter'];
 	}
 
 }

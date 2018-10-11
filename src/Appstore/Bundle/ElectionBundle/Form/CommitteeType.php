@@ -36,18 +36,16 @@ class CommitteeType extends AbstractType
     {
         $builder
 
-	        ->add('committeeType', 'entity', array(
+	        ->add('electionSetup', 'entity', array(
 		        'required'    => true,
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
-		        'empty_value' => '--- Choose the type of committee ---',
-		        'property' => 'name',
+		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionSetup',
+		        'empty_value' => '--- Choose the election name ---',
+		        'property' => 'electionName',
 		        'attr'=>array('class'=>'m-wrap span6 inputs'),
-		        'constraints' =>array( new NotBlank(array('message'=>'Choose the type of committee')) ),
+		        'constraints' =>array( new NotBlank(array('message'=>'Choose the election name')) ),
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
-			                  ->join("e.particularType","p")
-			                  ->where("e.status = 1")
-			                  ->andWhere("p.slug = 'committee'");
+			                  ->where("e.status = 1");
 		        },
 	        ))
 	        ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter committee name'),

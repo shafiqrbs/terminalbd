@@ -47,15 +47,17 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     public function insertInvoiceParticular(BusinessInvoice $invoice, $data)
     {
+	    $quantity = (isset($data['quantity']) and !empty($data['quantity'])) ? $data['quantity'] : 0;
         $em = $this->_em;
         $entity = new BusinessInvoiceParticular();
         $entity->setBusinessInvoice($invoice);
         $entity->setParticular($data['particular']);
         $entity->setPrice($data['price']);
-        $entity->setSubQuantity($data['quantity']);
-        $entity->setTotalQuantity($data['quantity']);
+        $entity->setQuantity($quantity);
+        $entity->setSubQuantity($quantity);
+        $entity->setTotalQuantity($quantity);
         if(!empty($data['quantity'])){
-            $entity->setSubTotal($data['price'] * $data['quantity']);
+            $entity->setSubTotal($data['price'] * $quantity);
         }else{
             $entity->setSubTotal($data['price']);
         }
@@ -184,7 +186,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $data .= "</td>";
             $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
             $data .= "<td>";
-            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/medicine/sales-temporary/sales-item-update' href='javascript:' class='btn blue mini itemUpdate' ><i class='icon-save'></i></a>";
+            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}'  href='javascript:' class='btn blue mini itemUpdate' ><i class='icon-save'></i></a>";
             $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
             $data .= "</td>";
             $data .= '</tr>';

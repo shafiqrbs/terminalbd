@@ -42,28 +42,28 @@ class ElectionVoteMatrix
 	/**
      * @var int
      *
-     * @ORM\Column(name="totalVoter", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="totalVoter", type="integer",  length = 10, nullable=true)
      */
     private $totalVoter = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="maleVoter", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="maleVoter", type="integer",  length = 10, nullable=true)
      */
     private $maleVoter = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="femaleVoter", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="femaleVoter", type="integer",  length = 10, nullable=true)
      */
     private $femaleVoter = 0;
 
 	/**
      * @var int
      *
-     * @ORM\Column(name="otherVoter", type="smallint",  length = 6, nullable=true)
+     * @ORM\Column(name="otherVoter", type="integer",  length = 10, nullable=true)
      */
     private $otherVoter = 0;
 
