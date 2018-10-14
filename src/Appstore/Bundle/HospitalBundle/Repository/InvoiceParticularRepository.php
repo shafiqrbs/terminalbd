@@ -21,7 +21,91 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class InvoiceParticularRepository extends EntityRepository
 {
 
-    public function handleDateRangeFind($qb,$data)
+	protected function handleSearchBetween($qb,$data)
+	{
+
+		$invoice = isset($data['invoice'])? $data['invoice'] :'';
+		$commission = isset($data['commission'])? $data['commission'] :'';
+		$assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+		$referred = isset($data['referred'])? $data['referred'] :'';
+		$process = isset($data['process'])? $data['process'] :'';
+		$customerName = isset($data['name'])? $data['name'] :'';
+		$customerMobile = isset($data['mobile'])? $data['mobile'] :'';
+		$created = isset($data['created'])? $data['created'] :'';
+		$deliveryDate = isset($data['deliveryDate'])? $data['deliveryDate'] :'';
+		$transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
+		$service = isset($data['service'])? $data['service'] :'';
+		$cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
+		$cabin = isset($data['cabinNo'])? $data['cabinNo'] :'';
+
+		if (!empty($invoice)) {
+			$qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
+		}
+		if (!empty($customerName)) {
+			$qb->join('e.customer','c');
+			$qb->andWhere($qb->expr()->like("c.customerId", "'%$customerName%'"  ));
+		}
+
+		if (!empty($customerMobile)) {
+			$qb->join('e.customer','m');
+			$qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
+		}
+		if (!empty($created)) {
+			$compareTo = new \DateTime($created);
+			$created =  $compareTo->format('Y-m-d');
+			$qb->andWhere("e.created LIKE :created");
+			$qb->setParameter('created', $created.'%');
+		}
+
+		if (!empty($deliveryDate)) {
+			$compareTo = new \DateTime($deliveryDate);
+			$created =  $compareTo->format('Y-m-d');
+			$qb->andWhere("e.deliveryDateTime LIKE :deliveryDate");
+			$qb->setParameter('deliveryDate', $created.'%');
+		}
+
+		if(!empty($commission)){
+			$qb->andWhere("e.hmsCommission = :commission");
+			$qb->setParameter('commission', $commission);
+		}
+		if(!empty($assignDoctor)){
+			$qb->andWhere("e.assignDoctor = :assignDoctor");
+			$qb->setParameter('assignDoctor', $assignDoctor);
+		}
+
+		if(!empty($referred)){
+			$qb->andWhere("e.referredDoctor = :referredDoctor");
+			$qb->setParameter('referredDoctor', $referred);
+		}
+
+		if(!empty($process)){
+			$qb->andWhere("e.process = :process");
+			$qb->setParameter('process', $process);
+		}
+
+		if(!empty($transactionMethod)){
+			$qb->andWhere("e.transactionMethod = :transactionMethod");
+			$qb->setParameter('transactionMethod', $transactionMethod);
+		}
+
+		if(!empty($service)){
+			$qb->andWhere("e.service = :service");
+			$qb->setParameter('service', $service);
+		}
+
+		if(!empty($cabin)){
+			$qb->andWhere("e.cabin = :cabin");
+			$qb->setParameter('cabin', $cabin);
+		}
+		if(!empty($cabinGroup)){
+			$qb->leftJoin('e.cabin','cabin');
+			$qb->leftJoin('cabin.serviceGroup','sg');
+			$qb->andWhere("sg.id = :cabinGroup");
+			$qb->setParameter('cabinGroup', $cabinGroup);
+		}
+	}
+
+	public function handleDateRangeFind($qb,$data)
     {
         if(empty($data)){
             $datetime = new \DateTime("now");
@@ -50,7 +134,7 @@ class InvoiceParticularRepository extends EntityRepository
         $qb->join('ip.particular','p');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
-       // $this->handleSearchBetween($qb,$data);
+        $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
         $qb->orderBy('e.created','DESC');
@@ -68,10 +152,17 @@ class InvoiceParticularRepository extends EntityRepository
 
                 $invoiceParticular = new InvoiceParticular();
                 $invoiceParticular->setHmsInvoice($invoice);
-                $invoiceParticular->setQuantity($entity->getQuantity());
+	            $invoiceParticular->setQuantity($entity->getQuantity());
                 $invoiceParticular->setSalesPrice($entity->getSalesPrice());
                 $invoiceParticular->setSubTotal($entity->getSubTotal());
                 $invoiceParticular->setParticular($entity->getParticular());
+	            if($entity->getParticular()->getService()->getSlug() == 'diagnostic'){
+		            $datetime = new \DateTime("now");
+		            $lastCode = $this->getLastCode($invoice,$datetime);
+		            $invoiceParticular->setCode($lastCode+1);
+		            $reportCode = sprintf("%s%s", $datetime->format('dmy'), str_pad($invoiceParticular->getCode(),3, '0', STR_PAD_LEFT));
+		            $invoiceParticular->setReportCode($reportCode);
+	            }
                 $invoiceParticular->setEstimatePrice($entity->getEstimatePrice());
                 $em->persist($invoiceParticular);
                 $em->flush();
@@ -106,7 +197,7 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setSubTotal($data['price'] * $data['quantity']);
         }
         $entity->setHmsInvoice($invoice);
-        if($particular->getService()->getCode() == '01'){
+        if($particular->getService()->getSlug() == 'diagnostic'){
             $datetime = new \DateTime("now");
             $entity->setCode($invoice);
             $lastCode = $this->getLastCode($invoice,$datetime);

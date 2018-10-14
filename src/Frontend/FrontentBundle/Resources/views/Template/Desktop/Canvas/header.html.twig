@@ -1,6 +1,6 @@
 <nav class="navbar navbar-inverse ">
     <section id="top-bar">
-        <div class="container" id="menu">
+        <div class="container">
             <div class="row">
                 <div class="col-md-6 text-left">
                     <div class="box">
@@ -100,11 +100,12 @@
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header'}) %}
     {% endif %}
 </nav>
-<!-- BEGIN NAVIGATION -->
-
-<!-- END NAVIGATION -->
-
 <style>
+
+    .fixed-top{
+        z-index: 99999;
+        width: 100%;
+    }
 
     .input-group-field {
         border-radius: 0!important;

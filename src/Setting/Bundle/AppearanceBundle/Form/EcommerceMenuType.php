@@ -151,6 +151,16 @@ class EcommerceMenuType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
+	        ->add('menuPosition', 'choice', array(
+		        'attr'=>array('class'=>'span12  m-wrap'),
+		        'empty_value' => '---Menu Position ---',
+		        'expanded'      =>false,
+		        'multiple'      =>false,
+		        'choices' => array(
+			        'top'       => 'Top',
+			        'left'      => 'Left',
+			    ),
+	        ))
             ->add('singleMenu')
 
           ;

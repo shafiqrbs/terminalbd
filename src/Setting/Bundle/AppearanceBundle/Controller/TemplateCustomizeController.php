@@ -3,6 +3,7 @@
 namespace Setting\Bundle\AppearanceBundle\Controller;
 
 use Doctrine\Entity;
+use Setting\Bundle\AppearanceBundle\Form\TemplateEcommerceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -129,6 +130,27 @@ class TemplateCustomizeController extends Controller
         ));
     }
 
+     /**
+     * Displays a form to edit an existing TemplateCustomize entity.
+     *
+     */
+    public function ecommerceEditAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption'=>$id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
+        }
+
+        $editForm = $this->createEcommerceForm($entity);
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:ecommerce.html.twig', array(
+            'entity'      => $entity,
+            'form'   => $editForm->createView(),
+
+        ));
+    }
+
     /**
     * Creates a form to edit a TemplateCustomize entity.
     *
@@ -140,6 +162,20 @@ class TemplateCustomizeController extends Controller
     {
         $form = $this->createForm(new TemplateCustomizeType(), $entity, array(
             'action' => $this->generateUrl('templatecustomize_update', array('id' => $entity->getGlobalOption()->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+                'enctype' => 'multipart/form-data',
+            )
+        ));
+
+        return $form;
+    }
+    private function createEcommerceForm(TemplateCustomize $entity)
+    {
+        $form = $this->createForm(new TemplateEcommerceType(), $entity, array(
+            'action' => $this->generateUrl('templatecustomize_ecommerce_update', array('id' => $entity->getGlobalOption()->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -189,10 +225,54 @@ class TemplateCustomizeController extends Controller
             $entity->upload();
             $em->flush();
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:TemplateCustomize')->fileUploader($entity,$file);
-            return $this->redirect($this->generateUrl('templatecustomize_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('templatecustomize_ecommerce_edit', array('id' => $id)));
         }
 
         return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(
+            'entity'      => $entity,
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+    public function ecommerceUpdateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption'=> $id));
+        $data = $request->request->all();
+        $file = $request->files->all();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+
+            if(isset($data['removeLogo']) || (isset($file['logo']) && !empty($entity->getLogo()))  ){
+                $entity->removeLogo();
+                $entity->setLogo(NULL);
+            }
+            if(isset($data['removeFavicon']) || (isset($file['faviconFile']) && !empty($entity->getFavicon()))  ){
+                $entity->removeFavicon();
+                $entity->setFavicon(NULL);
+            }
+            if(isset($data['removeHeaderImage']) || (isset($file['removeHeaderImage']) && !empty($entity->getHeaderBgImage())) ){
+                $entity->removeHeaderImage();
+                $entity->setHeaderBgImage(NULL);
+            }
+            if(isset($data['removeBodyImage']) || (isset($file['removeBodyImage']) && !empty($entity->getBgImage())) ){
+                $entity->removeBodyImage();
+                $entity->setBgImage(NULL);
+            }
+            $entity->upload();
+            $em->flush();
+            $this->getDoctrine()->getRepository('SettingAppearanceBundle:TemplateCustomize')->fileUploader($entity,$file);
+            return $this->redirect($this->generateUrl('templatecustomize_edit', array('id' => $id)));
+        }
+
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:ecommerce.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

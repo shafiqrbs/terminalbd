@@ -319,7 +319,16 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-cog')
                 ->setAttribute('dropdown', true);
 
-            $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $option->getId())));
+	        if (!empty($result)) {
+		        $menu['Manage Appearance']->addChild( 'Customize Template', array( 'route'           => 'templatecustomize_ecommerce_edit',
+		                                                                           'routeParameters' => array( 'id' => $option->getId() )
+		        ) );
+	        }else{
+		        $menu['Manage Appearance']->addChild( 'Customize Template', array( 'route'           => 'templatecustomize_edit',
+		                                                                           'routeParameters' => array( 'id' => $option->getId() )
+		        ) );
+	        }
+
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')){
                     $menu['Manage Appearance']->addChild('E-commerce')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);

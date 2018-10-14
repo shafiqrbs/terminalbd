@@ -89,7 +89,7 @@ class PurchaseType extends AbstractType
             )))
             ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark')))
             ->add('receiveDate','text', array('attr'=>array('class'=>'m-wrap span12 dateCalendar','placeholder'=>'Enter receive date')))
-            ->add('payment','text', array('attr'=>array('class'=>'numeric','placeholder'=>'Payment amount')
+            ->add('payment','text', array('attr'=>array('class'=>'numeric m-wrap span12','placeholder'=>'Payment amount')
             ));
     }
     

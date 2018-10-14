@@ -139,6 +139,41 @@
                 </table>
             </div>
             {% endif %}
+            <div class="form-actions portlet box yellow">
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-reorder"></i>Upload Reports</div>
+                   {% if  entity.webPath is not empty %}
+                    <a class="btn red pull-right mini" target="_blank" href="/{{ entity.webPath }}"><i class="icon-upload"></i> Download File</a>
+                  {% endif %}
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+            <div class="row-fluid">
+                <div class="span8">
+                    <div class="control-group">
+                        <label class="control-label" for="firstName">Select Upload File</label>
+                        <div class="controls">
+                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                <div class="input-append">
+                                    <div class="uneditable-input span6">
+                                        <i class="icon-file fileupload-exists"></i>
+                                        <span class="fileupload-preview"></span>
+                                    </div>
+                                    <span class="btn blue btn-file">
+                                    <span class="fileupload-new">Select File</span>
+                                    <span class="fileupload-exists">Change</span>
+                                        {{ form_widget(form.file) }}
+                                        {{ form_errors(form.file) }}
+                                    </span>
+                                    <a href="#" class="btn  fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box green">
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-reorder"></i>Additional Field & Value</div>

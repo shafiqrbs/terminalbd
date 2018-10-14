@@ -148,6 +148,7 @@ class FeatureWidgetType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
+                    'left-menu'         => 'Left Menu',
                     'category'          => 'Category',
                     'brand'             => 'Brand',
                     'discount'          => 'Discount',

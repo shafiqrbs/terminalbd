@@ -96,7 +96,7 @@ class InvoiceParticularController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
         }
-        $barcodePrint = $entity->getParticular()->getParticularCode().'-'.$entity->getReportCode();
+	    $barcodePrint = $entity->getParticular()->getParticularCode().'-'.$entity->getReportCode();
         $barcodeReport = $this->getBarcode($barcodePrint);
         return $this->render('HospitalBundle:InvoiceParticular:sampleCollectionBarcode.html.twig', array(
             'entity' => $entity,
@@ -191,6 +191,7 @@ class InvoiceParticularController extends Controller
         if ($editForm->isValid()) {
             
             $entity->setParticularPreparedBy($this->getUser());
+            $entity->upload();
             $em->flush();
             $this->getDoctrine()->getRepository('HospitalBundle:InvoicePathologicalReport')->insert($entity,$data);
             $this->get('session')->getFlashBag()->add(

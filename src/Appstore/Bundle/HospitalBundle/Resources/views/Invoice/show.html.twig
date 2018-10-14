@@ -121,12 +121,17 @@
                                                 <td class="span1">{{ item.quantity }}</td>
                                                 <td class="span1">{{ item.subTotal|number_format }}</td>
                                                 <td>
-                                                {% if item.particular.service.id == 1 and item.process =='Done'%}
-                                                    <a target="_blank" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"  class="btn blue mini"><i class="icon-print"></i> Report</a>
-                                                {% endif %}
+                                                    <div class="btn-group">
+                                                    {% if item.particular.service.slug == 'diagnostic' and item.process =='Done'%}
+                                                        <a target="_blank" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"  class="btn blue mini"><i class="icon-print"></i> Report</a>
+                                                        {% if  item.webPath is not empty %}
+                                                            <a class="btn red pull-right mini" target="_blank" href="/{{ item.webPath }}"><i class="icon-download"></i> Download</a>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    </div>
                                                 </td>
                                             </tr>
-                                            {% if item.particular.service.id == 1 %}
+                                            {% if item.particular.service.slug == 'diagnostic' %}
                                                 <tr id="show-{{ item.id }}" class="showing-overview">
                                                     <td colspan="7">
                                                         <table class="table table-bordered table-striped">

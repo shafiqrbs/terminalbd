@@ -175,7 +175,6 @@ class ExcelImporterController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-
             return $this->redirect($this->generateUrl('inventory_excelimproter_edit', array('id' => $id)));
         }
 

@@ -116,6 +116,14 @@ class EcommerceMenu
     private $sorting;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="menuPosition", type="string" , length = 20, nullable=true)
+     */
+    private $menuPosition;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="singleMenu", type="boolean")
@@ -377,6 +385,22 @@ class EcommerceMenu
     {
         $this->singleMenu = $singleMenu;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getMenuPosition(){
+		return $this->menuPosition;
+	}
+
+	/**
+	 * @param string $menuPosition
+	 * top
+	 * left
+	 */
+	public function setMenuPosition( string $menuPosition ) {
+		$this->menuPosition = $menuPosition;
+	}
 
 
 }

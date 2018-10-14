@@ -191,6 +191,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@HospitalBundle/Resources/public/js/editable.js'
     '@HospitalBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -198,4 +199,5 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    EditableWithOutReloadInit();
 {% endblock %}

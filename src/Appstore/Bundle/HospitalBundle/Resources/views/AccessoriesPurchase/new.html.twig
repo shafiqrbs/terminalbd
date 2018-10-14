@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_purchase') }}">Accessories Receive</a>
+                    <a href="{{ path('hms_accessories_purchase') }}">Accessories Receive</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Manage Accessories Receive</a></li>
@@ -36,7 +36,6 @@
             <div class="caption"><i class="icon-reorder"></i>Accessories Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn red" href="{{ path('hms_accessories_purchase_new') }}"><i class="icon-plus-sign"></i> Accessories Receive</a>
                     <a class="btn" href="{{ path('hms_accessories_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                 </div>
             </div>
@@ -119,34 +118,36 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="row-fluid particular-info" >
-                                <div class="span4">
+                                <div class="span5">
                                     <select id="particular" name="particular" class="span12 select2">
                                         <option value="">--- Select accessories name ---</option>
-                                       {% for particular in particulars %}
-                                           <option value="{{ path('hms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
-                                       {% endfor %}
-                                     </select>
+                                        {% for particular in particulars %}
+                                            <option value="{{ path('hms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
-                                <div class="span2"><input type="text" class="m-wrap span12" id="purchasePrice" disabled="disabled" required="required" name="purchasePrice" placeholder="Purchase price" value="" maxlength="8"></div>
-                                <div class="span2"><input type="text" class="m-wrap span12" id="price" disabled="disabled" required="required" name="price" placeholder="Sales price" value="" maxlength="8"></div>
                                 <div class="span3">
-                                    <div class="input-group">
-                                            <span class="input-group-btn">
-                                               <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity">
-                                                        <span class="fa fa-minus"></span>
-                                               </button>
-                                            </span>
-                                        <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="10000">
-                                        <span class="input-group-btn">
-                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
-                                                      <span class="fa fa-plus"></span>
-                                              </button>
-                                            </span>
+                                    <div class="input-append">
+                                        <div class="input-group">
+                                            <input type="text" class="m-wrap span6" id="purchasePrice" disabled="disabled" required="required" name="purchasePrice" placeholder="Purchase price" value="" maxlength="8">
+                                            <input type="text" class="m-wrap span6" id="price" disabled="disabled" required="required" name="price" placeholder="Sales price" value="" maxlength="8">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="span1">
-                                    <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_purchase_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                <div class="span4">
+                                    <div class="input-append">
+                                        <div class="input-group">
+                                            <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity">
+                                                <span class="fa fa-minus"></span>
+                                            </button>
+                                            <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="10000">
+                                            <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
+                                                <span class="fa fa-plus"></span>
+                                            </button>
+                                            <input type="hidden" id="particularId" name="particularId" value="">
+                                            <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_purchase_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -171,7 +172,7 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="firstName"><span>Discount TK.</span> <span class="pull-right sales-right"><input class="numeric"  name="discount" id="discount" value="{{ entity.discount }}" autocomplete="off" type="text"></span></label>
+                                <label class="control-label" for="firstName"><span>Discount TK.</span> <span class="pull-right sales-right"><input class="numeric m-wrap span12"  name="discount" id="discount" value="{{ entity.discount }}" autocomplete="off" type="text"></span></label>
                             </div>
                         </div>
                         <!--/span-->

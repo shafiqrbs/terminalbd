@@ -208,7 +208,7 @@ class DoctorController extends Controller
             $entity->setName($entity->getAssignDoctor()->getProfile()->getName());
             $entity->setMobile($entity->getAssignDoctor()->getProfile()->getMobile());
             if(empty($entity->getDesignation())){
-                $entity->setDesignation($entity->getAssignDoctor()->getProfile()->getDesignation()->getName());
+               // $entity->setDesignation($entity->getAssignDoctor()->getProfile()->getDesignation()->getName());
             }
             $em->flush();
             $this->get('session')->getFlashBag()->add(

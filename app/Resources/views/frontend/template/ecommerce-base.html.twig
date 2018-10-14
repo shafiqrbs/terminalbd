@@ -57,14 +57,18 @@
 
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
-      <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />
+      <link href="/assets/template/desktop/{{ template }}/css/bootstrap.min.css" rel="stylesheet" />
+      <link href="/assets/template/desktop/{{ template }}/css/font-awesome.min.css" rel="stylesheet" />
+      <link href="/assets/template/desktop/{{ template }}/css/font-electro.css" rel="stylesheet" />
+      <link href="/assets/template/desktop/{{ template }}/css/electro.css" rel="stylesheet" />
+      <link href="/assets/template/desktop/{{ template }}/css/colors/yellow.css" rel="stylesheet" />
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     {% block cssBlock %}{% endblock %}
 </head>
-<body data-spy="scroll">
+<body data-spy="scroll" >
 {{ include('frontend/template/templateCustomize.html.twig')}}
 <!-- Navigation -->
 {% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'menu':menu.id}) %}
@@ -73,7 +77,7 @@
 {% if globalOption.templateCustomize.footerBlock == 1 %}
     {{ include('@Frontend/Template/Desktop/'~globalOption.siteSetting.theme.folderName~'/footer.html.twig') }}
 {% endif %}
-<footer id="footer">
+<footer id="footer" class="copyright-bar">
     <div class="container">
         <div class="row myfooter">
             <div class="col-sm-6">

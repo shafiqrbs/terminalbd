@@ -66,7 +66,6 @@ class CategoryRepository extends MaterializedPathRepository
 
                 if(in_array($row->getId(), $array)){
                     $tree .= '<option value="'.$row->getId().' >'.$row->getName() . "</option>";
-
                     array_push($exclude, $row->getId());
                     if ( $row->getId() < 6 )
                     { $top_level_on = $row->getId(); }
@@ -117,32 +116,106 @@ class CategoryRepository extends MaterializedPathRepository
         return $tempTree;
     }
 
-    public function printTree( $category , $spacing = '--', $user_tree_array = '' ) {
+    public function printCategoryTree($category,$parent = 0) {
 
         $em = $this->_em;
-        $user_tree_array = array();
+	    $trees = array();
+        /* @var $row Category */
+
         foreach ($category as $row )
         {
-            $user_tree_array[] = array("id" => $row->getId(), "name" => $spacing . $row->getName());
-            $user_tree_array = $this->printTree($row->getChildren(), $spacing . '--', $user_tree_array);
+	        $trees[] = array("id" => $row->getId(), "name" =>$row->getName(),'parent'=>$row->getParent()->getId());
+        	if(!empty($row->getChildren())){
+		      //  $trees[] = $this->printTree($row->getChildren(),$row->getId());
+	        }
         }
-        return $user_tree_array;
+        return $trees;
 
     }
 
-    public function  getReturnCategoryTree($category, $selected = '')
-    {
+	public function printTree( $category ,$parent = 0, $spacing = '--', $user_tree_array = '' ) {
 
-        $categoryTree = $this->printTree($category);
-        $tree='';
-        $tree .= "<select name='category' id='category' class='search-select search-field form-control'>";
-        $tree .= "<option value=''>Filter by Category</option>";
-        foreach($categoryTree as $row) {
-            $selected = ($selected === $row['id'])? 'selected="selected"':'';
-            $tree .= "<option ".$selected." value=".$row["id"].">".$row["name"]."</option>";
-        }
-        $tree .= "</select>";
-        return $tree;
+		$em = $this->_em;
+		$user_tree_array = array();
+		foreach ($category as $row )
+		{
+			$user_tree_array[] = array("id" => $row->getId(), "name" => $spacing . $row->getName());
+			if(!empty($row->getChildren()) and $row->getId() == $parent ) {
+				$user_tree_array[] = $this->printTree( $row->getChildren(), $row->getId(), $spacing . '--', $user_tree_array );
+			}
+		}
+		return $user_tree_array;
+
+	}
+
+
+	public function buildTreeDropDown(Array $data, $parent = 0){
+
+		$tree = array();
+		foreach ($data as $d) {
+			if ($d['parent'] == $parent) {
+				$children = $this->buildTreeDropDown($data, $d['id']);
+				// set a trivial key
+				if (!empty($children)) {
+					$d['_children'] = $children;
+				}
+				$tree[] = $d;
+			}
+		}
+		return $tree;
+	}
+
+	function printCatTree($tree, $r = 0, $p = null) {
+
+		$trees = '';
+		foreach ($tree as $i => $t) {
+			$dash = (!empty($t['parent']) and $t['parent'] == 0) ? '' : str_repeat('-', $r) .' ';
+			$trees .= sprintf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['name']);
+			if ($t['parent'] == $p) {
+				$r = 0;
+			}
+			if (isset($t['_children'])) {
+				$trees .= $this->printCatTree($t['_children'], ++$r, $t['parent']);
+			}
+		}
+		 return $trees;
+	}
+
+
+	function printCategoryCustomTree($category, $r = 0, $p = null) {
+
+		/* @var $row Category */
+
+	   $tree ='';
+	   foreach ($category as $row )
+	    {
+	    	$dash = ($row->getParent()->getId() == 0) ? '' : str_repeat('-', $r) .' ';
+		    $tree .="<option value='{$row->getId()}'>{$dash}{$row->getName()}</option>";
+			if ($row->getParent()->getId() == $p) {
+				$r = 0;
+			}
+			if(!empty($row->getChildren())) {
+				 $this->printCategoryTree($row->getChildren(), ++$r, $row->getParent()->getId());
+			}
+		}
+		return $tree;
+	}
+
+
+	public function  getReturnCategoryTree($cats, $selected = '')
+    {
+	    $trees =array();
+	    $categoryTree = $this->printTree($cats);
+	   // $trees = $this->printCatTree($categoryTree);
+	    $tree='';
+		$tree .= "<select name='category' id='category' class='search-select search-field form-control'>";
+		$tree .= "<option value=''>Filter by Category</option>";
+	    foreach($categoryTree as $row) {
+		    $selected = ($selected === $row['id'])? 'selected':'';
+		    $tree .= "<option ".$selected." value=".$row["id"].">".$row["name"]."</option>";
+	    }
+		$tree .= "</select>";
+		return $tree;
     }
 
     public function  getReturnCategoryTreeForMobile($category,$array = array())

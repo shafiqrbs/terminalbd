@@ -154,7 +154,7 @@ class CommissionController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-            return $this->redirect($this->generateUrl('hms_commission_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('hms_commission'));
         }
 
         return $this->render('HospitalBundle:Commission:index.html.twig', array(

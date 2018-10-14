@@ -1,3 +1,4 @@
+
 var owlCategory = $(".category-slider");
 owlCategory.owlCarousel({
     items: 4 ,
