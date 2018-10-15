@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem;
+use Appstore\Bundle\HospitalBundle\Entity\HmsStockOut;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -244,6 +245,24 @@ class ParticularRepository extends EntityRepository
                     $em->persist($particular);
                     $em->flush();
                 }
+            }
+        }
+    }
+
+    public function insertIssueItem(HmsStockOut $invoice){
+
+        $em = $this->_em;
+        /** @var InvoiceParticular $item */
+        if(!empty($invoice->getStockOutItems())){
+            foreach($invoice->getStockOutItems() as $item ){
+
+            	/** @var Particular  $particular */
+
+                $particular = $item->getParticular();
+	            $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+	            $particular->setSalesQuantity($qnt);
+	            $em->persist($particular);
+	            $em->flush();
             }
         }
     }

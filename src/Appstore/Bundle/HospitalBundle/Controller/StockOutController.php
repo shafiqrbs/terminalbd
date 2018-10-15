@@ -237,17 +237,19 @@ class StockOutController extends Controller
         ));
     }
 
-    public function approvedAction(HmsStockOut $purchase)
+    public function approvedAction(HmsStockOut $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($purchase)) {
+        if (!empty($entity) and $entity->getProcess() == "Done") {
             $em = $this->getDoctrine()->getManager();
-            $purchase->setProcess('Approved');
-            $purchase->setApprovedBy($this->getUser());
+	        $entity->setProcess('Approved');
+	        $entity->setApprovedBy($this->getUser());
             $em->flush();
-         //   $accountStockOut = $em->getRepository('AccountingBundle:AccountStockOut')->insertHmsAccountStockOut($purchase);
+          //  $accountStockOut = $em->getRepository('AccountingBundle:AccountStockOut')->insertHmsAccountStockOut($purchase);
           //  $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountStockOut);
-            return new Response('success');
+	        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertIssueItem($entity);
+
+	        return new Response('success');
         } else {
             return new Response('failed');
         }
@@ -282,7 +284,7 @@ class StockOutController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('HospitalBundle:HmsVendor')->find($id);
+        $entity = $em->getRepository('HospitalBundle:HmsStockOut')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -298,7 +300,7 @@ class StockOutController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('hms_vendor'));
+        return $this->redirect($this->generateUrl('hms_stockout'));
     }
 
 
