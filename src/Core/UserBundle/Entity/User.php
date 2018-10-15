@@ -609,7 +609,7 @@ class User extends BaseUser
      */
     protected $hmsInvoiceCreatedBy;
 
-/**
+	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
      */
     protected $hmsInvoiceApprovedBy;
@@ -634,6 +634,16 @@ class User extends BaseUser
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignDoctor" , cascade={"persist", "remove"})
      */
     protected $particularDoctor;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsStockOut", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $stockOut;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsStockOut", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $stockOutApprovedBy;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignOperator" , cascade={"persist", "remove"})

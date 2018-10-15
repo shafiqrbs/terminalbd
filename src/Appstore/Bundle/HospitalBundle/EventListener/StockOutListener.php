@@ -1,11 +1,11 @@
 <?php
 
-namespace Appstore\Bundle\AccountingBundle\EventListener;
+namespace Appstore\Bundle\HospitalBundle\EventListener;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\HospitalBundle\Entity\HmsStockOut;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-class AccountSalesListener
+class StockOutListener
 {
     public function prePersist(LifecycleEventArgs $args)
     {
@@ -17,14 +17,17 @@ class AccountSalesListener
         $entity = $args->getEntity();
 
         // perhaps you only want to act on some "Sales" entity
-        if ($entity instanceof AccountSales) {
+        if ($entity instanceof HmsStockOut) {
 
             $datetime = new \DateTime("now");
-
             $lastCode = $this->getLastCode($args, $datetime, $entity);
-
             $entity->setCode($lastCode+1);
-            $entity->setAccountRefNo(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),5, '0', STR_PAD_LEFT)));
+            if(empty($entity->getHospitalConfig()->getInvoicePrefix())){
+                $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            }else{
+                $entity->setInvoice(sprintf("%s%s%s", $entity->getHospitalConfig()->getInvoicePrefix(), $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            }
+
         }
     }
 
@@ -36,19 +39,17 @@ class AccountSalesListener
      */
     public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
     {
-	    $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
+        $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
-
-
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository('AccountingBundle:AccountSales')->createQueryBuilder('s');
+        $qb = $entityManager->getRepository('HospitalBundle:HmsStockOut')->createQueryBuilder('s');
 
         $qb
             ->select('MAX(s.code)')
-            ->where('s.globalOption = :globalOption')
+            ->where('s.hospitalConfig = :hospital')
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
-            ->setParameter('globalOption', $entity->getGlobalOption())
+            ->setParameter('hospital', $entity->getHospitalConfig())
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();

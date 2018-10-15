@@ -6,6 +6,10 @@ hospital_purchase:
     resource: "@HospitalBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
 
+hospital_stockout:
+    resource: "@HospitalBundle/Resources/config/routing/stockout.yml"
+    prefix:   /stock-out
+
 hospital_accessories_purchase:
     resource: "@HospitalBundle/Resources/config/routing/accessoriesPurchase.yml"
     prefix:   /accessories-purchase

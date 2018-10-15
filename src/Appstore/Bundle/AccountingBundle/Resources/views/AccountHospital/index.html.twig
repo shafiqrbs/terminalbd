@@ -100,6 +100,7 @@
 
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Mode</th>
@@ -113,6 +114,7 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.hmsInvoices is not empty %}{{ entity.hmsInvoices.invoice }} {% endif %}

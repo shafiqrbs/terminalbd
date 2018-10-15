@@ -52,6 +52,11 @@ class Particular
     private $purchaseItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsStockOutItem", mappedBy="particular")
+     **/
+    private $stockOutItems;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="particulars" )
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
@@ -443,7 +448,12 @@ class Particular
         return $this->name;
     }
 
-    public function getReferred(){
+    public function particularNameCode(){
+
+        return $this->particularCode.' - '.$this->name;
+    }
+
+     public function getReferred(){
 
         return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')/'.$this->getService()->getName();
     }
@@ -1293,21 +1303,7 @@ class Particular
         $this->purchasePrice = $purchasePrice;
     }
 
-    /**
-     * @return HmsServiceGroup
-     */
-    public function getHmsServiceGroup()
-    {
-        return $this->hmsServiceGroup;
-    }
 
-    /**
-     * @param HmsServiceGroup $hmsServiceGroup
-     */
-    public function setHmsServiceGroup($hmsServiceGroup)
-    {
-        $this->hmsServiceGroup = $hmsServiceGroup;
-    }
 
     /**
      * @return mixed

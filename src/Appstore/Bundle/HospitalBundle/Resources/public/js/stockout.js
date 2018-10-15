@@ -25,45 +25,25 @@ $(document).on("click", ".approve", function() {
     });
 });
 
-$(document).on('change', '.transactionMethod', function() {
-
-    var paymentMethod = $(this).val();
-
-    if( paymentMethod == 2){
-        $('#cartMethod').show();
-        $('#bkashMethod').hide();
-    }else if( paymentMethod == 3){
-        $('#bkashMethod').show();
-        $('#cartMethod').hide();
-    }else{
-        $('#cartMethod').hide();
-        $('#bkashMethod').hide();
-    }
-
-});
 
 $(document).on('change', '.particular', function() {
 
-    var url = $('#particular').val();
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#particularId').val(obj['particularId']);
-            $('#quantity').val(obj['quantity']);
-            $('#price').val(obj['price']);
-            $('#purchasePrice').val(obj['purchasePrice']);
-            $('#instruction').html(obj['instruction']);
-        }
-    })
+    var id = $(this).val();
+    var url = Routing.generate('hms_stockout_particular_search',{'id':id});
+    $.get(url, function( response ) {
+        obj = JSON.parse(response);
+        $('#particularId').val(obj['particularId']);
+        $('#quantity').val(obj['quantity']);
+        $('#price').val(obj['price']);
+    });
+
 });
 
 $(document).on('click', '#addParticular', function() {
 
     var particularId = $('#particularId').val();
     var quantity = $('#quantity').val();
-    var price = $('#purchasePrice').val();
+    var price = $('#price').val();
     var url = $('#addParticular').attr('data-url');
     if(particularId == ''){
         $('.msg-hidden').show();
@@ -73,7 +53,7 @@ $(document).on('click', '#addParticular', function() {
     }
     if(price == ''){
         $('.msg-hidden').show();
-        $('#msg').html('Please enter purchase price');
+        $('#msg').html('Please enter price');
         $('input[name=purchasePrice]').focus();
         return false;
     }
@@ -92,10 +72,10 @@ $(document).on('click', '#addParticular', function() {
             $('.dueAmount').html(obj['dueAmount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
-            $('#purchasePrice').val('');
-            $("#particular").select2().select2("val","");
+            $(".particular").select2().select2("val","");
             $('#price').val('');
             $('#quantity').val('1');
+
         }
     })
 });
@@ -104,12 +84,11 @@ $(document).on('change', '#discount', function() {
     var discount = parseInt($('#discount').val());
     var purchaseId = parseInt($('#purchaseId').val());
     $.ajax({
-        url: Routing.generate('hms_purchase_discount_update'),
+        url: Routing.generate('hms_stockout_discount_update'),
         type: 'POST',
         data:'discount=' + discount+'&invoice='+ purchaseId,
         success: function(response) {
             obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#subTotal').html(obj['subTotal']);
             $('#vat').val(obj['vat']);
             $('.grandTotal').html(obj['grandTotal']);
@@ -123,7 +102,7 @@ $(document).on('change', '#discount', function() {
     })
 });
 
-$('#invoiceParticulars').on("click", ".delete", function() {
+$('#invoiceParticulars').on("click", ".itemDelete", function() {
 
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
@@ -133,7 +112,6 @@ $('#invoiceParticulars').on("click", ".delete", function() {
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#subTotal').html(obj['subTotal']);
             $('#vat').val(obj['vat']);
             $('.grandTotal').html(obj['grandTotal']);
@@ -145,9 +123,9 @@ $('#invoiceParticulars').on("click", ".delete", function() {
     })
 });
 
-$(document).on('change', '#appstore_bundle_hospitalbundle_hmspurchase_payment', function() {
+$(document).on('change', '#stockout_payment', function() {
 
-    var payment     = parseInt($('#appstore_bundle_hospitalbundle_hmspurchase_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_hmspurchase_payment').val() : 0 );
+    var payment     = parseInt($('#stockout_payment').val()  != '' ? $('#stockout_payment').val() : 0 );
     var due =  parseInt($('#due').val());
     var dueAmount = (due - payment);
     if(dueAmount > 0){

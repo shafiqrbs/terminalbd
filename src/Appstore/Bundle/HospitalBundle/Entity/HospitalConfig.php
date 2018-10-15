@@ -33,6 +33,11 @@ class HospitalConfig
      **/
     private $hmsInvoices;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsStockOut", mappedBy="hospitalConfig")
+     **/
+    private $stockOuts;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCommission", mappedBy="hospitalConfig")
      **/
@@ -1053,6 +1058,13 @@ class HospitalConfig
     {
         return $this->hmsInvoiceTemporaryParticular;
     }
+
+	/**
+	 * @return HmsStockOut
+	 */
+	public function getStockOuts() {
+		return $this->stockOuts;
+	}
 
 
 }

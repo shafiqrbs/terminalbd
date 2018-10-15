@@ -9,6 +9,48 @@
     <div class="portlet-title">
         <div class="caption"><i class="icon-reorder"></i>Diagnostic Particulars</div>
     </div>
+    <div class="row-fluid particular-info" style="padding-left: 15px" >
+        <div class="row-fluid">
+        <div class="span7">
+            <select id="particular" name="particular" class="span12 select2">
+                <option value="">Test Name, Accessories, Surgery, Cabin etc. </option>
+                {{ particularService|raw }}
+            </select>
+        </div>
+        <div class="span2">
+            <div class="input-append span12" style="margin-bottom:0!important">
+                <div class="input-group">
+                                            <span class="input-group-btn">
+                                               <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity">
+                                                        <span class="fa fa-minus"></span>
+                                               </button>
+                                            </span>
+                    <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
+                    <span class="input-group-btn">
+                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
+                                                      <span class="fa fa-plus"></span>
+                                              </button>
+                                            </span>
+                </div>
+            </div>
+        </div>
+        <div class="span3">
+            <div class="input-append span11" style="margin-bottom:0!important">
+                <input type="hidden" id="particularId" name="particularId" value="">
+                <input type="text" class="m-wrap span8" id="price" name="price" value="" maxlength="8">
+                <div class="btn-group">
+                    <button type="button" class="btn blue" id="temporaryParticular" data-url="{{ path('hms_invoice_temporary_particular_add') }}" ><i class="icon-plus"></i> Add</button>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="row-fluid">
+            <div class="span12" id="instruction"></div>
+        </div>
+    </div>
+
+    <div class="clearfix">&nbsp;</div>
     <div class="row-fluid">
         <div class="span12" id="particular-table" style="background:#ffffff">
             <table class="table table-bordered table-striped table-condensed table-fixed">
@@ -77,56 +119,13 @@
         </div>
     </div>
 </div>
-<div class="clearfix">&nbsp;</div>
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption"><i class="icon-reorder"></i>Diagnostic Particulars</div>
+        <div class="caption"><i class="icon-reorder"></i>Patient Information</div>
     </div>
-    <div class="clearfix">&nbsp;</div>
     <div class="row-fluid" style="background: #ffffff">
         <div class="span9">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="row-fluid particular-info" >
-                        <div class="span7">
-                            <select id="particular" name="particular" class="span12 select2">
-                                <option value="">Test Name, Accessories, Surgery, Cabin etc. </option>
-                                {{ particularService|raw }}
-                            </select>
-                        </div>
-                        <div class="span2">
-                            <div class="input-append span12" style="margin-bottom:0!important">
-                                <div class="input-group">
-                                            <span class="input-group-btn">
-                                               <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity">
-                                                        <span class="fa fa-minus"></span>
-                                               </button>
-                                            </span>
-                                    <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
-                                    <span class="input-group-btn">
-                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
-                                                      <span class="fa fa-plus"></span>
-                                              </button>
-                                            </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="span3">
-                            <div class="input-append span11" style="margin-bottom:0!important">
-                                <input type="hidden" id="particularId" name="particularId" value="">
-                                <input type="text" class="m-wrap span8" id="price" name="price" value="" maxlength="8">
-                                <div class="btn-group">
-                                    <button type="button" class="btn blue" id="temporaryParticular" data-url="{{ path('hms_invoice_temporary_particular_add') }}" ><i class="icon-plus"></i> Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12" id="instruction"></div>
-            </div>
-            <div class="row-fluid">
+            <div class="clearfix">&nbsp;</div>
             <div class="row-fluid patient-info">
                 <div class="row-fluid customer-add">
                     <div class="span4">
@@ -205,6 +204,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="clearfix">&nbsp;</div>
                 <div class="row-fluid">
                     <div class="span12">
                         <label class="control-label red" for="firstName"><span><strong>Referred doctor/agent</strong></span>
@@ -271,7 +271,6 @@
                 </div>
             </div>
             <div class="clearfix">&nbsp;</div>
-        </div>
         </div>
         <div class="span3 payment-info">
             <div class="row-fluid">

@@ -23,6 +23,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.hospital.stockout.event.listener:
+        class: Appstore\Bundle\HospitalBundle\EventListener\StockOutListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.hospital.doctor.invoice.event.listener:
         class: Appstore\Bundle\HospitalBundle\EventListener\DoctorInvoiceListener
         tags:

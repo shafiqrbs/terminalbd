@@ -1257,7 +1257,11 @@ class TransactionRepository extends EntityRepository
     {
 
         $transaction = new Transaction();
-        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+	    $transaction->setGlobalOption($accountSales->getGlobalOption());
+	    if(!empty($accountSales->getBranches())){
+		    $transaction->setBranches($accountSales->getBranches());
+	    }
+	    $transaction->setAccountRefNo($accountSales->getAccountRefNo());
         $transaction->setProcessHead('Sales');
         $transaction->setProcess('Operating Revenue');
         $transaction->setUpdated($entity->getUpdated());
