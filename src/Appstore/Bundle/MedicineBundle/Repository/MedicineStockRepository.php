@@ -9,6 +9,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 
@@ -61,6 +62,74 @@ class MedicineStockRepository extends EntityRepository
         return $stock;
     }
 
+    public function getPurchaseDetails(MedicineConfig $config,MedicineStock $stock){
+
+    	$qb = $this->_em->createQueryBuilder();
+	    $qb->from('MedicineBundle:MedicinePurchaseItem','e');
+	    $qb->join('e.medicinePurchase','mp');
+	    $qb->select('e');
+	    $qb->where('e.medicineStock = :item')->setParameter('item',$stock->getId());
+	    $qb->andWhere('mp.medicineConfig = :config')->setParameter('config',$config->getId());
+	    $qb->orderBy('mp.created','DESC');
+	    $result = $qb->getQuery();
+	    return $result;
+
+    }
+
+    public function getPurchaseReturnDetails(MedicineConfig $config,MedicineStock $stock){
+
+    	$qb = $this->_em->createQueryBuilder();
+	    $qb->from('MedicineBundle:MedicinePurchaseReturnItem','e');
+	    $qb->join('e.medicinePurchaseReturn','mp');
+	    $qb->select('e');
+	    $qb->where('e.medicineStock = :item')->setParameter('item',$stock->getId());
+	    $qb->andWhere('mp.medicineConfig = :config')->setParameter('config',$config->getId());
+	    $qb->orderBy('mp.created','DESC');
+	    $result = $qb->getQuery();
+	    return $result;
+
+    }
+
+    public function getSalesDetails(MedicineConfig $config,MedicineStock $stock){
+
+    	$qb = $this->_em->createQueryBuilder();
+	    $qb->from('MedicineBundle:MedicineSalesItem','e');
+	    $qb->join('e.medicineSales','mp');
+	    $qb->select('e');
+	    $qb->where('e.medicineStock = :item')->setParameter('item',$stock->getId());
+	    $qb->andWhere('mp.medicineConfig = :config')->setParameter('config',$config->getId());
+	    $qb->orderBy('mp.created','DESC');
+	    $result = $qb->getQuery();
+	    return $result;
+
+    }
+
+    public function getSalesReturnDetails(MedicineConfig $config,MedicineStock $stock){
+
+    	$qb = $this->_em->createQueryBuilder();
+	    $qb->from('MedicineBundle:MedicineSalesReturn','e');
+	    $qb->select('e');
+	    $qb->where('e.medicineStock = :item')->setParameter('item',$stock->getId());
+	    $qb->andWhere('e.medicineConfig = :config')->setParameter('config',$config->getId());
+	    $qb->orderBy('e.created','DESC');
+	    $result = $qb->getQuery();
+	    return $result;
+
+    }
+
+    public function getDamageDetails(MedicineConfig $config,MedicineStock $stock){
+
+    	$qb = $this->_em->createQueryBuilder();
+	    $qb->from('MedicineBundle:MedicineDamage','e');
+	    $qb->select('e');
+	    $qb->where('e.medicineStock = :item')->setParameter('item',$stock->getId());
+	    $qb->andWhere('e.medicineConfig = :config')->setParameter('config',$config->getId());
+	    $qb->orderBy('e.created','DESC');
+	    $result = $qb->getQuery();
+	    return $result;
+
+    }
+
     public function findWithSearch($config,$data){
 
         $qb = $this->createQueryBuilder('e');
@@ -69,6 +138,18 @@ class MedicineStockRepository extends EntityRepository
         $qb->orderBy('e.sku','ASC');
         $qb->getQuery();
         return  $qb;
+    }
+
+    public function reportCurrentStockPrice(User $user)
+    {
+
+	    $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+	    $qb = $this->createQueryBuilder('e');
+	    $qb->select('SUM(e.purchasePrice * e.remainingQuantity) as purchasePrice, SUM(e.salesPrice * e.remainingQuantity) as salesPrice');
+	    $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+	    $result = $qb->getQuery()->getOneOrNullResult();
+	    return $result;
+
     }
 
 	public function findMedicineShortListCount($user)

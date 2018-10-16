@@ -1,0 +1,115 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN purchase_order HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="purchase_order-title">
+                    Medicine Purchase Overview
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Medicine Purchase Overview</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END purchase_order HEADER-->
+        <!-- BEGIN purchase_order CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box blue tabbable">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>System Overview</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="portlet-body form">
+                            <div class="form-actions portlet box green">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Medicine Current Stock Purchase & Sales Price</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <tr>
+                                    <th class="numeric" >Purchase Amount</th>
+                                    <td class="numeric" >{{ currentStockPrice.purchasePrice|number_format }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="numeric" >Sales Amount</th>
+                                    <td class="numeric" >{{ currentStockPrice.salesPrice|number_format }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="numeric" >Approximately Profit Amount</th>
+                                    <td class="numeric" >{{ (currentStockPrice.salesPrice - currentStockPrice.purchasePrice)|number_format }}</td>
+                                </tr>
+
+                            </table>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Purchase & Sales Overview</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span6">
+                                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                                        <tr><th class="numeric" >Total Amount</th><td>{{ accountPurchase.purchaseAmount|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Payment Amount</th><td>{{ accountPurchase.payment|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Due Amount</th><td>{{ (accountPurchase.purchaseAmount - accountPurchase.payment)|number_format }}</td></tr>
+                                    </table>
+                                </div>
+                                <div class="span6">
+                                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                                        <tr><th class="numeric" >Total Amount</th><td>{{ accountSales.totalAmount|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Payment Amount</th><td>{{ accountSales.receiveAmount|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Due Amount</th><td>{{ (accountSales.totalAmount - accountSales.receiveAmount)|number_format }}</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-actions portlet box red">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Current Capital</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                                        {% set payable = (accountPurchase.purchaseAmount - accountPurchase.payment) %}
+                                        {% set receivable = (accountSales.totalAmount - accountSales.receiveAmount) %}
+
+                                        <tr><th class="numeric" >Total Amount</th><td>{{ currentStockPrice.purchasePrice|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Purchase Payable Amount</th><td>({{ payable|number_format }})</td></tr>
+                                        <tr><th class="numeric" >Sales Receivable Amount</th><td>{{ (receivable)|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Current Investment</th><th>{{ (currentStockPrice.purchasePrice - payable + receivable)|number_format }}</th></tr>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    ApproveProcess();
+{% endblock %}
+
+
+
+
+

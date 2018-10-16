@@ -1131,6 +1131,8 @@ class Builder extends ContainerAware
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Manage Stock']->addChild('Stock Item Details', array('route' => 'medicine_purchase_item'))
                     ->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Manage Stock']->addChild('Stock Item History', array('route' => 'medicine_stock_item_history'))
+                    ->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Manage Stock']->addChild('Medicine Expiration', array('route' => 'medicine_expiry_item'))
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Manage Stock']->addChild('Medicine Short List', array('route' => 'medicine_stock_short_item'))
@@ -1161,11 +1163,11 @@ class Builder extends ContainerAware
                 $menu['Medicine']->addChild('Reports')
                     ->setAttribute('icon', 'icon icon-bar-chart')
                     ->setAttribute('dropdown', true);
-
-	            $menu['Medicine']['Reports']->addChild('Sales')
+	        $menu['Medicine']['Reports']->addChild('System Overview', array('route' => 'medicine_system_overview'))
+	                                    ->setAttribute('icon', 'icon-th-list');
+	        $menu['Medicine']['Reports']->addChild('Sales')
                     ->setAttribute('icon', 'icon icon-bar-chart')
                     ->setAttribute('dropdown', true);
-
                 $menu['Medicine']['Reports']['Sales']->addChild('Sales Summary', array('route' => 'medicine_report_sales_summary'))
                     ->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Sales']->addChild('Sales Details', array('route' => 'medicine_report_sales_details'))

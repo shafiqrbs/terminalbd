@@ -37,7 +37,7 @@ class AccountHeadController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('AccountingBundle:AccountHead')->findBy(array(),array('parent'=>'asc'));
+        $entities = $em->getRepository('AccountingBundle:AccountHead')->findBy(array(),array('parent'=>'asc','name'=>'asc'));
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:AccountHead:index.html.twig', array(
             'entities' => $pagination,

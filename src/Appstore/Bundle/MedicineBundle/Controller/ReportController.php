@@ -139,8 +139,7 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-
-        $purchaseCashOverview   = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
+	    $purchaseCashOverview   = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
         $transactionCash        = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseTransactionOverview($user,$data);
         $purchaseMode           = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseModeOverview($user,$data);
         $stockMode              = $em->getRepository('MedicineBundle:MedicinePurchase')->reportStockModeOverview($user,$data);
@@ -150,6 +149,28 @@ class ReportController extends Controller
             'transactionCash'                   => $transactionCash ,
             'purchaseMode'                      => $purchaseMode ,
             'stockMode'                         => $stockMode ,
+            'searchForm'                        => $data,
+
+        ));
+    }
+
+    public function systemOverviewAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+
+	    $currentStockPrice   = $em->getRepository('MedicineBundle:MedicineStock')->reportCurrentStockPrice($user);
+	    $accountPurchase   = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user->getGlobalOption(),$data);
+	    $accountSales   = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+	    $accountExpenditure   = $em->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+
+	    return $this->render('MedicineBundle:Report:systemOverview.html.twig', array(
+            'option'                            => $user->getGlobalOption() ,
+            'currentStockPrice'                 => $currentStockPrice ,
+            'accountPurchase'                   => $accountPurchase ,
+            'accountSales'                      => $accountSales ,
+            'accountExpenditure'                => $accountExpenditure ,
             'searchForm'                        => $data,
 
         ));

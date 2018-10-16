@@ -71,6 +71,46 @@ class MedicineStockController extends Controller
         ));
     }
 
+	public function stockItemHistoryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+	    $pagination = '';
+	    $entity = '';
+	    if(!empty($data['name']) and $data['report'] == 'Purchase'){
+		    $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('name'=> $data['name']));
+		    $entities = $em->getRepository('MedicineBundle:MedicineStock')->getPurchaseDetails($config,$entity);
+		    $pagination = $this->paginate($entities);
+	    }
+        if(!empty($data['name']) and $data['report'] == 'Purchase-Return'){
+		    $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('name'=> $data['name']));
+		    $entities = $em->getRepository('MedicineBundle:MedicineStock')->getPurchaseReturnDetails($config,$entity);
+		    $pagination = $this->paginate($entities);
+	    }
+        if(!empty($data['name']) and $data['report'] == 'Sales'){
+		    $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('name'=> $data['name']));
+		    $entities = $em->getRepository('MedicineBundle:MedicineStock')->getSalesDetails($config,$entity);
+		    $pagination = $this->paginate($entities);
+	    }
+        if(!empty($data['name']) and $data['report'] == 'Sales-Return'){
+		    $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('name'=> $data['name']));
+		    $entities = $em->getRepository('MedicineBundle:MedicineStock')->getSalesReturnDetails($config,$entity);
+		    $pagination = $this->paginate($entities);
+	    }
+        if(!empty($data['name']) and $data['report'] == 'Damage'){
+		    $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('name'=> $data['name']));
+		    $entities = $em->getRepository('MedicineBundle:MedicineStock')->getDamageDetails($config,$entity);
+		    $pagination = $this->paginate($entities);
+	    }
+
+        return $this->render('MedicineBundle:MedicineStock:itemDetails.html.twig', array(
+            'entity' => $entity,
+            'pagination' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
 
     public function newAction()
     {

@@ -142,7 +142,6 @@ class AccountSalesRepository extends EntityRepository
         $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
-
         $data =  array('totalAmount'=> $result['totalAmount'],'receiveAmount'=>$result['receiveAmount'],'dueAmount'=>$result['dueAmount'],'returnAmount'=>$result['returnAmount']);
         return $data;
 

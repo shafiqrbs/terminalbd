@@ -16,6 +16,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class MedicineDamageRepository extends EntityRepository
 {
+
+   public function findWithSearch(MedicineConfig $config)
+   {
+	    $qb = $this->createQueryBuilder('e');
+        $qb->select('e');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId());
+	    $qb->orderBy('e.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+   }
+
     public function damagePurchaseStockItemUpdate(MedicinePurchaseItem $item)
     {
         $qb = $this->createQueryBuilder('e');

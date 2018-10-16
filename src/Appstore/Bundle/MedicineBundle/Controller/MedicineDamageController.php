@@ -16,7 +16,20 @@ use Symfony\Component\HttpFoundation\Response;
 class MedicineDamageController extends Controller
 {
 
-    /**
+	public function paginate($entities)
+	{
+		$paginator = $this->get('knp_paginator');
+		$pagination = $paginator->paginate(
+			$entities,
+			$this->get('request')->query->get('page', 1)/*page number*/,
+			25  /*limit per page*/
+		);
+		$pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+		return $pagination;
+	}
+
+
+	/**
      * Lists all Damage entities.
      *
      */
@@ -26,9 +39,10 @@ class MedicineDamageController extends Controller
         $entity = new MedicineDamage();
         $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineDamage')->findBy(array('medicineConfig' => $config),array('created'=>'ASC'));
-        return $this->render('MedicineBundle:Damage:index.html.twig', array(
-            'entities' => $entities,
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineDamage')->findWithSearch($config);
+	    $pagination = $this->paginate($entities);
+	    return $this->render('MedicineBundle:Damage:index.html.twig', array(
+            'entities' => $pagination,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
