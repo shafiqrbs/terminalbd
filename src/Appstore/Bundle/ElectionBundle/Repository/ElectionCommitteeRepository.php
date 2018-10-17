@@ -15,6 +15,19 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class ElectionCommitteeRepository extends EntityRepository
 {
 
+	public function getCommittees(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('e');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->orderBy("e.updated",'DESC');
+		$qb->getMaxResults(0,5);
+		$results = $qb->getQuery()->getResult();
+		return $results;
+	}
+
 	public function getTypeBaseCommittee(ElectionConfig $config){
 
 		$qb = $this->createQueryBuilder('e');
@@ -38,6 +51,21 @@ class ElectionCommitteeRepository extends EntityRepository
 		$qb->andWhere("e.status = :status");
 		$qb->setParameter('status', 1);
 		$qb->groupBy('t.name');
+		$results = $qb->getQuery()->getArrayResult();
+		return $results;
+	}
+
+	public function getLocationGroupBaseCommittee(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.location','location');
+		$qb->leftJoin('location.locationType','type');
+		$qb->leftJoin('e.members','m');
+		$qb->select('type.name as locationName , COUNT(e.id) as countId, COUNT(m.id) as memberCount');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->groupBy('type.name');
 		$results = $qb->getQuery()->getArrayResult();
 		return $results;
 	}

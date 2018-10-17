@@ -37,7 +37,20 @@ class CampaignType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter campaign title'),
+	        ->add('electionSetup', 'entity', array(
+		        'required'    => true,
+		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionSetup',
+		        'empty_value' => '--- Choose the election name ---',
+		        'property' => 'electionName',
+		        'attr'=>array('class'=>'m-wrap span12 inputs'),
+		        'constraints' =>array( new NotBlank(array('message'=>'Choose the election name')) ),
+		        'query_builder' => function(EntityRepository $er){
+			        return $er->createQueryBuilder('e')
+			                  ->where("e.status = 1");
+		        },
+	        ))
+
+	        ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter campaign title'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter particular name')),
                 )

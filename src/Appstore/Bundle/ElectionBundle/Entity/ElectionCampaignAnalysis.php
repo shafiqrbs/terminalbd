@@ -35,8 +35,12 @@ class ElectionCampaignAnalysis
      **/
     private  $analysisType;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="campaigns")
+	 **/
+	protected $electionSetup;
 
-    /**
+	/**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="campaignAnalysisPriority" , cascade={"detach","merge"} )
      **/
     private  $priority;
@@ -287,6 +291,20 @@ class ElectionCampaignAnalysis
 	 */
 	public function setLocation( $location ) {
 		$this->location = $location;
+	}
+
+	/**
+	 * @return ElectionSetup
+	 */
+	public function getElectionSetup() {
+		return $this->electionSetup;
+	}
+
+	/**
+	 * @param ElectionSetup $electionSetup
+	 */
+	public function setElectionSetup( $electionSetup ) {
+		$this->electionSetup = $electionSetup;
 	}
 
 

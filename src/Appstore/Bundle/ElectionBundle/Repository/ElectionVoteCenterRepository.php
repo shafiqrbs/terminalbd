@@ -17,6 +17,18 @@ use Doctrine\ORM\EntityRepository;
 class ElectionVoteCenterRepository extends EntityRepository
 {
 
+	public function getUnionWiseVoter(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('e.memberUnion as unionName,COUNT(e.id) as totalCenter,SUM(e.totalVoter) as totalVoter');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->groupBy('e.memberUnion');
+		$results = $qb->getQuery()->getArrayResult();
+		return $results;
+	}
+
 
 	public function getUnionBaseVoteCenter(ElectionConfig $config)
 	{

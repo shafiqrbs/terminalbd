@@ -17,7 +17,21 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class ElectionCampaignAnalysisRepository extends EntityRepository
 {
 
-	public function getAnalysisBaseEvent(ElectionConfig $config){
+
+	public function getCampaigns(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('e');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->orderBy("e.updated",'DESC');
+		$qb->getMaxResults(0,5);
+		$results = $qb->getQuery()->getResult();
+		return $results;
+	}
+
+	public function getAnalysisType(ElectionConfig $config){
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.analysisType','t');

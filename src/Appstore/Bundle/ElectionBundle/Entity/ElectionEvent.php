@@ -30,6 +30,11 @@ class ElectionEvent
     private  $electionConfig;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="events")
+	 **/
+	protected $electionSetup;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="events")
 	 **/
 	protected $location;
@@ -426,14 +431,14 @@ class ElectionEvent
 	}
 
 	/**
-	 * @return mixed
+	 * @return ElectionParticular
 	 */
 	public function getEventType() {
 		return $this->eventType;
 	}
 
 	/**
-	 * @param mixed $eventType
+	 * @param ElectionParticular $eventType
 	 */
 	public function setEventType( $eventType ) {
 		$this->eventType = $eventType;
@@ -594,6 +599,20 @@ class ElectionEvent
 	 */
 	public function getEventMembers() {
 		return $this->eventMembers;
+	}
+
+	/**
+	 * @return ElectionSetup
+	 */
+	public function getElectionSetup() {
+		return $this->electionSetup;
+	}
+
+	/**
+	 * @param ElectionSetup $electionSetup
+	 */
+	public function setElectionSetup( $electionSetup ) {
+		$this->electionSetup = $electionSetup;
 	}
 
 

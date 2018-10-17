@@ -50,6 +50,16 @@ class ElectionSetup
 	protected $electionCommittees;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEvent", mappedBy="electionSetup")
+	 **/
+	protected $events;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCampaignAnalysis", mappedBy="electionSetup")
+	 **/
+	protected $campaigns;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", mappedBy="electionSetup")
 	 **/
 	protected $candidates;
@@ -421,6 +431,15 @@ class ElectionSetup
 
 	}
 
+	public function getSetupName(){
+
+		$year = $this->getElectionDate()->format('y');
+		$type = $this->getElectionType()->getName();
+		$data = $type.' - '.$year.', '.$this->getLocation()->getName();
+		return $data;
+
+	}
+
 	/**
 	 * @return int
 	 */
@@ -585,6 +604,21 @@ class ElectionSetup
 	public function getElectionCommittees() {
 		return $this->electionCommittees;
 	}
+
+	/**
+	 * @return ElectionEvent
+	 */
+	public function getEvents() {
+		return $this->events;
+	}
+
+	/**
+	 * @return ElectionCampaignAnalysis
+	 */
+	public function getCampaigns() {
+		return $this->campaigns;
+	}
+
 
 
 }

@@ -11,48 +11,62 @@
                 </div>
                 <div class="portlet-body">
                     <div class="row-fluid">
-                        <div class="span4 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                             <div class="dashboard-stat green">
                                 <div class="visual">
                                     <i class="icon-group"></i>
                                 </div>
                                 <div class="details">
                                     <div class="number">
-                                        1349
+                                        {{ members.totalMember }}
                                     </div>
                                     <div class="desc">
                                         Total Member
                                     </div>
                                 </div>
-                                <a class="more" href="{{ path('vendor_user') }}">
+                                <a class="more" href="{{ path('election_member') }}">
                                     View more <i class="m-icon-swapright m-icon-white"></i>
                                 </a>
                             </div>
                         </div>
-                        <div class="span4 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                             <div class="dashboard-stat blue">
                                 <div class="visual">
                                     <i class="icon-group"></i>
                                 </div>
                                 <div class="details">
-                                    <div class="number">549</div>
+                                    <div class="number"> {{ members.male }}</div>
                                     <div class="desc">Male Member</div>
                                 </div>
-                                <a class="more" href="{{ path('vendor_user') }}">
+                                <a class="more" href="{{ path('election_member') }}">
                                     View more <i class="m-icon-swapright m-icon-white"></i>
                                 </a>
                             </div>
                         </div>
-                        <div class="span4 responsive" data-tablet="span6  fix-offset" data-desktop="span3">
+                        <div class="span3 responsive" data-tablet="span6  fix-offset" data-desktop="span3">
                             <div class="dashboard-stat yellow">
                                 <div class="visual">
                                     <i class="icon-group"></i>
                                 </div>
                                 <div class="details">
-                                    <div class="number">+89%</div>
+                                    <div class="number">{{ members.female }}</div>
                                     <div class="desc">Female Member</div>
                                 </div>
-                                <a class="more" href="{{ path('vendor') }}">
+                                <a class="more" href="{{ path('election_member') }}">
+                                    View more <i class="m-icon-swapright m-icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="span3 responsive" data-tablet="span6  fix-offset" data-desktop="span3">
+                            <div class="dashboard-stat purple">
+                                <div class="visual">
+                                    <i class="icon-group"></i>
+                                </div>
+                                <div class="details">
+                                    <div class="number">{{ setup.totalVoter|number_format }}</div>
+                                    <div class="desc">Voters </div>
+                                </div>
+                                <a class="more" href="{{ path('election_votecenter') }}">
                                     View more <i class="m-icon-swapright m-icon-white"></i>
                                 </a>
                             </div>
@@ -71,82 +85,54 @@
                     <div class="row-fluid">
                         <div class="span8">
                             <div class="row-fluid">
-                             fbdfdfh
+                                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
                         <div class="span4">
                             <div class="row-fluid">
-                                <div class="portlet box blue" style="margin-bottom: -1px!important;">
+                                <div class="portlet box red">
                                     <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>Social Icons(Colored)</div>
+                                        <div class="caption"><i class="icon-reorder"></i>Election Result</div>
                                         <div class="actions">
                                             <div class="btn-group">
-                                                <a class="btn red " href="{{ path('election_candidate_new') }}"><i class="icon-plus-sign"></i>&nbsp;32452734</a>
+                                                <a class="btn red " href="{{ path('election_setup_matrix',{'id':setup.id}) }}"></a>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>Social Icons(Colored)</div>
-                                        <div class="actions">
-                                            <div class="btn-group">
-                                                <a class="btn red " href="{{ path('election_candidate_new') }}"><i class="icon-plus-sign"></i>&nbsp;32452734</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>Social Icons(Colored)</div>
-                                        <div class="actions">
-                                            <div class="btn-group">
-                                                <a class="btn red " href="{{ path('election_candidate_new') }}"><i class="icon-plus-sign"></i>&nbsp;32452734</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span6" style="margin-top:-10px">
+                                    <div class="clearfix"></div>
                                     <div class="portlet-body">
-                                        <a href="{{ path('account_sales_medicine_outstanding') }}" class="icon-btn">
-                                            <div> Total Voter <br/> <span style="color: red">44,555,666,888</span> </div>
-                                        </a>
-                                        <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
-                                            <div> Total Voter Caste <br/> <span style="color: red">44,555,666,888</span> </div>
-                                        </a>
-                                        <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
-                                            <div> Total Vote Center <br/> <span style="color: red">50</span> </div>
-                                        </a>
-                                        <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
-                                            <div> Casted Center <br/> <span style="color: red">40</span> </div>
-                                        </a>
-
-
+                                    <div class="row-fluid">
+                                        <div class="span6" style="margin-top:-10px">
+                                            <div class="portlet-body">
+                                                <a href="{{ path('election_setup_matrix',{'id':setup.id}) }}" class="icon-btn">
+                                                    <div> Total Voter <br/> <span style="color: red">{{ setup.totalVoter }}</span> </div>
+                                                </a>
+                                                <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
+                                                    <div> Total Center <br/> <span style="color: red">{{ setup.voteCenter }}</span> </div>
+                                                </a>
+                                                <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
+                                                    <div> Hold  Center <br/> <span style="color: red">{{ setup.holdVoteCenter }}</span> </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="span6" style="margin-top:-10px">
+                                            <div class="portlet-body">
+                                                <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
+                                                    <div> Total Vote Cast <br/> <span style="color: red">{{ setup.resultTotalVote }}</span> </div>
+                                                </a>
+                                                <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
+                                                    <div> Casted Center <br/> <span style="color: red">{{ setup.activeVoteCenter }}</span> </div>
+                                                </a>
+                                                <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
+                                                    <div> Rejected Center <br/> <span style="color: red">{{ setup.rejectedVoteCenter }}</span> </div>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="span6" style="margin-top:-10px">
-                                    <div class="portlet-body">
-                                        <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
-                                            <div> Male Voter <br/> <span style="color: red">44,555,666,888</span> </div>
-                                        </a>
-                                        <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
-                                            <div> Female Voter <br/> <span style="color: red">44,555,666,888</span> </div>
-                                        </a>
-                                        <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
-                                            <div> Others Voter <br/> <span style="color: red">44,555,666,888</span> </div>
-                                        </a>
-                                        <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
-                                            <div> Invalid Voter <br/> <span style="color: red">44,555,666,888</span> </div>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -156,104 +142,115 @@
         <div class="row-fluid">
             <div class="portlet box green">
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-reorder"></i>Election Result</div>
+                    <div class="caption"><i class="icon-reorder"></i>Union Base Member Chart</div>
                 </div>
                 <div class="portlet-body">
                     <div class="row-fluid">
-                        <div class="span8">
+                        <div class="span12">
                             <div class="row-fluid">
-                                fbdfdfh
-                            </div>
-                        </div>
-                        <div class="span4">
-                            <div class="row-fluid">
-                                <div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>Social Icons(Colored)</div>
-                                        <div class="actions">
-                                            <div class="btn-group">
-                                                <a class="btn red " href="{{ path('election_candidate_new') }}"><i class="icon-plus-sign"></i>&nbsp;32452734</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>Social Icons(Colored)</div>
-                                        <div class="actions">
-                                            <div class="btn-group">
-                                                <a class="btn red " href="{{ path('election_candidate_new') }}"><i class="icon-plus-sign"></i>&nbsp;32452734</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>Social Icons(Colored)</div>
-                                        <div class="actions">
-                                            <div class="btn-group">
-                                                <a class="btn red " href="{{ path('election_candidate_new') }}"><i class="icon-plus-sign"></i>&nbsp;32452734</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span6" style="margin-top:-10px">
-                                    <div class="portlet-body">
-                                        <a href="{{ path('account_sales_medicine_outstanding') }}" class="icon-btn">
-                                            <span class="badge badge-success">4000</span>
-                                            <div> Customer </div>
-                                        </a>
-                                        <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
-                                            <span class="badge badge-success">4000</span>
-                                            <div> Sales </div>
-                                        </a>
-                                        <a href="{{ path('account_purchase_medicine_outstanding') }}" class="icon-btn">
-                                            <span class="badge badge-success">4000</span>
-                                            <div> Vendor </div>
-                                        </a>
-                                        <a href="{{ path('medicine_report_purchase_summary') }}" class="icon-btn">
-                                            <span class="badge badge-success">4000</span>
-                                            <div> Purchase </div>
-                                        </a>
-
-                                    </div>
-
-                                </div>
-                                <div class="span6" style="margin-top:-10px">
-                                    <div class="portlet-body">
-                                        <a href="{{ path('medicine_stock') }}" class="icon-btn">
-                                            <i class="icon-bar-chart"></i>
-                                            <div> Stock </div>
-                                        </a>
-                                        <a href="{{ path('medicine_stock_short_item') }}" class="icon-btn">
-                                            <i class="icon-signal"></i>
-                                            <div> Short List </div>
-                                            <span class="badge badge-important"></span>
-                                        </a>
-                                        <a href="{{ path('medicine_purchase_item') }}" class="icon-btn">
-                                            <i class=" icon-list-ol"></i>
-                                            <div> Expiration </div>
-                                            <span class="badge badge-important"></span>
-                                        </a>
-                                        <a href="{{ path('medicine_expiry_item') }}" class="icon-btn">
-                                            <i class="icon-th"></i>
-                                            <div> Stock Details </div>
-                                        </a>
-                                    </div>
-                                </div>
+                                <div id="chartOfUnion" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
+        <div class="row-fluid">
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-reorder"></i>Union Base Voter Center & Voter</div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="row-fluid">
+                                <div id="chartOfUnionVoter" style="height: 300px; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>Location Base Committees</div>
+            </div>
+            <div class="portlet-body">
+                <div class="row-fluid">
+                    <div class="span6">
+                        {% for type in typeBaseCommittees %}
+                            <div class="row-fluid">
+                                <div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption"><i class="icon-reorder"></i>{{ type.locationName }}</div>
+                                        <div class="actions">
+                                            <div class="btn-group">
+                                                <a class="btn yellow " href="javascript:">Committee:&nbsp;{{ type.countId }}</a>
+                                                <a class="btn red " href="javascript:">Member:&nbsp;{{ type.memberCount }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="span6">
+                        {% for type in typeBaseCommittees %}
+                            <div class="row-fluid">
+                                <div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption"><i class="icon-reorder"></i>{{ type.locationName }}</div>
+                                        <div class="actions">
+                                            <div class="btn-group">
+                                                <a class="btn yellow " href="javascript:">Committee:&nbsp;{{ type.countId }}</a>
+                                                <a class="btn red " href="javascript:">Member:&nbsp;{{ type.memberCount }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="portlet box blue">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-comments"></i>Latest Events</div>
+                        <div class="actions">
+                            <a href="{{ path('election_event') }}" class="btn blue"> All Events</a>
+                        </div>
+                    </div>
+                    <div class="portlet-body fuelux">
+                        <ul>
+                            {% for event in events %}
+                                <li><a data-title="{{ event.name }}" class="view" href="javascript:" data-url="{{ path('election_event_show', { 'id': event.id }) }}" >{{ event.eventDate|date('d-m-Y') }} {{ event.eventTime }}: {{ event.name }} - {{ event.location.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="portlet box grey">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-comments"></i>Latest Campaign</div>
+                        <div class="actions">
+                            <a href="{{ path('election_campaign') }}" class="btn blue"> All Campaigns</a>
+                        </div>
+                    </div>
+                    <div class="portlet-body fuelux">
+                        <ul>
+                            {% for campaign in campaigns %}
+                                <li><a data-title="{{ campaign.name }}" class="view" href="javascript:" data-url="{{ path('election_campaign_edit', { 'id': campaign.id }) }}" >{{ campaign.updated|date('d-m-Y') }} : {{ campaign.name }} - {{ campaign.location.name }}, {{ campaign.analysisType.name }} & {{ campaign.priority.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <style>
             /***
 Dashboard Stats 2
@@ -585,7 +582,7 @@ Dashboard Stats 2
         <div class="portlet-body">
             <div class="row-fluid" >
                 <div class="span8">
-                    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                    <div id="" style="height: 300px; width: 100%;"></div>
                 </div>
                 <div class="span4">
                     <div id="userDailySales" style="height: 300px; width: 100%;"></div>
@@ -1326,7 +1323,95 @@ Dashboard Stats 2
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@MedicineBundle/Resources/public/js/jquery-canvas.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+
 {% block documentready %}
     {{ parent() }}
+
+    window.onload = function () {
+
+        var optionsElection = {
+        animationEnabled: true,
+        title: {
+        text: "Election Result - {{ setup.setupName }}, Total Vote :{{ setup.resultTotalVote }} "
+        },
+        axisY: {
+        title: "Growth Rate (in %)",
+        suffix: "%",
+        includeZero: false
+        },
+        axisX: {
+        title: "Election Result - {{ setup.setupName }}, Total Vote :{{ setup.resultTotalVote }}"
+        },
+        data: [{
+        type: "column",
+        yValueFormatString: "#,##0.0#"%"",
+        dataPoints: [
+        {% for employee in setup.candidates %}
+            { label: "{{ employee.marka.name|capitalize }}", y: {% if employee is defined and employee is not empty %} {{ ((employee.totalVote * 100)/setup.resultTotalVote)|number_format }}{% else %}0{% endif %} , indexLabel: "BDT {% if  employee is defined and employee is not empty %} {{ employee.totalVote|number_format }}{% else %}0{% endif %}" },
+        {% endfor %}
+        ]
+        }]
+        };
+        $("#chartContainer").CanvasJSChart(optionsElection);
+
+        var unionBaseMember = {
+        animationEnabled: true,
+        title: {
+        text: "Union Base Member - {{ members.totalMember }}"
+        },
+        axisY: {
+        title: "Growth Rate (in %)",
+        suffix: "%",
+        includeZero: false
+        },
+        axisX: {
+        title: "Union Base Voter"
+        },
+        data: [{
+        type: "column",
+        yValueFormatString: "#,##0.0#"%"",
+        dataPoints: [
+        {% for unionMember in unionMembers %}
+            { label: "{{ unionMember.unionName|capitalize }}", y: {% if unionMember is defined and unionMember is not empty %} {{ ((unionMember.total * 100)/members.totalMember) }}{% else %}0{% endif %} , indexLabel: "Member {% if  unionMember is defined and unionMember is not empty %} {{ unionMember.total }}{% else %}0{% endif %}" },
+        {% endfor %}
+        ]
+        }]
+        };
+        $("#chartOfUnion").CanvasJSChart(unionBaseMember);
+
+        var unionBaseVoter = {
+        animationEnabled: true,
+        title: {
+        text: "Total Center - {{ setup.voteCenter }}"
+        },
+        axisY: {
+        title: "Growth Rate (in %)",
+        suffix: "%",
+        includeZero: false
+        },
+        axisX: {
+        title: "Total Voter - {{ setup.totalVoter }}"
+        },
+        data: [{
+        type: "column",
+        yValueFormatString: "#,##0.0#"%"",
+        dataPoints: [
+        {% for unionMember in unionVoters %}
+            { label: "{{ unionMember.unionName|capitalize }}", y: {% if unionMember is defined and unionMember is not empty %} {{ ((unionMember.totalVoter * 100)/setup.totalVoter)|number_format }}{% else %}0{% endif %} , indexLabel: "Center: {% if  unionMember is defined and unionMember is not empty %} {{ unionMember.totalCenter }} & Voter: {{ unionMember.totalVoter }}{% else %}0{% endif %}" },
+        {% endfor %}
+        ]
+        }]
+        };
+        $("#chartOfUnionVoter").CanvasJSChart(unionBaseVoter);
+
+    }
 {% endblock %}
 

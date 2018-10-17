@@ -135,8 +135,11 @@ class VotecenterController extends Controller
 
 		$editForm = $this->createEditForm($entity);
 		$editForm->handleRequest($request);
-		$data = $request->request->all();
 		if ($editForm->isValid()) {
+			$entity->setVoteCenterName($entity->getLocation()->getName());
+			$entity->setMemberUnion($entity->getLocation()->getParent()->getName());
+			$entity->setThana($entity->getLocation()->getParent()->getParent()->getName());
+			$entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been changed successfully"

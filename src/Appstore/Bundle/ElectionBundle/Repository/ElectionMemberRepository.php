@@ -31,24 +31,40 @@ class ElectionMemberRepository extends EntityRepository
 
     }
 
-    public function getGenderBaseMember(ElectionConfig $config){
+    public function getGenderBaseMember(ElectionConfig $config,$type = 'member'){
 
 	    $qb = $this->createQueryBuilder('e');
 	    $qb->select('e.gender as gender, COUNT(e.id) as countId');
 	    $qb->where('e.electionConfig='.$config->getId());
 	    $qb->andWhere("e.memberType = :type");
-	    $qb->setParameter('type', 'member');
+	    $qb->setParameter('type', $type);
 	    $qb->andWhere("e.status = :status");
 	    $qb->setParameter('status', 1);
 	    $qb->groupBy('e.gender');
+	    $qb->orderBy('e.gender','ASC');
 	    $results = $qb->getQuery()->getArrayResult();
-	    return $results;
+	    $totalMembers = ($results[0]['countId'] + $results[1]['countId']);
+	    $data = array('totalMember' => $totalMembers,'male' =>$results[1]['countId'],'female' => $results[0]['countId']);
+	    return $data;
+    }
+
+    public function getGenderBaseVoter(ElectionConfig $config){
+
+	    $qb = $this->createQueryBuilder('e');
+	    $qb->select('COUNT(e.id) as totalVoters');
+	    $qb->where('e.electionConfig='.$config->getId());
+	    $qb->andWhere("e.memberType = :type");
+	    $qb->setParameter('type', 'voter');
+	    $qb->andWhere("e.status = :status");
+	    $qb->setParameter('status', 1);
+	    $result = $qb->getQuery()->getOneOrNullResult();
+	    return $result['totalVoters'];
     }
 
     public function getUnionWiseMember(ElectionConfig $config){
 
 	    $qb = $this->createQueryBuilder('e');
-	    $qb->select('e.memberUnion as unionName,COUNT(e.id) as countId');
+	    $qb->select('e.memberUnion as unionName,COUNT(e.id) as total');
 	    $qb->where('e.electionConfig='.$config->getId());
 	    $qb->andWhere("e.memberType = :type");
 	    $qb->setParameter('type', 'member');

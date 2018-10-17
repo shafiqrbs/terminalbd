@@ -20,6 +20,19 @@ class ElectionEventRepository extends EntityRepository
 {
 
 
+	public function getEvents(ElectionConfig $config){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('e');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->orderBy("e.updated",'DESC');
+		$qb->getMaxResults(0,5);
+		$results = $qb->getQuery()->getResult();
+		return $results;
+	}
+
 	public function getTypeBaseEvent(ElectionConfig $config){
 
 		$qb = $this->createQueryBuilder('e');
