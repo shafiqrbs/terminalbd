@@ -20,7 +20,7 @@ class MemberListener
         if ($entity instanceof ElectionMember) {
             $lastCode = $this->getLastCode($args,$entity);
 	        $entity->setCode($lastCode + 1);
-	        $entity->setMemberId(sprintf("%s%s", $entity->getElectionConfig()->getParliament()->getSku(), str_pad($entity->getCode(), 6, '0', STR_PAD_LEFT)));
+	        $entity->setMemberId(sprintf("%s%s", $entity->getElectionConfig()->getGlobalOption()->getId(), str_pad($entity->getCode(), 5, '0', STR_PAD_LEFT)));
         }
     }
 

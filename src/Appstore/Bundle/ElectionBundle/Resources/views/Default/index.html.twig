@@ -171,51 +171,67 @@
                 </div>
             </div>
         </div>
-        <div class="portlet box green">
-            <div class="portlet-title">
-                <div class="caption"><i class="icon-reorder"></i>Location Base Committees</div>
-            </div>
-            <div class="portlet-body">
-                <div class="row-fluid">
-                    <div class="span6">
-                        {% for type in typeBaseCommittees %}
-                            <div class="row-fluid">
-                                <div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>{{ type.locationName }}</div>
-                                        <div class="actions">
-                                            <div class="btn-group">
-                                                <a class="btn yellow " href="javascript:">Committee:&nbsp;{{ type.countId }}</a>
-                                                <a class="btn red " href="javascript:">Member:&nbsp;{{ type.memberCount }}</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Location Base Committees</div>
                     </div>
-                    <div class="span6">
-                        {% for type in typeBaseCommittees %}
-                            <div class="row-fluid">
-                                <div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>{{ type.locationName }}</div>
-                                        <div class="actions">
-                                            <div class="btn-group">
-                                                <a class="btn yellow " href="javascript:">Committee:&nbsp;{{ type.countId }}</a>
-                                                <a class="btn red " href="javascript:">Member:&nbsp;{{ type.memberCount }}</a>
+                    <div class="portlet-body">
+                        <div class="row-fluid">
+                            <div class="span12">
+                                {% for type in typeBaseCommittees %}
+                                    <div class="row-fluid">
+                                        <div class="portlet box blue">
+                                            <div class="portlet-title">
+                                                <div class="caption"><i class="icon-reorder"></i>{{ type.locationName }}</div>
+                                                <div class="actions">
+                                                    <div class="btn-group">
+                                                        <a class="btn yellow " href="javascript:">Committee:&nbsp;{{ type.countId }}</a>
+                                                        <a class="btn red " href="javascript:">Member:&nbsp;{{ type.memberCount }}</a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="portlet box blue">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>{{ setup.setupName }} Candidate</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row-fluid">
+                            <div class="span12">
+                                {% for candidate in setup.candidates %}
+                                    <div class="row-fluid">
+                                        <div class="portlet box grey">
+                                            <div class="portlet-title">
+                                                <div class="caption"><i class="icon-user"></i>{{ candidate.name }}</div>
+                                                <div class="actions">
+                                                    <div class="btn-group">
+                                                        <a class="btn yellow " href="javascript:"><i class="icon-phone"></i>&nbsp;{{ candidate.mobile }}</a>
+                                                        <a class="btn red " href="javascript:">{{ candidate.marka.name }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span6">
+            <div class="span5">
                 <div class="portlet box blue">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-comments"></i>Latest Events</div>
@@ -232,7 +248,7 @@
                     </div>
                 </div>
             </div>
-            <div class="span6">
+            <div class="span5">
                 <div class="portlet box grey">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-comments"></i>Latest Campaign</div>
@@ -248,6 +264,39 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+            <div class="span2">
+                <div class="row-fluid">
+                    <div class="portlet box red">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Election Result</div>
+                            <div class="actions">
+                                <div class="btn-group">
+                                    <a class="btn red " href="{{ path('election_setup_matrix',{'id':setup.id}) }}"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="portlet-body">
+                            <div class="row-fluid">
+                                <div class="span12" style="margin-top:-10px">
+                                    <div class="portlet-body">
+                                        <a href="{{ path('election_setup_matrix',{'id':setup.id}) }}" class="icon-btn">
+                                            <div> Total Voter <br/> <span style="color: red">{{ setup.totalVoter }}</span> </div>
+                                        </a>
+                                        <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
+                                            <div> Total Center <br/> <span style="color: red">{{ setup.voteCenter }}</span> </div>
+                                        </a>
+                                        <a href="{{ path('medicine_report_sales_summary') }}" class="icon-btn">
+                                            <div> Hold  Center <br/> <span style="color: red">{{ setup.holdVoteCenter }}</span> </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
