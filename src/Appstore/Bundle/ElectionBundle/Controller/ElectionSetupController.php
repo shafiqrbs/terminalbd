@@ -365,6 +365,30 @@ class ElectionSetupController extends Controller
 		exit;
 	}
 
+	public function centerCandidateTotalVoteUpdateAction(Request $request)
+	{
+		$data = $_REQUEST;
+		$matrixId = (int)$data['matrixId'];
+		$totalVoter = (int)$data['centerCandidateVote'];
+		$em = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('ElectionBundle:ElectionVoteMatrix')->find($matrixId);
+		if(!empty($entity)){
+			$entity->setTotalVoter($totalVoter);
+			$em->flush();
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteMatrix')->updateTotalVote($entity->getCandidate());
+			$res = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCandidate')->updateTotalVote($entity->getCandidate(),$data);
+			$result = array(
+				'candidateId'   =>  $res->getId(),
+				'maleVote'      =>  $res->getMaleVote(),
+				'femaleVote'    =>  $res->getFemaleVote(),
+				'otherVote'     =>  $res->getOtherVote(),
+				'totalVote'     =>  $res->getTotalVote()
+			);
+			return new Response(json_encode($result));
+		}
+		exit;
+	}
+
 	public function resultGenerateAction($id)
 	{
 		set_time_limit(0);

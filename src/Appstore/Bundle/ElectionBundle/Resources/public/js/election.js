@@ -39,6 +39,17 @@ function submitCountVote(url) {
 
 }
 
+$(document).on('keyup', '.centerCandidateTotalVote', function() {
+
+    var id = $(this).attr("data-id");
+    var centerCandidateVote   = parseInt($('#totalVoter-' + id).val()  != '' ? $('#totalVoter-' + id).val() : 0 );
+    var url = Routing.generate('election_matrix_centercandidatetotalvoteupdate', {
+        'matrixId': id,
+        'centerCandidateVote': centerCandidateVote
+    });
+    setTimeout(submitCountVote(url),1000)
+});
+
 $(document).on('keyup', '.resultTotalVote , .resultInvalidVote', function() {
 
     var id = $(this).attr("data-id");

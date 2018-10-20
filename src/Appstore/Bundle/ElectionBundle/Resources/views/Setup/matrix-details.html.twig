@@ -77,11 +77,18 @@
                                             <span class="span12 pull-center"><strong>{{ candidate.marka.name }}</strong></span>
                                         </div>
                                         <div class="row-fluid" style="border-top: 1px solid red">
-                                            <span class="span12 pull-center">Total</span>
+                                            <span class="span3 pull-center">Male</span>
+                                            <span class="span3 pull-center">Female</span>
+                                            <span class="span3 pull-center">Others</span>
+                                            <span class="span3 pull-center">Total</span>
                                         </div>
                                         <div class="row-fluid" style="border-top: 1px solid red">
-                                            <span class="span12 pull-center" ><strong class="totalCandidateVote-{{ candidate.id }}" >{{ candidate.totalVote }}</strong></span>
+                                            <span class="span3 pull-center"><strong class="totalMaleVote-{{ candidate.id }}" >{{ candidate.maleVote }}</strong></span>
+                                            <span class="span3 pull-center"><strong class="totalFemaleVote-{{ candidate.id }}" >{{ candidate.femaleVote }}</strong></span>
+                                            <span class="span3 pull-center"><strong class="totalOtherVote-{{ candidate.id }}" >{{ candidate.otherVote }}</strong></span>
+                                            <span class="span3 pull-center" ><strong class="totalCandidateVote-{{ candidate.id }}" >{{ candidate.totalVote }}</strong></span>
                                         </div>
+
                                     </td>
                                 {% endfor %}
                                 <th class="numeric" >
@@ -116,7 +123,10 @@
                                         {% set ids = center.id~'-'~candidate.id %}
                                         {% if matrixArr[ids]['centerId'] == center.id and  matrixArr[ids]['candidateId'] ==  candidate.id %}
                                             <td>
-                                                <input type="text" class="m-wrap span12 inline-input centerCandidateTotalVote" data-id="{{ matrixArr[ids]['matrixId'] }}" id="totalVoter-{{ matrixArr[ids]['matrixId'] }}" style="width: 100%!important;"  name="totalVoter-{{ matrixArr[ids]['matrixId'] }}" value="{{ matrixArr[ids]['totalVoter'] }}" >
+                                                <input type="text" data-id="{{ matrixArr[ids]['matrixId'] }}" class="m-wrap  span3 inline-input voteCount" id="maleVoter-{{ matrixArr[ids]['matrixId'] }}" name="maleVoter-{{ matrixArr[ids]['matrixId'] }}" value="{{ matrixArr[ids]['maleVoter'] }}" >
+                                                <input type="text" data-id="{{ matrixArr[ids]['matrixId'] }}" class="m-wrap  span3 inline-input voteCount" id="femaleVoter-{{ matrixArr[ids]['matrixId'] }}" name="femaleVoter-{{ matrixArr[ids]['matrixId'] }}" value="{{ matrixArr[ids]['femaleVoter'] }}" >
+                                                <input type="text" data-id="{{ matrixArr[ids]['matrixId'] }}" class="m-wrap  span3 inline-input voteCount" id="otherVoter-{{ matrixArr[ids]['matrixId'] }}" name="otherVoter-{{ matrixArr[ids]['matrixId'] }}" value="{{ matrixArr[ids]['otherVoter'] }}" >
+                                                <input type="text" class="m-wrap  span3 inline-input" id="totalVoter-{{ matrixArr[ids]['matrixId'] }}"  name="totalVoter-{{ matrixArr[ids]['matrixId'] }}" value="{{ matrixArr[ids]['totalVoter'] }}" >
                                             </td>
                                         {% endif %}
                                     {% endfor %}
@@ -163,10 +173,16 @@
                                 {% for candidate in entity.candidates %}
                                     <td class="numeric" >
                                         <div class="row-fluid">
-                                            <span class="span12 pull-center"><strong class="totalCandidateVote-{{ candidate.id }}">{{ candidate.totalVote }}</strong></span>
+                                            <span class="span3 pull-center"><strong class="totalMaleVote-{{ candidate.id }}">{{ candidate.maleVote }}</strong></span>
+                                            <span class="span3 pull-center"><strong class="totalFemaleVote-{{ candidate.id }}">{{ candidate.femaleVote }}</strong></span>
+                                            <span class="span3 pull-center" ><strong class=" totalOtherVote-{{ candidate.id }}">{{ candidate.otherVote }}</strong></span>
+                                            <span class="span3 pull-center"><strong class="totalCandidateVote-{{ candidate.id }}">{{ candidate.totalVote }}</strong></span>
                                         </div>
                                         <div class="row-fluid" style="border-top: 1px solid red">
-                                            <span class="span12 pull-center">Total</span>
+                                            <span class="span3 pull-center">Male</span>
+                                            <span class="span3 pull-center">Female</span>
+                                            <span class="span3 pull-center">Others</span>
+                                            <span class="span3 pull-center">Total</span>
                                         </div>
                                         <div class="row-fluid" style="border-top: 1px solid red">
                                             <span class="span12 pull-center"><strong>{{ candidate.marka.name }}</strong></span>
