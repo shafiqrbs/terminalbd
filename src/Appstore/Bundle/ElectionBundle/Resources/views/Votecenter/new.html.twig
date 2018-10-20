@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Election Vote Center</a></li>
+                    <li><a href="{{ path('election_votecenter') }}">Manage Election Vote Center</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -32,7 +32,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Election Vote Center Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_votecenter') }}"><i class="icon-th-list"></i>&nbsp; Create</a>
+                                <a class="btn red" href="{{ path('election_votecenter') }}"><i class="icon-th-list"></i>&nbsp; Vote Center</a>
                             </div>
                         </div>
                     </div>

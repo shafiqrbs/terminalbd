@@ -70,4 +70,22 @@ class ElectionCampaignAnalysisRepository extends EntityRepository
 		return $results;
 	}
 
+	public function searchAutoComplete(ElectionConfig $config, $q)
+	{
+		$query = $this->createQueryBuilder('e');
+		$query->leftJoin('e.analysisType','analysis');
+		$query->leftJoin('e.priority','priority');
+		$query->select('e.id as id');
+		$query->addSelect('CONCAT(e.name, \' \', analysis.name, \' \', priority.name) AS text');
+		$query->where($query->expr()->like("e.name", "'$q%'"  ));
+		$query->orWhere($query->expr()->like("analysis.name", "'$q%'"  ));
+		$query->orWhere($query->expr()->like("priority.name", "'$q%'"  ));
+		$query->andWhere("e.electionSetup = :config");
+		$query->setParameter('config', $config->getSetup()->getId());
+		$query->orderBy('e.name', 'ASC');
+		$query->setMaxResults( '10' );
+		return $query->getQuery()->getResult();
+
+	}
+
 }

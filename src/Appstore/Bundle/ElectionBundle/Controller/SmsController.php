@@ -242,7 +242,7 @@ class SmsController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 		$entity = $em->getRepository('ElectionBundle:ElectionSms')->findOneBy(array('electionConfig' => $config,'id'=>$id));
-		if (!$entity) {
+		if(!$entity){
 			throw $this->createNotFoundException('Unable to find ElectionSms entity.');
 		}
 

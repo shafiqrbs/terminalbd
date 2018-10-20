@@ -67,7 +67,7 @@ class VotecenterType extends AbstractType
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionMember',
 		        'empty_value' => '---Choose a representative ---',
 		        'property' => 'nameMobile',
-		        'attr'=>array('class'=>'m-wrap span12 inputs'),
+		        'attr'=>array('class'=>'m-wrap span12 inputs select2'),
 		        'constraints' =>array( new NotBlank(array('message'=>'Select representative')) ),
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')

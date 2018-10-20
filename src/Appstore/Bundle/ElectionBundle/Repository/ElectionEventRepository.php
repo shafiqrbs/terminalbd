@@ -81,4 +81,22 @@ class ElectionEventRepository extends EntityRepository
 		}
 		return $data;
 	}
+
+
+	public function searchAutoComplete(ElectionConfig $config, $q)
+	{
+		$query = $this->createQueryBuilder('e');
+		$query->leftJoin('e.eventType','event');
+		$query->select('e.id as id');
+		$query->addSelect('CONCAT(e.name, \' \', event.name) AS text');
+		$query->where($query->expr()->like("e.name", "'$q%'"  ));
+		$query->orWhere($query->expr()->like("event.name", "'$q%'"  ));
+		$query->andWhere("e.electionSetup = :config");
+		$query->setParameter('config', $config->getSetup()->getId());
+		$query->orderBy('e.name', 'ASC');
+		$query->setMaxResults( '10' );
+		return $query->getQuery()->getResult();
+
+	}
+
 }

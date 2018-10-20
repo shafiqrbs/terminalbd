@@ -48,16 +48,20 @@
 
             </div>
             <div class="clearfix">&nbsp;</div>
+            <div class="form-actions portlet box green">
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-reorder"></i>Agent Information</div>
+                </div>
+            </div>
+            <div class="clearfix"><br/></div>
             <div class="portlet-body flip-scroll">
                 <table class="table table-bordered table-striped table-condensed flip-content ">
 
                     <thead class="flip-content ">
                     <tr class="head-blue">
-                        <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                        <th class="numeric">Id</th>
-                        <th class="numeric">Booth</th>
+                        <td>&nbsp;&nbsp;<i class="icon-list"></i> Booth No</td>
+                        <th class="numeric">NID</th>
                         <th class="numeric">Name</th>
-                        <th class="numeric">Designation</th>
                         <th class="numeric">Mobile</th>
                         <th class="numeric">Village</th>
                         <th class="numeric">Vote Center</th>
@@ -69,23 +73,59 @@
                     </thead>
                     <tbody id="memberCommittees">
                     {% for committe in entity.centerMembers %}
-                        <tr id="remove-{{ committe.id }}">
-                            <td class="numeric">{{ loop.index }}.</td>
-                            <td class="numeric">{{ committe.boothNo }}</td>
-                            <td class="numeric">{{ committe.member.name }}</td>
-                            <td class="numeric">{{ committe.designation.name }}</td>
-                            <td class="numeric"><a href="tel:+88 {% if  committe.mobile is empty %} {{ committe.member.mobile }}{% else %}{{ committe.mobile }}{% endif %}">{% if  committe.mobile is empty %} {{ committe.member.mobile }}{% else %}{{ committe.mobile }}{% endif %}</a></td>
-                            <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.name }}{% endif %}</td>
-                            <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.voteCenter.name }}{% endif %}</td>
-                            <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.wardName }}{% endif %}</td>
-                            <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.unionName }}{% endif %}</td>
-                            <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.thanaName }}{% endif %}</td>
-                            <td><a data-id="{{ committe.id }}" class="btn mini delete red" href="javascript:" data-url="{{ path('election_committee_member_delete', { 'id': committe.id }) }}" >&nbsp;<i class="icon-trash"></i> </a></td>
-                        </tr>
+                        {% if committe.personType == 'agent' %}
+                            <tr id="remove-{{ committe.id }}">
+                                <td class="numeric">{{ committe.boothNo }}</td>
+                                <td class="numeric">{{ committe.member.nid }}</td>
+                                <td class="numeric">{{ committe.member.name }}</td>
+                                <td class="numeric"><a href="tel:+88 {% if  committe.agentMobile is empty %} {{ committe.member.mobile }}{% else %}{{ committe.agentMobile }}{% endif %}">{% if  committe.agentMobile is empty %} {{ committe.member.mobile }}{% else %}{{ committe.agentMobile }}{% endif %}</a></td>
+                                <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.name }}{% endif %}</td>
+                                <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.voteCenter.name }}{% endif %}</td>
+                                <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.wardName }}{% endif %}</td>
+                                <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.unionName }}{% endif %}</td>
+                                <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.thanaName }}{% endif %}</td>
+                                <td>
+                                    {% if committe.isMaster == 1 %}
+                                        <a class="btn mini blue" href="javascript:" >&nbsp;<i class="icon-user"></i> Lead</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
+            <div class="clearfix">&nbsp;</div>
+            <div class="form-actions portlet box yellow">
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-reorder"></i>Center Pooling Officer Information</div>
+                </div>
+            </div>
+            <div class="clearfix"><br/></div>
+
+            <div class="portlet-body flip-scroll">
+            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                <thead class="flip-content ">
+                <tr class="head-blue">
+                    <td>&nbsp;&nbsp;<i class="icon-list"></i> Booth No</td>
+                    <th class="numeric">Pooling Officer</th>
+                    <th class="numeric">Mobile</th>
+                </tr>
+                </thead>
+                <tbody id="memberPoolings">
+                {% for committe in entity.centerMembers %}
+                    {% if committe.personType == 'pooling' %}
+                        <tr id="remove-{{ committe.id }}">
+                            <td class="numeric">{{ committe.boothNo }}</td>
+                            <td class="numeric">{{ committe.poolingOfficer }}</td>
+                            <td class="numeric">{{ committe.poolingMobile }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
             <div class="clearfix">&nbsp;</div>
         </div>
     </div>

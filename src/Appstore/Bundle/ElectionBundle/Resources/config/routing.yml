@@ -4,7 +4,7 @@ election_particular:
 
 election_event:
     resource: "@ElectionBundle/Resources/config/routing/event.yml"
-    prefix:   /event
+    prefix:   /campaign
 
 election_setup:
     resource: "@ElectionBundle/Resources/config/routing/setup.yml"
@@ -24,7 +24,7 @@ election_sms:
 
 election_campaign:
     resource: "@ElectionBundle/Resources/config/routing/campaign.yml"
-    prefix:   /campaign
+    prefix:   /campaign-analysis
 
 election_committee:
     resource: "@ElectionBundle/Resources/config/routing/committee.yml"
@@ -57,3 +57,45 @@ election_config:
 election_homepage:
     path:     /
     defaults: { _controller: ElectionBundle:Default:index }
+
+
+election_homepage_member:
+    path:     /dashboard-member
+    defaults: { _controller: ElectionBundle:Default:memberData }
+    options:
+            expose: true
+
+
+election_homepage_voter:
+    path:     /dashboard-voter
+    defaults: { _controller: ElectionBundle:Default:voterData }
+    options:
+            expose: true
+
+
+election_homepage_votecenter:
+    path:     /dashboard-vote-center
+    defaults: { _controller: ElectionBundle:Default:voteCenterData }
+    options:
+            expose: true
+
+
+election_homepage_committee:
+    path:     /dashboard-committee
+    defaults: { _controller: ElectionBundle:Default:committeeData }
+    options:
+            expose: true
+
+election_homepage_campaign:
+    path:     /dashboard-campaign
+    defaults: { _controller: ElectionBundle:Default:campaignData }
+    options:
+            expose: true
+
+
+election_homepage_analysis:
+    path:     /dashboard-analysis
+    defaults: { _controller: ElectionBundle:Default:analysisData }
+    options:
+            expose: true
+

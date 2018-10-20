@@ -70,6 +70,20 @@ class ElectionCommitteeRepository extends EntityRepository
 		return $results;
 	}
 
+	public function searchAutoComplete(ElectionConfig $config, $q)
+	{
+		$query = $this->createQueryBuilder('e');
+		$query->select('e.id as id');
+		$query->addSelect('e.name AS text');
+		$query->where($query->expr()->like("e.name", "'$q%'"  ));
+		$query->andWhere("e.electionSetup = :config");
+		$query->setParameter('config', $config->getSetup()->getId());
+		$query->orderBy('e.name', 'ASC');
+		$query->setMaxResults( '10' );
+		return $query->getQuery()->getResult();
+
+	}
+
 
 
 }

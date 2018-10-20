@@ -256,8 +256,8 @@ class CampaignController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getElectionConfig();
-            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCampaignAnalysis')->searchAutoComplete($item,$inventory);
+            $config = $this->getUser()->getGlobalOption()->getElectionConfig();
+            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCampaignAnalysis')->searchAutoComplete($config,$item);
         }
         return new JsonResponse($item);
     }
@@ -265,8 +265,8 @@ class CampaignController extends Controller
     public function searchCampaignNameAction($vendor)
     {
         return new JsonResponse(array(
-            'id'=>$vendor,
-            'text'=>$vendor
+            'id' => $vendor,
+            'text' => $vendor
         ));
     }
 

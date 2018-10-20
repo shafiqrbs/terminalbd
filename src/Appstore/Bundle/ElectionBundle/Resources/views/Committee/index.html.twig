@@ -31,7 +31,7 @@
                         <div class="caption"><i class="icon-reorder"></i> Committee Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_committee_new') }}"><i class="icon-plus-sign"></i>&nbsp;Committee Create</a>
+                                <a class="btn red" href="{{ path('election_committee_new') }}"><i class="icon-plus-sign"></i>&nbsp;Create</a>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,6 @@
                                     <th class="numeric" >Location</th>
                                     <th class="numeric" >Location Type</th>
                                     <th class="numeric" >Date Duration</th>
-                                    <th class="numeric" >Expiration</th>
                                     <th class="numeric" >Created By</th>
                                     <th class="numeric" >Approved By</th>
                                     <th class="numeric" >Action</th>
@@ -65,11 +64,10 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
-                                        <td class="numeric" >{{ entity.electionSetup.electionName }}</td>
+                                        <td class="numeric" >{% if entity.electionSetup is not empty %}{{ entity.electionSetup.electionName }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.location is not empty %}{{ entity.location.locationType.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.startDate|date('d-m-Y') }} To {{ entity.endDate|date('d-m-Y') }}</td>
-                                        <td class="numeric" >Expiration</td>
                                         <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" >{{ entity.approvedBy }}</td>
                                         <td class="numeric" >

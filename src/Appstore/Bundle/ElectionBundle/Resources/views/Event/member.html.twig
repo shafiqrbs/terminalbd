@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage Election Event
+                    Manage Election Campaign
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Election Event</a></li>
+                    <li><a href="#">Manage Election Campaign</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,10 +28,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Election Event Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Election Campaign Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_committee') }}"><i class="icon-th-list"></i>&nbsp; Event</a>
+                                <a class="btn red" href="{{ path('election_committee') }}"><i class="icon-th-list"></i>&nbsp; Campaign</a>
                             </div>
                         </div>
                     </div>
@@ -54,9 +54,9 @@
                                             <div class="span4">
                                                 <h4>About:</h4>
                                                 <ul class="unstyled">
-                                                    <li><strong>Event Name:</strong>&nbsp;{{ entity.name }}</li>
+                                                    <li><strong>Campaign Name:</strong>&nbsp;{{ entity.name }}</li>
                                                     <li><strong>Location:</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</li>
-                                                    <li><strong>Event Type:</strong>&nbsp;{% if entity.eventType is not empty %}{{ entity.eventType.name }}{% endif %}</li>
+                                                    <li><strong>Campaign Type:</strong>&nbsp;{% if entity.eventType is not empty %}{{ entity.eventType.name }}{% endif %}</li>
                                                 </ul>
                                             </div>
                                             <div class="span4">
@@ -72,8 +72,8 @@
                                                 <h4>&nbsp;</h4>
                                                 <ul class="unstyled">
                                                     <li><strong>Created Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
-                                                    <li><strong>Event Date:</strong>&nbsp;{{ entity.eventDate|date('d-m-Y') }}</li>
-                                                    <li><strong>Event Time:</strong>&nbsp;{{ entity.eventTime }}</li>
+                                                    <li><strong>Campaign Date:</strong>&nbsp;{{ entity.eventDate|date('d-m-Y') }}</li>
+                                                    <li><strong>Campaign Time:</strong>&nbsp;{{ entity.eventTime }}</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -118,7 +118,7 @@
                             <div class="clearfix"><br/></div>
                             <div class="form-actions portlet box green">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Add Event Member</div>
+                                    <div class="caption"><i class="icon-reorder"></i>Add Campaign Member</div>
                                 </div>
                             </div>
                             <div class="clearfix"><br/></div>

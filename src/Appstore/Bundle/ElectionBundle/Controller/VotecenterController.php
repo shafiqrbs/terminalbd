@@ -221,8 +221,8 @@ class VotecenterController extends Controller
 	{
 		$item = $_REQUEST['q'];
 		if ($item) {
-			$inventory = $this->getUser()->getGlobalOption()->getElectionConfig();
-			$item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->searchAutoComplete($item,$inventory);
+			$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+			$item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->searchAutoComplete($config,$item);
 		}
 		return new JsonResponse($item);
 	}

@@ -4,6 +4,7 @@ namespace Appstore\Bundle\ElectionBundle\Controller;
 
 use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -40,9 +41,7 @@ class DefaultController extends Controller
 			'voters'                    => $voters,
 			'unionVoters'               => $unionVoters,
 			'unionMembers'              => $unionMembers,
-			'typeBaseCommittees'       => $typeBaseCommittees,
-
-
+			'typeBaseCommittees'        => $typeBaseCommittees,
 			'wardMembers'               => $wardMembers,
 			'committees'                => $committees,
 			'locationBaseCommittees'    => $locationBaseCommittees,
@@ -56,8 +55,83 @@ class DefaultController extends Controller
 			'setup'                     => $setup,
 			'globalOption'              => $this->getUser()->getGlobalOption(),
 
-
 		));
+	}
+
+	public function memberDataAction()
+	{
+		$mobile = $_REQUEST['id'];
+		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('mobile' => $mobile));
+		if($entity){
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->memberData($entity);
+			return new Response($data);
+		}else{
+			return new Response('No record found, please try again');
+		}
+		exit;
+	}
+	public function voterDataAction()
+	{
+		$mobile = $_REQUEST['id'];
+		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('mobile' => $mobile));
+		if($entity){
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->voterData($entity);
+			return new Response($data);
+		}else{
+			return new Response('No record found, please try again');
+		}
+		exit;
+	}
+	public function voteCenterDataAction()
+	{
+		$name = $_REQUEST['id'];
+		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->findOneBy(array('id' => $name));
+		if($entity){
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->voteCenterData($entity);
+			return new Response($data);
+		}else{
+			return new Response('No record found, please try again');
+		}
+		exit;
+	}
+
+
+	public function committeeDataAction()
+	{
+		$name = $_REQUEST['id'];
+		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findOneBy(array('id' => $name));
+		if($entity){
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->committeeData($entity);
+			return new Response($data);
+		}else{
+			return new Response('No record found, please try again');
+		}
+		exit;
+	}
+
+	public function campaignDataAction()
+	{
+		$name = $_REQUEST['id'];
+		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findOneBy(array('id' => $name));
+		if($entity){
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->campaignData($entity);
+			return new Response($data);
+		}else{
+			return new Response('No record found, please try again');
+		}
+		exit;
+	}
+	public function analysisDataAction()
+	{
+		$name = $_REQUEST['id'];
+		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCampaignAnalysis')->findOneBy(array('id' => $name));
+		if($entity){
+			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->analysisData($entity);
+			return new Response($data);
+		}else{
+			return new Response('No record found, please try again');
+		}
+		exit;
 	}
 
 }

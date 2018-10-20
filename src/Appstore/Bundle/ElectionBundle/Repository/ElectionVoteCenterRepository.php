@@ -144,4 +144,20 @@ class ElectionVoteCenterRepository extends EntityRepository
 		}
 		return $data;
 	}
+
+	public function searchAutoComplete(ElectionConfig $config, $q)
+	{
+		$query = $this->createQueryBuilder('e');
+		$query->select('e.id as id');
+		$query->addSelect('e.voteCenterName AS text');
+		$query->where($query->expr()->like("e.voteCenterName", "'$q%'"  ));
+		$query->andWhere("e.electionSetup = :config");
+		$query->setParameter('config', $config->getSetup()->getId());
+		$query->orderBy('e.voteCenterName', 'ASC');
+		$query->setMaxResults( '10' );
+		return $query->getQuery()->getResult();
+
+	}
+
+
 }

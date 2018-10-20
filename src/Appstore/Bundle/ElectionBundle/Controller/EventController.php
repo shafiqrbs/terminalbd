@@ -269,8 +269,8 @@ class EventController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getElectionConfig();
-            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->searchAutoComplete($item,$inventory);
+            $config = $this->getUser()->getGlobalOption()->getElectionConfig();
+            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->searchAutoComplete($config,$item);
         }
         return new JsonResponse($item);
     }
@@ -278,8 +278,8 @@ class EventController extends Controller
     public function searchEventNameAction($vendor)
     {
         return new JsonResponse(array(
-            'id'=>$vendor,
-            'text'=>$vendor
+            'id' => $vendor,
+            'text' => $vendor
         ));
     }
 

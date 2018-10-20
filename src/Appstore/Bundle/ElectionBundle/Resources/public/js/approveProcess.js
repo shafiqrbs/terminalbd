@@ -20,6 +20,64 @@ $(document).on( "click", ".show", function(e){
     $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
 });
 
+$(document).on('change', '#dashboardMember', function() {
+
+    var id  = $(this).val();
+    var url = $('form#memberForm').attr('action');
+    $.get(url,{'id':id}, function(response) {
+        $('#search-content').html(response);
+    });
+});
+
+$(document).on('change', '#dashboardVoter', function() {
+
+    var id  = $(this).val();
+    var url = $('form#voterForm').attr('action');
+    $.get(url,{'id':id}, function(response) {
+        $('#search-content').html(response);
+    });
+});
+
+$(document).on('change', '#dashboardVoteCenter', function() {
+
+    var id  = $(this).val();
+    var url = $('form#voteCenterForm').attr('action');
+    $.get(url,{'id':id}, function(response) {
+        $('#search-content').html(response);
+    });
+});
+
+$(document).on('change', '#dashboardCommittee', function() {
+
+    var id  = $(this).val();
+    var url = $('form#committeeForm').attr('action');
+    $.get(url,{'id':id}, function(response) {
+        $('#search-content').html(response);
+    });
+});
+
+$(document).on('change', '#dashboardCampaign', function() {
+
+    var id  = $(this).val();
+    var url = $('form#campaignForm').attr('action');
+    $.get(url,{'id':id}, function(response) {
+        $('#search-content').html(response);
+    });
+});
+
+$(document).on('change', '#dashboardAnalysis', function() {
+
+    var id  = $(this).val();
+    var url = $('form#analysisForm').attr('action');
+    $.get(url,{'id':id}, function(response) {
+        $('#search-content').html(response);
+    });
+});
+
+$(document).on('click', '.tabLi', function() {
+    $('#search-content').html('');
+});
+
 $(document).on('click', '.view', function() {
 
     var url = $(this).attr("data-url");
@@ -318,6 +376,47 @@ $(".select2VoteCenter").select2({
     minimumInputLength: 1
 });
 
+$(".select2ElectionVoteCenter").select2({
+
+    ajax: {
+
+        url: Routing.generate('election_votecenter_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var name = $(element).val();
+        $.ajax(Routing.generate('election_location_name', { name : name}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+});
+
 $(".select2Member").select2({
 
     ajax: {
@@ -350,6 +449,128 @@ $(".select2Member").select2({
     initSelection: function (element, callback) {
         var name = $(element).val();
         $.ajax(Routing.generate('election_member_name', { name : name}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+});
+
+$(".select2Campaign").select2({
+
+    ajax: {
+
+        url: Routing.generate('election_event_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var name = $(element).val();
+        $.ajax(Routing.generate('election_location_name', { name : name}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+});
+
+$(".select2Committee").select2({
+
+    ajax: {
+        url: Routing.generate('election_committee_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var name = $(element).val();
+        $.ajax(Routing.generate('election_location_name', { name : name}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+});
+
+$(".select2Analysis").select2({
+
+    ajax: {
+
+        url: Routing.generate('election_campaign_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var name = $(element).val();
+        $.ajax(Routing.generate('election_location_name', { name : name}), {
             dataType: "json"
         }).done(function (data) {
             return  callback(data);

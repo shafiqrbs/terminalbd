@@ -50,9 +50,9 @@ class CampaignType extends AbstractType
 		        },
 	        ))
 
-	        ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter campaign title'),
+	        ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter campaign name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter particular name')),
+                    new NotBlank(array('message'=>'Enter campaign name')),
                 )
             ))
 	        ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12 inputs','rows' => 5,'autocomplete'=>'off','placeholder'=>'Enter campaign content')))

@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage Event
+                    Manage Campaign
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Event</a></li>
+                    <li><a href="#">Manage Campaign</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,10 +29,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Event Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Campaign Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a href="javascript:" data-trigger="hover" data-original-title="Add Event" class=" btn red tooltips show"><i class="fa fa-angle-double-down"></i> Add Event</a>
+                                <a href="javascript:" data-trigger="hover" data-original-title="Add Campaign" class=" btn red tooltips show"><i class="fa fa-angle-double-down"></i> Add Campaign</a>
                             </div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">Event For</label>
+                                                <label class="control-label" for="firstName">Campaign For</label>
                                                 <div class="controls">
                                                     {{ form_widget(form.electionSetup) }}
                                                     {{ form_errors(form.electionSetup) }}
@@ -71,7 +71,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">Event Date</label>
+                                                <label class="control-label" for="firstName">Campaign Date</label>
                                                 <div class="controls">
                                                     <div class="span6">
                                                         {{ form_widget(form.eventDate) }}
@@ -140,7 +140,7 @@
                                     <div class="row-fluid">
                                         <div class="span4">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">Event Type</label>
+                                                <label class="control-label" for="firstName">Campaign Type</label>
                                                 <div class="controls">
                                                     {{ form_widget(form.eventType) }}
                                                     {{ form_errors(form.eventType) }}
@@ -230,10 +230,10 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Event Date</th>
-                                    <th class="numeric" >Event Type</th>
-                                    <th class="numeric" >Election For</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Campaign Date</th>
+                                    <th class="numeric" >Campaign Type</th>
+                                    <th class="numeric" >Election For</th>
                                     <th class="numeric" >Organiser</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Location</th>
@@ -245,10 +245,10 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.eventDate|date('d-m-Y') }} {{ entity.eventTime }}</td>
                                         <td class="numeric" >{{ entity.eventType.name }}</td>
                                         <td class="numeric" >{% if entity.electionSetup is not empty %}{{ entity.electionSetup.electionName }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{% if entity.organiser is not empty %}{{ entity.organiser.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric" >{{ entity.location.name }}</td>

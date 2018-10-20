@@ -11,6 +11,8 @@
                     <h4>About:</h4>
                     <ul class="unstyled">
                         {% if entity is not empty %}<li><strong>Created: </strong>&nbsp;{{ entity.created|date('d-m-y') }}</li>{% endif %}
+                        {% if entity is not empty %}<li><strong>Election: </strong>&nbsp;{{ entity.electionSetup.setupName }}</li>{% endif %}
+                        {% if entity is not empty %}<li><strong>Name: </strong>&nbsp;{{ entity.name }}</li>{% endif %}
                         {% if entity.location is not empty  %}<li><strong>Location: </strong>&nbsp;{{ entity.location.name }}</li>{% endif %}
                         {% if entity.analysisType is not empty %}<li><strong>Analysis Type: </strong>&nbsp;{{ entity.analysisType.name }}</li>{% endif %}
                         {% if entity.priority is not empty %}<li><strong>Priority: </strong>&nbsp;{{ entity.priority.name }}</li>{% endif %}

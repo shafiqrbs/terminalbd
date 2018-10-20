@@ -93,7 +93,7 @@
                                             <td class="numeric">{{ committe.designation.name }}</td>
                                             <td class="numeric"><a href="tel:+88 {{ committe.member.mobile }}"> {{ committe.member.mobile }}</a></td>
                                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.name }}{% endif %}</td>
-                                            <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.voteCenter.name }}{% endif %}</td>
+                                            <td class="numeric">{% if committe.member.voteCenter is not empty %}{{ committe.member.voteCenter.name }}{% endif %}</td>
                                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.wardName }}{% endif %}</td>
                                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.unionName }}{% endif %}</td>
                                             <td class="numeric">{% if committe.member.location is not empty %}{{ committe.member.location.thanaName }}{% endif %}</td>

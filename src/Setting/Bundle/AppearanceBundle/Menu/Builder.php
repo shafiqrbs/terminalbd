@@ -1362,10 +1362,10 @@ class Builder extends ContainerAware
 		                             ->setAttribute('icon', 'icon-th-list')
 		                             ->setAttribute('dropdown', true);
 		$menu['Election & Committee']['Committee']->addChild('Committee Setup', array('route' => 'election_organizationcommittee'))->setAttribute('icon', 'icon-th-list');*/
-		$menu['Election & Committee']->addChild('Manage Members', array('route' => 'election_member'))->setAttribute('icon', 'icon-th-list');
-		$menu['Election & Committee']->addChild('Manage Voters', array('route' => 'election_voter'))->setAttribute('icon', 'icon-th-list');
-		$menu['Election & Committee']->addChild('Manage Event', array('route' => 'election_event'))->setAttribute('icon', 'icon-calendar');
-		$menu['Election & Committee']->addChild('Manage Campaign', array('route' => 'election_campaign'))->setAttribute('icon', 'icon-refresh');
+		$menu['Election & Committee']->addChild('Members', array('route' => 'election_member'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']->addChild('Voters', array('route' => 'election_voter'))->setAttribute('icon', 'icon-th-list');
+		$menu['Election & Committee']->addChild('Campaign', array('route' => 'election_event'))->setAttribute('icon', 'icon-calendar');
+		$menu['Election & Committee']->addChild('Campaign Analysis', array('route' => 'election_campaign'))->setAttribute('icon', 'icon-refresh');
 		$menu['Election & Committee']->addChild('Manage SMS', array('route' => 'election_sms'))->setAttribute('icon', 'icon-th-list');
 		$menu['Election & Committee']->addChild('Master Data')
 		                           ->setAttribute('icon', 'icon icon-cog')

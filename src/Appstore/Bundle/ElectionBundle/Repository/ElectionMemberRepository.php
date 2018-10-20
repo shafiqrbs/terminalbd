@@ -2,9 +2,12 @@
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionCampaignAnalysis;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionEvent;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionLocation;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionMember;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
@@ -329,6 +332,170 @@ class ElectionMemberRepository extends EntityRepository
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
     }
+
+    public function memberData(ElectionMember $entity )
+    {
+
+	    $voter = '';
+	    if($entity->getVoteCenter()){
+		    $voter = $entity->getVoteCenter()->getName();
+	    }
+    	$data ="";
+    	$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
+	    $data .=" <thead class='flip-content'><tr class='head-blue'><th>ID</th><th>Name</th><th>Mobile</th><th>Village</th><th>Vote Center</th><th>Ward</th><th>Union/Purashava</th><th>Thana/Upazila</th><th></th></tr></thead>";
+        $data .= "<tbody>";
+        $data .= "<tr>";
+	    $data .= "<td>{$entity->getMemberId()}</td>";
+	    $data .= "<td>{$entity->getName()}</td>";
+	    $data .= "<td><a href='tel:+88 {$entity->getMobile()}'>{$entity->getMobile()}</a></td>";
+	    $data .= "<td>{$entity->getLocation()->getName()}</td>";
+	    $data .= "<td>{$voter}</td>";
+	    $data .= "<td>{$entity->getLocation()->wardName()}</td>";
+	    $data .= "<td>{$entity->getLocation()->unionName()}</td>";
+	    $data .= "<td>{$entity->getLocation()->thanaName()}</td>";
+        $data .= "<td>";
+		$data .= "<a data-title='{$entity->getName()}' class='btn mini view blue' href='javascript:' data-url='/election/member/{$entity->getId()}/show'>&nbsp;<i class='icon-eye-open'></i> View</a>";
+		$data .= "<a data-title='{$entity->getName()}' class='btn mini sms purple' href='javascript:' data-url='/election/member/{$entity->getId()}/sms'>&nbsp;<i class='icon-file-text'></i> SMS</a>";
+	    $data .= "</td>";
+	    $data .= "</tr>";
+	    $data .= "</tbody>";
+	    $data .= "</table></div>";
+	    return $data;
+
+    }
+
+	public function voterData(ElectionMember $entity )
+	{
+		$voter = '';
+		if($entity->getVoteCenter()){
+			$voter = $entity->getVoteCenter()->getName();
+		}
+		$data ="";
+		$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
+		$data .=" <thead class='flip-content'><tr class='head-grey'><th>ID</th><th>Name</th><th>Mobile</th><th>Village</th><th>Vote Center</th><th>Ward</th><th>Union/Purashava</th><th>Thana/Upazila</th></tr></thead>";
+		$data .= "<tbody>";
+		$data .= "<tr>";
+		$data .= "<td>{$entity->getMemberId()}</td>";
+		$data .= "<td>{$entity->getName()}</td>";
+		$data .= "<td><a href='tel:+88 {$entity->getMobile()}'>{$entity->getMobile()}</a></td>";
+		$data .= "<td>{$entity->getLocation()->getName()}</td>";
+		$data .= "<td>{$voter}</td>";
+		$data .= "<td>{$entity->getLocation()->wardName()}</td>";
+		$data .= "<td>{$entity->getLocation()->unionName()}</td>";
+		$data .= "<td>{$entity->getLocation()->thanaName()}</td>";
+		$data .= "</tr>";
+		$data .= "</tbody>";
+		$data .= "</table></div>";
+		return $data;
+
+	}
+
+	public function committeeData(ElectionCommittee $entity )
+	{
+		$duration = empty($entity->getStartDate()) ? '': "{$entity->getStartDate()->format('d-m-Y')} To {$entity->getEndDate()->format('d-m-Y')}";
+		$data ="";
+		$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
+		$data .=" <thead class='flip-content'><tr class='head-green'><th>Created</th><th>Name</th><th>Committee For</th><th>Location</th><th>Location Type</th><th>Date Duration</th><th>Created By</th><th>Approved By</th><th></th></tr></thead>";
+		$data .= "<tbody>";
+		$data .= "<tr>";
+		$data .= "<td>{$entity->getCreated()->format('d-m-Y')}</td>";
+		$data .= "<td>{$entity->getName()}</td>";
+		$data .= "<td>{$entity->getElectionSetup()->getElectionName()}</td>";
+		$data .= "<td>{$entity->getLocation()->getName()}</td>";
+		$data .= "<td>{$entity->getLocation()->getLocationType()->getName()}</td>";
+		$data .= "<td>{$duration}</td>";
+		$data .= "<td>{$entity->getCreatedBy()}</td>";
+		$data .= "<td>{$entity->getApprovedBy()}</td>";
+		$data .= "<td>";
+		$data .= "<a data-title='{$entity->getLocation()->getName()}' class='btn mini view blue' href='javascript:' data-url='/election/committee/{$entity->getId()}/show'>&nbsp;<i class='icon-eye-open'></i> View</a>";
+		$data .= "<a data-title='{$entity->getLocation()->getName()}' class='btn mini sms purple' href='javascript:' data-url='/election/sms/{$entity->getId()}/committee'>&nbsp;<i class='icon-file-text'></i> SMS</a>";
+		$data .= "</td>";
+		$data .= "</tr>";
+		$data .= "</tbody>";
+		$data .= "</table></div>";
+		return $data;
+
+	}
+
+	public function voteCenterData(ElectionVoteCenter $entity )
+	{
+		$voter = '';
+		$data ="";
+		$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
+		$data .=" <thead class='flip-content'><tr class='head-green'><th>Created</th><th>Vote Center</th><th>Election</th><th>Total Voter</th><th>Male</th><th>Female</th><th>Representative</th><th>Mobile</th><th>Presiding</th><th>Presiding Mobile</th><th></th></tr></thead>";
+		$data .= "<tbody>";
+		$data .= "<tr>";
+		$data .= "<td>{$entity->getCreated()->format('d-m-Y')}</td>";
+		$data .= "<td>{$entity->getLocation()->getName()}</td>";
+		$data .= "<td>{$entity->getElectionSetup()->getElectionName()}</td>";
+		$data .= "<td>{$entity->getTotalVoter()}</td>";
+		$data .= "<td>{$entity->getMaleVoter()}</td>";
+		$data .= "<td>{$entity->getFemaleVoter()}</td>";
+		$data .= "<td>{$entity->getRepresentative()->getName()}</td>";
+		$data .= "<td><a href='tel:+88 {$entity->getRepresentativeMobile()}'>{$entity->getRepresentativeMobile()}</a></td>";
+		$data .= "<td>{$entity->getPresiding()}</td>";
+		$data .= "<td><a href='tel:+88 {$entity->getPresidingMobile()}'>{$entity->getPresidingMobile()}</a></td>";
+		$data .= "<td>";
+		$data .= "<a data-title='{$entity->getLocation()->getName()}' class='btn mini view blue' href='javascript:' data-url='/election/vote-center/{$entity->getId()}/show'>&nbsp;<i class='icon-eye-open'></i> View</a>";
+		$data .= "<a data-title='{$entity->getLocation()->getName()}' class='btn mini sms purple' href='javascript:' data-url='/election/vote-center/{$entity->getId()}/sms'>&nbsp;<i class='icon-file-text'></i> SMS</a>";
+		$data .= "</td>";
+		$data .= "</tr>";
+		$data .= "</tbody>";
+		$data .= "</table></div>";
+		return $data;
+
+	}
+
+	public function campaignData(ElectionEvent $entity )
+	{
+		$data ="";
+		$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
+		$data .=" <thead class='flip-content'><tr class='head-grey'><th>Created</th><th>Name</th><th>Campaign Date</th><th>Campaign type</th><th>Election</th><th>Organiser</th><th>Mobile</th><th>Location</th><th></th></tr></thead>";
+		$data .= "<tbody>";
+		$data .= "<tr>";
+		$data .= "<td>{$entity->getCreated()->format('d-m-Y')}</td>";
+		$data .= "<td>{$entity->getName()}</td>";
+		$data .= "<td>{$entity->getEventDate()->format('d-m-Y')} {$entity->getEventTime()}</td>";
+		$data .= "<td>{$entity->getEventType()->getName()}</td>";
+		$data .= "<td>{$entity->getElectionSetup()->getElectionName()}</td>";
+		$data .= "<td>{$entity->getOrganiser()->getName()}</td>";
+		$data .= "<td><a href='tel:+88 {$entity->getMobile()}'>{$entity->getMobile()}</a></td>";
+		$data .= "<td>{$entity->getLocation()->getName()}</td>";
+		$data .= "<td>";
+		$data .= "<a data-title='{$entity->getName()}' class='btn mini view blue' href='javascript:' data-url='/election/campaign/{$entity->getId()}/show'>&nbsp;<i class='icon-eye-open'></i> View</a>";
+		$data .= "<a data-title='{$entity->getName()}' class='btn mini sms purple' href='javascript:' data-url='/election/event/{$entity->getId()}/sms'>&nbsp;<i class='icon-file-text'></i> SMS</a>";
+		$data .= "</td>";
+		$data .= "</tr>";
+		$data .= "</tr>";
+		$data .= "</tbody>";
+		$data .= "</table></div>";
+		return $data;
+
+	}
+
+	public function analysisData(ElectionCampaignAnalysis $entity )
+	{
+		$data ="";
+		$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
+		$data .=" <thead class='flip-content'><tr class='head-yellow'><th>Created</th><th>Name</th><th>Election</th><th>Analysis type</th><th>Priority</th><th>Location</th><th></th></tr></thead>";
+		$data .= "<tbody>";
+		$data .= "<tr>";
+		$data .= "<td>{$entity->getCreated()->format('d-m-Y')}</td>";
+		$data .= "<td>{$entity->getName()}</td>";
+		$data .= "<td>{$entity->getElectionSetup()->getElectionName()}</td>";
+		$data .= "<td>{$entity->getAnalysisType()->getName()}</td>";
+		$data .= "<td>{$entity->getPriority()->getName()}</td>";
+		$data .= "<td>{$entity->getLocation()->getName()}</td>";
+		$data .= "<td>";
+		$data .= "<a data-title='{$entity->getName()}' class='btn mini view blue' href='javascript:' data-url='/election/campaign-analysis/{$entity->getId()}/show'>&nbsp;<i class='icon-eye-open'></i> View</a>";
+		$data .= "</td>";
+		$data .= "</tr>";
+		$data .= "</tr>";
+		$data .= "</tbody>";
+		$data .= "</table></div>";
+		return $data;
+
+	}
 
 
 

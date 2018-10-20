@@ -3,7 +3,113 @@
     <div id="dashboard">
         <!-- BEGIN DASHBOARD inventory -->
         <!-- BEGIN DASHBOARD STATS -->
+        <div class="row-fluid ">
+            <div class="span12">
+                <!-- BEGIN TAB PORTLET-->
+                <div class="portlet box red tabbable">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Search</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="tabbable portlet-tabs">
+                            <ul class="nav nav-tabs">
+                                <li class=""><a href="#portlet_tab6" class="btn tabLi yellow" data-toggle="tab"><i class="icon-tasks"></i> Analysis</a></li>
+                                <li class=""><a href="#portlet_tab5" class="btn tabLi" data-toggle="tab"><i class="icon-comments"></i> Campaign</a></li>
+                                <li class=""><a href="#portlet_tab4" class="btn tabLi purple" data-toggle="tab"><i class="icon-tags"></i> Committee</a></li>
+                                <li class=""><a href="#portlet_tab3" class="btn tabLi green" data-toggle="tab"><i class="icon-bar-chart"></i> Vote Center</a></li>
+                                <li class=""><a href="#portlet_tab2" class="btn tabLi black" data-toggle="tab"><i class="icon-group"></i> Voter</a></li>
+                                <li class="active"><a href="#portlet_tab1" class="btn tabLi blue" data-toggle="tab"><i class="icon-user"></i> Member</a></li>
+                            </ul>
+                            <div class="tab-content" style="padding-bottom: 0!important;">
+                                <div class="tab-pane active" id="portlet_tab1">
+                                    <form class="search-form" id="memberForm" action="{{ path('election_homepage_member') }}" method="get" name="itemSearch">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="controls">
+                                                    <div class="input">
+                                                        <input type="text" id="dashboardMember" name="dashboardMember"  class="m-wrap span12 search-input select2Member" value=""  autocomplete="off" placeholder="Search member name or mobile no">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="portlet_tab2">
+                                    <form class="search-form" id="voterForm" action="{{ path('election_homepage_voter') }}" method="get" name="itemSearch">
+                                        <div class="row-fluid" >
+                                            <div class="span12">
+                                                <div class="controls">
+                                                    <div class="input">
+                                                        <input type="text" id="dashboardVoter" name="dashboardVoter"  class="m-wrap span12 search-input select2Member" value=""  autocomplete="off" placeholder="Search member name or mobile no">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="portlet_tab3">
+                                    <form class="search-form" id="voteCenterForm" action="{{ path('election_homepage_votecenter') }}" method="get" name="itemSearch">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="controls">
+                                                    <div class="input">
+                                                        <input type="text" id="dashboardVoteCenter" name="dashboardVoteCenter"  class="m-wrap span12 search-input select2ElectionVoteCenter" value=""  autocomplete="off" placeholder="Search vote center">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="portlet_tab4">
+                                    <form class="search-form" id="committeeForm" action="{{ path('election_homepage_committee') }}" method="get" name="itemSearch">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="controls">
+                                                    <div class="input">
+                                                        <input type="text" id="dashboardCommittee" name="dashboardCommittee"  class="m-wrap span12 search-input select2Committee" value=""  autocomplete="off" placeholder="Search election committee">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="portlet_tab5">
+                                    <form class="search-form" id="campaignForm" action="{{ path('election_homepage_campaign') }}" method="get" name="itemSearch">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="controls">
+                                                    <div class="input">
+                                                        <input type="text" id="dashboardCampaign" name="dashboardCampaign"  class="m-wrap span12 search-input select2Campaign" value=""  autocomplete="off" placeholder="Search campaign">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="portlet_tab6">
+                                    <form class="search-form" id="analysisForm" action="{{ path('election_homepage_analysis') }}" method="get" name="itemSearch">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="controls">
+                                                    <div class="input">
+                                                        <input type="text" id="dashboardAnalysis" name="dashboardAnalysis"  class="m-wrap span12 search-input select2Analysis" value=""  autocomplete="off" placeholder="Search campaign analysis">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span12 pull-right" id="search-content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END TAB PORTLET-->
+            </div>
 
+        </div>
         <div class="row-fluid">
             <div class="span9">
                 <div class="portlet box blue">
@@ -61,7 +167,7 @@
                 <div class="row-fluid">
                     <div class="portlet box green">
                         <div class="portlet-title">
-                            <div class="caption"><i class="icon-reorder"></i>Event Type</div>
+                            <div class="caption"><i class="icon-reorder"></i>Campaign Type</div>
                             <div class="actions">
                                 <div class="btn-group">
                                     <a class="btn red " href="{{ path('election_event',{'id':setup.id}) }}"><i class="m-icon-swapright m-icon-white"></i> </a>
@@ -235,7 +341,7 @@
                     <div class="caption"><i class="icon-reorder"></i>Union Base Member Chart</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn blue " href="{{ path('election_member') }}">All View <i class="m-icon-swapright m-icon-white"></i></a>
+                            <a class="btn blue " href="{{ path('election_member') }}">All Members <i class="m-icon-swapright m-icon-white"></i></a>
                         </div>
                     </div>
                 </div>
@@ -256,7 +362,7 @@
                     <div class="caption"><i class="icon-reorder"></i>Union Base Vote Center & Voters</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn blue " href="{{ path('election_votecenter') }}">All View <i class="m-icon-swapright m-icon-white"></i></a>
+                            <a class="btn blue " href="{{ path('election_votecenter') }}">All Centers <i class="m-icon-swapright m-icon-white"></i></a>
                         </div>
                     </div>
                 </div>
@@ -284,7 +390,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Location Base Committees</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn blue " href="{{ path('election_committee') }}">All View <i class="m-icon-swapright m-icon-white"></i></a>
+                                <a class="btn blue " href="{{ path('election_committee') }}">All Committees <i class="m-icon-swapright m-icon-white"></i></a>
                             </div>
                         </div>
                     </div>
@@ -320,7 +426,7 @@
                         <div class="caption"><i class="icon-reorder"></i>{{ setup.setupName }} Candidate</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn blue " href="{{ path('election_candidate') }}">All View <i class="m-icon-swapright m-icon-white"></i></a>
+                                <a class="btn blue " href="{{ path('election_candidate') }}">All Candidates <i class="m-icon-swapright m-icon-white"></i></a>
                             </div>
                         </div>
                     </div>
@@ -342,7 +448,6 @@
                                             </td>
                                             <td>
                                                 <ul>
-
                                                     <li>Total Vote:{{ candidate.totalVote }}</li>
                                                     <li>Male Vote: {{ candidate.maleVote }}</li>
                                                     <li>Female Vote: {{ candidate.femaleVote }}</li>
@@ -362,9 +467,9 @@
             <div class="span6">
                 <div class="portlet box blue">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-comments"></i>Latest Events</div>
+                        <div class="caption"><i class="icon-comments"></i>Latest Campaign</div>
                         <div class="actions">
-                            <a href="{{ path('election_event') }}" class="btn blue"> All Events</a>
+                            <a href="{{ path('election_event') }}" class="btn blue"> All Campaigns</a>
                         </div>
                     </div>
                     <div class="portlet-body fuelux">
@@ -395,9 +500,9 @@
             <div class="span6">
                 <div class="portlet box green">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-comments"></i>Latest Campaign</div>
+                        <div class="caption"><i class="icon-comments"></i>Campaign Analysis</div>
                         <div class="actions">
-                            <a href="{{ path('election_campaign') }}" class="btn blue"> All Campaigns</a>
+                            <a href="{{ path('election_campaign') }}" class="btn blue"> All Analysis</a>
                         </div>
                     </div>
                     <div class="portlet-body fuelux">
@@ -1048,6 +1153,7 @@ Dashboard Stats 2
     {% stylesheets filter='cssrewrite'
     '@MedicineBundle/Resources/public/css/dashboard.css'
     '@ElectionBundle/Resources/public/css/style.css'
+    '@ElectionBundle/Resources/public/css/messagebox.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -1057,6 +1163,7 @@ Dashboard Stats 2
     {% javascripts
     '@MedicineBundle/Resources/public/js/jquery-canvas.js'
     '@ElectionBundle/Resources/public/js/approveProcess.js'
+    '@ElectionBundle/Resources/public/js/messagebox.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -1085,7 +1192,7 @@ Dashboard Stats 2
         yValueFormatString: "#,##0.0#"%"",
         dataPoints: [
         {% for employee in setup.candidates %}
-            { label: "{{ employee.marka.name|capitalize }}", y: {% if employee is defined and employee is not empty %} {{ ((employee.totalVote * 100)/setup.resultTotalVote)|number_format }}{% else %}0{% endif %} , indexLabel: "BDT {% if  employee is defined and employee is not empty %} {{ employee.totalVote|number_format }}{% else %}0{% endif %}" },
+            { label: "{{ employee.marka.name|capitalize }}", y: {% if employee is defined and employee is not empty %} {{ ((employee.totalVote * 100)/setup.resultTotalVote)|number_format }}{% else %}0{% endif %} , indexLabel: "{% if  employee is defined and employee is not empty %} {{ employee.totalVote|number_format }}{% else %}0{% endif %}" },
         {% endfor %}
         ]
         }]

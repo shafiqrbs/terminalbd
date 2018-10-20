@@ -123,7 +123,7 @@ class MemberType extends AbstractType
 
 	        ->add('referenceMember', 'entity', array(
 		        'required'    => true,
-		        'property' => 'name',
+		        'property' => 'nameMobile',
 		        'empty_value' => '--- Choose reference member ---',
 		        'attr'=>array('class'=>'m-wrap span12 select2'),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionMember',

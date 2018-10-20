@@ -31,7 +31,7 @@
                         <div class="caption"><i class="icon-reorder"></i> Vote Center Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_votecenter_new') }}"><i class="icon-plus-sign"></i>&nbsp;Vote Center Create</a>
+                                <a class="btn red" href="{{ path('election_votecenter_new') }}"><i class="icon-plus-sign"></i>&nbsp;Create</a>
                             </div>
                         </div>
                     </div>
@@ -80,8 +80,8 @@
                                             <a href="{{ path('election_votecenter_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                             <a title="Are you sure went to delete ?" href="{{ path('election_votecenter_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             <a class="btn mini yellow" href="{{ path('election_votecenter_member_new', { 'id': entity.id }) }}" ><i class="icon-plus"></i> Member</a>
-                                            <a data-title="{{ entity.location.name }}: {{ entity.location.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('election_votecenter_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
-                                                <a data-title="{{ entity.location.name }}:" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_votecenter_sms', { 'id': entity.id }) }}" >SMS</a>
+                                            <a data-title="{{ entity.location.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('election_votecenter_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
+                                                <a data-title="{{ entity.location.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_votecenter_sms', { 'id': entity.id }) }}" >SMS</a>
                                             </div>
                                         </td>
                                     </tr>
