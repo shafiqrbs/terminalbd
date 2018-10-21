@@ -521,7 +521,7 @@ class MemberController extends Controller
 			$border = 0;
 		}
 
-		$shopName = $config->getCardText();
+		$text = $config->getCardText();
 		$scale = $config->getBarcodeScale();
 		$fontsize = $config->getBarcodeFontSize();
 		$thickness = $config->getBarcodeThickness();
@@ -537,7 +537,7 @@ class MemberController extends Controller
 		$data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
 		$data .='<div class="centered">';
 		$data .='<div class="clearfix"></div>';
-		$data .="<div class='span4'>Image</div><div class='span8'>{cardText}</div>";
+		$data .="<div class='span4'>Image</div><div class='span8'>{$text}</div>";
 		$data .='<div class="clearfix"></div>';
 		$data .='<img src="data:image/png;base64,'.$code.'" />';
 		$data .='<p><span class="center">'.$config->getBarcodeText().'</span></p>';
