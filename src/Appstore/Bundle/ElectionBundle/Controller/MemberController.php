@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Controller;
 
+use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionMember;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionMemberFamily;
 use Appstore\Bundle\ElectionBundle\Form\MemberType;
@@ -12,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Symfony\Component\HttpFoundation\Response;
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 
 
 /**
@@ -39,7 +41,7 @@ class MemberController extends Controller
      * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
      */
 
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -50,6 +52,7 @@ class MemberController extends Controller
         return $this->render('ElectionBundle:Member:index.html.twig', array(
             'entities' => $pagination,
             'importCount' => $importCount,
+            'selected' => explode(',', $request->cookies->get('memberIds', '')),
             'searchForm' => $data,
         ));
     }
@@ -467,6 +470,80 @@ class MemberController extends Controller
 			}
 		endforeach;
 		return $this->redirect($this->generateUrl('election_member'));
+
+	}
+
+	public function generateCardAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = explode(',',$request->cookies->get('memberIds'));
+		if(is_null($data)) {
+			return $this->redirect($this->generateUrl('election_member'));
+		}
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getBarcodeForPrint($config,$data);
+
+		$x = 0;
+		/* @var $entity ElectionMember */
+
+		foreach ($entities as $entity) {
+				$barCoder[] = $this->itemBarcoder($config,$entity);
+		}
+		$this->get('session')->set('barcodeQ',$barCoder);
+		return $this->render('ElectionBundle:Member:idcard.html.twig', array(
+			'barCoder'      => $barCoder
+		));
+	}
+
+
+	public function itemBarcoder(ElectionConfig $config , ElectionMember $entity )
+	{
+
+
+		$barcodeWidth = "{$config->getBarcodeWidth()}px";
+		$barcodeHeight = "{$config->getBarcodeHeight()}px";
+		$barcodeMargin = $config->getBarcodeMargin();
+		if($barcodeMargin == 0 ){
+			$margin = 0;
+		}else{
+			$margin = "{$barcodeMargin}px";
+		}
+		$barcodePadding = $config->getBarcodePadding();
+		if($barcodePadding == 0 ){
+			$padding = 0;
+		}else{
+			$padding = "{$barcodePadding}px";
+		}
+		$barcodeBorder = $config->getBarcodeBorder();
+		if($barcodeBorder > 0 ){
+			$border = "{$barcodeBorder}px";
+		}else{
+			$border = 0;
+		}
+
+		$shopName = $config->getCardText();
+		$scale = $config->getBarcodeScale();
+		$fontsize = $config->getBarcodeFontSize();
+		$thickness = $config->getBarcodeThickness();
+
+		$barcode = new BarcodeGenerator();
+		$barcode->setText($entity->getMemberId());
+		$barcode->setType(BarcodeGenerator::Code128);
+		$barcode->setScale($scale);
+		$barcode->setThickness($thickness);
+		$barcode->setFontSize($fontsize);
+		$code = $barcode->generate();
+		$data = '';
+		$data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
+		$data .='<div class="centered">';
+		$data .='<div class="clearfix"></div>';
+		$data .="<div class='span4'>Image</div><div class='span8'>{cardText}</div>";
+		$data .='<div class="clearfix"></div>';
+		$data .='<img src="data:image/png;base64,'.$code.'" />';
+		$data .='<p><span class="center">'.$config->getBarcodeText().'</span></p>';
+		$data .='</div>';
+		$data .='</div>';
+		return $data;
 
 	}
 

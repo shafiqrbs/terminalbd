@@ -34,6 +34,18 @@ class ElectionMemberRepository extends EntityRepository
 
     }
 
+	public function getBarcodeForPrint($config,$data)
+	{
+		$qb = $this->createQueryBuilder('item');
+		$qb->select('item');
+		$qb->where($qb->expr()->in("item.id", $data ));
+		$qb->andWhere("item.electionConfig = :config");
+		$qb->setParameter('config', $config->getId());
+		$qb->orderBy('item.memberId','ASC');
+		return $qb->getQuery()->getResult();
+
+	}
+
     public function getGenderBaseMember(ElectionConfig $config,$type = 'member'){
 
 	    $qb = $this->createQueryBuilder('e');

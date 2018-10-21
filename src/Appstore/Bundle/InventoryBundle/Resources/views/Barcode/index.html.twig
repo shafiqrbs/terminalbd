@@ -85,7 +85,7 @@
                                 </thead>
                                 <tbody>
                                 {% for purchaseItem in entities %}
-                                    <tr {% if purchaseItem.itemStock == 0    %} class="disabled" aria-disabled="true" {% endif %}>
+                                    <tr {% if purchaseItem.itemStock == 0 %} class="disabled" aria-disabled="true" {% endif %}>
                                         <td><input {% if purchaseItem.id in selected %}checked="checked"{% endif %} id="action-{{ purchaseItem.id }}" {% if purchaseItem.itemStock == 0    %} disabled="disabled" {% endif %} data-id="{{ purchaseItem.id }}" type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;{{ purchaseItem.barcode }}</td>
                                         <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                         <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.created|date('d-m-Y') }}{% endif %}</td>

@@ -125,6 +125,92 @@ class ElectionConfig
 	private $address;
 
 	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="cardText", type="text", nullable = true)
+	 */
+	private $cardText;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodeWidth", type="smallint", nullable = true)
+	 */
+	private $barcodeWidth = 140;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodeMargin", type="smallint", nullable = true)
+	 */
+	private $barcodeMargin = 0;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodeBorder", type="smallint", nullable = true)
+	 */
+	private $barcodeBorder = 0;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodePadding", type="smallint", nullable = true)
+	 */
+	private $barcodePadding = 0;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodePageTopMargin", type="smallint", nullable = true)
+	 */
+	private $barcodePageTopMargin = 0;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodePageLeftMargin", type="smallint", nullable = true)
+	 */
+	private $barcodePageLeftMargin = 0;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="printLeftMargin", type="smallint", nullable = true)
+	 */
+	private $printLeftMargin = 0;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodeHeight", type="smallint", nullable = true)
+	 */
+	private $barcodeHeight = 80;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodeThickness", type="smallint", nullable = true)
+	 */
+	private $barcodeThickness = 30;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodeFontSize", type="smallint", nullable = true)
+	 */
+	private $barcodeFontSize = 8;
+
+	/**
+	 * @var smallint
+	 *
+	 * @ORM\Column(name="barcodeScale", type="smallint", nullable = true)
+	 */
+	private $barcodeScale = 1;
+
+
+
+	/**
 	 * @var boolean
 	 *
 	 * @ORM\Column(name="removeImage", type="boolean")
@@ -441,6 +527,176 @@ class ElectionConfig
 	 */
 	public function setSetup( $setup ) {
 		$this->setup = $setup;
+	}
+
+
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodeWidth(){
+		return $this->barcodeWidth;
+	}
+
+	/**
+	 * @param smallint $barcodeWidth
+	 */
+	public function setBarcodeWidth( smallint $barcodeWidth ) {
+		$this->barcodeWidth = $barcodeWidth;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodeMargin(){
+		return $this->barcodeMargin;
+	}
+
+	/**
+	 * @param smallint $barcodeMargin
+	 */
+	public function setBarcodeMargin( smallint $barcodeMargin ) {
+		$this->barcodeMargin = $barcodeMargin;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodeBorder(){
+		return $this->barcodeBorder;
+	}
+
+	/**
+	 * @param smallint $barcodeBorder
+	 */
+	public function setBarcodeBorder( smallint $barcodeBorder ) {
+		$this->barcodeBorder = $barcodeBorder;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodePadding(): smallint {
+		return $this->barcodePadding;
+	}
+
+	/**
+	 * @param smallint $barcodePadding
+	 */
+	public function setBarcodePadding( smallint $barcodePadding ) {
+		$this->barcodePadding = $barcodePadding;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodePageTopMargin(){
+		return $this->barcodePageTopMargin;
+	}
+
+	/**
+	 * @param smallint $barcodePageTopMargin
+	 */
+	public function setBarcodePageTopMargin( smallint $barcodePageTopMargin ) {
+		$this->barcodePageTopMargin = $barcodePageTopMargin;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodePageLeftMargin(){
+		return $this->barcodePageLeftMargin;
+	}
+
+	/**
+	 * @param smallint $barcodePageLeftMargin
+	 */
+	public function setBarcodePageLeftMargin( smallint $barcodePageLeftMargin ) {
+		$this->barcodePageLeftMargin = $barcodePageLeftMargin;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getPrintLeftMargin(){
+		return $this->printLeftMargin;
+	}
+
+	/**
+	 * @param smallint $printLeftMargin
+	 */
+	public function setPrintLeftMargin( smallint $printLeftMargin ) {
+		$this->printLeftMargin = $printLeftMargin;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodeHeight(){
+		return $this->barcodeHeight;
+	}
+
+	/**
+	 * @param smallint $barcodeHeight
+	 */
+	public function setBarcodeHeight( smallint $barcodeHeight ) {
+		$this->barcodeHeight = $barcodeHeight;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodeThickness(){
+		return $this->barcodeThickness;
+	}
+
+	/**
+	 * @param smallint $barcodeThickness
+	 */
+	public function setBarcodeThickness( smallint $barcodeThickness ) {
+		$this->barcodeThickness = $barcodeThickness;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodeFontSize(){
+		return $this->barcodeFontSize;
+	}
+
+	/**
+	 * @param smallint $barcodeFontSize
+	 */
+	public function setBarcodeFontSize( smallint $barcodeFontSize ) {
+		$this->barcodeFontSize = $barcodeFontSize;
+	}
+
+	/**
+	 * @return smallint
+	 */
+	public function getBarcodeScale(){
+		return $this->barcodeScale;
+	}
+
+	/**
+	 * @param smallint $barcodeScale
+	 */
+	public function setBarcodeScale( smallint $barcodeScale ) {
+		$this->barcodeScale = $barcodeScale;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCardText(){
+		return $this->cardText;
+	}
+
+	/**
+	 * @param string $cardText
+	 */
+	public function setCardText( string $cardText ) {
+		$this->cardText = $cardText;
 	}
 
 

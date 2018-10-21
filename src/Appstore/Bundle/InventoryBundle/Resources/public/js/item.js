@@ -3,17 +3,17 @@ var InventoryItemListPage = function () {
     var items = $.cookie('itemBarcode') ? $.cookie('itemBarcode').split(',') : [];
 
     $('body').on('change', 'input.itemBarcode', function(el) {
-        console.log(itemArr);
+        console.log(items);
         var val = $(this).val();
         if($(this).prop('checked')) {
-            itemArr.push(val);
+            items.push(val);
         }else{
-            var index = itemArr.indexOf(val);
+            var index = items.indexOf(val);
             if (index > -1) {
-                itemArr.splice(index, 1);
+                items.splice(index, 1);
             }
         }
-        $.cookie('itemBarcode', itemArr, {path: '/'});
+        $.cookie('itemBarcode', items, {path: '/'});
     });
 
 

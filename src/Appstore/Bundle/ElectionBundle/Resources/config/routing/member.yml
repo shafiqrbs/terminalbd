@@ -6,6 +6,10 @@ election_member_import_updated:
     path:     /import-updated
     defaults: { _controller: "ElectionBundle:Member:memberImportUpdated" }
 
+election_member_generate_idcard:
+    path:     /generate-id-card
+    defaults: { _controller: "ElectionBundle:Member:generateCard" }
+
 
 election_member_search:
     path:     /search

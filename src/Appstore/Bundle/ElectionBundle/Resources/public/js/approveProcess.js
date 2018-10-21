@@ -15,6 +15,23 @@ $( ".dob" ).datepicker({
     yearRange: "-100:+0",
 });
 
+var itemArr = $.cookie('memberIds') ? $.cookie('memberIds').split(',') : [];
+
+$('body').on('change', 'input.memberId', function(el) {
+    console.log(itemArr);
+    var val = $(this).val();
+    if($(this).prop('checked')) {
+        itemArr.push(val);
+    }else{
+        var index = itemArr.indexOf(val);
+        if (index > -1) {
+            itemArr.splice(index, 1);
+        }
+    }
+    $.cookie('memberIds', itemArr, {path: '/'});
+});
+
+
 $(document).on( "click", ".show", function(e){
     $('#hide').slideToggle(2000);
     $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
