@@ -335,7 +335,7 @@ class StockController extends Controller
 		set_time_limit(0);
 		ignore_user_abort(true);
 		$em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+		$config = $this->getUser()->getGlobalOption()->getBussinessConfig();
 		$items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findBy(array('medicineConfig'=>$config));
 
 		/* @var BusinessParticular $item */

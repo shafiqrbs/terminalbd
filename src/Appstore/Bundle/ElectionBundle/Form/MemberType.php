@@ -40,7 +40,10 @@ class MemberType extends AbstractType
                         new NotBlank(array('message'=>'Please enter member name'))
                     ))
             )
-            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Father name'),
+
+	        ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12 inputs ','autocomplete'=>'off','placeholder'=>'Enter name bangla')))
+
+	        ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Father name'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please enter father name'))
                     ))
@@ -80,7 +83,7 @@ class MemberType extends AbstractType
 		        'required'    => true,
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member family political status ---',
-		        'attr'=>array('class'=>'m-wrap span12 select2'),
+		        'attr'=>array('class'=>'m-wrap span12'),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
@@ -95,7 +98,7 @@ class MemberType extends AbstractType
 		        'required'    => true,
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member previous political party ---',
-		        'attr'=>array('class'=>'m-wrap span12 select2'),
+		        'attr'=>array('class'=>'m-wrap span12'),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
@@ -110,7 +113,7 @@ class MemberType extends AbstractType
 		        'required'    => true,
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member political designation ---',
-		        'attr'=>array('class'=>'m-wrap span12 select2'),
+		        'attr'=>array('class'=>'m-wrap span12'),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
@@ -138,7 +141,7 @@ class MemberType extends AbstractType
 		        'required'    => true,
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member profession ---',
-		        'attr'=>array('class'=>'m-wrap span12 select2'),
+		        'attr'=>array('class'=>'m-wrap span12'),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
@@ -152,7 +155,7 @@ class MemberType extends AbstractType
 		        'required'    => true,
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member education degree ---',
-		        'attr'=>array('class'=>'m-wrap span12 select2'),
+		        'attr'=>array('class'=>'m-wrap span12'),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')

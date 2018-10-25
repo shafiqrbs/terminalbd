@@ -56,7 +56,7 @@ class MemberDataReader
                 foreach ($headingsArray as $columnKey => $columnHeading) {
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
-                $key = $dataArray['Name'].$dataArray['FatherName']. $dataArray['MotherName'].$dataArray['NID'].$dataArray['MobileNo'].$dataArray['Age'].$dataArray['Gender']
+                $key = $dataArray['Name'].$dataArray['NameBN'].$dataArray['FatherName']. $dataArray['MotherName'].$dataArray['NID'].$dataArray['MobileNo'].$dataArray['Age'].$dataArray['Gender']
                        .$dataArray['Nationality'].$dataArray['Education'].$dataArray['Profession'].$dataArray['Email'].$dataArray['FacebookID'].$dataArray['Address']
                        .$dataArray['Village'].$dataArray['Ward'].$dataArray['VoteCenter'].$dataArray['Union'].$dataArray['Thana'].$dataArray['District'].$dataArray['PostOffice'].$dataArray['PostalCode']
                        .$dataArray['BloodGroup'].$dataArray['Birthday'].$dataArray['Religion'].$dataArray['FamilyMember'].$dataArray['PoliticalStatus'];

@@ -245,6 +245,17 @@ class UserRepository extends EntityRepository
                 'ROLE_DPS_ADMIN'                                => 'Doctor Admin',
             );
         }
+
+        $dms = array('election');
+        $result = array_intersect($arrSlugs, $dms);
+        if (!empty($result)) {
+            $array['ELECTION'] = array(
+                'ROLE_ELECTION_OPERATOR'                        => 'Operator',
+                'ROLE_ELECTION_MANAGER'                         => 'Manager',
+                'ROLE_ELECTION_ADMIN'                           => 'Admin',
+            );
+        }
+
         $array['Customer'] = array(
             'ROLE_CRM'                  => 'Customer',
             'ROLE_CRM_MANAGER'          => 'Manage Customer ',

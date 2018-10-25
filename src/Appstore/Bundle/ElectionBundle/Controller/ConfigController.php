@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\ElectionBundle\Controller;
 
 use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionParticular;
 use Appstore\Bundle\ElectionBundle\Form\ConfigType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,6 +82,28 @@ class ConfigController extends Controller
             'entity'        => $entity,
             'form'          => $editForm->createView(),
         ));
+    }
+
+    public function restoreMasterParticularAction()
+    {
+
+	    $em = $this->getDoctrine()->getManager();
+    	$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticularMaster')->findBy(array('status'=>1));
+	    foreach ($entities as $entity){
+	        $exist = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->findOneBy(array('electionConfig' => $config , 'defineSlug' => $entity->getSlug(),'particularType' => $entity->getParticularType()));
+	        if(empty($exist)){
+		        $particular = new ElectionParticular();
+		        $particular->setElectionConfig($config);
+		        $particular->setParticularType($entity->getParticularType());
+		        $particular->setName($entity->getName());
+		        $particular->setDefineSlug($entity->getSlug());
+		        $particular->setStatus(true);
+		        $em->persist($particular);
+		        $em->flush();
+	        }
+	   }
+	   return $this->redirect($this->generateUrl('election_config_manage'));
     }
 
     public function autoSearchAction(Request $request)

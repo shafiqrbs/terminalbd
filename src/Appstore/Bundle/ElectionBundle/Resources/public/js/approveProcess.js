@@ -1,3 +1,16 @@
+var doc = new jsPDF();
+
+$("#pdfDownloader").click(function() {
+
+    var doc = new jsPDF('p', 'pt', 'a4', true);
+    doc.fromHTML($('#card-content').get(0), 15, 15, {
+        'width': 500
+    }, function (dispose) {
+        doc.save('thisMotion.pdf');
+    });
+});
+
+
 $( ".date-picker" ).datepicker({
     dateFormat: "dd-mm-yy"
 });

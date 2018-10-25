@@ -132,6 +132,13 @@ class ElectionLocation
      */
     private $name;
 
+/**
+     * @var string
+     *
+     * @ORM\Column(name="nameBn", type="string", length=100, nullable=true)
+     */
+    private $nameBn;
+
 
     /**
      * @var string
@@ -459,6 +466,27 @@ class ElectionLocation
 	 */
 	public function getCenterMembers() {
 		return $this->centerMembers;
+	}
+
+	/**
+	 * @return ElectionCommittee
+	 */
+	public function getCommittees() {
+		return $this->committees;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getNameBn(){
+		return $this->nameBn;
+	}
+
+	/**
+	 * @param string $nameBn
+	 */
+	public function setNameBn( string $nameBn ) {
+		$this->nameBn = $nameBn;
 	}
 
 

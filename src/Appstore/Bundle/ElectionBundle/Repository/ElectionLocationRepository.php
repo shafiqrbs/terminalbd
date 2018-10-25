@@ -285,7 +285,7 @@ class ElectionLocationRepository extends MaterializedPathRepository{
 			$qb = $this->createQueryBuilder( 'e' );
 			$qb->join( 'e.locationType', 'p' );
 			$qb->where( 'e.electionConfig =' . $config->getId() );
-			$qb->andWhere( "p.slug = :slug" )->setParameter( 'slug', 'village' );
+			$qb->andWhere( "p.defineSlug = :slug" )->setParameter( 'slug', 'village' );
 			$qb->andWhere( $qb->expr()->like( "e.name", "'$q%'" ) );
 			$result = $qb->getQuery()->getOneOrNullResult();
 
@@ -301,7 +301,7 @@ class ElectionLocationRepository extends MaterializedPathRepository{
 			$qb = $this->createQueryBuilder('e');
 			$qb->join('e.locationType','p');
 			$qb->where('e.electionConfig ='.$config->getId());
-			$qb->andWhere("p.slug = :slug")->setParameter('slug','vote-center');
+			$qb->andWhere("p.defineSlug = :slug")->setParameter('slug','vote-center');
 			$qb->andWhere($qb->expr()->like("e.name", "'$q%'"  ));
 			$result  = $qb->getQuery()->getOneOrNullResult();
 			return $result;

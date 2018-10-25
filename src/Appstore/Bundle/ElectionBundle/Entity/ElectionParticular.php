@@ -120,13 +120,19 @@ class ElectionParticular
      **/
     private $event;
 
-
-    /**
+	/**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     private $name;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="defineSlug", type="string", length=100, nullable=true)
+     */
+    private $defineSlug;
 
 	/**
 	 * @Gedmo\Slug(fields={"name"})
@@ -396,6 +402,20 @@ class ElectionParticular
 	 */
 	public function getCommitteeMember() {
 		return $this->committeeMember;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDefineSlug() {
+		return $this->defineSlug;
+	}
+
+	/**
+	 * @param mixed $defineSlug
+	 */
+	public function setDefineSlug( $defineSlug ) {
+		$this->defineSlug = $defineSlug;
 	}
 
 

@@ -36,6 +36,7 @@ class Member
 		        $member->setName($name);
 		        $member->setMobile($mobile);
 		        $member->setFatherName(trim($item['FatherName']));
+		        $member->setNameBn(trim($item['NameBN']));
 		        $member->setMotherName(trim($item['MotherName']));
 		        $member->setNid(trim($item['NID']));
 		        $member->setAge(trim($item['Age']));

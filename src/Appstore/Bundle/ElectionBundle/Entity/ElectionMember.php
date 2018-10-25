@@ -155,13 +155,19 @@ class ElectionMember
      */
     private $postalCode;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=150, nullable =true)
+     */
+    private $name;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100, nullable =true)
+     * @ORM\Column(name="nameBn", type="string", length=150, nullable =true)
      */
-    private $name;
+    private $nameBn;
 
     /**
      * @var string
@@ -1253,6 +1259,20 @@ class ElectionMember
 	 */
 	public function setMemberType( string $memberType ) {
 		$this->memberType = $memberType;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getNameBn(){
+		return $this->nameBn;
+	}
+
+	/**
+	 * @param string $nameBn
+	 */
+	public function setNameBn( string $nameBn ) {
+		$this->nameBn = $nameBn;
 	}
 
 

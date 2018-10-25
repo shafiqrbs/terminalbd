@@ -20,7 +20,6 @@
     {% endif %}#}
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-
     {% stylesheets filter='cssrewrite'
         'assets/plugins/bootstrap/css/bootstrap.min.css'
         'assets/plugins/bootstrap/css/bootstrap-responsive.min.css'
@@ -391,8 +390,8 @@
 {#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
 
 <script type="text/javascript">
-    jQuery(document).ready(function () {
 
+    jQuery(document).ready(function () {
 
         {% block documentready %}
             App.init();

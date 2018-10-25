@@ -5,12 +5,12 @@ namespace Appstore\Bundle\ElectionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 /**
- * MedicineVendor
+ * ElectionParticularMaster
  *
- * @ORM\Table(name="election_particular_type")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\ElectionBundle\Repository\ElectionParticularTypeRepository")
+ * @ORM\Table(name="election_particular_master")
+ * @ORM\Entity(repositoryClass="")
  */
-class ElectionParticularType
+class ElectionParticularMaster
 {
     /**
      * @var integer
@@ -22,40 +22,29 @@ class ElectionParticularType
     private $id;
 
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", mappedBy="particularType")
-     */
-    protected $particulars;
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticularType", inversedBy="particularMasters")
+	 */
+	protected $particularType;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticularMaster", mappedBy="particularType")
-     */
-    protected $particularMasters;
 
-    /**
+	/**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="modeFor", type="string", length=50, nullable=true)
-     */
-    private $modeFor;
-
-    /**
+     /**
      * @Gedmo\Slug(fields={"name"})
-     * @Doctrine\ORM\Mapping\Column(length=255)
+     * @Doctrine\ORM\Mapping\Column(length=100)
      */
     private $slug;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="status", type="boolean" )
+     * @ORM\Column(name="status", type="boolean", nullable=true )
      */
     private $status=true;
 
@@ -75,7 +64,7 @@ class ElectionParticularType
      *
      * @param string $name
      *
-     * @return MedicineVendor
+     * @return ElectionParticularMaster
      */
     public function setName($name)
     {
@@ -128,36 +117,20 @@ class ElectionParticularType
         $this->slug = $slug;
     }
 
-    /**
-     * @return MedicineParticular
-     */
-    public function getParticulars()
-    {
-        return $this->particulars;
-    }
-
-    /**
-     * @return string
-     */
-    public function getModeFor()
-    {
-        return $this->modeFor;
-    }
-
-    /**
-     * @param string $modeFor
-     */
-    public function setModeFor($modeFor)
-    {
-        $this->modeFor = $modeFor;
-    }
+	/**
+	 * @return ElectionParticularType
+	 */
+	public function getParticularType() {
+		return $this->particularType;
+	}
 
 	/**
-	 * @return ElectionParticularMaster
+	 * @param ElectionParticularType $particularType
 	 */
-	public function getParticularMasters() {
-		return $this->particularMasters;
+	public function setParticularType( $particularType ) {
+		$this->particularType = $particularType;
 	}
+
 
 }
 

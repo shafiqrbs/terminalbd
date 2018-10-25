@@ -483,15 +483,19 @@ class MemberController extends Controller
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getBarcodeForPrint($config,$data);
 
-		$x = 0;
 		/* @var $entity ElectionMember */
 
+		/*
+		$barCoder = array();
 		foreach ($entities as $entity) {
-				$barCoder[] = $this->itemBarcoder($config,$entity);
+			$barCoder[] = $this->itemBarcoder($config,$entity);
 		}
-		$this->get('session')->set('barcodeQ',$barCoder);
+		*/
+
+		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->find(22);
+		$barCoder = $this->itemBarcoder($config,$entity);
 		return $this->render('ElectionBundle:Member:idcard.html.twig', array(
-			'barCoder'      => $barCoder
+			'entities'      => $entities
 		));
 	}
 
@@ -531,18 +535,15 @@ class MemberController extends Controller
 		$barcode->setType(BarcodeGenerator::Code128);
 		$barcode->setScale($scale);
 		$barcode->setThickness($thickness);
-		$barcode->setFontSize($fontsize);
+		$barcode->setFontSize(8);
 		$code = $barcode->generate();
 		$data = '';
-		$data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
+	//	$data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
 		$data .='<div class="centered">';
-		$data .='<div class="clearfix"></div>';
-		$data .="<div class='span4'>Image</div><div class='span8'>{$text}</div>";
-		$data .='<div class="clearfix"></div>';
+	//	$data .='<div class="clearfix"></div>';
 		$data .='<img src="data:image/png;base64,'.$code.'" />';
-		$data .='<p><span class="center">'.$config->getBarcodeText().'</span></p>';
 		$data .='</div>';
-		$data .='</div>';
+	//	$data .='</div>';
 		return $data;
 
 	}

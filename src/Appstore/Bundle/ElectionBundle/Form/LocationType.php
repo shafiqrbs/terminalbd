@@ -36,9 +36,14 @@ class LocationType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter particular name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter location name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter particular name')),
+                    new NotBlank(array('message'=>'Enter location name')),
+                )
+            ))
+	        ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter location name bangla'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter location name bangla')),
                 )
             ))
 	        ->add('locationType', 'entity', array(
