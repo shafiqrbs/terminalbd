@@ -31,3 +31,18 @@ services:
         class: Appstore\Bundle\ElectionBundle\Importer\VoterDataReader
         arguments: [ @phpexcel ]
 
+    appstore_election.listener.election_sms:
+        class: Appstore\Bundle\ElectionBundle\EventListener\ElectionSmsListener
+        arguments: [@setting_tool.sms_gateWay]
+        tags:
+            - { name: kernel.event_listener, event: appstore_election.post.election_sms, method: sendSms }
+
+    setting_tool.listener.election_bulk_sms:
+            class: Appstore\Bundle\ElectionBundle\EventListener\ElectionSmsBulkListener
+            arguments: [@doctrine ,@setting_tool.sms_gateWay]
+            tags:
+              - { name: kernel.event_listener, event: setting_tool.post.election_bulk_sms , method: sendSms }
+
+
+
+

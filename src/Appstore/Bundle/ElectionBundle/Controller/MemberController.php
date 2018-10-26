@@ -488,6 +488,7 @@ class MemberController extends Controller
 		/*
 		$barCoder = array();
 		foreach ($entities as $entity) {
+
 			$barCoder[] = $this->itemBarcoder($config,$entity);
 		}
 		*/

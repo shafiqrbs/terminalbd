@@ -6,27 +6,27 @@
  * Time: 5:24 PM
  */
 
-namespace Setting\Bundle\ToolBundle\Event;
+namespace Appstore\Bundle\ElectionBundle\Event;
 
-use Setting\Bundle\ToolBundle\Entity\SmsBulk;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionSms;
 use Symfony\Component\EventDispatcher\Event;
 
 
-class SmsBulkEvent extends Event
+class ElectionSmsBulkEvent extends Event
 {
 
-    /** @var \Setting\Bundle\ToolBundle\Entity\SmsBulk */
+    /** @var ElectionSms */
 
     protected $smsBulk;
 
 
-    public function __construct(SmsBulk $smsBulk)
+    public function __construct(ElectionSms $smsBulk)
     {
         $this->smsBulk = $smsBulk;
     }
 
     /**
-     * @return SmsBulk
+     * @return ElectionSms
      */
     public function getSmsBulk()
     {

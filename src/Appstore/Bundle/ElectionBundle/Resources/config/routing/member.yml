@@ -40,10 +40,6 @@ election_member_show:
     path:     /{id}/show
     defaults: { _controller: "ElectionBundle:Member:show" }
 
-election_member_sms:
-    path:     /{id}/sms
-    defaults: { _controller: "ElectionBundle:Member:sms" }
-
 election_member_update:
     path:     /{id}/update
     defaults: { _controller: "ElectionBundle:Member:update" }

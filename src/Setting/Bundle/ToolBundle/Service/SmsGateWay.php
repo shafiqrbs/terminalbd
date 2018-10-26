@@ -46,9 +46,9 @@ class SmsGateWay
             return 'success';
 
         } catch (RequestException $e) {
-           // var_dump($e->getRequest());
+            //var_dump($e->getRequest());
             if ($e->hasResponse()) {
-            //var_dump($e->getResponse()->getReasonPhrase());
+           // var_dump($e->getResponse()->getReasonPhrase());
             }
             return 'failed';
         }

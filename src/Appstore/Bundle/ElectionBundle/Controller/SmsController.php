@@ -4,6 +4,7 @@ namespace Appstore\Bundle\ElectionBundle\Controller;
 
 use Appstore\Bundle\ElectionBundle\Entity\ElectionSms;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionSmsMember;
+use Appstore\Bundle\ElectionBundle\EventListener\ElectionSmsEvent;
 use Appstore\Bundle\ElectionBundle\Form\SmsMemberType;
 use Appstore\Bundle\ElectionBundle\Form\SmsPoolingType;
 use Appstore\Bundle\ElectionBundle\Form\SmsType;
@@ -241,11 +242,14 @@ class SmsController extends Controller
 		$msg = $_REQUEST['sms'];
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entity = $em->getRepository('ElectionBundle:ElectionSms')->findOneBy(array('electionConfig' => $config,'id'=>$id));
+		$entity = $em->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('electionConfig' => $config,'id'=>$id));
 		if(!$entity){
 			throw $this->createNotFoundException('Unable to find ElectionSms entity.');
 		}
-
+	//	if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+			$dispatcher = $this->container->get('event_dispatcher');
+			$dispatcher->dispatch('appstore_election.post.election_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsEvent($entity,$msg));
+	//	}
 		exit;
 
 	}

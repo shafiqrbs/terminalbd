@@ -6,16 +6,15 @@
  * Time: 4:51 PM
  */
 
-namespace Setting\Bundle\ElectionBundle\EventListener;
+namespace  Appstore\Bundle\ElectionBundle\EventListener;
+use Appstore\Bundle\ElectionBundle\Event\ElectionSmsBulkEvent;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ToolBundle\Entity\SmsBulk;
-use Setting\Bundle\ToolBundle\Event\SmsBulkEvent;
 use Setting\Bundle\ToolBundle\Service\SmsGateWay;
 
 
-class SmsBulkListener extends BaseSmsAwareListener
+class ElectionSmsBulkListener extends BaseSmsAwareListener
 {
     /**
      * @var EntityManager
@@ -35,10 +34,10 @@ class SmsBulkListener extends BaseSmsAwareListener
         $this->em = $doctrine->getManager();
     }
 
-    public function sendSms(SmsBulkEvent $event)
+    public function sendSms(ElectionSmsBulkEvent $event)
     {
         /**
-         * @var SmsBulk $event
+         * @var ElectionSmsBulkEvent $event
          */
 
         $bulk = $event->getSmsBulk();

@@ -1,3 +1,4 @@
+/*
 var doc = new jsPDF();
 
 $("#pdfDownloader").click(function() {
@@ -9,6 +10,7 @@ $("#pdfDownloader").click(function() {
         doc.save('thisMotion.pdf');
     });
 });
+*/
 
 
 $( ".date-picker" ).datepicker({

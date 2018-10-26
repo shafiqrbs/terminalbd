@@ -6,9 +6,7 @@
  * Time: 5:05 PM
  */
 
-namespace Setting\Bundle\ElectionBundle\EventListener;
-
-
+namespace  Appstore\Bundle\ElectionBundle\EventListener;
 use Setting\Bundle\ToolBundle\Service\SmsGateWay;
 use Symfony\Component\EventDispatcher\Event;
 
