@@ -43,6 +43,15 @@ class AccountHeadType extends AbstractType
                     'Credit' => 'Credit',
                 ),
             ))
+            ->add('motherAccount', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'assets' => 'Assets',
+                    'revenue' => 'Revenue',
+                    'liabilities' => 'Liabilities',
+                    'expenses' => 'Expenses',
+                ),
+            ))
             ->add('isParent')
             ->add('status')
         ;

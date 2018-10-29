@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -37,12 +38,15 @@ class AccountHeadController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('AccountingBundle:AccountHead')->findBy(array(),array('parent'=>'asc','name'=>'asc'));
-        $pagination = $this->paginate($entities);
-        return $this->render('AccountingBundle:AccountHead:index.html.twig', array(
-            'entities' => $pagination,
+	    $data = $_REQUEST;
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent'=>1),array('name'=>'ASC'));
+	    return $this->render('AccountingBundle:AccountHead:index.html.twig', array(
+            'accountHead' => $accountHead,
+            'searchForm'  => $data,
         ));
     }
+
+
     /**
      * Creates a new AccountHead entity.
      *
@@ -189,7 +193,7 @@ class AccountHeadController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('accounthead_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('accounthead'));
         }
 
         return $this->render('AccountingBundle:AccountHead:new.html.twig', array(
@@ -237,4 +241,40 @@ class AccountHeadController extends Controller
             ->getForm()
         ;
     }
+
+	public function parentSelectAction()
+	{
+
+		$accountHeads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent'=>1),array('name'=>'ASC'));
+		$items      = array();
+		$items[]    = array('value' => '','text'=> '---Select Parent Head---');
+		foreach ($accountHeads as $entity):
+			$items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+		endforeach;
+		return new JsonResponse($items);
+
+	}
+
+	public function inlineUpdateAction(Request $request)
+	{
+		$data = $request->request->all();
+		$em = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('AccountingBundle:AccountHead')->find($data['pk']);
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find AccountHead entity.');
+		}
+		if($data['name'] == 'code'){
+			$entity->setCode($data['value']);
+		}
+		if($data['name'] == 'name'){
+			$entity->setName($data['value']);
+		}
+		if($data['name'] == 'parent'){
+			$parent = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->find($data['value']);
+			$entity->setParent($parent);
+		}
+		$em->flush();
+		exit;
+	}
+
 }

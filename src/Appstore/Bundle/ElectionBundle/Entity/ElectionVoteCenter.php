@@ -599,7 +599,7 @@ class ElectionVoteCenter
 	/**
 	 * @param int $otherVoter
 	 */
-	public function setOtherVoter( int $otherVoter ) {
+	public function setOtherVoter($otherVoter ) {
 		$this->otherVoter = $otherVoter;
 	}
 

@@ -63,10 +63,10 @@ class EventType extends AbstractType
 			               ->andWhere("e.status = 1");
 		        },
 	        ))
-	        ->add('eventDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
-	        ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter campaign title')))
-	        ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter campaign title')))
-	        ->add('facebookEvent','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter campaign title')))
+	        ->add('eventDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter event date')))
+	        ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter contact mobile no')))
+	        ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter email address ie. info@election.info')))
+	        ->add('facebookEvent','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter facebook page id')))
 	        ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter campaign title'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter event name')),

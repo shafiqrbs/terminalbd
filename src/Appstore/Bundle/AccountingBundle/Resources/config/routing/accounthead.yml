@@ -28,3 +28,12 @@ accounthead_delete:
     path:     /{id}/delete
     defaults: { _controller: "AccountingBundle:AccountHead:delete" }
     methods:  [POST, DELETE]
+
+accounthead_inline:
+    path:     /inline-update
+    defaults: { _controller: "AccountingBundle:AccountHead:inlineUpdate" }
+
+accounthead_parent_select:
+    path:     /parent-select
+    defaults: { _controller: "AccountingBundle:AccountHead:parentSelect" }
+

@@ -48,7 +48,7 @@ class CommitteeType extends AbstractType
 			                  ->where("e.status = 1");
 		        },
 	        ))
-	        ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter committee name'),
+	        ->add('name','text', array('attr'=>array('class'=>'m-wrap span6 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter committee name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter committee name')),
                 )

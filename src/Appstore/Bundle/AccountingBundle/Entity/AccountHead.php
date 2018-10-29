@@ -77,8 +77,14 @@ class AccountHead
      **/
     private  $transactions;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="motherAccount", type="string", length=50, nullable=true)
+	 */
+	private $motherAccount;
 
-    /**
+	/**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=20, nullable= true)
@@ -368,6 +374,20 @@ class AccountHead
 	 */
 	public function setSorting( int $sorting ) {
 		$this->sorting = $sorting;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMotherAccount(){
+		return $this->motherAccount;
+	}
+
+	/**
+	 * @param string $motherAccount
+	 */
+	public function setMotherAccount( string $motherAccount ) {
+		$this->motherAccount = $motherAccount;
 	}
 
 }

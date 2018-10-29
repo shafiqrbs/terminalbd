@@ -249,8 +249,8 @@ class PurchaseVendorItemController extends Controller
         }
 
         return $this->render('InventoryBundle:PurchaseVendorItem:edit.html.twig', array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
+            'entity'        => $entity,
+            'form'          => $editForm->createView(),
         ));
     }
     /**
@@ -297,7 +297,9 @@ class PurchaseVendorItemController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+
         /* @var $entity PurchaseVendorItem  **/
+
         $entity = $em->getRepository('InventoryBundle:PurchaseVendorItem')->find($id);
 
         if (!$entity) {

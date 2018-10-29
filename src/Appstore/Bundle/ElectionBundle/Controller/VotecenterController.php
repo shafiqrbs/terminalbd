@@ -140,6 +140,8 @@ class VotecenterController extends Controller
 			$entity->setMemberUnion($entity->getLocation()->getParent()->getName());
 			$entity->setThana($entity->getLocation()->getParent()->getParent()->getName());
 			$entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
+			$totalVoter = $entity->getMaleVoter() + $entity->getFemaleVoter() + $entity->getOtherVoter();
+			$entity->setTotalVoter($totalVoter);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been changed successfully"
