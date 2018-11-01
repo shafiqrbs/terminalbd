@@ -111,7 +111,7 @@ class HotelInvoiceRepository extends EntityRepository
         $qb->where('e.hotelConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('e.process IN (:process)');
-        $qb->setParameter('process', array('Done','Delivered','Chalan'));
+        $qb->setParameter('process', array('Done','Booking','Check-in','Check-out'));
         $this->handleSearchBetween($qb,$data);
         if ($userBranch){
             $qb->andWhere("e.branch = :branch");
@@ -483,7 +483,7 @@ class HotelInvoiceRepository extends EntityRepository
 		          ->andWhere('si.process = :process')
 		          ->setParameter('process', 'Done')
 		          ->getQuery()->getOneOrNullResult();
-		echo $payment = !empty($res['payment']) ? $res['payment'] :0;
+		$payment = !empty($res['payment']) ? $res['payment'] :0;
 		$invoice->setReceived($payment);
 		$invoice->setDue($invoice->getTotal() - $invoice->getReceived());
 		if($invoice->getReceived() >= $invoice->getTotal()){
@@ -518,13 +518,10 @@ class HotelInvoiceRepository extends EntityRepository
 		$entity->setComment($invoice->getComment());
 		$this->_em->persist($entity);
 		$this->_em->flush($entity);
-
-		/*if($invoice->getPayment() > 0){
-			$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
-			$this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
-		}*/
-
-
+		if($invoice->getReceived() > 0 ){
+			$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
+			$this->_em->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
+		}
 	}
 
 	public function insertPaymentTransaction(HotelInvoice $invoice,$data)

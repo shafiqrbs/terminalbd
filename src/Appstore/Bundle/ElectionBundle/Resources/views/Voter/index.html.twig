@@ -95,6 +95,7 @@
                                     <th {% if entities.isSorted('e.ward') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Ward', 'e.ward') }}{% if( direction == 'desc' and sort == 'e.ward') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th {% if entities.isSorted('e.memberUnion') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Union/Pourasava', 'e.memberUnion') }}{% if( direction == 'desc' and sort == 'e.memberUnion') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th {% if entities.isSorted('e.thana') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Thana/Upazila', 'e.thana') }}{% if( direction == 'desc' and sort == 'e.thana') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th class="numeric">Is Member</th>
                                     <th class="numeric">Action</th>
                                 </tr>
                                 </thead>
@@ -109,6 +110,7 @@
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.wardName }}{% endif %}</td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.unionName }}{% endif %}</td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.thanaName }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.isMember == 1 %}<a class="btn blue mini" href="{{ path('election_voter_status', { 'id': entity.id }) }}"><i class="icon-refresh"></i> Yes</a>{% else %}<a class="btn yellow mini" href="{{ path('election_voter_status', { 'id': entity.id }) }}"><i class="icon-refresh"></i> No</a>{% endif %}</td>
                                         <td class="numeric">
                                             <div class="btn-group">
                                              {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_ELECTION_MANAGER"))  %}

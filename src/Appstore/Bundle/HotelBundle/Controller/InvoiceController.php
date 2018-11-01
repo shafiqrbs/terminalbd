@@ -147,7 +147,7 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Hotel Ivoice entity.');
         }
-        $editForm = $this->createPaymentReceiveForm($entity);
+        $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
         if ($editForm->isValid()) {
@@ -164,24 +164,24 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
+	        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
             $done = array('Check-in');
             if (in_array($entity->getProcess(), $done) and $entity->getTotal() > 0) {
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->insertInvoiceProductItem($entity);
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertTransaction($entity);
-	            if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+	           // if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 		            $dispatcher = $this->container->get('event_dispatcher');
 		            $dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
-	            }
+	           // }
             }
             $inProgress = array('Booking');
             if (in_array($entity->getProcess(), $inProgress)) {
-	            if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+	          //  if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 		            $dispatcher = $this->container->get('event_dispatcher');
 		            $dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
-	            }
+	          //  }
                 return $this->redirect($this->generateUrl('hotel_invoice_new'));
             } else {
                 return $this->redirect($this->generateUrl('hotel_invoice_payment', array('id' => $entity->getId())));
@@ -191,7 +191,7 @@ class InvoiceController extends Controller
         $hotelConfig = $entity->getHotelConfig();
 	    $particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('production','stock','service','virtual'));
 	    $view = !empty($hotelConfig->getInvoiceType()) ? $hotelConfig->getInvoiceType():'new';
-        return $this->render("HotelBundle:Invoice:{$view}.html.twig", array(
+	    return $this->render("HotelBundle:Invoice:new.html.twig", array(
             'entity' => $entity,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
@@ -369,9 +369,12 @@ class InvoiceController extends Controller
 		if(!empty($entity) and $entity->getProcess() == 'In-progress' and $entity->getPayment() > 0) {
 			$entity->setProcess('Done');
 			$em->flush();
-			$invoice = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updatePaymentReceive($entity->getHotelInvoice());
-			$result = $this->returnResultData($invoice);
-			return new Response(json_encode($result));
+			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updatePaymentReceive($entity->getHotelInvoice());
+			if($entity->getPayment() > 0 ){
+				$accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
+				$this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
+			}
+			return new Response('success');
 		}else{
 			return new Response('failed');
 		}
@@ -381,13 +384,16 @@ class InvoiceController extends Controller
 	public function checkoutAction(HotelInvoice $entity)
 	{
 		$em = $this->getDoctrine()->getManager();
-		if(!empty($entity) and $entity->getProcess() == 'Check-in' and $entity->getReceived() == $entity->getTotal()) {
+		if(!empty($entity) and $entity->getProcess() == 'Check-in') {
 			$entity->setProcess('Check-out');
 			$em->flush();
-			if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+			if($entity->getDue() > 0){
+				$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->checkOutHotelAccountInvoice($entity);
+			}
+			//if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 				$dispatcher = $this->container->get('event_dispatcher');
 				$dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
-			}
+			//}
 			return new Response('success');
 		}else{
 			return new Response('failed');
@@ -407,6 +413,7 @@ class InvoiceController extends Controller
 	{
 
 		$em = $this->getDoctrine()->getManager();
+
 		/* @var $hotelConfig HotelConfig */
 
 		$hotelConfig = $this->getUser()->getGlobalOption()->getHotelConfig();
@@ -588,27 +595,6 @@ class InvoiceController extends Controller
 
     }
 
-    public function bannerSignAction(Request $request, HotelInvoice $invoice)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $particular = $request->request->get('particular');
-        $quantity = $request->request->get('quantity');
-        $salesPrice = $request->request->get('salesPrice');
-        $width = $request->request->get('width');
-        $height = $request->request->get('height');
-        if(!empty($particular)){
-            $invoiceItems = array('particular' => $particular ,'quantity' => $quantity,'salesPrice'=> $salesPrice, 'width'=> $width,'height'=> $height);
-            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->insertBannerSignItem($invoice,$invoiceItems);
-	        $invoice = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updateInvoiceTotalPrice($invoice);
-            $msg = 'Particular added successfully';
-            $result = $this->returnResultData($invoice,$msg);
-            return new Response(json_encode($result));
-        }
-        exit;
-
-    }
-
     public function invoiceItemUpdateAction(Request $request)
     {
 
@@ -650,6 +636,7 @@ class InvoiceController extends Controller
 	        }else{
                 $template = !empty($hotelConfig->getInvoiceType()) ? $hotelConfig->getInvoiceType():'print';
             }
+	        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
 	        $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($hotelConfig->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
 	        $balance = empty($result) ? 0 :$result[0]['customerBalance'];
             return  $this->render("HotelBundle:Print:{$template}.html.twig",
@@ -657,6 +644,7 @@ class InvoiceController extends Controller
                     'config' => $hotelConfig,
                     'entity' => $entity,
                     'balance' => $balance,
+                    'amountInWords' => $amountInWords,
                     'print' => 'print',
                 )
             );

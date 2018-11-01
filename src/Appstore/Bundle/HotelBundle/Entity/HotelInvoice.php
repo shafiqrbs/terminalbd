@@ -177,50 +177,57 @@ class HotelInvoice
     private $discountCalculation;
 
 
-
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="subTotal", type="decimal", nullable=true)
+     * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="discount", type="decimal", nullable=true)
+     * @ORM\Column(name="discount", type="float", nullable=true)
      */
     private $discount;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="vat", type="decimal", nullable=true)
+     * @ORM\Column(name="vat", type="float", nullable=true)
      */
     private $vat;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="total", type="decimal", nullable=true)
+     * @ORM\Column(name="total", type="float", nullable=true)
      */
     private $total;
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="received", type="decimal", nullable=true)
+     * @ORM\Column( name = "received", type = "float" , nullable = true)
      */
-    private $received;
+    private $received = 0;
+
+	/**
+     * @var float
+     *
+     * @ORM\Column( name = "paymentReceived", type = "float" , nullable = true)
+     */
+    private $paymentReceived = 0;
+
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="commission", type="decimal", nullable=true)
+     * @ORM\Column(name="commission", type="float", nullable=true)
      */
-    private $commission;
+    private $commission = 0;
 
 
     /**
@@ -232,11 +239,11 @@ class HotelInvoice
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="due", type="decimal", nullable=true)
+     * @ORM\Column(name="due", type="float", nullable=true)
      */
-    private $due;
+    private $due = 0;
 
 
     /**
@@ -280,69 +287,6 @@ class HotelInvoice
     }
 
 
-    /**
-     * @return string
-     */
-    public function getSubTotal()
-    {
-        return $this->subTotal;
-    }
-
-    /**
-     * @param string $subTotal
-     */
-    public function setSubTotal($subTotal)
-    {
-        $this->subTotal = $subTotal;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDiscount()
-    {
-        return $this->discount;
-    }
-
-    /**
-     * @param string $discount
-     */
-    public function setDiscount($discount)
-    {
-        $this->discount = $discount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    /**
-     * @param string $vat
-     */
-    public function setVat($vat)
-    {
-        $this->vat = $vat;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @param string $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-    }
 
     /**
      * @return \DateTime
@@ -529,21 +473,6 @@ class HotelInvoice
         $this->comment = $comment;
     }
 
-    /**
-     * @return string
-     */
-    public function getDue()
-    {
-        return $this->due;
-    }
-
-    /**
-     * @param string $due
-     */
-    public function setDue($due)
-    {
-        $this->due = $due;
-    }
 
 
     /**
@@ -576,22 +505,6 @@ class HotelInvoice
     public function setApprovedBy($approvedBy)
     {
         $this->approvedBy = $approvedBy;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCommission()
-    {
-        return $this->commission;
-    }
-
-    /**
-     * @param string $commission
-     */
-    public function setCommission($commission)
-    {
-        $this->commission = $commission;
     }
 
     /**
@@ -786,21 +699,6 @@ class HotelInvoice
         $this->salesBy = $salesBy;
     }
 
-    /**
-     * @return string
-     */
-    public function getReceived()
-    {
-        return $this->received;
-    }
-
-    /**
-     * @param string $received
-     */
-    public function setReceived($received)
-    {
-        $this->received = $received;
-    }
 
 	/**
 	 * @return HotelReverse
@@ -828,6 +726,118 @@ class HotelInvoice
 	 */
 	public function getHotelInvoiceTransactions() {
 		return $this->hotelInvoiceTransactions;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getReceived(){
+		return $this->received;
+	}
+
+	/**
+	 * @param float $received
+	 */
+	public function setReceived($received ) {
+		$this->received = $received;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getSubTotal(){
+		return $this->subTotal;
+	}
+
+	/**
+	 * @param float $subTotal
+	 */
+	public function setSubTotal($subTotal) {
+		$this->subTotal = $subTotal;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getDiscount(){
+		return $this->discount;
+	}
+
+	/**
+	 * @param float $discount
+	 */
+	public function setDiscount($discount ) {
+		$this->discount = $discount;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getVat(){
+		return $this->vat;
+	}
+
+	/**
+	 * @param float $vat
+	 */
+	public function setVat($vat ) {
+		$this->vat = $vat;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getTotal(){
+		return $this->total;
+	}
+
+	/**
+	 * @param float $total
+	 */
+	public function setTotal($total ) {
+		$this->total = $total;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getCommission(){
+		return $this->commission;
+	}
+
+	/**
+	 * @param float $commission
+	 */
+	public function setCommission($commission ) {
+		$this->commission = $commission;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getDue(){
+		return $this->due;
+	}
+
+	/**
+	 * @param float $due
+	 */
+	public function setDue($due ) {
+		$this->due = $due;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getPaymentReceived(){
+		return $this->paymentReceived;
+	}
+
+	/**
+	 * @param float $paymentReceived
+	 */
+	public function setPaymentReceived($paymentReceived ) {
+		$this->paymentReceived = $paymentReceived;
 	}
 
 }

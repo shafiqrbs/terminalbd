@@ -324,7 +324,10 @@ class HotelInvoiceTransactionRepository extends EntityRepository
 	        $data .= "<td class='numeric' >{$transactionMethod}</td>";
 	        $data .= "<td class='numeric' >{$transaction->getPayment()}</td>";
 	        $data .= "<td> <span id='approved-{$transaction->getId()}'>";
-	        if($transaction->getProcess() != 'approved'){
+
+
+			$arrs = array('Created','Pending','In-progress');
+	        if(in_array($transaction->getProcess(),$arrs)){
 		        $data .= "<a id='{$transaction->getId()}' data-id='{$transaction->getId()}' data-url='/hotel-restaurant/invoice/{$transaction->getId()}/payment-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";
 		        $data .= "<a id='{$transaction->getId()}' data-id='{$transaction->getId()}' data-url='/hotel-restaurant/invoice/{$transaction->getId()}/payment-approved' href='javascript:' class='btn blue mini approve' ><i class='icon-ok'></i> Approve</a>";
 	        }else{

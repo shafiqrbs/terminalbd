@@ -50,7 +50,6 @@ class DefaultController extends Controller
 	    foreach($monthlyPurchase as $row) {
 		    $monthlyPurchaseArr[$row['month']] = $row['total'];
 	    }
-
 	    return $this->render('HotelBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,

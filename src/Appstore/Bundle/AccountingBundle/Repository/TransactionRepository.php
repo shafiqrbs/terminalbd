@@ -14,6 +14,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
@@ -1849,6 +1850,102 @@ class TransactionRepository extends EntityRepository
         return $transaction;
 
     }
+
+
+	/** =========================== HOSPITAL MANAGEMENT SYSTEM    =========================== */
+
+
+	public function hotelSalesTransaction(HotelInvoiceTransaction $entity,$accountSales)
+	{
+		$this->insertHotelCashDebit($entity,$accountSales);
+		$this->insertHotelCashCredit($entity,$accountSales);
+		if($entity->getVat() > 0){
+			$this->insertHotelSalesVatAccountPayable($entity,$accountSales);
+		}
+	}
+
+	private function insertHotelCashDebit(HotelInvoiceTransaction $entity , AccountSales $accountSales)
+	{
+		$amount = $entity->getPayment();
+		if($amount > 0) {
+			$transaction = new Transaction();
+			$transaction->setGlobalOption($accountSales->getGlobalOption());
+			if(!empty($accountSales->getBranches())){
+				$transaction->setBranches($accountSales->getBranches());
+			}
+			$transaction->setAccountRefNo($accountSales->getAccountRefNo());
+			$transaction->setProcessHead('Sales');
+			$transaction->setUpdated($entity->getUpdated());
+
+			/* Cash - Cash various */
+			if($accountSales->getTransactionMethod()->getId() == 2 ){
+				/* Current Asset Bank Cash Debit */
+				$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+				$transaction->setProcess('Current Assets');
+			}elseif($accountSales->getTransactionMethod()->getId() == 3 ){
+				/* Current Asset Mobile Account Debit */
+				$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+				$transaction->setProcess('Current Assets');
+			}else{
+				/* Current Assets - Cash in Hand Debit */
+				$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+				$transaction->setProcess('Current Assets');
+			}
+
+			$transaction->setAmount($amount);
+			$transaction->setDebit($amount);
+			$this->_em->persist($transaction);
+			$this->_em->flush();
+		}
+	}
+
+	public function insertHotelCashCredit(HotelInvoiceTransaction $entity , AccountSales $accountSales)
+	{
+
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($accountSales->getGlobalOption());
+		if(!empty($accountSales->getBranches())){
+			$transaction->setBranches($accountSales->getBranches());
+		}
+		$transaction->setAccountRefNo($accountSales->getAccountRefNo());
+		$transaction->setProcessHead('Sales');
+		$transaction->setProcess('Operating Revenue');
+		$transaction->setUpdated($entity->getUpdated());
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
+		$transaction->setAmount('-'.$entity->getPayment());
+		$transaction->setCredit($entity->getPayment());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+		return $transaction;
+
+	}
+
+	private function insertHotelSalesVatAccountPayable(HotelInvoiceTransaction $entity, AccountSales $accountSales)
+	{
+
+		$amount = $entity->getVat();
+		if($amount > 0){
+
+			$transaction = new Transaction();
+			$transaction->setGlobalOption($accountSales->getGlobalOption());
+			if(!empty($accountSales->getBranches())){
+				$transaction->setBranches($accountSales->getBranches());
+			}
+			$transaction->setAccountRefNo($accountSales->getAccountRefNo());
+			$transaction->setProcessHead('Sales');
+			$transaction->setProcess('AccountPayable');
+			/* Current Liabilities - Sales Vat & Tax */
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(16));
+			$transaction->setAmount('-'.$amount);
+			$transaction->setCredit($amount);
+			$this->_em->persist($transaction);
+			$this->_em->flush();
+
+		}
+
+	}
+
+
 
 
 }

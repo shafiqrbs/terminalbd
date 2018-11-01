@@ -46,7 +46,8 @@ class MemberController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
 	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data);
+	    $type = 'voter';
+        $entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data,$type);
         $pagination = $this->paginate($entities);
         $importCount = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getImportCount($config,'Import');
         return $this->render('ElectionBundle:Member:index.html.twig', array(

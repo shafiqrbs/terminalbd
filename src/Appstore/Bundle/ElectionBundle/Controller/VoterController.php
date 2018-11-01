@@ -45,8 +45,8 @@ class VoterController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
 	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-	    $type = 'voter';
-        $entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data,$type);
+
+        $entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         $importCount = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getImportCount($config,'Import');
         return $this->render('ElectionBundle:Voter:index.html.twig', array(
@@ -249,7 +249,37 @@ class VoterController extends Controller
         return $this->redirect($this->generateUrl('election_voter'));
     }
 
-    public function autoSearchAction(Request $request)
+	/**
+	 * Status a Page entity.
+	 *
+	 */
+	public function statusAction(Request $request, $id)
+	{
+
+		$em = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('ElectionBundle:ElectionMember')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find District entity.');
+		}
+
+		$status = $entity->isMember();
+		if($status == 1){
+			$entity->setIsMember(false);
+			$entity->setMemberType('member');
+		} else{
+			$entity->setIsMember(true);
+			$entity->setMemberType('voter');
+		}
+		$em->flush();
+		$this->get('session')->getFlashBag()->add(
+			'success',"Data has been changed successfully"
+		);
+		return $this->redirect($request->headers->get('referer'));
+	}
+
+
+	public function autoSearchAction(Request $request)
     {
 
         $item = $_REQUEST['q'];
@@ -299,8 +329,6 @@ class VoterController extends Controller
         return new JsonResponse($items);
 
     }
-
-
 
     public function searchCodeAction($customer)
     {

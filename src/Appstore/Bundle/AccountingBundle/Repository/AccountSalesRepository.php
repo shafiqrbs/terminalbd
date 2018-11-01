@@ -4,6 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -638,7 +640,6 @@ class AccountSalesRepository extends EntityRepository
         $this->updateCustomerBalance($accountSales);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
-
     }
 
     public function insertBusinessAccountPurchaseReturn(MedicineSalesReturn $entity)
@@ -756,6 +757,57 @@ class AccountSalesRepository extends EntityRepository
 		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Sales'");
 		$accountCash->execute();
 	}
+
+
+	/* Start Account sales for Hotel Module */
+
+	public function insertHotelAccountInvoice(HotelInvoiceTransaction $entity)
+	{
+		$em = $this->_em;
+		$accountSales = new AccountSales();
+
+		$accountSales->setAccountBank($entity->getAccountBank());
+		$accountSales->setAccountMobileBank($entity->getAccountMobileBank());
+		$accountSales->setGlobalOption($entity->getHotelInvoice()->getHotelConfig()->getGlobalOption());
+		$accountSales->setHotelInvoice($entity->getHotelInvoice());
+		$accountSales->setCustomer($entity->getHotelInvoice()->getCustomer());
+		$accountSales->setTransactionMethod($entity->getTransactionMethod());
+		$accountSales->setTotalAmount($entity->getPayment());
+		$accountSales->setAmount($entity->getPayment());
+		$accountSales->setApprovedBy($entity->getCreatedBy());
+		$accountSales->setProcessHead('hotel');
+		$accountSales->setProcessType('Sales');
+		$accountSales->setProcess('approved');
+		$em->persist($accountSales);
+		$em->flush();
+		$this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+		return $accountSales;
+
+	}
+
+	public function checkOutHotelAccountInvoice(HotelInvoice $entity)
+	{
+		$em = $this->_em;
+		$accountSales = new AccountSales();
+		$accountSales->setGlobalOption($entity->getHotelConfig()->getGlobalOption());
+		$accountSales->setCustomer($entity->getCustomer());
+		$accountSales->setHotelInvoice($entity);
+		$accountSales->setTransactionMethod(NUll);
+		$accountSales->setTotalAmount($entity->getDue());
+		$accountSales->setAmount(0);
+		$accountSales->setApprovedBy($entity->getCreatedBy());
+		$accountSales->setProcessHead('hotel');
+		$accountSales->setProcessType('Sales');
+		$accountSales->setProcess('approved');
+		$em->persist($accountSales);
+		$em->flush();
+		$this->updateCustomerBalance($accountSales);
+		//$this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+		return $accountSales;
+
+	}
+
+	/* End Account sales for Hotel Module */
 
 
 

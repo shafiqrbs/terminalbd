@@ -9,7 +9,7 @@
                     <td style="width: 66%">
                         <div class="span4  pull-left invoice-logo-space">
                             {% if config.webPath is not empty %}
-                            <img style="width:220px" src="{{ image(config.webPath).resize(220,220, 'white') }}">
+                            <img style="width:220px" src="{{ image(config.webPath).resize(220,120, 'white') }}">
                             {% endif %}
                         </div>
                     </td>
@@ -70,7 +70,7 @@
                             <div class="row-fluid box green">
                                 {% if entity.hotelInvoiceParticulars is defined and  entity.hotelInvoiceParticulars is not empty  %}
                                     <table class="table table-bordered table-striped table-condensed table-fixed">
-                                        <thead class="head-green">
+                                        <thead class="table-header">
                                         <tr>
                                             <th class="">Si/No</th>
                                             <th class="">Particular</th>
@@ -115,8 +115,8 @@
                                             <td class="span1"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
-                                            <td class="span1"><strong class="netTotal">{{ entity.total|number_format }}</strong></td>
+                                            <td colspan="6" ><strong>In words:</strong> {{ amountInWords }}</td><td colspan="2"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                                            <td class="span1"><strong class="netTotal">{{ entity.received|number_format }}</strong></td>
                                         </tr>
                                         </tfoot>
                                     </table>

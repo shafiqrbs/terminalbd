@@ -100,7 +100,7 @@
                                         <br/>
                                         <strong><i class="fa fa-power-off"></i></strong>&nbsp;{% for day in page.weeklyOffDay %}{{ day }}{{ loop.last ? '' : ', ' }}{% endfor %}<br>
                                     {% endif %}
-                                    <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>
+                                    <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:{{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a></br>
                                     <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ globalOption.email }}" class="contact-email">{{ globalOption.email }}</a></br>
                                     <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a></br>{% endif %}
                                 {% if(page.additionalPhone) %}<strong><i class="fa fa-phone"></i></strong>&nbsp;<a href="javascript:" >{{ page.additionalPhone|raw }}</a></br>{% endif %}
@@ -202,7 +202,7 @@
                                                 <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
                                             {% endif %}
                                             <br>
-                                            <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
+                                            <i class="fa fa-mobile-phone"></i> <a href="tel:{{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
                                             <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr={{ page.address1 }}&daddr={{ page.latitude }},{{ page.longitude }}">Direction</a>
                                         </span>
                                     </div>

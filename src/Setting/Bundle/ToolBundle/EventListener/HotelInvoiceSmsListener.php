@@ -52,11 +52,11 @@ class HotelInvoiceSmsListener extends BaseSmsAwareListener
 		    $msg = $config->getInvoiceCheckoutsms();
 	    }
 
-	    $mobile = "+8801828148148"; //.$invoice->getCustomer()->getMobile();
+	  //  $mobile = "+8801828148148"; //.$invoice->getCustomer()->getMobile();
 	    $msg = $orgName .'\nDear '.$msg;
 	    if (!empty($mobile)) {
             $status = $this->gateway->send($msg,$mobile);
-            $this->em->getRepository('SettingToolBundle:SmsSender')->insertHotelInvoiceSenderSms($invoice, $status);
+          //  $this->em->getRepository('SettingToolBundle:SmsSender')->insertHotelInvoiceSenderSms($invoice, $status);
 	    }
 
 

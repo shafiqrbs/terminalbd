@@ -30,31 +30,9 @@ class ConfigType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12'),
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),
             ))
-            ->add('productionType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
-                'choices' => array('' => '-- Select Production --', 'pre-production' => 'Pre Production',  'post-production' => 'Post Production'),
-            ))
-            ->add('invoiceType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
-                'choices' => array('' => '-- Select invoice type --', 'new' => 'General',  'banner-print' => 'Banner-Print'),
-            ))
-	        ->add('stockFormat',
-		        'choice', array(
-			        'attr'=>array('class'=>'m-wrap  span12'),
-			        'choices' => array(
-				        'wearhouse'           => 'Wearhouse',
-				        'category'           => 'Category'
-			        ),
-			        'required'    => false,
-			        'multiple'    => true,
-			        'expanded'  => false,
-			        'empty_data'  => null,
-		        ))
-
-	        ->add('isPowered')
+            ->add('isPowered')
 	        ->add('invoicePrintLogo')
             ->add('customInvoicePrint')
-            ->add('customInvoice')
             ->add('isInvoiceTitle')
             ->add('showStock')
             ->add('isPrintHeader')

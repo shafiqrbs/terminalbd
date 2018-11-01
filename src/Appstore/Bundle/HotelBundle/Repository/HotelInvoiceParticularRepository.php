@@ -68,8 +68,8 @@ class HotelInvoiceParticularRepository extends EntityRepository
 	    }
 	    if(!empty($stock)){
 		    $entity = new HotelInvoiceParticular();
-		    $quantity = !empty($quantity) and $quantity > 0 ? $quantity :1;
-		    $entity->setQuantity($quantity);
+		   // $quantity = !empty($quantity) and $quantity > 0 ? $quantity :1;
+		    $entity->setQuantity((int)$quantity);
 		    $entity->setParticular($stock->getName());
 		    $entity->setHotelParticular($stock);
 		    $entity->setGuestName($data['guestName']);
@@ -81,7 +81,8 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		    $entity->setBookingDate($bookingDate);
 		    $entity->setPrice($price);
 		    $entity->setPurchasePrice($stock->getPurchasePrice());
-		    $entity->setSubTotal($quantity * $price);
+		    $subTotal = ($entity->getQuantity() * $price);
+		    $entity->setSubTotal($subTotal);
 		    $entity->setHotelInvoice($invoice);
 		    $em->persist($entity);
 		    $em->flush();

@@ -58,7 +58,7 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('medicine_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') && $enable == 1 && in_array('business',$apps) ) {
             return $this->redirect($this->generateUrl('business_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOTEL') && $enable == 1 && in_array('reservation',$apps) ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOTEL') && $enable == 1 && in_array('hotel',$apps) ) {
             return $this->redirect( $this->generateUrl('hotel_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ELECTION') && $enable == 1 && in_array('election',$apps) ) {
         	return $this->redirect($this->generateUrl('election_homepage'));

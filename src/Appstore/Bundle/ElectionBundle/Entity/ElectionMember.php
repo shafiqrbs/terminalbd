@@ -355,6 +355,13 @@ class ElectionMember
      */
     private $status = true;
 
+	/**
+     * @var boolean
+     *
+     * @ORM\Column(name="isMember", type="boolean")
+     */
+    private $isMember = false;
+
 
 	/**
 	 * @var boolean
@@ -1273,6 +1280,20 @@ class ElectionMember
 	 */
 	public function setNameBn( string $nameBn ) {
 		$this->nameBn = $nameBn;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isMember(){
+		return $this->isMember;
+	}
+
+	/**
+	 * @param bool $isMember
+	 */
+	public function setIsMember( bool $isMember ) {
+		$this->isMember = $isMember;
 	}
 
 

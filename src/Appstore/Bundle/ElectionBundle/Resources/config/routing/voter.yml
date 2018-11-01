@@ -28,5 +28,12 @@ election_voter_delete:
     path:     /{id}/delete
     defaults: { _controller: "ElectionBundle:Voter:delete" }
 
+election_voter_status:
+    path:     /{id}/is-member
+    defaults: { _controller: "ElectionBundle:Voter:status" }
+
+
+
+
 
 

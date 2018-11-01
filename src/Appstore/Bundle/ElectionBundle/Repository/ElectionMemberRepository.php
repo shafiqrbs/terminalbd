@@ -163,15 +163,17 @@ class ElectionMemberRepository extends EntityRepository
 		return $choices;
 	}
 
-    public function findWithSearch( $config , $data , $type = 'member')
+    public function findWithSearch( $config , $data , $type = '')
     {
 	    $sort = isset($data['sort'])? $data['sort'] :'e.name';
 	    $direction = isset($data['direction'])? $data['direction'] :'ASC';
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.electionConfig = :config");
         $qb->setParameter('config', $config);
-	    $qb->andWhere("e.memberType = :type");
-        $qb->setParameter('type', $type);
+        if(!empty($type)){
+	        $qb->andWhere("e.memberType = :type");
+	        $qb->setParameter('type', $type);
+        }
 	    $qb->leftJoin('e.location','node');
 	    $qb->leftJoin('e.voteCenter','center');
 	    $this->handleSearchBetween($qb,$data);
