@@ -122,6 +122,7 @@
                                                 <td><strong class="pull-right" >{{ item.subTotal|number_format() }}</strong></td>
                                             </tr>
                                         {% endfor %}
+                                        <tr> <td colspan="8" style="border-top:1px solid #999999"><strong>Narration: </strong> : {{ entity.comment|raw }}</td></tr>
                                         <tr> <td colspan="8" style="border: 1px solid #999999"></td></tr>
                                         </tbody>
                                         <tfoot>
