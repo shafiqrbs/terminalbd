@@ -778,12 +778,12 @@
 
     /* ====================  E-commerce ============================*/
 
-    {% if globalOption.templateCustomize.headerBorderColor is not empty %}
+    {#{% if globalOption.templateCustomize.headerBorderColor is not empty %}
         #menu-bar{
             border-bottom:solid {{ globalOption.templateCustomize.headerBorderHeight }}!important;
             border-color:{{ globalOption.templateCustomize.headerBorderColor }}!important;
         }
-    {% endif %}
+    {% endif %}#}
 
     .navbar-inverse .navbar-nav>li>a{
         color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
