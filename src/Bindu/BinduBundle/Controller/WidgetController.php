@@ -26,13 +26,19 @@ class WidgetController extends Controller
         }else{
             $theme = 'Desktop/'.$themeName;
         }*/
-
-        return $this->render('@Bindu/Widget/main-header-menu.html.twig', array(
+	    return $this->render('@Bindu/Widget/main-header-menu.html.twig', array(
             'applications'       => $applications,
         ));
     }
 
+	public function loginAction()
+	{
 
+		$csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
+		return $this->render('@Bindu/Widget/login.html.twig', array(
+			'csrfToken'   => $csrfToken,
+		));
+	}
 
 
     public function aboutusAction($slug='')
@@ -141,6 +147,8 @@ class WidgetController extends Controller
         ));
     }
 
+
+
     /**
      * Creates a form to create a User entity.
      *
@@ -164,8 +172,6 @@ class WidgetController extends Controller
 
         return $form;
     }
-
-
 
 
 

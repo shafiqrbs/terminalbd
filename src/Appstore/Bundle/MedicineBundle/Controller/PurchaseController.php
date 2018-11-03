@@ -65,7 +65,7 @@ class PurchaseController extends Controller
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
-        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('medicineConfig'=> $config,'modeFor'=>'brand'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
         return $this->render('MedicineBundle:Purchase:purchaseItem.html.twig', array(
             'entities' => $pagination,
             'racks' => $racks,

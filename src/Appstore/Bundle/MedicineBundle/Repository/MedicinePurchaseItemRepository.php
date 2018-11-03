@@ -107,12 +107,13 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
 
 
-    public function findWithSearch($config,$data = array(),$instant = ''){
+    public function findWithSearch(MedicineConfig $config,$data = array(),$instant = ''){
 
-        $qb = $this->createQueryBuilder('mpi');
+
+    	$qb = $this->createQueryBuilder('mpi');
         $qb->join('mpi.medicinePurchase','e');
         $qb->join('mpi.medicineStock','s');
-        $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
         $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
        // $qb->andWhere('mpi.remainingQuantity > 0');
         $this->handleSearchBetween($qb,$data);

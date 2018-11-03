@@ -1,6 +1,21 @@
 {% extends ':bindu:base.html.twig' %}
 {% block body %}
     <div id="tm-page-body">
+        <div id="tm-page-title">
+            <div class="tm-wrap tm-table">
+                <div class="tm-title-captions">
+                    <h2 class="tm-entry-title">About Us</h2>
+                </div>
+                <ul class="tm-breadcrumbs">
+                    <li>
+                        <a href="{{ path('bindu_homepage') }}">Home</a>
+                    </li>
+                    <li>
+                        Our Respectable Clients
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div id="" class="tm-container tm-wrap">
             <div class="page-content">
 
@@ -11,7 +26,7 @@
                         </div>
                         <div id="tm-portfolio" class="tm-portfolio-classic">
 
-                            <div class="tm-content tm-col-4">
+                            <div class="tm-content">
                                 {% for entity in entities %}
                                     {% if(entity.templateCustomize.webPath('logo') is defined and entity.templateCustomize.webPath('logo') is not empty) %}
                                         <article>
@@ -75,7 +90,17 @@
         <!--tm-container-->
     </div>
 <style>
-
+#tm-portfolio .tm-content article {
+    margin: 0 10px;
+    width: 23%;
+    margin-bottom: 20px;
+    padding: 0;
+    background: #eeeeee;
+}
+#tm-portfolio.tm-portfolio-classic .tm-content article .tm-mask{
+    left: 0;
+    right: 0;
+}
 .client-logo{
     height: 200px;
     width: 250px

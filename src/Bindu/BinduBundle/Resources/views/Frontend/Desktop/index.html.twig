@@ -1,156 +1,339 @@
 {% extends ':bindu:base.html.twig' %}
 {% block body %}
+    <style>
+        #tm-template-default-box.tm-container{
+            margin-top: -10px;
+        }
+    </style>
     <div id="tm-page-body">
-        <div id="tm-template-default-fullwidth" class="tm-container">
+        <div class="tm-row" style="">
+            <div class="tm-gallery gallery-slide flexslider" style="">
+                <ul class="slides">
+                    <li>
+                        <a href="#">
+                            <img alt="img" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/5.jpg') }}">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img alt="img" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/6.jpg') }}">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="tm-template-default-box" class="tm-container">
             <div class="page-content">
                 <div class="page-content-inner tm-content">
-                    <div class="tm-row" style="padding:50px 0 80px; text-align:center; display: none">
-                        <div class="tm-wrap">
-                            <img alt="img" style="margin-bottom:20px" width="100" height="100" src="../../assets/bindu/img/sample/home/icons/mobile-icon.png">
-                            <div class="header-line-center-bottom">
-                                <h1>
-                                    Creative design on desktop, tablet and mobile
-                                </h1>
-                            </div>
-                            <p style="padding:30px 0">
-                                Fedora is ready to WOW the web visitors no matter what devices they are using to surf the website. With responsive layout, your website will seamlessly displays and run smoothly on any device including desktop, tablet and mobile phone with any screen resolution.
-                            </p>
-                            <div class="setanimate">
-                                <a><img alt="img" class="tm-animate slide-from-bottom" src="../../assets/bindu/img/sample/home/responsive.jpg"></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tm-row" style="text-align:center;padding:50px 0 100px 0;background:#eee;">
-                        <div class="tm-wrap">
-                            <div class="header-line-center-bottom">
-                                    <h1>Creative Application/Website on Desktop, Tablet and Mobile</h1>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <div class="tm-row" style="margin:-50px 0 0 0">
-                        <div class="tm-wrap">
-                            <div class="one-third">
-                                <div style="padding-top:100px">
-                                    <ul class="tm-iconlist tm-style1">
-                                        <li>
-                                            <div class="iconlist-icon">
-                                                <i class="fa fa-magic"></i>
-                                            </div>
-                                            <div class="iconlist-entry">
-                                                <div class="iconlist-container">
-                                                    <h3>Fully hosted Cloud Platform</h3>
-                                                    <div class="iconlist-content">
-                                                        <p>Robust scalable platform to build and manage websites.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="iconlist-icon">
-                                                <i class="fa fa-hand-o-up"></i>
-                                            </div>
-                                            <div class="iconlist-entry">
-                                                <div class="iconlist-container">
-                                                    <h3>Full Marketing and Technical Support</h3>
-                                                    <div class="iconlist-content">
-                                                        <p>All the marketing and technical support you need to resell terminalbd.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                    <div class="tm-row" style="padding:50px 0 20px 0">
+                        <div class="tm-wrap setanimate visible">
+                            <div class="tm-iconbox tm-style1">
+                                <div class="one-fourth tm-box">
+                                    <div class="iconlist-icon-header">
+											<span>
+											<i class="fa fa-trophy"></i>
+											</span>
+                                        <h3 class="tm-title">Fully hosted Cloud Platform</h3>
+                                    </div>
+                                    <div class="iconlist-entry">
+                                        <div class="iconlist-content">
+                                            <p>Robust scalable platform to build and manage websites.</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="one-third">
-                                <div id="container-form">
-                                    <div class="entry-container">
+                                <div class="one-fourth tm-box">
+                                    <div class="iconlist-icon-header">
+											<span>
+											<i class="fa fa-flash"></i>
+											</span>
+                                        <h3 class="tm-title">Easily Manage Your Sites</h3>
+                                    </div>
+                                    <div class="iconlist-entry">
+                                        <div class="iconlist-content">
+                                            <p>Manage sites for your clients, run reports and analytics via the Online Management Dashboard.</p>
 
-                                        <section id="tm-comment">
-                                            <section id="respond">
-                                                    <!-- BEGIN FORM-->
-                                                    {{ form_start(form) }}
-                                                    {{ form_row(form._token) }}
-
-                                                <div>
-                                                    {{ form_errors(form.globalOption.name) }}
-                                                    <p><span class="fa-icon"><i class="fa  fa-building-o"></i></span>
-                                                        {{ form_widget(form.globalOption.name) }}
-                                                    </p>
-                                                </div>
-
-                                                <div>
-                                                    {{ form_errors(form.profile.mobile) }}
-                                                    <p><span class="fa-icon"><i class="fa  fa-mobile-phone"></i></span>
-                                                        {{ form_widget(form.profile.mobile) }}<span id="checking"></span>
-                                                     </p>
-                                                </div>
-                                                    <p style="color: #ffffff; text-align: left">Next enter the relevant information below to populate your site.</p>
-
-                                                <div>
-                                                    {{ form_errors(form.globalOption.syndicate) }}
-                                                    <p>{{ form_widget(form.globalOption.syndicate) }}</p>
-                                                </div>
-                                                <div>
-                                                    {{ form_errors(form.globalOption.location) }}
-                                                    <p> {{ form_widget(form.globalOption.location) }}</p>
-                                                </div>
-                                                <div>
-                                                    {{ form_errors(form.globalOption.status) }}
-                                                    <div class="checkbox block">
-                                                        {{ form_widget(form.globalOption.status) }}
-                                                    </div><span style="color: #ffffff; line-height: 32px">&nbsp;I agree to &nbsp;<a class="anchor-white" target="_blank" id="TosLink" href="{{ path('bindu_page_content',{'slug':'terms-of-service'}) }}">Terms</a>&nbsp;&&nbsp;<a class="anchor-white" target="_blank" id="PrivacyLink" href="{{ path('bindu_page_content',{'slug':'privacy-policy'}) }}">Privacy</a></span>
-                                                </div>
-                                                <div><p class="form-suphobmit" style="text-align:right"><input id="signup" class="tm-btn red small" type="submit" value="CREATE SITE" name="submit"></p></div>
-                                                {{ form_end(form) }}
-                                            </section>
-                                        </section>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="one-fourth tm-box">
+                                    <div class="iconlist-icon-header">
+											<span>
+											<i class="fa fa-signal"></i>
+											</span>
+                                        <h3 class="tm-title">Full Marketing and Technical Support</h3>
+                                    </div>
+                                    <div class="iconlist-entry">
+                                        <div class="iconlist-content">
+                                            <p>All the marketing and technical support you need to resell terminalbd.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="one-fourth tm-box last">
+                                    <div class="iconlist-icon-header">
+											<span>
+											<i class="fa fa-gears"></i>
+											</span>
+                                        <h3 class="tm-title">Easy to get Onboard</h3>
+                                    </div>
+                                    <div class="iconlist-entry">
+                                        <div class="iconlist-content">
+                                            <p>Start building and selling terminalbd sites today.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="one-third last">
-                                <div style="padding-top:100px">
-                                    <ul class="tm-iconlist tm-style1">
-                                        <li>
-                                            <div class="iconlist-icon">
-                                                <i class="fa fa-crop"></i>
-                                            </div>
-                                            <div class="iconlist-entry">
-                                                <div class="iconlist-container">
-                                                    <h3>Easily Manage Your Sites</h3>
-                                                    <div class="iconlist-content">
-                                                        <p>Manage sites for your clients, run reports and analytics via the Online Management Dashboard.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="iconlist-icon">
-                                                <i class="fa fa-eye"></i>
-                                            </div>
-                                            <div class="iconlist-entry">
-                                                <div class="iconlist-container">
-                                                    <h3>Easy to get Onboard</h3>
-                                                    <div class="iconlist-content">
-                                                        <p>Start building and selling terminalbd sites today.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                        </div>
+                    </div>
+
+                    <div class="tm-row">
+                        <div class="tm-wrap">
+                            <div style="padding:30px;background:#29739D;margin:30px 0">
+                                <div class="two-third">
+                                    <p style="color:#fff">
+                                        Fedora is a design-led property development & interior design company that specializes in creating the finest residential addresses based in United States and more than 50 countries all over the world.
+                                    </p>
                                 </div>
+                                <div class="last one-third">
+                                    <div style="text-align:right" class="">
+                                        <a href="#" class="tm-btn blue">See More</a>
+                                        <a href="#" class="tm-btn green">Contact Us</a>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
                             </div>
                         </div>
                     </div>
 
+                    <div class="tm-row" style="padding:20px 0 30px 0">
+                        <div class="tm-wrap">
+                            <div class="header-double-line-right">
+                                <h3 class="tm-title">Welcome to our website!</h3>
+                            </div>
+                            <div style="margin-bottom:30px">
+                                <p>
+                                    <span class="tm-dropcap tm-style3">T</span>
+                                    urning back to 10 years ago, we were established in October 1999 and we have been decorating homes and businesses throughout the United States since then. Being showcased in many local and international architect and design magazine, our talented team is also proud to get Golden Award of best interior design company in 5 recent years. We know that a enchanting, enjoyable and reasonable design experience can all be YOURS! So, what are you waiting for? Contact us today!
+                                </p>
+                            </div>
+                            <div style="">
+                                <div class="one-fourth tm-box">
+                                    <div style="margin-bottom:30px">
+                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/7.jpg') }}">
+                                        <h3 class="tm-title">PLANNING AND URBAN DESIGN</h3>
+                                        <p>
+                                            Our consultants work globally on a broad range of projects to deliver the realistic qualities that make a place outstanding.
+                                        </p>
+                                    </div>
+                                    <div style="">
+                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/9.jpg') }}">
+                                        <h3 class="tm-title">INTERIOR DESIGN</h3>
+                                        <p>
+                                            Our team creates a design not just for visual impression, but also for usability, relaxation, flexibility and ease of use.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="one-fourth tm-box">
+                                    <div style="margin-bottom:30px">
+                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/7.jpg') }}">
+                                        <h3 class="tm-title">PLANNING AND URBAN DESIGN</h3>
+                                        <p>
+                                            Our consultants work globally on a broad range of projects to deliver the realistic qualities that make a place outstanding.
+                                        </p>
+                                    </div>
+                                    <div style="">
+                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/9.jpg') }}">
+                                        <h3 class="tm-title">INTERIOR DESIGN</h3>
+                                        <p>
+                                            Our team creates a design not just for visual impression, but also for usability, relaxation, flexibility and ease of use.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="one-fourth tm-box">
+                                    <div style="margin-bottom:30px">
+                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/7.jpg') }}">
+                                        <h3 class="tm-title">PLANNING AND URBAN DESIGN</h3>
+                                        <p>
+                                            Our consultants work globally on a broad range of projects to deliver the realistic qualities that make a place outstanding.
+                                        </p>
+                                    </div>
+                                    <div style="">
+                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/9.jpg') }}">
+                                        <h3 class="tm-title">INTERIOR DESIGN</h3>
+                                        <p>
+                                            Our team creates a design not just for visual impression, but also for usability, relaxation, flexibility and ease of use.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="one-fourth tm-box last">
+                                    <div style="margin-bottom:30px">
+                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/5.jpg') }}">
+                                        <h3 class="tm-title">ARCHITECTURE DEVELOPMENT</h3>
+                                        <p>
+                                            We work collaboratively with customers to develop buildings that beautiful in design and perform well on every level.
+                                        </p>
+                                    </div>
+                                    <div style="">
+                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/10.jpg') }}">
+                                        <h3 class="tm-title">EXPERT IN CONSULTING</h3>
+                                        <p>
+                                            Our services contain tactical planning, real estate and profile examination and positioning/location evaluation.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tm-row">
+                        <div class="tm-wrap">
+                            <div class="header-double-line-right">
+                                <h3 class="tm-title">Our Happy Clients</h3>
+                            </div>
+                        </div>
+                        <div class="tm-wrap">
+                                <div class="tm-logo-client tm-gallery gallery-carousel">
+                                <ul class="slides">
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/1.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/2.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/3.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/4.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/5.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/1.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/2.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/3.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/4.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/5.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/1.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/2.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/3.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/4.png') }}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/5.png') }}">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tm-row setanimate visible" style="padding:10px 0 80px; text-align:center">
+                        <div class="tm-wrap">
+                            <div class="header-line-center-bottom" style="margin-bottom:30px">
+                                <h1>
+                                    What others say about us
+                                </h1>
+                            </div>
+                            <div class="one-third tm-animate slide-from-left">
+                                <img alt="img" style="margin:30px 0" src="{{ asset('assets/bindu/img/sample/home/comment/1.png') }}">
+                                <div class="tm-testimonial tm-style2">
+                                    <div class="testimonial-content">
+                                        <p>
+                                            I’m totally in love with the design of Fedora. It helps me to attract not only the PCs users but also the mobile visitors to increase the visit traffic with the great responsive layout!
+                                        </p>
+                                    </div>
+                                    <div class="info">
+                                        <div class="name">
+                                            <h3>- Jone Doe -</h3>
+                                            <p>Co-Founder - <span>Themeforest</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="one-third ">
+                                <img alt="img" style="margin:30px 0" src="{{ asset('assets/bindu/img/sample/home/comment/3.png') }}">
+                                <div class="tm-testimonial tm-style2">
+                                    <div class="testimonial-content">
+                                        <p>
+                                            Professional, innovative and easy-to-customize, with the vast array of layout options to choose from, Fedora helps me much. That's why I can use it for multiple websites.
+                                        </p>
+                                    </div>
+                                    <div class="info">
+                                        <div class="name">
+                                            <h3>- Jone Doe -</h3>
+                                            <p>Co-Founder - <span>Themeforest</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="one-third last tm-animate slide-from-right">
+                                <img alt="img" style="margin:30px 0" src="{{ asset('assets/bindu/img/sample/home/comment/2.png') }}">
+                                <div class="tm-testimonial tm-style2">
+                                    <div class="testimonial-content">
+                                        <p>
+                                            Simply like both this great theme and the extraordinary provider with their 5-star service and product that they creatively crafted and brought to the market.
+                                        </p>
+                                    </div>
+                                    <div class="info">
+                                        <div class="name">
+                                            <h3>- Jone Doe -</h3>
+                                            <p>Co-Founder - <span>Themeforest</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--page-content-->
         </div>
-        <!--tm-container-->
     </div>
 
 {% endblock %}

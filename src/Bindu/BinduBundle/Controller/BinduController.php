@@ -19,7 +19,22 @@ class BinduController extends Controller
     public function indexAction()
     {
 
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+       // return $this->redirect($this->generateUrl('fos_user_security_login'));
+	    $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
+	    $entity = new User();
+	    $form   = $this->createCreateForm($entity);
+	    $detect = new MobileDetect();
+	    if( $detect->isMobile() OR  $detect->isTablet() ) {
+		    $theme = 'Frontend/Mobile';
+	    }else{
+		    $theme = 'Frontend/Desktop';
+	    }
+	    return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
+		    'entity' => $entity,
+		    'slides' => $slides,
+		    'error' => '',
+		    'form'   => $form->createView(),
+	    ));
     }
 
     public function homeAction()
@@ -37,6 +52,7 @@ class BinduController extends Controller
         return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
              'entity' => $entity,
              'slides' => $slides,
+             'error' => '',
              'form'   => $form->createView(),
          ));
 

@@ -65,9 +65,7 @@ class SecurityController extends Controller
         if ($error) {
             $error = $error->getMessage();
         }
-
-
-        //echo var_dump($error);
+       // echo var_dump($error);
        // exit;
 
         return $this->renderLogin(array(
@@ -89,12 +87,13 @@ class SecurityController extends Controller
     {
 
         $detect = new MobileDetect();
-        if($detect->isMobile() OR  $detect->isTablet() ) {
-            $theme = 'Security/Mobile';
-        }else{
-            $theme = 'Security';
-        }
-        return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
+	    if( $detect->isMobile() OR  $detect->isTablet() ) {
+		    $theme = 'Frontend/Mobile';
+	    }else{
+		    $theme = 'Frontend/Desktop';
+	    }
+    //    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
+	    return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
     }
 
 
