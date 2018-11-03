@@ -1,6 +1,21 @@
 {% extends ':bindu:base.html.twig' %}
 {% block body %}
     <div id="tm-page-body">
+        <div id="tm-page-title">
+            <div class="tm-wrap tm-table">
+                <div class="tm-title-captions">
+                    <h2 class="tm-entry-title">{{ app.name }}</h2>
+                </div>
+                <ul class="tm-breadcrumbs">
+                    <li>
+                        <a href="{{ path('bindu_homepage') }}">Home</a>
+                    </li>
+                    <li>
+                        Applications
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div id="" class="tm-container tm-wrap">
             <div class="page-content">
 

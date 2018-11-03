@@ -24,14 +24,18 @@ class SiteContentType extends AbstractType
                 )
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows'=>15)))
+            ->add('content','textarea', array('attr'=>array('class'=>'ckeditor m-wrap span12','rows'=>15)))
+	        ->add('businessSector', 'choice', array(
+		        'attr'=>array('class'=>'m-wrap span12'),
+		        'choices' => array('portal' => 'Portal','education' => 'Education',  'ecommerce' => 'E-commerce', 'reservation' => 'Reservation', 'fleet' => 'Fleet Management'),
+	        ))
 
-            ->add('parent', 'entity', array(
+	        ->add('parent', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\SiteContent',
                 'empty_value' => '---Select parent page---',
                 'property' => 'name',
-                'attr'=>array('class'=>'form-control input-sm selectbox'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'query_builder' => function(EntityRepository $er){
                         return $er->createQueryBuilder('o')
                             ->andWhere("o.status = 1")

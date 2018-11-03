@@ -19,8 +19,9 @@ class BinduController extends Controller
     public function indexAction()
     {
 
-       // return $this->redirect($this->generateUrl('fos_user_security_login'));
-	    $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
+        $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
+	    $apps =$this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1));
+
 	    $entity = new User();
 	    $form   = $this->createCreateForm($entity);
 	    $detect = new MobileDetect();
@@ -32,6 +33,7 @@ class BinduController extends Controller
 	    return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
 		    'entity' => $entity,
 		    'slides' => $slides,
+		    'apps' => $apps,
 		    'error' => '',
 		    'form'   => $form->createView(),
 	    ));
@@ -39,23 +41,7 @@ class BinduController extends Controller
 
     public function homeAction()
     {
-
-        $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
-        $entity = new User();
-        $form   = $this->createCreateForm($entity);
-        $detect = new MobileDetect();
-        if( $detect->isMobile() OR  $detect->isTablet() ) {
-            $theme = 'Frontend/Mobile';
-        }else{
-            $theme = 'Frontend/Desktop';
-        }
-        return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
-             'entity' => $entity,
-             'slides' => $slides,
-             'error' => '',
-             'form'   => $form->createView(),
-         ));
-
+	    return $this->redirect($this->generateUrl('home'));
     }
 
 

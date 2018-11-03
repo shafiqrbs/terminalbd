@@ -45,7 +45,16 @@ class SiteContent
      **/
     private $children;
 
-    /**
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="businessSector", type="string", length=50)
+	 */
+	private $businessSector;
+
+
+
+	/**
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
@@ -323,6 +332,20 @@ class SiteContent
     {
         $this->isPage = $isPage;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getBusinessSector() {
+		return $this->businessSector;
+	}
+
+	/**
+	 * @param string $businessSector
+	 */
+	public function setBusinessSector( string $businessSector ) {
+		$this->businessSector = $businessSector;
+	}
 
 
 }

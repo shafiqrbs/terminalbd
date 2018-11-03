@@ -2,26 +2,26 @@
 {% block body %}
     <style>
         #tm-template-default-box.tm-container{
-            margin-top: -10px;
+            margin-top: 30px;
         }
     </style>
     <div id="tm-page-body">
         <div class="tm-row" style="">
-            <div class="tm-gallery gallery-slide flexslider" style="">
+            <div class="tm-gallery gallery-slide flexslider" style="height: 350px;">
                 <ul class="slides">
+                    {% if slides is not empty %}
+                    {% for slide in slides %}
                     <li>
-                        <a href="#">
-                            <img alt="img" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/5.jpg') }}">
+                        <a href="{{ slide.routePath }}">
+                            <img alt="img" src="{{ image(slide.webPath).scaleResize(1014,320) }}">
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <img alt="img" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/6.jpg') }}">
-                        </a>
-                    </li>
+                    {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
+        <div class="clear"></div>
         <div id="tm-template-default-box" class="tm-container">
             <div class="page-content">
                 <div class="page-content-inner tm-content">
@@ -112,74 +112,22 @@
                             <div style="margin-bottom:30px">
                                 <p>
                                     <span class="tm-dropcap tm-style3">T</span>
-                                    urning back to 10 years ago, we were established in October 1999 and we have been decorating homes and businesses throughout the United States since then. Being showcased in many local and international architect and design magazine, our talented team is also proud to get Golden Award of best interior design company in 5 recent years. We know that a enchanting, enjoyable and reasonable design experience can all be YOURS! So, what are you waiting for? Contact us today!
+                                    {% render controller("FrontendBundle:Widget:siteContent",{'sector':'portal','slug':'portal-home','limit':350}) %}
                                 </p>
                             </div>
+                            <div class="clear"></div>
                             <div style="">
-                                <div class="one-fourth tm-box">
-                                    <div style="margin-bottom:30px">
-                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/7.jpg') }}">
-                                        <h3 class="tm-title">PLANNING AND URBAN DESIGN</h3>
-                                        <p>
-                                            Our consultants work globally on a broad range of projects to deliver the realistic qualities that make a place outstanding.
-                                        </p>
+                                {% if apps is not empty %}
+                                {% for app in apps %}
+                                    <div class="one-fourth tm-box">
+                                        <div style="margin-bottom:30px">
+                                            <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/7.jpg') }}">
+                                            <h3 class="tm-title">{{ app.name }}</h3>
+                                            <p>{{ app.shortContent|raw }}</p>
+                                        </div>
                                     </div>
-                                    <div style="">
-                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/9.jpg') }}">
-                                        <h3 class="tm-title">INTERIOR DESIGN</h3>
-                                        <p>
-                                            Our team creates a design not just for visual impression, but also for usability, relaxation, flexibility and ease of use.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="one-fourth tm-box">
-                                    <div style="margin-bottom:30px">
-                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/7.jpg') }}">
-                                        <h3 class="tm-title">PLANNING AND URBAN DESIGN</h3>
-                                        <p>
-                                            Our consultants work globally on a broad range of projects to deliver the realistic qualities that make a place outstanding.
-                                        </p>
-                                    </div>
-                                    <div style="">
-                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/9.jpg') }}">
-                                        <h3 class="tm-title">INTERIOR DESIGN</h3>
-                                        <p>
-                                            Our team creates a design not just for visual impression, but also for usability, relaxation, flexibility and ease of use.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="one-fourth tm-box">
-                                    <div style="margin-bottom:30px">
-                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/7.jpg') }}">
-                                        <h3 class="tm-title">PLANNING AND URBAN DESIGN</h3>
-                                        <p>
-                                            Our consultants work globally on a broad range of projects to deliver the realistic qualities that make a place outstanding.
-                                        </p>
-                                    </div>
-                                    <div style="">
-                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/9.jpg') }}">
-                                        <h3 class="tm-title">INTERIOR DESIGN</h3>
-                                        <p>
-                                            Our team creates a design not just for visual impression, but also for usability, relaxation, flexibility and ease of use.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="one-fourth tm-box last">
-                                    <div style="margin-bottom:30px">
-                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/5.jpg') }}">
-                                        <h3 class="tm-title">ARCHITECTURE DEVELOPMENT</h3>
-                                        <p>
-                                            We work collaboratively with customers to develop buildings that beautiful in design and perform well on every level.
-                                        </p>
-                                    </div>
-                                    <div style="">
-                                        <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/10.jpg') }}">
-                                        <h3 class="tm-title">EXPERT IN CONSULTING</h3>
-                                        <p>
-                                            Our services contain tactical planning, real estate and profile examination and positioning/location evaluation.
-                                        </p>
-                                    </div>
-                                </div>
+                                {% endfor %}
+                                {% endif %}
                                 <div class="clear"></div>
                             </div>
                         </div>
@@ -335,7 +283,11 @@
             <!--page-content-->
         </div>
     </div>
-
+    <style>
+        .one-fourth:nth-child(4) , .one-fourth:nth-child(8), .one-fourth:nth-child(12), .one-fourth:nth-child(13){
+            margin-right: 0;
+        }
+    </style>
 {% endblock %}
     {% block cssBlock %}
         {% stylesheets filter='cssrewrite'

@@ -91,6 +91,13 @@ class AppModule
      */
     private $content;
 
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="shortContent", type="text" , nullable = true)
+     */
+    private $shortContent;
+
 
     /**
      * @var float
@@ -399,5 +406,19 @@ class AppModule
     {
         return $this->applicationTestimonial;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getShortContent(){
+		return $this->shortContent;
+	}
+
+	/**
+	 * @param string $shortContent
+	 */
+	public function setShortContent( string $shortContent ) {
+		$this->shortContent = $shortContent;
+	}
 }
 

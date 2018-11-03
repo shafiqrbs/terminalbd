@@ -21,6 +21,7 @@ class TemplateEcommerceType extends AbstractType
             ->add('mobileShowLogo')
             ->add('mobileHomeShowLogo')
             ->add('topBar')
+	        ->add('showNewsLetter')
             ->add('footerBlock')
             ->add('showCalendar')
             ->add('showEmail')

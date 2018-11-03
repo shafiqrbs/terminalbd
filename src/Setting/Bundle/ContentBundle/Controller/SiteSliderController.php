@@ -171,15 +171,12 @@ class SiteSliderController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
-            $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-
+	        $entity->upload();
+            //$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
             // Here, "getMyFile" returns the "UploadedFile" instance that the form bound in your $myFile property
-            $uploadableManager->markEntityToUpload($entity, $entity->getFile());
-
+            //$uploadableManager->markEntityToUpload($entity, $entity->getFile());
             $em->flush();
-
-            return $this->redirect($this->generateUrl('siteslider_edit', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('siteslider'));
         }
 
         return $this->render('SettingContentBundle:SiteSlider:edit.html.twig', array(

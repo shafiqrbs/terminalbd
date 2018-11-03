@@ -618,7 +618,7 @@ form .tm-button {
   padding: 10px;
 }
 form .tm-button {
-  background: #df0100;
+  background: #0d8bb3;
   color: #ffffff;
   font-weight: bold;
   border: none;
@@ -708,7 +708,7 @@ header #tm-header-top .tm-search form input {
   vertical-align: middle;
 }
 header #tm-header-top .tm-search form button {
-  background: #df0100;
+  background:#0d8bb3;
   color: #ffffff;
   font-weight: bold;
   vertical-align: middle;
@@ -1045,7 +1045,7 @@ header .tm-social-icons a:hover {
 }
 /** page-title **/
 #tm-page-title {
-  background:#df0100;
+  background:#0d8bb3;
   color: #ffffff;
   padding: 15px;
 }

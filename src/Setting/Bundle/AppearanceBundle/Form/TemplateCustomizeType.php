@@ -23,6 +23,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('topBar')
             ->add('footerBlock')
             ->add('showCalendar')
+            ->add('showNewsLetter')
             ->add('showEmail')
             ->add('showMobile')
             ->add('showSearch')

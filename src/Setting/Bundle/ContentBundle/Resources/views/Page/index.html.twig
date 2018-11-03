@@ -47,23 +47,14 @@
                     #}
                 </div>
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Page Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Page Content Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('page_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('page') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('page_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Page</a>
                             </div>
                         </div>
                     </div>
-
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}

@@ -238,15 +238,19 @@ class CategoryRepository extends MaterializedPathRepository
     function getParentId($inventoryCat) {
 
         $cats = array();
-        foreach ( $inventoryCat->getCategories() as $cat ){
-           $cats[] = $cat->getId();
+        if(!empty($inventoryCat)){
+	        foreach ( $inventoryCat->getCategories() as $cat ){
+		        $cats[] = $cat->getId();
+	        }
+	        $qb = $this->createQueryBuilder('category');
+	        $qb->where('category.parent IN(:cats)');
+	        $qb->setParameter('cats',array_values($cats));
+	        $qb->orderBy('category.name','ASC');
+	        $result = $qb->getQuery()->getResult();
+	        return $result;
         }
-        $qb = $this->createQueryBuilder('category');
-        $qb->where('category.parent IN(:cats)');
-        $qb->setParameter('cats',array_values($cats));
-        $qb->orderBy('category.name','ASC');
-        $result = $qb->getQuery()->getResult();
-        return $result;
+	    return false;
+
 
     }
 

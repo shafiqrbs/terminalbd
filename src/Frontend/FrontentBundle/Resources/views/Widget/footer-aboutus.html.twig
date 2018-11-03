@@ -1,1 +1,3 @@
-{{ about.content|truncate(180)|raw }}
+{% if about is defined and about is not empty %}
+{{ about.content|truncate(limit)|raw }}
+{% endif %}

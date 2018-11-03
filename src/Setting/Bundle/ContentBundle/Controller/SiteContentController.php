@@ -47,7 +47,7 @@ class SiteContentController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('sitecontent_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('sitecontent'));
         }
 
         return $this->render('SettingContentBundle:SiteContent:new.html.twig', array(
@@ -65,8 +65,7 @@ class SiteContentController extends Controller
      */
     private function createCreateForm(SiteContent $entity)
     {
-
-        $form = $this->createForm(new SiteContentType($user -> getId()), $entity, array(
+	    $form = $this->createForm(new SiteContentType(), $entity, array(
             'action' => $this->generateUrl('sitecontent_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -74,7 +73,7 @@ class SiteContentController extends Controller
                 'novalidate' => 'novalidate',
             )
         ));
-        return $form;
+	    return $form;
     }
 
     /**
@@ -147,7 +146,7 @@ class SiteContentController extends Controller
     */
     private function createEditForm(SiteContent $entity)
     {
-        $form = $this->createForm(new SiteContentType($entity->getUser()->getId()), $entity, array(
+        $form = $this->createForm(new SiteContentType(), $entity, array(
             'action' => $this->generateUrl('sitecontent_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -182,10 +181,10 @@ class SiteContentController extends Controller
             $entity->upload();
             $em->flush();
 
-            return $this->redirect($this->generateUrl('sitecontent_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('sitecontent'));
         }
 
-        return $this->render('SettingContentBundle:SiteContent:edit.html.twig', array(
+        return $this->render('SettingContentBundle:SiteContent:new.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

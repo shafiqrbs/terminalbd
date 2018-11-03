@@ -42,7 +42,7 @@ class DefaultController extends Controller
                 }
             }
         }
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+	    if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
             return $this->redirect($this->generateUrl('bindu_build'));
@@ -62,13 +62,14 @@ class DefaultController extends Controller
             return $this->redirect( $this->generateUrl('hotel_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ELECTION') && $enable == 1 && in_array('election',$apps) ) {
         	return $this->redirect($this->generateUrl('election_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 && in_array('inventory',$apps)) {
         	return $this->redirect($this->generateUrl('inventory_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1 && in_array('website',$apps)) {
 	        return $this->redirect($this->generateUrl('website'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {
 	        return $this->redirect($this->generateUrl('domain'));
-/*        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES') && $enable == 1) {
+		/*
+		 }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES') && $enable == 1) {
             $inventory = $user->getGlobalOption()->getInventoryConfig();
             $deliveryProcess = $inventory->getDeliveryProcess();
             if (!empty($deliveryProcess)) {
@@ -81,7 +82,8 @@ class DefaultController extends Controller
                 }
             }
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') && $enable == 1) {
-            return $this->redirect($this->generateUrl('purchase'));*/
+            return $this->redirect($this->generateUrl('purchase'));
+		*/
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_AGENT')) {
               return $this->redirect($this->generateUrl('agentclient'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER')) {

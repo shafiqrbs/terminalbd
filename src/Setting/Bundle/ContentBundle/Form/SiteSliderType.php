@@ -23,8 +23,13 @@ class SiteSliderType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
+            ->add('routePath','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter slider name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                )
+            ))
             ->add('businessSector', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'choices' => array('portal' => 'Portal','education' => 'Education',  'ecommerce' => 'E-commerce', 'reservation' => 'Reservation', 'fleet' => 'Fleet Management'),
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))

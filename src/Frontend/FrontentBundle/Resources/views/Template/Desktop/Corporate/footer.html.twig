@@ -4,6 +4,7 @@
     </section>
 {% endif %}
 <section class="footer-menu">
+    {% if globalOption.templateCustomize.showNewsLetter == 1 %}
     <div class="container social-payment" >
         <div class="row">
 
@@ -46,8 +47,8 @@
                 </div>
             </div>
         </div>
-
     </div>
+    {% endif %}
     <div class="container" id="footer-menu" >
         <div class="row">
             <div class="col-sm-4">

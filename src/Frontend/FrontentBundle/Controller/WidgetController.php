@@ -80,7 +80,18 @@ class WidgetController extends Controller
         $about                     = $this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->find(1);
         return $this->render('@Frontend/Widget/footer-aboutus.html.twig', array(
             'about'           => $about,
+            'limit'           => 200,
         ));
+    }
+
+	public function siteContentAction($sector = '' , $slug = '', $limit = 200)
+    {
+        $content                     = $this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->findOneBy(array('businessSector'=> $sector,  'slug' => $slug));
+	    return $this->render('@Frontend/Widget/footer-aboutus.html.twig', array(
+		    'about'           => $content,
+		    'limit'           => $limit,
+	    ));
+
     }
 
     public function admissionAction()

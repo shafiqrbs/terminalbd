@@ -148,13 +148,19 @@ class TemplateCustomize
      */
     private $showSocialIcon = false;
 
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="logoDisplayWebsite", type="boolean")
      */
     private $logoDisplayWebsite=true;
+
+	/**
+     * @var boolean
+     *
+     * @ORM\Column(name="showNewsLetter", type="boolean")
+     */
+    private $showNewsLetter = true;
 
     /**
      * @var string
@@ -2527,6 +2533,20 @@ class TemplateCustomize
     {
         $this->mobileHomeShowLogo = $mobileHomeShowLogo;
     }
+
+	/**
+	 * @return bool
+	 */
+	public function isShowNewsLetter(){
+		return $this->showNewsLetter;
+	}
+
+	/**
+	 * @param bool $showNewsLetter
+	 */
+	public function setShowNewsLetter( bool $showNewsLetter ) {
+		$this->showNewsLetter = $showNewsLetter;
+	}
 
 
 }
