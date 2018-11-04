@@ -142,81 +142,15 @@
                         <div class="tm-wrap">
                                 <div class="tm-logo-client tm-gallery gallery-carousel">
                                 <ul class="slides">
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/1.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/2.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/3.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/4.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/5.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/1.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/2.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/3.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/4.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/5.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/1.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/2.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/3.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/4.png') }}">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/logo/5.png') }}">
-                                        </a>
-                                    </li>
+                                    {% if clients is not empty %}
+                                        {% for client in clients %}
+                                        <li>
+                                            <a target="_blank" href="{% if client.domain is not empty %}http://www.{{ client.domain }}{% else %}javascript:{% endif %}" data-title="{% if client.domain is not empty %}http://www.{{ client.domain }}{% endif %}">
+                                                <img alt="img" src="{{ image(client.templateCustomize.webPath('logo')).resize(80,80) }}">
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -228,54 +162,25 @@
                                     What others say about us
                                 </h1>
                             </div>
-                            <div class="one-third tm-animate slide-from-left">
-                                <img alt="img" style="margin:30px 0" src="{{ asset('assets/bindu/img/sample/home/comment/1.png') }}">
-                                <div class="tm-testimonial tm-style2">
-                                    <div class="testimonial-content">
-                                        <p>
-                                            I’m totally in love with the design of Fedora. It helps me to attract not only the PCs users but also the mobile visitors to increase the visit traffic with the great responsive layout!
-                                        </p>
-                                    </div>
-                                    <div class="info">
-                                        <div class="name">
-                                            <h3>- Jone Doe -</h3>
-                                            <p>Co-Founder - <span>Themeforest</span></p>
+                            {% if testimonials is not empty %}
+                                {% for testimonial in testimonials %}
+                                    <div class="one-third tm-animate slide-from-left">
+                                        <img alt="img" style="margin:30px 0" src="{{ image(testimonial.webPath).scaleResize(160,160) }}">
+                                        <div class="tm-testimonial tm-style2">
+                                            <div class="testimonial-content">
+                                                <p>{{ testimonial.content|striptags|raw|truncate(250) }}</p>
+                                            </div>
+                                            <div class="info">
+                                                <div class="name">
+                                                    <h3>- {{ testimonial.name }} -</h3>
+                                                    <p>{{ testimonial.designation }} - <span>{{ testimonial.company }}</span></p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="one-third ">
-                                <img alt="img" style="margin:30px 0" src="{{ asset('assets/bindu/img/sample/home/comment/3.png') }}">
-                                <div class="tm-testimonial tm-style2">
-                                    <div class="testimonial-content">
-                                        <p>
-                                            Professional, innovative and easy-to-customize, with the vast array of layout options to choose from, Fedora helps me much. That's why I can use it for multiple websites.
-                                        </p>
-                                    </div>
-                                    <div class="info">
-                                        <div class="name">
-                                            <h3>- Jone Doe -</h3>
-                                            <p>Co-Founder - <span>Themeforest</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="one-third last tm-animate slide-from-right">
-                                <img alt="img" style="margin:30px 0" src="{{ asset('assets/bindu/img/sample/home/comment/2.png') }}">
-                                <div class="tm-testimonial tm-style2">
-                                    <div class="testimonial-content">
-                                        <p>
-                                            Simply like both this great theme and the extraordinary provider with their 5-star service and product that they creatively crafted and brought to the market.
-                                        </p>
-                                    </div>
-                                    <div class="info">
-                                        <div class="name">
-                                            <h3>- Jone Doe -</h3>
-                                            <p>Co-Founder - <span>Themeforest</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                {% endfor %}
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>

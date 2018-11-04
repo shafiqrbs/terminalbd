@@ -26,7 +26,8 @@ class ServiceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+
+	    $builder
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter service name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
@@ -48,17 +49,18 @@ class ServiceType extends AbstractType
             ))
             ->add('moduleCategory', 'entity', array(
                 'required'    => false,
-                'expanded'      =>true,
-                'multiple'      =>true,
+                'expanded'    => false,
+                'multiple'    => false,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
-                'empty_value' => '---Select category---',
+                'empty_value' => '---Select Category---',
                 'property' => 'name',
-                'attr'=>array('class'=>'check-list  span12'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
-                        ->where("o.status = 1")
-                        ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module', 16)
+                        ->join('o.module', 'module')
+	                    ->where("o.status = 1")
+	                    ->andWhere("module.slug = :module")
+	                    ->setParameter('module', 'service')
                         ->andWhere("o.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },

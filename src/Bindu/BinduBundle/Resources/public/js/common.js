@@ -9,8 +9,6 @@ function indexFormValidation(){
 
     });
 
-
-
     var validator =  $(".registration").validate({
 
         rules: {

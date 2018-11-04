@@ -367,6 +367,18 @@
 		});
 
 		// Flex slider with carousel style
+		$('.client-carousel').flexslider({
+			animation: "slide",
+			animationLoop: false,
+			itemWidth: 100,
+			itemMargin: 10,
+			minItems: 2,
+			maxItems: 4,
+			prevText: '<i class="fa fa-angle-left"></i>',
+			nextText: '<i class="fa fa-angle-right"></i>',
+		});
+
+		// Flex slider with carousel style
 		$('.mobile-carousel').flexslider({
 			animation: "slide",
 			animationLoop: false,

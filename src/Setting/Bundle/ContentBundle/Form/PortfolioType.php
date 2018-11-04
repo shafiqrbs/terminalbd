@@ -38,18 +38,19 @@ class PortfolioType extends AbstractType
             ->add('website','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter website name')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 wysihtml5 m-wrap','rows' => 8)))
-            ->add('category', 'entity', array(
+            ->add('moduleCategory', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
                 'empty_value' => '---Select Category---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
-                        ->where("o.status = 1")
-                        ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module', 14)
-                        ->andWhere("o.globalOption =".$this->globalOption->getId())
+	                    ->join('o.module', 'module')
+	                    ->where("o.status = 1")
+	                    ->andWhere("module.slug = :module")
+	                    ->setParameter('module', 'portfolio')
+	                    ->andWhere("o.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },
             ));

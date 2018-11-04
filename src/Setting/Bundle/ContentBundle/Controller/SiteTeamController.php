@@ -47,7 +47,7 @@ class SiteTeamController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('sitecontent'));
+            return $this->redirect($this->generateUrl('siteteam'));
         }
 
         return $this->render('SettingContentBundle:SiteTeam:new.html.twig', array(
@@ -66,7 +66,7 @@ class SiteTeamController extends Controller
     private function createCreateForm(SiteTeam $entity)
     {
 	    $form = $this->createForm(new SiteTeamType(), $entity, array(
-            'action' => $this->generateUrl('sitecontent_create', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('siteteam_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -130,7 +130,7 @@ class SiteTeamController extends Controller
     private function createEditForm(SiteTeam $entity)
     {
         $form = $this->createForm(new SiteTeamType(), $entity, array(
-            'action' => $this->generateUrl('sitecontent_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('siteteam_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -164,7 +164,7 @@ class SiteTeamController extends Controller
             $entity->upload();
             $em->flush();
 
-            return $this->redirect($this->generateUrl('sitecontent'));
+            return $this->redirect($this->generateUrl('siteteam'));
         }
 
         return $this->render('SettingContentBundle:SiteTeam:new.html.twig', array(
@@ -194,7 +194,7 @@ class SiteTeamController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('sitecontent'));
+        return $this->redirect($this->generateUrl('siteteam'));
     }
 
     /**
@@ -207,7 +207,7 @@ class SiteTeamController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('sitecontent_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('siteteam_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
