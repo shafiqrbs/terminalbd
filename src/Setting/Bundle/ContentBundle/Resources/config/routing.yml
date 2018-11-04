@@ -46,6 +46,14 @@ setting_content_sitecontent:
     resource: "@SettingContentBundle/Resources/config/routing/sitecontent.yml"
     prefix:   /admin/sitecontent
 
+setting_content_sitetestimonial:
+    resource: "@SettingContentBundle/Resources/config/routing/sitetestimonial.yml"
+    prefix:   /admin/site-testimonial
+
+setting_content_siteteam:
+    resource: "@SettingContentBundle/Resources/config/routing/siteteam.yml"
+    prefix:   /admin/site-team
+
 SettingContentBundle_homeslider:
     resource: "@SettingContentBundle/Resources/config/routing/homeslider.yml"
     prefix:   /website/homeslider

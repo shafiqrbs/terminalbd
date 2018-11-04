@@ -91,7 +91,6 @@ class GlobalOptionRepository extends EntityRepository
         $location = isset($data['location']) ? $data['location']:'';
         $name = isset($data['name']) ? $data['name']:'';
         $data = array('location'=> $location ,'syndicate'=> $syndicate,'name' => $name);
-
         $qb =  $this->createQueryBuilder('e');
         $qb->leftJoin('e.templateCustomize', 't');
         $qb->orderBy('e.name', 'ASC');

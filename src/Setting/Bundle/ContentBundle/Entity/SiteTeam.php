@@ -10,12 +10,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
- * SiteContent
+ * Testimonial
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Setting\Bundle\ContentBundle\Repository\SiteContentRepository")
+ * @ORM\Table("site_team")
+ * @ORM\Entity(repositoryClass="")
  */
-class SiteContent
+class SiteTeam
 {
     /**
      * @var integer
@@ -33,17 +33,12 @@ class SiteContent
      */
     private $name;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\SiteContent", inversedBy="children", cascade={"detach","merge"})
-     * @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="SET NULL")
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="designation", type="string", length=255)
      */
-    protected $parent;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\SiteContent" , mappedBy="parent")
-     * @ORM\OrderBy({"name" = "ASC"})
-     **/
-    private $children;
+    private $designation;
 
 	/**
 	 * @var string
@@ -51,13 +46,6 @@ class SiteContent
 	 * @ORM\Column(name="businessSector", type="string", length=50)
 	 */
 	private $businessSector;
-
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="routePath", type="string", length=255, nullable=true)
-	 */
-	private $routePath;
 
 	/**
      * @var string
@@ -72,12 +60,6 @@ class SiteContent
      */
     private $slug;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isPage", type="boolean")
-     */
-    private $isPage;
 
     /**
      * @var boolean
@@ -124,7 +106,7 @@ class SiteContent
      * Set name
      *
      * @param string $name
-     * @return SiteContent
+     * @return Testimonial
      */
     public function setName($name)
     {
@@ -147,7 +129,7 @@ class SiteContent
      * Set content
      *
      * @param string $content
-     * @return SiteContent
+     * @return Testimonial
      */
     public function setContent($content)
     {
@@ -170,7 +152,7 @@ class SiteContent
      * Set slug
      *
      * @param string $slug
-     * @return SiteContent
+     * @return Testimonial
      */
     public function setSlug($slug)
     {
@@ -193,7 +175,7 @@ class SiteContent
      * Set status
      *
      * @param boolean $status
-     * @return SiteContent
+     * @return Testimonial
      */
     public function setStatus($status)
     {
@@ -353,18 +335,19 @@ class SiteContent
 	}
 
 	/**
-	 * @return string
+	 * @return mixed
 	 */
-	public function getRoutePath(){
-		return $this->routePath;
+	public function getDesignation() {
+		return $this->designation;
 	}
 
 	/**
-	 * @param string $routePath
+	 * @param mixed $designation
 	 */
-	public function setRoutePath( string $routePath ) {
-		$this->routePath = $routePath;
+	public function setDesignation( $designation ) {
+		$this->designation = $designation;
 	}
+
 
 
 }

@@ -33,16 +33,16 @@ class Builder extends ContainerAware
         if ($securityContext->getRole() === 'ROLE_SUPER_ADMIN') {
 
             $menu = $this->toolsMenu($menu);
-            $menu = $this->productCategoryMenu($menu);
+           // $menu = $this->productCategoryMenu($menu);
             $menu = $this->manageFrontendMenu($menu);
-            $menu = $this->manageVendorMenu($menu);
-            $menu = $this->manageAdvertismentMenu($menu);
+           // $menu = $this->manageVendorMenu($menu);
+           // $menu = $this->manageAdvertismentMenu($menu);
             $menu = $this->manageApplicationSettingMenu($menu);
             $menu = $this->manageDomainMenu($menu);
-            $menu = $this->manageSystemAccountMenu($menu);
+          //  $menu = $this->manageSystemAccountMenu($menu);
             $menu = $this->PayrollMenu($menu);
             $menu = $this->businessMenu($menu);
-            $menu = $this->reservationMenu($menu);
+          //  $menu = $this->reservationMenu($menu);
 
         }
 
@@ -1525,15 +1525,15 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('Manage Frontend')
-            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('icon', 'fa fa-sitemap')
             ->setAttribute('dropdown', true);
-
         $menu['Manage Frontend']->addChild('Site Slider', array('route' => 'siteslider'));
         $menu['Manage Frontend']->addChild('Site Content', array('route' => 'sitecontent'));
+        $menu['Manage Frontend']->addChild('Testimonial', array('route' => 'sitetestimonial'));
+        $menu['Manage Frontend']->addChild('Team', array('route' => 'siteteam'));
         $menu['Manage Frontend']->addChild('Manage Mega Menu', array('route' => 'megamenu'));
         $menu['Manage Frontend']->addChild('Feature Category', array('route' => 'category_sorting'));
         $menu['Manage Frontend']->addChild('Collection', array('route' => 'collection'));
-
         return $menu;
 
     }
@@ -1542,7 +1542,7 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('Tools')
-            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('icon', 'fa fa-cogs')
             ->setAttribute('dropdown', true);
 
         $menu['Tools']->addChild('Manage Option', array('route' => 'globaloption'));

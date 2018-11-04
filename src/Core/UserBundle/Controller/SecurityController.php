@@ -67,10 +67,18 @@ class SecurityController extends Controller
         }
        // echo var_dump($error);
        // exit;
+	    $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
+	    $apps =$this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1));
+	    $testimonals =$this->getDoctrine()->getRepository('SettingContentBundle:Testimonial')->findBy(array('status'=>1));
+	    $clients =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain();
 
         return $this->renderLogin(array(
             'last_username' => $lastUsername,
             'error' => $error,
+            'slides' => $slides,
+            'apps' => $apps,
+            'testimonals' => $testimonals,
+            'clients' => $clients,
             'csrf_token' => $csrfToken,
         ));
     }

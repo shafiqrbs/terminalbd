@@ -21,6 +21,8 @@ class BinduController extends Controller
 
         $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
 	    $apps =$this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1));
+	    $testimonals =$this->getDoctrine()->getRepository('SettingContentBundle:Testimonial')->findBy(array('status'=>1));
+	    $clients =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain();
 
 	    $entity = new User();
 	    $form   = $this->createCreateForm($entity);
@@ -34,6 +36,8 @@ class BinduController extends Controller
 		    'entity' => $entity,
 		    'slides' => $slides,
 		    'apps' => $apps,
+		    'testimonals' => $testimonals,
+		    'clients' => $clients,
 		    'error' => '',
 		    'form'   => $form->createView(),
 	    ));
