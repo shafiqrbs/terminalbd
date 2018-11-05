@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\MediaBundle\Entity\PhotoGallery;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -44,6 +45,13 @@ class SiteContent
      * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $children;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", inversedBy="siteContent")
+	 */
+	protected $photoGallery;
+
+
 
 	/**
 	 * @var string
@@ -386,6 +394,20 @@ class SiteContent
 	 */
 	public function setOrdering( $ordering ) {
 		$this->ordering = $ordering;
+	}
+
+	/**
+	 * @return PhotoGallery
+	 */
+	public function getPhotoGallery() {
+		return $this->photoGallery;
+	}
+
+	/**
+	 * @param PhotoGallery $photoGallery
+	 */
+	public function setPhotoGallery( $photoGallery ) {
+		$this->photoGallery = $photoGallery;
 	}
 
 

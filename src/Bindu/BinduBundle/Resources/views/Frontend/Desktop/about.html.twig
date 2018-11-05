@@ -28,33 +28,29 @@
                     <div class="page-content-inner tm-content">
                         <div class="tm-row" style="padding:50px 0">
                             <div class="tm-wrap">
+                                {% if entity.webPath is not empty or entity.photoGallery is not empty  %}
                                 <div class="one-half">
                                     <div class="tm-gallery gallery-slide flexslider">
                                         <ul class="slides">
+                                            {% if entity.webPath is not empty %}
                                             <li>
-                                                <a class="expand" href="{{ asset('assets/bindu/img/sample/shortcode/gallery/10.jpg') }}" data-rel="prettyPhoto[gallery3]">
-                                                    <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/gallery/10.jpg') }}">
+                                                <a class="expand" href="{{ image(entity.webPath).scaleResize(1024,512,'#000000') }}" data-rel="prettyPhoto[gallery3]">
+                                                    <img alt="img" src="{{ image(entity.webPath).scaleResize(1024,512,'#000000') }}">
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a class="expand" href="{{ asset('assets/bindu/img/sample/shortcode/gallery/12.jpg') }}" data-rel="prettyPhoto[gallery3]">
-                                                    <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/gallery/12.jpg') }}">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="expand" href="{{ asset('assets/bindu/img/sample/shortcode/gallery/11.jpg') }}" data-rel="prettyPhoto[gallery3]">
-                                                    <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/gallery/11.jpg') }}">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="expand" href="{{ asset('assets/bindu/img/sample/shortcode/gallery/9.jpg') }}" data-rel="prettyPhoto[gallery3]">
-                                                    <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/gallery/9.jpg') }}">
-                                                </a>
-                                            </li>
+                                            {% endif %}
+                                            {% for slide in entity.photoGallery.galleryImages %}
+                                                <li>
+                                                    <a class="expand" href="{{ image(slide.getAbsolutePath(1,entity.photoGallery.id)).scaleResize(1024,512,'#000000') }}" data-rel="prettyPhoto[gallery3]">
+                                                        <img alt="img" src="{{ image(slide.getAbsolutePath(1,entity.photoGallery.id)).scaleResize(1024,512,'#000000') }}">
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="one-half last">
+                                {% endif %}
+                                <div class="{% if entity.webPath is not empty or entity.photoGallery is not empty  %} one-half last {% endif %}">
                                     <div class="header-double-line-right">
                                         <h3 class="tm-title">Welcome to Terminalbd.com</h3>
                                     </div>

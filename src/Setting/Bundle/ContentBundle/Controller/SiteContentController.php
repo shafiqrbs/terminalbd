@@ -65,7 +65,7 @@ class SiteContentController extends Controller
      */
     private function createCreateForm(SiteContent $entity)
     {
-	    $form = $this->createForm(new SiteContentType(), $entity, array(
+	    $form = $this->createForm(new SiteContentType($this->getUser()->getGlobalOption()), $entity, array(
             'action' => $this->generateUrl('sitecontent_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -146,7 +146,7 @@ class SiteContentController extends Controller
     */
     private function createEditForm(SiteContent $entity)
     {
-        $form = $this->createForm(new SiteContentType(), $entity, array(
+        $form = $this->createForm(new SiteContentType($this->getUser()->getGlobalOption()), $entity, array(
             'action' => $this->generateUrl('sitecontent_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

@@ -32,11 +32,13 @@
                             <h2 class="tm-title">PRODUCT PREVIEW</h2>
                         </div>
                         <div class="tm-recent-post">
-                        <ul>
-                            {% for gallery in app.photoGallery.galleryImages %}
-                                 <li class=""><a class="thumb" title="You can add caption to pictures." href="{{ image(gallery.getAbsolutePath(app.photoGallery.globalOption.id,app.photoGallery.id)).resize(750,450,'#fff') }}" rel="prettyPhoto[pp_gal]"><img src="{{ image(gallery.getAbsolutePath(app.photoGallery.globalOption.id,app.photoGallery.id)).resize(250,250,'#fff') }}" alt="Red round shape" ></a></li>
-                            {% endfor %}
-                        </ul>
+                            {% if app.photoGallery is defined and app.photoGallery is not empty %}
+                                <ul>
+                                    {% for gallery in app.photoGallery.galleryImages %}
+                                         <li class=""><a class="thumb" title="You can add caption to pictures." href="{{ image(gallery.getAbsolutePath(app.photoGallery.globalOption.id,app.photoGallery.id)).resize(750,450,'#fff') }}" rel="prettyPhoto[pp_gal]"><img src="{{ image(gallery.getAbsolutePath(app.photoGallery.globalOption.id,app.photoGallery.id)).resize(250,250,'#fff') }}" alt="Red round shape" ></a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                         </div>
                         <div class="clear"></div>
                         <div class="header-double-line-right" >
