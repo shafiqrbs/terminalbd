@@ -217,7 +217,10 @@ class GalleryImage
     public function removeUpload($globalOption,$item)
     {
         if ($file = $this->getAbsolutePath($globalOption,$item)) {
-            unlink($file);
+        	if(!empty($file)){
+		        unlink($file);
+		        $this->path = null ;
+	        }
         }
     }
 

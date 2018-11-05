@@ -168,16 +168,17 @@ class UserRepository extends EntityRepository
             );
         }
 
-		$reservation = array('reservation');
+		$reservation = array('hotel');
         $result = array_intersect($arrSlugs, $reservation);
         if (!empty($result)) {
 
-            $array['Hotel & Reservation'] = array(
+            $array['Hotel & Restaurant'] = array(
                 'ROLE_HOTEL'                             => 'Hotel & Reservation',
                 'ROLE_HOTEL_INVOICE'                     => 'Invoice',
                 'ROLE_HOTEL_PURCHASE'                    => 'Purchase',
                 'ROLE_HOTEL_STOCK'                       => 'Stock',
                 'ROLE_HOTEL_MANAGER'                     => 'Manager',
+                'ROLE_HOTEL_REPORTS'                     => 'Reports',
             );
         }
 

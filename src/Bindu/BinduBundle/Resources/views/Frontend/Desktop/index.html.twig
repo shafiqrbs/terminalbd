@@ -146,7 +146,7 @@
                                         {% for client in clients %}
                                         <li>
                                             <a target="_blank" href="{% if client.domain is not empty %}http://www.{{ client.domain }}{% else %}javascript:{% endif %}" data-title="{% if client.domain is not empty %}http://www.{{ client.domain }}{% endif %}">
-                                                <img alt="img" style="width: 160px; height: 140px; border: 1px solid #0000001a" src="{{ image(client.templateCustomize.webPath('logo')).resize(160,140) }}">
+                                                <img alt="img" style="width: 160px; height: 140px; border: 1px solid #0000001a" src="{{ image(client.templateCustomize.webPath('logo')).forceResize(160,140) }}">
                                             </a>
                                         </li>
                                         {% endfor %}

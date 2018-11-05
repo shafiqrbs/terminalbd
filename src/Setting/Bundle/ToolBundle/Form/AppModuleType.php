@@ -40,6 +40,12 @@ class AppModuleType extends AbstractType
                 )
             ))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows'=>15)))
+            ->add('shortContent','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>5),
+              'constraints' =>array(
+                  new NotBlank(array('message'=>'Please input required')),
+                  new Length(array('max'=>200))
+              )
+	        ))
             ->add('photo_gallery', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\MediaBundle\Entity\PhotoGallery',

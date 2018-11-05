@@ -26,7 +26,12 @@ class SiteTestimonialType extends AbstractType
             ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter person designation')))
             ->add('company','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter company name')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'ckeditor m-wrap span12','rows'=>15)))
+            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>5),
+                  'constraints' =>array(
+                      new NotBlank(array('message'=>'Please input required')),
+                      new Length(array('max'=>200))
+                  )
+	            ))
 	        ->add('businessSector', 'choice', array(
 		        'attr'=>array('class'=>'m-wrap span12'),
 		        'choices' => array('portal' => 'Portal','education' => 'Education',  'ecommerce' => 'E-commerce', 'reservation' => 'Reservation', 'fleet' => 'Fleet Management'),

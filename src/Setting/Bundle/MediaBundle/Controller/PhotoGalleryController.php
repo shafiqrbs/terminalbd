@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\MediaBundle\Controller;
 
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -278,17 +279,25 @@ class PhotoGalleryController extends Controller
     public function deleteAction(PhotoGallery $entity)
     {
 
-            $em = $this->getDoctrine()->getManager();
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find PhotoGallery entity.');
-            }
-            $entity->deleteImageDirectory();
-            $em->remove($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'error',"Data has been deleted successfully"
-            );
-            return $this->redirect($this->generateUrl('gallery'));
+	    $em = $this->getDoctrine()->getManager();
+	    if (!$entity) {
+		    throw $this->createNotFoundException('Unable to find Product entity.');
+	    }
+
+	    try {
+		    $entity->deleteImageDirectory();
+		    $em->remove($entity);
+		    $em->flush();
+		    $this->get('session')->getFlashBag()->add(
+			    'error',"Data has been deleted successfully"
+		    );
+
+	    } catch (ForeignKeyConstraintViolationException $e) {
+		    $this->get('session')->getFlashBag()->add(
+			    'notice',"Data has been relation another Table"
+		    );
+	    }
+	    return $this->redirect($this->generateUrl('gallery'));
     }
 
 

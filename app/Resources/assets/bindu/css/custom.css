@@ -989,7 +989,7 @@ ul.social-networks li a.last{
   margin: 0 auto;
   background: #fff;
   border: 1px solid #ddd;
-  font-size: 20px;
+  font-size: 13px;
   font-weight: 700;
   color: #c7373c;
   letter-spacing: 1px;
@@ -1000,7 +1000,7 @@ ul.social-networks li a.last{
   right: 0;
 }
 .testimonial .post{
-  font-size: 15px;
+  font-size: 10px;
   color: #671a36;
 }
 .owl-theme .owl-controls{
