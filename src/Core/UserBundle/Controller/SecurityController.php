@@ -99,10 +99,8 @@ class SecurityController extends Controller
 		    $theme = 'Security/Mobile';
 		    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
 	    }else{
-		    $theme = 'Security/Mobile';
-		    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
-		   // $theme = 'Frontend/Desktop';
-		   // return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
+		    $theme = 'Frontend/Desktop';
+		    return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
 	    }
 
     }
