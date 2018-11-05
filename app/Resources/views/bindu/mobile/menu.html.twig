@@ -5,7 +5,23 @@
                 <i class="fa fa-home"></i>Home
             </a>
         </li>
-       <li>
+        <li>
+            <a href="{{ path('bindu_about') }}">
+                <i class="fa fa-users"></i>About us
+            </a>
+            <ul>
+                {% render controller("FrontendBundle:Widget:footerMenu",{'sector':'portal','parent':'about-us'}) %}
+            </ul>
+        </li>
+        <li>
+            <a href="{{ path('bindu_page_content',{'slug':'promotion'}) }}">
+                <i class="fa fa-users"></i>Business Promotion
+            </a>
+            <ul>
+                {% render controller("FrontendBundle:Widget:footerMenu",{'sector':'portal','parent':'promotion'}) %}
+            </ul>
+        </li>
+        <li>
             <a href="{{ path('bindu_find') }}">
                 <i class="fa fa-search"></i>Find me
             </a>
@@ -25,24 +41,18 @@
                <i class="fa fa-building-o"></i>Web Builder
            </a>
        </li>
-
-       <li>
-           <a href="{{ path('bindu_about') }}">
-               <i class="fa fa-users"></i>About us
-           </a>
-       </li>
-       <li>
+{#       <li>
            <a href="{{ path('bindu_service') }}">
                <i class="fa fa-product-hunt"></i>Product & Service
            </a>
-       </li>
+       </li>#}
        <li>
            <a href="{{ path('bindu_contact') }}">
                <i class="fa fa-envelope"></i>Contact
            </a>
        </li>
        <li>
-           <a href="{{ path('homepage') }}">
+           <a href="{{ path('bindu_login') }}">
                <i class="fa fa-lock"></i>Login
            </a>
        </li>

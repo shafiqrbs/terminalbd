@@ -15,20 +15,19 @@ class WidgetController extends Controller
     public function headerMenuAction()
     {
 
-   //     $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
-     //   $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain(),'desktop');
         $applications                     = $this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1),array('name'=>'ASC'));
-
         /* Device Detection code desktop or mobile */
-        /*$detect = new MobileDetect();
+        $detect = new MobileDetect();
         if($detect->isMobile() && $detect->isTablet() ) {
-            $theme = 'Mobile/'.$themeName;
+            return $this->render('@Bindu/Widget/mobile-menu.html.twig', array(
+		        'applications'           => $applications,
+	        ));
         }else{
-            $theme = 'Desktop/'.$themeName;
-        }*/
-	    return $this->render('@Bindu/Widget/main-header-menu.html.twig', array(
-            'applications'       => $applications,
-        ));
+	        return $this->render('@Bindu/Widget/main-header-menu.html.twig', array(
+		        'applications'       => $applications,
+	        ));
+        }
+
     }
 
 	public function loginAction()

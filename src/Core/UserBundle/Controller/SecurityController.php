@@ -96,12 +96,15 @@ class SecurityController extends Controller
 
         $detect = new MobileDetect();
 	    if( $detect->isMobile() OR  $detect->isTablet() ) {
-		    $theme = 'Frontend/Mobile';
+		    $theme = 'Security/Mobile';
+		    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
 	    }else{
-		    $theme = 'Frontend/Desktop';
+		    $theme = 'Security/Mobile';
+		    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
+		   // $theme = 'Frontend/Desktop';
+		   // return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
 	    }
-    //    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
-	    return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
+
     }
 
 

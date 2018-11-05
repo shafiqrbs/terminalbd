@@ -10,7 +10,7 @@
             <div class="camera_wrap camera_black_skin camera_emboss pattern_1" id="camera_wrap_4">
                 {% for slide in slides  %}
                 <div data-thumb="{{ image(slide.webPath).resize(150,150) }}" data-src="{{ image(slide.webPath).resize() }}">
-                    <div class="bannerContent fadeFromBottom">
+                    {#<div class="bannerContent fadeFromBottom">
                         <div class="b-c-textpane">
                             <a href="http://facebook.com/terminalbd" class="home-scl-icon facebook">
                                 <i class="fa fa-facebook"></i>
@@ -18,7 +18,7 @@
                             </a>
 
                         </div>
-                    </div>
+                    </div>#}
                 </div>
                 {% endfor %}
             </div><!-- #camera_wrap_3 -->

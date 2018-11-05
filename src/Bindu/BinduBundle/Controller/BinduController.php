@@ -31,7 +31,7 @@ class BinduController extends Controller
 	    if( $detect->isMobile() OR  $detect->isTablet() ) {
 		    $theme = 'Frontend/Mobile';
 	    }else{
-		    $theme = 'Frontend/Desktop';
+		    $theme = 'Frontend/Mobile';
 	    }
 	    return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
 		    'entity' => $entity,
@@ -50,6 +50,11 @@ class BinduController extends Controller
     }
 
 
+    /*public function loginAction()
+    {
+	    return $this->redirect($this->generateUrl('home'));
+    }*/
+
     public function builderAction()
     {
 
@@ -59,7 +64,7 @@ class BinduController extends Controller
         if($detect->isMobile() OR $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
         }else{
-            $theme = 'Frontend/Desktop';
+            $theme = 'Frontend/Mobile';
         }
         return $this->render('BinduBundle:'.$theme.':webBuilder.html.twig', array(
             'entity' => $entity,
