@@ -92,6 +92,16 @@ class TransactionMethod
      */
     protected $accountJournals;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="fromTransactionMethod" , cascade={"persist", "remove"})
+     */
+    protected $fromBalanceTransfer;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="toTransactionMethod" , cascade={"persist", "remove"})
+     */
+    protected $toBalanceTransfer;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */

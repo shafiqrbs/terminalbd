@@ -24,7 +24,7 @@ class DefaultController extends Controller
         $user = $this->getUser();
         $salesCashOverview = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user,$data);
         $purchaseCashOverview = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseOverview($user,$data);
-	    $transactionMethods = array(1,2,3,4);
+	    $transactionMethods = array(1);
 	    $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
 	    $expenditureOverview = $em->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
 

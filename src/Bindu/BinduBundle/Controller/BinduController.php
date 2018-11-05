@@ -476,6 +476,7 @@ class BinduController extends Controller
     public function aboutAction()
     {
         $entity =$this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->findOneBy(array('slug'=>'about-us'));
+        $teams =$this->getDoctrine()->getRepository('SettingContentBundle:SiteTeam')->findBy(array('businessSector'=>'portal','status'=> 1));
         $detect = new MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
@@ -484,6 +485,7 @@ class BinduController extends Controller
         }
         return $this->render('BinduBundle:'.$theme.':about.html.twig', array(
             'entity' => $entity,
+            'teams' => $teams,
         ));
     }
 

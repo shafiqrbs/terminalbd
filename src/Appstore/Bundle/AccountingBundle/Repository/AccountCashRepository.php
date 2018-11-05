@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
@@ -403,7 +404,66 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function insertPurchaseCash(AccountPurchase $entity)
+	public function balanceTransferAccountCash(AccountBalanceTransfer $entity , $processHead ='BalanceTransfer')
+	{
+		$this->fromBalanceTransfer($entity,$processHead);
+		$this->toBalanceTransfer($entity,$processHead);
+	}
+
+	private function fromBalanceTransfer(AccountBalanceTransfer $entity,$processHead){
+
+		$em = $this->_em;
+		$cash = new AccountCash();
+		$cash->setGlobalOption($entity->getGlobalOption());
+		$cash->setTransactionMethod($entity->getFromTransactionMethod());
+		$cash->setAccountBank($entity->getFromAccountBank());
+		$cash->setAccountMobileBank($entity->getFromAccountMobileBank());
+		$cash->setProcessHead($processHead);
+		$cash->setAccountRefNo($entity->getAccountRefNo());
+		if(!empty($entity->getBranches())){
+			$cash->setBranches($entity->getBranches());
+		}
+		if(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 2 ){
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+		}elseif(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 3 ){
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+		}else{
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+		}
+		$cash->setCredit($entity->getAmount());
+		$em->persist($cash);
+		$em->flush();
+
+	}
+
+	private function toBalanceTransfer(AccountBalanceTransfer $entity,$processHead){
+
+		$em = $this->_em;
+		$cash = new AccountCash();
+		$cash->setGlobalOption($entity->getGlobalOption());
+		$cash->setTransactionMethod($entity->getToTransactionMethod());
+		$cash->setAccountBank($entity->getToAccountBank());
+		$cash->setAccountMobileBank($entity->getToAccountMobileBank());
+		$cash->setProcessHead($processHead);
+		$cash->setAccountRefNo($entity->getAccountRefNo());
+		if(!empty($entity->getBranches())){
+			$cash->setBranches($entity->getBranches());
+		}
+		if(!empty($entity->getToTransactionMethod()) and $entity->getToTransactionMethod()->getId() == 2 ){
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+		}elseif(!empty($entity->getToTransactionMethod()) and $entity->getToTransactionMethod()->getId() == 3 ){
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+		}else{
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+		}
+		$cash->setDebit($entity->getAmount());
+		$em->persist($cash);
+		$em->flush();
+
+	}
+
+
+	public function insertPurchaseCash(AccountPurchase $entity)
     {
 
         $balance = $this->lastInsertCash($entity,'Purchase');

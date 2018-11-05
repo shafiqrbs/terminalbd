@@ -69,17 +69,17 @@ class SecurityController extends Controller
        // exit;
 	    $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
 	    $apps =$this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1));
-	    $testimonals =$this->getDoctrine()->getRepository('SettingContentBundle:Testimonial')->findBy(array('status'=>1));
 	    $clients =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain();
+	    $testimonials =$this->getDoctrine()->getRepository('SettingContentBundle:Testimonial')->findBy(array('status'=>1));
 
-        return $this->renderLogin(array(
-            'last_username' => $lastUsername,
-            'error' => $error,
-            'slides' => $slides,
-            'apps' => $apps,
-            'testimonals' => $testimonals,
-            'clients' => $clients,
-            'csrf_token' => $csrfToken,
+	    return $this->renderLogin(array(
+            'last_username'         => $lastUsername,
+            'error'                 => $error,
+            'slides'                => $slides,
+            'apps'                  => $apps,
+            'testimonials'          => $testimonials,
+            'clients'               => $clients,
+            'csrf_token'            => $csrfToken,
         ));
     }
 

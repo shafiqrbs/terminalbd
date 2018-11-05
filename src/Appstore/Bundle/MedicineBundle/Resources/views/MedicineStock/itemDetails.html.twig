@@ -108,6 +108,7 @@
                                         <th class="numeric" >Barcode</th>
                                         <th class="numeric" >Grn</th>
                                         <th class="numeric" >Received</th>
+                                        <th class="numeric" >Created By</th>
                                         <th class="numeric" >Vendor</th>
                                         <th class="numeric" >PP</th>
                                         <th class="numeric" >MRP</th>
@@ -122,6 +123,7 @@
                                             <td class="numeric" >{{ item.barcode }}</td>
                                             <td class="numeric" >{{ item.medicinePurchase.grn }}</td>
                                             <td class="numeric" >{{ item.medicinePurchase.receiveDate|date('d-m-Y') }}</td>
+                                            <td class="numeric" >{{ item.medicinePurchase.createdBy }}</td>
                                             <td class="numeric" >{% if item.medicinePurchase.medicineVendor is defined and item.medicinePurchase.medicineVendor is not empty %}{{ item.medicinePurchase.medicineVendor.companyName }}{% endif %}</td>
                                             <td class="numeric" >{{ item.purchasePrice }}</td>
                                             <td class="numeric" >{{ item.salesPrice }}</td>
@@ -148,6 +150,7 @@
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
                                         <th class="numeric" >Created</th>
+                                        <th class="numeric" >Created By</th>
                                         <th class="numeric" >Invoice</th>
                                         <th class="numeric" >Price</th>
                                         <th class="numeric" >Quantity</th>
@@ -158,6 +161,7 @@
                                     {% for item in pagination %}
                                         <tr>
                                             <td class="numeric" >{{ item.medicinePurchaseReturn.created|date('d-m-y') }}</td>
+                                            <td class="numeric" >{{ item.medicinePurchaseReturn.createdBy }}</td>
                                             <td class="numeric" >{{ item.medicinePurchaseReturn.invoice }}</td>
                                             <td class="numeric" >{{ item.purchasePrice }}</td>
                                             <td class="numeric" >{{ item.quantity }}</td>
@@ -184,6 +188,7 @@
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
                                         <th class="numeric" >Created</th>
+                                        <th class="numeric" >Created By</th>
                                         <th class="numeric" >Invoice</th>
                                         <th class="numeric" >Purchase Price</th>
                                         <th class="numeric" >MRP</th>
@@ -195,6 +200,7 @@
                                     {% for item in pagination %}
                                         <tr>
                                             <td class="numeric" >{{ item.medicineSales.created|date('d-m-Y') }}</td>
+                                            <td class="numeric" >{{ item.medicineSales.createdBy }}</td>
                                             <td class="numeric" >{{ item.medicineSales.invoice }}</td>
                                             <td class="numeric" >{{ item.purchasePrice }}</td>
                                             <td class="numeric" >{{ item.salesPrice }}</td>
@@ -223,6 +229,7 @@
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
                                         <th class="numeric" >Created</th>
+                                        <th class="numeric" >Created By</th>
                                         <th class="numeric" >Invoice</th>
                                         <th class="numeric" >MRP</th>
                                         <th class="numeric" >Quantity</th>
@@ -233,6 +240,7 @@
                                     {% for item in pagination %}
                                         <tr>
                                             <td class="numeric" >{{ item.created|date('d-m-Y') }}</td>
+                                            <td class="numeric" >{{ item.invoice.createdBy }}</td>
                                             <td class="numeric" >{{ item.invoice }}</td>
                                             <td class="numeric" >{{ item.quantity }}</td>
                                             <td class="numeric" >{{ item.salesPrice }}</td>
@@ -260,6 +268,7 @@
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
                                         <th class="numeric" >Created</th>
+                                        <th class="numeric" >Created By</th>
                                         <th class="numeric" >Purchase Price</th>
                                         <th class="numeric" >Quantity</th>
                                         <th class="numeric" >Total</th>
@@ -269,6 +278,7 @@
                                     {% for item in pagination %}
                                         <tr>
                                             <td class="numeric" >{{ item.created|date('d-m-Y') }}</td>
+                                            <td class="numeric" >{{ item.createdBy }}</td>
                                             <td class="numeric" >{{ item.quantity }}</td>
                                             <td class="numeric" >{{ item.purchasePrice }}</td>
                                             <td class="numeric" >{{ item.quantity * item.purchasePrice }}</td>

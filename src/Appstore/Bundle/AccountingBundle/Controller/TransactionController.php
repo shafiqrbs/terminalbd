@@ -126,6 +126,7 @@ class TransactionController extends Controller
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
         $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
+
         return $this->render('AccountingBundle:Transaction:cashoverview.html.twig', array(
             'transactionCashOverviews'               => $transactionCashOverview,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,

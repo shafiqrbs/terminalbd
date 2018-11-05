@@ -59,6 +59,16 @@ class AccountMobileBank
     private  $accountJournals;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="fromAccountMobileBank"  )
+     **/
+    private  $fromBalanceTransfer;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="toAccountMobileBank"  )
+     **/
+    private  $toBalanceTransfer;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountMobileBank"  )
      **/
     private  $accountCashes;
@@ -615,6 +625,21 @@ class AccountMobileBank
 	public function getHotelPurchases() {
 		return $this->hotelPurchases;
 	}
+
+	/**
+	 * @return AccountBalanceTransfer
+	 */
+	public function getFromBalanceTransfer() {
+		return $this->fromBalanceTransfer;
+	}
+
+	/**
+	 * @return AccountBalanceTransfer
+	 */
+	public function getToBalanceTransfer() {
+		return $this->toBalanceTransfer;
+	}
+
 
 
 }

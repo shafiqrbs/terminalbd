@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
@@ -238,10 +239,8 @@ class TransactionRepository extends EntityRepository
 
     public function insertAccountJournalTransaction(AccountJournal $journal)
     {
-
         $this->insertAccountJournalDebitTransaction($journal);
         $this->insertAccountJournalCreditTransaction($journal);
-
     }
 
     public function insertAccountJournalDebitTransaction(AccountJournal $entity)
@@ -249,10 +248,7 @@ class TransactionRepository extends EntityRepository
 
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
-        }
-        $transaction->setProcessHead('Journal');
+	    $transaction->setProcessHead('Journal');
         $transaction->setProcess($entity->getAccountHeadDebit()->getParent()->getName());
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setUpdated($entity->getUpdated());
@@ -274,9 +270,6 @@ class TransactionRepository extends EntityRepository
 
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
-        }
         $transaction->setProcessHead('Journal');
         $transaction->setProcess($entity->getAccountHeadCredit()->getParent()->getName());
         $transaction->setAccountRefNo($entity->getAccountRefNo());
@@ -294,7 +287,69 @@ class TransactionRepository extends EntityRepository
 
     }
 
-    public function purchaseTransaction(Purchase $purchase,$accountPurchase,$source='')
+	public function insertAccountBalanceTransferTransaction(AccountBalanceTransfer $journal)
+	{
+		$this->insertAccountBalanceDebitTransaction($journal);
+		$this->insertAccountBalanceCreditTransaction($journal);
+	}
+
+	public function insertAccountBalanceDebitTransaction(AccountBalanceTransfer $entity)
+	{
+
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($entity->getGlobalOption());
+		$transaction->setProcessHead('BalanceTransfer');
+		$transaction->setProcess('Current Assets');
+		$transaction->setAccountRefNo($entity->getAccountRefNo());
+		$transaction->setUpdated($entity->getUpdated());
+		if(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 2 ){
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+		}elseif(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 3 ){
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+		}else{
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+		}
+		$transaction->setAmount($entity->getAmount());
+		$transaction->setDebit($entity->getAmount());
+		if(!empty($entity->getBranches())){
+			$transaction->setBranches($entity->getBranches());
+		}
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+		return $transaction;
+
+	}
+
+	public function insertAccountBalanceCreditTransaction(AccountBalanceTransfer $entity)
+	{
+
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($entity->getGlobalOption());
+		$transaction->setProcessHead('BalanceTransfer');
+		$transaction->setProcess('Current Assets');
+		$transaction->setAccountRefNo($entity->getAccountRefNo());
+		$transaction->setUpdated($entity->getUpdated());
+		if(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 2 ){
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+		}elseif(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 3 ){
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+		}else{
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+		}
+		$transaction->setAmount('-'.$entity->getAmount());
+		$transaction->setCredit($entity->getAmount());
+		if(!empty($entity->getBranches())){
+			$transaction->setBranches($entity->getBranches());
+		}
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+		return $transaction;
+
+	}
+
+	public function purchaseTransaction(Purchase $purchase,$accountPurchase,$source='')
     {
         $this->insertInventoryAsset($purchase,$accountPurchase);
         $this->insertPurchaseCash($purchase,$accountPurchase);

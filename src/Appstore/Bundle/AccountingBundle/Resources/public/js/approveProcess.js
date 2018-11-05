@@ -6,9 +6,14 @@ $("#printLedgerx").on('click', function() {
         timeout: 750
     });
 
-})
+});
 
-
+$('.horizontal-form').submit(function(){
+    $("button[type='submit']", this)
+        .html("Please Wait...")
+        .attr('disabled', 'disabled');
+    return true;
+});
 
 $( ".date-picker" ).datepicker({
         dateFormat: "dd-mm-yy",

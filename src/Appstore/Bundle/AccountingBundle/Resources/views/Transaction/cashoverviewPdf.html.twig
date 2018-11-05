@@ -95,8 +95,8 @@
                             {% set totalCredit = 0 %}
                             {% for mode in transactionCashOverviews.result %}
                                 {% set open = transactionCashOverviews.openingBalance[mode.transactionId]|default(0) %}
-                                {% set debit = transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].debit|default(0)  %}
-                                {% set credit = transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].credit|default(0)  %}
+                                {% set debit = transactionCashOverviews.transactionBalances[mode.transactionId][0].debit|default(0)  %}
+                                {% set credit = transactionCashOverviews.transactionBalances[mode.transactionId][0].credit|default(0)  %}
                                 {% set totalOpen = totalOpen + open %}
                                 {% set totalDebit = totalDebit + debit %}
                                 {% set totalCredit = totalCredit + credit %}

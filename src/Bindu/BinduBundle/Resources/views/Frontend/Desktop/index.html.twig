@@ -90,13 +90,13 @@
                             <div style="padding:30px;background:#29739D;margin:30px 0">
                                 <div class="two-third">
                                     <p style="color:#fff">
-                                        Fedora is a design-led property development & interior design company that specializes in creating the finest residential addresses based in United States and more than 50 countries all over the world.
+                                        {% render controller("FrontendBundle:Widget:siteContent",{'sector':'portal','slug':'about-us','limit':220}) %}
                                     </p>
                                 </div>
                                 <div class="last one-third">
                                     <div style="text-align:right" class="">
-                                        <a href="#" class="tm-btn blue">See More</a>
-                                        <a href="#" class="tm-btn green">Contact Us</a>
+                                        <a href="{{ path('bindu_about') }}" class="tm-btn blue">See More</a>
+                                        <a href="{{ path('bindu_contact') }}" class="tm-btn green">Contact Us</a>
                                     </div>
                                 </div>
                                 <div class="clear"></div>
@@ -121,7 +121,7 @@
                                 {% for app in apps %}
                                     <div class="one-fourth tm-box">
                                         <div style="margin-bottom:30px">
-                                            <img alt="img" style="margin-bottom:20px" src="{{ asset('assets/bindu/img/sample/home/slider/flexslider/7.jpg') }}">
+                                            <img alt="img" style="margin-bottom:20px" src="{{ image(app.webPath).scaleResize(320,220) }}">
                                             <h3 class="tm-title">{{ app.name }}</h3>
                                             <p>{{ app.shortContent|raw }}</p>
                                         </div>
@@ -140,13 +140,13 @@
                             </div>
                         </div>
                         <div class="tm-wrap">
-                                <div class="tm-logo-client tm-gallery gallery-carousel">
+                                <div class="tm-gallery gallery-carousel">
                                 <ul class="slides">
                                     {% if clients is not empty %}
                                         {% for client in clients %}
                                         <li>
                                             <a target="_blank" href="{% if client.domain is not empty %}http://www.{{ client.domain }}{% else %}javascript:{% endif %}" data-title="{% if client.domain is not empty %}http://www.{{ client.domain }}{% endif %}">
-                                                <img alt="img" src="{{ image(client.templateCustomize.webPath('logo')).resize(80,80) }}">
+                                                <img alt="img" style="width: 160px; height: 140px; border: 1px solid #0000001a" src="{{ image(client.templateCustomize.webPath('logo')).resize(160,140) }}">
                                             </a>
                                         </li>
                                         {% endfor %}

@@ -73,6 +73,12 @@ class AccountCash
     protected $accountJournal;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", inversedBy="accountCashes")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $balanceTransfer;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", inversedBy="accountCash")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
@@ -668,6 +674,20 @@ class AccountCash
     {
         $this->invoiceModule = $invoiceModule;
     }
+
+	/**
+	 * @return AccountBalanceTransfer
+	 */
+	public function getBalanceTransfer() {
+		return $this->balanceTransfer;
+	}
+
+	/**
+	 * @param AccountBalanceTransfer $balanceTransfer
+	 */
+	public function setBalanceTransfer( $balanceTransfer ) {
+		$this->balanceTransfer = $balanceTransfer;
+	}
 
 
 }

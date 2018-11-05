@@ -37,7 +37,7 @@ class DomainController extends Controller
 
         foreach ($entities as $data){
 
-            $routes['_www_domain_app_' . strtolower(str_replace('.', '_', $data->getDomain()))] = array(
+            $routes['_www_domain_app_' . strtolower(str_replace(array('.','-'), '_', $data->getDomain()))] = array(
                 'resource' => $resource ,
                 'host' => '{domain_name}',
                 'name_prefix' => $data->getSubDomain() . "_",

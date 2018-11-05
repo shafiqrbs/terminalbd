@@ -1,6 +1,7 @@
 <?php
 
 namespace Setting\Bundle\ToolBundle\Entity;
+use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
@@ -205,10 +206,17 @@ class GlobalOption
     */
 
    protected $accountCashes;
-    /**
+
+   /**
     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="globalOption" , cascade={"persist", "remove"})
     */
    protected $accountJournal;
+
+   /**
+    * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="globalOption" , cascade={"persist", "remove"})
+    */
+   protected $balanceTransfer;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
@@ -1820,6 +1828,13 @@ class GlobalOption
 	 */
 	public function getElectionConfig() {
 		return $this->electionConfig;
+	}
+
+	/**
+	 * @return AccountBalanceTransfer
+	 */
+	public function getBalanceTransfer() {
+		return $this->balanceTransfer;
 	}
 
 

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
@@ -123,6 +124,11 @@ class Branches
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="branches" )
      **/
     private  $accountJournal;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="branches" )
+     **/
+    private  $balanceTransfer;
 
     /**
      * @var string
@@ -453,6 +459,13 @@ class Branches
     {
         return $this->medicineSales;
     }
+
+	/**
+	 * @return AccountBalanceTransfer
+	 */
+	public function getBalanceTransfer() {
+		return $this->balanceTransfer;
+	}
 
 
 }

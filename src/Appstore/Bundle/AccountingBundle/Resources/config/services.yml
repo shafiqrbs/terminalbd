@@ -23,6 +23,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.account.balance.transfer.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountBalanceTransferListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.account.sales.return.event.listener:
         class: Appstore\Bundle\AccountingBundle\EventListener\AccountSalesReturnListener
         tags:

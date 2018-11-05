@@ -23,7 +23,7 @@
         </div>
         <!--tm-page-title-->
         <div id="tm-page-body">
-            <div id="tm-template-default-fullwidth" class="tm-container">
+            <div id="tm-blog" class="tm-container tm-wrap tm-blog-style-magazine1 tm-sidebar-right">
                 <div class="page-content">
                     <div class="page-content-inner tm-content">
                         <div class="tm-row" style="padding:50px 0">
@@ -56,42 +56,10 @@
                                 </div>
                                 <div class="one-half last">
                                     <div class="header-double-line-right">
-                                        <h3 class="tm-title">Welcome to Fedora</h3>
+                                        <h3 class="tm-title">Welcome to Terminalbd.com</h3>
                                     </div>
                                     <div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eros ipsum, facilisis eget scelerisque non, fermentum at tellus. Etiam eleifend nibh quis eros gravida luctus. Vestibulum et velit tellus. Maecenas at fermentum dui. Nam metus nisl, volutpat id faucibus non
-                                        </p>
-                                    </div>
-                                    <br><br>
-                                    <div class="header-double-line-right">
-                                        <h3 class="tm-title">Our specialization</h3>
-                                    </div>
-                                    <div class="tm-progress-bar tm-style1">
-                                        <strong>Web Design <span>70%</span></strong>
-                                        <div class="tm-progress-bar-wrap tm-animation ">
-                                            <div class="tm-progress-bar-inner green" style="width: 70%">
-                                                <span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="tm-progress-bar tm-style1">
-                                        <strong>HTML/CSS <span>90%</span></strong>
-                                        <div class="tm-progress-bar-wrap tm-animation ">
-                                            <div class="tm-progress-bar-inner lightblue" style="width: 90%">
-                                                <span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="tm-progress-bar tm-style1">
-                                        <strong>WordPress Development <span>95%</span></strong>
-                                        <div class="tm-progress-bar-wrap tm-animation ">
-                                            <div class="tm-progress-bar-inner blue" style="width: 95%">
-                                                <span></span>
-                                            </div>
-                                        </div>
+                                        <p>{{ entity.content|raw }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -101,229 +69,31 @@
                                 <div class="header-double-line-right">
                                     <h3 class="tm-title">Meet the Team</h3>
                                 </div>
-                                <div class="one-fourth">
-                                    <div class="tm-team">
-                                        <div class="tm-team-img">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/p1.jpg') }}">
-                                            <div class="tm-mask">
-                                                <div class="tm-mask-inner">
-                                                    <ul class="social-networks">
-                                                        <li>
-                                                            <a href="#" data-title="Facebook">
-                                                                <i class="fa fa-facebook"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="Twitter">
-                                                                <i class="fa fa-twitter"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="GooglePlus">
-                                                                <i class="fa fa-google-plus"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="Tumblr">
-                                                                <i class="fa fa-tumblr"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
+                                <div class="tm-main-content">
+                                    <div class="tm-main-content-inner">
+                                        {% if teams is defined and teams is not empty %}
+                                        {% for team in teams %}
+                                        <article>
+                                            <div class="tm-content-inner">
+                                                <div class="entry-thumbnail">
+                                                    <a href="javascript:">
+                                                        <img src="{{ image(team.webPath).scaleResize(320,220) }}" alt="Thumb">
+                                                    </a>
+                                                </div>
+                                                <div class="entry-container">
+                                                    <h3>
+                                                        <a href="javascript:">{{ team.name }}</a>
+                                                    </h3>
+                                                    <div class="meta">
+                                                        <span class="incategory"><a href="javascript:">{{ team.designation }}</a></span>
+                                                    </div>
+                                                    <p>{{ team.content|raw }}</p>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <h2>John Doe</h2>
-                                        <div class="job-title">
-                                            CEO & Founder
-                                        </div>
-                                        <div class="description">
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="one-fourth">
-                                    <div class="tm-team">
-                                        <div class="tm-team-img">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/p2.jpg') }}">
-                                            <div class="tm-mask">
-                                                <div class="tm-mask-inner">
-                                                    <ul class="social-networks">
-                                                        <li>
-                                                            <a href="#" data-title="Facebook">
-                                                                <i class="fa fa-facebook"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="Twitter">
-                                                                <i class="fa fa-twitter"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="GooglePlus">
-                                                                <i class="fa fa-google-plus"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="Tumblr">
-                                                                <i class="fa fa-tumblr"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h2>John Doe</h2>
-                                        <div class="job-title">
-                                            CEO & Founder
-                                        </div>
-                                        <div class="description">
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="one-fourth">
-                                    <div class="tm-team">
-                                        <div class="tm-team-img">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/p3.jpg') }}">
-                                            <div class="tm-mask">
-                                                <div class="tm-mask-inner">
-                                                    <ul class="social-networks">
-                                                        <li>
-                                                            <a href="#" data-title="Facebook">
-                                                                <i class="fa fa-facebook"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="Twitter">
-                                                                <i class="fa fa-twitter"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="GooglePlus">
-                                                                <i class="fa fa-google-plus"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="Tumblr">
-                                                                <i class="fa fa-tumblr"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h2>John Doe</h2>
-                                        <div class="job-title">
-                                            CEO & Founder
-                                        </div>
-                                        <div class="description">
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="one-fourth last">
-                                    <div class="tm-team">
-                                        <div class="tm-team-img">
-                                            <img alt="img" src="{{ asset('assets/bindu/img/sample/shortcode/p4.jpg') }}">
-                                            <div class="tm-mask">
-                                                <div class="tm-mask-inner">
-                                                    <ul class="social-networks">
-                                                        <li>
-                                                            <a href="#" data-title="Facebook">
-                                                                <i class="fa fa-facebook"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="Twitter">
-                                                                <i class="fa fa-twitter"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="GooglePlus">
-                                                                <i class="fa fa-google-plus"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-title="Tumblr">
-                                                                <i class="fa fa-tumblr"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h2>John Doe</h2>
-                                        <div class="job-title">
-                                            CEO & Founder
-                                        </div>
-                                        <div class="description">
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tm-row" style="padding:80px 0 50px 0; background:#eee">
-                            <div class="tm-wrap">
-                                <div class="tm-iconbox tm-style4">
-                                    <div class="one-third tm-box">
-                                        <div class="iconlist-icon">
-											<span>
-											<i class="fa fa-magic"></i>
-											</span>
-                                        </div>
-                                        <div class="iconlist-entry">
-                                            <div class="iconlist-container">
-                                                <h3 class="tm-title">Lorem ipsum dolor sit amet</h3>
-                                                <div class="iconlist-content">
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit integer pretium
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="one-third tm-box">
-                                        <div class="iconlist-icon">
-											<span>
-											<i class="fa fa-download"></i>
-											</span>
-                                        </div>
-                                        <div class="iconlist-entry">
-                                            <div class="iconlist-container">
-                                                <h3 class="tm-title">Lorem ipsum dolor sit amet</h3>
-                                                <div class="iconlist-content">
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit integer pretium
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="one-third tm-box last">
-                                        <div class="iconlist-icon">
-											<span>
-											<i class="fa fa-crop"></i>
-											</span>
-                                        </div>
-                                        <div class="iconlist-entry">
-                                            <div class="iconlist-container">
-                                                <h3 class="tm-title">Lorem ipsum dolor sit amet</h3>
-                                                <div class="iconlist-content">
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit integer pretium
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </article>
+                                        {% endfor %}
+                                        {% endif %}
+
                                     </div>
                                 </div>
                             </div>

@@ -130,15 +130,18 @@
                                                     <br/> {{ entity.accountPurchase.remark }}
                                                 {% endif %}
                                             {% elseif entity.processHead == 'Journal' and  entity.debit > 0 %}
-                                                Journal: {% if entity.journal.accountHeadCredit is not empty %} {{ entity.journal.accountHeadCredit.name }}{% endif %}: {{ entity.accountRefNo }}
-                                                {% if entity.journal.remark is not empty  %}
-                                                    <br/> {{ entity.journal.remark }}
+                                                Journal: {% if entity.accountJournal is defined and entity.accountJournal.accountHeadCredit is not empty %} {{ entity.accountJournal.accountHeadCredit.name }}{% endif %}: {{ entity.accountRefNo }}
+                                                {% if entity.accountJournal.remark is not empty  %}
+                                                    <br/> {{ entity.accountJournal.remark }}
                                                 {% endif %}
                                             {% elseif entity.processHead == 'Journal' and  entity.credit > 0 %}
-                                                Journal: {% if entity.journal.accountHeadDebit is not empty %} {{ entity.journal.accountHeadDebit.name }}{% endif %}: {{ entity.accountRefNo }}
-                                                {% if entity.expenditure.remark is not empty  %}
-                                                    <br/> {{ entity.journal.remark }}
+                                                Journal: {% if  entity.accountJournal is defined and entity.accountJournal.accountHeadDebit is not empty %} {{ entity.journal.accountHeadDebit.name }}{% endif %}: {{ entity.accountRefNo }}
+                                                {% if entity.accountJournal.remark is not empty  %}
+                                                    <br/> {{ entity.accountJournal.remark }}
                                                 {% endif %}
+                                            {% elseif entity.processHead == 'BalanceTransfer'%}
+                                                Balance Transfer: {% if  entity.balanceTransfer is defined  %} {{ entity.accountHead.name }}{% endif %}: {{ entity.accountRefNo }}
+
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >{% if entity.debit > 0 and entity.transactionMethod.slug == 'cash'  %}{{ entity.debit|number_format }}{% endif %}</td>

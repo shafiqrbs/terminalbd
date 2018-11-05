@@ -7,7 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+
+	public function indexAction()
     {
 	    /* @var GlobalOption $globalOption */
 
@@ -21,7 +22,7 @@ class DefaultController extends Controller
 	    $user = $this->getUser();
 	    $salesCashOverview = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
 	    $purchaseCashOverview = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->reportPurchaseOverview($user,$data);
-	    $transactionMethods = array(1,2,3,4);
+	    $transactionMethods = array(1);
 	    $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
 	    $expenditureOverview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
 	    $salesUserReport = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->salesUserReport($user,array('startDate'=>$data['startDate'],'endDate'=>$data['endDate']));

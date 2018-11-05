@@ -17,32 +17,19 @@
                     <aside class="widget tm-list-style1">
                         <h3 class="tm-title">About Us</h3>
                         <ul>
-                            <li><a href="">About us</a></li>
-                            <li><a href="">Sales & Service</a></li>
-                            <li><a href="">FAQ</a></li>
-                            <li><a href="">Terms & Condition</a></li>
-                            <li><a href="">Copyright Notice</a></li>
-                            <li><a href="">Policy</a></li>
-                            <li><a href="">Youtube Chanel</a></li>
+                            {% render controller("FrontendBundle:Widget:footerMenu",{'sector':'portal','parent':'about-us'}) %}
                         </ul>
-                        {#              {{ knp_menu_render('SettingAppearanceBundle:Builder:footerMenu', {'template':'SettingAppearanceBundle:Menu:simple-menu.html.twig','currentClass': 'active'}) }}
-                        #}
+
                     </aside>
                 </div>
                 <div class="tm-column tm3">
                     <aside class="widget tm-list-style1">
                         <h3 class="tm-title">Business Promotion</h3>
                         <ul>
-                            <li><a href="">Documentation</a></li>
-                            <li><a href="">Project Proposal</a></li>
-                            <li><a href="">SMS Marketing</a></li>
-                            <li><a href="">Email Marketing</a></li>
-                            <li><a href="">Google Advertising</a></li>
-                            <li><a href="">Facebook Marketing</a></li>
-                            <li><a href="">Youtube Marketing</a></li>
+                            {% render controller("FrontendBundle:Widget:footerMenu",{'sector':'portal','parent':'promotion'}) %}
                         </ul>
-                        {#              {{ knp_menu_render('SettingAppearanceBundle:Builder:footerMenu', {'template':'SettingAppearanceBundle:Menu:simple-menu.html.twig','currentClass': 'active'}) }}
-                        #}          </aside>
+
+                    </aside>
                 </div>
                 <div class="tm-column tm3">
                     <aside class="widget widget_tag_cloud">

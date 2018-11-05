@@ -94,6 +94,15 @@ class WidgetController extends Controller
 
     }
 
+    public function footerMenuAction($sector = '' , $parent = '')
+    {
+        $menus                     = $this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->getSubMenuList($sector,$parent);
+	    return $this->render('@Frontend/Widget/footer-menu.html.twig', array(
+		    'menus'           => $menus,
+	    ));
+
+    }
+
     public function admissionAction()
     {
         $admissions                     = $this->getDoctrine()->getRepository('SettingContentBundle:Admission')->findModuleContent(5);

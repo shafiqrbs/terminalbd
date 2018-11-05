@@ -361,7 +361,7 @@
 			itemWidth: 100,
 			itemMargin: 10,
 			minItems: 2,
-			maxItems: 4,
+			maxItems: 6,
 			prevText: '<i class="fa fa-angle-left"></i>',
 			nextText: '<i class="fa fa-angle-right"></i>',
 		});

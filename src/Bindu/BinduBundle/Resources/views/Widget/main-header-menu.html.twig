@@ -3,6 +3,7 @@
         <li>
             <a href="{{ path('bindu_homepage') }}">Home</a>
         </li>
+        <li><a href="{{ path('bindu_about') }}">About Us</a></li>
         <li><a href="{{ path('bindu_find') }}">Our Client</a></li>
         <li class="parent">
             <a href="#">Application</a>
@@ -12,7 +13,7 @@
                 {% endfor %}
             </ul>
         </li>
-        <li><a href="{{ path('bindu_contact') }}">Connect</a></li>
+        <li><a href="{{ path('bindu_contact') }}">Contact us</a></li>
 
     </ul>
     {#          {{ knp_menu_render('SettingAppearanceBundle:Builder:megaMenu', {'template':'SettingAppearanceBundle:Menu:mega-menu.html.twig','currentClass': 'active'}) }}

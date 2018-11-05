@@ -61,7 +61,15 @@ class Testimonial
      */
     private $content;
 
-    /**
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="ordering", type="smallint", nullable=true)
+	 */
+	private $ordering = 0;
+
+
+	/**
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(length=255, unique=true)
      */
@@ -367,6 +375,20 @@ class Testimonial
 	 */
 	public function setCompany( $company ) {
 		$this->company = $company;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getOrdering() {
+		return $this->ordering;
+	}
+
+	/**
+	 * @param mixed $ordering
+	 */
+	public function setOrdering( $ordering ) {
+		$this->ordering = $ordering;
 	}
 
 

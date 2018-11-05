@@ -42,17 +42,15 @@ class NewsType extends AbstractType
                 'multiple'      =>true,
                 'required'    => false,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
-                'empty_value' => '---Select parent page---',
+                'empty_value' => '---Select category page---',
                 'property' => 'name',
                 'attr'=>array('class'=>'check-list span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
-                        ->join("o.module",'module')
-                        ->where("o.status = 1")
-                        ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module', 1)
-/*                        ->andWhere('module.slug = :n')
-                        ->setParameter('n.slug', 'news')*/
+	                    ->join('o.module', 'module')
+	                    ->where("o.status = 1")
+	                    ->andWhere("module.slug = :module")
+	                    ->setParameter('module', 'news')
                         ->andWhere("o.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },

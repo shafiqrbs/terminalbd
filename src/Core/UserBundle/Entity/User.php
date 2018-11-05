@@ -371,7 +371,7 @@ class User extends BaseUser
      */
     protected $accountJournal;
 
-    /**
+   /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="toUser" , cascade={"persist", "remove"} )
      */
     protected $accountJournalToUser;
@@ -381,7 +381,17 @@ class User extends BaseUser
      */
     protected $accountJournalApprove;
 
-    /**
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="createdBy" , cascade={"persist", "remove"} )
+	 */
+	protected $balanceTransfer;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+	 */
+	protected $balanceTransferApprove;
+
+	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="createdBy" , cascade={"persist", "remove"} )
      */
     protected $accountPurchases;

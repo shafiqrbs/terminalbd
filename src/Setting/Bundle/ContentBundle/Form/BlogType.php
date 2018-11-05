@@ -50,9 +50,10 @@ class BlogType extends AbstractType
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
-                        ->where("o.status = 1")
-                        ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module',  $this->module)
+	                    ->join('o.module', 'module')
+	                    ->where("o.status = 1")
+	                    ->andWhere("module.slug = :module")
+	                    ->setParameter('module', 'products')
                         ->andWhere("o.globalOption =".$this->globalOption)
                         ->orderBy('o.name','ASC');
                 },

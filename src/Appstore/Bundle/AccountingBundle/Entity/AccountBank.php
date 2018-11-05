@@ -71,6 +71,16 @@ class AccountBank
     private  $accountJournals;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="fromAccountBank"  )
+     **/
+    private  $fromBalanceTransfer;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="toAccountBank"  )
+     **/
+    private  $toBalanceTransfer;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountBank"  )
      **/
     private  $accountCashes;
@@ -643,6 +653,20 @@ class AccountBank
 	 */
 	public function getMedicinePurchases() {
 		return $this->medicinePurchases;
+	}
+
+	/**
+	 * @return AccountBalanceTransfer
+	 */
+	public function getFromBalanceTransfer() {
+		return $this->fromBalanceTransfer;
+	}
+
+	/**
+	 * @return AccountBalanceTransfer
+	 */
+	public function getToBalanceTransfer() {
+		return $this->toBalanceTransfer;
 	}
 
 }

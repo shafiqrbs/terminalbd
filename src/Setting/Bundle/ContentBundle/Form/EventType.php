@@ -112,17 +112,18 @@ class EventType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array('Ongoing' => 'Ongoing',  'Upcoming' => 'Upcoming'),
             ))
-            ->add('category', 'entity', array(
+            ->add('moduleCategory', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
-                'empty_value' => '---Select Category ---',
+                'empty_value' => '---Select event category ---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
-                        ->where("o.status = 1")
-                        ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module', 7)
+	                    ->join('o.module', 'module')
+	                    ->where("o.status = 1")
+	                    ->andWhere("module.slug = :module")
+	                    ->setParameter('module', 'event')
                         ->andWhere("o.globalOption =".$this->globalOption)
                         ->orderBy('o.name','ASC');
                 },

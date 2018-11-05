@@ -42,6 +42,10 @@ accounting_journal:
     resource: "@AccountingBundle/Resources/config/routing/accountjournal.yml"
     prefix:   /finance/journal
 
+accounting_balancetransfer:
+    resource: "@AccountingBundle/Resources/config/routing/accountbalancetransfer.yml"
+    prefix:   /finance/balance-transfer
+
 accounting_expenditure:
     resource: "@AccountingBundle/Resources/config/routing/expenditure.yml"
     prefix:   /finance/expenditure
