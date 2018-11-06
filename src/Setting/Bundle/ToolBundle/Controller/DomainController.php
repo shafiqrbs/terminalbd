@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Controller;
 
+use Setting\Bundle\ToolBundle\Entity\AppModule;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +21,9 @@ class DomainController extends Controller
 
     public function generateDomainPathAction()
     {
-        $em = $this->getDoctrine()->getManager();
+
+	    set_time_limit(0);
+    	$em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('SettingToolBundle:GlobalOption')->findByDomain();
 
         $domains = array(
@@ -31,13 +34,19 @@ class DomainController extends Controller
             )
         );
 
-
-        $resource = '@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml';
+        $resourceWebsite = '@FrontendBundle/Resources/config/routing/websitesubdomain.yml';
+	    $resourceEcommerce = '@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml';
         $routes = array();
 
+        /* @var $data GlobalOption */
         foreach ($entities as $data){
 
-            $routes['_www_domain_app_' . strtolower(str_replace(array('.','-'), '_', $data->getDomain()))] = array(
+        	if($data ->getDomainType() == 'ecommerce'){
+		        $resource = $resourceEcommerce;
+	        }else{
+		        $resource = $resourceWebsite;
+	        }
+	        $routes['_www_domain_app_' . strtolower(str_replace(array('.','-'), '_', $data->getDomain()))] = array(
                 'resource' => $resource ,
                 'host' => '{domain_name}',
                 'name_prefix' => $data->getSubDomain() . "_",
@@ -71,13 +80,14 @@ class DomainController extends Controller
 
     public function paginate($entities)
     {
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            20  /*limit per page*/
-        );
-        return $pagination;
+	    $paginator = $this->get('knp_paginator');
+	    $pagination = $paginator->paginate(
+		    $entities,
+		    $this->get('request')->query->get('page', 1)/*page number*/,
+		    25  /*limit per page*/
+	    );
+	    $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+	    return $pagination;
     }
 
 
@@ -88,10 +98,12 @@ class DomainController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList();
+        $data = $_REQUEST;
+        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList($data);
         $entities = $this->paginate($entities);
         return $this->render('SettingToolBundle:Domain:index.html.twig', array(
             'entities' => $entities,
+            'searchForm' => $data,
         ));
     }
 

@@ -26,13 +26,14 @@ class ItemController extends Controller
     public function paginate($entities)
     {
 
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            25  /*limit per page*/
-        );
-        return $pagination;
+	    $paginator = $this->get('knp_paginator');
+	    $pagination = $paginator->paginate(
+		    $entities,
+		    $this->get('request')->query->get('page', 1)/*page number*/,
+		    25  /*limit per page*/
+	    );
+	    $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+	    return $pagination;
     }
 
     /**

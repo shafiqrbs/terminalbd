@@ -3,10 +3,8 @@
 namespace Setting\Bundle\ToolBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ContentBundle\Form\ContactOpeningType;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
-use Setting\Bundle\ToolBundle\Form\SiteSettingType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Length;
@@ -78,8 +76,7 @@ class GlobalOptionModifyType extends AbstractType
 
                 ->add('domain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter domain name'),
                     'constraints' =>array(
-                        new NotBlank(array('message'=>'Please input required')),
-                        new Length(array('max'=>200))
+	                    new Length(array('max'=>200))
                     )
                 ))
                 ->add('subDomain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sub-domain name'),
@@ -170,7 +167,7 @@ class GlobalOptionModifyType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_toolbundle_globaloption';
+        return 'globaloption';
     }
 
     protected function LocationChoiceList()

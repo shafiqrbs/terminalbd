@@ -77,8 +77,7 @@ class GlobalOptionType extends AbstractType
 
                 ->add('domain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter domain name'),
                     'constraints' =>array(
-                        new NotBlank(array('message'=>'Please input required')),
-                        new Length(array('max'=>200))
+	                    new Length(array('max'=>200))
                     )
                 ))
                 ->add('subDomain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sub-domain name'),
@@ -105,8 +104,12 @@ class GlobalOptionType extends AbstractType
                 ->add('primaryNumber')
                 ->add('isBranch')
                 ->add('status', 'choice', array(
-                    'attr'=>array('class'=>'selectbox span12'),
+                    'attr'=>array('class'=>'m-wrap span12'),
                     'choices' => array(1 => 'Active','2' => 'In-active'),
+                ))
+                ->add('domainType', 'choice', array(
+                    'attr'=>array('class'=>'m-wrap span12'),
+                    'choices' => array('' => 'Select Domain Type','website' => 'Website','ecommerce' => 'E-commerce'),
                 ))
                 /*->add('callBackEmail')
                 ->add('callBackContent','textarea', array('attr'=>array('class'=>' m-wrap span12','rows'=>4)))

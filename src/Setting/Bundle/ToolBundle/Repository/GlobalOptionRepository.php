@@ -36,23 +36,43 @@ use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 class GlobalOptionRepository extends EntityRepository
 {
 
-    function getList() {
-       return  $this->createQueryBuilder('g')
-           ->orderBy('g.updated', 'DESC')
-           ->getQuery();
+    function getList($data) {
+
+	    $sort = isset($data['sort'])? $data['sort'] :'e.updated';
+	    $direction = isset($data['direction'])? $data['direction'] :'DESC';
+	    $qb =  $this->createQueryBuilder('e');
+	    $qb->select('e');
+	    $qb->where('e.location is not null');
+	    $this->searchHandle($qb,$data);
+	    $qb->orderBy("{$sort}",$direction);
+	    $result = $qb->getQuery();
+	    return $result;
     }
 
     public function searchHandle($qb,$data)
     {
 
         if(!empty($data['location'])){
-            $qb->andWhere("e.location= :location");
-            $qb->setParameter('location', $data['location']);
+            $qb->join("e.location","location");
+            $qb->andWhere("location.name LIKE :location");
+	        $qb->setParameter('location',  '%'.$data['location'].'%');
         }
+
+        if(!empty($data['domain'])){
+            $qb->andWhere("e.domain LIKE :domain");
+            $qb->setParameter('domain',  '%'.$data['domain'].'%');
+        }
+
+        if(!empty($data['mobile'])){
+            $qb->andWhere("e.mobile LIKE :mobile");
+            $qb->setParameter('mobile',  '%'.$data['mobile'].'%');
+        }
+
         if(!empty($data['syndicate'])){
             $qb->andWhere("e.syndicate = :syndicate");
             $qb->setParameter('syndicate', $data['syndicate']);
         }
+
         if(!empty($data['name'])){
             $qb->andWhere("e.slug LIKE :slug");
             $qb->setParameter('slug',  '%'.$data['name'].'%');

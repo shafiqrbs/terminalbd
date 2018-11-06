@@ -36,6 +36,7 @@
                         {% if entity.siteSetting.appModules is not empty %}
                         <div class="actions">
                             <div class="btn-group">
+                                <a class="btn red" href="{{ path('tools_domain') }}"> <i class="icon-th-list"></i> Domain</a>
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     App Store
                                     <i class="icon-angle-down"></i>
@@ -204,6 +205,16 @@
                         </div>
                         <div class="clearfix">&nbsp;</div>
                         <!--/row-->
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <div class="control-group">
+                                    <label class="control-label" >Domain Type</label>
+                                    <div class="controls">
+                                        {{ form_widget(edit_form.domainType) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row-fluid">
                             <div class="span6 ">
                                 <div class="control-group">

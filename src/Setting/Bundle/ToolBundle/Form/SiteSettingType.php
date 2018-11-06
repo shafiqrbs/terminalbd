@@ -36,7 +36,7 @@ class SiteSettingType extends AbstractType
                  'class' => 'Setting\Bundle\ToolBundle\Entity\Theme',
                  'empty_value' => '---Select Theme ---',
                  'property' => 'name',
-                 'attr'=>array('class'=>'selectbox span12'),
+                 'attr'=>array('class'=>'m-wrap span12'),
                  'query_builder' => function(EntityRepository $er){
                          return $er->createQueryBuilder('wt')
                              ->andWhere("wt.status = 1")

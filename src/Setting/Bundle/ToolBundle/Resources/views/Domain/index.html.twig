@@ -38,49 +38,75 @@
                                 <a class="btn blue" href="{{ path('tools_domain_generate_path') }}">
                                     <i class="icon-umbrella"></i>&nbsp;Generate Domain Route
                                 </a>
-                            </div>
-                            <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('globaloption_new') }}"><i class="icon-th-list"></i>&nbsp; New Client</a></li>
-                                    <li><a href="{{ path('tools_domain') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('globaloption_new') }}"><i class="icon-plus-sign"></i>&nbsp; New Customer</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="portlet-body">
+                        <form class="search-form" action="" method="get" name="itemSearch">
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <input type="text" id="name" name="name"  class="span12 m-wrap select2Customer" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter customer company name ">
+                                </div>
+                                <div class="span3">
+                                    <input type="text" id="mobile" name="mobile"  class="span12 m-wrap select2User" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no">
+                                </div>
+                                <div class="span3">
+                                    <input type="text" id="domain" name="domain"  class="span12 m-wrap" value="{% if searchForm.domain is defined %}{{ searchForm.domain }}{% endif %}"  autocomplete="off" placeholder="Enter domain or subdomain name">
+                                </div>
+                                <div class="span3">
+                                    <div class="controls">
+                                        <div class="input-append span10">
+                                            <select name="paymentStatus" id="paymentStatus" class="span12 m-wrap">
+                                                <option value="">Select Customer Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Hold">Hold</option>
+                                                <option value="Suspend">Suspend</option>
+                                            </select>
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
-                                    <th class="numeric" >Name</th>
-                                    <th class="numeric" >Mobile</th>
+                                <tr class="head-green">
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Domain</th>
+                                    {%  set sort = app.request.query.get('sort') %}
+                                    {%  set direction = app.request.query.get('direction') %}
+                                    <th class="numeric" >Location</th>
+                                    <th {% if entities.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Organization', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th class="numeric" >Mobile</th>
+                                    <th {% if entities.isSorted('e.doamin') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Domain', 'e.domain') }}{% if( direction == 'desc' and sort == 'e.domain') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Monthly</th>
-                                    <th class="numeric" >Status</th>
-                                    <th class="numeric" >Invoice/Payment</th>
+                                    <th {% if entities.isSorted('e.status') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'status', 'e.status') }}{% if( direction == 'desc' and sort == 'e.status') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in entities %}
                                     <tr>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.location.name }},{{ entity.location.parent.name }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
-                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" ><a target="_blank" href="http://{{ entity.domain }}">{{ entity.domain }}</a></td>
                                         <td class="numeric" ><a href="#" class="editable" data-name="MonthlyAmount" id="group" data-type="text" data-pk="{{ entity.id }}" data-value="{{ entity.monthlyAmount }}"  data-url="{{ path('tools_option_status_update') }}" data-original-title="Enter monthly amount">{{ entity.monthlyAmount }}</a></td>
                                         <td class="numeric" ><a href="#" class="editable" data-name="Status" id="group" data-type="select" data-pk="{{ entity.id }}" data-value="{{ entity.status }}" data-source="{{ path('tools_option_status') }}" data-url="{{ path('tools_option_status_update') }}" data-original-title="Select domain status">{{ entity.currentStatus }}</a></td>
                                         <td class="numeric" >
+                                            <div class="btn-group">
                                             <a href="javascript:" class="btn blue mini badge badge-warning toggle badge-custom" id="{{ entity.id }}" ><i class="icon-cogs"></i>&nbsp;Operation</a>
                                             <a href="javascript:" class="btn green mini badge badge-warning toggle badge-custom" id="software-{{ entity.id }}" ><i class="icon-money"></i>&nbsp;Software</a>
                                             <a href="javascript:" class="btn purple mini badge badge-warning toggle badge-custom" id="sms-{{ entity.id }}" ><i class="icon-money"></i>&nbsp;SMS/Email</a>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr id="show-{{ entity.id }}" class="showing-overview">

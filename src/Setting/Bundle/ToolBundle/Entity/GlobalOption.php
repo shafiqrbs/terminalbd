@@ -522,12 +522,22 @@ class GlobalOption
      * @ORM\Column(name="isIntro", type="boolean" , nullable=true)
      */
     private $isIntro;
+
     /**
      * @var string
      *
      * @ORM\Column(name="callBackEmail", type="string", length=255 , nullable=true)
      */
     private $callBackEmail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="domainType", type="string", length=30 , nullable=true)
+     */
+    private $domainType;
+
+
     /**
      * @var text
      *
@@ -535,7 +545,15 @@ class GlobalOption
      */
     private $callBackContent;
 
-    /*---------------------- Manage Domain Pricing-------------------------------------*/
+	/**
+	 * @var integer
+	 *
+	 * @ORM\Column(name="status", type="smallint", nullable=true)
+	 */
+	private $status = 0;
+
+
+	/*---------------------- Manage Domain Pricing-------------------------------------*/
     /**
      * @var boolean
      *
@@ -572,12 +590,6 @@ class GlobalOption
     private $leaveContent;
 
     /*===================================Mall Connect =====================================*/
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="status", type="smallint", nullable=true)
-     */
-    private $status = 0;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -1835,6 +1847,20 @@ class GlobalOption
 	 */
 	public function getBalanceTransfer() {
 		return $this->balanceTransfer;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDomainType(){
+		return $this->domainType;
+	}
+
+	/**
+	 * @param string $domainType
+	 */
+	public function setDomainType( string $domainType ) {
+		$this->domainType = $domainType;
 	}
 
 
