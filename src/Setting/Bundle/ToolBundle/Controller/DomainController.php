@@ -34,7 +34,7 @@ class DomainController extends Controller
             )
         );
 
-        $resourceWebsite = '@FrontendBundle/Resources/config/routing/websitesubdomain.yml';
+        $resourceWebsite = '@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml';
 	    $resourceEcommerce = '@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml';
         $routes = array();
 
