@@ -69,16 +69,6 @@ class UserRepository extends EntityRepository
 
         $array = array();
 
-        $website = array('website');
-        $result = array_intersect($arrSlugs, $website);
-        if (!empty($result)) {
-
-            $array['Website'] = array(
-                'ROLE_WEBSITE'                  => 'Website',
-                'ROLE_DOMAIN_WEBSITE_MANAGER'   => 'Website Manager',
-                'ROLE_DOMAIN_WEBSITE_SETTING'   => 'Website Setting',
-            );
-        }
 
         $inventory = array('inventory');
         $result = array_intersect($arrSlugs, $inventory);
@@ -164,6 +154,7 @@ class UserRepository extends EntityRepository
                 'ROLE_BUSINESS_STOCK'                       => 'Business Stock',
                 'ROLE_BUSINESS_INVOICE_REVERSE'             => 'Business Invoice Reverse',
                 'ROLE_BUSINESS_PURCHASE_REVERSE'            => 'Business Purchase Reverse',
+                'ROLE_BUSINESS_REPORT'                      => 'Business Reports',
                 'ROLE_BUSINESS_MANAGER'                     => 'Business Manager',
             );
         }
@@ -261,7 +252,19 @@ class UserRepository extends EntityRepository
             'ROLE_CRM'                  => 'Customer',
             'ROLE_CRM_MANAGER'          => 'Manage Customer ',
         );
-        $array['SMS'] = array(
+
+	    $website = array('website');
+	    $result = array_intersect($arrSlugs, $website);
+	    if (!empty($result)) {
+
+		    $array['Website'] = array(
+			    'ROLE_WEBSITE'                  => 'Website',
+			    'ROLE_DOMAIN_WEBSITE_MANAGER'   => 'Website Manager',
+			    'ROLE_DOMAIN_WEBSITE_SETTING'   => 'Website Setting',
+			    'ROLE_DOMAIN_WEBSITE'           => 'Website Admin',
+		    );
+	    }
+	    $array['SMS'] = array(
             'ROLE_SMS'                                          => 'Sms/E-mail',
             'ROLE_SMS_MANAGER'                                  => 'Sms/E-mail Manager',
             'ROLE_SMS_CONFIG'                                   => 'SMS/E-mail Setup',

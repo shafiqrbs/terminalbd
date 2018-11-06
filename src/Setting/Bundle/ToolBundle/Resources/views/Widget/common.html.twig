@@ -74,10 +74,10 @@
         <li class="" id="header_notification_bar">
             <a href="{{ path('globaloption_modify') }}" class="btn blue mini"><i class="icon-cogs"></i> Settings</a>
         </li>
+        <li class="" id="header_notification_bar">
+            <a  href="{{ path('contactpage_modify') }}" class="btn grey mini"><i class="icon-map-marker"></i> Contact</a>
+        </li>
     {% endif %}
-    <li class="" id="header_notification_bar">
-        <a  href="{{ path('contactpage_modify') }}" class="btn grey mini"><i class="icon-map-marker"></i> Contact</a>
-    </li>
     {% if(app.user and app.user.globaloption.webmail is not empty) %}
         <li class="" id="header_notification_bar">
             <a href="{{ app.user.globaloption.webmail }}" target="_blank" class=""><i class="icon-envelope-alt"></i>&nbsp;Webmail</a>

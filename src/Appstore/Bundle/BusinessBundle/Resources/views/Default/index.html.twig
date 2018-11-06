@@ -86,7 +86,9 @@
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
+                                        {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE"))  %}
                                         <a href="{{ path('account_expenditure') }}" class="btn red mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +119,9 @@
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
+                                        {% if (app.user.granted("ROLE_BUSINESS_PURCHASE"))  %}
                                         <a href="{{ path('business_purchase') }}" class="btn blue mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
 
@@ -146,7 +150,9 @@
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
+                                        {% if (app.user.granted("ROLE_BUSINESS_SALES"))  %}
                                         <a href="{{ path('business_invoice') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +164,7 @@
             <div class="span4">
                       <div class="span6" style="margin-top:-10px">
                             <div class="portlet-body">
+                                {% if (app.user.granted("ROLE_BUSINESS_REPORT"))  %}
                                 <a href="{{ path('account_sales_business_outstanding') }}" class="icon-btn">
                                     <i class="fa fa-group"></i>
                                     <div> Customer </div>
@@ -174,62 +181,64 @@
                                     <i class="icon-truck"></i>
                                     <div> Purchase </div>
                                 </a>
+                                {% endif %}
 
                             </div>
 
                         </div>
                         <div class="span6" style="margin-top:-10px">
                             <div class="portlet-body">
+                                {% if (app.user.granted("ROLE_BUSINESS_MANAGER"))  %}
                                 <a href="{{ path('business_stock') }}" class="icon-btn">
                                     <i class="icon-th"></i>
                                     <div> Stock Details </div>
                                 </a>
+                                {% endif %} {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE"))  %}
                                 <a href="{{ path('account_expenditure_new') }}" class="icon-btn">
                                     <i class="icon-bar-chart"></i>
                                     <div> Expense </div>
                                 </a>
+                                {% endif %}
+                                {% if (app.user.granted("ROLE_BUSINESS_STOCK"))  %}
                                 <a href="{{ path('business_damage_new') }}" class="icon-btn">
                                     <i class="icon-trash"></i>
                                     <div> Damage </div>
                                 </a>
+                                {% endif %}
                                 <a href="{{ path('domain_notepad') }}" class="icon-btn">
-                                    <i class=" icon-file"></i>
+                                    <i class="icon-file"></i>
                                     <div> Notepad </div>
                                 </a>
-
                             </div>
 
                         </div>
             </div>
 
         </div>
-        <div class="portlet-body form">
-            <div class="portlet box blue">
-                <div class="portlet-body">
-                    <div class="row-fluid" >
-                        <div class="span12">
-                            <div id="optionsYearlyMonthlySales" style="height: 330px; width: 100%;"></div>
+        {% if (app.user.granted("ROLE_BUSINESS_MANAGER"))  %}
+            <div class="portlet-body form">
+                <div class="portlet box blue">
+                    <div class="portlet-body">
+                        <div class="row-fluid" >
+                            <div class="span12">
+                                <div id="optionsYearlyMonthlySales" style="height: 330px; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet box green">
+                    <div class="portlet-body">
+                        <div class="row-fluid" >
+                            <div class="span12">
+                                <div id="optionsYearlyMonthlyPurchase" style="height: 330px; width: 100%;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="portlet box green">
-                <div class="portlet-body">
-                    <div class="row-fluid" >
-                        <div class="span12">
-                            <div id="optionsYearlyMonthlyPurchase" style="height: 330px; width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
+        {% endif %}
     </div>
-    </div>
-
-
-        <style>
+    <style>
         .icon-btn{
             width: 100%;
             height: 50px!important;
