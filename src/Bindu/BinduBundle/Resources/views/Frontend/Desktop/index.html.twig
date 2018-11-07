@@ -1,20 +1,19 @@
 {% extends ':bindu:base.html.twig' %}
 {% block body %}
-    <style>
-        #tm-template-default-box.tm-container{
-            margin-top: 30px;
-        }
-    </style>
     <div id="tm-page-body">
         <div class="tm-row" style="">
-            <div class="tm-gallery gallery-slide flexslider" style="height: 350px;">
+            <div class="tm-gallery gallery-slide flexslider" style="height: 450px; position: relative">
                 <ul class="slides">
                     {% if slides is not empty %}
                     {% for slide in slides %}
                     <li>
                         <a href="{{ slide.routePath }}">
-                            <img alt="img" src="{{ image(slide.webPath).scaleResize(1014,320) }}">
+                            <img alt="img"  src="{{ image(slide.webPath).forceResize(1280,450)}}">
                         </a>
+                        <div class="flex-caption">
+                            <h3>{{ slide.name }}</h3>
+                            <p>{{ slide.content|raw }}</p>
+                        </div>
                     </li>
                     {% endfor %}
                     {% endif %}
@@ -25,104 +24,17 @@
         <div id="tm-template-default-box" class="tm-container">
             <div class="page-content">
                 <div class="page-content-inner tm-content">
-                    <div class="tm-row" style="padding:50px 0 20px 0">
-                        <div class="tm-wrap setanimate visible">
-                            <div class="tm-iconbox tm-style1">
-                                <div class="one-fourth tm-box">
-                                    <div class="iconlist-icon-header">
-											<span>
-											<i class="fa fa-trophy"></i>
-											</span>
-                                        <h3 class="tm-title">Fully hosted Cloud Platform</h3>
-                                    </div>
-                                    <div class="iconlist-entry">
-                                        <div class="iconlist-content">
-                                            <p>Robust scalable platform to build and manage websites.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="one-fourth tm-box">
-                                    <div class="iconlist-icon-header">
-											<span>
-											<i class="fa fa-flash"></i>
-											</span>
-                                        <h3 class="tm-title">Easily Manage Your Sites</h3>
-                                    </div>
-                                    <div class="iconlist-entry">
-                                        <div class="iconlist-content">
-                                            <p>Manage sites for your clients, run reports and analytics via the Online Management Dashboard.</p>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="one-fourth tm-box">
-                                    <div class="iconlist-icon-header">
-											<span>
-											<i class="fa fa-signal"></i>
-											</span>
-                                        <h3 class="tm-title">Full Marketing and Technical Support</h3>
-                                    </div>
-                                    <div class="iconlist-entry">
-                                        <div class="iconlist-content">
-                                            <p>All the marketing and technical support you need to resell terminalbd.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="one-fourth tm-box last">
-                                    <div class="iconlist-icon-header">
-											<span>
-											<i class="fa fa-gears"></i>
-											</span>
-                                        <h3 class="tm-title">Easy to get Onboard</h3>
-                                    </div>
-                                    <div class="iconlist-entry">
-                                        <div class="iconlist-content">
-                                            <p>Start building and selling terminalbd sites today.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tm-row">
+                    <div class="tm-row" style="padding:20px 0 20px 0">
+                        {% render controller("BinduBundle:Widget:siteContent",{'sector':'portal','slug':'portal-home'}) %}
                         <div class="tm-wrap">
-                            <div style="padding:30px;background:#29739D;margin:30px 0">
-                                <div class="two-third">
-                                    <p style="color:#fff">
-                                        {% render controller("FrontendBundle:Widget:siteContent",{'sector':'portal','slug':'about-us','limit':220}) %}
-                                    </p>
-                                </div>
-                                <div class="last one-third">
-                                    <div style="text-align:right" class="">
-                                        <a href="{{ path('bindu_about') }}" class="tm-btn blue">See More</a>
-                                        <a href="{{ path('bindu_contact') }}" class="tm-btn green">Contact Us</a>
-                                    </div>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tm-row" style="padding:20px 0 30px 0">
-                        <div class="tm-wrap">
-                            <div class="header-double-line-right">
-                                <h3 class="tm-title">Welcome to our website!</h3>
-                            </div>
-                            <div style="margin-bottom:30px">
-                                <p>
-                                    <span class="tm-dropcap tm-style3">T</span>
-                                    {% render controller("FrontendBundle:Widget:siteContent",{'sector':'portal','slug':'portal-home','limit':350}) %}
-                                </p>
-                            </div>
                             <div class="clear"></div>
                             <div style="">
                                 {% if apps is not empty %}
                                 {% for app in apps %}
                                     <div class="one-fourth tm-box">
                                         <div style="margin-bottom:30px">
-                                            <img alt="img" style="margin-bottom:20px" src="{{ image(app.webPath).scaleResize(320,220) }}">
-                                            <h3 class="tm-title">{{ app.name }}</h3>
+                                            <a href="{{ path('bindu_application',{'slug':app.slug}) }}"><img alt="img" style="margin-bottom:20px" src="{{ image(app.webPath).forceResize(320,220) }}"></a>
+                                            <h3 class="tm-title"><a href="{{ path('bindu_application',{'slug':app.slug}) }}">{{ app.name }}</a></h3>
                                             <p>{{ app.shortContent|raw }}</p>
                                         </div>
                                     </div>
@@ -132,7 +44,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="tm-row">
                         <div class="tm-wrap">
                             <div class="header-double-line-right">

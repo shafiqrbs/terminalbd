@@ -84,7 +84,7 @@ class WidgetController extends Controller
         ));
     }
 
-	public function siteContentAction($sector = '' , $slug = '', $limit = 200)
+	public function siteContentAction($sector = '' , $slug = '', $limit = '')
     {
         $content                     = $this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->findOneBy(array('businessSector'=> $sector,  'slug' => $slug));
 	    return $this->render('@Frontend/Widget/footer-aboutus.html.twig', array(

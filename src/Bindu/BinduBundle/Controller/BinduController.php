@@ -320,8 +320,6 @@ class BinduController extends Controller
 		$entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data);
 		if(!empty($entities)){
 			$pagination = $this->paginate($entities);
-		}else{
-			$pagination = '';
 		}
 		/* Device Detection code desktop or mobile */
 		$detect = new MobileDetect();
