@@ -126,7 +126,8 @@
                                         <tr> <td colspan="8" style="border: 1px solid #999999"></td></tr>
                                         </tbody>
                                         <tfoot>
-                                           <tr><td colspan="3"  style="width: 33%; border-right:1px solid #999999">
+                                           <tr>
+                                               <td colspan="3"  style="width: 33%; border-right:1px solid #999999">
                                                 <table style="width: 100%;">
                                                      <tr><td>Previous Due</td><td>{% if balance > 0 %}{{ (balance - entity.due)|number_format }}{% endif %}</td></tr>
                                                      <tr><th>Sales Amount</th><td>{{ entity.total|number_format() }}</td></tr>

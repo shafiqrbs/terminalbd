@@ -560,7 +560,7 @@ class InvoiceController extends Controller
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         if ($config->getId() == $entity->getBusinessConfig()->getId()) {
 
-            if($config->isCustomInvoicePrint() == 1){
+	        if($config->isCustomInvoicePrint() == 1){
                 $template = $config->getGlobalOption()->getSlug();
 	        }else{
                 $template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
