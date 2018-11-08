@@ -306,11 +306,9 @@ class BinduController extends Controller
 
 	public function previewAction()
 	{
-		$user = $this->getUser();
-		$entity = $user->getGlobalOption();
-		return $this->render('BinduBundle:Bindu-old:preview.html.twig', array(
-			'entity' => $entity,
-		));
+		//$user = $this->getUser();
+		//$entity = $user->getGlobalOption();
+		return $this->render('BinduBundle:Bindu-old:preview.html.twig');
 
 	}
 
