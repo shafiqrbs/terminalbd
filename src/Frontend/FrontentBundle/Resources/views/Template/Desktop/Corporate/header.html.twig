@@ -56,7 +56,7 @@
                                 <div class="searchBtn pull-right searchBtnSelector">
                                     <span class="glyphicon glyphicon-search search-btn"></span>
                                 </div>
-                                <div id="search-area" style="position: absolute; top: 58px; width: 100%; display:none; ">
+                                <div id="search-area">
                                     <form action="{{ path(globalOption.subDomain ~ '_webservice_search') }}" style="width: 100%" class="" method="get">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="keyword" id="keyword" value="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% endif %}" placeholder="Enter search keywords" autocomplete="off">

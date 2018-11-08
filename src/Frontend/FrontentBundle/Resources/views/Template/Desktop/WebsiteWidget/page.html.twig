@@ -73,9 +73,9 @@
 </div>
 {% endif %}
 
-{% if widget.module is defined and widget.module.slug == 'category' %}
+{#{% if widget.module is defined and widget.module.slug == 'category' %}
     {% render controller("FrontendBundle:WebsiteWidget:pageBaseModuleFeatureCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
-{% endif %}
+{% endif %}#}
 {% if widget.moduleCategory is defined and widget.moduleCategory is not empty %}
     {% render controller("FrontendBundle:WebsiteWidget:pageBaseModuleCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
 {% endif %}

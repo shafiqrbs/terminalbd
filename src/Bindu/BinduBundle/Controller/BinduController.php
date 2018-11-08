@@ -308,7 +308,7 @@ class BinduController extends Controller
 	{
 		$user = $this->getUser();
 		$entity = $user->getGlobalOption();
-		return $this->render('BinduBundle:Bindu:preview.html.twig', array(
+		return $this->render('BinduBundle:Bindu-old:preview.html.twig', array(
 			'entity' => $entity,
 		));
 

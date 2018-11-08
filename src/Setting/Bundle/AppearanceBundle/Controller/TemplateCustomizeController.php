@@ -37,22 +37,7 @@ class TemplateCustomizeController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new TemplateCustomize();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-            return $this->redirect($this->generateUrl('templatecustomize_show', array('id' => $entity->getId())));
-        }
-
-        return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
     }
 
     /**
@@ -96,17 +81,6 @@ class TemplateCustomizeController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
-        }
-
-        return $this->render('SettingAppearanceBundle:TemplateCustomize:show.html.twig', array(
-            'entity'      => $entity,
-        ));
     }
 
     /**
@@ -144,7 +118,7 @@ class TemplateCustomizeController extends Controller
         }
 
         $editForm = $this->createEcommerceForm($entity);
-        return $this->render('SettingAppearanceBundle:TemplateCustomize:ecommerce.html.twig', array(
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
 
@@ -225,7 +199,7 @@ class TemplateCustomizeController extends Controller
             $entity->upload();
             $em->flush();
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:TemplateCustomize')->fileUploader($entity,$file);
-            return $this->redirect($this->generateUrl('templatecustomize_ecommerce_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('templatecustomize_edit', array('id' => $id)));
         }
 
         return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(

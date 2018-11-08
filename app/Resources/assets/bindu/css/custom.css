@@ -181,7 +181,13 @@ header #tm-header-nav.tm-menu-style2 nav.tm-nav ul.tm-menu > li.current-menu-ite
 
 .laptop_preview  {
   height:523px;
-  background: url(../img/divice/laptop-full.png) no-repeat center;
+  background: url(../img/divice/mac-computer.png) no-repeat center;
+  display: none;
+}
+
+.mac_preview  {
+  height:850px;
+  background: url(../img/divice/macbook-desktop.png) no-repeat;
   display: none;
 }
 
@@ -199,6 +205,12 @@ header #tm-header-nav.tm-menu-style2 nav.tm-nav ul.tm-menu > li.current-menu-ite
   float: left;
   background: url(../img/iphone.png) no-repeat center;
   margin-left: 8%;
+}
+
+
+.laptop_wrap {
+  width:1026px!important;
+  padding: 45px 0 0 48px;
 }
 
 

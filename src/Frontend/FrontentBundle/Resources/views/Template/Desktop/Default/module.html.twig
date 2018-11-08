@@ -1,14 +1,21 @@
-{% extends ':frontend/template:ecommerce-base.html.twig' %}
+{% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
-    <section id="breadcrumb">
-        <div class="container">
-            <ol class="breadcrumb">
-                <li><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class="active"><span>{{ menu.menu }}</span></li>
-            </ol>
-        </div>
-    </section>
+    {% if globalOption.templateCustomize.breadcrumb == 1 %}
+        <section id="breadcrumb">
+            <div class="container">
+                <ul class="breadcrumb">
+                    <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                    {% if category is defined and category is not empty %}
+                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a></li>
+                        <li class="active"><a href="javascript:void(0);">{{ category.name }}</a></li>
+                    {% else %}
+                        <li class="active"><a href="javascript:void(0);">{{ menu.menu }}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </section>
+    {% endif %}
     <div class="clearfix"></div>
     <section>
         <div class="container">
@@ -22,13 +29,11 @@
         <div class="container">
             <div class="row">
                 {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' and menu.featureWidgetExist == 'true'  %}
-                    <div class="col-md-3"  >
+                    <div class="col-md-3">
                         {% if globalOption.templateCustomize.sidebarTitle is not empty %}
                             <div class="page-title-bar">
-                                <div class="col-md-12">
-                                    <div class="btn-group pull-left">
-                                        <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
-                                    </div>
+                                <div class="btn-group pull-left">
+                                    <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
                                 </div>
                             </div>
                         {% endif %}
@@ -45,7 +50,7 @@
                     <div class="page-title-bar">
                         <div class="col-md-12">
                             <div class="btn-group pull-left">
-                                <div class="page-title"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;{{ menu.menu }}</div>
+                                <div class="page-title"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;{{ menu.menu }} {% if category is defined and category is not empty %} : {{ category.name }}{% endif %}</div>
                             </div>
                         </div>
                     </div>
@@ -82,6 +87,8 @@
                                 {{ include('@Frontend/Template/Desktop/Module/admission.html.twig')}}
                             {% elseif( menu.module.slug == 'syndicate' ) %}
                                 {{ include('@Frontend/Template/Desktop/Module/syndicate.html.twig')}}
+                            {% elseif( menu.module.slug == 'products' ) %}
+                                {{ include('@Frontend/Template/Desktop/Module/product.html.twig')}}
                             {% else %}
                                 {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
                             {% endif %}
@@ -127,13 +134,9 @@
         </div>
     </section>
     <div class="clearfix"></div>
- <style>
-
- </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
     '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
@@ -142,13 +145,22 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/js/common.js'
-    '@FrontendBundle/Resources/public/template/js/page.js'
-    '@FrontendBundle/Resources/public/template/js/headerfooter.js'
-    '@FrontendBundle/Resources/public/template/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/page.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/corporate.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
-
+{% block documentready %}
+    {{ parent() }}
+    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+        sliderPageOwl(3);
+    {% else %}
+        sliderPageOwl(4);
+    {% endif %}
+    $('#list').click(function(event){event.preventDefault();$('#categories-list .item').addClass('list-group-item');});
+    $('#grid').click(function(event){event.preventDefault();$('#categories-list .item').removeClass('list-group-item');$('#categories-list .item').addClass('grid-group-item');});
+{% endblock %}
 

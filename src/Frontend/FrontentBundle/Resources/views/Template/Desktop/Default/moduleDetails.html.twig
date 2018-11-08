@@ -1,15 +1,17 @@
-{% extends ':frontend/template:ecommerce-base.html.twig' %}
+{% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
+{% if globalOption.templateCustomize.breadcrumb == 1 %}
     <section id="breadcrumb">
         <div class="container">
-            <ol class="breadcrumb">
-                <li><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+            <ul class="breadcrumb">
+                <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain':globalOption.subDomain,'module': menu.module.slug }) }}"> {{ menu.module.name }}</a></li>
-                <li class="active"><span>{{ page.name }}</span></li>
-            </ol>
+                <li class="active"><a href="javascript:void(0);">{{ page.name }}</a></li>
+            </ul>
         </div>
     </section>
+{% endif %}
     <div class="clearfix"></div>
     <section>
         <div class="container">
@@ -26,10 +28,8 @@
                     <div class="col-md-3"  >
                         {% if globalOption.templateCustomize.sidebarTitle is not empty %}
                             <div class="page-title-bar">
-                                <div class="col-md-12">
-                                    <div class="btn-group pull-left">
-                                        <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
-                                    </div>
+                                <div class="btn-group pull-left">
+                                    <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
                                 </div>
                             </div>
                         {% endif %}
@@ -55,13 +55,15 @@
                             {% elseif( menu.module.slug == 'branch' ) %}
                                 {{ include('@Frontend/Template/Desktop/ModuleDetails/branch.html.twig')}}
                             {% elseif( menu.module.slug == 'event' ) %}
-                                {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
+                                {{ include('@Frontend/Template/Desktop/ModuleDetails/event.html.twig')}}
                             {% elseif( menu.module.slug == 'noticeboard' ) %}
                                 {{ include('@Frontend/Template/Desktop/ModuleDetails/noticeboard.html.twig')}}
                             {% elseif( menu.module.slug == 'service' ) %}
                                 {{ include('@Frontend/Template/Desktop/ModuleDetails/service.html.twig')}}
                             {% elseif( menu.module.slug == 'team' ) %}
                                 {{ include('@Frontend/Template/Desktop/ModuleDetails/team.html.twig')}}
+                            {% elseif( menu.module.slug == 'products' ) %}
+                                {{ include('@Frontend/Template/Desktop/ModuleDetails/product.html.twig')}}
                             {% elseif( menu.module.slug == 'syndicate' ) %}
                                 {{ include('@Frontend/Template/Desktop/ModuleDetails/syndicate.html.twig')}}
                             {% else %}
@@ -120,12 +122,21 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/js/common.js'
-    '@FrontendBundle/Resources/public/template/js/page.js'
-    '@FrontendBundle/Resources/public/template/js/headerfooter.js'
-    '@FrontendBundle/Resources/public/template/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/page.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/corporate.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
-
+{% block documentready %}
+    {{ parent() }}
+    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+        sliderPageOwl(3);
+    {% else %}
+        sliderPageOwl(4);
+    {% endif %}
+    $('#list').click(function(event){event.preventDefault();$('#categories-list .item').addClass('list-group-item');});
+    $('#grid').click(function(event){event.preventDefault();$('#categories-list .item').removeClass('list-group-item');$('#categories-list .item').addClass('grid-group-item');});
+{% endblock %}

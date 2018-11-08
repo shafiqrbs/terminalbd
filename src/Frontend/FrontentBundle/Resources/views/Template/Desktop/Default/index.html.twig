@@ -1,44 +1,60 @@
-{% extends ':frontend/template:ecommerce-base.html.twig' %}
+{% extends ':frontend/template:base.html.twig' %}
 {% block body %}
-    <section class="home" style="background:#222">
-        <!-- Header Carousel -->
-        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-bottom') %}
-            <div class="container container-margin">
-                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header-bottom'}) %}
-            </div>
-        {% endif %}
-        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-            <div class="container container-margin">
-                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
-            </div>
-        {% endif %}
-        <div class="container">
+    <section>
+        <div class="container" style="border-bottom: 1px; border-color: #c0c5c9">
             <div class="row">
-                <div class="col-md-10 col-md-offset-1"  style="margin-top: 15px; margin-bottom:15px">
-                    <div class="col-md-10" >
-                        <div class="order-widget-block">
-                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> PLACE YOUR ORDER NOW - RECEIVE YOUR ITEMS WITHIN 72 HOURS
-                        </div>
+                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' and menu.featureWidgetExist == 'ture' %}
+                    <div class="col-md-3"  >
+                        {% if globalOption.templateCustomize.sidebarTitle is not empty %}
+                            <div class="page-title">{{ globalOption.templateCustomize.sidebarTitle }}</div>
+                        {% endif %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-top'}) %}
+                        {% endif %}
                     </div>
-                    <div class="col-md-2"><a class="btn shop-now" href="{{ path(globalOption.subDomain ~ '_webservice_product') }}">SHOP NOW</a></div>
+                {% endif %}
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true'  %} col-md-9 {% else %} col-md-12 {% endif %}"  >
+                    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-top'}) %}
+                    {% endif %}
+                    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-bottom'}) %}
+                    {% endif %}
                 </div>
+                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' and menu.featureWidgetExist == 'true'  %}
+                    <div class="col-md-3">
+                        {% if globalOption.templateCustomize.sidebarTitle is not empty %}
+                            <div class="page-title-bar row">
+                                <div class="col-md-12">
+                                    <div class="btn-group pull-left">
+                                        <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-top'}) %}
+                        {% endif %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-bottom'}) %}
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
         </div>
-        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-            <div class="container container-margin">
-                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-bottom'}) %}
-            </div>
-        {% endif %}
-        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer-top') %}
-            <div class="container">
-                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer-top'}) %}
-            </div>
-        {% endif %}
     </section>
+    <div class="clearfix"></div>
+    <script>
+        {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+            columnItem = 3;
+        {% else %}
+            columnItem = 4;
+        {% endif %}
+    </script>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/desktop/css/product.css'
+    '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -46,25 +62,20 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/js/common.js'
-    '@FrontendBundle/Resources/public/template/js/product.js'
-    '@FrontendBundle/Resources/public/template/js/e-commerce.js'
-    '@FrontendBundle/Resources/public/template/js/sidebar.js'
-    '@FrontendBundle/Resources/public/template/js/page.js'
-    '@FrontendBundle/Resources/public/template/js/headerfooter.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/page.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/corporate.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+        sliderPageOwl(3);
+    {% else %}
+        sliderPageOwl(4);
+    {% endif %}
 {% endblock %}
-
-
-
-
-
-
-
-
 

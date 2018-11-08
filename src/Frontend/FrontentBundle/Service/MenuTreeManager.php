@@ -105,6 +105,7 @@ class MenuTreeManager
 
     }
 
+
     public function getEcommerceFooterMenuTree($arr,$subdomain,$device ='')
     {
 
