@@ -1,9 +1,8 @@
-<nav class="navbar navbar-inverse ">
-    {% if globalOption.templateCustomize.topBar is not empty %}
+{% if globalOption.templateCustomize.topBar is not empty %}
     <section id="top-bar" class=" header-position">
         <div class="container" >
             <div class="row">
-                <div class="col-md-6 text-left">
+                <div class="col-md-4 text-left">
                     <div class="box">
                         <ul class="info-links">
                             {% if globalOption.templateCustomize.showCalendar == 1 %}
@@ -18,7 +17,22 @@
                         </ul>
                     </div>
                 </div>
-                <div class=" col-md-6 text-right">
+                <div class="col-md-4 text-center">
+                    <div class="box">
+                        <ul class="info-links">
+                            {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                            {% endif %}
+                            {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                            {% endif %}
+                            {% if globalOption.templateCustomize.showMobile == 1 %}
+                                <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class=" col-md-4 text-right">
                     <div class="box">
                         <ul class="social-links">
                             {% if globalOption.facebookPageUrl is not empty %}
@@ -40,179 +54,190 @@
             </div>
         </div>
     </section>
-    {% endif %}
-    <section id="header"  class="sticky {% if globalOption.templateCustomize.topBar is not empty %}header-position{% endif %}" >
+{% endif %}
+<nav class="navbar navbar-default bootsnav on no-full navbar-transparent sticky">
+    <!-- Start Top Search -->
+    <div class="top-login" style="display: none">
         <div class="container">
-            <div class="navbar-header" >
-                <div class="col-md-3">
-                    <a class="img-logo"  href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
-                    <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}
-                    </a>
-                </div>
-                <div class="col-md-9" >
-                    {#<div id="menu" class="header-inner-menu" >
-                        <div class="row" id="menu-bar" style="position: relative">
-                            <nav id="header-menu">{{ menuTree|raw }}</nav>
-                            {% if globalOption.templateCustomize.showSearch == 1 %}
-                                <div class="searchBtn pull-right searchBtnSelector">
-                                    <span class="glyphicon glyphicon-search search-btn"></span>
-                                </div>
-                                <div id="search-area">
-                                    <form action="{{ path(globalOption.subDomain ~ '_webservice_search') }}" style="width: 100%" class="" method="get">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" name="keyword" id="keyword" value="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% endif %}" placeholder="Enter search keywords" autocomplete="off">
-                                              <span class="input-group-btn">
-                                                <button class="btn btn-info" type="submit">Go!</button>
-                                              </span>
-                                        </div><!-- /input-group -->
-                                    </form>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>#}
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <nav class="navbar navbar-default navbar-mobile bootsnav on">
-                                    <div class="navbar-header">
-                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                                            <i class="fa fa-bars"></i>
-                                        </button>
-                                    </div>
-                                    <div class="collapse navbar-collapse" id="navbar-menu">
-                                        <ul class="nav navbar-nav" data-in="fadeInDown" data-out="fadeOutUp">
-                                            <li class="active"><a href="#" data-hover="Home">Home</a></li>
-                                            <li><a href="#" data-hover="About">About</a></li>
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="Shortcodes">Shortcodes</a>
-                                                <ul class="dropdown-menu animated">
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li class="dropdown">
-                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
-                                                        <ul class="dropdown-menu animated">
-                                                            <li><a href="#">Custom Menu</a></li>
-                                                            <li><a href="#">Custom Menu</a></li>
-                                                            <li class="dropdown">
-                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
-                                                                <ul class="dropdown-menu multi-dropdown animated">
-                                                                    <li><a href="#">Custom Menu</a></li>
-                                                                    <li><a href="#">Custom Menu</a></li>
-                                                                    <li><a href="#">Custom Menu</a></li>
-                                                                    <li><a href="#">Custom Menu</a></li>
-                                                                </ul>
-                                                            </li>
-                                                            <li><a href="#">Custom Menu</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="Pages">Pages</a>
-                                                <ul class="dropdown-menu animated">
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li class="dropdown">
-                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
-                                                        <ul class="dropdown-menu animated">
-                                                            <li><a href="#">Custom Menu</a></li>
-                                                            <li><a href="#">Custom Menu</a></li>
-                                                            <li class="dropdown">
-                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
-                                                                <ul class="dropdown-menu multi-dropdown animated">
-                                                                    <li><a href="#">Custom Menu</a></li>
-                                                                    <li><a href="#">Custom Menu</a></li>
-                                                                    <li><a href="#">Custom Menu</a></li>
-                                                                    <li><a href="#">Custom Menu</a></li>
-                                                                </ul>
-                                                            </li>
-                                                            <li><a href="#">Custom Menu</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                    <li><a href="#">Custom Menu</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#" data-hover="Portfolio">Portfolio</a></li>
-                                            <li class="dropdown megamenu-fw">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu</a>
-                                                <ul class="dropdown-menu megamenu-content animated" role="menu">
-                                                    <li>
-                                                        <div class="row">
-                                                            <div class="col-menu col-md-3">
-                                                                <h6 class="title">Title Menu One</h6>
-                                                                <div class="content">
-                                                                    <ul class="menu-col">
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div><!-- end col-3 -->
-                                                            <div class="col-menu col-md-3">
-                                                                <h6 class="title">Title Menu Two</h6>
-                                                                <div class="content">
-                                                                    <ul class="menu-col">
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div><!-- end col-3 -->
-                                                            <div class="col-menu col-md-3">
-                                                                <h6 class="title">Title Menu Three</h6>
-                                                                <div class="content">
-                                                                    <ul class="menu-col">
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-menu col-md-3">
-                                                                <h6 class="title">Title Menu Four</h6>
-                                                                <div class="content">
-                                                                    <ul class="menu-col">
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                        <li><a href="#">Custom Menu</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div><!-- end col-3 -->
-                                                        </div><!-- end row -->
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#" data-hover="Contact">Contact</a></li>
-                                        </ul>
-                                    </div>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-login"><i class="fa fa-times"></i></span>
             </div>
-
         </div>
-    </section>
+    </div>
+    <!-- End Top Search -->
+    <div class="container">
+        <!-- Start Header Navigation -->
+        <div class="attr-nav">
+            <ul class="icon-circle-fadein">
+                <li>
+                <a href="https://twitter.com/minimalmonkey" class="icon-button twitter"><i class="fa fa-twitter"></i><span></span></a>
+
+                </li>
+                <li>
+                <a href="https://facebook.com" class="icon-button facebook"><i class="fa fa-facebook"></i><span></span></a>
+
+                </li>
+                <li>
+
+                    <a href="https://twitter.com/minimalmonkey" class="icon-button twitter"><i class="fa fa-instagram"></i><span></span></a>
+                </li>
+                <li>
+
+                    <a href="https://plus.google.com" class="icon-button google-plus"><i class="fa fa-google-plus"></i><span></span></a>
+                </li>
+
+            </ul>
+            <ul class="icon-circle-fancy" id="fancy-circle">
+                <li>
+                    <div class="facebook">
+                        <a href="https://facebook.com/colorlib/">
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="twitter">
+                        <a href="https://twitter.com/colorlib/">
+                            <i class="fa fa-twitter" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="icon-square">
+                <li><a href="#" class="btn-social btn-instagram"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#" class="btn-social btn-twitter"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#" class="btn-social btn-google-plus"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+            <ul class="icon-circle">
+                <li><a href="#" class="btn-social btn-instagram"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#" class="btn-social btn-twitter"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#" class="btn-social btn-google-plus"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+            <ul>
+                <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
+                <li class="login"><a href="#"><i class="fa fa-lock"></i></a></li>
+            </ul>
+        </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="#brand">
+                <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120,50) }}" alt="{{ globalOption.name }}" />
+
+            </a>
+        </div>
+        <!-- End Header Navigation -->
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="nav navbar-nav " data-in="fadeInDown" data-out="fadeOutUp">
+                <li class="active"><a href="#" data-hover="Home">Home</a></li>
+                <li><a href="#" data-hover="About">About</a></li>
+               {# <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="Shortcodes">Shortcodes</a>
+                    <ul class="dropdown-menu animated">
+                        <li><a href="#">Custom Menu</a></li>
+                        <li><a href="#">Custom Menu</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
+                            <ul class="dropdown-menu animated">
+                                <li><a href="#">Custom Menu</a></li>
+                                <li><a href="#">Custom Menu</a></li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
+                                    <ul class="dropdown-menu multi-dropdown animated">
+                                        <li><a href="#">Custom Menu</a></li>
+                                        <li><a href="#">Custom Menu</a></li>
+                                        <li><a href="#">Custom Menu</a></li>
+                                        <li><a href="#">Custom Menu</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Custom Menu</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Custom Menu</a></li>
+                        <li><a href="#">Custom Menu</a></li>
+                        <li><a href="#">Custom Menu</a></li>
+                        <li><a href="#">Custom Menu</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="Pages">Pages</a>
+                    <ul class="dropdown-menu animated">
+                        <li><a href="#">Custom Menu</a></li>
+                        <li><a href="#">Custom Menu</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
+                            <ul class="dropdown-menu animated">
+                                <li><a href="#">Custom Menu</a></li>
+                                <li><a href="#">Custom Menu</a></li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
+                                    <ul class="dropdown-menu multi-dropdown animated">
+                                        <li><a href="#">Custom Menu</a></li>
+                                        <li><a href="#">Custom Menu</a></li>
+                                        <li><a href="#">Custom Menu</a></li>
+                                        <li><a href="#">Custom Menu</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Custom Menu</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Custom Menu</a></li>
+                        <li><a href="#">Custom Menu</a></li>
+                        <li><a href="#">Custom Menu</a></li>
+                        <li><a href="#">Custom Menu</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" data-hover="Portfolio">Portfolio</a></li>
+                <li><a href="#" data-hover="Contact">Contact</a></li>#}
+            </ul>
+        </div><!-- /.navbar-collapse -->
+
+    </div>
+    <div class="top-search">
+        <div class="container">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+
 </nav>
 <style>
 
+    .sticky{
+        width: 100%;
+        box-shadow: 0 8px 6px -6px black;
+    }
+    .navbar-header{
+        float: left;
+    }
+    .dropdown {
+        height: auto!important;
+    }
+    #sollist{
+        margin-top: 23px;
+    }
+
+    .pageheader-header{
+        padding: 0 0;
+        background-color: #f43438;
+    }
+    nav.navbar.bootsnav ul.nav > li > a {
+        text-shadow: 0px 1px 0px rgba(0,0,0,0.2);
+    }
+
+
+
 </style>
+
+<div class="clearfix"></div>
+<div class="pageheader-header dark"></div>
 <div class="clearfix"></div>
 {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.featureWidgetPositionExist('header') %}
     <section class="feature-widget-header-top" >

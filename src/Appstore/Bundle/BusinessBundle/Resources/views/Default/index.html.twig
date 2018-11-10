@@ -215,7 +215,7 @@
             </div>
 
         </div>
-        {% if (app.user.granted("ROLE_BUSINESS_MANAGER"))  %}
+        {% if (app.user.granted("ROLE_HOTEL_REPORTS"))  %}
             <div class="portlet-body form">
                 <div class="portlet box blue">
                     <div class="portlet-body">
@@ -290,60 +290,62 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    window.onload = function () {
+    {% if (app.user.granted("ROLE_HOTEL_REPORTS"))  %}
+        window.onload = function () {
 
-    var optionsYearlyMonthlySales = {
-    animationEnabled: true,
-    title: {
-    text: "Monthly Sales - {{ "now"|date("Y") }}"
-    },
-    axisY: {
-    title: "",
-    suffix: "",
-    includeZero: false
-    },
-    axisX: {
-    title: "Monthly Sales - {{ "now"|date("Y") }}"
-    },
-    data: [{
-    type: "column",
-    yValueFormatString: "#,##0.0#",
-    dataPoints: [
-    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
-    {% for key,month in months %}
-        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlySales|keys %}{{ monthlySales[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlySales|keys %}{{ monthlySales[key]|number_format }}{% endif %}" },
-    {% endfor %}
-    ]
-    }]
-    };
-    $("#optionsYearlyMonthlySales").CanvasJSChart(optionsYearlyMonthlySales);
+        var optionsYearlyMonthlySales = {
+        animationEnabled: true,
+        title: {
+        text: "Monthly Sales - {{ "now"|date("Y") }}"
+        },
+        axisY: {
+        title: "",
+        suffix: "",
+        includeZero: false
+        },
+        axisX: {
+        title: "Monthly Sales - {{ "now"|date("Y") }}"
+        },
+        data: [{
+        type: "column",
+        yValueFormatString: "#,##0.0#",
+        dataPoints: [
+        {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
+        {% for key,month in months %}
+            { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlySales|keys %}{{ monthlySales[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlySales|keys %}{{ monthlySales[key]|number_format }}{% endif %}" },
+        {% endfor %}
+        ]
+        }]
+        };
+        $("#optionsYearlyMonthlySales").CanvasJSChart(optionsYearlyMonthlySales);
 
-    var optionsYearlyMonthlyPurchase = {
-    animationEnabled: true,
-    title: {
-    text: "Monthly Purchase - {{ "now"|date("Y") }}"
-    },
-    axisY: {
-    title: "",
-    suffix: "",
-    includeZero: false
-    },
-    axisX: {
-    title: "Monthly Purchase - {{ "now"|date("Y") }} "
-    },
-    data: [{
-    type: "column",
-    yValueFormatString: "#,##0.0#",
-    dataPoints: [
-    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
-    {% for key,month in months %}
-        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlyPurchase|keys %}{{ monthlyPurchase[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlyPurchase|keys %}{{ monthlyPurchase[key]|number_format }}{% endif %}" },
-    {% endfor %}
-    ]
-    }]
-    };
-    $("#optionsYearlyMonthlyPurchase").CanvasJSChart(optionsYearlyMonthlyPurchase);
+        var optionsYearlyMonthlyPurchase = {
+        animationEnabled: true,
+        title: {
+        text: "Monthly Purchase - {{ "now"|date("Y") }}"
+        },
+        axisY: {
+        title: "",
+        suffix: "",
+        includeZero: false
+        },
+        axisX: {
+        title: "Monthly Purchase - {{ "now"|date("Y") }} "
+        },
+        data: [{
+        type: "column",
+        yValueFormatString: "#,##0.0#",
+        dataPoints: [
+        {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
+        {% for key,month in months %}
+            { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlyPurchase|keys %}{{ monthlyPurchase[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlyPurchase|keys %}{{ monthlyPurchase[key]|number_format }}{% endif %}" },
+        {% endfor %}
+        ]
+        }]
+        };
+        $("#optionsYearlyMonthlyPurchase").CanvasJSChart(optionsYearlyMonthlyPurchase);
 
-    }
+        }
+{% endif %}
 
 {% endblock %}

@@ -26,7 +26,7 @@ class WebServiceController extends Controller
 	        }elseif ($globalOption->getDomainType() == 'medicine'){
 		        return $this->renderMedicine($request , $globalOption);
 	        }else{
-		        return $this->renderWebsite($request , $globalOption);
+		        return $this->renderWebsite($globalOption);
 	        }
 
         }else{
@@ -91,7 +91,7 @@ class WebServiceController extends Controller
 	    );
     }
 
-    public function renderMedicineAction(Request $request , GlobalOption $globalOption){
+    public function renderMedicine(Request $request , GlobalOption $globalOption){
 
 	    $em = $this->getDoctrine()->getManager();
 	    $cart = new Cart($request->getSession());

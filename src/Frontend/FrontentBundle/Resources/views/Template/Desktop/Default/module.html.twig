@@ -1,6 +1,12 @@
 {% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
+    <div class="pageheader">
+        <div class="container">
+            <h2 class="title">Navbar Fixed Transparent</h2>
+            <p>Navigation menu with fixed transparent</p>
+        </div>
+    </div>
     {% if globalOption.templateCustomize.breadcrumb == 1 %}
         <section id="breadcrumb">
             <div class="container">
@@ -138,6 +144,7 @@
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
+    '@FrontendBundle/Resources/public/template/desktop/css/socialicon.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -162,5 +169,15 @@
     {% endif %}
     $('#list').click(function(event){event.preventDefault();$('#categories-list .item').addClass('list-group-item');});
     $('#grid').click(function(event){event.preventDefault();$('#categories-list .item').removeClass('list-group-item');$('#categories-list .item').addClass('grid-group-item');});
+    $("#sollist").sollist({
+    theme: 'lee-gargano-square-color',
+    profiles: {
+    facebook: 'http://facebook.com/yourlink'
+    ,googleplus: 'https://plus.google.com/yourlink/posts'
+    ,dribbble: 'https://dribbble.com/yourlink'
+    }
+    ,hoverEffect: 'fade-out'
+
+    });
 {% endblock %}
 

@@ -37,7 +37,10 @@
                         <div class="actions">
                             <div class="btn-group">
                             <a class="btn red" href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
-                           {# <a class="btn black" href="{{ path('item_purcahse_stock_update') }}"><i class="icon-refresh"></i>&nbsp; Update Stock</a>#}
+                            <a class="btn purple" href="{{ path('item_stock_export_csv') }}"><i class="fa fa-file-excel-o"></i>&nbsp; Export CSV</a>
+                                {#
+                                    <a class="btn red" href="{{ path('item_stock_export_excel') }}"><i class="icon-plus-sign"></i>&nbsp; Export Excel</a>
+                               <a class="btn black" href="{{ path('item_purcahse_stock_update') }}"><i class="icon-refresh"></i>&nbsp; Update Stock</a>#}
                             <a href="{{ path('barcode_item_add') }}" id="btn-create-barcode" class="btn yellow"  onclick="return prepareBarCode()" >Barcode <i class="icon-barcode"></i></a>
                             </div>
                         </div>

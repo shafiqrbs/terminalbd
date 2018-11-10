@@ -39,7 +39,7 @@
                             {{ form_row(form._token) }}
 
                             <div class="row-fluid">
-                                <div class="span3">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Location Type</label>
                                         <div class="controls">
@@ -48,7 +48,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3">
+                                <div class="span4">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Parent Name</label>
                                         <div class="controls">
@@ -92,10 +92,10 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
+                                    <th class="numeric" >Parent Name </th>
                                     <th class="numeric" >Location Type</th>
                                     <th class="numeric" >Name </th>
                                     <th class="numeric" >Name Bangla</th>
-                                    <th class="numeric" >Parent Name </th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -104,10 +104,10 @@
                                 {% for entity in entities %}
                                     <tr>
 
+                                        <td class="numeric" >{% if entity.parent is not empty and entity.parent.parent is not empty %}{{ entity.parent.parent.name }} => {% endif %}  {% if entity.parent is not empty %}{{ entity.parent.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.locationType is not empty %}{{ entity.locationType.name }}{% endif %}</td>
                                         <td class="numeric" ><a href="{{ path('election_location_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.nameBn }}</td>
-                                        <td class="numeric" >{% if entity.parent is not empty %}{{ entity.parent.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.district is empty %}
                                             {% if( entity.status == 1) %}

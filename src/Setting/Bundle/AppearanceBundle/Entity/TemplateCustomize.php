@@ -32,6 +32,11 @@ class TemplateCustomize
     protected $globalOption;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SocialIcon", mappedBy="templateCustomize")
+     **/
+    protected $socialIcons;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="topBar", type="boolean", nullable=true)
@@ -531,6 +536,21 @@ class TemplateCustomize
      * @ORM\Column(name="dividerAfterColor", type="string", length=20, nullable=true)
      */
     private $dividerAfterColor;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="socialIconPosition", type="string", length=20, nullable=true)
+     */
+    private $socialIconPosition;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="socialIconType", type="string", length=100, nullable=true)
+     */
+    private $socialIconType;
+
 
     /**
      * @var integer
@@ -2546,6 +2566,41 @@ class TemplateCustomize
 	 */
 	public function setShowNewsLetter( bool $showNewsLetter ) {
 		$this->showNewsLetter = $showNewsLetter;
+	}
+
+	/**
+	 * @return SocialIcon
+	 */
+	public function getSocialIcons() {
+		return $this->socialIcons;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSocialIconType(){
+		return $this->socialIconType;
+	}
+
+	/**
+	 * @param string $socialIconType
+	 */
+	public function setSocialIconType( string $socialIconType ) {
+		$this->socialIconType = $socialIconType;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSocialIconPosition(){
+		return $this->socialIconPosition;
+	}
+
+	/**
+	 * @param string $socialIconPosition
+	 */
+	public function setSocialIconPosition( string $socialIconPosition ) {
+		$this->socialIconPosition = $socialIconPosition;
 	}
 
 

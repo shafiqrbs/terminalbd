@@ -99,3 +99,11 @@ item_purcahse_stock_update:
     path:      /stock-remaining-quantity-update
     defaults: { _controller: "InventoryBundle:Item:updateStockQuantity" }
 
+item_stock_export_csv:
+    path:      /item-stock-export-to-csv
+    defaults: { _controller: "InventoryBundle:Item:itemExportToCsv" }
+
+item_stock_export_excel:
+    path:      /item-stock-export-to-excel
+    defaults: { _controller: "InventoryBundle:Item:itemExportToExcel" }
+

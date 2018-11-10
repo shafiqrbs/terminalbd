@@ -10,8 +10,6 @@ wow = new WOW(
 );
 wow.init();
 
-
-
 $(document).ready(function(){
 
         var stickyOffset = $('.sticky').offset().top;
@@ -21,8 +19,6 @@ $(document).ready(function(){
             if (scroll > 1) sticky.addClass('fixed-top');
             else sticky.removeClass('fixed-top');
         });
-
-
 
         $('.social-tooltip').tooltip({
             selector: "[data-toggle=tooltip]",

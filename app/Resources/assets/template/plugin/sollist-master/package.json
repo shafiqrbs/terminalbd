@@ -1,0 +1,15 @@
+{
+  "name": "sollist",
+  "version": "1.0.0",
+  "description": "jQuery plugin builds easy customisable lists of social links ",
+  "main": "jquery.sollist.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1", 
+    "build": "./build.sh"
+  },
+  "author": "Sasha Zhuravlev <paperairplane89@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "minifier": "~0.6.2"
+  }
+}

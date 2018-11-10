@@ -36,6 +36,24 @@ class TemplateCustomizeType extends AbstractType
                 'choices' => array('' => '---Select One---','left' => 'left',  'right' => 'right'),
             ))
 
+            ->add('socialIconType', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                	'' => '---Select Icon Type ---',
+	                'icon-hover-name' => 'Icon Hover name',
+	                'icon-fancy-circle' => 'Icon Fancy Circle',
+	                'icon-tooltip-square' => 'Icon Tooltip Square',
+	                'icon-button-with-text' => 'Icon Button with text',
+	                'icon-circle-mouse-hover' => 'Icon Circle mouse hover',
+	                'icon-circle' => 'Icon Circle',
+                ),
+            ))
+
+            ->add('socialIconPosition', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array('' => '---Select Icon Position---','top-left' => 'Top Left','top-right' => 'Top Right','menu-right' => 'Menu Right'),
+            ))
+
             ->add('breadcrumb')
             ->add('breadcrumbFontSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),

@@ -1,0 +1,131 @@
+/*layout*/
+.sl-container {
+	list-style-type: none;
+    padding:0;
+    margin:0;
+}
+
+.sl-container .sl-item {
+    display: inline-block;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    padding-bottom: 5px;
+}
+
+.sl-container a {
+	display: block;
+}
+.sl-container .sl-item a {
+	background-size: contain;
+	display: block;
+}
+
+/*tooltips*/
+.sl-tooltip-black {
+    border:0;
+    border-radius: 5px; 
+    background: #4c4c4c;
+    color: #fff;
+}
+.sl-tooltip-black .tooltipster-content {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 16px;
+    padding: 5px 10px;
+}
+
+.sl-tooltip-white {
+    border:0;
+    border-radius: 5px; 
+    background: #fff;
+    color: #000;
+}
+.sl-tooltip-white .tooltipster-content {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 16px;
+    padding: 5px 10px;
+}
+
+
+/*hover animations*/
+
+.sl-item.shrink:hover {
+	-webkit-transform: scale(0.9);
+  	transform: scale(0.9);
+}
+.sl-item.grow:hover {
+	-webkit-transform: scale(1.1);
+  	transform: scale(1.1);
+}
+.sl-item.rotate:hover {
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+}
+
+.sl-item.fade-out:hover {
+  -webkit-opacity: 0.5;
+  opacity: 0.5;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+}
+
+.sl-item.fade-in {
+     -webkit-opacity: 0.7;
+    opacity: 0.7;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.sl-item.fade-in:hover {
+    -webkit-opacity: 1.0;
+    opacity: 1.0;
+
+}
+
+
+@keyframes bounce {
+  	20% {
+ 	  -webkit-transform: translateY(-6px);
+    	transform: translateY(-6px);
+  	}
+
+  	40% {
+    	-webkit-transform: translateY(4px);
+    	transform: translateY(4px);
+  	}
+
+  	60% {
+    	-webkit-transform: translateY(-2px);
+    	transform: translateY(-2px);
+  	}
+
+  	80% {
+    	-webkit-transform: translateY(1px);
+    	transform: translateY(1px);
+  	}
+
+  	100% {
+    	-webkit-transform: translateY(0);
+    	transform: translateY(0);
+	}
+}
+.sl-item.bounce:hover {
+	-webkit-animation-name: bounce;
+	animation-name: bounce;
+	-webkit-animation-duration: 0.7s;
+	animation-duration: 0.7s;
+	-webkit-animation-timing-function: ease-in-out;
+	animation-timing-function: ease-in-out;
+	-webkit-animation-iteration-count: 1;
+	animation-iteration-count: 1;
+}
+
+.sl-item.rise:hover {
+  -webkit-transform: translateY(-10%);
+  transform: translateY(-10%);
+}

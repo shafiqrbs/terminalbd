@@ -568,4 +568,131 @@ class ItemController extends Controller
 
 	}
 
+	public function itemExportToCsvAction()
+	{
+
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$em = $this->getDoctrine()->getManager();
+		$global = $this->getUser()->getGlobalOption();
+		$data = $_REQUEST;
+		$array = array();
+
+		$inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+		$entities = $em->getRepository('InventoryBundle:Item')->findWithSearch($inventory,$data);
+		$entities = $entities->getQuery()->getResult();
+		$array[] = 'SKU,Name,Category Name,Unit,Purchase,Purchase Return,Sales,Sales Return,Damage,Reaming,Avg Purchase,Avg Sales,Sales Price';
+		/* @var $entity Item */
+
+		foreach ($entities as $key => $entity){
+
+			$unit = !empty($entity->getMasterItem()->getProductUnit()) ? $entity->getMasterItem()->getProductUnit()->getName():'';
+			$category = !empty($entity->getMasterItem()->getCategory()) ? $entity->getMasterItem()->getCategory()->getName():'';
+
+			$rows = array(
+				$entity->getSku(),
+				$entity->getName(),
+				$category,
+				$unit,
+				$entity->getPurchaseQuantity(),
+				abs($entity->getPurchaseQuantityReturn()),
+				abs($entity->getSalesQuantity()),
+				abs($entity->getSalesQuantityReturn()),
+				$entity->getDamageQuantity(),
+				$entity->getRemainingQuantity(),
+				$entity->getAvgPurchasePrice(),
+				$entity->getAvgSalesPrice(),
+				$entity->getSalesPrice(),
+			);
+			$array[] = implode(',', $rows);
+		}
+		$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+		$compareStart = new \DateTime($startDate);
+		$start =  $compareStart->format('d-m-Y');
+		$fileName = $start.'-stock-item.csv';
+		$content = implode("\n", $array);
+		$response = new Response($content);
+		$response->headers->set('Content-Type', 'text/csv');
+		$response->headers->set('Content-Type', 'application/octet-stream');
+		$response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+		return $response;
+		exit;
+
+	}
+
+	public function itemExportToExcelAction()
+	{
+
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$em = $this->getDoctrine()->getManager();
+		$global = $this->getUser()->getGlobalOption();
+		$data = $_REQUEST;
+		$entities = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->gpProductWiseSales($global,$data);
+		$phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+		$phpExcelObject->setActiveSheetIndex(0)
+		               ->setCellValue('A1', 'Created')
+		               ->setCellValue('B1', 'Order Date')
+		               ->setCellValue('C1', 'Time of Order')
+		               ->setCellValue('D1', 'Category')
+		               ->setCellValue('E1', 'Item Sku')
+		               ->setCellValue('F1', 'Item Name')
+		               ->setCellValue('G1', 'GP Center')
+		               ->setCellValue('H1', 'Circle')
+		               ->setCellValue('I1', 'Region')
+		               ->setCellValue('J1', 'District')
+		               ->setCellValue('K1', 'Thana')
+		               ->setCellValue('L1', 'Quantity')
+		               ->setCellValue('M1', 'MRP')
+		               ->setCellValue('N1', 'Vat')
+		               ->setCellValue('O1', 'Commission')
+		               ->setCellValue('P1', 'Method');
+		$rowNo =2;
+		foreach ($entities as $key => $entity){
+
+			//  $com = round(($entity['dpPrice']*8)/100);
+
+			$phpExcelObject->setActiveSheetIndex(0)
+			               ->setCellValue("A{$rowNo}", $entity['createdBy'])
+			               ->setCellValue("B{$rowNo}", $entity['created']->format('d-m-Y') )
+			               ->setCellValue("C{$rowNo}", $entity['created']->format('H:m A') )
+			               ->setCellValue("D{$rowNo}", $entity['categoryName'])
+			               ->setCellValue("E{$rowNo}", $entity['itemSku'])
+			               ->setCellValue("F{$rowNo}", $entity['itemName'])
+			               ->setCellValue("G{$rowNo}", $entity['gpCenterName'])
+			               ->setCellValue("H{$rowNo}", $entity['circle'])
+			               ->setCellValue("I{$rowNo}", $entity['region'])
+			               ->setCellValue("J{$rowNo}", $entity['district'])
+			               ->setCellValue("K{$rowNo}", $entity['thana'])
+			               ->setCellValue("L{$rowNo}", $entity['quantity'])
+			               ->setCellValue("M{$rowNo}", $entity['subTotal'])
+			               ->setCellValue("N{$rowNo}", $entity['vat'])
+			               ->setCellValue("O{$rowNo}", $entity['gpCommission'])
+			               ->setCellValue("P{$rowNo}", $entity['methodName']);
+			$rowNo++;
+		}
+		$phpExcelObject->getActiveSheet()->setTitle('GP-Center Product Details');
+		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+		$phpExcelObject->setActiveSheetIndex(0);
+
+		// create the writer
+		$writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
+		// create the response
+		$response = $this->get('phpexcel')->createStreamedResponse($writer);
+		// adding headers
+		$dispositionHeader = $response->headers->makeDisposition(
+			ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+			'GP-ExpressDetails.xlsx'
+		);
+		$response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+		$response->headers->set('Pragma', 'public');
+		$response->headers->set('Cache-Control', 'maxage=1');
+		$response->headers->set('Content-Disposition', $dispositionHeader);
+
+		return $response;
+
+	}
+
+
 }
