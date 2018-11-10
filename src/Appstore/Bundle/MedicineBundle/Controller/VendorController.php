@@ -49,11 +49,9 @@ class VendorController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['customer']));
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$config->getGlobalOption(),'mobile' => $data['customer']));
             if($customer){
                 $entity->setCustomer($customer);
-            }else{
-                $entity->setCustomer(null);
             }
             $entity->setMedicineConfig($config);
             $em->persist($entity);

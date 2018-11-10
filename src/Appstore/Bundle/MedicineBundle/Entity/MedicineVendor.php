@@ -47,6 +47,7 @@ class MedicineVendor
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="medicineVendor")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      */
     protected $customer;
 
