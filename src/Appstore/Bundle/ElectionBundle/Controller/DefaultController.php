@@ -24,9 +24,9 @@ class DefaultController extends Controller
 		$unionMembers    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getUnionWiseMember($config);
 		$unionVoters    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->getUnionWiseVoter($config);
 		$wardMembers    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getWardWiseMember($config);
-		$committees    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->getTypeBaseCommittee($config);
-		$typeBaseCommittees    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->getLocationGroupBaseCommittee($config);
-		$locationBaseCommittees    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->getLocationBaseCommittee($config);
+		$committees    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->getCommittees($setup);
+		$typeBaseCommittees    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->getLocationGroupBaseCommittee($setup);
+		$locationBaseCommittees    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->getLocationBaseCommittee($setup);
 		$eventTypes    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->getTypeBaseEvent($config);
 		$locationBaseEvent    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->getLocationBaseEvent($config);
 		$campaignsType    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCampaignAnalysis')->getAnalysisType($config);

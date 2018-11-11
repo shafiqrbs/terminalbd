@@ -58,8 +58,10 @@ class ElectionMemberRepository extends EntityRepository
 	    $qb->groupBy('e.gender');
 	    $qb->orderBy('e.gender','ASC');
 	    $results = $qb->getQuery()->getArrayResult();
-	    $totalMembers = ($results[0]['countId'] + $results[1]['countId']);
-	    $data = array('totalMember' => $totalMembers,'male' =>$results[1]['countId'],'female' => $results[0]['countId']);
+	    $male = !empty($results[1]['countId'])?$results[1]['countId']:0;
+	    $female = !empty($results[0]['countId'])?$results[0]['countId']:0;
+	    $totalMembers = ($male + $female);
+	    $data = array('totalMember' => $totalMembers,'male' => $male,'female' => $female);
 	    return $data;
     }
 
@@ -385,21 +387,27 @@ class ElectionMemberRepository extends EntityRepository
 			$voter = $entity->getVoteCenter()->getName();
 		}
 		$data ="";
-		$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
-		$data .=" <thead class='flip-content'><tr class='head-grey'><th>ID</th><th>Name</th><th>Mobile</th><th>Village</th><th>Vote Center</th><th>Ward</th><th>Union/Purashava</th><th>Thana/Upazila</th></tr></thead>";
-		$data .= "<tbody>";
-		$data .= "<tr>";
-		$data .= "<td>{$entity->getMemberId()}</td>";
-		$data .= "<td>{$entity->getName()}</td>";
-		$data .= "<td><a href='tel:+88 {$entity->getMobile()}'>{$entity->getMobile()}</a></td>";
-		$data .= "<td>{$entity->getLocation()->getName()}</td>";
-		$data .= "<td>{$voter}</td>";
-		$data .= "<td>{$entity->getLocation()->wardName()}</td>";
-		$data .= "<td>{$entity->getLocation()->unionName()}</td>";
-		$data .= "<td>{$entity->getLocation()->thanaName()}</td>";
-		$data .= "</tr>";
-		$data .= "</tbody>";
-		$data .= "</table></div>";
+		if(!empty($entity->getLocation())){
+			$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
+			$data .=" <thead class='flip-content'><tr class='head-grey'><th>ID</th><th>Name</th><th>Mobile</th><th>Village</th><th>Vote Center</th><th>Ward</th><th>Union/Purashava</th><th>Thana/Upazila</th></tr></thead>";
+			$data .= "<tbody>";
+			$data .= "<tr>";
+			$data .= "<td>{$entity->getMemberId()}</td>";
+			$data .= "<td>{$entity->getName()}</td>";
+			$data .= "<td><a href='tel:+88 {$entity->getMobile()}'>{$entity->getMobile()}</a></td>";
+			$data .= "<td>{$entity->getLocation()->getName()}</td>";
+			$data .= "<td>{$voter}</td>";
+			$data .= "<td>{$entity->getLocation()->wardName()}</td>";
+			$data .= "<td>{$entity->getLocation()->unionName()}</td>";
+			$data .= "<td>{$entity->getLocation()->thanaName()}</td>";
+			$data .= "</tr>";
+			$data .= "</tbody>";
+			$data .= "</table></div>";
+
+		}else{
+			$data .="<p class='text-center'>There is no available information. </p>";
+		}
+
 		return $data;
 
 	}
@@ -409,7 +417,7 @@ class ElectionMemberRepository extends EntityRepository
 		$duration = empty($entity->getStartDate()) ? '': "{$entity->getStartDate()->format('d-m-Y')} To {$entity->getEndDate()->format('d-m-Y')}";
 		$data ="";
 		$data .="<div class='portlet-body flip-scroll'><table class='table table-bordered table-striped table-condensed flip-content '>";
-		$data .=" <thead class='flip-content'><tr class='head-green'><th>Created</th><th>Name</th><th>Committee For</th><th>Location</th><th>Location Type</th><th>Date Duration</th><th>Created By</th><th>Approved By</th><th></th></tr></thead>";
+		$data .=" <thead class='flip-content'><tr class='head-purple'><th>Created</th><th>Name</th><th>Committee For</th><th>Location</th><th>Location Type</th><th>Date Duration</th><th>Created By</th><th>Approved By</th><th></th></tr></thead>";
 		$data .= "<tbody>";
 		$data .= "<tr>";
 		$data .= "<td>{$entity->getCreated()->format('d-m-Y')}</td>";

@@ -57,7 +57,7 @@ $(document).on('change', '#dashboardMember', function() {
     var id  = $(this).val();
     var url = $('form#memberForm').attr('action');
     $.get(url,{'id':id}, function(response) {
-        $('#search-content').html(response);
+        $('#search-content').html(response).show();
     });
 });
 
@@ -66,7 +66,7 @@ $(document).on('change', '#dashboardVoter', function() {
     var id  = $(this).val();
     var url = $('form#voterForm').attr('action');
     $.get(url,{'id':id}, function(response) {
-        $('#search-content').html(response);
+        $('#search-content').html(response).show();
     });
 });
 
@@ -75,7 +75,7 @@ $(document).on('change', '#dashboardVoteCenter', function() {
     var id  = $(this).val();
     var url = $('form#voteCenterForm').attr('action');
     $.get(url,{'id':id}, function(response) {
-        $('#search-content').html(response);
+        $('#search-content').html(response).show();
     });
 });
 
@@ -84,7 +84,7 @@ $(document).on('change', '#dashboardCommittee', function() {
     var id  = $(this).val();
     var url = $('form#committeeForm').attr('action');
     $.get(url,{'id':id}, function(response) {
-        $('#search-content').html(response);
+        $('#search-content').html(response).show();
     });
 });
 
@@ -93,7 +93,7 @@ $(document).on('change', '#dashboardCampaign', function() {
     var id  = $(this).val();
     var url = $('form#campaignForm').attr('action');
     $.get(url,{'id':id}, function(response) {
-        $('#search-content').html(response);
+        $('#search-content').html(response).show();
     });
 });
 
@@ -102,12 +102,12 @@ $(document).on('change', '#dashboardAnalysis', function() {
     var id  = $(this).val();
     var url = $('form#analysisForm').attr('action');
     $.get(url,{'id':id}, function(response) {
-        $('#search-content').html(response);
+        $('#search-content').html(response).show();
     });
 });
 
 $(document).on('click', '.tabLi', function() {
-    $('#search-content').html('');
+    $('#search-content').html('').hide();
 });
 
 $(document).on('click', '.view', function() {

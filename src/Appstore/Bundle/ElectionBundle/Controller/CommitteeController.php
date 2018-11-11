@@ -31,8 +31,10 @@ class CommitteeController extends Controller
 		$entity = new ElectionCommittee();
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findBy(array('electionConfig' => $config),array('created'=>'DESC'));
+		$locationTypes = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->getListOfParticular($config,'location');
 		return $this->render('ElectionBundle:Committee:index.html.twig', array(
 			'entities' => $entities,
+			'locationTypes' => $locationTypes,
 			'entity' => $entity,
 		));
 	}

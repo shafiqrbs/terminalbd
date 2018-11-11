@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionSetup;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -15,11 +16,11 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class ElectionCommitteeRepository extends EntityRepository
 {
 
-	public function getCommittees(ElectionConfig $config){
+	public function getCommittees(ElectionSetup  $setup){
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->select('e');
-		$qb->where('e.electionConfig='.$config->getId());
+		$qb->where('e.electionSetup='.$setup->getId());
 		$qb->andWhere("e.status = :status");
 		$qb->setParameter('status', 1);
 		$qb->orderBy("e.updated",'DESC');
@@ -28,13 +29,13 @@ class ElectionCommitteeRepository extends EntityRepository
 		return $results;
 	}
 
-	public function getTypeBaseCommittee(ElectionConfig $config){
+	public function getTypeBaseCommittee(ElectionSetup  $setup){
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.electionSetup','t');
 		$qb->join('t.electionType','type');
 		$qb->select('type.name as committeeName , COUNT(e.id) as countId');
-		$qb->where('e.electionConfig='.$config->getId());
+		$qb->where('e.electionSetup='.$setup->getId());
 		$qb->andWhere("e.status = :status");
 		$qb->setParameter('status', 1);
 		$qb->groupBy('type.name');
@@ -42,12 +43,12 @@ class ElectionCommitteeRepository extends EntityRepository
 		return $results;
 	}
 
-	public function getLocationBaseCommittee(ElectionConfig $config){
+	public function getLocationBaseCommittee(ElectionSetup  $setup){
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.location','t');
 		$qb->select('t.name as locationName , COUNT(e.id) as countId');
-		$qb->where('e.electionConfig='.$config->getId());
+		$qb->where('e.electionSetup='.$setup->getId());
 		$qb->andWhere("e.status = :status");
 		$qb->setParameter('status', 1);
 		$qb->groupBy('t.name');
@@ -55,14 +56,14 @@ class ElectionCommitteeRepository extends EntityRepository
 		return $results;
 	}
 
-	public function getLocationGroupBaseCommittee(ElectionConfig $config){
+	public function getLocationGroupBaseCommittee(ElectionSetup  $setup){
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.location','location');
 		$qb->leftJoin('location.locationType','type');
 		$qb->leftJoin('e.members','m');
-		$qb->select('type.name as locationName , COUNT(e.id) as countId, COUNT(m.id) as memberCount');
-		$qb->where('e.electionConfig='.$config->getId());
+		$qb->select('type.name as locationName , COUNT(e.id) as committeeCount, COUNT(m.id) as memberCount');
+		$qb->where('e.electionSetup='.$setup->getId());
 		$qb->andWhere("e.status = :status");
 		$qb->setParameter('status', 1);
 		$qb->groupBy('type.name');

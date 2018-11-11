@@ -45,9 +45,7 @@ class ElectionLocationRepository extends MaterializedPathRepository{
 	{
 
 		$locations = $this->childrenHierarchy();
-
 		$this->buildFlatLocationTree($locations, $array);
-
 		return $array;
 	}
 
@@ -150,7 +148,6 @@ class ElectionLocationRepository extends MaterializedPathRepository{
 
 		foreach ($locations as $location) {
 			switch($location->getLevel()) {
-
 				case 3:
 					$grouped[$locations[$location->getParentIdByLevel(3)]->getName()][$location->getId()] = $location;
 			}
@@ -195,19 +192,95 @@ class ElectionLocationRepository extends MaterializedPathRepository{
 		return $categories;
 	}
 
+	/**
+	 * @param Category $category
+	 * @param int $level
+	 * @return Category
+	 */
+	public function getParentCategoryByLevel(ElectionLocation $category, $level = 1)
+	{
+		return $this->find($category->getParentIdByLevel($level));
+	}
+
+	public function getParentIdByLevel($level = 1)
+	{
+		$parentsIds = explode("/", $this->getPath());
+
+		return isset($parentsIds[$level - 1]) ? $parentsIds[$level - 1] : null;
+
+	}
+
+
 	public function getLocationGroup($config)
 	{
+
+		$result = array();
+		$config = $this->_em->getRepository('ElectionBundle:ElectionConfig')->find($config);
+
+		$categories = $this->findBy(array('electionConfig' => $config),array('level'=>'ASC','name'=>'ASC'));
+		foreach($categories as $category) {
+
+			//$parentCategory = $this->getParentCategoryByLevel($category, 2);
+
+
+			if(empty($parentCategory)) {
+				continue;
+			}
+
+			$parentId = $parentCategory->getId();
+
+			if(!isset($result[$parentId])) {
+				$result[$parentId] = array(
+					'name' =>  $parentCategory->getName(),
+					'id' =>  $parentCategory->getId(),
+					'__children' =>  array(),
+				);
+			}
+
+			$result[$parentId]['__children'][] = array(
+				'name' => $category->getName(),
+				'id' => $category->getId()
+			);
+		}
+
+		return $result;
+
+		/*$arr =array();
+		$array =array();
+		$config = $this->_em->getRepository('ElectionBundle:ElectionConfig')->find($config);
+		if(!empty($config->getLocations())){
+
+			$categories = $this->findBy(array('electionConfig' => $config),array('level'=>'ASC','name'=>'ASC'));
+			foreach($categories as $category){
+				$arr[] = array(
+					'id' => $category->getId(),
+					'name' => $category->getName(),
+					'level' => $category->getLevel(),
+					'__children' => $this->childrenHierarchy($category)
+				);
+			}
+			$this->buildFlatLocationTree($arr , $array);
+		}
+		return $array == null ? array() : $array;*/
+
+
+
+	}
+
+	public function getLocationGroupByTree($config)
+	{
+
+
+
 		$grouped = array();
 
 		$qb = $this->createQueryBuilder('node');
 		$results = $qb
-			->orderBy('node.level, node.name', 'ASC')
+			->orderBy('node.parent', 'ASC')
 			->where('node.electionConfig = '.$config)
 			->getQuery()
 			->getResult();
-
 		$categories = $this->getCategoriesIndexedById($results);
-
 		foreach ($categories as $category) {
 			switch($category->getLevel()) {
 				case 1: break;

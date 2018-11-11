@@ -87,7 +87,8 @@ class CommitteeType extends AbstractType
 	 */
 	protected function locationChoiceList()
 	{
-		return $categoryTree = $this->location->getLocationGroup($this->config->getId());
+		return $categoryTree = $this->location->getFlatLocationTree();
+		//return $categoryTree = $this->location->getLocationGroupByTree($this->config->getId());
 
 	}
 

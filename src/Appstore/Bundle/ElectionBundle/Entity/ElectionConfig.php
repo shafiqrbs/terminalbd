@@ -41,6 +41,7 @@ class ElectionConfig
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", mappedBy="electionConfig")
+	 * @ORM\OrderBy({"level" = "ASC"})
 	 **/
 	private $locations;
 

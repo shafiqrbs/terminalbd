@@ -266,10 +266,10 @@ class VoterController extends Controller
 		$status = $entity->isMember();
 		if($status == 1){
 			$entity->setIsMember(false);
-			$entity->setMemberType('member');
+			$entity->setMemberType('voter');
 		} else{
 			$entity->setIsMember(true);
-			$entity->setMemberType('voter');
+			$entity->setMemberType('member');
 		}
 		$em->flush();
 		$this->get('session')->getFlashBag()->add(

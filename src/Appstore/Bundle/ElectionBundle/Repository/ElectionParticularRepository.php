@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -13,4 +14,18 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class ElectionParticularRepository extends EntityRepository
 {
+	public function getListOfParticular(ElectionConfig $config , $slug)
+	{
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.particularType','type');
+		$qb->select('e.id,e.name');
+		$qb->where('e.electionConfig='.$config->getId());
+		$qb->andWhere("type.slug = :slug");
+		$qb->setParameter('slug', $slug);
+		$qb->andWhere("e.status = :status");
+		$qb->setParameter('status', 1);
+		$qb->orderBy("e.name",'ASC');
+		$results = $qb->getQuery()->getArrayResult();
+		return $results;
+	}
 }

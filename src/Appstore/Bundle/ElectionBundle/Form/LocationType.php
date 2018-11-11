@@ -49,7 +49,7 @@ class LocationType extends AbstractType
 	        ->add('locationType', 'entity', array(
 		        'required'    => true,
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
-		        'empty_value' => '--- Type of Location ---',
+		        'empty_value' => '--- Choose type of location ---',
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span12 inputs'),
 		        'constraints' =>array( new NotBlank(array('message'=>'Select location type')) ),
@@ -92,7 +92,9 @@ class LocationType extends AbstractType
 	 */
 	protected function locationChoiceList()
 	{
-		return $categoryTree = $this->location->getLocationGroup($this->config->getId());
+		//return $categoryTree = $this->location->getLocationGroup($this->config);
+		return $categoryTree = $this->location->getFlatLocationTree();
+
 
 	}
 

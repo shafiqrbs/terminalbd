@@ -242,9 +242,10 @@ class UserRepository extends EntityRepository
         $result = array_intersect($arrSlugs, $dms);
         if (!empty($result)) {
             $array['ELECTION'] = array(
-                'ROLE_ELECTION_OPERATOR'                        => 'Operator',
-                'ROLE_ELECTION_MANAGER'                         => 'Manager',
-                'ROLE_ELECTION_ADMIN'                           => 'Admin',
+                'ROLE_ELECTION'                        => 'Election',
+                'ROLE_ELECTION_OPERATOR'               => 'Operator',
+                'ROLE_ELECTION_MANAGER'                => 'Manager',
+                'ROLE_ELECTION_ADMIN'                  => 'Admin',
             );
         }
 

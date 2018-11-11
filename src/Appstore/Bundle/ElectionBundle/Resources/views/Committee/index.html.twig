@@ -37,6 +37,28 @@
                     </div>
 
                     <div class="portlet-body form">
+                        <form class="search-form" action="" method="get" name="itemSearch">
+                            <div class="row-fluid">
+                                <div class="span4">
+                                    <select name="type" id="type" class="m-wrap span12">
+                                        {% for type in locationTypes %}
+                                            <option value="{{ type.id }}">{{ type.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="span8">
+                                    <div class="controls">
+                                        <div class="input-append span12 ">
+                                            <input type="text" id="keyword" name="keyword"  class="m-wrap span11 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% else %}Enter any key words{% endif %} ">
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
                         {% include('flash-message.html.twig')  %}
                         <!-- BEGIN FORM-->
 

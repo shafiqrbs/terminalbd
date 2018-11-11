@@ -466,10 +466,7 @@ class CategoryRepository extends MaterializedPathRepository
                 ->getQuery()
                 ->execute();
             $i++;
-
         }
-
-
     }
 
     public function getRootCategoriesQB() {
