@@ -373,7 +373,6 @@ class InvoiceController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
 		$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountBusinessSalesReverse($sales);
-		exit;
 		$sales->setIsReversed(true);
 		$sales->setProcess('Created');
 		$em->flush();

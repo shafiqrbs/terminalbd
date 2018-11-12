@@ -639,8 +639,6 @@ class AccountSalesRepository extends EntityRepository
         $em->flush();
 	    $sales = $this->updateCustomerBalance($accountSales);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-	    echo $sales->getBusinessInvoice()->getId();
-	    exit;
         return $accountSales;
     }
 
@@ -740,7 +738,7 @@ class AccountSalesRepository extends EntityRepository
 			foreach ($entity->getAccountSales() as $sales ){
 
 				$globalOption = $sales->getGlobalOption()->getId();
-				echo $accountRefNo = $sales->getAccountRefNo();
+				$accountRefNo = $sales->getAccountRefNo();
 				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
 				$transaction->execute();
 				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
@@ -751,7 +749,6 @@ class AccountSalesRepository extends EntityRepository
 		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.businessInvoice = '.$entity->getId());
 		if(!empty($accountCash)){
 			$accountCash->execute();
-			exit;
 		}
 	}
 

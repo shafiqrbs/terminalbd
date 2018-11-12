@@ -121,16 +121,13 @@ class AccountSales
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="accountSales" )
-     * @ORM\JoinColumn(name="business_invoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $businessInvoice;
 
 	/**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", inversedBy="accountSales" )
-     * @ORM\JoinColumn(name="business_invoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $hotelInvoice;
-
 
     /**
      * @var string
