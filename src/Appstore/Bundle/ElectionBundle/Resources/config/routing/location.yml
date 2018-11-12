@@ -22,7 +22,7 @@ election_location_search:
             expose: true
 
 election_location_name:
-    path:      /{name}/
+    path:      /{name}/location-name
     defaults: { _controller: "ElectionBundle:Location:searchLocationName" }
     options:
             expose: true
