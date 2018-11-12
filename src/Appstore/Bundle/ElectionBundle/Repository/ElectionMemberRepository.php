@@ -165,7 +165,8 @@ class ElectionMemberRepository extends EntityRepository
 		return $choices;
 	}
 
-    public function findWithSearch( $config , $data , $type = '')
+
+	public function findWithSearch( $config , $data , $type = '')
     {
 	    $sort = isset($data['sort'])? $data['sort'] :'e.name';
 	    $direction = isset($data['direction'])? $data['direction'] :'ASC';
@@ -176,8 +177,8 @@ class ElectionMemberRepository extends EntityRepository
 	        $qb->andWhere("e.memberType = :type");
 	        $qb->setParameter('type', $type);
         }
-	    $qb->leftJoin('e.location','node');
-	    $qb->leftJoin('e.voteCenter','center');
+	    $qb->leftJoin('e.location','l');
+	    $qb->leftJoin('l.parent','parentLocation');
 	    $this->handleSearchBetween($qb,$data);
 	    $qb->orderBy("{$sort}",$direction);
         $qb->getQuery();
@@ -214,27 +215,49 @@ class ElectionMemberRepository extends EntityRepository
             }
 
 	        if (!empty($thana)) {
-                $qb->andWhere("e.thana LIKE :thana");
-                $qb->setParameter('thana','%'. $thana.'%');
+		        $val = explode(',',$thana);
+		        $name = $val[0];
+		        $parent = $val[1];
+		        $qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
+		        $qb->andWhere($qb->expr()->like("parentLocation.name", "'%$parent%'"  ));
             }
 
 	        if (!empty($union)) {
-		        $qb->andWhere("e.memberUnion LIKE :union");
-		        $qb->setParameter('union','%'. $union.'%');
+		        $val = explode(',',$union);
+		        $name = $val[0];
+		        $parent = $val[1];
+		        $qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
+		        $qb->andWhere($qb->expr()->like("parentLocation.name", "'%$parent%'"  ));
+
 	        }
 
             if (!empty($ward)) {
-		        $qb->andWhere("e.ward LIKE :ward");
-		        $qb->setParameter('ward','%'. $ward.'%');
-	        }
+		        $val = explode(',',$ward);
+	            $name = $val[0];
+	            $parent = $val[1];
+	            $qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
+	            $qb->andWhere($qb->expr()->like("parentLocation.name", "'%$parent%'"  ));
+
+            }
 
             if (!empty($village)) {
-		        $qb->andWhere("e.village LIKE :village");
-		        $qb->setParameter('village','%'. $village.'%');
-	        }
+		        $val = explode(',',$village);
+	            $name = $val[0];
+	            $parent = $val[1];
+	            $qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
+	            $qb->andWhere($qb->expr()->like("parentLocation.name", "'%$parent%'"  ));
+
+            }
+
 	        if (!empty($voteCenter)) {
-		        $qb->andWhere("e.voteCenterName LIKE :voteCenter");
-		        $qb->setParameter('voteCenter','%'.$voteCenter.'%');
+		        $val = explode(',',$voteCenter);
+		        $name = $val[0];
+		        $parent = $val[1];
+		        $qb->leftJoin('e.voteCenter','center');
+		        $qb->andWhere($qb->expr()->like("center.name", "'%$name%'"  ));
+			//	$qb->leftJoin('center.parent','centerParent');
+		    //    $qb->andWhere($qb->expr()->like("centerParent.name", "'%$parent%'"  ));
+
 	        }
 
         }

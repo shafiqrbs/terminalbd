@@ -9,6 +9,12 @@ election_location_type_wise_search:
     options:
             expose: true
 
+election_location_all_search:
+    path:     /all-search
+    defaults: { _controller: "ElectionBundle:Location:allLocationSearch" }
+    options:
+            expose: true
+
 election_location_search:
     path:     /{type}/search
     defaults: { _controller: "ElectionBundle:Location:autoSearch" }
@@ -16,7 +22,7 @@ election_location_search:
             expose: true
 
 election_location_name:
-    path:      /{particular}/particular-name
+    path:      /{name}/
     defaults: { _controller: "ElectionBundle:Location:searchLocationName" }
     options:
             expose: true

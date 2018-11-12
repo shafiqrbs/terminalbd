@@ -21,6 +21,20 @@ use Symfony\Component\HttpFoundation\Response;
 class CommitteeController extends Controller
 {
 
+	public function paginate($entities)
+	{
+
+		$paginator  = $this->get('knp_paginator');
+		$pagination = $paginator->paginate(
+			$entities,
+			$this->get('request')->query->get('page', 1)/*page number*/,
+			25  /*limit per page*/
+		);
+		return $pagination;
+	}
+
+
+
 	/**
 	 * Lists all Committee entities.
 	 *
@@ -29,13 +43,17 @@ class CommitteeController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$entity = new ElectionCommittee();
+		$data = $_REQUEST;
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findBy(array('electionConfig' => $config),array('created'=>'DESC'));
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findWithSearch($config,$data);
+		$pagination = $this->paginate($entities);
+
 		$locationTypes = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->getListOfParticular($config,'location');
 		return $this->render('ElectionBundle:Committee:index.html.twig', array(
-			'entities' => $entities,
+			'entities' => $pagination,
 			'locationTypes' => $locationTypes,
 			'entity' => $entity,
+			'searchForm' => $data,
 		));
 	}
 

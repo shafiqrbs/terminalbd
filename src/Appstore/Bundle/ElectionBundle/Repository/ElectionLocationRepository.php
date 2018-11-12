@@ -334,15 +334,18 @@ class ElectionLocationRepository extends MaterializedPathRepository{
 
 	}
 
-	public function searchAutoComplete(ElectionConfig $config , $type , $q)
+	public function searchAutoComplete(ElectionConfig $config , $q , $type = '')
 	{
 		$query = $this->createQueryBuilder('e');
 		$query->join('e.parent','parent');
 		$query->join('e.locationType','t');
-		$query->select('e.id as id');
+	//	$query->select('e.id as id');
+		$query->addSelect('CONCAT(e.name, \',\', parent.name) AS id');
 		$query->addSelect('CONCAT(e.name, \',\', parent.name) AS text');
 		$query->where("e.electionConfig = ".$config->getId());
-		$query->andWhere("t.slug = '{$type}'");
+		if(!empty($type)){
+			$query->andWhere("t.slug = '{$type}'");
+		}
 		$query->andWhere($query->expr()->like("e.name", "'$q%'"  ));
 		$query->groupBy('e.id');
 		$query->orderBy('e.name', 'ASC');

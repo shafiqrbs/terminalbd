@@ -396,7 +396,7 @@
                                                 <li>No of Committees: {{ type.committeeCount }}</li>
                                             </ul>
                                         </td>
-                                        <td class="vertical-right"><a href="{{ path('election_committee',{'locationType':type.id}) }}" class="btn blue"> View <i class="m-icon-swapright m-icon-white"></i></a></td>
+                                        <td class="vertical-right"><a href="{{ path('election_committee',{'location':type.id}) }}" class="btn blue"> View <i class="m-icon-swapright m-icon-white"></i></a></td>
                                     </tr>
                                     {% endfor %}
                                     </tbody>

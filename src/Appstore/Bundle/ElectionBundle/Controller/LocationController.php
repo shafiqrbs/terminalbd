@@ -242,16 +242,26 @@ class LocationController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->searchAutoComplete($config,$type,$item);
+            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->searchAutoComplete($config,$item,$type);
         }
         return new JsonResponse($item);
     }
 
-    public function searchLocationNameAction($vendor)
+     public function allLocationSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $config = $this->getUser()->getGlobalOption()->getElectionConfig();
+            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->searchAutoComplete($config,$item);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchLocationNameAction($name)
     {
         return new JsonResponse(array(
-            'id'=>$vendor,
-            'text'=>$vendor
+            'id'=>$name,
+            'text'=>$name
         ));
     }
 

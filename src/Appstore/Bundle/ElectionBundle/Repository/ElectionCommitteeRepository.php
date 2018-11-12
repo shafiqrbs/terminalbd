@@ -16,6 +16,47 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class ElectionCommitteeRepository extends EntityRepository
 {
 
+	protected function handleSearchBetween($qb,$data)
+	{
+
+		$type = isset($data['locationType'])? $data['locationType'] :'';
+		$location = isset($data['location'])? $data['location'] :'';
+		$keyword = isset($data['keyword'])? $data['keyword'] :'';
+
+		if (!empty($keyword)) {
+			$qb->andWhere($qb->expr()->like("e.name", "'%$keyword%'"  ));
+		}
+		if (!empty($type)) {
+			$qb->andWhere("l.locationType = :type");
+			$qb->setParameter('type', $type);
+
+		}
+		if (!empty($location)) {
+			$val = explode(',',$location);
+			$name = $val[0];
+			$parent = $val[1];
+			$qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
+			$qb->join('l.parent','p');
+			$qb->andWhere($qb->expr()->like("p.name", "'%$parent%'"  ));
+		}
+
+
+	}
+
+	public function findWithSearch(ElectionConfig $config , $data)
+	{
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.location','l');
+		$qb->where("e.electionConfig = :config");
+		$qb->setParameter('config', $config->getId());
+		$this->handleSearchBetween($qb,$data);
+		$qb->orderBy('e.created','ASC');
+		$qb->getQuery();
+		return  $qb;
+
+	}
+
 	public function getCommittees(ElectionSetup  $setup){
 
 		$qb = $this->createQueryBuilder('e');

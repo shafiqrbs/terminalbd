@@ -205,11 +205,10 @@ $( ".sms" ).click(function() {
 });
 
 
-$(".select2Thana").select2({
+$(".select2Location").select2({
 
     ajax: {
-
-        url: Routing.generate('election_location_search',{'type':'thana'}),
+        url: Routing.generate('election_location_all_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -246,10 +245,50 @@ $(".select2Thana").select2({
     minimumInputLength: 2
 });
 
+$(".select2Thana").select2({
+
+    ajax: {
+        url: Routing.generate('election_location_search',{'type':'thana-upozila'}),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var name = $(element).val();
+        $.ajax(Routing.generate('election_location_name', { name : name}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+});
+
 $(".select2Union").select2({
 
     ajax: {
-        url: Routing.generate('election_location_search',{'type':'union'}),
+        url: Routing.generate('election_location_search',{'type':'union-paurashava'}),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
