@@ -47,7 +47,7 @@ class ElectionCommitteeRepository extends EntityRepository
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.location','t');
-		$qb->select('t.name as locationName , COUNT(e.id) as countId');
+		$qb->select('t.id as id,t.name as locationName , COUNT(e.id) as committeeCount');
 		$qb->where('e.electionSetup='.$setup->getId());
 		$qb->andWhere("e.status = :status");
 		$qb->setParameter('status', 1);
@@ -60,13 +60,13 @@ class ElectionCommitteeRepository extends EntityRepository
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.location','location');
-		$qb->leftJoin('location.locationType','type');
-		$qb->leftJoin('e.members','m');
-		$qb->select('type.name as locationName , COUNT(e.id) as committeeCount, COUNT(m.id) as memberCount');
+		$qb->join('location.locationType','type');
+		$qb->select('type.id as id, type.name as locationName , COUNT(e.location) as committeeCount');
 		$qb->where('e.electionSetup='.$setup->getId());
 		$qb->andWhere("e.status = :status");
 		$qb->setParameter('status', 1);
 		$qb->groupBy('type.name');
+		$qb->orderBy('type.id');
 		$results = $qb->getQuery()->getArrayResult();
 		return $results;
 	}
