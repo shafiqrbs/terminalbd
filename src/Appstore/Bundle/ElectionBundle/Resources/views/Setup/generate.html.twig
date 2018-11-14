@@ -40,8 +40,8 @@
                     <h4>&nbsp;</h4>
                     <ul class="unstyled">
                         <li><strong>Vote Center: </strong>&nbsp;{{ entity.resultVoteCenter|number_format }}</li>
-                        <li><strong>Cast Center: </strong>&nbsp;{{ (entity.resultVoteCenter - entity.holdCenter)|number_format }}</li>
-                        <li><strong>Hold Center: </strong>&nbsp;{{ entity.holdCenter|number_format }}</li>
+                        <li><strong>Cast Center: </strong>&nbsp;{{ (entity.resultVoteCenter - entity.holdVoteCenter)|number_format }}</li>
+                        <li><strong>Hold Center: </strong>&nbsp;{{ entity.holdVoteCenter|number_format }}</li>
                         <li><strong>Invalid Vote: </strong>&nbsp;{{ entity.resultInvalidVote|number_format }}</li>
                     </ul>
                 </div>
