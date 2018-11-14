@@ -99,8 +99,8 @@
                             <tbody >
                             {% for center in entity.votecenters|slice(0,10) %}
                                 <tr>
-                                    <th class="" style="background:#dbe0e6!important;">{{ center.location.voteCenterName }}</th>
-                                    <th class="" style="background:#e1f2ea!important;">{{ center.representative.name }} - {% if center.representativeMobile is not empty %}{{ center.representativeMobile }}{% else %}{{ center.representative.mobile }}{% endif %}</th>
+                                    <th class="" style=""><a data-title="{{ center.location.voteCenterName }}" href="javascript:" class="view" data-url="{{ path('election_votecenter_show', { 'id': center.id }) }}" >{{ center.location.voteCenterName }}</a></th>
+                                    <th class="" style="background:#e1f2ea!important;"><a data-title="{{ center.representative.name }}" class="view " href="javascript:" data-url="{{ path('election_member_show', { 'id': center.representative.id }) }}">{{ center.representative.name }} - {% if center.representativeMobile is not empty %}{{ center.representativeMobile }}{% else %}{{ center.representative.mobile }}{% endif %}</a></th>
                                     <th class="">
                                         <select class="span12 m-wrap process inline-input" style="width: 95px!important;" data-id="{{ center.id }}" id="process-{{ center.id }}" name="process-{{ center.id }}">
                                             <option value="">Process</option>

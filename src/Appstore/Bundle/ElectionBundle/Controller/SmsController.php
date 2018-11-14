@@ -76,8 +76,6 @@ class SmsController extends Controller
 
 	}
 
-
-
 	/**
 	 * Displays a form to edit an existing Sms entity.
 	 *
@@ -173,7 +171,6 @@ class SmsController extends Controller
 			$this->get('session')->getFlashBag()->add(
 				'error',"Data has been deleted successfully"
 			);
-
 		} catch (ForeignKeyConstraintViolationException $e) {
 			$this->get('session')->getFlashBag()->add(
 				'notice',"Data has been relation another Table"
@@ -183,7 +180,6 @@ class SmsController extends Controller
 				'notice', 'Please contact system administrator further notification.'
 			);
 		}
-
 		return $this->redirect($this->generateUrl('election_sms'));
 	}
 

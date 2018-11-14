@@ -41,9 +41,9 @@
                             <ul class="unstyled">
                                 <li><strong>Parliament Seat :</strong>&nbsp;{% if entity.electionConfig.parliament is not empty %}{{ entity.electionConfig.parliament.name }}{% endif %}</li>
                                 <li><strong>Village/Unit :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</li>
-                                <li><strong>Vote Center :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.voteCenter.name }}{% endif %}</li>
-                                <li><strong>Ward & Union :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.wardName }}{% endif %}, {% if entity.location is not empty %}{{ entity.location.unionName }}{% endif %}</li>
-                                <li><strong>Thana/Upazila :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.thanaName }}{% endif %}</li>
+                                <li><strong>Vote Center :</strong>&nbsp;{% if entity.voteCenter is not empty %}{{ entity.voteCenter.name }}{% endif %}</li>
+                                <li><strong>Ward & Union :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.ward }}{% endif %}, {% if entity.location is not empty %}{{ entity.memberUnion }}{% endif %}</li>
+                                <li><strong>Thana/Upazila :</strong>&nbsp;{% if entity.location is not empty %}{{ entity.thana }}{% endif %}</li>
                                 <li><strong>District :</strong>&nbsp;{% if entity.electionConfig.district is not empty %}{{ entity.electionConfig.district.name }}{% endif %}</li>
                             </ul>
                         </div>
@@ -120,8 +120,8 @@
                             <td class="numeric" >{{ member.committee.created|date('d-m-Y') }}</td>
                             <td class="numeric" >{{ member.committee.name }}</td>
                             <td class="numeric" >{{ member.designation.name }}</td>
-                            <td class="numeric" >{% if member.committee.electionLocation is not empty %}{{ member.committee.electionLocation.name }}{% endif %}</td>
-                            <td class="numeric" >{% if member.committee.electionLocation is not empty %}{{ member.committee.electionLocation.locationType.name }}{% endif %}</td>
+                            <td class="numeric" >{% if member.committee.location is not empty %}{{ member.committee.location.name }}{% endif %}</td>
+                            <td class="numeric" >{% if member.committee.location is not empty %}{{ member.committee.location.locationType.name }}{% endif %}</td>
                             <td class="numeric" >{{ member.committee.startDate|date('d-m-Y') }} To {{ member.committee.endDate|date('d-m-Y') }}</td>
                             <td class="numeric" >Yes</td>
                             <td class="numeric" >{{ member.committee.process }}</td>
