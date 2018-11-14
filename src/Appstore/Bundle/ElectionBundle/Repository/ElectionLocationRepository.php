@@ -344,7 +344,7 @@ class ElectionLocationRepository extends MaterializedPathRepository{
 		$query->addSelect('CONCAT(e.name, \',\', parent.name) AS text');
 		$query->where("e.electionConfig = ".$config->getId());
 		if(!empty($type)){
-			$query->andWhere("t.slug = '{$type}'");
+			$query->andWhere("t.defineSlug = '{$type}'");
 		}
 		$query->andWhere($query->expr()->like("e.name", "'$q%'"  ));
 		$query->groupBy('e.id');

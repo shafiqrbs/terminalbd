@@ -248,7 +248,7 @@ $(".select2Location").select2({
 $(".select2Thana").select2({
 
     ajax: {
-        url: Routing.generate('election_location_search',{'type':'thana-upozila'}),
+        url: Routing.generate('election_location_search',{'type':'thana'}),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -288,7 +288,7 @@ $(".select2Thana").select2({
 $(".select2Union").select2({
 
     ajax: {
-        url: Routing.generate('election_location_search',{'type':'union-paurashava'}),
+        url: Routing.generate('election_location_search',{'type':'union'}),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {

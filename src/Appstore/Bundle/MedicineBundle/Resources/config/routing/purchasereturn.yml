@@ -28,6 +28,10 @@ medicine_purchase_return_delete:
     path:     /{id}/delete
     defaults: { _controller: "MedicineBundle:MedicinePurchaseReturn:delete" }
 
+medicine_purchase_return_item_delete:
+    path:     /{purchase}/{id}/item-delete
+    defaults: { _controller: "MedicineBundle:MedicinePurchaseReturn:deleteItem" }
+
 medicine_purchase_return_approve:
     path:     /{id}/approve
     defaults: { _controller: "MedicineBundle:MedicinePurchaseReturn:approve" }

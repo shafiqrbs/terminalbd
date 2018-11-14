@@ -99,7 +99,7 @@
                                             <td class="numeric" >{{ item.subTotal }}</td>
                                             <td class="numeric" >
                                                 {% if entity.process == 'created' %}
-                                                    <a title="Are you sure went to delete ?" href="{{ path('medicine_purchase_return_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                                    <a title="Are you sure went to delete ?" href="{{ path('medicine_purchase_return_item_delete', { 'purchase': entity.id,'id': item.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                                 {% endif %}
                                             </td>
                                         </tr>

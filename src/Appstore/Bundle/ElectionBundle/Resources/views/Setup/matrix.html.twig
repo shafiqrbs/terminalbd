@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Election Vote Result Matrix
+                    Vote Result Matrix
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="{{ path('daily_attendance') }}">Election Vote Result Matrix</a></li>
+                    <li><a href="{{ path('daily_attendance') }}">Vote Result Matrix</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -27,7 +27,7 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Election Vote Result Matrix Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Vote Result Matrix Information</div>
                         <div class="pull-right">
                             <div class="btn-group">
                                 <input type="text"  class="m-wrap inline-input" style="width: 250px; background-color: #FFFFff; text-align: left; height: 20px!important;" autocomplete="on" id="search" name="search" value="" placeholder="Search the vote center" >
@@ -42,9 +42,10 @@
                         <thead class="head-grey">
                             <tr>
                                 <th class="numeric" ><strong>Name of Center</strong></th>
+                                <th class="numeric" ><strong>Representative <br/>Mobile</strong></th>
                                 <th class="numeric" >
                                     <div class="row-fluid">
-                                        <span class="span12 pull-center"><strong>Process</strong></span>
+                                        <span class="span12 pull-center"><strong>Center</strong></span>
                                     </div>
                                     <div class="row-fluid pull-center"  style="border-top: 1px solid red"><strong>{{ entity.voteCenter }}</strong></div>
                                     <div class="row-fluid"  style="border-top: 1px solid red">
@@ -57,7 +58,7 @@
                                 </th>
                                 <th class="numeric" >
                                     <div class="row-fluid">
-                                        <span class="span12 pull-center"><strong>Total</strong></span>
+                                        <span class="span12 pull-center"><strong>Total<br/>Voter</strong></span>
                                     </div>
                                     <div class="row-fluid"  style="border-top: 1px solid red">
                                         <span class="span6 pull-center" id="totalInvalidVote"><strong>{{ entity.totalVoter }}</strong></span>
@@ -65,7 +66,7 @@
                                 </th>
                                 <th class="numeric" >
                                     <div class="row-fluid">
-                                        <span class="span12 pull-center"><strong>Cast</strong></span>
+                                        <span class="span12 pull-center"><strong>Cast <br/>Voter</strong></span>
                                     </div>
                                     <div class="row-fluid"  style="border-top: 1px solid red">
                                         <span class="span12 pull-center"><strong class="totalCastVote">{{ entity.resultTotalVote }}</strong></span>
@@ -86,7 +87,7 @@
                                 {% endfor %}
                                 <th class="numeric" >
                                     <div class="row-fluid">
-                                        <span class="span12 pull-center"><strong>Invalid</strong></span>
+                                        <span class="span12 pull-center"><strong>Invalid<br/>Voter</strong></span>
                                     </div>
                                     <div class="row-fluid"  style="border-top: 1px solid red">
                                         <span class="span12 pull-center"><strong class="totalInvalidVote">{{ entity.resultInvalidVote }}</strong></span>
@@ -96,9 +97,10 @@
                                 </tr>
                             </thead>
                             <tbody >
-                            {% for center in entity.votecenters %}
+                            {% for center in entity.votecenters|slice(0,10) %}
                                 <tr>
                                     <th class="">{{ center.location.voteCenterName }}</th>
+                                    <th class="">{{ center.representative.name }} - {% if center.representativeMobile is not empty %}{{ center.representativeMobile }}{% else %}{{ center.representative.mobile }}{% endif %}</th>
                                     <th class="">
                                         <select class="span12 m-wrap process inline-input" style="width: 95px!important;" data-id="{{ center.id }}" id="process-{{ center.id }}" name="process-{{ center.id }}">
                                             <option value="">Process</option>
@@ -130,6 +132,7 @@
                             <tfoot class="head-grey">
                             <tr>
                                 <th class="numeric" ><strong>Name of Center</strong></th>
+                                <th class="numeric" ><strong>Representative <br/>Mobile</strong></th>
                                 <th class="numeric" >
                                     <div class="row-fluid"  style="border-bottom: 1px solid red">
                                         <div class="btn-group span12 pull-center">

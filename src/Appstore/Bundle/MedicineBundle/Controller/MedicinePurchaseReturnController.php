@@ -197,16 +197,74 @@ class MedicinePurchaseReturnController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('MedicineBundle:MedicinePurchaseReturn')->find($id);
-        $purchaseItem = $entity->getMedicinePurchaseItem();
-        $stock = $entity->getMedicineStock();
-        $em->remove($entity);
+        $this->allPurchaseReturnItemDelete($entity);
+	    $em->remove($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'purchase_return');
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'purchase_return');
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
         return $this->redirect($this->generateUrl('medicine_purchase_return'));
+    }
+
+	public function allPurchaseReturnItemDelete(MedicinePurchaseReturn $invoice){
+
+		$em = $this->getDoctrine()->getManager();
+
+		/* @var $particular MedicinePurchaseReturnItem */
+
+		if(!empty($invoice->getMedicinePurchaseReturnItems())){
+
+			foreach ($invoice->getMedicinePurchaseReturnItems() as $particular){
+
+				//$item = $particular->getMedicinePurchaseItem();
+				$stock = $particular->getMedicineStock();
+				//$this->get('session')->set('item', $item);
+				$this->get('session')->set('stock', $stock);
+				$em->remove($particular);
+				$em->flush();
+				//$item = $this->get('session')->get('item');
+				$stock = $this->get('session')->get('stock');
+				//$this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'purchase_return');
+				$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'purchase-return');
+
+			}
+
+		}
+
+
+	}
+
+
+
+	/**
+     * Deletes a PurchaseReturn entity.
+     *
+     */
+    public function deleteItemAction(MedicinePurchaseReturn $purchase,$id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+        if($config == $purchase->getMedicineConfig()->getId()){
+		    $entity = $em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->find($id);
+		    $stock = $entity->getMedicineStock();
+		    $purchaseReturn = $entity->getMedicinePurchaseReturn()->getId();
+		    $this->get('session')->set('stock', $stock);
+		    $this->get('session')->set('purchaseReturn', $purchaseReturn);
+		    // $purchaseItem = $entity->getMedicinePurchaseItem();
+		    $em->remove($entity);
+		    $em->flush();
+		    $stock = $this->get('session')->get('stock');
+		    $purchaseReturn = $this->get('session')->get('purchaseReturn');
+		    // $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'purchase_return');
+		    $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'purchase-return');
+	        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->updatePurchaseReturnTotalPrice($purchase);
+	        $this->get('session')->getFlashBag()->add(
+			    'error',"Data has been deleted successfully"
+		    );
+        }
+
+        return $this->redirect($this->generateUrl('medicine_purchase_return_edit',array('id' => $purchase->getId())));
     }
 
 	public function invoiceDiscountUpdateAction(Request $request)

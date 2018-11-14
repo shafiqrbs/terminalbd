@@ -217,17 +217,15 @@ class ElectionMemberRepository extends EntityRepository
 	        if (!empty($thana)) {
 		        $val = explode(',',$thana);
 		        $name = $val[0];
-		        $parent = $val[1];
-		        $qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
-		        $qb->andWhere($qb->expr()->like("parentLocation.name", "'%$parent%'"  ));
-            }
+		        $qb->andWhere($qb->expr()->like("e.thana", "'%$name%'"  ));
+		    }
 
 	        if (!empty($union)) {
 		        $val = explode(',',$union);
 		        $name = $val[0];
 		        $parent = $val[1];
-		        $qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
-		        $qb->andWhere($qb->expr()->like("parentLocation.name", "'%$parent%'"  ));
+		        $qb->andWhere($qb->expr()->like("e.union", "'%$name%'"  ));
+		        $qb->andWhere($qb->expr()->like("e.thana", "'%$parent%'"  ));
 
 	        }
 
@@ -235,8 +233,8 @@ class ElectionMemberRepository extends EntityRepository
 		        $val = explode(',',$ward);
 	            $name = $val[0];
 	            $parent = $val[1];
-	            $qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
-	            $qb->andWhere($qb->expr()->like("parentLocation.name", "'%$parent%'"  ));
+	            $qb->andWhere($qb->expr()->like("e.ward", "'%$name%'"  ));
+	            $qb->andWhere($qb->expr()->like("e.union", "'%$parent%'"  ));
 
             }
 
@@ -244,8 +242,8 @@ class ElectionMemberRepository extends EntityRepository
 		        $val = explode(',',$village);
 	            $name = $val[0];
 	            $parent = $val[1];
-	            $qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
-	            $qb->andWhere($qb->expr()->like("parentLocation.name", "'%$parent%'"  ));
+	            $qb->andWhere($qb->expr()->like("e.village", "'%$name%'"  ));
+	            $qb->andWhere($qb->expr()->like("ward.ward", "'%$parent%'"  ));
 
             }
 
@@ -253,8 +251,8 @@ class ElectionMemberRepository extends EntityRepository
 		        $val = explode(',',$voteCenter);
 		        $name = $val[0];
 		        $parent = $val[1];
-		        $qb->leftJoin('e.voteCenter','center');
-		        $qb->andWhere($qb->expr()->like("center.name", "'%$name%'"  ));
+		        $qb->andWhere($qb->expr()->like("e.voteCenter", "'%$name%'"  ));
+		        $qb->andWhere($qb->expr()->like("e.union", "'%$parent%'"  ));
 			//	$qb->leftJoin('center.parent','centerParent');
 		    //    $qb->andWhere($qb->expr()->like("centerParent.name", "'%$parent%'"  ));
 
