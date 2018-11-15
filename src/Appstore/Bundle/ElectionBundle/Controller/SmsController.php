@@ -149,8 +149,6 @@ class SmsController extends Controller
 		));
 	}
 
-
-
 	/**
 	 * Deletes a Sms entity.
 	 *
@@ -260,6 +258,62 @@ class SmsController extends Controller
 			throw $this->createNotFoundException('Unable to find ElectionSms entity.');
 		}
 
+		exit;
+
+	}
+
+	/**
+	 * Finds and displays a ElectionSms entity.
+	 *
+	 */
+	public function bulkSmsAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$entity = $em->getRepository('ElectionBundle:ElectionSms')->findOneBy(array('electionConfig' => $config,'id'=>$id));
+		if(!$entity){
+			throw $this->createNotFoundException('Unable to find ElectionSms entity.');
+		}
+		$msg = '';
+		if($entity->getProcess() == "Member" and !empty($entity->getLocationMember())){
+
+			$dispatcher = $this->container->get('event_dispatcher');
+			$dispatcher->dispatch('appstore_election.post.election_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsEvent($entity,$msg));
+
+		}elseif ($entity->getProcess() == "Voter" and !empty($entity->getLocationMember())){
+
+			$dispatcher = $this->container->get('event_dispatcher');
+			$dispatcher->dispatch('appstore_election.post.election_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsEvent($entity,$msg));
+
+		}elseif ($entity->getProcess() == "Vote Center" and !empty($entity->getLocationMember())){
+
+			$dispatcher = $this->container->get('event_dispatcher');
+			$dispatcher->dispatch('appstore_election.post.election_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsEvent($entity,$msg));
+
+		}elseif ($entity->getProcess() == "Committee" and !empty($entity->getLocationMember())){
+
+			$dispatcher = $this->container->get('event_dispatcher');
+			$dispatcher->dispatch('appstore_election.post.election_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsEvent($entity,$msg));
+
+		}elseif ($entity->getProcess() == "Event" and !empty($entity->getLocationMember())){
+
+			$dispatcher = $this->container->get('event_dispatcher');
+			$dispatcher->dispatch('appstore_election.post.election_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsEvent($entity,$msg));
+
+		}
+
+		echo $entity->getName();
+		exit;
+
+
+
+
+
+
+		//	if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+		$dispatcher = $this->container->get('event_dispatcher');
+		$dispatcher->dispatch('appstore_election.post.election_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsEvent($entity,$msg));
+		//	}
 		exit;
 
 	}

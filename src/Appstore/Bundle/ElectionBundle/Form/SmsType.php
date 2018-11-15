@@ -86,22 +86,33 @@ class SmsType extends AbstractType
 			                  ->andWhere("e.electionConfig =". $this->config->getId());
 		        },
 	        ))
-
-	        ->add('locationMember', 'entity', array(
-		        'required'    => false,
-		        'attr'=>array('class'=>'m-wrap span12 select2'),
-		        'empty_value' => 'Choose a member location',
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionLocation',
-		        'property' => 'nestedLabel',
-		        'choices'=> $this->locationChoiceList()
-	        ))
 	        ->add('locationVoter', 'entity', array(
-		        'required'    => false,
+		        'required'    => true,
+		        'property' => 'voteCenterName',
 		        'attr'=>array('class'=>'m-wrap span12 select2'),
-		        'empty_value' => 'Choose a member location',
+		        'constraints' =>array( new NotBlank(array('message'=>'Choose location for committee')) ),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionLocation',
-		        'property' => 'nestedLabel',
-		        'choices'=> $this->locationChoiceList()
+		        'query_builder' => function(EntityRepository $er){
+			        return $er->createQueryBuilder('e')
+			                  ->join("e.locationType","p")
+			                  ->where("e.status = 1")
+			                  ->andWhere("e.electionConfig =". $this->config->getId())
+			                  ->andWhere("p.slug = 'vote-center'");
+		        },
+	        ))
+	        ->add('locationMember', 'entity', array(
+		        'required'    => true,
+		        'property' => 'villageName',
+		        'attr'=>array('class'=>'m-wrap span12 select2'),
+		        'constraints' =>array( new NotBlank(array('message'=>'Choose location for committee')) ),
+		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionLocation',
+		        'query_builder' => function(EntityRepository $er) {
+			        return $er->createQueryBuilder( 'e' )
+			                  ->join( "e.locationType", "p" )
+			                  ->where( "e.status = 1" )
+			                  ->andWhere("e.electionConfig =". $this->config->getId())
+			                  ->andWhere( "p.slug = 'village'" );
+		        }
 	        ))
 	        ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter sms title')))
 	        ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12 inputs','rows'=>2, 'autocomplete'=>'off','placeholder'=>'Enter sms text more then 160 characters')))
@@ -132,7 +143,9 @@ class SmsType extends AbstractType
 	 */
 	protected function locationChoiceList()
 	{
-		return $categoryTree = $this->location->getLocationGroup($this->config->getId());
+		//return $categoryTree = $this->location->getLocationGroup($this->config->getId());
+		return $categoryTree = $this->location->getFlatLocationTree();
+
 
 	}
 

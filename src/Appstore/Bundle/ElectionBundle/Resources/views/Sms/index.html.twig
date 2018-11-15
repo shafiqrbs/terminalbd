@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage SMS
+                    Manage Bulk SMS
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage SMS</a></li>
+                    <li><a href="#">Manage Bulk SMS</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -49,6 +49,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Process</th>
                                     <th class="numeric" >SMS for</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Success</th>
@@ -63,6 +64,19 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
+                                        <td class="numeric" >
+                                            {% if entity.process == 'Member' and entity.locationMember is not empty %}
+                                                {{ entity.locationMember.locationType.name }}: {{ entity.locationMember.name }},{{ entity.locationMember.parent.name }}
+                                            {% elseif entity.process == 'Voter' and entity.locationVoter is not empty %}
+                                                {{ entity.locationVoter.locationType.name }}: {{ entity.locationVoter.name }},{{ entity.locationVoter.parent.name }}
+                                            {% elseif entity.process == 'Committee' and entity.committee is not empty %}
+                                                {{ entity.committee.name }}
+                                            {% elseif entity.process == 'Vote Center' and entity.voteCenter is not empty %}
+                                               Vote Center: {{ entity.voteCenter.voteCenterName }}, {{ entity.voteCenter.parent.voteCenterName }}
+                                            {% elseif entity.process == 'Event' and entity.event is not empty %}
+                                                {{ entity.event.name }}
+                                            {% endif %}
+                                        </td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.failed }}</td>
                                         <td class="numeric" >{{ entity.failed }}</td>
@@ -75,6 +89,7 @@
                                                 {% endif %}
                                                 <a href="{{ path('election_sms_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                                 <a title="Are you sure went to delete ?" href="{{ path('election_sms_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                                <a data-title="{{ entity.name }}" id="" class="btn mini approve purple" href="javascript:" data-url="{{ path('election_bulk_sms', { 'id': entity.id }) }}" >SMS</a>
                                             </div>
                                         </td>
                                     </tr>

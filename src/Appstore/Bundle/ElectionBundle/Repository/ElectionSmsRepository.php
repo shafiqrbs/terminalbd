@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionSms;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -13,4 +14,12 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class ElectionSmsRepository extends EntityRepository
 {
+	public function updateSmsStatus(ElectionSms $sms , $total = 0 , $success = 0){
+
+		$sms->setTotal($total);
+		$sms->setSuccess($success);
+		$sms->setFailed($total - $success);
+		$this->_em->flush($sms);
+
+	}
 }

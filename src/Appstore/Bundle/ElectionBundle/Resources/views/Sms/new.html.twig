@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage Election Vote Center
+                    Bulk SMS
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Election Vote Center</a></li>
+                    <li><a href="{{ path('election_sms') }}">Bulk SMS</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,10 +29,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Election Vote Center Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Bulk SMS Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_sms') }}"><i class="icon-th-list"></i>&nbsp; Create</a>
+                                <a class="btn red" href="{{ path('election_sms') }}"><i class="icon-th-list"></i>&nbsp; Bulk SMS</a>
                             </div>
                         </div>
                     </div>

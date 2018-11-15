@@ -62,21 +62,8 @@ election_sms_delete:
     path:     /{id}/delete
     defaults: { _controller: "ElectionBundle:Sms:delete" }
 
-election_sms_member_new:
-    path:     /{id}/member-new
-    defaults: { _controller: "ElectionBundle:Sms:newMember" }
-    options:
-            expose: true
-
-election_sms_member_create:
-    path:     /{id}/member-create
-    defaults: { _controller: "ElectionBundle:Sms:createMember" }
-    methods:  POST
-    options:
-            expose: true
-
-election_sms_member_delete:
-    path:     /{id}/member-delete
-    defaults: { _controller: "ElectionBundle:Sms:memberDelete" }
+election_bulk_sms:
+    path:     /{id}/bluk
+    defaults: { _controller: "ElectionBundle:Sms:bulkSms" }
 
 

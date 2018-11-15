@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\SmsSender;
 use Setting\Bundle\ToolBundle\Event\DmsInvoiceSmsEvent;
 use Setting\Bundle\ToolBundle\Event\DmsTreatmentPlanSmsEvent;
-use Setting\Bundle\ToolBundle\Event\DmsTreatmentScheduleSmsEvent;
 use Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent;
 use Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent;
 use Setting\Bundle\ToolBundle\Service\SmsGateWay;
