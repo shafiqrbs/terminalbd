@@ -66,6 +66,7 @@ class ElectionSetup
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", mappedBy="electionSetup")
+	 * @ORM\OrderBy({"voteCenterName" = "ASC"})
 	 **/
 	protected $votecenters;
 

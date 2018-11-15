@@ -97,7 +97,7 @@
                             </tr>
                             </thead>
                             <tbody >
-                            {% for center in entity.votecenters|slice(0,10) %}
+                            {% for center in entity.votecenters %}
                                 <tr>
                                     <th class="" style=""><a data-title="{{ center.location.voteCenterName }}" href="javascript:" class="view" data-url="{{ path('election_votecenter_show', { 'id': center.id }) }}" >{{ center.location.voteCenterName }}</a></th>
                                     <th class="" style="background:#e1f2ea!important;"><a data-title="{{ center.representative.name }}" class="view " href="javascript:" data-url="{{ path('election_member_show', { 'id': center.representative.id }) }}">{{ center.representative.name }} - {% if center.representativeMobile is not empty %}{{ center.representativeMobile }}{% else %}{{ center.representative.mobile }}{% endif %}</a></th>
