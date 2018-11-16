@@ -47,6 +47,7 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Process</th>
@@ -58,9 +59,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {% for entity in entities %}
                                     <tr>
+                                        <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
@@ -87,10 +88,21 @@
                                                 {% else %}
                                                     <a  href="{{ path('election_sms_status', { 'id': entity.id}) }}" class="btn yellow mini" >x</a>
                                                 {% endif %}
-                                                <a href="{{ path('election_sms_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                                <a title="Are you sure went to delete ?" href="{{ path('election_sms_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-                                                <a data-title="{{ entity.name }}" id="" class="btn mini approve purple" href="javascript:" data-url="{{ path('election_bulk_sms', { 'id': entity.id }) }}" >SMS</a>
+                                                {% if entity.smsStatus == 'Created'  %}
+                                                    <a href="{{ path('election_sms_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                                    <a title="Are you sure went to delete ?" href="{{ path('election_sms_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                                    <a data-title="{{ entity.name }}" id="" class="btn mini approve purple" href="javascript:" data-url="{{ path('election_bulk_sms', { 'id': entity.id }) }}" >SMS</a>
+                                                {% else %}
+                                                    <a  id="" class="btn mini blue" href="javascript:">Done</a>
+                                                {% endif %}
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="9">
+                                            <table class="table">
+                                                <tr><td>Message</td><td>{{ entity.content }}</td></tr>
+                                            </table>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -106,19 +118,9 @@
     </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@ElectionBundle/Resources/public/css/style.css'
-    '@ElectionBundle/Resources/public/css/messagebox.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@ElectionBundle/Resources/public/js/election.js'
-    '@ElectionBundle/Resources/public/js/messagebox.js'
     '@ElectionBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

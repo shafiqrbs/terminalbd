@@ -89,8 +89,8 @@ class SmsType extends AbstractType
 	        ->add('locationVoter', 'entity', array(
 		        'required'    => true,
 		        'property' => 'voteCenterName',
+		        'empty_value' => 'Choose a voter location',
 		        'attr'=>array('class'=>'m-wrap span12 select2'),
-		        'constraints' =>array( new NotBlank(array('message'=>'Choose location for committee')) ),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionLocation',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
@@ -103,8 +103,8 @@ class SmsType extends AbstractType
 	        ->add('locationMember', 'entity', array(
 		        'required'    => true,
 		        'property' => 'villageName',
+		        'empty_value' => 'Choose a member location',
 		        'attr'=>array('class'=>'m-wrap span12 select2'),
-		        'constraints' =>array( new NotBlank(array('message'=>'Choose location for committee')) ),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionLocation',
 		        'query_builder' => function(EntityRepository $er) {
 			        return $er->createQueryBuilder( 'e' )

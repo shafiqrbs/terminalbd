@@ -98,6 +98,13 @@ class ElectionSms
 	 */
 	private $process;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="smsStatus", type="string",  length = 20, nullable=true)
+	 */
+	private $smsStatus = 'Created';
+
 
 	/**
 	 * @var boolean
@@ -347,6 +354,20 @@ class ElectionSms
 	 */
 	public function setProcess( string $process ) {
 		$this->process = $process;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSmsStatus() {
+		return $this->smsStatus;
+	}
+
+	/**
+	 * @param string $smsStatus
+	 */
+	public function setSmsStatus( string $smsStatus ) {
+		$this->smsStatus = $smsStatus;
 	}
 
 

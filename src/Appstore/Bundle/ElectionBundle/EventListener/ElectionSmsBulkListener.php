@@ -1,7 +1,11 @@
 <?php
 namespace  Appstore\Bundle\ElectionBundle\EventListener;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionEventMember;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionMember;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionSms;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenterMember;
 use Appstore\Bundle\ElectionBundle\Event\ElectionSmsBulkEvent;
 use Setting\Bundle\ToolBundle\Entity\SmsSender;
@@ -45,13 +49,13 @@ class ElectionSmsBulkListener extends BaseSmsAwareListener
 
 		if($entity->getProcess() == "Member" and !empty($entity->getLocationMember())){
 			$this->memberSms($entity);
-		}elseif ($entity->getProcess() == "Voter" and !empty($entity->getLocationMember())){
+		}elseif ($entity->getProcess() == "Voter" and !empty($entity->getLocationVoter())){
 			$this->voterSms($entity);
-		}elseif ($entity->getProcess() == "Vote Center" and !empty($entity->getLocationMember())){
+		}elseif ($entity->getProcess() == "Vote Center" and !empty($entity->getVoteCenter())){
 			$this->voteCenterSms($entity);
-		}elseif ($entity->getProcess() == "Committee" and !empty($entity->getLocationMember())){
+		}elseif ($entity->getProcess() == "Committee" and !empty($entity->getCommittee())){
 			$this->committeeSms($entity);
-		}elseif ($entity->getProcess() == "Event" and !empty($entity->getLocationMember())){
+		}elseif ($entity->getProcess() == "Event" and !empty($entity->getEvent())){
 			$this->campaignSms($entity);
 		}
 	}
@@ -114,6 +118,9 @@ class ElectionSmsBulkListener extends BaseSmsAwareListener
 	{
 		$village    = $event->getVoteCenter()->getId();
 		$config     = $event->getElectionConfig();
+
+		/* @var ElectionVoteCenter $voteCenter */
+
 		$voteCenter    = $this->em->getRepository('ElectionBundle:ElectionVoteCenter')->findBy(array('electionConfig' => $config ,'location' => $village));
 
 		$msg = $event->getContent();
@@ -122,27 +129,73 @@ class ElectionSmsBulkListener extends BaseSmsAwareListener
 
 		/* @var ElectionVoteCenterMember $member */
 
+		if(!empty($members)) {
+
+			$total = 0;
+			$count = 0;
+			foreach ( $members as $member ) {
+				if ( ! empty( $member->getAgentMobile() ) and $member->getPersonType() == 'agent' ) {
+					$mobile = "88" . $member->getAgentMobile();
+					$this->gateway->send( $msg, $mobile );
+					$count ++;
+				}
+				$total ++;
+			}
+			$this->insertSmsStatus( $event, $total, $count );
+		}
+	}
+
+	private function committeeSms(ElectionSms $event)
+	{
+		$committee    = $event->getCommittee();
+
+		$msg = $event->getContent();
+
+		/* @var ElectionCommitteeMember $member */
+
+		$members = $committee->getMembers();
+
 		$total = 0;
 		$count = 0;
-		foreach ($members as $member){
-
-			if(!empty($member->getAgentMobile()) and $member->getPersonType() == 'agent' ){
-				$mobile = "88".$member->getAgentMobile();
-				$this->gateway->send($msg, $mobile);
-				$count ++;
+		if(!empty($members)){
+			foreach ($members as $member){
+				if(!empty($member->getMember()) and !empty($member->getMember()->getMobile()) ){
+					$mobile = "88".$member->getMember()->getMobile();
+					$this->gateway->send($msg, $mobile);
+					$count ++;
+				}
+				$total++;
 			}
-			$total++;
+			$this->insertSmsStatus( $event, $total, $count );
 		}
-		$this->insertSmsStatus($event,$total,$count);
-	}
-
-	private function committeeSms(ElectionSmsBulkEvent $event)
-	{
+		exit;
 
 	}
 
-	private function campaignSms(ElectionSmsBulkEvent $event)
+	private function campaignSms(ElectionSms $event)
 	{
+		$committee    = $event->getEvent();
+
+		$msg = $event->getContent();
+
+		/* @var ElectionEventMember $member */
+
+		$members = $committee->getEventMembers();
+
+		$total = 0;
+		$count = 0;
+		if(!empty($members)){
+			foreach ($members as $member){
+
+				if(!empty($member->getMobile())){
+					$mobile = "88".$member->getMobile();
+					$this->gateway->send($msg, $mobile);
+					$count ++;
+				}
+				$total++;
+			}
+			$this->insertSmsStatus( $event, $total, $count );
+		}
 
 	}
 

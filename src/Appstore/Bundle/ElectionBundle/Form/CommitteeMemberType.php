@@ -48,6 +48,7 @@ class CommitteeMemberType extends AbstractType
 		        'required'    => true,
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
 		        'property' => 'name',
+		        'empty_value' => 'Choose a member designation',
 		        'attr'=>array('class'=>'m-wrap span9 inputs'),
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')

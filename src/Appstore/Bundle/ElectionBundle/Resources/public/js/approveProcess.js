@@ -163,7 +163,7 @@ $(document).on("click", ".approve", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+                //location.reload();
             });
         }
     });

@@ -19,6 +19,7 @@ class ElectionSmsRepository extends EntityRepository
 		$sms->setTotal($total);
 		$sms->setSuccess($success);
 		$sms->setFailed($total - $success);
+		$sms->setSmsStatus('Done');
 		$this->_em->flush($sms);
 
 	}
