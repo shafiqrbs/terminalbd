@@ -30,7 +30,6 @@
                         <div class="caption"><i class="icon-reorder"></i>Vote Result Matrix Information</div>
                         <div class="pull-right">
                             <div class="btn-group">
-                                <input type="text"  class="m-wrap inline-input" style="width: 250px; background-color: #FFFFff; text-align: left; height: 20px!important;" autocomplete="on" id="search" name="search" value="" placeholder="Search the vote center" >
                                 <a class="red btn" href="{{ path('election_setup') }}"><i class="icon-th-list"></i>&nbsp; Election</a>
                                 <a class="yellow btn view" href="javascript:" data-url="{{ path('election_setup_result_generate',{'id':entity.id}) }}"><i class="icon-refresh"></i>&nbsp; Result</a>
                             </div>
@@ -219,7 +218,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@ElectionBundle/Resources/public/js/quicksearch.js'
     '@ElectionBundle/Resources/public/js/election.js'
     '@ElectionBundle/Resources/public/js/approveProcess.js'
     %}
@@ -228,26 +226,11 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('input#search').quicksearch('table#list-data tbody tr', {
-        'delay': 300,
-        'selector': 'th',
-        'stripeRows': ['odd', 'even'],
-        'loader': 'span.loading',
-        'bind': 'keyup click',
-        'show': function () {
-        this.style.color = '';
-        },
-        'hide': function () {
-        this.style.color = '#000';
-        },
-        'prepareQuery': function (val) {
-        return new RegExp(val, "i");
-        },
-        'testQuery': function (query, txt, _row) {
-        return query.test(txt);
-        }
+    oTable = $('#list-data').DataTable( {
+    "paging":   false,
+    "ordering": false,
+    "info":     false,
     });
-
 {% endblock %}
 
 
