@@ -191,22 +191,25 @@ class ElectionMemberRepository extends EntityRepository
         if(!empty($data))
         {
 
-            $mobile =    isset($data['mobile'])? $data['mobile'] :'';
-            $name =    isset($data['name'])? $data['name'] :'';
+            $mobile =    isset($data['member'])? $data['member'] :'';
+            $keyword =    isset($data['keyword'])? $data['keyword'] :'';
             $thana =    isset($data['thana'])? $data['thana'] :'';
             $union =    isset($data['union'])? $data['union'] :'';
             $ward =    isset($data['ward'])? $data['ward'] :'';
             $village =    isset($data['village'])? $data['village'] :'';
             $voteCenter =    isset($data['voteCenter'])? $data['voteCenter'] :'';
             $district =    isset($data['district'])? $data['district'] :'';
+
             if (!empty($mobile)) {
                 $qb->andWhere("e.mobile = :mobile");
                 $qb->setParameter('mobile', $mobile);
             }
 
-	        if (!empty($name)) {
-		        $qb->andWhere("e.mobile LIKE :name");
-		        $qb->setParameter('name','%'. $name.'%');
+	        if (!empty($keyword)) {
+		        $qb->andWhere("e.name LIKE :name");
+		        $qb->setParameter('name','%'. $keyword.'%');
+	            $qb->orWhere("e.mobile LIKE :mobile");
+		        $qb->setParameter('mobile','%'. $keyword.'%');
 	        }
 
 	        if (!empty($district)) {
@@ -224,7 +227,7 @@ class ElectionMemberRepository extends EntityRepository
 		        $val = explode(',',$union);
 		        $name = $val[0];
 		        $parent = $val[1];
-		        $qb->andWhere($qb->expr()->like("e.union", "'%$name%'"  ));
+		        $qb->andWhere($qb->expr()->like("e.memberUnion", "'%$name%'"  ));
 		        $qb->andWhere($qb->expr()->like("e.thana", "'%$parent%'"  ));
 
 	        }
@@ -234,7 +237,7 @@ class ElectionMemberRepository extends EntityRepository
 	            $name = $val[0];
 	            $parent = $val[1];
 	            $qb->andWhere($qb->expr()->like("e.ward", "'%$name%'"  ));
-	            $qb->andWhere($qb->expr()->like("e.union", "'%$parent%'"  ));
+	            $qb->andWhere($qb->expr()->like("e.memberUnion", "'%$parent%'"  ));
 
             }
 
@@ -243,7 +246,7 @@ class ElectionMemberRepository extends EntityRepository
 	            $name = $val[0];
 	            $parent = $val[1];
 	            $qb->andWhere($qb->expr()->like("e.village", "'%$name%'"  ));
-	            $qb->andWhere($qb->expr()->like("ward.ward", "'%$parent%'"  ));
+	            $qb->andWhere($qb->expr()->like("e.ward", "'%$parent%'"  ));
 
             }
 
@@ -251,8 +254,8 @@ class ElectionMemberRepository extends EntityRepository
 		        $val = explode(',',$voteCenter);
 		        $name = $val[0];
 		        $parent = $val[1];
-		        $qb->andWhere($qb->expr()->like("e.voteCenter", "'%$name%'"  ));
-		        $qb->andWhere($qb->expr()->like("e.union", "'%$parent%'"  ));
+		        $qb->andWhere($qb->expr()->like("e.voteCenterName", "'%$name%'"  ));
+		        $qb->andWhere($qb->expr()->like("e.memberUnion", "'%$parent%'"  ));
 			//	$qb->leftJoin('center.parent','centerParent');
 		    //    $qb->andWhere($qb->expr()->like("centerParent.name", "'%$parent%'"  ));
 

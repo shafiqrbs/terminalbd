@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\AppearanceBundle\Form;
 
+use Setting\Bundle\ToolBundle\Form\SocialIconType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -31,6 +32,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('sidebarTooltip')
             ->add('menuBold')
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
+            ->add('topBarContent','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>2,'placeholder'=>'Enter top bar text or button')))
             ->add('sidebarPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('' => '---Select One---','left' => 'left',  'right' => 'right'),
@@ -40,18 +42,16 @@ class TemplateCustomizeType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
                 	'' => '---Select Icon Type ---',
-	                'icon-hover-name' => 'Icon Hover name',
-	                'icon-fancy-circle' => 'Icon Fancy Circle',
-	                'icon-tooltip-square' => 'Icon Tooltip Square',
-	                'icon-button-with-text' => 'Icon Button with text',
-	                'icon-circle-mouse-hover' => 'Icon Circle mouse hover',
+	                'icon-fadein' => 'Icon Fadein',
+	                'icon-loop' => 'Icon Loop',
+	                'icon-square' => 'Icon Square',
 	                'icon-circle' => 'Icon Circle',
                 ),
             ))
 
             ->add('socialIconPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
-                'choices' => array('' => '---Select Icon Position---','top-left' => 'Top Left','top-right' => 'Top Right','menu-right' => 'Menu Right'),
+                'choices' => array('' => '---Select Icon Position---','left' => 'Left','center' => 'Center','right' => 'Right'),
             ))
 
             ->add('breadcrumb')
@@ -369,6 +369,8 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
         ;
+	    $builder->add('globalOption', new SocialIconType());
+
     }
     
     /**
@@ -386,6 +388,6 @@ class TemplateCustomizeType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_toolbundle_templatecustomize';
+        return 'templatecustomize';
     }
 }

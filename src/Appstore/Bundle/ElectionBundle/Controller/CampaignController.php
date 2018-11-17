@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\ElectionBundle\Controller;
 
 use Appstore\Bundle\ElectionBundle\Entity\ElectionCampaignAnalysis;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionEvent;
 use Appstore\Bundle\ElectionBundle\Form\CampaignType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -269,6 +270,7 @@ class CampaignController extends Controller
             'text' => $vendor
         ));
     }
+
 
 
 }

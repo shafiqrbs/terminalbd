@@ -351,6 +351,21 @@ class EventController extends Controller
 
 	}
 
+	public function printAction(ElectionEvent $entity){
+
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		// $entity = $em->getRepository('ElectionBundle:ElectionCommittee')->findOneBy(array('electionConfig' => $config,'id'=>$id));
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+		}
+		return $this->render('ElectionBundle:Print:campaign.html.twig', array(
+			'entity'      => $entity,
+		));
+	}
+
+
+
 
 
 }

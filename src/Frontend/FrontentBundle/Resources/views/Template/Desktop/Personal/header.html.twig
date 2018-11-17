@@ -1,0 +1,179 @@
+{% if globalOption.templateCustomize.topBar is not empty %}
+    <section id="top-bar" class=" header-position">
+        <div class="container" >
+            <div class="row">
+                <div class="col-md-4 text-left">
+                    <div class="box">
+                        <ul class="info-links">
+                            {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                            {% endif %}
+                            {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                            {% endif %}
+                            {% if globalOption.templateCustomize.showMobile == 1 %}
+                                <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="box">
+                        {{  globalOption.templateCustomize.topBarContent }}
+                    </div>
+                </div>
+                <div class=" col-md-4 text-right">
+                    <div class="box">
+                        {{  globalOption.templateCustomize.topBarContent }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif %}
+<nav class="navbar navbar-default bootsnav on no-full navbar-transparent sticky">
+    <!-- Start Top Search -->
+    <div class="top-login" style="display: none">
+        <div class="container">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-login"><i class="fa fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+    <!-- End Top Search -->
+    <div class="container">
+        <!-- Start Header Navigation -->
+        <div class="attr-nav">
+            {% if globalOption.templateCustomize.socialIconType == 'icon-fadein' %}
+            <ul class="icon-circle-fadein">
+                {% if globalOption.facebookPageUrl is not empty %}
+                <li>
+                    <a target="_blank" href="{{ globalOption.facebookPageUrl }}" class="icon-button facebook"><i class="fa fa-facebook"></i><span></span></a>
+                </li>
+                {% endif %}
+                {% if globalOption.twitterUrl is not empty %}
+                <li>
+                <a target="_blank" href="{{ globalOption.twitterUrl }}" class="icon-button twitter"><i class="fa fa-twitter"></i><span></span></a>
+                </li>
+                {% endif %}
+                {% if globalOption.instagramPageUrl is not empty %}
+                <li>
+                    <a target="_blank" href="{{ globalOption.instagramPageUrl }}" class="icon-button instagram"><i class="fa fa-instagram"></i><span></span></a>
+                </li>
+                {% endif %}
+                {% if globalOption.googlePlus is not empty %}
+                <li>
+                    <a target="_blank" href="{{ globalOption.googlePlus }}" class="icon-button google-plus"><i class="fa fa-google-plus"></i><span></span></a>
+                </li>
+                {% endif %}
+
+                {% if globalOption.youtube is not empty %}
+                <li>
+                    <a target="_blank" href="{{ globalOption.youtube }}" class="icon-button youtube"><i class="fa fa-youtube"></i><span></span></a>
+                </li>
+                {% endif %}
+
+            </ul>
+            {% elseif  globalOption.templateCustomize.socialIconType == 'icon-loop' %}
+            <ul class="icon-circle-fancy" id="fancy-circle">
+                <li>
+                    <div class="facebook">
+                        <a href="https://facebook.com/colorlib/">
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="twitter">
+                        <a href="https://twitter.com/colorlib/">
+                            <i class="fa fa-twitter" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+            {% elseif  globalOption.templateCustomize.socialIconType == 'icon-square' %}
+            <ul class="icon-square">
+                <li><a href="#" class="btn-social btn-instagram"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#" class="btn-social btn-twitter"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#" class="btn-social btn-google-plus"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+            {% elseif  globalOption.templateCustomize.socialIconType == 'icon-circle' %}
+            <ul class="icon-circle">
+                <li><a href="#" class="btn-social btn-instagram"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#" class="btn-social btn-twitter"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#" class="btn-social btn-google-plus"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+            {% endif %}
+            <ul>
+                {% if globalOption.templateCustomize.showSearch == 1 %}
+                <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
+                {% endif %}
+                <li class="login"><a href="#"><i class="fa fa-lock"></i></a></li>
+            </ul>
+        </div>
+        {% if globalOption.templateCustomize.webPath('logo') is not empty %}
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">
+                <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120,50) }}" alt="{{ globalOption.name }}" />
+            </a>
+        </div>
+        {% endif %}
+        <!-- End Header Navigation -->
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            {{ menuTree|raw }}
+        </div><!-- /.navbar-collapse -->
+    </div>
+    <div class="top-search">
+        <div class="container">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+
+</nav>
+<style>
+
+    .sticky{
+        width: 100%;
+        box-shadow: 0 8px 6px -6px black;
+    }
+    .navbar-header{
+        float: left;
+    }
+    .dropdown {
+        height: auto!important;
+    }
+    #sollist{
+        margin-top: 23px;
+    }
+
+    .pageheader-header{
+        padding: 0 0;
+        background-color: #f43438;
+    }
+    nav.navbar.bootsnav ul.nav > li > a {
+        text-shadow: 0px 1px 0px rgba(0,0,0,0.2);
+    }
+
+
+
+</style>
+
+<div class="clearfix"></div>
+<div class="pageheader-header dark"></div>
+<div class="clearfix"></div>
+{% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.featureWidgetPositionExist('header') %}
+    <section class="feature-widget-header-top" >
+        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header'}) %}
+    </section>
+{% endif %}

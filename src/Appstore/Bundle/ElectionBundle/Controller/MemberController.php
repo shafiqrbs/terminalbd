@@ -443,6 +443,55 @@ class MemberController extends Controller
 
 	}
 
+	public function memberExportToCsvAction()
+	{
+
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$em = $this->getDoctrine()->getManager();
+		$global = $this->getUser()->getGlobalOption();
+		$data = $_REQUEST;
+		$array = array();
+
+		$config =   $global->getElectionConfig();
+		$entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data,'member');
+		$entities = $entities->getQuery()->getResult();
+
+
+		$array[] = 'Name,Mobile,Father Name,NID,Village,Vote center,Ward,Union/Purashabva,Thana/Upozila,District';
+
+		/* @var $entity ElectionMember */
+
+		foreach ($entities as $key => $entity){
+
+			$rows = array(
+				$entity->getName(),
+				$entity->getMobile(),
+				$entity->getFatherName(),
+				$entity->getNid(),
+				$entity->getVillage(),
+				$entity->getVoteCenterName(),
+				$entity->getWard(),
+				$entity->getMemberUnion(),
+				$entity->getThana(),
+				$entity->getDistrict(),
+
+			);
+			$array[] = implode(',', $rows);
+		}
+		$compareStart = new \DateTime();
+		$start =  $compareStart->format('d-m-Y');
+		$fileName = $start.'-member-list.csv';
+		$content = implode("\n", $array);
+		$response = new Response($content);
+		$response->headers->set('Content-Type', 'text/csv');
+		$response->headers->set('Content-Type', 'application/octet-stream');
+		$response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+		return $response;
+		exit;
+
+	}
+
 	public function memberImportUpdatedAction()
 	{
 
@@ -497,7 +546,8 @@ class MemberController extends Controller
 		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->find(22);
 		$barCoder = $this->itemBarcoder($config,$entity);
 		return $this->render('ElectionBundle:Member:idcard.html.twig', array(
-			'entities'      => $entities
+			'entities'      => $entities,
+			'config'      => $config
 		));
 	}
 

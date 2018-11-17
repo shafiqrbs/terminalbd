@@ -238,8 +238,15 @@ class TemplateCustomize
      */
     private $siteTitleSize;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="topBarContent", type="text" , nullable=true)
+	 */
+	private $topBarContent;
 
-     /**
+
+	/**
      * @var string
      *
      * @ORM\Column(name="siteSlogan", type="text" , nullable=true)
@@ -2601,6 +2608,20 @@ class TemplateCustomize
 	 */
 	public function setSocialIconPosition( string $socialIconPosition ) {
 		$this->socialIconPosition = $socialIconPosition;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTopBarContent(){
+		return $this->topBarContent;
+	}
+
+	/**
+	 * @param string $topBarContent
+	 */
+	public function setTopBarContent( string $topBarContent ) {
+		$this->topBarContent = $topBarContent;
 	}
 
 

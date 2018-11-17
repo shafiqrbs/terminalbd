@@ -63,7 +63,9 @@ class ElectionConfigController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        /* @var $entity ElectionConfig */
         $entity = $this->getUser()->getGlobalOption()->getElectionConfig();
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
@@ -72,14 +74,13 @@ class ElectionConfigController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            if($entity->getRemoveImage() == 1 ){
+           /* if($entity->getRemoveImage() == 1 ){
                 $entity->removeUpload();
-            }elseif($entity->getRemoveImage() != 1) {
-                $entity->upload();
-            }
+            }*/
+            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'success',"Report has been created successfully"
+                'success',"Data has been created successfully"
             );
             return $this->redirect($this->generateUrl('business_config_manage'));
         }

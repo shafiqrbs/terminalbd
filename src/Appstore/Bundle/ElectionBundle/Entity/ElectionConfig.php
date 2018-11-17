@@ -121,6 +121,13 @@ class ElectionConfig
 	/**
 	 * @var string
 	 *
+	 * @ORM\Column(name="candidateName", type="string", nullable = true)
+	 */
+	private $candidateName;
+
+	/**
+	 * @var string
+	 *
 	 * @ORM\Column(name="address", type="text", nullable = true)
 	 */
 	private $address;
@@ -339,7 +346,7 @@ class ElectionConfig
 
 	protected function getUploadDir()
 	{
-		return 'uploads/domain/'.$this->getGlobalOption()->getId().'/business';
+		return 'uploads/domain/'.$this->getGlobalOption()->getId().'/election';
 	}
 
 	public function removeUpload()
@@ -390,8 +397,6 @@ class ElectionConfig
 	{
 		$this->removeImage = $removeImage;
 	}
-
-
 
 	/**
 	 * Set address
@@ -698,6 +703,20 @@ class ElectionConfig
 	 */
 	public function setCardText( string $cardText ) {
 		$this->cardText = $cardText;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCandidateName(){
+		return $this->candidateName;
+	}
+
+	/**
+	 * @param string $candidateName
+	 */
+	public function setCandidateName( string $candidateName ) {
+		$this->candidateName = $candidateName;
 	}
 
 

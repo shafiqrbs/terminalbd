@@ -53,6 +53,10 @@ election_member_family:
     path:     /{id}/add-family
     defaults: { _controller: "ElectionBundle:Member:family" }
 
+election_member_export_csv:
+    path:     /member-export-csv
+    defaults: { _controller: "ElectionBundle:Member:memberExportToCsv" }
+
 election_member_family_delete:
     path:     /{id}/family-member-delete
     defaults: { _controller: "ElectionBundle:Member:familyMemberDelete" }

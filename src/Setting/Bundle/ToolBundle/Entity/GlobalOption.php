@@ -492,6 +492,14 @@ class GlobalOption
      * @ORM\Column(name="googlePlus", type="string", length=255 , nullable=true)
      */
     private $googlePlus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="youtube", type="string", length=255 , nullable=true)
+     */
+
+    private $youtube;
     /**
      * @var boolean
      *
@@ -1861,6 +1869,20 @@ class GlobalOption
 	 */
 	public function setDomainType( string $domainType ) {
 		$this->domainType = $domainType;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getYoutube(){
+		return $this->youtube;
+	}
+
+	/**
+	 * @param string $youtube
+	 */
+	public function setYoutube( string $youtube ) {
+		$this->youtube = $youtube;
 	}
 
 

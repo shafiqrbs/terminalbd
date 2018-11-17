@@ -57,3 +57,9 @@ election_event_member_create:
 election_event_member_delete:
     path:     /{id}/member-delete
     defaults: { _controller: "ElectionBundle:Event:memberDelete" }
+
+
+election_event_print:
+    path:     /{id}/print
+    defaults: { _controller: "ElectionBundle:Event:print" }
+

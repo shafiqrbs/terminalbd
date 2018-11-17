@@ -38,6 +38,7 @@ class ElectionCommitteeRepository extends EntityRepository
 			$qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
 			$qb->join('l.parent','p');
 			$qb->andWhere($qb->expr()->like("p.name", "'%$parent%'"  ));
+			$qb->andWhere($qb->expr()->like("p.name", "'%$parent%'"  ));
 		}
 
 

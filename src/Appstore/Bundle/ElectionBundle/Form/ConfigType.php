@@ -33,7 +33,11 @@ class ConfigType extends AbstractType
             ->add('file')
             ->add('smsNotification')
             ->add('removeImage')
-	        ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize inputs address','rows'=> 8,'autocomplete'=>'off','placeholder'=>'Enter address')
+	        ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize inputs address','rows'=> 4,'autocomplete'=>'off','placeholder'=>'Enter address')
+	        ))
+	        ->add('cardText','textarea', array('attr'=>array('class'=>'m-wrap span12 resize inputs','rows'=> 4,'autocomplete'=>'off','placeholder'=>'Enter ID card text')
+	        ))
+	        ->add('candidateName','text', array('attr'=>array('class'=>'m-wrap span12 resize inputs','autocomplete'=>'off','placeholder'=>'Enter candidate name')
 	        ))
 	        ->add('setup', 'entity', array(
 		        'required'    => true,

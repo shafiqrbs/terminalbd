@@ -39,3 +39,4 @@ election_campaign_status:
 election_campaign_delete:
     path:     /{id}/delete
     defaults: { _controller: "ElectionBundle:Campaign:delete" }
+

@@ -50,6 +50,17 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
+                                            <label class="control-label " for="">Candidate Namer</label>
+                                            <div class="control">
+                                                {{ form_widget(form.candidateName) }}
+                                                {{ form_errors(form.candidateName) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
                                             <label class="control-label " for="vatPercentage">District</label>
                                             <div class="control">
                                                 {{ form_widget(form.district) }}
@@ -90,6 +101,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label " >Card Text</label>
+                                            <div class="control">
+                                                {{ form_widget(form.cardText) }}
+                                                {{ form_errors(form.cardText) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="span4">
                                 <div class="row-fluid">
@@ -98,7 +120,7 @@
                                         <div class="controls">
                                             <div data-provides="fileupload" class="fileupload fileupload-new">
                                                 <div  class="fileupload-new thumbnail">
-                                                    {% if(entity.webPath) %}
+                                                    {% if(entity.webPath is not empty) %}
                                                         <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.webPath).resize(250,150) }}">
                                                     {% else %}
                                                         <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">

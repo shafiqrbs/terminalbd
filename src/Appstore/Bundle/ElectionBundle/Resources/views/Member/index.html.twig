@@ -39,7 +39,15 @@
                                 {% if importCount > 0 %}
                                 <a class="btn yellow" href="{{ path('election_member_import_updated') }}"><i class="icon-th-list"></i>&nbsp;Import Updated</a>
                                 {% endif %}
-                                <a class="btn red" href="{{ path('election_member_generate_idcard') }}">ID Cards</a>
+                                {% set thana = searchForm.thana is defined ? searchForm.thana :'' %}
+                                {% set union = searchForm.union is defined ? searchForm.union :'' %}
+                                {% set ward = searchForm.ward is defined ? searchForm.ward :'' %}
+                                {% set village = searchForm.village is defined ? searchForm.village :'' %}
+                                {% set voteCenter = searchForm.voteCenter is defined ? searchForm.voteCenter :'' %}
+                                {% set member = searchForm.member is defined ? searchForm.member :'' %}
+                                {% set keyword = searchForm.keyword is defined ? searchForm.keyword :'' %}
+                                <a class="btn blue" href="{{ path('election_member_export_csv',{'thana':thana,'union':union,'ward':ward,'village':village,'voteCenter':voteCenter,'member':member,'keyword':keyword}) }}"><i class="icon-download"></i>&nbsp;Export</a>
+                                <a class="btn purple" href="{{ path('election_member_generate_idcard') }}">ID Cards</a>
                             </div>
                         </div>
                     </div>
@@ -72,7 +80,7 @@
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="keyword" name="keyword"  class="m-wrap span12 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% else %}Enter any key words{% endif %} ">
+                                                <input type="text" id="keyword" name="keyword"  class="m-wrap span12 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% else %}Enter any keywords{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>

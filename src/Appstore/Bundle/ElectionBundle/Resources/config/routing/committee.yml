@@ -63,4 +63,8 @@ election_committee_member_delete:
     path:     /{id}/member-delete
     defaults: { _controller: "ElectionBundle:Committee:memberDelete" }
 
+election_committee_print:
+    path:     /{id}/print
+    defaults: { _controller: "ElectionBundle:Committee:print" }
+
 

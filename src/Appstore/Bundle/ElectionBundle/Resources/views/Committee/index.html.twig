@@ -48,7 +48,7 @@
                                     </select>
                                 </div>
                                 <div class="span4">
-                                    <input type="text" id="location" name="location"  class="m-wrap span12 select2Location" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.location is defined %}{{ searchForm.location }}{% else %}Enter location name{% endif %} ">
+                                    <input type="text" id="location" name="location"  class="m-wrap span12 select2Location" value="{% if searchForm.location is defined %}{{ searchForm.location }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.location is defined %}{{ searchForm.location }}{% else %}Enter location name{% endif %} ">
                                 </div>
                                 <div class="span4">
                                     <div class="controls">
@@ -107,7 +107,7 @@
                                             <a title="Are you sure went to delete ?" href="{{ path('election_committee_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             <a class="btn mini yellow" href="{{ path('election_committee_member_new', { 'id': entity.id }) }}" ><i class="icon-plus"></i> Member</a>
                                             <a data-title="{{ entity.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('election_committee_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
-                                                <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_committee_sms', { 'id': entity.id }) }}" >SMS</a>
+                                            <a data-title="{{ entity.name }}" target="_blank" id="" class="btn mini purple print" href="{{ path('election_committee_print', { 'id': entity.id }) }}"  >Print</a>
                                             </div>
                                         </td>
                                     </tr>

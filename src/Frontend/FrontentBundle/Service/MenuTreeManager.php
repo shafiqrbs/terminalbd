@@ -76,12 +76,16 @@ class MenuTreeManager
 
     }
 
-    public function getMenuTree($arr,$subdomain,$device ='')
+    public function getMenuTree($arr,$subdomain , $device ='', $option = "")
     {
 
         $value ='';
-            $value .='<ul>';
-            $prefix = '';
+        if(!empty($option)){
+	        $value .='<ul class="'.$option.'">';
+        }else{
+	        $value .='<ul class="nav navbar-nav " data-in="fadeInDown" data-out="fadeOutUp" >';
+        }
+        $prefix = '';
         foreach ($arr as $val) {
 
             $menu = $val->getMenu()->getMenu();
@@ -89,8 +93,9 @@ class MenuTreeManager
             if (!empty($menu)) {
                 $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
                 if($subIcon == 1){
-                    $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
-                    $value .= $this->getMenuTree($val->getChildren(),$subdomain,$device);
+	                $option = "dropdown-menu animated fadeOutUp";
+                    $value .= '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-hover="'.$val->getMenu()->getMenu().'" href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
+                    $value .= $this->getMenuTree($val->getChildren(),$subdomain,$device,$option);
                 }else{
                     $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
                 }

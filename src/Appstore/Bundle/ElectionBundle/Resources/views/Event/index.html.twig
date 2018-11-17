@@ -256,9 +256,10 @@
                                             <div class="btn-group">
                                                 <a href="{{ path('election_event_edit', {'id': entity.id }) }}" data-id="{{ entity.id }}" class="btn green mini edit" ><i class="icon-edit"></i></a>
                                                 <a title="Are you sure went to delete ?" href="{{ path('election_event_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-                                                <a href="{{ path('election_event_member_new', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-user"></i> Member</a>
+                                                <a href="{{ path('election_event_member_new', { 'id': entity.id }) }}" class="btn yellow mini" >Member</a>
                                                 <a data-title="{{ entity.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('election_event_show', { 'id': entity.id }) }}" ><i class="icon-eye-open"></i></a>
-                                                <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_event_sms', { 'id': entity.id }) }}" >SMS</a>
+                                                <a data-title="{{ entity.name }}" id="" class="btn mini sms green" href="javascript:" data-url="{{ path('election_event_sms', { 'id': entity.id }) }}" >SMS</a>
+                                                <a data-title="{{ entity.name }}" id="" target="_blank" class="btn mini purple" href="{{ path('election_event_print', { 'id': entity.id }) }}" >Print</a>
                                             </div>
                                         </td>
                                     </tr>
