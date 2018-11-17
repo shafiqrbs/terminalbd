@@ -89,7 +89,8 @@ class ElectionCommitteeRepository extends EntityRepository
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.location','t');
-		$qb->select('t.id as id,t.name as locationName , COUNT(e.id) as committeeCount');
+		$qb->join('t.parent','p');
+		$qb->select('t.id as id,t.name as locationName ,p.name as parentLocationName , COUNT(e.id) as committeeCount');
 		$qb->where('e.electionSetup='.$setup->getId());
 		$qb->andWhere("e.status = :status");
 		$qb->setParameter('status', 1);

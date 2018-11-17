@@ -396,7 +396,8 @@
                                                 <li>No of Committees: {{ type.committeeCount }}</li>
                                             </ul>
                                         </td>
-                                        <td class="vertical-right"><a href="{{ path('election_committee',{'location':type.id}) }}" class="btn blue"> View <i class="m-icon-swapright m-icon-white"></i></a></td>
+                                        {% set location = type.locationName~','~type.parentLocationName %}
+                                        <td class="vertical-right"><a href="{{ path('election_committee',{'location':location}) }}" class="btn blue"> View <i class="m-icon-swapright m-icon-white"></i></a></td>
                                     </tr>
                                     {% endfor %}
                                     </tbody>
@@ -410,7 +411,7 @@
             <div class="span4">
                 <div class="portlet box blue">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>{{ setup.setupName }}</div>
+                        <div class="caption"><i class="icon-reorder"></i>{{ setup.setupName }} & Vote</div>
 
                     </div>
                     <div class="portlet-body">
@@ -422,18 +423,18 @@
                                     {% for candidate in setup.candidates %}
                                         <tr><th colspan="2"><strong>{{ candidate.name }}</strong></th></tr>
                                         <tr>
-                                            <td class="highlight">
+                                            <td class="span8 highlight">
                                                 <ul>
                                                     <li>Mobile no: {{ candidate.mobile }}</li>
                                                     <li>Marka: {{ candidate.marka.name }}</li>
                                                     <li>Party: {{ candidate.politicalParty.name }}</li>
                                                 </ul>
                                             </td>
-                                            <td>
+                                            <td class="span4">
                                                 <ul>
-                                                    <li>Total Vote:{{ candidate.totalVote }}</li>
-                                                    <li>Male Vote: {{ candidate.maleVote }}</li>
-                                                    <li>Female Vote: {{ candidate.femaleVote }}</li>
+                                                    <li>Total:{{ candidate.totalVote }}</li>
+                                                    <li>Male: {{ candidate.maleVote }}</li>
+                                                    <li>Female: {{ candidate.femaleVote }}</li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -456,8 +457,9 @@
                         </div>
                     </div>
                     <div class="portlet-body fuelux">
-
-                        <table class="table table-striped table-bordered table-advance table-hover">
+                        <div class="row-fluid">
+                            <div class="span12 campaign-box">
+                                <table class="table table-striped table-bordered table-advance table-hover">
                             <tbody>
                             {% for event in events %}
                                 <tr>
@@ -471,12 +473,14 @@
                                             </ul>
                                         </div>
                                     </td>
-                                    <td class="vertical-right"><a href="#" class="btn blue"> View <i class="m-icon-swapright m-icon-white"></i></a></td>
+                                    <td class="vertical-right"><a href="javascript:" data-title="{{ event.name }}" data-url="{{ path('election_event_show',{'id':event.id}) }}" class="btn blue view"> View <i class="m-icon-swapright m-icon-white"></i></a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
-                    </div>
+                            </div>
+                        </div>
+                   </div>
                 </div>
             </div>
 
@@ -489,7 +493,9 @@
                         </div>
                     </div>
                     <div class="portlet-body fuelux">
-                        <table class="table table-striped table-bordered table-advance table-hover">
+                        <div class="row-fluid">
+                            <div class="span12 campaign-box">
+                                <table class="table table-striped table-bordered table-advance table-hover">
                             <tbody>
                             {% for campaign in campaigns %}
                                 <tr>
@@ -503,11 +509,13 @@
                                             </ul>
                                         </div>
                                     </td>
-                                    <td class="vertical-right"><a href="#" class="btn blue"> View <i class="m-icon-swapright m-icon-white"></i></a></td>
+                                    <td class="vertical-right"><a href="javascript:" data-url="{{ path('election_campaign_show', { 'id': campaign.id }) }}" class="btn view green"> View <i class="m-icon-swapright m-icon-white"></i></a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -569,6 +577,11 @@
 
     $('.candidate-box').slimScroll({
         height: '440px',
+        width: '100%'
+    });
+
+    $('.campaign-box').slimScroll({
+        height: '515px',
         width: '100%'
     });
 
