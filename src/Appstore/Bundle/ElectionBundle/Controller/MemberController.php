@@ -533,25 +533,13 @@ class MemberController extends Controller
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getBarcodeForPrint($config,$data);
 
-		/* @var $entity ElectionMember */
-
-		/*
-		$barCoder = array();
-		foreach ($entities as $entity) {
-
-			$barCoder[] = $this->itemBarcoder($config,$entity);
-		}
-		*/
-
-		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->find(22);
-		$barCoder = $this->itemBarcoder($config,$entity);
 		return $this->render('ElectionBundle:Member:idcard.html.twig', array(
 			'entities'      => $entities,
 			'config'      => $config
 		));
 	}
 
-
+/*
 	public function itemBarcoder(ElectionConfig $config , ElectionMember $entity )
 	{
 
@@ -599,7 +587,7 @@ class MemberController extends Controller
 		return $data;
 
 	}
-
+*/
 
 
 }
