@@ -838,12 +838,12 @@ class User extends BaseUser
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="ElectionIssue.php", mappedBy="createdBy" , cascade={"persist", "remove"})
      */
     protected $businessInvoiceCreatedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="ElectionIssue.php", mappedBy="approvedBy" , cascade={"persist", "remove"})
      */
     protected $businessInvoiceApprovedBy;
 

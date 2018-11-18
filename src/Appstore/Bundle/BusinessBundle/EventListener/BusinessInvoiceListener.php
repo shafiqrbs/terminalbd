@@ -45,7 +45,7 @@ class BusinessInvoiceListener
 
 
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository('BusinessBundle:BusinessInvoice')->createQueryBuilder('s');
+        $qb = $entityManager->getRepository( 'ElectionIssue.php' )->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
             ->where('s.businessConfig = :config')

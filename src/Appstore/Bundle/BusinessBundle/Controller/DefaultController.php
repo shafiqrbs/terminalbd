@@ -22,7 +22,7 @@ class DefaultController extends Controller
 	    $data['endDate'] = $datetime->format('Y-m-d');
 
         $user = $this->getUser();
-        $salesCashOverview = $em->getRepository('BusinessBundle:BusinessInvoice')->reportSalesOverview($user,$data);
+        $salesCashOverview = $em->getRepository( 'ElectionIssue.php' )->reportSalesOverview($user,$data);
         $purchaseCashOverview = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseOverview($user,$data);
 	    $transactionMethods = array(1);
 	    $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
@@ -30,7 +30,7 @@ class DefaultController extends Controller
 
 	    $startMonthDate = $datetime->format('Y-m-01 00:00:00');
 	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
-	    $monthlySales = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->monthlySales($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    $monthlySales = $this->getDoctrine()->getRepository( 'ElectionIssue.php' )->monthlySales($user,$data = array( 'startDate' =>$startMonthDate, 'endDate' =>$endMonthDate));
 	    $monthlyPurchase = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->monthlyPurchase($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 
 	    $monthlySalesArr = array();

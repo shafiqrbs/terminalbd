@@ -67,7 +67,7 @@ class Customer
     protected $dpsInvoices;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="customer")
+     * @ORM\OneToMany(targetEntity="ElectionIssue.php", mappedBy="customer")
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $businessInvoices;

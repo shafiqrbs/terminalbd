@@ -28,7 +28,7 @@ class BusinessInvoiceParticular
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="businessInvoiceParticulars")
+     * @ORM\ManyToOne(targetEntity="ElectionIssue.php", inversedBy="businessInvoiceParticulars")
      * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\OrderBy({"id" = "ASC"})
      **/

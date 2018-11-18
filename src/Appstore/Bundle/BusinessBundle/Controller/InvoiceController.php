@@ -47,7 +47,7 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $user,$data);
+        $entities = $em->getRepository( 'ElectionIssue.php' )->invoiceLists( $user,$data);
         $pagination = $this->paginate($entities);
 
         return $this->render('BusinessBundle:Invoice:index.html.twig', array(
@@ -113,7 +113,7 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entity = $em->getRepository('BusinessBundle:BusinessInvoice')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+        $entity = $em->getRepository( 'ElectionIssue.php' )->findOneBy(array( 'businessConfig' => $config , 'id' => $id));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -206,7 +206,7 @@ class InvoiceController extends Controller
 
 		/* @var $entity BusinessInvoice */
 
-		$entity = $em->getRepository('BusinessBundle:BusinessInvoice')->find($invoice);
+		$entity = $em->getRepository( 'ElectionIssue.php' )->find($invoice);
 		$subTotal = $entity->getSubTotal();
 		if($discountType == 'flat'){
 			$total = ($subTotal  - $discountCal);
@@ -323,7 +323,7 @@ class InvoiceController extends Controller
         $quantity = $request->request->get('quantity');
         $invoiceItems = array('particular' => $particular, 'quantity' => $quantity,'price' => $price,'unit' => $unit);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertInvoiceParticular($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
+        $invoice = $this->getDoctrine()->getRepository( 'ElectionIssue.php' )->updateInvoiceTotalPrice($invoice);
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
@@ -343,7 +343,7 @@ class InvoiceController extends Controller
         }
         $em->remove($particular);
         $em->flush();
-	    $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
+	    $invoice = $this->getDoctrine()->getRepository( 'ElectionIssue.php' )->updateInvoiceTotalPrice($invoice);
         $result = $this->returnResultData($invoice,$msg ='');
         return new Response(json_encode($result));
         exit;
@@ -401,7 +401,7 @@ class InvoiceController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->findBy(array('businessConfig' => $config, 'process' => 'Created'));
+        $entities = $this->getDoctrine()->getRepository( 'ElectionIssue.php' )->findBy(array( 'businessConfig' => $config, 'process' => 'Created'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);
@@ -494,7 +494,7 @@ class InvoiceController extends Controller
         if(!empty($particular)){
             $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'price' => $price);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStockItem($invoice,$invoiceItems);
-            $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
+            $invoice = $this->getDoctrine()->getRepository( 'ElectionIssue.php' )->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';
             $result = $this->returnResultData($invoice,$msg);
             return new Response(json_encode($result));
@@ -515,7 +515,7 @@ class InvoiceController extends Controller
         if(!empty($particular)){
             $invoiceItems = array('particular' => $particular ,'quantity' => $quantity,'salesPrice'=> $salesPrice, 'width'=> $width,'height'=> $height);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertBannerSignItem($invoice,$invoiceItems);
-	        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
+	        $invoice = $this->getDoctrine()->getRepository( 'ElectionIssue.php' )->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';
             $result = $this->returnResultData($invoice,$msg);
             return new Response(json_encode($result));
@@ -529,7 +529,7 @@ class InvoiceController extends Controller
 
         $data = $request->request->all();
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->updateInvoiceItems($data);
-        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceTotalPrice($invoice);
+        $invoice = $this->getDoctrine()->getRepository( 'ElectionIssue.php' )->updateInvoiceTotalPrice($invoice);
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
