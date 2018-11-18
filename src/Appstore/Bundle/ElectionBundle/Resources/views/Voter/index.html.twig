@@ -39,6 +39,14 @@
                                 {% if importCount > 0 %}
                                 <a class="btn yellow" href="{{ path('election_voter_import_updated') }}"><i class="icon-th-list"></i>&nbsp;Import Updated</a>
                                 {% endif %}
+                                {% set thana = searchForm.thana is defined ? searchForm.thana :'' %}
+                                {% set union = searchForm.union is defined ? searchForm.union :'' %}
+                                {% set ward = searchForm.ward is defined ? searchForm.ward :'' %}
+                                {% set village = searchForm.village is defined ? searchForm.village :'' %}
+                                {% set voteCenter = searchForm.voteCenter is defined ? searchForm.voteCenter :'' %}
+                                {% set member = searchForm.member is defined ? searchForm.member :'' %}
+                                {% set keyword = searchForm.keyword is defined ? searchForm.keyword :'' %}
+                                <a class="btn blue" href="{{ path('election_member_export_csv',{'thana':thana,'union':union,'ward':ward,'village':village,'voteCenter':voteCenter,'member':member,'keyword':keyword}) }}"><i class="icon-download"></i>&nbsp;Export</a>
                             </div>
                         </div>
                     </div>
