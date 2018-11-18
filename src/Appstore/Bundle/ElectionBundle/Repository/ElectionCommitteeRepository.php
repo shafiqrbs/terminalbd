@@ -19,9 +19,22 @@ class ElectionCommitteeRepository extends EntityRepository
 	protected function handleSearchBetween($qb,$data)
 	{
 
+		$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+		$endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
 		$type = isset($data['locationType'])? $data['locationType'] :'';
 		$location = isset($data['location'])? $data['location'] :'';
 		$keyword = isset($data['keyword'])? $data['keyword'] :'';
+
+		if (!empty($startDate) ) {
+			$start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
+			$qb->andWhere("e.updated >= :startDate");
+			$qb->setParameter('startDate', $start);
+		}
+		if (!empty($endDate)) {
+			$end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
+			$qb->andWhere("e.updated <= :endDate");
+			$qb->setParameter('endDate',$end);
+		}
 
 		if (!empty($keyword)) {
 			$qb->andWhere($qb->expr()->like("e.name", "'%$keyword%'"  ));

@@ -16,7 +16,7 @@ election_committee_sms:
 
 election_votecenter_sms:
     path:     /{id}/vote-center
-    defaults: { _controller: "ElectionBundle:Sms:votecenter" }
+    defaults: { _controller: "ElectionBundle:Sms:voteCenter" }
 
 election_sms_new:
     path:     /new

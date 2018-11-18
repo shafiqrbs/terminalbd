@@ -340,6 +340,17 @@ class CommitteeController extends Controller
 		));
 	}
 
+	public function listPrintAction(){
+
+		$data = $_REQUEST;
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findWithSearch($config,$data);
+		$pagination = $entities->getQuery()->getResult();
+		return $this->render('ElectionBundle:Print:committee-list.html.twig', array(
+			'entities'      => $pagination,
+		));
+	}
+
 
 
 }

@@ -26,12 +26,17 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
+                        {% set locationType = searchForm.locationType is defined ? searchForm.locationType :'' %}
+                        {% set location = searchForm.location is defined ? searchForm.location :'' %}
+                        {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
+                        {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
+                        {% set keyword = searchForm.keyword is defined ? searchForm.keyword :'' %}
                         <div class="caption"><i class="icon-reorder"></i> Committee Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('election_committee_new') }}"><i class="icon-plus-sign"></i>&nbsp;Create</a>
+                                <a target="_blank" class="btn blue" href="{{ path('election_committee_list_print',{'locationType':locationType,'location':location,'startDate':startDate,'endDate':endDate,'keyword':keyword}) }}"><i class="icon-print"></i>&nbsp;Print</a>
                             </div>
                         </div>
                     </div>
@@ -39,7 +44,7 @@
                     <div class="portlet-body form">
                         <form class="search-form" action="" method="get" name="itemSearch">
                             <div class="row-fluid">
-                                <div class="span4">
+                                <div class="span3">
                                     <select name="locationType" id="locationType" class="m-wrap span12">
                                         <option value="">-Select Location Type-</option>
                                         {% for type in locationTypes %}
@@ -47,13 +52,17 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="span4">
+                                <div class="span3">
                                     <input type="text" id="location" name="location"  class="m-wrap span12 select2Location" value="{% if searchForm.location is defined %}{{ searchForm.location }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.location is defined %}{{ searchForm.location }}{% else %}Enter location name{% endif %} ">
                                 </div>
-                                <div class="span4">
+                                <div class="span3">
+                                    <input type="text" id="startDate" name="startDate"  class="span6 search-input  dateCalendar m-wrap" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                    <input type="text" id="endDate" name="endDate"  class="span6 search-input  dateCalendar m-wrap" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Start date{% endif %} ">
+                                </div>
+                                <div class="span3">
                                     <div class="controls">
                                         <div class="input-append span12 ">
-                                            <input type="text" id="keyword" name="keyword"  class="m-wrap span10 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% else %}Enter any key words{% endif %} ">
+                                            <input type="text" id="keyword" name="keyword"  class="m-wrap span10 search-input" value="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% else %}Enter any key words{% endif %} ">
                                             <div class="btn-group">
                                                 <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                             </div>
@@ -62,7 +71,6 @@
                                 </div>
                             </div>
                         </form>
-
                         {% include('flash-message.html.twig')  %}
                         <!-- BEGIN FORM-->
 

@@ -248,6 +248,24 @@ class SmsController extends Controller
 
 	}
 
+	/**
+	 * Finds and displays a ElectionSms entity.
+	 *
+	 */
+	public function bulkSmsAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$entity = $em->getRepository('ElectionBundle:ElectionSms')->findOneBy(array('electionConfig' => $config,'id'=>$id));
+		if(!$entity){
+			throw $this->createNotFoundException('Unable to find ElectionSms entity.');
+		}
+		$dispatcher = $this->container->get('event_dispatcher');
+		$dispatcher->dispatch('appstore_election.post.election_bulk_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsBulkEvent($entity));
+		exit;
+
+	}
+
 	public function committeeAction(Request $request , $id)
 	{
 		$msg = $_REQUEST['sms'];
@@ -262,23 +280,7 @@ class SmsController extends Controller
 
 	}
 
-	/**
-	 * Finds and displays a ElectionSms entity.
-	 *
-	 */
-	public function bulkSmsAction($id)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entity = $em->getRepository('ElectionBundle:ElectionSms')->findOneBy(array('electionConfig' => $config,'id'=>$id));
-		if(!$entity){
-			throw $this->createNotFoundException('Unable to find ElectionSms entity.');
-		}
-		//	$dispatcher = $this->container->get('event_dispatcher');
-		//	$dispatcher->dispatch('appstore_election.post.election_bulk_sms', new \Appstore\Bundle\ElectionBundle\Event\ElectionSmsBulkEvent($entity));
-		exit;
 
-	}
 
 	public function eventAction(Request $request , $id)
 	{
@@ -294,7 +296,7 @@ class SmsController extends Controller
 
 	}
 
-	public function votecenterAction(Request $request , $id)
+	public function voteCenterAction(Request $request , $id)
 	{
 		$msg = $_REQUEST['sms'];
 		$em = $this->getDoctrine()->getManager();

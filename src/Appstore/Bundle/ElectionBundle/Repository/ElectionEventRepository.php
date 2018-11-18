@@ -20,6 +20,63 @@ class ElectionEventRepository extends EntityRepository
 {
 
 
+	protected function handleSearchBetween($qb,$data)
+	{
+
+		$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+		$endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+		$type = isset($data['locationType'])? $data['locationType'] :'';
+		$location = isset($data['location'])? $data['location'] :'';
+		$keyword = isset($data['keyword'])? $data['keyword'] :'';
+
+		if (!empty($startDate) ) {
+			$start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
+			$qb->andWhere("e.updated >= :startDate");
+			$qb->setParameter('startDate', $start);
+		}
+		if (!empty($endDate)) {
+			$end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
+			$qb->andWhere("e.updated <= :endDate");
+			$qb->setParameter('endDate',$end);
+		}
+
+		if (!empty($keyword)) {
+			$qb->andWhere($qb->expr()->like("e.name", "'%$keyword%'"  ));
+		}
+
+		if (!empty($type)) {
+			$qb->andWhere("l.locationType = :type");
+			$qb->setParameter('type', $type);
+
+		}
+
+		if (!empty($location)) {
+			$val = explode(',',$location);
+			$name = $val[0];
+			$parent = $val[1];
+			$qb->andWhere($qb->expr()->like("l.name", "'%$name%'"  ));
+			$qb->join('l.parent','p');
+			$qb->andWhere($qb->expr()->like("p.name", "'%$parent%'"  ));
+			$qb->andWhere($qb->expr()->like("p.name", "'%$parent%'"  ));
+		}
+
+
+	}
+
+	public function findWithSearch(ElectionConfig $config , $data = array())
+	{
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.location','l');
+		$qb->where("e.electionConfig = :config");
+		$qb->setParameter('config', $config->getId());
+		$this->handleSearchBetween($qb,$data);
+		$qb->orderBy('e.created','ASC');
+		$qb->getQuery();
+		return  $qb;
+
+	}
+
 	public function getEvents(ElectionConfig $config){
 
 		$qb = $this->createQueryBuilder('e');

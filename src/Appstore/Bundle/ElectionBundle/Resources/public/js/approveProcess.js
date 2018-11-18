@@ -47,7 +47,7 @@ $('body').on('change', 'input.memberId', function(el) {
 });
 
 
-$(document).on( "click", ".show", function(e){
+$(document).on( "click", ".toggle-btn", function(e){
     $('#hide').slideToggle(2000);
     $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
 });

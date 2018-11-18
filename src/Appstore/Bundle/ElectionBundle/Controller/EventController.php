@@ -19,20 +19,39 @@ use Symfony\Component\HttpFoundation\Response;
 class EventController extends Controller
 {
 
-    /**
+	public function paginate($entities)
+	{
+
+		$paginator  = $this->get('knp_paginator');
+		$pagination = $paginator->paginate(
+			$entities,
+			$this->get('request')->query->get('page', 1)/*page number*/,
+			25  /*limit per page*/
+		);
+		return $pagination;
+	}
+
+
+	/**
      * Lists all Event entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+	    $data = $_REQUEST;
         $entity = new ElectionEvent();
         $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findBy(array('electionConfig' => $config),array('created'=>'DESC'));
-        return $this->render('ElectionBundle:Event:index.html.twig', array(
-            'entities' => $entities,
+        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findWithSearch($config,$data);
+	    $pagination = $this->paginate($entities);
+        $locationTypes = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->getListOfParticular($config,'location');
+
+	    return $this->render('ElectionBundle:Event:index.html.twig', array(
+            'entities' => $pagination,
             'entity' => $entity,
+            'searchForm' => $data,
+            'locationTypes' => $locationTypes,
             'show'      => 'hide',
             'form'   => $form->createView(),
         ));
@@ -45,7 +64,8 @@ class EventController extends Controller
     {
         $entity = new ElectionEvent();
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findBy(array('electionConfig' => $config));
+        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findWithSearch($config);
+	    $pagination = $this->paginate($entities);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -65,7 +85,7 @@ class EventController extends Controller
         }
 
         return $this->render('ElectionBundle:Event:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
             'entity' => $entity,
             'show'      => 'show',
             'form'   => $form->createView(),
@@ -124,8 +144,8 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findBy(array('electionConfig' => $config),array('created'=>'DESC'));
-
+	    $pagination = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findWithSearch($config);
+	    $entities = $this->paginate($pagination);
         $entity = $em->getRepository('ElectionBundle:ElectionEvent')->findOneBy(array('electionConfig'=>$config,'id'=>$id));
 
         if (!$entity) {
@@ -171,8 +191,8 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findBy(array('electionConfig' => $config),array('created'=>'DESC'));
-
+	    $pagination = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findWithSearch($config);
+	    $entities = $this->paginate($pagination);
         $entity = $em->getRepository('ElectionBundle:ElectionEvent')->find($id);
 
         if (!$entity) {
@@ -361,6 +381,17 @@ class EventController extends Controller
 		}
 		return $this->render('ElectionBundle:Print:campaign.html.twig', array(
 			'entity'      => $entity,
+		));
+	}
+
+	public function listPrintAction(){
+
+		$data = $_REQUEST;
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->findWithSearch($config,$data);
+		$pagination = $entities->getQuery()->getResult();
+		return $this->render('ElectionBundle:Print:campaign-list.html.twig', array(
+			'entities'      => $pagination,
 		));
 	}
 

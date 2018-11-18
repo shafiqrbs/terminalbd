@@ -59,6 +59,10 @@ election_event_member_delete:
     defaults: { _controller: "ElectionBundle:Event:memberDelete" }
 
 
+election_event_list_print:
+    path:     /list-print
+    defaults: { _controller: "ElectionBundle:Event:listPrint" }
+
 election_event_print:
     path:     /{id}/print
     defaults: { _controller: "ElectionBundle:Event:print" }

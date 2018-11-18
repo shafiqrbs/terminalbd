@@ -67,4 +67,6 @@ election_committee_print:
     path:     /{id}/print
     defaults: { _controller: "ElectionBundle:Committee:print" }
 
-
+election_committee_list_print:
+    path:     /list-print
+    defaults: { _controller: "ElectionBundle:Committee:listPrint" }
