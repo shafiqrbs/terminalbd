@@ -1,37 +1,37 @@
-dms_expensecategory:
+election_expensecategory:
     path:     /
-    defaults: { _controller: "DmsBundle:ExpenseCategory:index" }
+    defaults: { _controller: "ElectionBundle:ExpenseCategory:index" }
 
-dms_expensecategory_show:
+election_expensecategory_show:
     path:     /{id}/show
-    defaults: { _controller: "DmsBundle:ExpenseCategory:show" }
+    defaults: { _controller: "ElectionBundle:ExpenseCategory:show" }
 
-dms_expensecategory_new:
+election_expensecategory_new:
     path:     /new
-    defaults: { _controller: "DmsBundle:ExpenseCategory:new" }
+    defaults: { _controller: "ElectionBundle:ExpenseCategory:new" }
 
-dms_expensecategory_create:
+election_expensecategory_create:
     path:     /create
-    defaults: { _controller: "DmsBundle:ExpenseCategory:create" }
+    defaults: { _controller: "ElectionBundle:ExpenseCategory:create" }
     requirements: { _method: post }
 
-dms_expensecategory_edit:
+election_expensecategory_edit:
     path:     /{id}/edit
-    defaults: { _controller: "DmsBundle:ExpenseCategory:edit" }
+    defaults: { _controller: "ElectionBundle:ExpenseCategory:edit" }
 
-dms_expensecategory_sorting:
+election_expensecategory_sorting:
     path:     /sorting
-    defaults: { _controller: "DmsBundle:ExpenseCategory:sorting" }
+    defaults: { _controller: "ElectionBundle:ExpenseCategory:sorting" }
 
 
-dms_expensecategory_update:
+election_expensecategory_update:
     path:     /{id}/update
-    defaults: { _controller: "DmsBundle:ExpenseCategory:update" }
+    defaults: { _controller: "ElectionBundle:ExpenseCategory:update" }
     requirements: { _method: post|put }
 
-dms_expensecategory_delete:
+election_expensecategory_delete:
     path:     /{id}/delete
-    defaults: { _controller: "DmsBundle:ExpenseCategory:delete" }
+    defaults: { _controller: "ElectionBundle:ExpenseCategory:delete" }
     requirements: { _method: post|delete }
 
 

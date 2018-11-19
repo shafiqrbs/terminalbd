@@ -120,7 +120,7 @@ class AccountSales
     private  $medicineSales;
 
      /**
-     * @ORM\ManyToOne(targetEntity="ElectionIssue.php", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="accountSales" )
      **/
     private  $businessInvoice;
 

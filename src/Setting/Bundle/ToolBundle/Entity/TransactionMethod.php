@@ -208,7 +208,7 @@ class TransactionMethod
     protected $businessPurchase;
 
      /**
-     * @ORM\OneToMany(targetEntity="ElectionIssue.php", mappedBy="transactionMethod" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="transactionMethod" )
      */
     protected $businessInvoice;
 

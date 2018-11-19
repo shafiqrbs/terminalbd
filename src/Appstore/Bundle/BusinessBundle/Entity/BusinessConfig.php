@@ -31,7 +31,7 @@ class BusinessConfig
     private $globalOption;
 
     /**
-     * @ORM\OneToMany(targetEntity="ElectionIssue.php", mappedBy="businessConfig")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="businessConfig")
      **/
     private $businessInvoices;
 

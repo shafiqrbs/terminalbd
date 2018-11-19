@@ -28,7 +28,7 @@ class BusinessReverse
     protected $businessConfig;
 
     /**
-     * @ORM\OneToOne(targetEntity="ElectionIssue.php", inversedBy="businessReverse")
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="businessReverse")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $businessInvoice;

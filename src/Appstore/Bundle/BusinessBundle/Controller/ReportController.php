@@ -38,8 +38,8 @@ class ReportController extends Controller
 		$user = $this->getUser();
 		$cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
 
-		$salesPrice = $em->getRepository( 'ElectionIssue.php' )->reportSalesOverview($user,$data);
-		$purchasePrice = $em->getRepository( 'ElectionIssue.php' )->reportSalesItemPurchaseSalesOverview($user,$data);
+		$salesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
+		$purchasePrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 		return $this->render('BusinessBundle:Report:sales/salesOverview.html.twig', array(
 			'option'                    => $user->getGlobalOption() ,
 			'cashOverview'              => $cashOverview ,
@@ -56,12 +56,12 @@ class ReportController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$user = $this->getUser();
-		$entities = $em->getRepository( 'ElectionIssue.php' )->salesReport($user,$data);
+		$entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->salesReport($user,$data);
 		$pagination = $this->paginate($entities);
-		$salesPurchasePrice = $em->getRepository( 'ElectionIssue.php' )->salesPurchasePriceReport($user,$data,$pagination);
-		$purchaseSalesPrice = $em->getRepository( 'ElectionIssue.php' )->reportSalesItemPurchaseSalesOverview($user,$data);
+		$salesPurchasePrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->salesPurchasePriceReport($user,$data,$pagination);
+		$purchaseSalesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 		$transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-		$cashOverview = $em->getRepository( 'ElectionIssue.php' )->reportSalesOverview($user,$data);
+		$cashOverview = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
 		return $this->render('BusinessBundle:Report:sales/sales.html.twig', array(
 			'option'                => $user->getGlobalOption() ,
 			'entities'              => $pagination ,

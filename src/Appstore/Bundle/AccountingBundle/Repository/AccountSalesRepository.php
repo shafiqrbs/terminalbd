@@ -699,8 +699,8 @@ class AccountSalesRepository extends EntityRepository
             $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
         }
 
-	    $sales = $this->_em->getRepository( 'ElectionIssue.php' )->reportSalesOverview($user, $data);
-	    $purchase = $this->_em->getRepository( 'ElectionIssue.php' )->reportSalesItemPurchaseSalesOverview($user, $data);
+	    $sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
+	    $purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
 	    $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
         $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
         return $data;
@@ -719,8 +719,8 @@ class AccountSalesRepository extends EntityRepository
             $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
         }
 
-        $sales = $this->_em->getRepository( 'ElectionIssue.php' )->reportSalesOverview($user, $data);
-        $purchase = $this->_em->getRepository( 'ElectionIssue.php' )->reportSalesItemPurchaseSalesOverview($user, $data);
+        $sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
+        $purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
         $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
         return $data;

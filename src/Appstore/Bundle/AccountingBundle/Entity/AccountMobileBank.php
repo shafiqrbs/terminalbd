@@ -206,7 +206,7 @@ class AccountMobileBank
     protected $dpsTreatmentPlans;
 
     /**
-     * @ORM\OneToMany(targetEntity="ElectionIssue.php", mappedBy="accountMobileBank" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="accountMobileBank" )
      */
     protected $businessInvoice;
 

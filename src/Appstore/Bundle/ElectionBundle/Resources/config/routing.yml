@@ -54,6 +54,14 @@ election_config:
     resource: "@ElectionBundle/Resources/config/routing/config.yml"
     prefix:   /config
 
+election_expenditure:
+    resource: "@ElectionBundle/Resources/config/routing/expenditure.yml"
+    prefix:   /expenditure
+
+election_expenditure_category:
+    resource: "@ElectionBundle/Resources/config/routing/expensecategory.yml"
+    prefix:   /expenditure-category
+
 election_homepage:
     path:     /
     defaults: { _controller: ElectionBundle:Default:index }

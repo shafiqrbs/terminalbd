@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\DmsBundle\Controller;
+namespace Appstore\Bundle\ElectionBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,21 +38,17 @@ class ExpenditureController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entity = new Expenditure();
-        $form = $this->createCreateForm($entity);
         $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch($user,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-        //$flatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions();
-        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
-        return $this->render('DmsBundle:Expenditure:index.html.twig', array(
+	    $categories = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption'=> $user->getGlobalOption(), 'status'=>1),array('name'=>'asc'));
+	    $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        return $this->render('ElectionBundle:Expenditure:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
-            'flatExpenseCategoryTree' => '',
+            'categories' => $categories,
             'transactionMethods' => $transactionMethods,
             'overview' => $overview,
-            'entity' => $entity,
-            'form'   => $form->createView(),
         ));
     }
     /**
@@ -74,15 +70,16 @@ class ExpenditureController extends Controller
             if(!empty($this->getUser()->getProfile()->getBranches())){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
+	        $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('dms_account_expenditure'));
+            return $this->redirect($this->generateUrl('election_account_expenditure'));
         }
 
-        return $this->render('DmsBundle:Expenditure:new.html.twig', array(
+        return $this->render('ElectionBundle:Expenditure:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -100,7 +97,7 @@ class ExpenditureController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $expenseCategory = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory');
         $form = $this->createForm(new ExpenditureType($globalOption,$expenseCategory), $entity, array(
-            'action' => $this->generateUrl('dms_account_expenditure_create'),
+            'action' => $this->generateUrl('election_account_expenditure_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -120,7 +117,7 @@ class ExpenditureController extends Controller
         $entity = new Expenditure();
         $form   = $this->createCreateForm($entity);
         $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
-        return $this->render('DmsBundle:Expenditure:new.html.twig', array(
+        return $this->render('ElectionBundle:Expenditure:new.html.twig', array(
             'entity' => $entity,
             'banks' => $banks,
             'form'   => $form->createView(),
@@ -178,4 +175,10 @@ class ExpenditureController extends Controller
         return new Response('success');
         exit;
     }
+
+    public function categoryReport()
+    {
+
+    }
+
 }

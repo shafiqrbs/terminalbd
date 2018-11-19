@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\DmsBundle\Controller;
+namespace Appstore\Bundle\ElectionBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory;
 use Appstore\Bundle\AccountingBundle\Form\ExpenseCategoryType;
@@ -27,7 +27,7 @@ class ExpenseCategoryController extends Controller
         $option = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption' => $option),array( 'parent'=>'asc' , 'name' =>'asc' ));
         $pagination = $this->paginate($entities);
-        return $this->render('DmsBundle:ExpenseCategory:index.html.twig', array(
+        return $this->render('ElectionBundle:ExpenseCategory:index.html.twig', array(
             'entities' => $pagination,
         ));
 
@@ -64,10 +64,10 @@ class ExpenseCategoryController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('dms_expensecategory_new', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('election_expensecategory_new', array('id' => $entity->getId())));
         }
 
-        return $this->render('DmsBundle:ExpenseCategory:new.html.twig', array(
+        return $this->render('ElectionBundle:ExpenseCategory:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -86,7 +86,7 @@ class ExpenseCategoryController extends Controller
         $em = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory');
         $emHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead');
         $form = $this->createForm(new ExpenseCategoryType($em,$emHead,$globalOption), $entity, array(
-            'action' => $this->generateUrl('dms_expensecategory_create', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('election_expensecategory_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -106,7 +106,7 @@ class ExpenseCategoryController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $form   = $this->createCreateForm($entity,$globalOption);
 
-        return $this->render('DmsBundle:ExpenseCategory:new.html.twig', array(
+        return $this->render('ElectionBundle:ExpenseCategory:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -128,7 +128,7 @@ class ExpenseCategoryController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('DmsBundle:ExpenseCategory:show.html.twig', array(
+        return $this->render('ElectionBundle:ExpenseCategory:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -150,7 +150,7 @@ class ExpenseCategoryController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $editForm = $this->createEditForm($entity,$globalOption);
 
-        return $this->render('DmsBundle:ExpenseCategory:new.html.twig', array(
+        return $this->render('ElectionBundle:ExpenseCategory:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -168,7 +168,7 @@ class ExpenseCategoryController extends Controller
         $em = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory');
         $emHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead');
         $form = $this->createForm(new ExpenseCategoryType($em,$emHead,$globalOption), $entity, array(
-            'action' => $this->generateUrl('dms_expensecategory_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('election_expensecategory_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -203,10 +203,10 @@ class ExpenseCategoryController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('dms_expensecategory'));
+            return $this->redirect($this->generateUrl('election_expensecategory'));
         }
 
-        return $this->render('DmsBundle:ExpenseCategory:edit.html.twig', array(
+        return $this->render('ElectionBundle:ExpenseCategory:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
         ));
@@ -235,7 +235,7 @@ class ExpenseCategoryController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('dms_expensecategory'));
+        return $this->redirect($this->generateUrl('election_expensecategory'));
     }
 
     /**
@@ -248,7 +248,7 @@ class ExpenseCategoryController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('dms_expensecategory_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('election_expensecategory_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

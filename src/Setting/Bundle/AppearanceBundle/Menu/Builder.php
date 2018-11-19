@@ -1410,6 +1410,14 @@ class Builder extends ContainerAware
 			$menu['Election & Committee']['Master Data']->addChild( 'Member Import', array( 'route' => 'election_member_import' ) )->setAttribute( 'icon', 'icon-th-list' );
 			$menu['Election & Committee']['Master Data']->addChild( 'Configuration', array( 'route' => 'election_config_manage' ) )->setAttribute( 'icon', 'icon-cog' );
 		}
+		if ($securityContext->isGranted('ROLE_ELECTION_ADMIN')) {
+			$menu['Election & Committee']->addChild( 'Accounting' )
+			                             ->setAttribute( 'icon', 'icon icon-cog' )
+			                             ->setAttribute( 'dropdown', true );
+			$menu['Election & Committee']['Accounting']->addChild( 'Expense', array( 'route' => 'election_account_expenditure' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election & Committee']['Accounting']->addChild( 'Expense Category', array( 'route' => 'election_expensecategory' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election & Committee']['Accounting']->addChild( 'Expense Report', array( 'route' => 'election_account_expenditure_report' ) )->setAttribute( 'icon', 'icon-th-list' );
+		}
 		return $menu;
 
 	}
