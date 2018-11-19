@@ -173,7 +173,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
             $data .= "<td>{$entity->getParticular()}</td>";
-            if($sales->getBusinessConfig()->getInvoiceType() == 'banner-print') {
+            if($sales->getBusinessConfig()->getBusinessModel() == 'sign') {
             $data .= "<td>{$subQuantity}</td>";
             }
             $data .= "<td>";

@@ -79,8 +79,8 @@ class ReportController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$user = $this->getUser();
-		$purchaseSalesPrice = $em->getRepository( 'ElectionIssue.php' )->reportSalesItemPurchaseSalesOverview($user,$data);
-		$cashOverview = $em->getRepository( 'ElectionIssue.php' )->reportSalesOverview($user,$data);
+		$purchaseSalesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
+		$cashOverview = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
 		$entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportSalesStockItem($user,$data);
 		$pagination = $this->paginate($entities);
 		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));

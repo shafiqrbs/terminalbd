@@ -318,6 +318,9 @@ var stockInvoice = $("#stockInvoice").validate({
                 $('.due').html(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
+                $('#subQuantity').html('0');
+                $('#unit').html('Unit');
+                $("#particular").select2().select2("val","");
                 $('#stockInvoice')[0].reset();
             }
         });
