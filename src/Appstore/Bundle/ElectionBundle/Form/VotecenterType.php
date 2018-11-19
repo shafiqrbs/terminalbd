@@ -9,6 +9,7 @@ use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class VotecenterType extends AbstractType
@@ -80,9 +81,28 @@ class VotecenterType extends AbstractType
 	        ->add('presidingDesignation','text', array('attr'=>array('class'=>'m-wrap span12 inputs ','autocomplete'=>'off','placeholder'=>'Enter presiding designation')))
 	        ->add('presidingAddress','textarea', array('attr'=>array('class'=>'m-wrap span12 inputs','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter presiding address')))
 	        ->add('presidingMobile','text', array('attr'=>array('class'=>'m-wrap span12 inputs', 'autocomplete'=>'off','placeholder'=>'Enter presiding mobile')))
-	        ->add('maleVoter','number', array('attr'=>array('class'=>'m-wrap span3 inputs vote', 'autocomplete'=>'off','placeholder'=>'Male voter')))
-	        ->add('femaleVoter','number', array('attr'=>array('class'=>'m-wrap span3 inputs vote', 'autocomplete'=>'off','placeholder'=>'Female voter')))
-	        ->add('otherVoter','number', array('attr'=>array('class'=>'m-wrap span3 inputs vote', 'autocomplete'=>'off','placeholder'=>'Other voter')))
+	        ->add('maleVoter','number',
+	        array(
+	            'attr'=>array(
+	                'class'=>'m-wrap span3 inputs vote',
+			        'autocomplete'=>'off',
+			        'placeholder'=>'Male voter'),
+		            'constraints' =>array(new Length(array('max'=>6))
+	        )))
+	        ->add('femaleVoter','number', array(
+		        'attr'=>array(
+			        'class'=>'m-wrap span3 inputs vote',
+			        'autocomplete'=>'off',
+			        'placeholder'=>'Female voter'),
+		        'constraints' =>array(new Length(array('max'=>6))
+		        )))
+	        ->add('otherVoter','number', array(
+		        'attr'=>array(
+			        'class'=>'m-wrap span3 inputs vote',
+			        'autocomplete'=>'off',
+			        'placeholder'=>'Other voter'),
+		        'constraints' =>array(new Length(array('max'=>6))
+		        )))
 	        ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 inputs', 'rows'=> 4,'autocomplete'=>'off','placeholder'=>'Enter center addree')))
 	       ;
 

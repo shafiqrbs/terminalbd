@@ -145,6 +145,9 @@
                                     <th class="numeric" >Election Type</th>
                                     <th class="numeric" >Election Date</th>
                                     <th class="numeric" >Voter</th>
+                                    <th class="numeric" >Male</th>
+                                    <th class="numeric" >Female</th>
+                                    <th class="numeric" >Other</th>
                                     <th class="numeric" >Center</th>
                                     <th class="numeric" >Election</th>
                                     <th class="numeric" >Location</th>
@@ -158,6 +161,9 @@
                                         <td class="numeric" >{{ entity.electionType.name }}</td>
                                         <td class="numeric" >{{ entity.electionDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.totalVoter }}</td>
+                                        <td class="numeric" >{{ entity.maleVoter }}</td>
+                                        <td class="numeric" >{{ entity.femaleVoter }}</td>
+                                        <td class="numeric" >{{ entity.otherVoter }}</td>
                                         <td class="numeric" >{{ entity.voteCenter }}</td>
                                         <td class="numeric" >{% if entity.currentElection == 1 %}Yes{% else %}No{% endif %}</td>
                                         <td class="numeric" >{{ entity.location.name }}</td>

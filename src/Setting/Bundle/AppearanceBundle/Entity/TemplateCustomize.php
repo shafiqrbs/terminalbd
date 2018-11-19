@@ -554,6 +554,21 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="topTextPosition", type="string", length=20, nullable=true)
+     */
+    private $topTextPosition;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="topIconPosition", type="string", length=20, nullable=true)
+     */
+    private $topIconPosition;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="socialIconType", type="string", length=100, nullable=true)
      */
     private $socialIconType;
@@ -2622,6 +2637,34 @@ class TemplateCustomize
 	 */
 	public function setTopBarContent( string $topBarContent ) {
 		$this->topBarContent = $topBarContent;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTopTextPosition(){
+		return $this->topTextPosition;
+	}
+
+	/**
+	 * @param string $topTextPosition
+	 */
+	public function setTopTextPosition( string $topTextPosition ) {
+		$this->topTextPosition = $topTextPosition;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTopIconPosition(){
+		return $this->topIconPosition;
+	}
+
+	/**
+	 * @param string $topIconPosition
+	 */
+	public function setTopIconPosition( string $topIconPosition ) {
+		$this->topIconPosition = $topIconPosition;
 	}
 
 

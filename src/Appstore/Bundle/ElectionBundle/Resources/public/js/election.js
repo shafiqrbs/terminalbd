@@ -2,6 +2,12 @@
  * Created by rbs on 2/9/16.
  */
 
+oTable = $('#list-data').DataTable( {
+    "paging":   false,
+    "ordering": false,
+    "info":     false
+});
+
 $(document).on('keyup', '.vote', function() {
     var maleVoter       = parseInt($('#votecenter_maleVoter').val()  != '' ? $('#votecenter_maleVoter').val() : 0 );
     var femaleVoter     = parseInt($('#votecenter_femaleVoter').val()  != '' ? $('#votecenter_femaleVoter').val() : 0 );
@@ -19,11 +25,11 @@ $(document).on('keyup', '.voteCount', function() {
     $('#totalVoter-' + id).val(totalVoter);
     if (totalVoter > 0){
         var url = Routing.generate('election_matrix_update',{'matrixId':id,'maleVoter':maleVoter,'femaleVoter':femaleVoter,'otherVoter':otherVoter});
-        setTimeout(submitCountVote(url),3000)
+        setTimeout(submitCountVote(id,url),3000)
     }
 });
 
-function submitCountVote(url) {
+function submitCountVote(id,url) {
 
     $.ajax({
         url: url,
@@ -34,7 +40,11 @@ function submitCountVote(url) {
             $('.totalFemaleVote-'+ obj['candidateId']).html(obj['femaleVote']);
             $('.totalOtherVote-'+ obj['candidateId']).html(obj['otherVote']);
             $('.totalCandidateVote-'+ obj['candidateId']).html(obj['totalVote']);
-        },
+            if(obj['msg'] !== 'success'){
+                alert(obj['msg']);
+                $('#totalVoter-'+id).val(obj['centerVote']).focus();
+            }
+        }
     });
 
 }
@@ -47,7 +57,7 @@ $(document).on('keyup', '.centerCandidateTotalVote', function() {
         'matrixId': id,
         'centerCandidateVote': centerCandidateVote
     });
-    setTimeout(submitCountVote(url),1000)
+    setTimeout(submitCountVote(id,url),1000)
 });
 
 $(document).on('keyup', '.resultTotalVote , .resultInvalidVote', function() {
@@ -73,6 +83,9 @@ $(document).on('keyup', '.resultTotalVote , .resultInvalidVote', function() {
             $('.activeVoteCenter').html(obj['activeVoteCenter']);
             $('.holdVoteCenter').html(obj['holdVoteCenter']);
             $('.rejectedVoteCenter').html(obj['rejectedVoteCenter']);
+            if(obj['msg'] !== 'success'){
+                alert(obj['msg']);
+            }
         }
     });
 });

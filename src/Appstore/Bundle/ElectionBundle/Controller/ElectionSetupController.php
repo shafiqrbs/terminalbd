@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Controller;
 
+use Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionSetup;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteMatrix;
 use Appstore\Bundle\ElectionBundle\Form\SetupType;
@@ -313,7 +314,7 @@ class ElectionSetupController extends Controller
 		$process = $data['process'];
 		$em = $this->getDoctrine()->getManager();
 		$entity = $em->getRepository('ElectionBundle:ElectionVoteCenter')->find($centerId);
-		if(!empty($entity)){
+		if(!empty($entity) and ($entity->getTotalVoter() >= ($resultTotalVote + $resultInvalidVote) )){
 			$entity->setResultTotalVote($resultTotalVote);
 			$entity->setResultInvalidVote($resultInvalidVote);
 			$entity->setProcess($process);
@@ -326,6 +327,19 @@ class ElectionSetupController extends Controller
 				'activeVoteCenter'          =>  $res->getActiveVoteCenter(),
 				'holdVoteCenter'            =>  $res->getHoldVoteCenter(),
 				'rejectedVoteCenter'        =>  $res->getRejectedVoteCenter(),
+				'msg'                       =>  'success',
+			);
+			return new Response(json_encode($result));
+		}else{
+			/* @var $res ElectionSetup */
+			$res = $entity->getElectionSetup();
+			$result = array(
+				'resultTotalVote'           =>  $res->getResultTotalVote(),
+				'resultInvalidVote'         =>  $res->getResultInvalidVote(),
+				'activeVoteCenter'          =>  $res->getActiveVoteCenter(),
+				'holdVoteCenter'            =>  $res->getHoldVoteCenter(),
+				'rejectedVoteCenter'        =>  $res->getRejectedVoteCenter(),
+				'msg'                       =>  "Enter input vote is greater then actual vote",
 			);
 			return new Response(json_encode($result));
 		}
@@ -342,7 +356,8 @@ class ElectionSetupController extends Controller
 		$totalVoter = ($maleVoter + $femaleVoter + $otherVoter);
 		$em = $this->getDoctrine()->getManager();
 		$entity = $em->getRepository('ElectionBundle:ElectionVoteMatrix')->find($matrixId);
-		if(!empty($entity)){
+		$totalVoteCast = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteMatrix')->getCenterTotalCastVote($entity->getVoteCenter());
+		if(!empty($entity) and $entity->getVoteCenter()->getTotalVoter() >= $totalVoteCast ){
 
 			$entity->setMaleVoter($maleVoter);
 			$entity->setFemaleVoter($femaleVoter);
@@ -356,12 +371,25 @@ class ElectionSetupController extends Controller
 				'maleVote'      =>  $res->getMaleVote(),
 				'femaleVote'    =>  $res->getFemaleVote(),
 				'otherVote'     =>  $res->getOtherVote(),
-				'totalVote'     =>  $res->getTotalVote()
+				'totalVote'     =>  $res->getTotalVote(),
+				'msg'           =>  'success'
+			);
+			return new Response(json_encode($result));
+
+		}else{
+
+			/* @var $res ElectionCandidate */
+			$res = $entity->getCandidate();
+			$result = array(
+				'candidateId'   =>  $res->getId(),
+				'maleVote'      =>  $res->getMaleVote(),
+				'femaleVote'    =>  $res->getFemaleVote(),
+				'otherVote'     =>  $res->getOtherVote(),
+				'totalVote'     =>  $res->getTotalVote(),
+				'msg'           =>  "Enter input vote is greater then actual vote",
 			);
 			return new Response(json_encode($result));
 		}
-
-
 		exit;
 	}
 
@@ -372,7 +400,8 @@ class ElectionSetupController extends Controller
 		$totalVoter = (int)$data['centerCandidateVote'];
 		$em = $this->getDoctrine()->getManager();
 		$entity = $em->getRepository('ElectionBundle:ElectionVoteMatrix')->find($matrixId);
-		if(!empty($entity)){
+		$totalVoteCast = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteMatrix')->getCenterTotalCastVote($entity->getVoteCenter());
+		if(!empty($entity) and $entity->getVoteCenter()->getResultTotalVote() >= ($totalVoteCast + $totalVoter) ){
 			$entity->setTotalVoter($totalVoter);
 			$em->flush();
 			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteMatrix')->updateTotalVote($entity->getCandidate());
@@ -382,7 +411,24 @@ class ElectionSetupController extends Controller
 				'maleVote'      =>  $res->getMaleVote(),
 				'femaleVote'    =>  $res->getFemaleVote(),
 				'otherVote'     =>  $res->getOtherVote(),
-				'totalVote'     =>  $res->getTotalVote()
+				'totalVote'     =>  $res->getTotalVote(),
+				'msg'           =>  'success'
+			);
+			return new Response(json_encode($result));
+
+		}else{
+
+			/* @var $res ElectionCandidate */
+
+			$res = $entity->getCandidate();
+			$result = array(
+				'candidateId'   =>  $res->getId(),
+				'maleVote'      =>  $res->getMaleVote(),
+				'femaleVote'    =>  $res->getFemaleVote(),
+				'otherVote'     =>  $res->getOtherVote(),
+				'totalVote'     =>  $res->getTotalVote(),
+				'centerVote'    =>  $entity->getTotalVoter(),
+				'msg'           =>  "Enter input vote is greater then actual vote",
 			);
 			return new Response(json_encode($result));
 		}

@@ -4,6 +4,7 @@ namespace Appstore\Bundle\ElectionBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionSetup;
+use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionVoteMatrix;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -81,5 +82,14 @@ class ElectionVoteMatrixRepository extends EntityRepository
 		$qb->where('e.candidate ='.$candidate->getId());
 		$result  = $qb->getQuery()->getOneOrNullResult();
 		return $result;
+	}
+
+	public function getCenterTotalCastVote(ElectionVoteCenter $center){
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('SUM(e.totalVoter) as castVote');
+		$qb->where('e.voteCenter ='.$center->getId());
+		$result  = $qb->getQuery()->getOneOrNullResult();
+		return $result['castVote'];
 	}
 }

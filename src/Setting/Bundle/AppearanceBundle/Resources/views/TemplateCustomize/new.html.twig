@@ -57,15 +57,6 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            {{ form_widget(form.topBar) }}
-                                            {{ form_errors(form.topBar) }}
-                                            Show Top-bar
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
                                             {{ form_widget(form.showSidebar) }}
                                             {{ form_errors(form.showSidebar) }}
                                             Sidebar
@@ -78,6 +69,19 @@
                                             {{ form_widget(form.sidebarTooltip) }}
                                             {{ form_errors(form.sidebarTooltip) }}
                                             Sidebar Tooltip
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="span4">
+
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            {{ form_widget(form.showSearch) }}
+                                            {{ form_errors(form.showSearch) }}
+                                            Show Search
                                         </div>
                                     </div>
                                 </div>
@@ -96,44 +100,6 @@
                                             {{ form_widget(form.showNewsLetter) }}
                                             {{ form_errors(form.showNewsLetter) }}
                                             Newsletter Box
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span4">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            {{ form_widget(form.showCalendar) }}
-                                            {{ form_errors(form.showCalendar) }}
-                                            Show Calender
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            {{ form_widget(form.showEmail) }}
-                                            {{ form_errors(form.showEmail) }}
-                                            Show Email
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            {{ form_widget(form.showMobile) }}
-                                            {{ form_errors(form.showMobile) }}
-                                            Show Mobile
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            {{ form_widget(form.showSearch) }}
-                                            {{ form_errors(form.showSearch) }}
-                                            Show Search
                                         </div>
                                     </div>
                                 </div>
@@ -693,8 +659,72 @@
                         <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Manage Top Bar</div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    {{ form_widget(form.topBar) }}
+                                    {{ form_errors(form.topBar) }}
+                                    Show Top-bar
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label"  for="firstName">Top-bar Icon Position</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.topIconPosition) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label"  for="firstName">Top-bar Text Position</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.topTextPosition) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    {{ form_widget(form.showCalendar) }}
+                                    {{ form_errors(form.showCalendar) }}
+                                    Show Calender
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    {{ form_widget(form.showEmail) }}
+                                    {{ form_errors(form.showEmail) }}
+                                    Show Email
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    {{ form_widget(form.showMobile) }}
+                                    {{ form_errors(form.showMobile) }}
+                                    Show Mobile
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label"  for="firstName">Topbar Text Or Button</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.topBarContent) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       <div class="form-actions portlet box blue">
+                            <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Add Social Icons</div>
-                                <a href="javascript:" class="btn red pull-right mini addmore"><i class="icon-plus"></i></a>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
@@ -728,16 +758,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <div class="control-group">
-                                    <label class="control-label"  for="firstName">Topbar Text Or Button</label>
-                                    <div class="controls">
-                                        {{ form_widget(form.topBarContent) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">

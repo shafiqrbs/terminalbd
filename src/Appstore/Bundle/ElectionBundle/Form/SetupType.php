@@ -53,15 +53,16 @@ class SetupType extends AbstractType
 	        ->add('location', 'entity', array(
 		        'required'    => true,
 		        'attr'=>array('class'=>'m-wrap span12 select2'),
+		        'constraints' =>array( new NotBlank(array('message'=>'Choose the type of election')) ),
 		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionLocation',
 		        'property' => 'nestedLabel',
 		        'choices'=> $this->locationChoiceList()
 	        ))
 	        ->add('electionDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter election date')))
-	        ->add('maleVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'autocomplete'=>'off','placeholder'=>'Male voter')))
-	        ->add('femaleVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'autocomplete'=>'off','placeholder'=>'Female voter')))
-	        ->add('otherVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'autocomplete'=>'off','placeholder'=>'Other voter')))
-	        ->add('voteCenter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'autocomplete'=>'off','placeholder'=>'Vote center')))
+	        ->add('maleVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs', 'readonly'=>'readonly', 'autocomplete'=>'off','placeholder'=>'Male voter')))
+	        ->add('femaleVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs','readonly'=>'readonly', 'autocomplete'=>'off','placeholder'=>'Female voter')))
+	        ->add('otherVoter','number', array('attr'=>array('class'=>'m-wrap span8 inputs','readonly'=>'readonly', 'autocomplete'=>'off','placeholder'=>'Other voter')))
+	        ->add('voteCenter','number', array('attr'=>array('class'=>'m-wrap span8 inputs','readonly'=>'readonly', 'autocomplete'=>'off','placeholder'=>'Vote center')))
 	        ->add('currentElection')
 	       ;
 
@@ -90,7 +91,8 @@ class SetupType extends AbstractType
 	 */
 	protected function locationChoiceList()
 	{
-		return $categoryTree = $this->location->getLocationGroup($this->config->getId());
+		return $categoryTree = $this->location->getFlatLocationTree();
+	//	return $categoryTree = $this->location->getLocationGroup($this->config->getId());
 
 	}
 

@@ -76,6 +76,10 @@
                                                     {{ form_widget(form.femaleVoter) }}
                                                     {{ form_widget(form.otherVoter) }}
                                                     <input type="text" id="totalVote" name="totalVote" disabled="disabled" class="m-wrap span3" value="{{ entity.totalVoter }}"  placeholder="Total voter">
+                                                    {{ form_errors(form.maleVoter) }}
+                                                    {{ form_errors(form.femaleVoter) }}
+                                                    {{ form_errors(form.otherVoter) }}
+
                                                 </div>
                                             </div>
                                         </div>

@@ -2,29 +2,66 @@
     <section id="top-bar" class=" header-position">
         <div class="container" >
             <div class="row">
+
                 <div class="col-md-4 text-left">
                     <div class="box">
-                        <ul class="info-links">
-                            {% if globalOption.templateCustomize.showCalendar == 1 %}
-                                <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
-                            {% endif %}
-                            {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
-                                <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
-                            {% endif %}
-                            {% if globalOption.templateCustomize.showMobile == 1 %}
-                                <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
-                            {% endif %}
-                        </ul>
+                        {% if globalOption.templateCustomize.topTextPosition == "text-left" and globalOption.templateCustomize.topBarContent is not empty %}
+                            {{  globalOption.templateCustomize.topBarContent|raw }}
+                        {% endif %}
+                        {% if globalOption.templateCustomize.topIconPosition == "text-left" %}
+                            <ul class="info-links">
+                                {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                    <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                {% endif %}
+                                {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                    <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                {% endif %}
+                                {% if globalOption.templateCustomize.showMobile == 1 %}
+                                    <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
                     </div>
                 </div>
+
                 <div class="col-md-4 text-center">
                     <div class="box">
-                        {{  globalOption.templateCustomize.topBarContent }}
+                        {% if globalOption.templateCustomize.topTextPosition == "text-center" and globalOption.templateCustomize.topBarContent is not empty %}
+                            {{  globalOption.templateCustomize.topBarContent|raw }}
+                        {% endif %}
+                        {% if globalOption.templateCustomize.topIconPosition == "text-center" %}
+                            <ul class="info-links">
+                                {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                    <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                {% endif %}
+                                {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                    <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                {% endif %}
+                                {% if globalOption.templateCustomize.showMobile == 1 %}
+                                    <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
                     </div>
                 </div>
                 <div class=" col-md-4 text-right">
                     <div class="box">
-                        {{  globalOption.templateCustomize.topBarContent }}
+                        {% if globalOption.templateCustomize.topTextPosition == "text-right" and globalOption.templateCustomize.topBarContent is not empty %}
+                            {{  globalOption.templateCustomize.topBarContent|raw }}
+                        {% endif %}
+                        {% if globalOption.templateCustomize.topIconPosition == "text-right" %}
+                            <ul class="info-links">
+                                {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                    <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                {% endif %}
+                                {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                    <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                {% endif %}
+                                {% if globalOption.templateCustomize.showMobile == 1 %}
+                                    <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
                     </div>
                 </div>
             </div>

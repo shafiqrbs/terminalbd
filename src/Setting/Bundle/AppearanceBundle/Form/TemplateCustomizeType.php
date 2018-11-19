@@ -54,6 +54,16 @@ class TemplateCustomizeType extends AbstractType
                 'choices' => array('' => '---Select Icon Position---','left' => 'Left','center' => 'Center','right' => 'Right'),
             ))
 
+            ->add('topIconPosition', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array('' => '---Top Icon Position---','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
+            ))
+
+            ->add('topTextPosition', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array('' => '---Top Text Position---','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
+            ))
+
             ->add('breadcrumb')
             ->add('breadcrumbFontSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),

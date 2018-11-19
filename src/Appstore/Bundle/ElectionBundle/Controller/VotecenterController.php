@@ -100,7 +100,7 @@ class VotecenterController extends Controller
 	/**
 	 * Creates a form to edit a Votecenter entity.
 	 *
-	 * @param Votecenter $entity The entity
+	 * @param ElectionVoteCenter $entity The entity
 	 *
 	 * @return \Symfony\Component\Form\Form The form
 	 */
@@ -146,10 +146,11 @@ class VotecenterController extends Controller
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been changed successfully"
 			);
+			$this->getDoctrine()->getRepository('ElectionBundle:ElectionSetup')->insertTotalVote($entity->getElectionSetup());
 			return $this->redirect($this->generateUrl('election_votecenter'));
 		}
 
-		return $this->render('ElectionBundle:Votecenter:index.html.twig', array(
+		return $this->render('ElectionBundle:Votecenter:new.html.twig', array(
 			'entity'      => $entity,
 			'form'   => $editForm->createView(),
 		));

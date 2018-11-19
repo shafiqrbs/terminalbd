@@ -14,6 +14,31 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class ElectionSetupRepository extends EntityRepository
 {
+	public function insertTotalVote(ElectionSetup $entity)
+	{
+
+		$data = $this->totalVoteCenterUpdate($entity);
+		$entity->setVoteCenter((int)$data['totalVoteCenter']);
+		$entity->setTotalVoter((int)$data['totalVoter']);
+		$entity->setMaleVoter((int)$data['maleVoter']);
+		$entity->setFemaleVoter((int)$data['femaleVoter']);
+		$entity->setOtherVoter((int)$data['otherVoter']);
+	    $this->_em->persist($entity);
+		$this->_em->flush();
+		return $entity;
+
+	}
+
+	private function totalVoteCenterUpdate(ElectionSetup $setup){
+
+		$qb = $this->_em->createQueryBuilder();
+		$qb->from('ElectionBundle:ElectionVoteCenter','e');
+		$qb->select('COUNT(e.id) as totalVoteCenter, SUM(e.maleVoter) as maleVoter, SUM(e.femaleVoter) as femaleVoter, SUM(e.otherVoter) as otherVoter, SUM(e.totalVoter) as totalVoter ');
+		$qb->where('e.electionSetup ='.$setup->getId());
+		$result  = $qb->getQuery()->getOneOrNullResult();
+		return $result;
+	}
+
 	public function updateTotalVote(ElectionSetup $entity,$data)
 	{
 		$entity->setResultTotalVote((int)$data['resultTotalVote']);

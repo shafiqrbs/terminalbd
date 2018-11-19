@@ -566,7 +566,7 @@ class BusinessPurchaseItem
 	/**
 	 * @return float
 	 */
-	public function getLength(): float {
+	public function getLength(){
 		return $this->length;
 	}
 
