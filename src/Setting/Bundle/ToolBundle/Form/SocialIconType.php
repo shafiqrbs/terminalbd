@@ -34,6 +34,8 @@ class SocialIconType extends AbstractType
                 ->add('instagramPageUrl','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter instagram url')))
                 ->add('googlePlus','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter google plus url')))
                 ->add('youtube','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter youtube url')))
+                ->add('linkedin','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter linkedin id & url')))
+                ->add('skype','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter skype id & url')))
               ;
 
 

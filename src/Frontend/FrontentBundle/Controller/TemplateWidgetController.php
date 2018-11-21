@@ -40,7 +40,7 @@ class TemplateWidgetController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=> $globalOption,'parent' => NULL ,'menuGroup'=> 1),array('sorting'=>'asc'));
-        $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
+        $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(

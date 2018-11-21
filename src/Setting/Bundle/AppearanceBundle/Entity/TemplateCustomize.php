@@ -81,6 +81,13 @@ class TemplateCustomize
     /**
      * @var boolean
      *
+     * @ORM\Column(name="showLogin", type="boolean", nullable=true)
+     */
+    private $showLogin = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="menuBold", type="boolean", nullable=true)
      */
     private $menuBold = false;
@@ -173,6 +180,13 @@ class TemplateCustomize
      * @ORM\Column(name="siteTitle", type="string", length=255, nullable=true)
      */
     private $siteTitle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="breadcrumbPosition", type="string", length=20, nullable=true)
+     */
+    private $breadcrumbPosition;
 
     /**
      * @var boolean
@@ -363,7 +377,7 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="menuPosition", type="string", length=10, nullable=true)
+     * @ORM\Column(name="menuPosition", type="string", length=100, nullable=true)
      */
     private $menuPosition;
 
@@ -2665,6 +2679,34 @@ class TemplateCustomize
 	 */
 	public function setTopIconPosition( string $topIconPosition ) {
 		$this->topIconPosition = $topIconPosition;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isShowLogin(){
+		return $this->showLogin;
+	}
+
+	/**
+	 * @param bool $showLogin
+	 */
+	public function setShowLogin( bool $showLogin ) {
+		$this->showLogin = $showLogin;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getBreadcrumbPosition(){
+		return $this->breadcrumbPosition;
+	}
+
+	/**
+	 * @param string $breadcrumbPosition
+	 */
+	public function setBreadcrumbPosition( string $breadcrumbPosition ) {
+		$this->breadcrumbPosition = $breadcrumbPosition;
 	}
 
 

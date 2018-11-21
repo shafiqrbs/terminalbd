@@ -28,6 +28,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('showEmail')
             ->add('showMobile')
             ->add('showSearch')
+            ->add('showLogin')
             ->add('showSidebar')
             ->add('sidebarTooltip')
             ->add('menuBold')
@@ -51,20 +52,24 @@ class TemplateCustomizeType extends AbstractType
 
             ->add('socialIconPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
-                'choices' => array('' => '---Select Icon Position---','left' => 'Left','center' => 'Center','right' => 'Right'),
+                'choices' => array('' => '---Select Icon Position---','menu-right' => 'Menu-Right','top-left' => 'Top-Left','top-center' => 'Top-Center','top-right' => 'Top-Right'),
             ))
 
             ->add('topIconPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
-                'choices' => array('' => '---Top Icon Position---','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
+                'choices' => array('' => '---Contact Position---','menu-right' => 'Menu-Right','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
             ))
 
             ->add('topTextPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
-                'choices' => array('' => '---Top Text Position---','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
+                'choices' => array('' => '---Top Text Position---','menu-right' => 'Menu-Right','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
             ))
 
             ->add('breadcrumb')
+            ->add('breadcrumbPosition', 'choice', array(
+                'attr'=>array('class'=>' span12'),
+                'choices' => array('' => 'Select Breadcrumb Position', 'flat' => 'Flat',  'left' => 'Left','center' => 'Center'),
+            ))
             ->add('breadcrumbFontSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),
@@ -303,7 +308,7 @@ class TemplateCustomizeType extends AbstractType
             ))
             ->add('menuPosition', 'choice', array(
                 'attr'=>array('class'=>'span10 m-wrap'),
-                'choices' => array('left' => 'Left',  'right' => 'Right'),
+                'choices' => array('' => 'Navbar-Default','navbar-right' => 'Navbar-Right','navbar-center' => 'Navbar-Center',  'brand-center' => 'Logo-Center','navbar-brand-top' => 'Logo-Center-Top',  'brand-center center-side' => 'Logo-Center Menu-Side'),
             ))
 
             ->add('menuTopMargin','text', array('attr'=>array(

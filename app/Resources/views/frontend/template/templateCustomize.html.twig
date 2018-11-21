@@ -14,10 +14,39 @@
     {% endif %}
 
     {% if globalOption.templateCustomize.breadcrumbBg is not empty %}
+    .pageheader{
+        background-color: {{ globalOption.templateCustomize.breadcrumbBg }} !important;
+        {% if globalOption.templateCustomize.webPath('headerBgImage') is not empty %}
+            background-image: url("{{ image(globalOption.templateCustomize.webPath('headerBgImage')) }}")!important;
+            background-size: cover;
+        {% endif %}
+        {% if globalOption.templateCustomize.breadcrumbColor is not empty %}
+         color: {{ globalOption.templateCustomize.breadcrumbColor }} !important;
+        {% endif %}
+    }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.breadcrumbColor is not empty %}
+        .pageheader .title{
+            color: {{ globalOption.templateCustomize.breadcrumbColor }} !important;
+        }
+    {% endif %}
+
+
+    {% if globalOption.templateCustomize.breadcrumbHome is not empty %}
+        .pageheader a.home{
+            color: {{ globalOption.templateCustomize.breadcrumbHome }} !important;
+        }
+    {% endif %}
+
+
+    {% if globalOption.templateCustomize.breadcrumbBg is not empty %}
     .breadcrumb{
         background-color: {{ globalOption.templateCustomize.breadcrumbBg }} !important;
     }
     {% endif %}
+
+
 
     {% if globalOption.templateCustomize.breadcrumbHome is not empty %}
     .breadcrumb li.home a{
@@ -225,6 +254,18 @@
         background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
         border-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
     }
+
+    {% if globalOption.templateCustomize.buttonBgColor is not empty %}
+        .attr-nav .quote-button-box .quote-btn{
+            background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
+            border-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
+        }
+        #top-bar .quote-button-box .quote-btn{
+            background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
+            border-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
+        }
+    {% endif %}
+
     #toTop:hover{
         background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
         border-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;

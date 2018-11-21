@@ -498,8 +498,22 @@ class GlobalOption
      *
      * @ORM\Column(name="youtube", type="string", length=255 , nullable=true)
      */
-
     private $youtube;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="skype", type="string", length=255 , nullable=true)
+     */
+    private $skype;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="linkedin", type="string", length=255 , nullable=true)
+     */
+    private $linkedin;
+
     /**
      * @var boolean
      *
@@ -1883,6 +1897,34 @@ class GlobalOption
 	 */
 	public function setYoutube( string $youtube ) {
 		$this->youtube = $youtube;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSkype(){
+		return $this->skype;
+	}
+
+	/**
+	 * @param string $skype
+	 */
+	public function setSkype( string $skype ) {
+		$this->skype = $skype;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLinkedin(){
+		return $this->linkedin;
+	}
+
+	/**
+	 * @param string $linkedin
+	 */
+	public function setLinkedin( string $linkedin ) {
+		$this->linkedin = $linkedin;
 	}
 
 

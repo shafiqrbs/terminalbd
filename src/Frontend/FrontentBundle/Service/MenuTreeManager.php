@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\DBAL\Connection;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -76,17 +77,20 @@ class MenuTreeManager
 
     }
 
-    public function getMenuTree($arr,$subdomain , $device ='', $option = "")
+    public function getMenuTree($arrs,GlobalOption $globalOption , $device ='', $option = "")
     {
 
         $value ='';
         if(!empty($option)){
 	        $value .='<ul class="'.$option.'">';
         }else{
-	        $value .='<ul class="nav navbar-nav " data-in="fadeInDown" data-out="fadeOutUp" >';
+	        $arr = array('navbar-right','navbar-center');
+	        $position = $globalOption->getTemplateCustomize()->getMenuPosition();
+	        $class = in_array($position,$arr) ? $position :'';
+        	$value .="<ul class='nav navbar-nav {$class}' data-in='fadeInDown' data-out='fadeOutUp' >";
         }
         $prefix = '';
-        foreach ($arr as $val) {
+        foreach ($arrs as $val) {
 
             $menu = $val->getMenu()->getMenu();
             
@@ -95,7 +99,7 @@ class MenuTreeManager
                 if($subIcon == 1){
 	                $option = "dropdown-menu animated fadeOutUp";
                     $value .= '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-hover="'.$val->getMenu()->getMenu().'" href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
-                    $value .= $this->getMenuTree($val->getChildren(),$subdomain,$device,$option);
+                    $value .= $this->getMenuTree($val->getChildren(),$globalOption,$device,$option);
                 }else{
                     $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
                 }

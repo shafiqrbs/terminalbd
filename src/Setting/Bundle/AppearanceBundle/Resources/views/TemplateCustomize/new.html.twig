@@ -57,6 +57,15 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
+                                            {{ form_widget(form.showLogin) }}
+                                            {{ form_errors(form.showLogin) }}
+                                            Show Login
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
                                             {{ form_widget(form.showSidebar) }}
                                             {{ form_errors(form.showSidebar) }}
                                             Sidebar
@@ -674,7 +683,7 @@
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label"  for="firstName">Top-bar Icon Position</label>
+                                    <label class="control-label"  for="firstName">Contact Position</label>
                                     <div class="controls">
                                         {{ form_widget(form.topIconPosition) }}
                                     </div>
@@ -682,7 +691,7 @@
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label"  for="firstName">Top-bar Text Position</label>
+                                    <label class="control-label"  for="firstName">Text Position</label>
                                     <div class="controls">
                                         {{ form_widget(form.topTextPosition) }}
                                     </div>
@@ -715,9 +724,10 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
-                                    <label class="control-label"  for="firstName">Topbar Text Or Button</label>
+                                    <label class="control-label"  for="firstName">Text Or Button</label>
                                     <div class="controls">
                                         {{ form_widget(form.topBarContent) }}
+                                        <p><input disabled="disabled" class="span12 m-wrap" value='<div class="button-box"><a href="contact.html" class="theme-btn btn-style-one">Ask For Quote</a></div>'></p>
                                     </div>
                                 </div>
                             </div>
@@ -802,16 +812,6 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
-                                    <label class="control-label"  for="firstName">Google Plus URL</label>
-                                    <div class="controls">
-                                        {{ form_widget(form.globalOption.googlePlus) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <div class="control-group">
                                     <label class="control-label"  for="firstName">Youtube URL</label>
                                     <div class="controls">
                                         {{ form_widget(form.globalOption.youtube) }}
@@ -822,9 +822,41 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
+                                    <label class="control-label"  for="firstName">Google Plus URL</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.globalOption.googlePlus) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
                                     <label class="control-label"  for="firstName">Instagram URL</label>
                                     <div class="controls">
                                         {{ form_widget(form.globalOption.instagramPageUrl) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label"  for="firstName">Linkedin URL</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.globalOption.linkedin) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label"  for="firstName">Skype URL</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.globalOption.skype) }}
                                     </div>
                                 </div>
                             </div>
@@ -1050,8 +1082,20 @@
                         <div class="row-fluid">
                             <div class="span3">
                                 <div class="control-group">
+                                    <label class="control-label" for="firstName">&nbsp;</label>
+                                    <div class="controls">
                                     {{ form_widget(form.breadcrumb) }}
                                     {{ form_errors(form.breadcrumb) }}Breadcrumb
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Breadcrumb Position</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.breadcrumbPosition) }}
+                                        {{ form_errors(form.breadcrumbPosition) }}
+                                    </div>
                                 </div>
                             </div>
                             <div class="span3">
@@ -1322,7 +1366,7 @@
                         <!--/span-->
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
-                                <div class="caption"><i class="icon-reorder"></i>Mobile Header Image</div>
+                                <div class="caption"><i class="icon-reorder"></i>Header Image</div>
                                 <div class="pull-right">Remove Header Image<input type="checkbox" class="checkbox" id="removeHeaderImage" name="removeHeaderImage" value="1"></div>
                             </div>
                         </div>

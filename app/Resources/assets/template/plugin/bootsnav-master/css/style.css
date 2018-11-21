@@ -121,7 +121,7 @@ footer a:hover,
 }
 
 .pageheader{
-    padding: 70px 0;
+    padding: 42px 0;
     background-color: #f43438;
 }
 
@@ -140,6 +140,7 @@ footer a:hover,
 .pageheader .title{
     text-shadow: 6px 6px 0px rgba(0,0,0,0.2);
     color: #fff !important;
+    text-transform: uppercase!important;
 }
 
 .pageheader p{

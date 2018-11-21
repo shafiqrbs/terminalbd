@@ -46,7 +46,6 @@ function submitCountVote(id,url) {
             }
         }
     });
-
 }
 
 $(document).on('keyup', '.centerCandidateTotalVote', function() {
