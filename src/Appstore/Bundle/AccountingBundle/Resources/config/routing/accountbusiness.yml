@@ -34,7 +34,6 @@ account_purchase_business:
     path:     /purchase
     defaults: { _controller: "AccountingBundle:AccountBusiness:purchase" }
 
-
 account_purchase_business_new:
     path:     /purchase-new
     defaults: { _controller: "AccountingBundle:AccountBusiness:purchaseNew" }

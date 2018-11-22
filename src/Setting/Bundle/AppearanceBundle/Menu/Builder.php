@@ -530,7 +530,7 @@ class Builder extends ContainerAware
             }
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
                 $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_business'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']->addChild('Payment', array('route' => 'account_purchase_business'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']->addChild('Payment', array('route' => 'account_purchase_business_new'))->setAttribute('icon', 'icon-th-list');
             }
         }
         $hotel = array('hotel');

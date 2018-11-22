@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Account Sales Ledger
+                    Account Vendor Ledger
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="javascript:">Account Sales Ledger</a></li>
+                    <li><a href="javascript:">Account Vendor Ledger</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,9 +29,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Account Sales Ledger</div>
+                        <div class="caption"><i class="icon-reorder"></i>Account Vendor Ledger</div>
                         <div class="actions">
                             <div class="btn-group">
+                                <a class="btn yellow" href="{{ path('report_vendor_outstanding') }}"><i class="icon-th-list"></i>&nbsp; Vendor Outstanding</a>
                                 <a class="btn red"  href="javascript:" id="printLedger"   >
                                     <i class=" icon-print"></i>&nbsp;Print
                                 </a>
@@ -68,10 +69,10 @@
                             <div class="span4">
                                 <h4>About:</h4>
                                 <ul class="unstyled">
-                                    {% if customer is not empty %}<li><strong>Customer #:</strong>&nbsp;{{ customer.name }}</li>{% endif %}
-                                    {% if customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ customer.mobile }}</li>{% endif %}
-                                    {% if customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ customer.address }}</li>{% endif %}
-                                    {% if customer is not empty and customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ customer.location.name }}, {{ customer.location.parent.name }}</li>{% endif %}
+                                    {% if vendor is not empty %}<li><strong>Vendor #:</strong>&nbsp;{{ vendor.name }}</li>{% endif %}
+                                    {% if vendor is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ vendor.mobile }}</li>{% endif %}
+                                    {% if vendor is not empty %}<li><strong>Address #:</strong>&nbsp;{{ vendor.address }}</li>{% endif %}
+                                    {% if vendor is not empty and vendor.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ vendor.location.name }}, {{ vendor.location.parent.name }}</li>{% endif %}
                                 </ul>
                             </div>
                         </div>
