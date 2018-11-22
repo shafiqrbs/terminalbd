@@ -339,6 +339,8 @@ class ElectionSetupController extends Controller
 				'activeVoteCenter'          =>  $res->getActiveVoteCenter(),
 				'holdVoteCenter'            =>  $res->getHoldVoteCenter(),
 				'rejectedVoteCenter'        =>  $res->getRejectedVoteCenter(),
+				'centerTotalVote'           =>  $entity->getResultTotalVote(),
+				'centerInvalidVote'         =>  $entity->getResultInvalidVote(),
 				'msg'                       =>  "Enter input vote is greater then actual vote",
 			);
 			return new Response(json_encode($result));

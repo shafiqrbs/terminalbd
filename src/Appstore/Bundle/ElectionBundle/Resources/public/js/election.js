@@ -8,7 +8,7 @@ oTable = $('#list-data').DataTable( {
     "info":     false
 });
 
-$(document).on('keyup', '.vote', function() {
+$(document).on('change', '.vote', function() {
     var maleVoter       = parseInt($('#votecenter_maleVoter').val()  != '' ? $('#votecenter_maleVoter').val() : 0 );
     var femaleVoter     = parseInt($('#votecenter_femaleVoter').val()  != '' ? $('#votecenter_femaleVoter').val() : 0 );
     var otherVoter      = parseInt($('#votecenter_otherVoter').val()  != '' ? $('#votecenter_otherVoter').val() : 0 );
@@ -16,7 +16,7 @@ $(document).on('keyup', '.vote', function() {
     $('#totalVote').val(totalVote);
 });
 
-$(document).on('keyup', '.voteCount', function() {
+$(document).on('change', '.voteCount', function() {
     var id = $(this).attr("data-id");
     var maleVoter       = parseInt($('#maleVoter-' + id).val()  != '' ? $('#maleVoter-' + id).val() : 0 );
     var femaleVoter     = parseInt($('#femaleVoter-' + id).val()  != '' ? $('#femaleVoter-' + id).val() : 0 );
@@ -48,7 +48,7 @@ function submitCountVote(id,url) {
     });
 }
 
-$(document).on('keyup', '.centerCandidateTotalVote', function() {
+$(document).on('change', '.centerCandidateTotalVote', function() {
 
     var id = $(this).attr("data-id");
     var centerCandidateVote   = parseInt($('#totalVoter-' + id).val()  != '' ? $('#totalVoter-' + id).val() : 0 );
@@ -59,10 +59,12 @@ $(document).on('keyup', '.centerCandidateTotalVote', function() {
     setTimeout(submitCountVote(id,url),1000)
 });
 
-$(document).on('keyup', '.resultTotalVote , .resultInvalidVote', function() {
+
+
+
+$(document).on('change', '.resultTotalVote , .resultInvalidVote', function() {
 
     var id = $(this).attr("data-id");
-
     var resultTotalVote     = parseInt($('#resultTotalVote-' + id).val()  != '' ? $('#resultTotalVote-' + id).val() : 0 );
     var resultInvalidVote   = parseInt($('#resultInvalidVote-' + id).val()  != '' ? $('#resultInvalidVote-' + id).val() : 0 );
     var process             = $('#process-' + id).val()  != '' ? $('#process-' + id).val() : '' ;
@@ -84,6 +86,8 @@ $(document).on('keyup', '.resultTotalVote , .resultInvalidVote', function() {
             $('.rejectedVoteCenter').html(obj['rejectedVoteCenter']);
             if(obj['msg'] !== 'success'){
                 alert(obj['msg']);
+                $('#resultTotalVote-'+id).val(obj['centerTotalVote']).addClass('input-error');
+                $('#resultInvalidVote-'+id).val(obj['centerInvalidVote']).addClass('input-error');
             }
         }
     });

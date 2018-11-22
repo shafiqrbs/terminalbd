@@ -41,8 +41,8 @@
                             <thead class="head-blue">
                             <tr>
                                 <th class="numeric" ><strong>Name of Center</strong></th>
-                                <th class="numeric" ><strong>Representative <br/>Mobile</strong></th>
-                                <th class="numeric" >
+                                <th class="numeric" style="background: #e5e5e5!important;"  ><strong>Representative <br/>Mobile</strong></th>
+                                <th class="numeric" style="background: #e4d7c6!important;">
                                     <div class="row-fluid">
                                         <span class="span12 pull-center"><strong>Center</strong></span>
                                     </div>
@@ -55,7 +55,7 @@
                                         </div>
                                     </div>
                                 </th>
-                                <th class="numeric" >
+                                <th class="numeric" style="background: #f8dec5!important;" >
                                     <div class="row-fluid">
                                         <span class="span12 pull-center"><strong>Total<br/>Voter</strong></span>
                                     </div>
@@ -63,7 +63,7 @@
                                         <span class="span6 pull-center" id="totalInvalidVote"><strong>{{ entity.totalVoter }}</strong></span>
                                     </div>
                                 </th>
-                                <th class="numeric" >
+                                <th class="numeric" style="background: #e3bdb0!important;" >
                                     <div class="row-fluid">
                                         <span class="span12 pull-center"><strong>Cast <br/>Voter</strong></span>
                                     </div>
@@ -72,7 +72,7 @@
                                     </div>
                                 </th>
                                 {% for candidate in entity.candidates %}
-                                    <td class="numeric" >
+                                    <td class="numeric" style="background:#d6b79a!important;border-right: 1px solid #4a4545 !important;" >
                                         <div class="row-fluid">
                                             <span class="span12 pull-center"><strong>{{ candidate.marka.name }}</strong></span>
                                         </div>
@@ -84,7 +84,7 @@
                                         </div>
                                     </td>
                                 {% endfor %}
-                                <th class="numeric" >
+                                <th class="numeric" style="background: #fde2a3!important;" >
                                     <div class="row-fluid">
                                         <span class="span12 pull-center"><strong>Invalid<br/>Voter</strong></span>
                                     </div>
@@ -99,8 +99,8 @@
                             {% for center in entity.votecenters %}
                                 <tr>
                                     <th class="" style=""><a data-title="{{ center.location.voteCenterName }}" href="javascript:" class="view" data-url="{{ path('election_votecenter_show', { 'id': center.id }) }}" >{{ center.location.voteCenterName }}</a></th>
-                                    <th class="" style="background:#e1f2ea!important;"><a data-title="{{ center.representative.name }}" class="view " href="javascript:" data-url="{{ path('election_member_show', { 'id': center.representative.id }) }}">{{ center.representative.name }} - {% if center.representativeMobile is not empty %}{{ center.representativeMobile }}{% else %}{{ center.representative.mobile }}{% endif %}</a></th>
-                                    <th class="">
+                                    <th class="" style="background: #e5e5e5!important;"><a data-title="{{ center.representative.name }}" class="view " href="javascript:" data-url="{{ path('election_member_show', { 'id': center.representative.id }) }}">{{ center.representative.name }} - {% if center.representativeMobile is not empty %}{{ center.representativeMobile }}{% else %}{{ center.representative.mobile }}{% endif %}</a></th>
+                                    <th class="" style="background: #e4d7c6!important;">
                                         <select class="span12 m-wrap process inline-input" style="width: 95px!important;" data-id="{{ center.id }}" id="process-{{ center.id }}" name="process-{{ center.id }}">
                                             <option value="">Process</option>
                                             {% set process = ['Active','Rejected','Hold'] %}
@@ -109,19 +109,19 @@
                                             {% endfor %}
                                         </select>
                                     </th>
-                                    <th class="" style="background: #fedfaa!important;">{{ center.totalVoter }}</th>
-                                    <th class="">
-                                        <input type="text" data-id="{{ center.id }}" class="m-wrap span12 inline-input resultTotalVote" style="width: 100%!important;" id="resultTotalVote-{{ center.id }}" name="resultTotalVote-{{ center.id }}" value="{{ center.resultTotalVote }}" >
+                                    <th class="" style="background: #f8dec5!important;">{{ center.totalVoter }}</th>
+                                    <th class="" style="background: #e3bdb0!important;">
+                                        <input  type="text" data-id="{{ center.id }}" class="m-wrap span12 inline-input resultTotalVote" style="width: 100%!important;" id="resultTotalVote-{{ center.id }}" name="resultTotalVote-{{ center.id }}" value="{{ center.resultTotalVote }}" >
                                     </th>
                                     {% for candidate in entity.candidates %}
                                         {% set ids = center.id~'-'~candidate.id %}
                                         {% if matrixArr[ids]['centerId'] == center.id and  matrixArr[ids]['candidateId'] ==  candidate.id %}
-                                            <td>
+                                            <td style="background:#d6b79a!important;border-right: 1px solid #4a4545 !important;">
                                                 <input type="text" class="m-wrap span12 inline-input centerCandidateTotalVote" data-id="{{ matrixArr[ids]['matrixId'] }}" id="totalVoter-{{ matrixArr[ids]['matrixId'] }}" style="width: 100%!important;"  name="totalVoter-{{ matrixArr[ids]['matrixId'] }}" value="{{ matrixArr[ids]['totalVoter'] }}" >
                                             </td>
                                         {% endif %}
                                     {% endfor %}
-                                    <th class="">
+                                    <th class="" style="background: #fde2a3!important;">
                                         <input type="text" data-id="{{ center.id }}" class="m-wrap span12 inline-input resultInvalidVote" style="width: 100%!important;" id="resultInvalidVote-{{ center.id }}" name="resultInvalidVote-{{ center.id }}" value="{{ center.resultInvalidVote }}" >
                                     </th>
 
@@ -131,8 +131,8 @@
                             <tfoot class="head-blue">
                             <tr>
                                 <th class="numeric" ><strong>Name of Center</strong></th>
-                                <th class="numeric" ><strong>Representative <br/>Mobile</strong></th>
-                                <th class="numeric" >
+                                <th class="numeric" style="background: #e5e5e5!important;" ><strong>Representative <br/>Mobile</strong></th>
+                                <th class="numeric" style="background: #e4d7c6!important;">
                                     <div class="row-fluid"  style="border-bottom: 1px solid red">
                                         <div class="btn-group span12 pull-center">
                                             <button class="btn mini purple activeVoteCenter tooltips" data-trigger="hover" data-original-title="Active center:{{ entity.activeVoteCenter }}" >{{ entity.activeVoteCenter }}</button>
@@ -145,7 +145,7 @@
                                         <span class="span12 pull-center"><strong>Process</strong></span>
                                     </div>
                                 </th>
-                                <th class="numeric" >
+                                <th class="numeric" style="background: #f8dec5!important;">
                                     <div class="row-fluid">
                                         <span class="span12 pull-center"><strong>{{ entity.totalVoter }}</strong></span>
                                     </div>
@@ -153,7 +153,7 @@
                                         <span class="span12 pull-center"><strong>Total</strong></span>
                                     </div>
                                 </th>
-                                <th class="numeric" >
+                                <th class="numeric" style="background: #e3bdb0!important;" >
                                     <div class="row-fluid">
                                         <span class="span12 pull-center"><strong class="totalCastVote">{{ entity.resultTotalVote }}</strong></span>
                                     </div>
@@ -161,9 +161,8 @@
                                         <span class="span12 pull-center"><strong>Cast</strong></span>
                                     </div>
                                 </th>
-
                                 {% for candidate in entity.candidates %}
-                                    <td class="numeric" >
+                                    <td class="numeric" style="background:#d6b79a!important; border-right: 1px solid #4a4545 !important;" >
                                         <div class="row-fluid">
                                             <span class="span12 pull-center"><strong class="totalCandidateVote-{{ candidate.id }}">{{ candidate.totalVote }}</strong></span>
                                         </div>
@@ -175,7 +174,7 @@
                                         </div>
                                     </td>
                                 {% endfor %}
-                                <th class="numeric" >
+                                <th class="numeric" style="background: #fde2a3!important;" >
                                     <div class="row-fluid">
                                         <span class="span12 pull-center"><strong class="totalInvalidVote">{{ entity.resultInvalidVote }}</strong></span>
                                     </div>
@@ -198,6 +197,10 @@
         </div>
     </div>
  <style>
+     .head-blue{
+         color: #000101!important;
+         background: #c8bfba!important;
+     }
     input[class*="span"].m-wrap , select[class*="span"].m-wrap{
          font-weight: bold;
          margin-top: -1px;
@@ -205,7 +208,14 @@
          border: 2px solid #4b8df8!important;
          height: 23px!important;
          width: 24%;
+         background: #ffffff!important;
+         text-align: center;
      }
+
+     .input-error{
+         border: 2px solid red!important;
+      }
+
 
     #list-data_filter{
         width: 97%;
