@@ -163,4 +163,85 @@ class ReportController extends Controller
     }
 
 
+	/**
+	 * Lists all AccountSales entities.
+	 *
+	 */
+	public function customerOutstandingAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data =$_REQUEST;
+		$globalOption = $this->getUser()->getGlobalOption();
+		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
+		$pagination = $this->paginate($entities);
+		return $this->render('AccountingBundle:Report/Outstanding:customerOutstanding.html.twig', array(
+			'entities' => $pagination,
+			'searchForm' => $data,
+		));
+	}
+
+	public function customerLedgerAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$customer ='';
+		$overview = '';
+		if(isset($data['mobile']) and !empty($data['mobile'])){
+			$customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['mobile']));
+			$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+
+		}
+		$entities = $em->getRepository('AccountingBundle:AccountSales')->customerLedger($user,$data);
+		return $this->render('AccountingBundle:Report/Outstanding:customerLedger.html.twig', array(
+			'entities' => $entities->getResult(),
+			'overview' => $overview,
+			'customer' => $customer,
+			'searchForm' => $data,
+		));
+	}
+
+
+	/**
+	 * Lists all AccountSales entities.
+	 *
+	 */
+	public function vendorOutstandingAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data =$_REQUEST;
+		$globalOption = $this->getUser()->getGlobalOption();
+		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorBusinessOutstanding($globalOption,$data);
+		$pagination = $this->paginate($entities);
+		return $this->render('AccountingBundle:Report/Outstanding:vendorOutstanding.html.twig', array(
+			'entities' => $pagination,
+			'searchForm' => $data,
+		));
+	}
+
+
+	public function vendorLedgerAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$customer ='';
+		$overview = '';
+		if(isset($data['mobile']) and !empty($data['mobile'])){
+			$customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['mobile']));
+			$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+
+		}
+		$entities = $em->getRepository('AccountingBundle:AccountSales')->customerLedger($user,$data);
+		return $this->render('AccountingBundle:Report/Outstanding:vendorLedger.html.twig', array(
+			'entities' => $entities->getResult(),
+			'overview' => $overview,
+			'customer' => $customer,
+			'searchForm' => $data,
+		));
+	}
+
+
+
+
 }

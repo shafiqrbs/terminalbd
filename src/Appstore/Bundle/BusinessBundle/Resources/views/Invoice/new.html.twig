@@ -337,6 +337,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row-fluid error">
+                                        {{ form_errors(form.process) }}
+                                    </div>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="clearfix"></div>
@@ -352,7 +355,6 @@
                                     <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
                                     <div class="action"> <strong>Invoice For: </strong>
                                         {{ form_widget(form.process) }}
-                                        {{ form_errors(form.process) }}
                                         <div class="btn-group">
                                             <button type="button" class="btn blue" id="receiveBtn" ><i class="icon-print"></i>&nbsp; Save</button>
                                         </div>

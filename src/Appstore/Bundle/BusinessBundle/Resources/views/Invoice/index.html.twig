@@ -37,6 +37,10 @@
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('business_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
                                 <a class="btn red" href="{{ path('business_invoice_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
+                                {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
+                                    <a href="{{ path('account_sales_business_new') }}" class="btn blue"><i class="icon-money"></i> Due Receive</a>
+                                    <a href="{{ path('account_sales_business_outstanding') }}" class="btn purple"><i class="icon-th-list"></i> Outstanding</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -113,9 +117,11 @@
                                         <td class="numeric" >{{ entity.received }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
-                                        <td class="numeric" >  {% if entity.isReversed == 1 %}
+                                        <td class="numeric" >
+                                            {% if entity.isReversed == 1 %}
                                                 <a href="{{ path('business_reverse_show', { 'id': entity.businessReverse.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
-                                            {% endif %}</td>
+                                            {% endif %}
+                                        </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processIntArr = ['Hold','Created','Revised'] %}

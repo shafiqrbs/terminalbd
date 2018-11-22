@@ -10,6 +10,14 @@ $( ".dateCalendar" ).datepicker({
 });
 
 
+$('.horizontal-form').submit(function(){
+    $("button[type='submit']", this)
+        .html("Please Wait...")
+        .attr('disabled', 'disabled');
+    return true;
+});
+
+
 
 /*
 $(document).on("click", ".editable-submit", function() {

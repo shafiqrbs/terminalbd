@@ -34,17 +34,6 @@ account_purchase_business:
     path:     /purchase
     defaults: { _controller: "AccountingBundle:AccountBusiness:purchase" }
 
-account_purchase_business_outstanding:
-    path:     /vendor-outstanding
-    defaults: { _controller: "AccountingBundle:AccountBusiness:vendorOutstanding" }
-
-account_sales_business_outstanding:
-    path:     /customer-outstanding
-    defaults: { _controller: "AccountingBundle:AccountBusiness:customerOutstanding" }
-
-account_sales_business_ledger:
-    path:     /customer-ledger
-    defaults: { _controller: "AccountingBundle:AccountBusiness:customerLedger" }
 
 account_purchase_business_new:
     path:     /purchase-new

@@ -239,7 +239,7 @@ class AccountSalesRepository extends EntityRepository
     public function customerOutstanding($globalOption, $data = array())
     {
         $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
-        $amount =   isset($data['amount'])  ? $data['amount'] : '';
+        $amount =   isset($data['amount'])  ? $data['amount'] : 0;
         $mobile =   isset($data['mobile'])  ? $data['mobile'] : '';
 
         $outstanding = '';
@@ -247,11 +247,10 @@ class AccountSalesRepository extends EntityRepository
         if($mobile){
             $customer =  "AND subCustomer.mobile LIKE '%{$mobile}%'";
         }
-        if($mode == 'Receivable' and $amount !="" ){
-           $outstanding =  "AND sales.balance >= {$amount}";
-        }
         if($mode == 'Payable' and $amount !="") {
            $outstanding =  "AND sales.balance <= -{$amount}";
+        }else{
+	       $outstanding =  "AND sales.balance > {$amount}";
         }
         $sql = "SELECT customer.`id` as id,customer.`customerId` as customerId,customer.`name` as customerName , customer.mobile as customerMobile, customer.address as customerAddress, sales.balance as customerBalance
                 FROM account_sales as sales
@@ -263,7 +262,8 @@ class AccountSalesRepository extends EntityRepository
                    WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$customer}
                    GROUP BY sub.customer_id
                 ) {$outstanding}
-                ORDER BY sales.id DESC";
+                ORDER BY sales.balance DESC";
+
         $qb = $this->getEntityManager()->getConnection()->prepare($sql);
         $qb->bindValue('globalOption', $globalOption->getId());
         $qb->execute();

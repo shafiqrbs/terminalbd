@@ -150,7 +150,7 @@
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
-                                        {% if (app.user.granted("ROLE_BUSINESS_SALES"))  %}
+                                        {% if (app.user.granted("ROLE_BUSINESS_INVOICE"))  %}
                                         <a href="{{ path('business_invoice') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
                                         {% endif %}
                                     </div>

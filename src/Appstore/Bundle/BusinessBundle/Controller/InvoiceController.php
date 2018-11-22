@@ -165,9 +165,11 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
-	        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
-            $entity->setPaymentInWord($amountInWords);
-            $em->flush();
+            if(!empty($entity->getReceived())){
+	            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
+	            $entity->setPaymentInWord($amountInWords);
+            }
+	        $em->flush();
             $done = array('Done','Delivered');
             if (in_array($entity->getProcess(), $done)) {
 	          //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($invoiceItem,'sales');
@@ -185,7 +187,7 @@ class InvoiceController extends Controller
 
         $config = $entity->getBusinessConfig();
 	    $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual'));
-	    $view = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'new';
+	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'particulars' => $particulars,

@@ -58,6 +58,7 @@ class InvoiceType extends AbstractType
                 'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
+                'constraints' =>array( new NotBlank(array('message'=>'Confirm current process status')) ),
                 'empty_value' => '---Choose process---',
                 'choices' => array(
                     'Hold' => 'Hold',

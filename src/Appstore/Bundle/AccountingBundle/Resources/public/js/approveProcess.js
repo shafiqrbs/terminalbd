@@ -1,13 +1,5 @@
 function AccountingApproveProcess(){}
 
-$("#printLedgerx").on('click', function() {
-    $("#DivIdToPrint").print({
-        globalStyles: true,
-        timeout: 750
-    });
-
-});
-
 $('.horizontal-form').submit(function(){
     $("button[type='submit']", this)
         .html("Please Wait...")
