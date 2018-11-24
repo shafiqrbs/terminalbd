@@ -241,7 +241,7 @@ class PurchaseController extends Controller
             $total = ($subTotal  - $discountCal);
             $discount = $discountCal;
         }else{
-            $discount = ($subTotal*$discountCal)/100;
+            $discount = ($subTotal * $discountCal)/100;
             $total = ($subTotal  - $discount);
         }
         $vat = 0;
@@ -249,13 +249,13 @@ class PurchaseController extends Controller
             $entity->setDiscountType($discountType);
             $entity->setDiscountCalculation($discountCal);
 	        $entity->setDiscount(round($discount));
-	        $entity->setNetTotal(round($entity->getSubTotal() + $vat));
+	        $entity->setNetTotal(round($total + $vat));
 	        $entity->setDue(round($entity->getNetTotal()));
         }else{
 			$entity->setDiscountType('flat');
 			$entity->setDiscountCalculation(0);
 			$entity->setDiscount(round($discount));
-			$entity->setNetTotal(round($entity->getSubTotal() + $vat));
+			$entity->setNetTotal(round($total + $vat));
 			$entity->setDue(round($entity->getNetTotal()));
 		}
 	    $em->flush();

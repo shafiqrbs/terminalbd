@@ -97,7 +97,6 @@ class PurchaseType extends AbstractType
                     new NotBlank(array('message'=>'Please add  memo no'))
                 )))
             ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
-            ->add('discount','hidden')
             ->add('asInvestment')
             ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Payment amount','autocomplete'=>'off')
             ));

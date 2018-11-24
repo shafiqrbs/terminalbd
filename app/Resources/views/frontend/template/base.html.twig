@@ -50,7 +50,6 @@
     'assets/template/plugin/select2/select2.css'
     'assets/template/plugin/bootsnav-master/css/animate.css'
     'assets/template/plugin/bootsnav-master/css/bootsnav.css'
-    'assets/template/plugin/bootsnav-master/css/style.css'
     'assets/plugins/pop-modal/popModal.min.css'
     'assets/template/plugin/range-slider/bootstrap-slider.css'
     'assets/template/desktop/css/module.css'
@@ -76,7 +75,8 @@
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
 {% if globalOption.templateCustomize.footerBlock == 1 %}
-{{ include('@Frontend/Template/Desktop/'~globalOption.siteSetting.theme.folderName~'/footer.html.twig') }}
+{#{{ include('@Frontend/Template/Desktop/'~globalOption.siteSetting.theme.folderName~'/footer.html.twig') }}#}
+{{ include('@Frontend/Template/Desktop/WebsiteWidget/footer.html.twig') }}
 {% endif %}
 <footer id="footer">
      <div class="container">

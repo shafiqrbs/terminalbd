@@ -133,7 +133,7 @@ var form = $("#purchaseItem").validate({
     })
 });*/
 
-$(document).on('keyup', '#purchase_discountCalculation', function() {
+$(document).on('change', '#purchase_discountCalculation , #purchase_discountType', function() {
 
     var discountType = $('#purchase_discountType').val();
     var discount = parseInt($('#purchase_discountCalculation').val());
