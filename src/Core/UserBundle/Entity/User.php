@@ -59,7 +59,7 @@ class User extends BaseUser
 
 	protected $role;
 
-	protected $enabled=true;
+	protected $enabled = true;
 
 	/**
 	 * @var boolean
@@ -1697,6 +1697,13 @@ class User extends BaseUser
 	 */
 	public function getCustomerInvoice() {
 		return $this->customerInvoice;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isEnabled(){
+		return $this->enabled;
 	}
 
 
