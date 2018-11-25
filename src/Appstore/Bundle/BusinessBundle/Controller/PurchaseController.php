@@ -89,6 +89,7 @@ class PurchaseController extends Controller
         $entity->setCreatedBy($this->getUser());
         $receiveDate = new \DateTime('now');
         $entity->setReceiveDate($receiveDate);
+        $entity->setProcess('Created');
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
