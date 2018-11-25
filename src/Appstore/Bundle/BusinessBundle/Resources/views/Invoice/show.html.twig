@@ -90,7 +90,7 @@
                                     <tr class="head-blue">
                                     <th class="span1"> Si/No</th>
                                         <th class="span4">Particular</th>
-                                        {% if entity.businessConfig.invoiceType == 'banner-print' %}
+                                        {% if entity.businessConfig.businessModel == 'sign' %}
                                         <th class="span1">Size</th>
                                         {% endif %}
                                         <th class="span1">Qnt</th>
@@ -104,7 +104,7 @@
                                         <tr id="remove-{{ item.id }}">
                                             <td  class="">{{ loop.index }}.</td>
                                             <td class="">{{ item.particular }}</td>
-                                            {% if entity.businessConfig.invoiceType == 'banner-print' %}
+                                            {% if entity.businessConfig.businessModel == 'sign' %}
                                             <td>
                                             {% if item.subQuantity is not empty %}
                                                 {{ item.height }} x {{ item.width }} = {{ item.subQuantity }}
@@ -119,7 +119,7 @@
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
-                                    {% if entity.businessConfig.invoiceType == 'banner-print' %}
+                                    {% if entity.businessConfig.businessModel == 'sign' %}
                                         {% set colspan = 7 %}
                                         {% set panCol = 6 %}
                                     {% else %}

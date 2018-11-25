@@ -93,7 +93,7 @@
                                         <tr class="table-header" style="">
                                             <th class="numeric"><strong>S/N</strong></th>
                                             <th class="numeric" ><strong>Description</strong></th>
-                                            {% if config.invoiceType == 'banner-print' %}
+                                            {% if entity.businessConfig.businessModel == 'sign' %}
                                                 <th class="numeric" >Size</th>
                                                 <th class="numeric" >S.ft</th>
                                             {% endif %}
@@ -108,7 +108,7 @@
                                             <tr>
                                                 <td>{{ loop.index }}.</td>
                                                 <td class="numeric" >{{ item.particular }}</td>
-                                                {% if config.invoiceType == 'banner-print' %}
+                                                {% if entity.businessConfig.businessModel == 'sign' %}
                                                     <td class="numeric" >
                                                         {% if item.subQuantity is not empty %}
                                                             {{ item.height }}x{{ item.width }}
