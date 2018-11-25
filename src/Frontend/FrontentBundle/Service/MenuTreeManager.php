@@ -47,33 +47,34 @@ class MenuTreeManager
 
     }
 
-    public function getMenuTreexx($arr,$subdomain)
+    public function getWebsiteMobileMenuTree($arrs,$subdomain)
     {
 
-        // $subdomain ='mobile/'.$subdomainName;
+	    $value ='';
+	    $prefix = '';
+	    $value .='<ul>';
 
-        $value ='';
-        $value .='<ul>';
-        foreach ($arr as $val) {
+       foreach ($arrs as $val) {
 
-            $menu = $val->getMenu()->getMenu();
-            if (!empty($menu)) {
-                $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
-                if($subIcon == 1){
-                    $value .= '<li><a href="/mobile/'.$subdomain.'/'.$val->getMenu()->getMenuSlug().'">' . $val->getMenu()->getMenu().'</a><span><i class="fa fa-caret-down"></i></span>';
-                    $value .= $this->getMenuTree($val->getChildren(),$subdomain);
-                }else{
-                    $value .= '<li><a class="width-full" href="/mobile/'.$subdomain.'/'.$val->getMenu()->getMenuSlug().'">' . $val->getMenu()->getMenu().'</a>';
-                }
+		    $menu = $val->getMenu()->getMenu();
 
-                $value .= '</li>';
-            } else {
-                $value .= '<li><a href="/mobile/'.$subdomain.'/'.$val->getMenu()->getMenuSlug().'">'.$val->getMenu()->getMenu() . '</a></li>';
-            }
-        }
-        $value .='</ul>';
+		    if (!empty($menu)) {
+			    $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
+			    if($subIcon == 1){
 
-        return $value;
+				    $value .= '<li><a  href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
+				    $value .= $this->getWebsiteMobileMenuTree($val->getChildren(),$subdomain);
+			    }else{
+				    $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
+			    }
+			    $value .= '</li>';
+		    } else {
+			    $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">'.$val->getMenu()->getMenu() . '</a></li>';
+		    }
+	    }
+	    $value .='</ul>';
+
+	    return $value;
 
     }
 

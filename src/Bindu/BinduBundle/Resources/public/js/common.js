@@ -1,13 +1,13 @@
 function indexFormValidation(){
 
-    $('.checkbox :checkbox').rcSwitcher({
+   /* $('.checkbox :checkbox').rcSwitcher({
 
         inputs:false,
         onText: 'Yes',
         offText: 'No',
         theme: 'modern'
 
-    });
+    });*/
 
     var validator =  $(".registration").validate({
 

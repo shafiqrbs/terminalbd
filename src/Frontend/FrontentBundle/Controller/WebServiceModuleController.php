@@ -87,17 +87,13 @@ class WebServiceModuleController extends Controller
 
         $categories ='';
         $page ='';
-
+	    $twigName = "content";
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+
         if(!empty($globalOption)){
 
             $entityModule = $em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => $module));
             if(!empty($entityModule)){
-
-                $siteEntity = $globalOption->getSiteSetting();
-                $themeName = $siteEntity->getTheme()->getFolderName();
-
-
                 $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => $module));
                 if($entityModule){
 
@@ -114,7 +110,8 @@ class WebServiceModuleController extends Controller
             }
 
         }
-
+	    $siteEntity = $globalOption->getSiteSetting();
+	    $themeName = $siteEntity->getTheme()->getFolderName();
         $page = ($page) ? $page :'';
 
         /* Device Detection code desktop or mobile */
