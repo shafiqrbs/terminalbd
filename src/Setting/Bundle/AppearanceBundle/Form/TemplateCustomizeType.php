@@ -68,7 +68,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('breadcrumb')
             ->add('breadcrumbPosition', 'choice', array(
                 'attr'=>array('class'=>' span12'),
-                'choices' => array('' => 'Select Breadcrumb Position', 'flat' => 'Flat',  'left' => 'Left','center' => 'Center'),
+                'choices' => array('' => 'Select Breadcrumb Position', 'flat-left' => 'Flat-Left','flat-right' => 'Flat-Right',  'left' => 'Left','center' => 'Center'),
             ))
             ->add('breadcrumbFontSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),

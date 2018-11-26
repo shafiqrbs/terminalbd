@@ -207,19 +207,38 @@ ul.sign-list > li.total {
     text-align: right;
 }
 
-.simple-breadcrumb{
+.simple-breadcrumb-right{
     list-style: none;
-    line-height: 50px;
+    line-height: 80px;
+    height: 80px;
 }
-.simple-breadcrumb li{
+.simple-breadcrumb-right li{
     list-style: square;
     float: right;
     padding-right: 30px;
 }
-.simple-breadcrumb li:last-child{
+.simple-breadcrumb-right li:last-child{
     list-style: none;
 }
-.simple-breadcrumb li a{
+.simple-breadcrumb-right li a{
+    color: #ffffff;
+}
+
+.simple-breadcrumb-left{
+    list-style: none;
+    line-height: 80px;
+    height: 80px;
+    padding-left: 15px;
+}
+.simple-breadcrumb-left li{
+    list-style: square;
+    float: left;
+    padding-right: 30px;
+}
+.simple-breadcrumb-left li:first-child {
+    list-style: none;
+}
+.simple-breadcrumb-left li a{
     color: #ffffff;
 }
 

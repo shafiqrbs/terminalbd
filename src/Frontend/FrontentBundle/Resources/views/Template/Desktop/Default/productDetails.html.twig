@@ -2,20 +2,48 @@
 {% block body %}
     {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
     <section class="siteBgColor">
+
         <div class="clearfix"></div>
-    {% if globalOption.templateCustomize.breadcrumb == 1 %}
-    <section id="breadcrumb">
-        <div class="container">
-            <ul class="breadcrumb">
-                <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class=""><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
-                <li class="active"><a href="javascript:void(0);">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></li>
-            </ul>
-        </div>
-    </section>
-    {% endif %}
+        {% if globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'flat'  %}
+            <div class="pageheader">
+                <div class="container">
+                    <div class="col-md-6">
+                        <h2 class="title">{{ page.name }}</h2>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="simple-breadcrumb">
+                            <li class="active">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</li>
+                            <li class=""><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
+                            <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% elseif globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'center'  %}
+
+            <div class="pageheader">
+                <div class="container">
+                    <div class="col-md-12 text-center">
+                        <h2 class="title">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</h2>
+                        <p><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></p>
+                        <p><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> <i class="fa fa-long-arrow-right "></i> {{ menu.menu }}</p>
+                    </div>
+                </div>
+            </div>
+        {% elseif globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'left'  %}
+            <div class="pageheader">
+                <div class="container">
+                    <div class="col-md-12 text-left">
+                        <h2 class="title">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</h2>
+                        <p><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></p>
+                        <p><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> <i class="fa fa-long-arrow-right "></i> {{ menu.menu }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         <div class="clearfix"></div>
-        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+
+      {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
             <div class="container bodyColor" >
                 {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'menu': menu.id ,'position':'header-bottom'}) %}
             </div>

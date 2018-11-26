@@ -1,20 +1,87 @@
 {% extends ':frontend/template:base.html.twig' %}
 {% block body %}
-    {% if globalOption.templateCustomize.breadcrumb == 1 %}
-        <section id="breadcrumb">
+    <div class="clearfix"></div>
+    {% if globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'flat-left'  %}
+        <div class="pageheader">
             <div class="container">
-                <ul class="breadcrumb">
-                    <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                    {% if category is defined and category is not empty %}
-                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a></li>
-                        <li class="active"><a href="javascript:void(0);">{{ category.name }}</a></li>
-                    {% else %}
-                        <li class="active"><a href="javascript:void(0);">{{ menu.menu }}</a></li>
-                    {% endif %}
-                </ul>
+                <div class="col-md-6">
+                    <ul class="simple-breadcrumb-left">
+                        <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
+                        {% if category is defined and category is not empty %}
+                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a></li>
+                            <li class="active"><a href="javascript:void(0);">{{ category.name }}</a></li>
+                        {% else %}
+                            <li class="active"><a href="javascript:void(0);">{{ menu.menu }}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h2 class="title">{% if category is defined and category is not empty %}{{ category.name }}{% else %}{{ menu.menu }}{% endif %}</h2>
+                </div>
             </div>
-        </section>
+        </div>
+    {% elseif globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'flat-right'  %}
+        <div class="pageheader">
+            <div class="container">
+                <div class="col-md-6">
+                    <h2 class="title">{% if category is defined and category is not empty %}{{ category.name }}{% else %}{{ menu.menu }}{% endif %}</h2>
+                </div>
+                <div class="col-md-6">
+                    <ul class="simple-breadcrumb-right">
+                        {% if category is defined and category is not empty %}
+                            <li class="active"><a href="javascript:void(0);">{{ category.name }}</a></li>
+                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a></li>
+                        {% else %}
+                            <li class="active"><a href="javascript:void(0);">{{ menu.menu }}</a></li>
+                        {% endif %}
+                        <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% elseif globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'left'  %}
+        <div class="pageheader">
+            <div class="container">
+                <div class="col-md-12 text-left">
+                    <h2 class="title">{% if category is defined and category is not empty %}{{ category.name }}{% else %}{{ menu.menu }}{% endif %}</h2>
+                    <p>
+                        <a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i>
+                        {% if category is defined and category is not empty %}
+                            <a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;
+                            {{ category.name }}
+                        {% else %}
+                            {{ menu.menu }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% elseif globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'center'  %}
+        <div class="pageheader">
+            <div class="container">
+                <div class="col-md-12 text-center">
+                    <h2 class="title">{% if category is defined and category is not empty %}{{ category.name }}{% else %}{{ menu.menu }}{% endif %}</h2>
+                    <p>
+                        <a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i>
+                        {% if category is defined and category is not empty %}
+                            <a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;
+                            {{ category.name }}
+                        {% else %}
+                            {{ menu.menu }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
     {% endif %}
+    <div class="clearfix"></div>
+    <section>
+        <div class="container">
+            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
+            {% endif %}
+        </div>
+    </section>
     <div class="clearfix"></div>
     <section>
         <div class="container">
@@ -46,54 +113,41 @@
                         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-top'}) %}
                     {% endif %}
                     <div class="clearfix"></div>
-                    <div class="page-title-bar">
-                        <div class="col-md-12">
-                            <div class="btn-group pull-left">
-                                <div class="page-title"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;{{ menu.menu }} {% if category is defined and category is not empty %} : {{ category.name }}{% endif %}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="row">
-                        <div class="col-md-12" >
-                            {% if( menu.module.slug == 'blog' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/blog.html.twig')}}
-                            {% elseif( menu.module.slug == 'branch' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/branch.html.twig')}}
-                            {% elseif( menu.module.slug == 'client' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/client.html.twig')}}
-                            {% elseif( menu.module.slug == 'event' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/event.html.twig')}}
-                            {% elseif( menu.module.slug == 'faq' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/faq.html.twig')}}
-                            {% elseif ( menu.module.slug == 'news') %}
-                                {{ include('@Frontend/Template/Desktop/Module/news.html.twig')}}
-                            {% elseif( menu.module.slug == 'noticeboard' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/noticeboard.html.twig')}}
-                            {% elseif( menu.module.slug == 'portfolio' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/portfolio.html.twig')}}
-                            {% elseif( menu.module.slug == 'service' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/service.html.twig')}}
-                            {% elseif( menu.module.slug == 'sponsor' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/sponsor.html.twig')}}
-                            {% elseif( menu.module.slug == 'team' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/team.html.twig')}}
-                            {% elseif( menu.module.slug == 'testimonial' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/testimonial.html.twig')}}
-                            {% elseif( menu.module.slug == 'timeline' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/timeline.html.twig')}}
-                            {% elseif( menu.module.slug == 'admission' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/admission.html.twig')}}
-                            {% elseif( menu.module.slug == 'syndicate' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/syndicate.html.twig')}}
-                            {% elseif( menu.module.slug == 'products' ) %}
-                                {{ include('@Frontend/Template/Desktop/Module/product.html.twig')}}
-                            {% else %}
-                                {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
-                            {% endif %}
-
-                        </div>
-                    </div>
+                    {% if( menu.module.slug == 'blog' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/blog.html.twig')}}
+                    {% elseif( menu.module.slug == 'branch' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/branch.html.twig')}}
+                    {% elseif( menu.module.slug == 'client' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/client.html.twig')}}
+                    {% elseif( menu.module.slug == 'event' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/event.html.twig')}}
+                    {% elseif( menu.module.slug == 'faq' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/faq.html.twig')}}
+                    {% elseif ( menu.module.slug == 'news') %}
+                        {{ include('@Frontend/Template/Desktop/Module/news.html.twig')}}
+                    {% elseif( menu.module.slug == 'noticeboard' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/noticeboard.html.twig')}}
+                    {% elseif( menu.module.slug == 'portfolio' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/portfolio.html.twig')}}
+                    {% elseif( menu.module.slug == 'service' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/service.html.twig')}}
+                    {% elseif( menu.module.slug == 'sponsor' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/sponsor.html.twig')}}
+                    {% elseif( menu.module.slug == 'team' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/team.html.twig')}}
+                    {% elseif( menu.module.slug == 'testimonial' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/testimonial.html.twig')}}
+                    {% elseif( menu.module.slug == 'timeline' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/timeline.html.twig')}}
+                    {% elseif( menu.module.slug == 'admission' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/admission.html.twig')}}
+                    {% elseif( menu.module.slug == 'syndicate' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/syndicate.html.twig')}}
+                    {% elseif( menu.module.slug == 'products' ) %}
+                        {{ include('@Frontend/Template/Desktop/Module/product.html.twig')}}
+                    {% else %}
+                        {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
+                    {% endif %}
                     <div class="clearfix"></div>
                     {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
                         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-bottom'}) %}
