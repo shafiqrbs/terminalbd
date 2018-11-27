@@ -5,13 +5,13 @@
         <div class="pageheader">
             <div class="container">
                 <div class="col-md-6">
-                    <h2 class="title">{{ page.name }}</h2>
-                </div>
-                <div class="col-md-6">
                     <ul class="simple-breadcrumb-left">
                         <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
                         <li class="active">{{ menu.menu }}</li>
                     </ul>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h2 class="title">{{ page.name }}</h2>
                 </div>
             </div>
         </div>
