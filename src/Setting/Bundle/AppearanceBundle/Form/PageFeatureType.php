@@ -52,6 +52,7 @@ class PageFeatureType extends AbstractType
             ->add('buttonName','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Button Text')))
             ->add('buttonBg','text', array('attr'=>array('class'=>'span10 m-wrap colorpicker-default','placeholder'=>'Button Bg')))
             ->add('captionBgColor','text', array('attr'=>array('class'=>'span11 m-wrap colorpicker-default','placeholder'=>'Caption Background Color')))
+            ->add('captionFontColor','text', array('attr'=>array('class'=>'span11 m-wrap colorpicker-default','placeholder'=>'Caption Font Color')))
 
             ->add('captionPosition', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap'),
@@ -59,15 +60,17 @@ class PageFeatureType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
-                    'top-left'               => 'Top Left',
-                    'top-center'             => 'Top Center',
-                    'top-right'              => 'Top Right',
-                    'center'                 => 'Center',
-                    'bottom-left'            => 'Bottom Left',
-                    'bottom-center'          => 'Bottom Center',
-                    'bottom-right'           => 'Bottom Right',
+	                'top-left'               => 'Top Left',
+	                'top-center'             => 'Top Center',
+	                'top-right'              => 'Top Right',
+	                'center-left'            => 'Center Left',
+	                'center-center'          => 'Center Center',
+	                'center-right'           => 'Center Right',
+	                'bottom-left'            => 'Bottom Left',
+	                'bottom-center'          => 'Bottom Center',
+	                'bottom-right'           => 'Bottom Right',
 
-                 ),
+                ),
             ))
             ->add('targetTo', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap targetTo'),

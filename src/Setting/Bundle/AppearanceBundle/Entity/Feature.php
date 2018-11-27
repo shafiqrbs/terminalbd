@@ -97,9 +97,16 @@ class Feature
     /**
      * @var string
      *
-     * @ORM\Column(name="captionBgColor", type="string", length=50 , nullable=true)
+     * @ORM\Column(name="captionBgColor", type="string", length=30 , nullable=true)
      */
     private $captionBgColor;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="captionFontColor", type="string", length=30 , nullable=true)
+     */
+    private $captionFontColor;
 
      /**
      * @var string
@@ -673,5 +680,19 @@ class Feature
     {
         $this->menu = $menu;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getCaptionFontColor(){
+		return $this->captionFontColor;
+	}
+
+	/**
+	 * @param string $captionFontColor
+	 */
+	public function setCaptionFontColor( string $captionFontColor ) {
+		$this->captionFontColor = $captionFontColor;
+	}
 
 }

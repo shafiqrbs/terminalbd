@@ -50,6 +50,7 @@
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >Title</th>
+                                    <th class="numeric" >Position</th>
                                     <th class="numeric" >Feature</th>
                                     <th class="numeric" >Target to</th>
                                     <th class="numeric" >Action</th>
@@ -62,6 +63,7 @@
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" ><a href="{{ path('appearancefeature_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{{ entity.captionPosition }}</td>
                                         <td class="numeric" >
                                             {% if(entity.featureFor is not empty) %}
                                                 <ul>

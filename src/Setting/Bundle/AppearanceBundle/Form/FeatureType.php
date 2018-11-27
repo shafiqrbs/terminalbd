@@ -120,7 +120,8 @@ class FeatureType extends AbstractType
             ->add('buttonName','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Button Text')))
             ->add('buttonBg','text', array('attr'=>array('class'=>'span10 m-wrap colorpicker-default','placeholder'=>'Button Bg')))
             ->add('captionBgColor','text', array('attr'=>array('class'=>'span11 m-wrap colorpicker-default','placeholder'=>'Caption Background Color')))
-            ->add('captionPosition', 'choice', array(
+	        ->add('captionFontColor','text', array('attr'=>array('class'=>'span11 m-wrap colorpicker-default','placeholder'=>'Caption Background Color')))
+	        ->add('captionPosition', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap'),
                 'empty_value' => '---Caption Position ---',
                 'expanded'      =>false,
@@ -129,7 +130,9 @@ class FeatureType extends AbstractType
                     'top-left'               => 'Top Left',
                     'top-center'             => 'Top Center',
                     'top-right'              => 'Top Right',
-                    'center'                 => 'Center',
+                    'center-left'            => 'Center Left',
+                    'center-center'          => 'Center Center',
+                    'center-right'           => 'Center Right',
                     'bottom-left'            => 'Bottom Left',
                     'bottom-center'          => 'Bottom Center',
                     'bottom-right'           => 'Bottom Right',

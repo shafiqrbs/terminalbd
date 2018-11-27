@@ -1,6 +1,6 @@
 $('#main-carousel').carousel({
     wrap:true,
-    interval:15000
+    interval:false
 });
 
 var owlMainPageSlider = $("#main-page-slider");

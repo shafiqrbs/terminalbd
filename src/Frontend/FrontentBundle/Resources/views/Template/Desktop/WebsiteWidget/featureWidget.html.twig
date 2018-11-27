@@ -1,5 +1,5 @@
 {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'slider' %}
-    <div id="main-carousel" class="carousel slide" data-ride="carousel" data-match-height="slider-height">
+    <div id="main-carousel" class="carousel slide"   data-pause="hover" data-ride="carousel" data-match-height="slider-height">
         <!-- Indicators -->
         <ol class="carousel-indicators">
             {% for slide in widget.featureWidgetItems %}
@@ -14,15 +14,13 @@
                  {% if slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
                     {% set path =  path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug})  %}
                  {% endif %}
-
                 <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
                     <a href="{{ path }}"><img class="image {% if widget.sliderFeature is empty %}  carousel-img {% else %} carousel-tab-img {% endif %}"  src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath) }}{% endif %}" alt="..."></a>
-                    <div class="carousel-caption {#caption-{{ slide.feature.captionPosition }}#}" style="background-color: {{ slide.feature.captionBgColor }}">
-                        {% if slide.feature.name is not empty %}<h4 class="animated fadeInLeftBig slide-delay-1" data-wow-delay="2s" >{{ slide.feature.name }}{% endif %}</h4>
-                        {% if slide.feature.content is not empty %}<span class="animated fadeInUpBig slide-delay-2" data-wow-delay="4s" >{{ slide.feature.content|raw }}</span>{% endif %}
+                    <div class="caption-{{ slide.feature.captionPosition }}" style="background-color: {{ slide.feature.captionBgColor }}!important; color: {{ slide.feature.captionFontColor }}!important;">
+                        {% if slide.feature.name is not empty %}<h2 data-animation="animated flipInX" class="delay-2s"  data-wow-delay="2s" >{{ slide.feature.name|upper }}{% endif %}</h2>
+                        {% if slide.feature.content is not empty %}<p data-animation="animated fadeInRight" class="delay-3s" data-wow-delay="3s" >{{ slide.feature.content|raw }}</p>{% endif %}
                         {% if slide.feature.targetTo == 'Page' %}
-                            <br/>
-                            <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path }}">{{ slide.feature.buttonName }}</a>
+                            <a data-animation="animated fadeInLeft" class="btn btn-mini delay-4s" data-wow-delay="4s" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path }}">{{ slide.feature.buttonName }}</a>
                         {% endif %}
                     </div>
                 </div>
@@ -81,7 +79,7 @@
                 <div class="section-header" style="margin-top:60px">
                     <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
                 {% if globalOption.templateCustomize.siteSlogan is not empty %}
-                    <p class="animated fadeInUpBig slide-delay-3" >{{  globalOption.templateCustomize.siteSlogan }}</p>
+                    <p  data-animation="animated fadeInUpBig" class="delay-1s" >{{  globalOption.templateCustomize.siteSlogan }}</p>
                 {% endif %}
             </div>
 
@@ -99,7 +97,7 @@
                                 <img class="image {% if widget.sliderFeature is empty %}  carousel-img {% else %} carousel-tab-img {% endif %}"  src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).resize(1366,768) }}{% endif %}" alt="...">
                                 <div class="carousel-caption">
                                     {% if slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
-                                        <a class="btn btn-mini " style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug}) }}">{{ slide.feature.buttonName }}</a>
+                                        <a data-animation="animated fadeInUpBig" class="delay-1s" class="btn btn-mini " style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug}) }}">{{ slide.feature.buttonName }}</a>
                                     {% endif %}
                                 </div>
 
@@ -122,7 +120,7 @@
                 <div class="section-header" style="margin-top:60px">
                     <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
                 {% if globalOption.templateCustomize.siteSlogan is not empty %}
-                    <p class="animated fadeInUpBig slide-delay-3" >{{  globalOption.templateCustomize.siteSlogan }}</p>
+                    <p data-animation="animated fadeInUpBig" class="delay-1s">{{  globalOption.templateCustomize.siteSlogan }}</p>
                 {% endif %}
             </div>
         {% endif %}
@@ -133,12 +131,10 @@
             <div class="row">
                 {% for slide in widget.featureWidgetItems %}
                     {% if(slide.feature.webPath) %}
-
                         {% set path ='' %}
                         {% if slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
                             {% set path =  path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug})  %}
                         {% endif %}
-
                         <div  style="overflow: hidden;height: {{ slide.divHeight }}px; width: {{ slide.divWidth }}%; margin-bottom: 15px; position: relative"  class="col-xs-12 col-md-12 feature-box ">
                             <div class="box-img">
                                 {%  set imageWidth =  slide.divWidth~'%' %}
