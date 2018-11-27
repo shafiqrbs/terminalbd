@@ -214,17 +214,11 @@
     {% else %}
         sliderPageOwl(4);
     {% endif %}
-    $('#list').click(function(event){event.preventDefault();$('#categories-list .item').addClass('list-group-item');});
-    $('#grid').click(function(event){event.preventDefault();$('#categories-list .item').removeClass('list-group-item');$('#categories-list .item').addClass('grid-group-item');});
-    $("#sollist").sollist({
-    theme: 'lee-gargano-square-color',
-    profiles: {
-    facebook: 'http://facebook.com/yourlink'
-    ,googleplus: 'https://plus.google.com/yourlink/posts'
-    ,dribbble: 'https://dribbble.com/yourlink'
-    }
-    ,hoverEffect: 'fade-out'
 
+    $('body').on('click', '.btn-cookie', function(el) {
+        var val = $(this).attr('id');
+        Cookies.set('productList', val);
+        setTimeout(location.reload(), 1000);
     });
 {% endblock %}
 

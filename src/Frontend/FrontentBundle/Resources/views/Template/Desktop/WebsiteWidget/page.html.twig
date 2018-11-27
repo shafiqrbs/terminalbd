@@ -73,9 +73,6 @@
 </div>
 {% endif %}
 
-{#{% if widget.module is defined and widget.module.slug == 'category' %}
-    {% render controller("FrontendBundle:WebsiteWidget:pageBaseModuleFeatureCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
-{% endif %}#}
 {% if widget.moduleCategory is defined and widget.moduleCategory is not empty %}
     {% render controller("FrontendBundle:WebsiteWidget:pageBaseModuleCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
 {% endif %}
@@ -121,7 +118,7 @@
             <div class="row">
                 <div id="blog-page-slider" class="owl-carousel">
                     {% for entity in entities  %}
-                        <div class="col-md-12 wow fadeInDown grid grid" data-wow-delay="1s" >
+                        <div class="col-md-12 wow fadeInDown grid" data-wow-delay="1s" >
                             <div class="sidebar-blog">
                                 <div class="post-img">
                                     <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -824,7 +821,7 @@
             <div class="row">
                 {% for key,portfolio in entities  %}
                     <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
-                        <div class="our-portfolio">
+                        <div class="our-portfolio" data-match-height="portfolio-list">
                             <img style="width: 100%!important;" src="{{ image(product.webPath).forceResize(400,250) }}" alt="">
                             <div class="team-content">
                                 <h3 class="team-prof">

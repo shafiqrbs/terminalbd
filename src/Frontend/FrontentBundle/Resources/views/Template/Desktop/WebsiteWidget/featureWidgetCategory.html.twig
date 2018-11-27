@@ -28,7 +28,7 @@
         <div class="row">
             {% for key,category in categories  %}
                 <div class="{% if globalOption.templateCustomize.showSidebar == 1 and widget.menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
-                    <div class="our-team">
+                    <div class="our-team" data-match-height="category-list" >
                         <div class="pic">
                             <img src="{{ image(category.webPath).forceResize(400,250) }}" alt="">
                             <div class="social_media_team">

@@ -37,11 +37,11 @@
             <div class="section-header" style="margin-top:60px">
                 <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
             {% if globalOption.templateCustomize.siteSlogan is not empty %}
-                <p class="animated fadeInUpBig slide-delay-3" >{{  globalOption.templateCustomize.siteSlogan }}</p>
+                <p class="animated fadeInUpBig slide-delay-3" data-wow-delay="1s" >{{  globalOption.templateCustomize.siteSlogan }}</p>
             {% endif %}
             </div>
-
     {% endif %}
+
 {% endif %}
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'top-tab-slider' %}
         <div class="container">
