@@ -90,7 +90,7 @@ class ElectionVoteCenterRepository extends EntityRepository
 
 
 
-	public function findWithSearch(ElectionConfig $config , $data , $type = '')
+	public function findWithSearch(ElectionConfig $config , $data = array(), $type = '')
 	{
 		$setup = $config ->getSetup()->getId();
 
@@ -106,7 +106,7 @@ class ElectionVoteCenterRepository extends EntityRepository
 
 	}
 
-	public function getUnionWiseVoter(ElectionConfig $config,$data){
+	public function getUnionWiseVoter(ElectionConfig $config,$data = array()){
 
 		$thana =    isset($data['thana'])? $data['thana'] :'';
 		$qb = $this->createQueryBuilder('e');
