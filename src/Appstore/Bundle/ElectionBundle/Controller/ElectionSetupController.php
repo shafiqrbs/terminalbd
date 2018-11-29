@@ -318,6 +318,7 @@ class ElectionSetupController extends Controller
 			$entity->setResultTotalVote($resultTotalVote);
 			$entity->setResultInvalidVote($resultInvalidVote);
 			$entity->setProcess($process);
+			$em->persist($entity);
 			$em->flush();
 			$data = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->updateTotalVote($entity->getElectionSetup());
 			$res = $this->getDoctrine()->getRepository('ElectionBundle:ElectionSetup')->updateTotalVote($entity->getElectionSetup(),$data);

@@ -17,12 +17,107 @@ use Doctrine\ORM\EntityRepository;
 class ElectionVoteCenterRepository extends EntityRepository
 {
 
-	public function getUnionWiseVoter(ElectionConfig $config){
+	protected function handleSearchBetween($qb,$data)
+	{
+		if(!empty($data))
+		{
 
+			$keyword =    isset($data['keyword'])? $data['keyword'] :'';
+			$thana =    isset($data['thana'])? $data['thana'] :'';
+			$union =    isset($data['union'])? $data['union'] :'';
+			$voteCenter =    isset($data['voteCenter'])? $data['voteCenter'] :'';
+			$district =    isset($data['district'])? $data['district'] :'';
+
+			if (!empty($keyword)) {
+				$qb->andWhere("e.name LIKE :name");
+				$qb->setParameter('name','%'. $keyword.'%');
+				$qb->orWhere("e.mobile LIKE :mobile");
+				$qb->setParameter('mobile','%'. $keyword.'%');
+			}
+
+			if (!empty($district)) {
+				$qb->andWhere("e.district LIKE :district");
+				$qb->setParameter('district','%'. $district.'%');
+			}
+
+			if (!empty($thana)) {
+				$val = explode(',',$thana);
+				$name = $val[0];
+				$qb->andWhere($qb->expr()->like("e.thana", "'%$name%'"  ));
+			}
+
+			if (!empty($union)) {
+				$val = explode(',',$union);
+				$name = $val[0];
+				$parent = $val[1];
+				$qb->andWhere($qb->expr()->like("e.memberUnion", "'%$name%'"  ));
+				$qb->andWhere($qb->expr()->like("e.thana", "'%$parent%'"  ));
+
+			}
+
+			if (!empty($voteCenter)) {
+				$val = explode(',',$voteCenter);
+				$name = $val[0];
+				$parent = $val[1];
+				$qb->andWhere($qb->expr()->like("e.voteCenterName", "'%$name%'"  ));
+				$qb->andWhere($qb->expr()->like("e.memberUnion", "'%$parent%'"  ));
+
+			}
+
+		}
+
+	}
+
+	public function findVoteCenter(ElectionConfig $config , $data , $type = '')
+	{
+		$voteCenter =    isset($data['voteCenter'])? $data['voteCenter'] :'';
+		$setup = $config ->getSetup()->getId();
 		$qb = $this->createQueryBuilder('e');
-		$qb->select('e.memberUnion as unionName,COUNT(e.id) as totalCenter,SUM(e.totalVoter) as totalVoter');
+		$qb->where("e.electionSetup = :setup");
+		$qb->setParameter('setup', $setup);
+		if (!empty($voteCenter)) {
+			$val = explode(',',$voteCenter);
+			$name = $val[0];
+			$parent = $val[1];
+			$qb->andWhere($qb->expr()->like("e.voteCenterName", "'%$name%'"  ));
+			$qb->andWhere($qb->expr()->like("e.memberUnion", "'%$parent%'"  ));
+
+		}
+		$result = $qb->getQuery()->getOneOrNullResult();
+		return  $result;
+
+	}
+
+
+
+	public function findWithSearch(ElectionConfig $config , $data , $type = '')
+	{
+		$setup = $config ->getSetup()->getId();
+
+		$sort = isset($data['sort'])? $data['sort'] :'e.voteCenterName';
+		$direction = isset($data['direction'])? $data['direction'] :'ASC';
+		$qb = $this->createQueryBuilder('e');
+		$qb->where("e.electionSetup = :setup");
+		$qb->setParameter('setup', $setup);
+		$this->handleSearchBetween($qb,$data);
+		$qb->orderBy("{$sort}",$direction);
+		$qb->getQuery();
+		return  $qb;
+
+	}
+
+	public function getUnionWiseVoter(ElectionConfig $config,$data){
+
+		$thana =    isset($data['thana'])? $data['thana'] :'';
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('e.memberUnion as unionName, e.thana as thana,COUNT(e.id) as totalCenter,SUM(e.totalVoter) as totalVoter,SUM(e.maleVoter) as maleVoter,SUM(e.femaleVoter) as femaleVoter,SUM(e.otherVoter) as otherVoter');
 		$qb->where('e.electionConfig='.$config->getId());
 		$qb->andWhere("e.status = :status");
+		if (!empty($thana)) {
+			$val = explode(',',$thana);
+			$name = $val[0];
+			$qb->andWhere($qb->expr()->like("e.thana", "'%$name%'"  ));
+		}
 		$qb->setParameter('status', 1);
 		$qb->groupBy('e.memberUnion');
 		$results = $qb->getQuery()->getArrayResult();

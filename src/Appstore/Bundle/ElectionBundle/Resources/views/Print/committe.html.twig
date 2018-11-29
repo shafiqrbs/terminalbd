@@ -27,6 +27,7 @@
                             <th class="text-left">Name</th>
                             <th class="text-left">Designation</th>
                             <th class="text-left">Mobile no</th>
+                            <th class="text-left">Address</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -36,6 +37,7 @@
                                 <td class="numeric">{{ committe.member.name }}</td>
                                 <td class="numeric">{{ committe.designation.name }}</td>
                                 <td class="numeric"><a href="tel:+88 {{ committe.member.mobile }}"> {{ committe.member.mobile }}</a></td>
+                                <td class="numeric">{{ committe.member.villageName }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -50,21 +52,12 @@
             <div></div>
         </div>
     </div>
-<style>
-    .invoice .contacts {
-        margin-bottom: 75px;
-    }
-    .invoice table th {
-        white-space: nowrap;
-        font-size: 16px;
-        background: #000;
-        font-weight: bold;
-        text-transform: uppercase;
-        color: #ffffff;
-        height: 48px;
-        line-height: 48px;
-
-    }
-</style>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@ElectionBundle/Resources/public/css/print.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 

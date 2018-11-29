@@ -126,7 +126,6 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
-
             ->add('siteFontSize', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
@@ -319,7 +318,6 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span12 numeric',
                 'placeholder'=>'')
             ))
-
 
             ->add('bodyColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',

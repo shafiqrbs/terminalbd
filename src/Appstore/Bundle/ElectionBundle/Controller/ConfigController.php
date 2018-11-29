@@ -61,7 +61,7 @@ class ConfigController extends Controller
     public function updateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
+		/* @var $entity ElectionConfig */
         $entity = $this->getUser()->getGlobalOption()->getElectionConfig();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -69,9 +69,23 @@ class ConfigController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        if ($editForm->isValid()) {
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
+	    $file = $request->files->all();
+
+	    if ($editForm->isValid()) {
+	        if($entity->getRemoveImage() == 1 ){
+		        $entity->removeUpload();
+	        }
+	        if(isset($data['removeLogo']) || (isset($file['logo']) && !empty($entity->getLogo()))  ){
+		        exit;
+	        	$entity->removeLogo();
+		        $entity->setLogo(NULL);
+	        }
+
+	        $entity->upload();
+        	$em->flush();
+	        $this->getDoctrine()->getRepository('ElectionBundle:ElectionConfig')->fileUploader($entity,$file);
+
+	        $this->get('session')->getFlashBag()->add(
                 'success',"Report has been created successfully"
             );
             $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->initialDistrict($entity);

@@ -1416,6 +1416,14 @@ class Builder extends ContainerAware
 			$menu['Election & Committee']['Master Data']->addChild( 'Member Import', array( 'route' => 'election_member_import' ) )->setAttribute( 'icon', 'icon-th-list' );
 			$menu['Election & Committee']['Master Data']->addChild( 'Configuration', array( 'route' => 'election_config_manage' ) )->setAttribute( 'icon', 'icon-cog' );
 		}
+		if ($securityContext->isGranted('ROLE_ELECTION_REPORT')) {
+			$menu['Election & Committee']->addChild( 'Report' )
+			                             ->setAttribute( 'icon', 'icon icon-chart' )
+			                             ->setAttribute( 'dropdown', true );
+			$menu['Election & Committee']['Report']->addChild( 'Vote Center', array( 'route' => 'election_report_voter_center' ) );
+			$menu['Election & Committee']['Report']->addChild( 'Union Vote Center', array( 'route' => 'election_report_union_base_voter_cenetr' ) );
+			$menu['Election & Committee']['Report']->addChild( 'Vote Center Details', array( 'route' => 'election_report_voter_cenetr_details' ));
+		}
 		if ($securityContext->isGranted('ROLE_ELECTION_ADMIN')) {
 			$menu['Election & Committee']->addChild( 'Accounting' )
 			                             ->setAttribute( 'icon', 'icon icon-cog' )

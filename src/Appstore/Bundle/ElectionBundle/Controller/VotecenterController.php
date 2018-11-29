@@ -22,6 +22,20 @@ use Symfony\Component\HttpFoundation\Response;
 class VotecenterController extends Controller
 {
 
+	public function paginate($entities)
+	{
+
+		$paginator  = $this->get('knp_paginator');
+		$pagination = $paginator->paginate(
+			$entities,
+			$this->get('request')->query->get('page', 1)/*page number*/,
+			25  /*limit per page*/
+		);
+		return $pagination;
+	}
+
+
+
 	/**
 	 * Lists all Votecenter entities.
 	 *
@@ -30,11 +44,14 @@ class VotecenterController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$entity = new ElectionVoteCenter();
+		$data = $_REQUEST;
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->findBy(array('electionConfig' => $config),array('created'=>'DESC'));
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->findWithSearch($config,$data);
+		$pagination = $this->paginate($entities);
 		return $this->render('ElectionBundle:Votecenter:index.html.twig', array(
-			'entities' => $entities,
+			'entities' => $pagination,
 			'entity' => $entity,
+			'searchForm' => $data,
 		));
 	}
 
@@ -190,6 +207,31 @@ class VotecenterController extends Controller
 		}
 
 		return $this->redirect($this->generateUrl('election_votecenter'));
+	}
+
+	public function printAction(ElectionVoteCenter $center)
+	{
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		if($config->getId() == $center->getElectionConfig()->getId()){
+			return $this->render('ElectionBundle:Print:votecenter.html.twig', array(
+				'entity'      => $center,
+				'config'      => $config,
+			));
+		}else{
+			return $this->redirect($this->generateUrl('election_votecenter'));
+		}
+	}
+
+	public function printListAction()
+	{
+		$data = $_REQUEST;
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->findWithSearch($config,$data);
+		$pagination = $entities->getQuery()->getResult();
+		return $this->render('ElectionBundle:Print:votecenter-list.html.twig', array(
+			'entities'      => $pagination,
+			'config'      => $config,
+		));
 	}
 
 

@@ -1,6 +1,11 @@
 <div class="portlet box green">
     <div class="portlet-title">
         <div class="caption"><i class="icon-reorder"></i>Vote Center Information</div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn yellow" target="_blank" href="{{ path('election_votecenter_print',{'id':entity.id}) }}"><i class="icon-print"></i>&nbsp;Print</a>
+            </div>
+        </div>
     </div>
     <div class="portlet-body form">
         <div class="loader loader-double" ></div>
@@ -10,7 +15,7 @@
                 <div class="span3">
                     <h4>About:</h4>
                     <ul class="unstyled">
-                        <li><strong>Location:</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</li>
+                        <li><strong>Vote Center:</strong>&nbsp;{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</li>
                         <li><strong>Representative:</strong>&nbsp;{{ entity.representative.name }}</li>
                         <li><strong>Mobile:</strong>&nbsp;{{ entity.representativeMobile }}</li>
                         <li><strong>Address:</strong>&nbsp;{{ entity.address|raw }}</li>

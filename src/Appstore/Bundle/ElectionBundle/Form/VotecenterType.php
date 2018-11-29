@@ -48,7 +48,7 @@ class VotecenterType extends AbstractType
 			                  ->join("e.locationType","p")
 			                  ->where("e.status = 1")
 			                  ->andWhere("e.electionConfig =". $this->config->getId())
-			                  ->andWhere("p.slug = 'vote-center'");
+			                  ->andWhere("p.defineSlug = 'vote-center'");
 		        },
 	        ))
 	        ->add('electionSetup', 'entity', array(

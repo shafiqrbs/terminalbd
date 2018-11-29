@@ -216,6 +216,19 @@ class ElectionConfig
 	 */
 	private $barcodeScale = 1;
 
+	/**
+	 * @var string
+	 *
+	 *
+	 * @ORM\Column(name="logo", type="string", length=255, nullable=true)
+	 */
+	private $logo;
+
+
+	/**
+	 * @Assert\File(maxSize="8388608")
+	 */
+	protected $logoFile;
 
 
 	/**
@@ -330,21 +343,19 @@ class ElectionConfig
 			: $this->getUploadRootDir().'/'.$this->path;
 	}
 
-	public function getWebPath()
+	public function getWebPath( $fileName = '' )
 	{
-		return null === $this->path
+		return null === $this-> $fileName
 			? null
-			: $this->getUploadDir().'/' . $this->path;
+			: $this->getUploadDir().'/'.$this-> $fileName;
 	}
-
-
 
 	protected function getUploadRootDir()
 	{
 		return __DIR__.'/../../../../../web/'.$this->getUploadDir();
 	}
 
-	protected function getUploadDir()
+	public function getUploadDir()
 	{
 		return 'uploads/domain/'.$this->getGlobalOption()->getId().'/election';
 	}
@@ -718,6 +729,51 @@ class ElectionConfig
 	public function setCandidateName( string $candidateName ) {
 		$this->candidateName = $candidateName;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getLogo()
+	{
+		return $this->logo;
+	}
+
+	/**
+	 * @param string $logo
+	 */
+	public function setLogo($logo)
+	{
+		$this->logo = $logo;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLogoFile()
+	{
+		return $this->logoFile;
+	}
+
+	/**
+	 * @param UploadedFile $logoFile
+	 */
+	public function setLogoFile(UploadedFile $logoFile)
+	{
+		$this->logoFile = $logoFile;
+	}
+
+	/**
+	 * @ORM\PostRemove()
+	 */
+
+	public function removeLogo()
+	{
+
+		if ($file = $this->getAbsolutePath()) {
+			unlink($file);
+		}
+	}
+
 
 
 }

@@ -2,6 +2,10 @@ election_particular:
     resource: "@ElectionBundle/Resources/config/routing/particular.yml"
     prefix:   /setting-option
 
+election_report:
+    resource: "@ElectionBundle/Resources/config/routing/report.yml"
+    prefix:   /report
+
 election_event:
     resource: "@ElectionBundle/Resources/config/routing/event.yml"
     prefix:   /campaign

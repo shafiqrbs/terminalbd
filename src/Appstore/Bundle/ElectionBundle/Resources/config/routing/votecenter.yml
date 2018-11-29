@@ -46,6 +46,14 @@ election_votecenter_delete:
     path:     /{id}/delete
     defaults: { _controller: "ElectionBundle:Votecenter:delete" }
 
+election_votecenter_print:
+    path:     /{id}/print
+    defaults: { _controller: "ElectionBundle:Votecenter:print" }
+
+election_votecenter_list_print:
+    path:     /print-list
+    defaults: { _controller: "ElectionBundle:Votecenter:printList" }
+
 election_votecenter_member_new:
     path:     /{id}/member-new
     defaults: { _controller: "ElectionBundle:Votecenter:newMember" }

@@ -59,9 +59,10 @@ class ElectionMemberRepository extends EntityRepository
 	    $qb->orderBy('e.gender','ASC');
 	    $results = $qb->getQuery()->getArrayResult();
 	    $male = !empty($results[1]['countId'])?$results[1]['countId']:0;
+	    $other = !empty($results[2]['countId'])?$results[2]['countId']:0;
 	    $female = !empty($results[0]['countId'])?$results[0]['countId']:0;
-	    $totalMembers = ($male + $female);
-	    $data = array('totalMember' => $totalMembers,'male' => $male,'female' => $female);
+	    $totalMembers = ($male + $female + $other);
+	    $data = array('results' => $results,'totalMember' => $totalMembers);
 	    return $data;
     }
 

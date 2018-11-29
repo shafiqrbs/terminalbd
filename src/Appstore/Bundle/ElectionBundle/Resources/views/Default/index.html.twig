@@ -127,14 +127,17 @@
                             <div class="row-fluid">
                                 <div class="span12" style="margin-top:-10px">
                                     <div class="portlet-body">
+                                        {% set totalMember = 0 %}
+                                        {% for member in members.results %}
+                                            {% if member.countId > 0 %}
+                                            {% set totalMember = totalMember + member.countId %}
+                                            <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                <div> {{ member.gender }} <br/> <span style="color: red"> {{ member.countId }}</span> </div>
+                                            </a>
+                                            {% endif %}
+                                        {% endfor %}
                                         <a href="javascript:" class="icon-btn icon-btn-mini">
                                             <div> Total <br/> <span style="color: red">  {{ members.totalMember }}</span> </div>
-                                        </a>
-                                        <a href="javascript:" class="icon-btn icon-btn-mini">
-                                            <div> Male <br/> <span style="color: red"> {{ members.male }}</span> </div>
-                                        </a>
-                                        <a href="javascript:" class="icon-btn icon-btn-mini">
-                                            <div> Female <br/> <span style="color: red"> {{ members.female }}</span> </div>
                                         </a>
                                     </div>
                                 </div>
@@ -162,14 +165,18 @@
                                 <div class="span12" style="margin-top:-10px">
                                     <div class="portlet-body">
                                         <a href="javascript:" class="icon-btn icon-btn-mini">
-                                            <div> Total <br/> <span style="color: red">  {{ setup.totalVoter|number_format }}</span> </div>
-                                        </a>
-                                        <a href="javascript:" class="icon-btn icon-btn-mini">
                                             <div> Male <br/> <span style="color: red"> {{ setup.maleVoter|number_format }}</span> </div>
                                         </a>
                                         <a href="javascript:" class="icon-btn icon-btn-mini">
                                             <div> Female <br/> <span style="color: red"> {{ setup.femaleVoter|number_format }}</span> </div>
                                         </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> Other <br/> <span style="color: red"> {{ setup.otherVoter|number_format }}</span> </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> Total <br/> <span style="color: red">  {{ setup.totalVoter|number_format }}</span> </div>
+                                        </a>
+
                                     </div>
                                 </div>
 
@@ -232,7 +239,6 @@
                                                     <div> {{ priority.priorityName }} ({{ priority.countId }}) </div>
                                                 </a>
                                             </li>
-
                                         {% endfor %}
                                     </ul>
                                 </div>
@@ -572,7 +578,7 @@
     {{ parent() }}
 
     $('.box-inner-scroll').slimScroll({
-        height: '185px'
+        height: '248px'
     });
 
     $('.candidate-box').slimScroll({
