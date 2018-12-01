@@ -441,7 +441,7 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getDmsConfig()->getGlobalOption());
         $accountPurchase->setDmsPurchase($entity);
-	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
+	    $accountPurchase->setAccountBank( $entity->getAccountBank());
 	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
 	    $accountPurchase->setDmsVendor($entity->getDmsVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
