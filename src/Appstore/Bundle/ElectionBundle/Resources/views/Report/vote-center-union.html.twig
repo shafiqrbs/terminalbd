@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage Vote Center Details
+                    Manage Vote Center
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Vote Center Details</a></li>
+                    <li><a href="#">Manage Vote Center</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,7 +28,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i> Vote Center Details Information</div>
+                        <div class="caption"><i class="icon-reorder"></i> Union Base Vote Center Information</div>
                     </div>
 
                     <div class="portlet-body form">
@@ -41,11 +41,15 @@
                                 <div class="row-fluid">
                                     <div class="span5"></div>
                                     <div class="span6">
-                                        <input type="text" id="voteCenter" name="voteCenter"  class="span12 m-wrap select2VoteCenter" value="{% if searchForm.voteCenter is defined %}{{ searchForm.voteCenter }}{% endif %}"  autocomplete="off" placeholder="Search Vote Center">
+
+                                        <input type="text" id="thana" name="thana"  class="span12 m-wrap select2Thana" value="{% if searchForm.thana is defined %}{{ searchForm.thana }}{% endif %}"  autocomplete="off" placeholder="Search Thana/Upazila name">
+
                                     </div>
                                     <div class="span1">
-                                        <div class="btn-group">
-                                            <button class="btn blue" type="submit"><i class="icon-print"></i> Print</button>
+                                        <div class="controls">
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -60,6 +64,13 @@
         </div>
     </div>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@ElectionBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

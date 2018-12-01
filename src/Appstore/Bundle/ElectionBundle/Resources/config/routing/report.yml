@@ -1,22 +1,18 @@
-election_report_voter_center:
-    path:     /voter-center
+election_report_vote_center:
+    path:     /vote-center
     defaults: { _controller: "ElectionBundle:Report:voteCenter" }
 
-election_report_union_base_voter_cenetr:
-    path:     /union-base-voter
+election_report_union_base_vote_center:
+    path:     /union-base-vote-center
     defaults: { _controller: "ElectionBundle:Report:voteCenterUnion" }
-
-election_report_union_base_vote_center_print:
-    path:     /union-base-vote-print
-    defaults: { _controller: "ElectionBundle:Report:voteCenterUnionPrint" }
 
 election_report_voter_cenetr_details:
     path:     /vote-center-details
     defaults: { _controller: "ElectionBundle:Report:voteCenterDetails" }
 
-election_report_voter_cenetr_details_print:
-    path:     /vote-center-details-print
-    defaults: { _controller: "ElectionBundle:Report:voteCenterDetailsPrint" }
+election_report_member_list:
+    path:     /member-list
+    defaults: { _controller: "ElectionBundle:Report:memberList" }
 
 election_report_location_group_member:
     path:     /location-group-member

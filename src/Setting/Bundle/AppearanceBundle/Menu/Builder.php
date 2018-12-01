@@ -1418,11 +1418,11 @@ class Builder extends ContainerAware
 		}
 		if ($securityContext->isGranted('ROLE_ELECTION_REPORT')) {
 			$menu['Election & Committee']->addChild( 'Report' )
-			                             ->setAttribute( 'icon', 'icon icon-chart' )
 			                             ->setAttribute( 'dropdown', true );
-			$menu['Election & Committee']['Report']->addChild( 'Vote Center', array( 'route' => 'election_report_voter_center' ) );
-			$menu['Election & Committee']['Report']->addChild( 'Union Vote Center', array( 'route' => 'election_report_union_base_voter_cenetr' ) );
+			$menu['Election & Committee']['Report']->addChild( 'Vote Center', array( 'route' => 'election_report_vote_center' ) );
+			$menu['Election & Committee']['Report']->addChild( 'Union Base Center', array( 'route' => 'election_report_union_base_vote_center' ) );
 			$menu['Election & Committee']['Report']->addChild( 'Vote Center Details', array( 'route' => 'election_report_voter_cenetr_details' ));
+			$menu['Election & Committee']['Report']->addChild( 'Member List', array( 'route' => 'election_report_member_list' ));
 		}
 		if ($securityContext->isGranted('ROLE_ELECTION_ADMIN')) {
 			$menu['Election & Committee']->addChild( 'Accounting' )

@@ -94,6 +94,14 @@ class WidgetController extends Controller
 
     }
 
+    public function footerMenuApplicationAction()
+    {
+        $menus                     = $this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1),array('name'=>'ASC'));
+	    return $this->render('@Frontend/Widget/mobile-menu.html.twig', array(
+		    'applications'           => $menus,
+	    ));
+    }
+
     public function footerMenuAction($sector = '' , $parent = '')
     {
         $menus                     = $this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->getSubMenuList($sector,$parent);

@@ -60,12 +60,18 @@ class ReportController extends Controller
 
 	public function voteCenterAction()
 	{
-
 		$data = $_REQUEST;
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->findWithSearch($config,$data);
-		$pagination = $entities->getQuery()->getResult();
-		return $this->render('ElectionBundle:Report:voter-center.html.twig', array(
+		$pagination = '';
+		if(!empty($data)){
+			$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->findWithSearch($config,$data);
+			$pagination = $entities->getQuery()->getResult();
+			$twig = 'Report/Print:vote-center.html.twig';
+		}else{
+			$twig = 'Report:vote-center.html.twig';
+		}
+		return $this->render("ElectionBundle:{$twig}", array(
+			'config' => $config,
 			'entities' => $pagination,
 			'searchForm' => $data,
 		));
@@ -78,28 +84,18 @@ class ReportController extends Controller
 
 		$data = $_REQUEST;
 		$config     = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$unionVoters    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->getUnionWiseVoter($config,$data);
-		return $this->render('ElectionBundle:Report:voter-center-union.html.twig', array(
+		$unionVoters = '';
+		if(!empty($data)){
+			$unionVoters    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->getUnionWiseVoter($config,$data);
+			$twig = 'Report/Print:vote-center-union.html.twig';
+		}else{
+			$twig = 'Report:vote-center-union.html.twig';
+		}
+		return $this->render("ElectionBundle:{$twig}", array(
 
-			'config'                   => $config,
-			'entities'               => $unionVoters,
-			'searchForm'            => $data,
-			'globalOption'              => $this->getUser()->getGlobalOption(),
-
-		));
-	}
-
-	public function voteCenterUnionPrintAction()
-	{
-		/* @var $config ElectionConfig */
-		$data = $_REQUEST;
-		$config     = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$unionVoters    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->getUnionWiseVoter($config,$data);
-		return $this->render('ElectionBundle:Report/Print:voter-center-union.html.twig', array(
-
-			'config'                   => $config,
-			'entities'               => $unionVoters,
-			'searchForm'            => $data,
+			'config'                    => $config,
+			'entities'                  => $unionVoters,
+			'searchForm'                => $data,
 			'globalOption'              => $this->getUser()->getGlobalOption(),
 
 		));
@@ -109,26 +105,73 @@ class ReportController extends Controller
 	{
 		$data = $_REQUEST;
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		return $this->render('ElectionBundle:Report:vote-center-details.html.twig', array(
-			'searchForm' => $data,
-		));
-	}
-
-	public function voteCenterDetailsPrintAction()
-	{
-		$data = $_REQUEST;
-		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->findVoteCenter($config,$data);
-		return $this->render('ElectionBundle:Report/Print:vote-center-details.html.twig', array(
+		$entity = '';
+		if(!empty($data)){
+			$entity = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->findVoteCenter($config,$data);
+			$twig = 'Report/Print:vote-center-details.html.twig';
+		}else{
+			$twig = 'Report:vote-center-details.html.twig';
+		}
+		return $this->render("ElectionBundle:{$twig}", array(
 			'entity' => $entity,
 			'config' => $config,
 			'searchForm' => $data,
 		));
+
 	}
+
+	public function memberListAction()
+	{
+
+		ini_set( 'max_execution_time', 0 );
+		ignore_user_abort( true );
+
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$type = 'member';
+		$pagination = '';
+
+		if(!empty($data)){
+			$entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data,$type);
+			$pagination = $entities->getQuery()->getResult();
+			$twig = 'Report/Print:member-list.html.twig';
+		}else{
+			$twig = 'Report:member-list.html.twig';
+		}
+		return $this->render("ElectionBundle:{$twig}", array(
+			'config' => $config,
+			'entities' => $pagination,
+
+		));
+	}
+
 
 	public function locationGroupMemberAction()
 	{
+		/* @var $config ElectionConfig */
 
+		$data = $_REQUEST;
+		$config     = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$unionVoters = '';
+		$groups = '';
+
+		if(!empty($data)){
+			$unionVoters    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->getUnionWiseVoter($config,$data);
+			$twig = 'Report/Print:member-group.html.twig';
+		}else{
+			$groups = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->findBy(array('particularType'=>11));
+			$twig = 'Report:member-group.html.twig';
+		}
+		return $this->render("ElectionBundle:{$twig}", array(
+
+			'config'                    => $config,
+			'groups'                  => $groups,
+			'entities'                  => $unionVoters,
+			'searchForm'                => $data,
+			'globalOption'              => $this->getUser()->getGlobalOption(),
+
+		));
 	}
 
 	public function locationBaseCommitteeAction()
