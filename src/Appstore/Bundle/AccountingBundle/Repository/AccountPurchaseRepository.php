@@ -411,7 +411,9 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
         $accountPurchase->setPurchase($entity);
-        $accountPurchase->setVendor($entity->getVendor());
+	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
+	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
+	    $accountPurchase->setVendor($entity->getVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getTotalAmount());
         $accountPurchase->setPayment($entity->getPaymentAmount());
@@ -439,7 +441,9 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getDmsConfig()->getGlobalOption());
         $accountPurchase->setDmsPurchase($entity);
-        $accountPurchase->setDmsVendor($entity->getDmsVendor());
+	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
+	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
+	    $accountPurchase->setDmsVendor($entity->getDmsVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
@@ -467,6 +471,8 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setGlobalOption($global);
         $accountPurchase->setMedicinePurchase($entity);
         $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
+	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
+	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
 	    if (!empty( $entity->getTransactionMethod())) {
 		    $accountPurchase->setTransactionMethod( $entity->getTransactionMethod() );
 	    }
@@ -513,7 +519,9 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
         $accountPurchase->setHmsPurchase($entity);
-        $accountPurchase->setHmsVendor($entity->getVendor());
+	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
+	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
+	    $accountPurchase->setHmsVendor($entity->getVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
@@ -539,7 +547,9 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setGlobalOption($entity->getRestaurantConfig()->getGlobalOption());
         $accountPurchase->setRestaurantPurchase($entity);
         $accountPurchase->setRestaurantVendor($entity->getVendor());
-        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
+	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
+	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
+	    $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
         $accountPurchase->setProcess('restaurant');
@@ -627,6 +637,8 @@ class AccountPurchaseRepository extends EntityRepository
 	    $accountPurchase->setGlobalOption( $global );
 	    $accountPurchase->setBusinessPurchase( $entity );
 	    $accountPurchase->setAccountVendor( $entity->getVendor() );
+	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
+	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
 	    if (!empty( $entity->getTransactionMethod())) {
 		    $accountPurchase->setTransactionMethod( $entity->getTransactionMethod() );
 	    }
