@@ -46,7 +46,8 @@
         "xiidea/ez-maintenance": "^1.0",
         "symfony/yaml": "^2.8",
         "symfony/validator": "^2.8",
-        "beberlei/DoctrineExtensions": "^1.0"
+        "beberlei/DoctrineExtensions": "^1.0",
+        "dompdf/dompdf": "^0.8.2"
     },
     "scripts": {
         "symfony-scripts": [

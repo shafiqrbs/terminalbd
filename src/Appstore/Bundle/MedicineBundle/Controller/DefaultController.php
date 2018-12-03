@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
+use Dompdf\Dompdf;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -20,7 +21,7 @@ class DefaultController extends Controller
 	public function indexAction()
     {
 
-        /* @var GlobalOption $globalOption */
+    	/* @var GlobalOption $globalOption */
 
         $globalOption = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();

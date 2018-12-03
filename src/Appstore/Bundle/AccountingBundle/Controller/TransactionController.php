@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
-use Appstore\Bundle\AccountingBundle\Form\TransactionType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

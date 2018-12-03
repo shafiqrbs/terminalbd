@@ -31,7 +31,7 @@
                             <div style="">
                                 {% if apps is not empty %}
                                 {% for app in apps %}
-                                    <div class="one-fourth tm-box">
+                                    <div class="one-fourth tm-box" data-match-height="medium-list">
                                         <div style="margin-bottom:30px">
                                             <a href="{{ path('bindu_application',{'slug':app.slug}) }}"><img alt="img" style="margin-bottom:20px" src="{{ image(app.webPath).forceResize(320,220) }}"></a>
                                             <h3 class="tm-title"><a href="{{ path('bindu_application',{'slug':app.slug}) }}">{{ app.name }}</a></h3>
