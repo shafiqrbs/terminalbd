@@ -29,7 +29,7 @@ class DefaultController extends Controller
         $datetime = new \DateTime("now");
         $data['startDate'] = $datetime->format('Y-m-d');
 	    $data['endDate'] = $datetime->format('Y-m-d');
-
+	    $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineIncome($this->getUser(),$data);
 	    $user = $this->getUser();
 	    $salesCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
         $purchaseCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
@@ -69,6 +69,7 @@ class DefaultController extends Controller
 	    return $this->render('MedicineBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
+            'income'                    => $income,
             'transactionCashOverviews'  => $transactionCashOverview,
             'expenditureOverview'       => $expenditureOverview ,
             'salesCashOverview'         => $salesCashOverview ,

@@ -21,19 +21,19 @@ class MedicineSalesTemporaryRepository extends EntityRepository
     {
         $config = $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.subTotal) AS subTotal');
+        $qb->select('SUM(e.subTotal) AS subTotal,SUM(e.purchasePrice * e.quantity) AS purchaseSubTotal ');
         $qb->where('e.medicineConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere("e.user =".$user->getId());
         $res = $qb->getQuery()->getOneOrNullResult();
-        return $res['subTotal'];
+        return $res;
     }
 
     public function insertInvoiceItems(User $user, $data)
     {
 
         $stockItem = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['stockName']);
-    //    $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['barcode']);
+        $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['barcode']);
 
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
@@ -46,10 +46,10 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
 	        $entity->setMedicineStock( $stockItem );
 	        $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
-	        /* if(!empty($purchaseStockItem)){
+	        if(!empty($purchaseStockItem)){
 				 $entity->setPurchasePrice(round($purchaseStockItem->getPurchasePrice(),2));
 				 $entity->setMedicinePurchaseItem($purchaseStockItem);
-			 }*/
+			}
 	        $em->persist( $entity );
 	        $em->flush();
         }

@@ -22,13 +22,13 @@ class SalesTemporaryItemType extends AbstractType
         $builder
 
             ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')))
-            /*->add('barcode', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span8 input'),
+            ->add('barcode', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12 input'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'empty_value' => '---Choose barcode---',
                 'choices' => array(),
-            ))*/
+            ))
 
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'MRP')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span5 form-control input-number input','placeholder'=>'quantity')))

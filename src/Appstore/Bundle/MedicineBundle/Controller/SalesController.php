@@ -164,7 +164,7 @@ class SalesController extends Controller
                 $purchaseItems .= '<option value="' . $item->getId() . '">' . $item->getBarcode() . ' - ' . $expiration . '[' . $item->getRemainingQuantity() . ']</option>';
             }
         }
-        return new Response(json_encode(array('purchaseItems' => '','salesPrice'=> round($stock->getSalesPrice()))));
+        return new Response(json_encode(array('purchaseItems' => $purchaseItems,'salesPrice'=> round($stock->getSalesPrice()))));
     }
 
     public function returnResultData(MedicineSales $entity,$msg=''){

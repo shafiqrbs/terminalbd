@@ -18,14 +18,14 @@
     {{ form_start(salesItem) }}
     {{ form_row(salesItem._token) }}
     <div class="row-fluid particular-info" style="padding-left:15px!important" >
-        <div class="span8">
+        <div class="span6">
             {{ form_widget(salesItem.stockName) }}
             {{ form_errors(salesItem.stockName) }}
         </div>
-        {#<div class="span2">
+        <div class="span2">
             {{ form_widget(salesItem.barcode) }}
             {{ form_errors(salesItem.barcode) }}
-        </div>#}
+        </div>
         <div class="span4">
             <div class="input-append">
                 <div class="input-group">
@@ -86,7 +86,7 @@
                 </tr>
                 <tr>
                     <td colspan="5" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                    <td class=""><strong id="subTotal">{{ subTotal|number_format }}</strong></td>
+                    <td class=""><strong id="subTotal">{{ result.subTotal|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>
                 <tr>
@@ -96,7 +96,12 @@
                 </tr>
                 <tr>
                     <td colspan="5" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
-                    <td class=""><strong id="grandTotal">{{ subTotal|number_format }}</strong></td>
+                    <td class=""><strong id="grandTotal">{{ result.subTotal|number_format }}</strong></td>
+                    <td class="span1"></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="span9"><span class="pull-right"><strong>Profit TK.</strong> =</span></td>
+                    <td class=""><strong id="profit">{{ (result.subTotal - result.purchaseSubTotal)|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>
                 </tfoot>
@@ -114,8 +119,8 @@
                         <label class="control-label" for="firstName">
                             <span class="label" >Discount Type</span>
                             <span class="pull-right sales-right">
-                                        {{ form_widget(form.discountType) }}
-                                    </span>
+                              {{ form_widget(form.discountType) }}
+                            </span>
                         </label>
                     </div>
                 </div>
@@ -303,8 +308,8 @@
                 <div class="pull-right">
                     {{ form_widget(form.due) }}
                     {{ form_widget(form.discount) }}
-                    <input type="hidden" id="salesNetTotal" name="salesNetTotal" value="{{ subTotal }}">
-                    <input type="hidden" id="salesSubTotal" name="salesSubTotal" value="{{ subTotal }}">
+                    <input type="hidden" id="salesNetTotal" name="salesNetTotal" value="{{ result.subTotal }}">
+                    <input type="hidden" id="salesSubTotal" name="salesSubTotal" value="{{ result.subTotal }}">
                     <button type="button" class="btn red span12 confirmTemporarySubmit" id="receiveBtn"><i class="icon-save"></i> Save Process</button>
                 </div>
             </div>

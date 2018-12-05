@@ -178,7 +178,7 @@ class MedicineStockRepository extends EntityRepository
         $qb->setParameter('config', $config);
         $qb->andWhere("item.minQuantity > 0");
         if($minQnt == 'minimum') {
-            $qb->andWhere("item.minQuantity >= item.remainingQuantity");
+            $qb->andWhere("item.minQuantity > item.remainingQuantity");
         }
         if (!empty($sku)) {
             $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));

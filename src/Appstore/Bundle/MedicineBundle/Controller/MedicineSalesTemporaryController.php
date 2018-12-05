@@ -35,14 +35,14 @@ class MedicineSalesTemporaryController extends Controller
         }
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
         $editForm = $this->createCreateForm($entity);
-        $subTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
+        $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
 
         $html = $this->renderView('MedicineBundle:Sales:temporary.html.twig', array(
             'entity' => $entity,
             'salesItem' => $salesItemForm->createView(),
             'form' => $editForm->createView(),
             'user'   => $user,
-            'subTotal'   => $subTotal,
+            'result'   => $result,
         ));
         return New Response($html);
     }
@@ -158,7 +158,8 @@ class MedicineSalesTemporaryController extends Controller
         $user = $this->getUser();
         $discount = (float)$request->request->get('discount');
         $discountType = $request->request->get('discountType');
-        $subTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
+        $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
+	    $subTotal = $result['subTotal'];
         if($discountType == 'flat' and $subTotal > $discount){
             $initialDiscount = round($discount);
             $initialGrandTotal =round ($subTotal  - $initialDiscount);
@@ -172,6 +173,7 @@ class MedicineSalesTemporaryController extends Controller
 
         $data = array(
             'subTotal' => round($subTotal),
+            'profit' => round($initialGrandTotal - $result['purchaseSubTotal']),
             'initialGrandTotal' => round($initialGrandTotal),
             'initialDiscount' => $initialDiscount,
             'success' => 'success'
@@ -183,12 +185,15 @@ class MedicineSalesTemporaryController extends Controller
     public function returnResultData(User $user,$msg=''){
 
         $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
-        $subTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-	    $subTotal = floor($subTotal);
+        $total = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
+	    $subTotal = floor($total['subTotal']);
+	    $purchaseSubTotal = floor($total['purchaseSubTotal']);
         $data = array(
            'subTotal' => $subTotal,
+           'purchaseSubTotal' => $purchaseSubTotal,
            'initialGrandTotal' => $subTotal,
            'discount' => $subTotal,
+           'profit' => ($subTotal - $purchaseSubTotal),
            'salesItems' => $salesItems ,
            'msg' => $msg ,
            'success' => 'success'

@@ -27,6 +27,22 @@ $(document).on('click', '#temporarySales', function() {
 
 });
 
+$(document).on('change', '#salesitem_stockName', function() {
+
+    var medicine = $('#salesitem_stockName').val();
+    $.ajax({
+        url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
+        type: 'GET',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#salesitem_barcode').html(obj['purchaseItems']).focus();
+            $('#salesitem_salesPrice').val(obj['salesPrice']);
+        }
+    })
+
+});
+
+
 $(document).on("click", ".instantPopup", function() {
 
     var url = $(this).attr('data-url');
@@ -142,6 +158,7 @@ function jqueryTemporaryLoad() {
                     $('.dueAmount').html(obj['initialGrandTotal']);
                     $('#salesSubTotal').val(obj['subTotal']);
                     $('#salesNetTotal').val(obj['initialGrandTotal']);
+                    $('#profit').html(obj['profit']);
                     $('#salesTemporary_discount').val(obj['initialDiscount']);
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
                     $("#salesTemporaryItem_stockName").select2("val", "");
@@ -171,6 +188,7 @@ function jqueryTemporaryLoad() {
                 $('.dueAmount').html(obj['initialGrandTotal']);
                 $('#salesSubTotal').val(obj['subTotal']);
                 $('#salesNetTotal').val(obj['initialGrandTotal']);
+                $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
             },
@@ -197,6 +215,7 @@ function jqueryTemporaryLoad() {
                 $('.dueAmount').html(obj['initialGrandTotal']);
                 $('#salesSubTotal').val(obj['subTotal']);
                 $('#salesNetTotal').val(obj['initialGrandTotal']);
+                $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
             },
@@ -221,6 +240,7 @@ function jqueryTemporaryLoad() {
                 $('.dueAmount').html(obj['initialGrandTotal']);
                 $('#salesSubTotal').val(obj['subTotal']);
                 $('#salesNetTotal').val(obj['initialGrandTotal']);
+                $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
             }
@@ -245,6 +265,7 @@ function jqueryTemporaryLoad() {
                 $('.dueAmount').html(obj['initialGrandTotal']);
                 $('#salesSubTotal').val(obj['subTotal']);
                 $('#salesNetTotal').val(obj['initialGrandTotal']);
+                $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
             }
