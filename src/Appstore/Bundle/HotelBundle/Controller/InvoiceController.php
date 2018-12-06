@@ -123,11 +123,13 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
+        if (in_array($entity->getProcess(), array('Check-in','Check-out','Canceled'))) {
             return $this->redirect($this->generateUrl('hotel_invoice_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('room','package','post-production','pre-production','stock','service','virtual'));
-	    $view = !empty($hotelConfig->getInvoiceType()) ? $hotelConfig->getInvoiceType():'new';
+	    $date = date('Y-m-d');
+	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($hotelConfig,$date);
+	    $particulars = $em->getRepository('HotelBundle:HotelParticular')->getAvailableRoom($hotelConfig, $type = array('room','package'),$bookings);
+        $view = !empty($hotelConfig->getInvoiceType()) ? $hotelConfig->getInvoiceType():'new';
         return $this->render("HotelBundle:Invoice:new.html.twig", array(
             'entity' => $entity,
             'particulars' => $particulars,

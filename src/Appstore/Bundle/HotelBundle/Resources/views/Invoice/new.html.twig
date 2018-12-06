@@ -6,6 +6,9 @@
             <div class="span12">
                 <h3 class="category-title">
                     Guest Invoice #  <strong>{{ entity.invoice }}</strong>
+                    <span class="pull-right">
+                        <a href="javascript:" data-title="{{ "now"|date("d-F-Y") }} Booking Overview" id="booking"  class="btn yellow"><i class="icon-building"></i> Booking Overview</a>
+                    </span>
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -54,11 +57,11 @@
                                             <div class="span3">
                                                 <div class="input-icon left span6">
                                                     <i class="icon-calendar"></i>
-                                                    <input class="m-wrap span12 search-input date-picker" style="padding-right:0!important" name="startDate" id="startDate" value=" {{ "now"|date("d-m-Y") }}"  autocomplete="off" placeholder="" >
+                                                    <input class="m-wrap span12" style="padding-right:0!important" name="startDate" id="startDate" value=" {{ "now"|date("d-m-Y") }}"  autocomplete="off" placeholder="" >
                                                 </div>
                                                 <div class="input-icon left span6">
                                                     <i class="icon-calendar"></i>
-                                                    <input class="m-wrap span12 search-input date-picker" style="padding-right:0!important;" name="endDate" id="endDate" value=" {{ "tomorrow"|date("d-m-Y") }}"  autocomplete="off" placeholder="">
+                                                    <input class="m-wrap span12" style="padding-right:0!important;" name="endDate" id="endDate" value=" {{ "tomorrow"|date("d-m-Y") }}"  autocomplete="off" placeholder="">
                                                 </div>
                                             </div>
                                             <div class="span6" >
@@ -444,6 +447,7 @@
             </div>
         </div>
     </div>
+    </div>
 
 {% endblock %}
 {% block cssBlock %}
@@ -464,4 +468,17 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    var dateToday = new Date();
+    var dates = $("#startDate, #endDate").datepicker({
+    defaultDate: "+1w",
+    changeMonth: true,
+    numberOfMonths: 2,
+    minDate: dateToday,
+    onSelect: function(selectedDate) {
+    var option = this.id == "startDate" ? "minDate" : "maxDate",
+    instance = $(this).data("datepicker"),
+    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+    dates.not(this).datepicker("option", option, date);
+    }
+    });
 {% endblock %}

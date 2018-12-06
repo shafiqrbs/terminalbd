@@ -142,7 +142,7 @@ class HotelInvoiceParticular
 	/**
      * @var array
      *
-     * @ORM\Column(name="bookingDate", type="array", nullable=true)
+     * @ORM\Column(name="bookingDate", type="simple_array", nullable=true)
      */
     private $bookingDate;
 

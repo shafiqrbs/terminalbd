@@ -187,7 +187,7 @@ input[class*="span"].m-wrap  {
 .tooltip.top .tooltip-arrow{
     color: #d12610 !important;
 }
-.close{
+.dialogModal_top #dialogModal_header .close{
     background-image: none!important;
 }
 .dialogModal .dialogModal_top .dialogModal_header{

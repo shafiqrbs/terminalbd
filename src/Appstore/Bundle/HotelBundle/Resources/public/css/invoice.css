@@ -82,7 +82,7 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     font-weight: normal;
     margin-top: -1px;
     text-align: left;
-    border: 1px solid #4b8df8!important;
+    border: 2px solid #4b8df8!important;
     height: 23px!important;
 }
 .select2-search{

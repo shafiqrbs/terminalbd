@@ -98,9 +98,23 @@ class HotelParticularRepository extends EntityRepository
             return  $qb;
     }
 
+	public function getAvailableRoom($config,$type,$booked = array()){
 
+		$qb = $this->createQueryBuilder('e');
+       $qb->join('e.hotelParticularType','p');
+       $qb->select('e.name as name, e.id as id , e.salesPrice as salesPrice, e.particularCode as particularCode');
+       $qb->where('e.hotelConfig = :config')->setParameter('config', $config);
+       $qb->andWhere('e.status = :status')->setParameter('status', 1);
+       $qb->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type));
+       $qb->andWhere('e.id NOT IN(:ids)')->setParameter('ids',$booked);
+	   // $qb->where($qb->expr()->notIn('rl.request_id', $booked));
+       $qb->orderBy('e.sorting','ASC');
+       $qb->orderBy('e.name','ASC');
+       $result = $qb->getQuery()->getArrayResult();
+		return  $result;
+	}
 
-    public function getServiceWithParticular($config,$services){
+	public function getServiceWithParticular($config,$services){
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')

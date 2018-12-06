@@ -1,3 +1,4 @@
+/*
 $( ".date-picker" ).datepicker({
     dateFormat: "dd-mm-yy"
 });
@@ -26,6 +27,7 @@ function datePickerReload() {
         dateFormat: "dd-mm-yy"
     });
 }
+*/
 
 $("[id^=startPicker]").each(function() {
     bindDatePicker(this);

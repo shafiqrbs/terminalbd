@@ -5,6 +5,7 @@ namespace Appstore\Bundle\HotelBundle\Controller;
 use Knp\Snappy\Pdf;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -86,6 +87,28 @@ class DefaultController extends Controller
         header('Content-Disposition: attachment; filename="'.$fileName.'"');
         echo $pdf;
         return new Response('');
+    }
+
+
+    public function bookingAction()
+    {
+		$curDate = date('Y-m-d');
+	    $user = $this->getUser();
+	    $config = $user->getGlobalOption()->getHotelConfig();
+	    $date = !empty($_REQUEST['bookingDate']) ? $_REQUEST['bookingDate']:$curDate;
+	    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($config,$type = array('room','package'));
+	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($config,$date);
+
+	    $books = array();
+	    foreach ($bookings as $booking){
+	    	$books[] = $booking['id'];
+	    }
+	    $html = $this->renderView('HotelBundle:Invoice:booking.html.twig', array(
+		    'entities' => $entities,
+		    'bookings' => $books,
+		 ));
+	    return New Response($html);
+
     }
 
 

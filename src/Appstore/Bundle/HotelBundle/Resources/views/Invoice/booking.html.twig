@@ -1,0 +1,24 @@
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption"><i class="icon-reorder"></i> <strong class="overview-title">{{ "now"|date("d-F-Y") }} Booking Overview</strong></div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine Sales</a>
+                <a class="btn yellow instantPopup" href="javascript:" data-url="{{ path('medicine_instant_purchase_add') }}" id="instantPurchasePopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        {% if entities is not empty  %}
+            {% for entity in entities %}
+                <div class="row-fluid">
+                    <div class="span6">{{ entity.name }}</div>
+                    <div class="span3">Price {{ entity.salesPrice }}</div>
+                    <div class="span3">{% if entity.id in bookings %} Booked{% endif %}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="clearfix"></div>
+    </div>
+</div>
+

@@ -124,6 +124,21 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 	}
 
+	public function getBookedRoom(HotelConfig $config,$date){
+
+		$config =  $config->getId();
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.hotelInvoice','h');
+		$qb->join('e.hotelParticular','p');
+		$qb->select('p.id as id');
+		$qb->andWhere('h.hotelConfig = :config')->setParameter('config',$config);
+		$qb->andWhere('e.process = :process')->setParameter('process','booked');
+		$qb->andWhere($qb->expr()->like("e.bookingDate", "'%$date%'"  ));
+		$qb->groupBy('p.id');
+		$result = $qb->getQuery()->getArrayResult();
+		return $result;
+	}
+
 
 	public function salesStockItemProduction(HotelInvoiceParticular $invoice_particular,HotelProductionElement $element)
 	{

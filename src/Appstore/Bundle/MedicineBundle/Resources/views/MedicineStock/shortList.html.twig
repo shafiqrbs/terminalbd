@@ -113,7 +113,7 @@
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% endif %}
                                         <td class="numeric" >{{ entity.brandName }}</td>
-                                        <td class="numeric" >{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</td>
                                         <td class="numeric">{{ entity.salesPrice }}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
@@ -155,7 +155,6 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
-
     var itemArr = $.cookie('stockIds') ? $.cookie('stockIds').split(',') : [];
     $('body').on('change', 'input.stockId', function(el) {
         console.log(itemArr);

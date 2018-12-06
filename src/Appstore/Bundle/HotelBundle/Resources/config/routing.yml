@@ -41,3 +41,9 @@ hotel_config:
 hotel_homepage:
     path:     /dashoard
     defaults: { _controller: HotelBundle:Default:index }
+
+hotel_booking:
+    path:     /booking-overview
+    defaults: { _controller: HotelBundle:Default:booking }
+    options:
+            expose: true
