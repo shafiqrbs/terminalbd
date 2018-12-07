@@ -64,6 +64,16 @@ class HotelParticular
     private $production;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticularMeta", mappedBy="particular" )
+     **/
+    private $particularMetas;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelRoomGallery", mappedBy="particular" )
+     **/
+    private $roomGalleries;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchaseItem", mappedBy="hotelParticular" )
      **/
     private $hotelPurchaseItems;
@@ -1008,6 +1018,21 @@ class HotelParticular
 	public function getHotelFeature() {
 		return $this->hotelFeature;
 	}
+
+	/**
+	 * @return HotelParticularMeta
+	 */
+	public function getParticularMetas() {
+		return $this->particularMetas;
+	}
+
+	/**
+	 * @return HotelRoomGallery
+	 */
+	public function getRoomGalleries() {
+		return $this->roomGalleries;
+	}
+
 
 }
 

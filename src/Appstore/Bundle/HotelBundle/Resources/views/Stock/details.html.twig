@@ -165,6 +165,78 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Additional Field & Value</div>
+                                    <a href="javascript:" class="btn green pull-right mini addmore"><i
+                                                class="icon-plus"></i></a>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid clone-block" id="clone-block">
+                                <div class="clone">
+                                    <div class="span3 ">
+                                        <div class="control-group">
+                                            <input type="hidden" name="metaId[]" value="">
+                                            <input type="text" name="metaKey[]" class="m-wrap span12"
+                                                   placeholder="Label name" value="">
+                                        </div>
+                                    </div>
+                                    <div class="span8">
+                                        <div class="control-group">
+                                            <input type="text" name="metaValue[]" class="m-wrap span12"
+                                                   placeholder="Label value" value="">
+                                        </div>
+                                    </div>
+                                    <div class="span1">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <a href="javascript:" class="btn red  remove hidden mini"><i
+                                                            class="icon-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if  entity.particularMetas is defined and entity.particularMetas is not empty %}
+                                <ol class="dd-list singleSortable ui-sortable">
+                                    {% for meta in entity.particularMetas %}
+                                        <li style="display:list-item" class="dd-item dd3-item removeAttr-{{ meta.id }}" id="menuItem_{{ meta.id }}">
+                                            <div class="menuDiv">
+                                                <div>
+                                                    <div data-id="{{ meta.id }}" class="itemTitle dd-handle dd3-handle"></div>
+                                                    <div class="row-fluid trash" id="remove-{{ meta.id }}" style="margin-left: 30px!important">
+                                                        <div class="span3 ">
+                                                            <div class="control-group">
+                                                                <input type="hidden" name="metaId[]" value="{{ meta.id }}">
+                                                                <input type="text" name="metaKey[]" class="m-wrap span12"
+                                                                       placeholder="Label name" value="{{ meta.metaKey }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="span8">
+                                                            <div class="control-group">
+                                                                <input type="text" name="metaValue[]" class="m-wrap span12"
+                                                                       placeholder="Label value" value="{{ meta.metaValue }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="span1">
+                                                            <div class="control-group">
+                                                                <div class="controls">
+                                                                    <a href="javascript:" data-id="{{ meta.id }}"
+                                                                       data-url="{{ path('hotel_stock_item_meta_delete',{'id':meta.id}) }}"
+                                                                       class="btn red delete  removeAttr mini"><i class="icon-trash"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ol>
+                            {% endif %}
+
                             <div class="form-actions portlet box purple">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Item Gallery</div>
@@ -172,17 +244,17 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
-                                {% if(entity.itemGalleries) %}
-                                    {% for photo in entity.itemGalleries %}
+                                {% if(entity.roomGalleries is not empty) %}
+                                    {% for photo in entity.roomGalleries %}
                                         <div class="span2">
                                             <input type="checkbox" data-placement="left" class="checker popovers"
                                                    data-trigger="hover"
                                                    data-content="Are you remove image, Please click here."
                                                    data-original-title="Remove image" name="imageId[]"
                                                    value="{{ photo.id }}">
-                                            <a href="/{{ photo.getWebPath(entity.inventoryConfig.globalOption.id,entity.id) }}"
+                                            <a href="/{{ photo.getWebPath(entity.hotelConfig.globalOption.id,entity.id) }}"
                                                target="_blank"> <img
-                                                        src="{{ image(photo.getAbsolutePath(entity.inventoryConfig.globalOption.id,entity.id)).resize(100,100) }}"/></a>
+                                                        src="{{ image(photo.getAbsolutePath(entity.hotelConfig.globalOption.id,entity.id)).resize(100,100) }}"/></a>
                                         </div>
                                     {% endfor %}
                                 {% endif %}
@@ -211,4 +283,17 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HotelBundle/Resources/public/js/room.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    NestSortable.init();
+    imageGallery({{ entity.id }})
 {% endblock %}

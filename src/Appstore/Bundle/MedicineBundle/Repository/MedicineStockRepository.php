@@ -324,7 +324,7 @@ class MedicineStockRepository extends EntityRepository
         $query->leftJoin('e.medicineBrand', 'brand');
         $query->leftJoin('brand.medicineGeneric', 'generic');
         $query->select('e.id as id');
-        $query->addSelect('CONCAT(e.sku, \' - \', e.name,  \' [\', e.remainingQuantity, \'] \', unit.name,\' => \', rack.name) AS text');
+        $query->addSelect('CONCAT(e.sku, \' - \', e.name,  \' [\', e.remainingQuantity, \'] \', unit.name,\' => \', rack.name,\' - PP Tk. \', e.purchasePrice) AS text');
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->orWhere($query->expr()->like("generic.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");

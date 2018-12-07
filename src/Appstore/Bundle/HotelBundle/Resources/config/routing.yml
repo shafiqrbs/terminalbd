@@ -47,3 +47,27 @@ hotel_booking:
     defaults: { _controller: HotelBundle:Default:booking }
     options:
             expose: true
+
+hotel_booking_temporary_create:
+    path:      /{id}/booking-temporary-create
+    defaults: { _controller: HotelBundle:Default:createTemporary }
+    methods:  POST
+    options:
+            expose: true
+
+hotel_booking_temporary_reset:
+    path:     /{id}/booking-room-reset
+    defaults: { _controller: HotelBundle:Default:roomReset }
+
+hotel_booking_room_details:
+    path:     /{id}/booking-room-details
+    defaults: { _controller: HotelBundle:Default:bookedRoomDetails }
+
+hotel_booking_room:
+    path:     /{id}/booking-room-form
+    defaults: { _controller: HotelBundle:Default:bookingRoomForm }
+
+hotel_booking_invoice_generate:
+    path:     /{id}/booking-invoice-generate
+    defaults: { _controller: HotelBundle:Default:bookingInvoiceGenerate }
+

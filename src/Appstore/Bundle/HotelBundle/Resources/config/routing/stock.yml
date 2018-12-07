@@ -41,6 +41,26 @@ hotel_stock_production:
     defaults: { _controller: "HotelBundle:Stock:production" }
 
 
+hotel_stock_item_image:
+    path:     /{id}/stock-item-image
+    defaults: { _controller: "HotelBundle:Stock:uploadItemImage" }
+    options:
+            expose: true
+
+hotel_stock_item_meta_delete:
+    path:     /{id}/item-key-value-delete
+    defaults: { _controller: "HotelBundle:Stock:keyValueDelete" }
+    options:
+            expose: true
+
+hotel_stock_attribute_sorted:
+    path:     /{item}/item-key-value-delete
+    defaults: { _controller: "HotelBundle:Stock:keyValueSorted" }
+    methods:  POST
+    options:
+            expose: true
+
+
 hotel_stock_search:
     path:     /search
     defaults: { _controller: "HotelBundle:Stock:autoSearch" }

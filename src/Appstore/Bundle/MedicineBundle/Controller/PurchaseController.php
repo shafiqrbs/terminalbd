@@ -630,9 +630,7 @@ class PurchaseController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
-
         $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->mergePurchaseItem($entity,$vendor);
-
         return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
 
     }

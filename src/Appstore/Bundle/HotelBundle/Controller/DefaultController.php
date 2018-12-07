@@ -2,6 +2,10 @@
 
 namespace Appstore\Bundle\HotelBundle\Controller;
 
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HotelBundle\Entity\HotelParticular;
+use Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice;
+use Appstore\Bundle\HotelBundle\Repository\HotelTemporaryInvoiceRepository;
 use Knp\Snappy\Pdf;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -103,15 +107,63 @@ class DefaultController extends Controller
 	    foreach ($bookings as $booking){
 	    	$books[] = $booking['id'];
 	    }
+
 	    $html = $this->renderView('HotelBundle:Invoice:booking.html.twig', array(
 		    'entities' => $entities,
 		    'bookings' => $books,
+
 		 ));
 	    return New Response($html);
 
     }
 
+    public function bookedRoomDetailsAction(HotelParticular $particular)
+    {
+	    $user = $this->getUser();
+    	$config = $user->getGlobalOption()->getHotelConfig();
+	    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoomDetails($config,$particular);
+	    $temp = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->findOneBy(array('createdBy' => $user,'hotelParticular'=>$particular));
+	    $html = $this->renderView('HotelBundle:Invoice:booking-details.html.twig', array(
+		    'entities' => $entities,
+		    'particular' => $particular,
+		    'temp' => $temp,
+	    ));
+	    return New Response($html);
+    }
+
+    public function bookingRoomFormAction(HotelParticular $particular)
+    {
+	    $html = $this->renderView('HotelBundle:Invoice:booking-form.html.twig', array(
+		    'particular' => $particular,
+	    ));
+	    return New Response($html);
+
+    }
 
 
+    public function createTemporaryAction(Request $request,HotelParticular $particular)
+    {
+	    $data = $request->request->all();
+	    $user = $this->getUser();
+		$this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->insertTemporaryRoom($user,$particular,$data);
+		exit;
+    }
+
+    public function roomResetAction(Particular $particular)
+    {
+
+    	$em = $this->getDoctrine()->getManager();
+	    $user = $this->getUser();
+    	$entity = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->findOneBy(array('createdBy'=>$user,'hotelParticular'=>$particular));
+	    $em->remove($entity);
+	    $em->flush();
+	    exit;
+
+    }
+
+    public function bookingInvoiceGenerateAction()
+    {
+
+    }
 
 }

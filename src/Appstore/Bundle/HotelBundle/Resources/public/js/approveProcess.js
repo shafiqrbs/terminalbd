@@ -23,34 +23,6 @@ function pageReload() {
 */
 
 
-$(document).on('click', '#booking', function() {
-
-    var title = $(this).attr('data-title');
-    $('.dialogModal_header').html(title);
-    $('.overview-title').html(title);
-    $('.dialog_content').dialogModal({
-        topOffset: 0,
-        top: 0,
-        type: '',
-        onOkBut: function(event, el, current) {},
-        onCancelBut: function(event, el, current) {},
-        onLoad: function(el, current) {
-            $.ajax({
-                url: Routing.generate('hotel_booking'),
-                async: true,
-                success: function (response) {
-                    el.find('.dialogModal_content').html(response);
-                   /* jqueryTemporaryLoad();*/
-                }
-            });
-        },
-        onClose: function(el, current) {},
-        onChange: function(el, current) {}
-    });
-
-});
-
-
 $(document).on( "click", "#show", function(e){
     $('#hide').slideToggle(2000);
     $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");

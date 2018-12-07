@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HotelBundle\Repository;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceAccessories;
+use Appstore\Bundle\HotelBundle\Entity\HotelParticularMeta;
 use Appstore\Bundle\HotelBundle\Entity\HotelProductionElement;
 use Appstore\Bundle\HotelBundle\Entity\HotelProductionExpense;
 use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
@@ -105,9 +106,10 @@ class HotelParticularRepository extends EntityRepository
        $qb->select('e.name as name, e.id as id , e.salesPrice as salesPrice, e.particularCode as particularCode');
        $qb->where('e.hotelConfig = :config')->setParameter('config', $config);
        $qb->andWhere('e.status = :status')->setParameter('status', 1);
-       $qb->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type));
-       $qb->andWhere('e.id NOT IN(:ids)')->setParameter('ids',$booked);
-	   // $qb->where($qb->expr()->notIn('rl.request_id', $booked));
+       $qb->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type));if(!empty($booked)){
+			$qb->andWhere('e.id NOT IN(:ids)')->setParameter('ids',$booked);
+			//		$qb->andWhere($qb->expr()->notIn('e.id', $booked));
+		}
        $qb->orderBy('e.sorting','ASC');
        $qb->orderBy('e.name','ASC');
        $result = $qb->getQuery()->getArrayResult();
@@ -371,5 +373,58 @@ class HotelParticularRepository extends EntityRepository
 
     }
 
+	public function insertItemKeyValue(HotelParticular $reEntity,$data)
+	{
 
+		$em = $this->_em;
+		$i=0;
+
+		if(isset($data['metaKey']) OR isset($data['metaValue']) ){
+			foreach ($data['metaKey'] as $value) {
+				$metaId = isset($data['metaId'][$i]) ? $data['metaId'][$i] : 0 ;
+				$itemKeyValue = $this->_em->getRepository('HotelBundle:HotelParticularMeta')->findOneBy(array('particular'=>$reEntity,'id' => $metaId));
+				if(!empty($metaId) and !empty($itemKeyValue)){
+					$this->updateMetaAttribute($itemKeyValue,$data['metaKey'][$i],$data['metaValue'][$i]);
+				}else{
+					if(!empty($data['metaKey'][$i]) OR !empty($data['metaValue'][$i]))
+					{
+						$entity = new HotelParticularMeta();
+						$entity->setMetaKey($data['metaKey'][$i]);
+						$entity->setMetaValue($data['metaValue'][$i]);
+						$entity->setParticular($reEntity);
+						$em->persist($entity);
+						$em->flush($entity);
+					}
+
+				}
+				$i++;
+			}
+		}
+	}
+
+	public function updateMetaAttribute(HotelParticularMeta $itemKeyValue,$key,$value ='')
+	{
+		$em = $this->_em;
+		$itemKeyValue->setMetaKey($key);
+		$itemKeyValue->setMetaValue($value);
+		$em->flush();
+	}
+
+	public function setDivOrdering($data)
+	{
+		$i = 1;
+		$em = $this->_em;
+		$qb = $em->createQueryBuilder();
+		foreach ($data as $key => $value){
+			$qb->update('HotelBundle:HotelParticularMeta', 'mg')
+			   ->set('mg.sorting', $i)
+			   ->where('mg.id = :id')
+			   ->setParameter('id', $key)
+			   ->getQuery()
+			   ->execute();
+			$i++;
+
+		}
+
+	}
 }

@@ -340,7 +340,7 @@ var InventoryItemEditPage = function (item) {
 
         serialized = $('ol.singleSortable').nestedSortable('serialize');
         $.ajax({
-            url: Routing.generate('inventory_goods_attribute_sorted', {id: item}),
+            url: Routing.generate('hotel_stock_attribute_sorted', {id: item}),
             type: "POST",
             data: serialized
         }).done(function(data){

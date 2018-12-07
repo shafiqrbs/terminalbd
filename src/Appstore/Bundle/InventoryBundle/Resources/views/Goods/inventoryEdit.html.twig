@@ -294,8 +294,7 @@
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Additional Field & Value</div>
-                                <a href="javascript:" class="btn green pull-right mini addmore"><i
-                                            class="icon-plus"></i></a>
+                                <a href="javascript:" class="btn green pull-right mini addmore"><i class="icon-plus"></i></a>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
@@ -427,6 +426,5 @@
 {% block documentready %}
     {{ parent() }}
     NestSortable.init();
-
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}

@@ -50,25 +50,29 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 	    $start = strtotime($data['startDate']);
 	    $end = strtotime($data['endDate']);
-	    $quantity = ceil(abs($end - $start) / 86400);
-    	$em = $this->_em;
-	    $particular = $data['particular'];
-	    $price = $data['salesPrice'];
-	    $stock = $em->getRepository('HotelBundle:HotelParticular')->find($particular);
+	    $quantity = ceil(abs($end - $start) / 86400)+1;
 
-	    $period = new \DatePeriod(
-		    new \DateTime($data['startDate']),
-		    new \DateInterval('P1D'),
-		    new \DateTime($data['endDate'])
-	    );
+	    $begin = new \DateTime( $data['startDate']);
+	    $end = new \DateTime( $data['endDate'] );
+	    $end = $end->modify( '+1 day' );
+
+	    $interval = new \DateInterval('P1D');
+	    $period = new \DatePeriod($begin, $interval ,$end);
 
 	    $bookingDate =array();
 	    foreach ($period as $key => $date) {
 		    $bookingDate[] = (string)$date->format('Y-m-d');
 	    }
+
+    	$em = $this->_em;
+	    $particular = $data['particular'];
+	    $price = $data['salesPrice'];
+	    $stock = $em->getRepository('HotelBundle:HotelParticular')->find($particular);
+
+
+
 	    if(!empty($stock)){
 		    $entity = new HotelInvoiceParticular();
-		   // $quantity = !empty($quantity) and $quantity > 0 ? $quantity :1;
 		    $entity->setQuantity((int)$quantity);
 		    $entity->setParticular($stock->getName());
 		    $entity->setHotelParticular($stock);
@@ -92,14 +96,16 @@ class HotelInvoiceParticularRepository extends EntityRepository
 	public function checkBooking(HotelParticular $particular,$data)
 	{
 
-		$period = new \DatePeriod(
-			new \DateTime($data['startDate']),
-			new \DateInterval('P1D'),
-			new \DateTime($data['endDate'])
-		);
+		$begin = new \DateTime( $data['startDate']);
+		$end = new \DateTime( $data['endDate'] );
+		$end = $end->modify( '+1 day' );
+
+		$interval = new \DateInterval('P1D');
+		$period = new \DatePeriod($begin, $interval ,$end);
+
 		$bookingDate =array();
 		foreach ($period as $key => $date) {
-			$bookingDate[] = $date->format('Y-m-d');
+			$bookingDate[] = (string)$date->format('Y-m-d');
 		}
 
 		$qb = $this->createQueryBuilder('e');
@@ -132,10 +138,23 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		$qb->join('e.hotelParticular','p');
 		$qb->select('p.id as id');
 		$qb->andWhere('h.hotelConfig = :config')->setParameter('config',$config);
-		$qb->andWhere('e.process = :process')->setParameter('process','booked');
+		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('booked','check-in'));
 		$qb->andWhere($qb->expr()->like("e.bookingDate", "'%$date%'"  ));
 		$qb->groupBy('p.id');
 		$result = $qb->getQuery()->getArrayResult();
+		return $result;
+	}
+
+	public function getBookedRoomDetails(HotelConfig $config,$roomId){
+
+		$config =  $config->getId();
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.hotelInvoice','h');
+		$qb->join('e.hotelParticular','p');
+		$qb->andWhere('h.hotelConfig = :config')->setParameter('config',$config);
+		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('booked','check-in'));
+		$qb->andWhere('e.hotelParticular = :room')->setParameter('room',$roomId);
+		$result = $qb->getQuery()->getResult();
 		return $result;
 	}
 

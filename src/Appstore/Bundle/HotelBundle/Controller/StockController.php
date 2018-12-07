@@ -1,14 +1,18 @@
 <?php
 
 namespace Appstore\Bundle\HotelBundle\Controller;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelParticular;
+use Appstore\Bundle\HotelBundle\Entity\HotelParticularMeta;
+use Appstore\Bundle\HotelBundle\Entity\HotelRoomGallery;
 use Appstore\Bundle\HotelBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * StockController controller.
@@ -158,7 +162,13 @@ class StockController extends Controller
 	    $config = $this->getUser()->getGlobalOption()->getHotelConfig();
 	    $stockFormat = $config->getStockFormat();
         $editForm = $this->createEditForm($entity);
-        return $this->render('HotelBundle:Stock:new.html.twig', array(
+
+        if(in_array($entity ->getHotelParticularType()->getSlug(),array('room','food','package'))){
+	        $view = 'details';
+        }else{
+	        $view = 'new';
+        }
+	    return $this->render("HotelBundle:Stock:{$view}.html.twig", array(
             'entity'            => $entity,
             'stockFormat'       => $stockFormat,
             'form'              => $editForm->createView(),
@@ -199,8 +209,9 @@ class StockController extends Controller
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+	    $data = $request->request->all();
 
-        if ($editForm->isValid()) {
+	    if ($editForm->isValid()) {
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
             }
@@ -208,7 +219,9 @@ class StockController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hotel_stock'));
+	        $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->insertItemKeyValue($entity,$data);
+	        $this->getDoctrine()->getRepository('HotelBundle:HotelRoomGallery')->insertProductGallery($entity,$data);
+	        return $this->redirect($this->generateUrl('hotel_stock'));
         }
         return $this->render('HotelBundle:Stock:new.html.twig', array(
             'entity'      => $entity,
@@ -216,7 +229,39 @@ class StockController extends Controller
         ));
     }
 
-    /**
+
+	public function uploadItemImageAction(HotelParticular $item)
+	{
+		$entity = new HotelRoomGallery();
+		$option = $this->getUser()->getGlobalOption();
+		$entity ->upload($option->getId(),$item->getId());
+	}
+
+	public function keyValueDeleteAction(HotelParticularMeta $itemKeyValue)
+	{
+		if($itemKeyValue){
+			$em = $this->getDoctrine()->getManager();
+			$em->remove($itemKeyValue);
+			$em->flush();
+			return new Response('success');
+		}else{
+			return new Response('failed');
+		}
+	}
+
+	public function keyValueSortedAction(Request $request,Particular $particular)
+	{
+		$data = $request ->request->get('menuItem');
+		$this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->setDivOrdering($data);
+		exit;
+
+	}
+
+
+
+
+
+	/**
      * Deletes a Particular entity.
      * @Secure(roles="ROLE_HOTEL_STOCK,ROLE_DOMAIN");
      */

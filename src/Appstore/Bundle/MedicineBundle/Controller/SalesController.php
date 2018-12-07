@@ -161,7 +161,7 @@ class SalesController extends Controller
                 }else{
                     $expiration='Expiry empty';
                 }
-                $purchaseItems .= '<option value="' . $item->getId() . '">' . $item->getBarcode() . ' - ' . $expiration . '[' . $item->getRemainingQuantity() . ']</option>';
+                $purchaseItems .= '<option value="' . $item->getId() . '">' . $item->getBarcode() . ' - ' . $expiration . '[' . $item->getRemainingQuantity() . '] - PP Tk.'.$item->getPurchasePrice().'</option>';
             }
         }
         return new Response(json_encode(array('purchaseItems' => $purchaseItems,'salesPrice'=> round($stock->getSalesPrice()))));
@@ -267,8 +267,6 @@ class SalesController extends Controller
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
         exit;
-
-
     }
 
 

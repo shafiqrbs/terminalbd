@@ -3,22 +3,45 @@
         <div class="caption"><i class="icon-reorder"></i> <strong class="overview-title">{{ "now"|date("d-F-Y") }} Booking Overview</strong></div>
         <div class="actions">
             <div class="btn-group">
-                <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine Sales</a>
-                <a class="btn yellow instantPopup" href="javascript:" data-url="{{ path('medicine_instant_purchase_add') }}" id="instantPurchasePopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
+                <a class="btn black" href="{{ path('hotel_invoice_new') }}"><i class="icon-refresh"></i> Generate Process</a>
             </div>
         </div>
     </div>
     <div class="portlet-body form">
         {% if entities is not empty  %}
             {% for entity in entities %}
-                <div class="row-fluid">
-                    <div class="span6">{{ entity.name }}</div>
-                    <div class="span3">Price {{ entity.salesPrice }}</div>
-                    <div class="span3">{% if entity.id in bookings %} Booked{% endif %}</div>
+                <div class="row-fluid room-box">
+                    <div class="span4">{{ entity.particularCode }} - {{ entity.name }}</div>
+                    <div class="span2 text-right">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</div>
+                    <div class="span2">BDT {{ entity.salesPrice }}</div>
+                    <div class="span1">{% if entity.id in bookings %} <button class="btn red">Booked</button>{% endif %}</div>
+                    <div class="span3">
+                        <a data-id="{{ entity.id }}" class="btn green booking-room" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" href="javascript:"><i class="icon-plus-sign"></i> View & Process</a>
+                    </div>
+
                 </div>
+                <div id="room-{{ entity.id }}"></div>
+                <div id="form-{{ entity.id }}"></div>
+
             {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
     </div>
 </div>
+<style>
+    .room-box:nth-of-type(odd) {
+        background-color: #eeeeee;
+    }
+
+    .room-box:nth-of-type(even) {
+        background-color: #cecece;
+    }
+    .room-box{
+        border: 1px solid #868181;
+        padding: 15px;
+        line-height: 32px;
+        margin-bottom: 5px;
+    }
+
+</style>
 
