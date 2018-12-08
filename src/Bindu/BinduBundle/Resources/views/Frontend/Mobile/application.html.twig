@@ -17,14 +17,15 @@
             font-weight: bold;
             margin-bottom: 15px;
             margin-top: 15px;
-            font-size: 20px;
+            font-size: 16px;
             text-align: left;
         }
 
         ul li{
             list-style: square !important;
             display: inline-block!important;
-            margin-left: 20px!important;
+            margin-left: 1px!important;
+            width: 100%;
         }
 
     </style>
@@ -55,6 +56,17 @@
                 </article>
             {% endfor %}
         {% endif %}
+        <div class="clear"></div>
+        {% for application in applications %}
+            <a href="{{ path('bindu_application',{'slug':application.slug}) }}">
+            <div class="bannerPane" id="VideoGallery" style="margin-top: 30px; background-image: url('/{{ application.webPath }}')">
+                <div class="overlay"></div>
+                <div class="s-banner-content">
+                    {{ application.name }}
+                </div>
+            </div>
+            </a>
+        {% endfor %}
         <div class="clear"></div>
     </div>
 {% endblock %}

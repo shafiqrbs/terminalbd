@@ -298,5 +298,25 @@
 
     });
 </script>
+<style>
+    .mm-list, .mm-list > li{
+        border-bottom:1px solid  #c6c2c2;
+    }
+    .mm-list, .mm-list > li:last-child{
+        border-bottom:inherit;
+    }
+
+    .mm-menu .mm-list > li > a.mm-subopen:before{
+        border-color: #c6c2c2!important;
+    }
+    .mm-menu .mm-list > li > a.mm-subopen:after, .mm-menu .mm-list > li > a.mm-subclose:before{
+        border-color: #c6c2c2!important;
+    }
+    .mm-menu .mm-list > li > a.mm-subclose {
+        background: #9d9797;
+        color: #0f0e0e;
+    }
+
+</style>
 </body>
 </html>
