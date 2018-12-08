@@ -83,7 +83,8 @@ html.remodal-is-locked {
 .remodal select:focus,
 .remodal textarea:focus,
 .remodal input:focus {
-    font-size: 16px;
+    font-size: 14px;
+    width: 100%!important;
 }
 
 /* ==========================================================================

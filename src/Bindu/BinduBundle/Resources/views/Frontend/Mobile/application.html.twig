@@ -1,6 +1,6 @@
 {% extends ':bindu/mobile:base.html.twig' %}
 {% block body %}
-    <div class="bannerPane" style="background-image: url('/{{ app.webPath }}')">
+    <div class="bannerPane bannerPane-find-business" {% if app.webPath is not empty %} style="background-image: url('/{{ app.webPath }}')" {% endif %}>
         <div class="overlay"></div>
         <div class="s-banner-content">
             <div><img width="100" src="{{ asset('assets/frontend/img/logo.png') }}" /></div>
