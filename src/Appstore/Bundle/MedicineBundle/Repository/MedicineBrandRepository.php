@@ -142,7 +142,6 @@ class MedicineBrandRepository extends EntityRepository
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
         return $query->getQuery()->getResult();
-
     }
 
 	public function searchMedicineGenericAutoComplete($q)

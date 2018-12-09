@@ -239,6 +239,7 @@ class MedicineBrandController extends Controller
     {
         $item = $_REQUEST['term'];
         $items = array();
+
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
             foreach ($entities as $entity):

@@ -81,7 +81,17 @@ class GlobalOptionModifyType extends AbstractType
                 ))
 	            ->add('domainType', 'choice', array(
 		            'attr'=>array('class'=>'m-wrap span12'),
-		            'choices' => array('' => 'Select Domain Type','website' => 'Website','ecommerce' => 'E-commerce'),
+		            'choices' => array(
+		            	'' => 'Select Domain Type',
+			            'website'       => 'Website',
+			            'ecommerce'     => 'E-commerce',
+			            'hotel'         => 'Hotel & Restaurant',
+			            'convention'    => 'Convention',
+			            'doctor'        => 'Doctor',
+			            'parlor'        => 'Parlor',
+			            'portal'        => 'Portal',
+			            'medicine'      => 'Medicine'
+		            ),
 	            ))
                 ->add('subDomain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sub-domain name'),
                     'constraints' =>array(
