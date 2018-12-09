@@ -155,7 +155,7 @@ class SalesController extends Controller
         foreach ($stock->getMedicinePurchaseItems() as $item){
             if($item->getRemainingQuantity() > 0) {
 
-                if(!empty($item->getExpirationEndDate()) and !empty($item->getExpirationStartDate())){
+                if(!empty($item->getExpirationEndDate())){
                     $expirationEndDate = $item->getExpirationEndDate()->format('d-m-y');
                     $expiration = $expirationEndDate;
                 }else{

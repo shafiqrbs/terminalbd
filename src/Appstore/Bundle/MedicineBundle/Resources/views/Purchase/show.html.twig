@@ -107,7 +107,7 @@
                                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-                                                    <td class="span1">{% if item.expirationStartDate is not empty and item.expirationEndDate is not empty %}{{ item.expirationStartDate|date('M y') }} To {{ item.expirationEndDate|date('M y') }}{% endif %}</td>
+                                                    <td class="span1">{% if item.expirationEndDate is not empty %} {{ item.expirationEndDate|date('d M y') }}{% endif %}</td>
                                                     <td class="span1">{{ item.purchasePrice }}</td>
                                                     <td class="span1">{{ item.salesPrice }}</td>
                                                     <td class="span1">{{ item.quantity }}</td>
