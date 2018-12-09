@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 
 /**
  * Vendor controller.
@@ -37,10 +39,11 @@ class PurchaseController extends Controller
     }
 
 
-    /**
-     * Lists all Vendor entities.
-     *
-     */
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 */
+
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -53,10 +56,11 @@ class PurchaseController extends Controller
             'searchForm' => $data,
         ));
     }
+
     /**
-     * Lists all Vendor entities.
-     *
-     */
+	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 */
+
     public function purchaseItemAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -73,10 +77,11 @@ class PurchaseController extends Controller
             'searchForm' => $data,
         ));
     }
-    /**
-     * Lists all Vendor entities.
-     *
-     */
+
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 */
+
     public function medicineExpiryAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -103,6 +108,11 @@ class PurchaseController extends Controller
     }
 
 
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 */
+
+
     public function newAction()
     {
 
@@ -121,6 +131,9 @@ class PurchaseController extends Controller
 
     }
 
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 */
 
     public function editAction($id)
     {

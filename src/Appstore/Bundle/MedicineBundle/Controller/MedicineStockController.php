@@ -9,6 +9,8 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 
 
 /**
@@ -31,10 +33,11 @@ class MedicineStockController extends Controller
         return $pagination;
     }
 
-    /**
-     * Lists all MedicineStock entities.
-     *
-     */
+
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_STOCK")
+	 */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -53,7 +56,13 @@ class MedicineStockController extends Controller
 
     }
 
-    public function itemShortListAction()
+
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_STOCK")
+	 */
+
+
+	public function itemShortListAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -70,6 +79,12 @@ class MedicineStockController extends Controller
             'searchForm' => $data,
         ));
     }
+
+
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_STOCK")
+	 */
+
 
 	public function stockItemHistoryAction()
     {
@@ -111,6 +126,9 @@ class MedicineStockController extends Controller
         ));
     }
 
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_STOCK")
+	 */
 
     public function newAction()
     {
@@ -250,10 +268,10 @@ class MedicineStockController extends Controller
     }
 
 
-    /**
-     * Displays a form to edit an existing MedicineStock entity.
-     *
-     */
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_STOCK")
+	 */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -356,10 +374,11 @@ class MedicineStockController extends Controller
             'form'              => $editForm->createView(),
         ));
     }
+
     /**
-     * Deletes a MedicineStock entity.
-     *
-     */
+	 * @Secure(roles="ROLE_MEDICINE_STOCK")
+	 */
+
     public function deleteAction(MedicineStock $entity)
     {
         $em = $this->getDoctrine()->getManager();

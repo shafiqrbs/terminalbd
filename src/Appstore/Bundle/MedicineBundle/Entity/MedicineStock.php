@@ -193,7 +193,7 @@ class MedicineStock
      *
      * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
-    private $purchasePrice;
+    private $purchasePrice = 0;
 
 
     /**
@@ -201,7 +201,7 @@ class MedicineStock
      *
      * @ORM\Column(name="salesPrice", type="float",  nullable=true)
      */
-    private $salesPrice;
+    private $salesPrice = 0;
 
     /**
      * @var boolean
