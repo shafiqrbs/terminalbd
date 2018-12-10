@@ -107,10 +107,20 @@ class GlobalOptionType extends AbstractType
                     'attr'=>array('class'=>'m-wrap span12'),
                     'choices' => array(1 => 'Active','2' => 'In-active'),
                 ))
-                ->add('domainType', 'choice', array(
-                    'attr'=>array('class'=>'m-wrap span12'),
-                    'choices' => array('' => 'Select Domain Type','website' => 'Website','ecommerce' => 'E-commerce'),
-                ))
+	            ->add('domainType', 'choice', array(
+		            'attr'=>array('class'=>'m-wrap span12'),
+		            'choices' => array(
+			            '' => 'Select Domain Type',
+			            'website'       => 'Website',
+			            'ecommerce'     => 'E-commerce',
+			            'hotel'         => 'Hotel & Restaurant',
+			            'convention'    => 'Convention',
+			            'doctor'        => 'Doctor',
+			            'parlor'        => 'Parlor',
+			            'portal'        => 'Portal',
+			            'medicine'      => 'Medicine'
+		            ),
+	            ))
                 /*->add('callBackEmail')
                 ->add('callBackContent','textarea', array('attr'=>array('class'=>' m-wrap span12','rows'=>4)))
                 ->add('callBackNotify')

@@ -222,23 +222,23 @@ class MedicineMinimumStockController extends Controller
         return $this->redirect($this->generateUrl('medicine_minimum'));
     }
 
-    public function autoSearchAction(Request $request)
+    public function processAction(MedicineMinimumStock $stock)
     {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineMinimumStock')->searchAutoComplete($item,$inventory);
-        }
-        return new JsonResponse($item);
+
+	    set_time_limit(0);
+	    ignore_user_abort(true);
+	    $em = $this->getDoctrine()->getManager();
+	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+	    $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findBy(array('medicineConfig'=>$config,'unit'=> $stock->getUnit()));
+		foreach ($items as $item){
+			$item->setMinQuantity($stock->getMinQuantity());
+			$em->flush();
+		}
+	    return $this->redirect($this->generateUrl('medicine_minimum'));
+
+
     }
 
-    public function searchMedicineMinimumStockNameAction($vendor)
-    {
-        return new JsonResponse(array(
-            'id'=>$vendor,
-            'text'=>$vendor
-        ));
-    }
 
 
 }

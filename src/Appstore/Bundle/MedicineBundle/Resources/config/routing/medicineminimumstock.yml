@@ -20,6 +20,10 @@ medicine_minimum_status:
     path:     /{id}/status
     defaults: { _controller: "MedicineBundle:MedicineMinimumStock:status" }
 
+medicine_minimum_process:
+    path:     /{id}/process
+    defaults: { _controller: "MedicineBundle:MedicineMinimumStock:process" }
+
 medicine_minimum_delete:
     path:     /{id}/delete
     defaults: { _controller: "MedicineBundle:MedicineMinimumStock:delete" }
