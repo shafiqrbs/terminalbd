@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ItemTypeGrouping
  *
  * @ORM\Table("ecommerce_category_grouping")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\ItemTypeGroupingRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\ItemCategoryGroupingRepository")
  */
 class ItemCategoryGrouping
 {
@@ -23,7 +23,7 @@ class ItemCategoryGrouping
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="categoryGrouping" , cascade={"detach","merge"})
+     * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="parentGroup" , cascade={"detach","merge"})
      * @ORM\OrderBy({"name" = "ASC"})
      **/
 
@@ -31,7 +31,7 @@ class ItemCategoryGrouping
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="itemTypeGrouping")
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="categoryGrouping")
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private $ecommerceConfig;

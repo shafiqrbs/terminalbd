@@ -4,7 +4,7 @@ namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
-use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ContentBundle\Entity\Page;
@@ -71,7 +71,7 @@ class Feature
     private  $discount;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="features")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="features")
      */
     protected $brand;
 

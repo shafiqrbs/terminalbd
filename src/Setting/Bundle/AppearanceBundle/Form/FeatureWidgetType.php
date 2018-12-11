@@ -71,21 +71,21 @@ class FeatureWidgetType extends AbstractType
                 'choices'=> $this->categoryChoiceList()
             ))
 
-            ->add('brand', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select brand---',
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
-                'property' => 'name',
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.inventoryConfig =".$this->globalOption->getInventoryConfig()->getId())
-                        ->orderBy('e.name','ASC');
-                },
-            ))
+	        ->add('brand', 'entity', array(
+		        'required'    => false,
+		        'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
+		        'empty_value' => '---Select Brand---',
+		        'property' => 'name',
+		        'attr'=>array('class'=>'m-wrap span12 '),
+		        'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+			        return $er->createQueryBuilder('e')
+			                  ->where("e.status = 1")
+			                  ->andWhere("e.ecommerceConfig =".$this->ecommerceConfig)
+			                  ->orderBy('e.name','ASC');
+		        },
+	        ))
 
-            ->add('discount', 'entity', array(
+	        ->add('discount', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Discount',
                 'empty_value' => '---Select Discount---',

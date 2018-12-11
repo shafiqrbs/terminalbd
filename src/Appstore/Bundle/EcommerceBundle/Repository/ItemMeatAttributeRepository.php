@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class ItemMeatAttributeRepository extends EntityRepository
 {
-    public function insertProductAttribute($reEntity,$data)
+    public function insertProductAttribute(Item $reEntity,$data)
     {
 
         $em = $this->_em;
@@ -22,11 +22,11 @@ class ItemMeatAttributeRepository extends EntityRepository
         if(isset($data['attributeId'])){
             foreach ($data['attributeId'] as $value) {
 
-                $metaAttribute = $this->_em->getRepository('InventoryBundle:ItemMetaAttribute')->findOneBy(array('purchaseVendorItem'=>$reEntity,'itemAttribute'=>$value));
+                $metaAttribute = $this->_em->getRepository('EcommerceBundle:ItemMetaAttribute')->findOneBy(array('item'=>$reEntity,'itemAttribute'=>$value));
                 if(!empty($metaAttribute)){
                     $this->updateMetaAttribute($metaAttribute,$data['value'][$i]);
                 }else{
-                    $itemAttribute= $this->_em->getRepository('InventoryBundle:ItemAttribute')->find($value);
+                    $itemAttribute= $this->_em->getRepository('EcommerceBundle:ItemAttribute')->find($value);
                     $entity = new ItemMetaAttribute();
                     $entity->setValue($data['value'][$i]);
                     $entity->setItemAttribute($itemAttribute);

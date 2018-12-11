@@ -1,8 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\InventoryBundle\Entity;
-
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
+namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
@@ -10,12 +8,14 @@ use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 /**
  * ItemBrand
  *
  * @ORM\Table("ecommerc_item_brand")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\InventoryBundle\Repository\ItemBrandRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\ItemBrandRepository")
  */
 class ItemBrand  implements CodeAwareEntity
 {
@@ -96,7 +96,19 @@ class ItemBrand  implements CodeAwareEntity
     private $status = true;
 
 
-    /**
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	protected $path;
+
+	/**
+	 * @Assert\File(maxSize="8388608")
+	 */
+	protected $file;
+
+
+
+	/**
      * Get id
      *
      * @return integer
@@ -205,21 +217,6 @@ class ItemBrand  implements CodeAwareEntity
         return $this->status;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
 
 
     /**
@@ -279,13 +276,6 @@ class ItemBrand  implements CodeAwareEntity
         return $this->features;
     }
 
-    /**
-     * @return StockItem
-     */
-    public function getStockItems()
-    {
-        return $this->stockItems;
-    }
 
     /**
      * @return FeatureBrand
@@ -309,6 +299,88 @@ class ItemBrand  implements CodeAwareEntity
 	public function setEcommerceConfig( $ecommerceConfig ) {
 		$this->ecommerceConfig = $ecommerceConfig;
 	}
+
+
+	/**
+	 * Sets file.
+	 *
+	 * @param ItemBrand $file
+	 */
+	public function setFile(UploadedFile $file = null)
+	{
+		$this->file = $file;
+	}
+
+	/**
+	 * Get file.
+	 *
+	 * @return ItemBrand
+	 */
+	public function getFile()
+	{
+		return $this->file;
+	}
+
+	public function getAbsolutePath()
+	{
+		return null === $this->path
+			? null
+			: $this->getUploadRootDir().'/'.$this->path;
+	}
+
+	public function getWebPath()
+	{
+		return null === $this->path
+			? null
+			: $this->getUploadDir().'/'.$this->path;
+	}
+
+	/**
+	 * @ORM\PostRemove()
+	 */
+	public function removeUpload()
+	{
+		if ($file = $this->getAbsolutePath()) {
+			unlink($file);
+		}
+	}
+
+
+	protected function getUploadRootDir()
+	{
+		return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+	}
+
+	protected function getUploadDir()
+	{
+		return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/brand/'.$this->getId().'/';
+	}
+
+	public function upload()
+	{
+		// the file property can be empty if the field is not required
+		if (null === $this->getFile()) {
+			return;
+		}
+
+		// use the original file name here but you should
+		// sanitize it at least to avoid any security issues
+
+		// move takes the target directory and then the
+		// target filename to move to
+		$filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+		$this->getFile()->move(
+			$this->getUploadRootDir(),
+			$filename
+		);
+
+		// set the path property to the filename where you've saved the file
+		$this->path = $filename;
+
+		// clean up the file property as you won't need it anymore
+		$this->file = null;
+	}
+
 
 
 }

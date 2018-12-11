@@ -189,7 +189,7 @@ class ItemSubRepository extends EntityRepository
         $goods->setPurchasePrice($updateSubProduct['purchasePrice']);
         $goods->setQuantity($updateSubProduct['quantity']);
         if(isset($updateSubProduct['size']) and !empty($updateSubProduct['size']) ){
-            $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('ecommerceConfig' => $goods->getitem()->getecommerceConfig(),'id'=> $updateSubProduct['size']));
+            $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('id'=> $updateSubProduct['size']));
             $goods->setSize($size);
             $goods->setName(null);
         }else{
@@ -197,7 +197,7 @@ class ItemSubRepository extends EntityRepository
         }
         if(isset($updateSubProduct['colors']) and !empty($updateSubProduct['colors'])) {
             foreach ($updateSubProduct['colors'] as $color){
-                $colors[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('ecommerceConfig' => $goods->getitem()->getecommerceConfig(), 'id' => $color));
+                $colors[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('id' => $color));
             }
             $goods->setColors($colors);
 
@@ -217,8 +217,6 @@ class ItemSubRepository extends EntityRepository
         }
 
     }
-
-  
 
   
     public function findGroupBrands(EcommerceConfig $config , $array = array())

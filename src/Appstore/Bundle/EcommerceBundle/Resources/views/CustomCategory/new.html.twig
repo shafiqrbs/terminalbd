@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('inventory_category') }}">Category</a>
+                    <a href="{{ path('ecommerce_category') }}">Category</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Form Components</a></li>
@@ -37,18 +37,7 @@
         <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
         <div class="actions">
             <div class="btn-group">
-                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                    <i class="icon-cogs"></i>&nbsp;Tools
-                    <i class="icon-tasks"></i>
-                </a>
-                <ul class="dropdown-menu pull-right">
-                    <li><a href="{{ path('inventory_category_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                    <li><a href="{{ path('inventory_category') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                    {% if(entity.id > 0 ) %}
-                        <li><a href="{{ path('inventory_category_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                        <li><a href="{{ path('inventory_category_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                    {% endif %}
-                </ul>
+                <a class="btn yellow" href="{{ path('ecommerce_category') }}"><i class="icon-th-list"></i>&nbsp; Category</a>
             </div>
         </div>
     </div>
@@ -92,7 +81,7 @@
                     <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
                     <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
                     {% if(entity.id > 0 ) %}
-                        <a href="{{ path('inventory_category_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
+                        <a href="{{ path('ecommerce_category_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
                     {% endif %}
                 </div>
             </div>

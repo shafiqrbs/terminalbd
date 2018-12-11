@@ -4,25 +4,18 @@ namespace Frontend\FrontentBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
-use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Core\UserBundle\Entity\User;
-use Core\UserBundle\Form\CustomerRegisterType;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
-use Setting\Bundle\ContentBundle\Entity\PageModule;
-use Setting\Bundle\ToolBundle\Entity\Branding;
-use Product\Bundle\ProductBundle\Entity\Product;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Setting\Bundle\ToolBundle\Entity\SubscribeEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Syndicate\Bundle\ComponentBundle\Entity\Education;
-use Syndicate\Bundle\ComponentBundle\Entity\Vendor;
 
 class EcommerceWidgetController extends Controller
 {
@@ -59,7 +52,7 @@ class EcommerceWidgetController extends Controller
        // $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
       //  $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
         $detect = new MobileDetect();
-        $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=> $globalOption->getInventoryConfig(),'status' => 1));
+        $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->findBy(array('ecommerceConfig'=> $globalOption->getEcommerceConfig(),'status' => 1));
         if( $detect->isMobile() ||  $detect->isTablet() ) {
         //    $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$category);
             $theme = 'Template/Mobile/'.$themeName;
@@ -257,7 +250,7 @@ class EcommerceWidgetController extends Controller
 
         $data = array('category' => $category);
         $inventory = $globalOption->getInventoryConfig()->getId();
-        $categoryProducts = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit=12);
+        $categoryProducts = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit=12);
 
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
@@ -315,7 +308,7 @@ class EcommerceWidgetController extends Controller
     public function featureProductShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
-        $entities  = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->getSliderFeatureProduct($globalOption->getInventoryConfig());
+        $entities  = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getSliderFeatureProduct($globalOption->getInventoryConfig());
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
@@ -508,7 +501,7 @@ class EcommerceWidgetController extends Controller
         $datalimit = $widget->getCategoryLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
         $inventory = $globalOption->getInventoryConfig()->getId();
-        $categoryProducts = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $categoryProducts = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -532,8 +525,8 @@ class EcommerceWidgetController extends Controller
         $data = array('brand' => $brand);
         $datalimit = $widget->getBrandLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
-        $inventory = $globalOption->getInventoryConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $config = $globalOption->getEcommerceConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -545,8 +538,8 @@ class EcommerceWidgetController extends Controller
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'products'                  => $products->getResult(),
-            'globalOption'                  => $globalOption,
-            'widget'                        => $widget,
+            'globalOption'              => $globalOption,
+            'widget'                    => $widget,
             'brand'                     => $brand,
         ));
     }
@@ -558,7 +551,7 @@ class EcommerceWidgetController extends Controller
         $datalimit = $widget->getPromotionLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
         $inventory = $globalOption->getInventoryConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -583,7 +576,7 @@ class EcommerceWidgetController extends Controller
         $datalimit = $widget->getTagLimit();
         $limit = $datalimit > 0 ? $datalimit :12;
         $inventory = $globalOption->getInventoryConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -607,7 +600,7 @@ class EcommerceWidgetController extends Controller
         $datalimit = $widget->getTagLimit();
         $limit = $datalimit > 0 ? $datalimit :12;
         $inventory = $globalOption->getInventoryConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */

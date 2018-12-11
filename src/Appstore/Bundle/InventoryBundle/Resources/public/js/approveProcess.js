@@ -10,6 +10,13 @@ function ApproveProcess(){
         changeYear: true,
     });
 
+    $('.horizontal-form').submit(function(){
+        $("button[type='submit']", this)
+            .html("Please Wait...")
+            .attr('disabled', 'disabled');
+        return true;
+    });
+
 
     $(document).on("click", ".delete , .remove", function() {
 

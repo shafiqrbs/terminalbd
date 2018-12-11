@@ -2,6 +2,8 @@
 
 namespace Product\Bundle\ProductBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemCategoryGrouping;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
@@ -40,6 +42,11 @@ class Category
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="categories")
      **/
     protected $inventoryConfig;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="categories")
+     **/
+    protected $ecommerceConfig;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="category" )
@@ -83,6 +90,12 @@ class Category
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\CategoryGrouping", mappedBy="categories" )
      **/
     protected $categoryGrouping;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemCategoryGrouping", mappedBy="categories" )
+     **/
+    protected $parentGroup;
 
 
     /**
@@ -597,6 +610,27 @@ class Category
     {
         return $this->featureCategory;
     }
+
+	/**
+	 * @return ItemCategoryGrouping
+	 */
+	public function getParentGroup() {
+		return $this->parentGroup;
+	}
+
+	/**
+	 * @return EcommerceConfig
+	 */
+	public function getEcommerceConfig() {
+		return $this->ecommerceConfig;
+	}
+
+	/**
+	 * @param EcommerceConfig $ecommerceConfig
+	 */
+	public function setEcommerceConfig( $ecommerceConfig ) {
+		$this->ecommerceConfig = $ecommerceConfig;
+	}
 
 
 }

@@ -2,13 +2,12 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\Discount;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
-use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
+
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -74,7 +73,7 @@ class Item
     protected $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="items")
      */
     protected $brand;
 
@@ -192,7 +191,8 @@ class Item
      */
     private $discountPrice;
 
-    /**
+
+	/**
      * @var string
      *
      * @ORM\Column(name="webPrice", type="decimal", nullable = true)
@@ -528,7 +528,7 @@ class Item
     }
 
     /**
-     * @return mixed
+     * @return ItemBrand
      */
     public function getBrand()
     {
@@ -536,7 +536,7 @@ class Item
     }
 
     /**
-     * @param mixed $brand
+     * @param ItemBrand $brand
      */
     public function setBrand($brand)
     {
@@ -544,7 +544,7 @@ class Item
     }
 
     /**
-     * @return mixed
+     * @return ItemMetaAttribute
      */
     public function getItemMetaAttributes()
     {
@@ -627,7 +627,7 @@ class Item
     /**
      * Sets file.
      *
-     * @param WebTheme $file
+     * @param Item $file
      */
     public function setFile(UploadedFile $file = null)
     {
@@ -637,7 +637,7 @@ class Item
     /**
      * Get file.
      *
-     * @return WebTheme
+     * @return Item
      */
     public function getFile()
     {
@@ -676,7 +676,7 @@ class Item
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/inventory/item/'.$this->getId().'/';
+        return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/ecommerce/item/'.$this->getId().'/';
     }
 
     public function upload()
@@ -1075,6 +1075,20 @@ class Item
 	 */
 	public function setCategory( $category ) {
 		$this->category = $category;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getWebPrice(): string {
+		return $this->webPrice;
+	}
+
+	/**
+	 * @param string $webPrice
+	 */
+	public function setWebPrice( string $webPrice ) {
+		$this->webPrice = $webPrice;
 	}
 
 

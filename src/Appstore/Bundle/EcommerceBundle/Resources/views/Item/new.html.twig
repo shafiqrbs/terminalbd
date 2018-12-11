@@ -51,10 +51,10 @@
                                 <div class="row-fluid">
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName">Master Product</label>
+                                            <label class="control-label" for="firstName">Category</label>
                                             <div class="controls">
-                                                {{ form_widget(form.masterItem) }}
-                                                {{ form_errors(form.masterItem) }}
+                                                {{ form_widget(form.category) }}
+                                                {{ form_errors(form.category) }}
                                             </div>
                                         </div>
                                     </div>
@@ -140,7 +140,7 @@
                             </div>
                             <div class="span4">
                                 <div class="row-fluid">
-                                    <div class="span8">
+                                    <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="size">Size/Weight/Dimension</label>
                                             <div class="controls">
@@ -149,9 +149,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span4">
+                                    <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="productUnit">Unit</label>
+                                            <label class="control-label" for="productUnit">Product Unit</label>
                                             <div class="controls">
                                                 {{ form_widget(form.productUnit) }}
                                                 {{ form_errors(form.productUnit) }}
@@ -245,6 +245,7 @@
                         <div class="form-actions portlet box grey">
                             <div class="pull-right">
                                 <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
+                                <button type="submit" class="btn yellow"><i class="icon-refresh"></i> Reset</button>
                             </div>
                         </div>
                         {{ form_end(form) }}
@@ -297,6 +298,4 @@
 {% block documentready %}
     {{ parent() }}
     ApproveProcess();
-
-
 {% endblock %}

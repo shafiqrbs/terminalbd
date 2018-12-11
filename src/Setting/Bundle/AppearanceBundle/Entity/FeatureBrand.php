@@ -2,7 +2,7 @@
 
 namespace Setting\Bundle\AppearanceBundle\Entity;
 
-use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -34,7 +34,7 @@ class FeatureBrand
     private  $globalOption;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="featureBrand")
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="featureBrand")
      */
     protected $brand;
 

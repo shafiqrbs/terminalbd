@@ -2,14 +2,13 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Controller;
 
-use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
-use Appstore\Bundle\InventoryBundle\Form\ItemBrandType;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
+use Appstore\Bundle\EcommerceBundle\Form\ItemBrandType;
 
 /**
  * ItemBrand controller.
@@ -25,8 +24,8 @@ class ItemBrandController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$inventory),array('name'=>'asc'));
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $em->getRepository('EcommerceBundle:ItemBrand')->findBy(array('ecommerceConfig'=>$config),array('name'=>'asc'));
 
         return $this->render('EcommerceBundle:ItemBrand:index.html.twig', array(
             'entities' => $entities,
@@ -44,14 +43,15 @@ class ItemBrandController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $entity->setInventoryConfig($inventory);
-            $em->persist($entity);
-            $em->flush();
+            $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+	        $entity->setEcommerceConfig($config);
+	        $entity->upload();
+	        $em->persist($entity);
+	        $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('itembrand'));
+            return $this->redirect($this->generateUrl('ecommerce_brand'));
         }
 
         return $this->render('EcommerceBundle:ItemBrand:new.html.twig', array(
@@ -103,7 +103,7 @@ class ItemBrandController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InventoryBundle:ItemBrand')->find($id);
+        $entity = $em->getRepository('ndle:ItemBrand')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ItemBrand entity.');
@@ -122,14 +122,12 @@ class ItemBrandController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InventoryBundle:ItemBrand')->find($id);
+        $entity = $em->getRepository('EcommerceBundle:ItemBrand')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ItemBrand entity.');
         }
-
         $editForm = $this->createEditForm($entity);
-
         return $this->render('EcommerceBundle:ItemBrand:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
@@ -163,7 +161,7 @@ class ItemBrandController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InventoryBundle:ItemBrand')->find($id);
+        $entity = $em->getRepository('EcommerceBundle:ItemBrand')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ItemBrand entity.');
@@ -222,8 +220,8 @@ class ItemBrandController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->searchAutoComplete($item,$inventory);
+            $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+            $item = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->searchAutoComplete($item,$config);
         }
         return new JsonResponse($item);
     }

@@ -79,7 +79,7 @@ appstore_inventory:
 
 appstore_ecommerce:
     resource: "@EcommerceBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /e-commerce
 
 setting_advertisment:
     resource: "@SettingAdvertismentBundle/Resources/config/routing.yml"

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemGallery;
 use Doctrine\ORM\EntityRepository;
 
@@ -13,7 +14,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class ItemGalleryRepository extends EntityRepository
 {
-    public function insertProductGallery($reEntity,$data)
+    public function insertProductGallery(Item $reEntity,$data)
     {
 
         $em = $this->_em;

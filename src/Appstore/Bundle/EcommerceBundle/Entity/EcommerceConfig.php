@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
@@ -59,6 +60,16 @@ class EcommerceConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
      */
     protected $promotions;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemCategoryGrouping", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $categoryGrouping;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $categories;
 
     /**
      * @var string
@@ -955,6 +966,21 @@ class EcommerceConfig
     {
         $this->sidebarTag = $sidebarTag;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getCategoryGrouping() {
+		return $this->categoryGrouping;
+	}
+
+	/**
+	 * @return Category
+	 */
+	public function getCategories() {
+		return $this->categories;
+	}
+
 
 }
 

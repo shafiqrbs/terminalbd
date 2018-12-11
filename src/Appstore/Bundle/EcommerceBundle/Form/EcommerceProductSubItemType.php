@@ -14,17 +14,14 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class EcommerceProductSubItemType extends AbstractType
 {
 
-    /** @var  InventoryConfig */
-
-    private $inventoryConfig;
 
     /** @var  ItemSizeRepository */
+
     private $em;
 
-    function __construct(ItemSizeRepository $em , InventoryConfig $inventoryConfig)
+    function __construct(ItemSizeRepository $em)
     {
         $this->em = $em;
-        $this->inventoryConfig = $inventoryConfig;
     }
 
 
@@ -36,9 +33,9 @@ class EcommerceProductSubItemType extends AbstractType
     {
         $builder
 
-            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Add product quantity' ,'hover'=>'trigger',' data-original-title'=>'Add product quantity')))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Add purchase price' ,'hover'=>'trigger',' data-original-title'=>'Add purchase price')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Add sales price','hover'=>'trigger',' data-original-title'=>'Add sales price')))
+            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span3 tooltips','placeholder'=>'Quantity' ,'hover'=>'trigger',' data-original-title'=>'Product quantity')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span4 tooltips','placeholder'=>'Purchase price' ,'hover'=>'trigger',' data-original-title'=>'Purchase price')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span3 tooltips','placeholder'=>'Sales price','hover'=>'trigger',' data-original-title'=>'Sales price')))
             ->add('size', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
@@ -50,7 +47,6 @@ class EcommerceProductSubItemType extends AbstractType
                         ->join('p.sizeGroup','sg')
                         ->where("p.status = 1")
                         ->andWhere("p.isValid = 1")
-                        ->andWhere("sg.inventoryConfig=".$this->inventoryConfig->getId())
                         ->orderBy("p.name","ASC");
                 },
             ))
@@ -90,7 +86,7 @@ class EcommerceProductSubItemType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\InventoryBundle\Entity\GoodsItem'
+            'data_class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemSub'
         ));
     }
 
@@ -102,13 +98,5 @@ class EcommerceProductSubItemType extends AbstractType
         return 'goods_item';
     }
 
-    /**
-     * @return mixed
-     */
-    protected function categoryChoiceList()
-    {
 
-        return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
-
-    }
 }

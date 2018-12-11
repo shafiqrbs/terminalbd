@@ -30,7 +30,6 @@ class ItemRepository extends EntityRepository
         }
 
         $qb = $this->createQueryBuilder('product');
-        $qb->leftJoin("product.masterItem",'masterItem');
         $qb->leftJoin('product.brand','brand');
         $qb->where("product.isWeb = 1");
         $qb->andWhere("product.status = 1");
@@ -60,7 +59,7 @@ class ItemRepository extends EntityRepository
 
         if (!empty($data['category'])) {
             $qb
-                ->join('masterItem.category', 'category')
+                ->join('product.category', 'category')
                 ->andWhere(
                     $qb->expr()->orX(
                         $qb->expr()->like('category.path', "'". intval($data['category']) . "/%'"),
@@ -68,8 +67,6 @@ class ItemRepository extends EntityRepository
                     )
                 );
         }
-
-
         if (!empty($data['product'])) {
              $search = strtolower($data['product']);
              $qb->andWhere($qb->expr()->like("product.slug", "'%$search%'"  ));
@@ -238,17 +235,10 @@ class ItemRepository extends EntityRepository
         $name           = isset($data['name'])? $data['name'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
-        $vendor         = isset($data['vendor'])? $data['vendor'] :'';
 
-        if (!empty($vendor)) {
-            $qb->join('purchase.vendor', 'v');
-            $qb->andWhere("v.name = :vendor");
-            $qb->setParameter('vendor', $vendor);
-        }
 
         if (!empty($cat)) {
-            $qb->join('product.masterItem', 'masterItem');
-            $qb->andWhere("masterItem.category = :category");
+            $qb->andWhere("e.category = :category");
             $qb->setParameter('category', $cat);
         }
         if (!empty($brand)) {
@@ -267,7 +257,7 @@ class ItemRepository extends EntityRepository
         $qb->join('item.purchase', 'purchase');
         $qb->where("item.source ='config' ");
         $qb->setParameter('config', $config);
-        $this->handleSearchBetween($qb,$data);
+       // $this->handleSearchBetween($qb,$data);
         $qb->orderBy('item.updated','DESC');
         $qb->getQuery();
         return  $qb;
@@ -319,8 +309,7 @@ class ItemRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('product');
-        $qb->where("product.isWeb = 1");
-        $qb->andWhere("product.ecommerceConfig = :config");
+        $qb->where("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('product.updated', 'DESC');
@@ -372,6 +361,20 @@ class ItemRepository extends EntityRepository
         return  $qb;
 
     }
+
+	public function updateMasterProductQuantity(Item $entity)
+	{
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.itemSubs','gi');
+		$qb->select('sum(gi.quantity) AS quantity');
+		$qb->where("e.id = :id");
+		$qb->setParameter('id', $entity->getId());
+		$sum = $qb->getQuery()->getSingleScalarResult();
+		$entity->setMasterQuantity($sum);
+		$this->_em->persist($entity);
+		$this->_em->flush($entity);
+
+	}
 
 
     public function getCulculationDiscountPrice(Item $purchase , Discount $discount)

@@ -52,25 +52,6 @@ class ItemBrand  implements CodeAwareEntity
      */
     protected $products;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="brands")
-     */
-    protected $ecommerceMenu;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="brand")
-     **/
-    private $featureWidgets;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureBrand", mappedBy="brand")
-     **/
-    private $featureBrand;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="brand")
-     **/
-    private $features;
 
     /**
      * @var string

@@ -3,7 +3,8 @@
 namespace Appstore\Bundle\EcommerceBundle\Controller;
 
 
-use Appstore\Bundle\InventoryBundle\Form\CustomCategoryType;
+use Appstore\Bundle\EcommerceBundle\Form\CustomCategoryType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,8 +27,8 @@ class CustomCategoryController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('ProductProductBundle:Category')->findBy(array('inventoryConfig' => $inventoryConfig ),array( 'name' =>'asc' ));
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $em->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig' => $config ),array( 'name' =>'asc' ));
         $pagination = $this->paginate($entities);
         return $this->render('EcommerceBundle:CustomCategory:index.html.twig', array(
             'entities' => $pagination,
@@ -59,14 +60,14 @@ class CustomCategoryController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $entity->setInventoryConfig($inventoryConfig);
+            $config =  $this->getUser()->getGlobalOption()->getEcommerceConfig();
+            $entity->setEcommerceConfig($config);
             $entity->setStatus(true);
             $entity->setPermission('private');
             $entity->upload();
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('ecommerce_category_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('ecommerce_category', array('id' => $entity->getId())));
         }
 
         return $this->render('EcommerceBundle:CustomCategory:new.html.twig', array(
@@ -85,9 +86,9 @@ class CustomCategoryController extends Controller
     private function createCreateForm(Category $entity)
     {
 
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new CustomCategoryType($inventory,$em), $entity, array(
+        $form = $this->createForm(new CustomCategoryType($config,$em), $entity, array(
             'action' => $this->generateUrl('ecommerce_category_create'),
             'method' => 'POST',
             'attr' => array(
@@ -169,7 +170,7 @@ class CustomCategoryController extends Controller
     private function createEditForm(Category $entity)
     {
 
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
         $form = $this->createForm(new CustomCategoryType($inventory,$em), $entity, array(
             'action' => $this->generateUrl('ecommerce_category_update', array('id' => $entity->getId())),
@@ -195,8 +196,6 @@ class CustomCategoryController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -210,46 +209,43 @@ class CustomCategoryController extends Controller
         return $this->render('EcommerceBundle:CustomCategory:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
     /**
      * Deletes a Category entity.
      *
      */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+	public function deleteAction($id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+		$entity = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->findOneBy(array('ecommerceConfig' => $config,'id' => $id));
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('ProductProductBundle:Category')->find($id);
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Brand entity.');
+		}
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Category entity.');
-            }
+		try {
 
-            $em->remove($entity);
-            $em->flush();
-        }
+			$em->remove($entity);
+			$em->flush();
+			$this->get('session')->getFlashBag()->add(
+				'error',"Data has been deleted successfully"
+			);
 
-        return $this->redirect($this->generateUrl('ecommerce_category'));
-    }
+		} catch (ForeignKeyConstraintViolationException $e) {
+			$this->get('session')->getFlashBag()->add(
+				'notice',"Data has been relation another Table"
+			);
+		}catch (\Exception $e) {
+			$this->get('session')->getFlashBag()->add(
+				'notice', 'Please contact system administrator further notification.'
+			);
+		}
 
-    /**
-     * Creates a form to delete a Category entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('ecommerce_category_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm();
-    }
+		return $this->redirect($this->generateUrl('ecommerce_category'));
+	}
+
+
+
 }

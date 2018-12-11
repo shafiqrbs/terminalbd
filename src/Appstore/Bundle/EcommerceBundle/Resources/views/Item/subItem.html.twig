@@ -1,5 +1,5 @@
-{% for subItem in entity.goodsItems  %}
-    <tr>
+{% for subItem in entity.itemSubs  %}
+    <tr id="removeProduct-{{ subItem.id }}">
         <td class="numeric" >{{ loop.index }}</td>
         <td class="numeric" >{% if subItem.size is not empty %}{{ subItem.size.name }}{% endif %}</td>
         <td class="numeric" >{% if subItem.productUnit is not empty %}{{ subItem.productUnit.name }}{% endif %}</td>
@@ -9,7 +9,7 @@
         <td class="numeric" >{{ subItem.salesPrice|number_format() }}</td>
         <td>
             {% if  subItem.masterItem == 0 %}
-            <a class="btn red remove mini" data-url="{{ path('ecommerce_product_subItem_delete',{'id':subItem.id}) }}"><i class="icon-trash"></i> Delete</a>
+            <a class="btn red remove mini" data-url="{{ path('ecommerce_item_subItem_delete',{'id':subItem.id}) }}"><i class="icon-trash"></i> Delete</a>
             {% endif %}
         </td>
     </tr>

@@ -9,8 +9,6 @@ class PreOrderListener
 {
     public function prePersist(LifecycleEventArgs $args)
     {
-        var_dump($args);
-        exit;
         $this->createCode($args);
     }
 

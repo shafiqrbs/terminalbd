@@ -1,6 +1,6 @@
 {% if widget.brandShow == 'imageProduct' %}
     <div id="" class="feature-carousel">
-        {% if brand is not empty %}
+        {% if brand is not empty and brand.featureBrand.webPath is not empty %}
             <div class="col-md-4">
                 <div id="" class="product-canvas feature-cat-image brandProductLeft" >
                     <a class="{% if products|length > 3  %} img-card-large {% else %} img-card {% endif %}" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':brand.id }) }}">
@@ -45,7 +45,7 @@
                         <img  src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
                     </a>
                     <div class="card-content" data-match-height="item-promotion">
-                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
+                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}</a>
                     </div>
                     <div class="card-read-more text-center">
                         <strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}

@@ -82,20 +82,21 @@ class EcommerceMenuType extends AbstractType
                 'choices'=> $this->categoryChoiceList()
             ))
             ->add('brands', 'entity', array(
-                'required'      => true,
-                'multiple'      =>true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
-                'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 multiselect'),
-                'query_builder' => function(EntityRepository $er){
-                        return $er->createQueryBuilder('b')
-                            ->andWhere("b.status = 1")
-                            ->andWhere("b.inventoryConfig =".$this->inventoryConfig->getId())
-                            ->orderBy('b.name','ASC');
-                    },
-            ))
+		        'required'    => false,
+		        'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
+		        'empty_value' => '---Select Brand---',
+		        'property' => 'name',
+		        'attr'=>array('class'=>'m-wrap span12 '),
+		        'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+			        return $er->createQueryBuilder('e')
+			                  ->where("e.status = 1")
+			                  ->andWhere("e.ecommerceConfig =".$this->ecommerceConfig)
+			                  ->orderBy('e.name','ASC');
+		        },
+	        ))
 
-            ->add('discounts', 'entity', array(
+
+	        ->add('discounts', 'entity', array(
                 'required'    => false,
                 'multiple'      =>true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Discount',

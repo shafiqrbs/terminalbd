@@ -2,6 +2,7 @@
 
 namespace Product\Bundle\ProductBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\Query\Expr\Orx;
@@ -296,7 +297,7 @@ class CategoryRepository extends MaterializedPathRepository
         return $tree .= '</select>';
     }
 
-    public function getGroupCategories($categories,$array = array() ){
+    public function getGroupCategories($categories , $array = array() ){
 
 
         $value ='';
@@ -705,6 +706,27 @@ class CategoryRepository extends MaterializedPathRepository
         if(!empty($inventroy->getItemTypeGrouping())){
 
             $categories = $inventroy->getItemTypeGrouping()->getCategories();
+            foreach($categories as $category){
+                $arr[] = array(
+                    'id' => $category->getId(),
+                    'name' => $category->getName(),
+                    'level' => $category->getLevel(),
+                    '__children' => $this->childrenHierarchy($category)
+                );
+            }
+            $this->buildFlatCategoryTree($arr , $array);
+        }
+        return $array == null ? array() : $array;
+
+    }
+
+    public function getUseEcommerceItemCategory(EcommerceConfig $config)
+    {
+        $arr =array();
+        $array =array();
+        if(!empty($config->getCategoryGrouping())){
+
+            $categories = $config->getCategoryGrouping()->getCategories();
             foreach($categories as $category){
                 $arr[] = array(
                     'id' => $category->getId(),

@@ -1,8 +1,8 @@
 <?php
 
-namespace Appstore\Bundle\InventoryBundle\EventListener;
+namespace Appstore\Bundle\EcommerceBundle\EventListener;
 
-use Appstore\Bundle\InventoryBundle\Entity\CodeAwareEntity;
+use Appstore\Bundle\EcommerceBundle\Entity\CodeAwareEntity;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class SettingListener
@@ -14,8 +14,8 @@ class SettingListener
 
     public function createCode(LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity();
 
+        $entity = $args->getEntity();
         // perhaps you only want to act on some "Purchase" entity
         if ($entity instanceof CodeAwareEntity) {
 
@@ -38,8 +38,8 @@ class SettingListener
         $qb = $entityManager->getRepository($class)->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-            ->where('s.inventoryConfig = :inventory')
-            ->setParameter('inventory', $entity->getInventoryConfig());
+            ->where('s.ecommerceConfig = :config')
+            ->setParameter('config', $entity->getEcommerceConfig());
             $lastCode = $qb->getQuery()->getSingleScalarResult();
 
         if (empty($lastCode)) {

@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * ItemAttribute
  *
- * @ORM\Table()
+ * @ORM\Table("ecommerce_item_attribute")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\ItemAttributeRepository")
  */
 class ItemAttribute
@@ -26,6 +26,12 @@ class ItemAttribute
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="itemAttributes" )
      **/
     private  $category;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="itemAttributes" )
+     **/
+    private  $ecommerceConfig;
 
 
     /**
@@ -75,7 +81,7 @@ class ItemAttribute
      *
      * @ORM\Column(name="status", type="boolean")
      */
-    private $status=true;
+    private $status = true;
 
 
     /**
@@ -314,5 +320,19 @@ class ItemAttribute
     {
         $this->dropDown = $dropDown;
     }
+
+	/**
+	 * @return EcommerceConfig
+	 */
+	public function getEcommerceConfig() {
+		return $this->ecommerceConfig;
+	}
+
+	/**
+	 * @param EcommerceConfig $ecommerceConfig
+	 */
+	public function setEcommerceConfig( $ecommerceConfig ) {
+		$this->ecommerceConfig = $ecommerceConfig;
+	}
 }
 

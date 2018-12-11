@@ -13,72 +13,72 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class CustomCategoryType extends AbstractType
 {
 
-    /** @var  InventoryConfig */
+	/** @var  InventoryConfig */
 
-    private $inventoryConfig;
+	private $inventoryConfig;
 
-    /** @var  CategoryRepository */
-    private $em;
+	/** @var  CategoryRepository */
+	private $em;
 
-    function __construct(InventoryConfig $inventoryConfig , CategoryRepository $em)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-        $this->em = $em;
-    }
+	function __construct(InventoryConfig $inventoryConfig , CategoryRepository $em)
+	{
+		$this->inventoryConfig = $inventoryConfig;
+		$this->em = $em;
+	}
 
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
+	/**
+	 * @param FormBuilderInterface $builder
+	 * @param array $options
+	 */
+	public function buildForm(FormBuilderInterface $builder, array $options)
+	{
+		$builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter category name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+			->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter category name'),
+			                           'constraints' =>array(
+				                           new NotBlank(array('message'=>'Please input required')),
+			                           )
+			))
 
-            ->add('parent', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select parent category---',
-                'attr'=>array('class'=>'category m-wrap span12 select2'),
-                'class' => 'ProductProductBundle:Category',
-                'property' => 'nestedLabel',
-                'choices'=> $this->categoryChoiceList()
-            ))
-        ;
-    }
-    
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'Product\Bundle\ProductBundle\Entity\Category'
-        ));
-    }
+			->add('parent', 'entity', array(
+				'required'    => true,
+				'empty_value' => '---Select parent category---',
+				'attr'=>array('class'=>'category m-wrap span12 select2'),
+				'class' => 'ProductProductBundle:Category',
+				'property' => 'nestedLabel',
+				'choices'=> $this->categoryChoiceList()
+			))
+		;
+	}
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'product_bundle_productbundle_category';
-    }
+	/**
+	 * @param OptionsResolverInterface $resolver
+	 */
+	public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+		$resolver->setDefaults(array(
+			'data_class' => 'Product\Bundle\ProductBundle\Entity\Category'
+		));
+	}
 
-    /**
-     * @return mixed
-     */
-    protected function categoryChoiceList()
-    {
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return 'product_bundle_productbundle_category';
+	}
 
-        return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
+	/**
+	 * @return mixed
+	 */
+	protected function categoryChoiceList()
+	{
 
-    }
+		return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
+
+	}
 
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\InventoryBundle\Form;
+namespace Appstore\Bundle\EcommerceBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,7 +20,7 @@ class ItemBrandType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  brand name'))
             )))
-            ->add('status');
+            ->add('file');
     }
     
     /**
@@ -29,7 +29,7 @@ class ItemBrandType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand'
+            'data_class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand'
         ));
     }
 
@@ -38,6 +38,6 @@ class ItemBrandType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_ItemBrand';
+        return 'itemBrand';
     }
 }

@@ -4,7 +4,7 @@ namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
-use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
@@ -85,7 +85,7 @@ class EcommerceMenu
     private  $discounts;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="ecommerceMenu")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="ecommerceMenu")
      * @ORM\OrderBy({"name" = "ASC"})
      */
     protected $brands;

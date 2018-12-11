@@ -27,5 +27,4 @@ ecommerce_category_update:
 ecommerce_category_delete:
     path:     /{id}/delete
     defaults: { _controller: "EcommerceBundle:CustomCategory:delete" }
-    methods:  [POST, DELETE]
 

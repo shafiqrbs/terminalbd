@@ -40,14 +40,14 @@ class EcommerceProductType extends AbstractType
             ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Web product name')))
             ->add('brand', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
+                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
                 'property' => 'name',
                 'empty_value' => '-Choose a brand-',
                 'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
-                        ->andWhere("p.inventoryConfig =".$this->config->getId())
+                        ->andWhere("p.ecommerceConfig =".$this->config->getId())
                         ->orderBy("p.name","ASC");
                 },
             ))
@@ -86,6 +86,17 @@ class EcommerceProductType extends AbstractType
 
                 },
             ))
+	        ->add('category', 'entity', array(
+		        'required'    => true,
+		        'empty_value' => '---Select product category---',
+		        'attr'=>array('class'=>'category m-wrap span12 select2'),
+		        'constraints' =>array(
+			        new NotBlank(array('message'=>'Please input required'))
+		        ),
+		        'class' => 'ProductProductBundle:Category',
+		        'property' => 'nestedLabel',
+		        'choices'=> $this->categoryChoiceList()
+	        ))
             ->add('productUnit', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
@@ -122,7 +133,8 @@ class EcommerceProductType extends AbstractType
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     $qb = $er->createQueryBuilder('p');
-                    $qb->where("p.status = 1");
+	                $qb->where("p.ecommerceConfig ={$this->config->getId()}");
+	                $qb->andWhere("p.status = 1");
                     $qb->andWhere($qb->expr()->like('p.type', ':type'));
                     $qb->setParameter('type','%Tag%');
                     $qb->orderBy("p.name","ASC");
@@ -137,7 +149,8 @@ class EcommerceProductType extends AbstractType
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     $qb = $er->createQueryBuilder('p');
-                    $qb->where("p.status = 1");
+	                $qb->where("p.ecommerceConfig ={$this->config->getId()}");
+	                $qb->andWhere("p.status = 1");
                     $qb->andWhere($qb->expr()->like('p.type', ':type'));
                     $qb->setParameter('type','%Promotion%');
                     $qb->orderBy("p.name","ASC");
@@ -166,7 +179,7 @@ class EcommerceProductType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\EcommerceBundle\Entity\Itemtem'
+            'data_class' => 'Appstore\Bundle\EcommerceBundle\Entity\Item'
         ));
     }
 
@@ -183,6 +196,6 @@ class EcommerceProductType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
+        return $categoryTree = $this->em->getUseEcommerceItemCategory($this->config);
     }
 }
