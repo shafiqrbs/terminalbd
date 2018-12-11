@@ -30,3 +30,19 @@ ecommerce_ecommerce_preorder:
     resource: "@EcommerceBundle/Resources/config/routing/preorder.yml"
     prefix:   /e-commerce/preorder
 
+ecommerce_ecommerce_category:
+    resource: "@EcommerceBundle/Resources/config/routing/category.yml"
+    prefix:   /e-commerce/category
+
+ecommerce_ecommerce_category_grouping:
+    resource: "@EcommerceBundle/Resources/config/routing/categorygrouping.yml"
+    prefix:   /e-commerce/category-grouping
+
+ecommerce_product:
+    resource: "@EcommerceBundle/Resources/config/routing/product.yml"
+    prefix:   /e-commerce/product
+
+ecommerce_brand_product:
+    resource: "@EcommerceBundle/Resources/config/routing/brand.yml"
+    prefix:   /e-commerce/brand
+

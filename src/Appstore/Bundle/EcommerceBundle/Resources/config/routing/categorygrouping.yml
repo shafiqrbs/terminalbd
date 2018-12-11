@@ -1,0 +1,22 @@
+ecommerce_grouping:
+    path:     /
+    defaults: { _controller: "EcommerceBundle:ItemTypeGrouping:index" }
+
+ecommerce_grouping_create:
+    path:     /create
+    defaults: { _controller: "EcommerceBundle:ItemTypeGrouping:create" }
+    methods:  POST
+
+ecommerce_grouping_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EcommerceBundle:ItemTypeGrouping:edit" }
+
+ecommerce_grouping_update:
+    path:     /{id}/update
+    defaults: { _controller: "EcommerceBundle:ItemTypeGrouping:update" }
+    methods:  [POST, PUT]
+
+ecommerce_grouping_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EcommerceBundle:ItemTypeGrouping:delete" }
+    methods:  [POST, DELETE]

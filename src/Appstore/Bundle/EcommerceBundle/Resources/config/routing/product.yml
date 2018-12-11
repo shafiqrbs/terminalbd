@@ -1,0 +1,96 @@
+ecommerce_product:
+    path:     /
+    defaults: { _controller: "EcommerceBundle:Product:index" }
+
+ecommerce_product_show:
+    path:     /{id}/show
+    defaults: { _controller: "EcommerceBundle:Product:show" }
+
+ecommerce_product_new:
+    path:     /new
+    defaults: { _controller: "EcommerceBundle:Product:new" }
+
+ecommerce_product_create:
+    path:      /create
+    defaults: { _controller: "EcommerceBundle:Product:create" }
+    methods:  POST
+    options:
+            expose: true
+
+ecommerce_product_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EcommerceBundle:Product:edit" }
+
+ecommerce_product_update:
+    path:     /{id}/update
+    defaults: { _controller: "EcommerceBundle:Product:update" }
+    methods:  [POST, PUT]
+
+ecommerce_product_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EcommerceBundle:Product:delete" }
+
+ecommerce_product_status:
+    path:     /{id}/product-status
+    defaults: { _controller: "EcommerceBundle:Product:webStatus" }
+
+ecommerce_product_copy:
+    path:     /{id}/item-copy
+    defaults: { _controller: "EcommerceBundle:Product:itemCopy" }
+
+ecommerce_product_inline_discount_search:
+    path:     /inline-discount-search
+    defaults: { _controller: "EcommerceBundle:Product:discountSelect" }
+    options:
+           expose: true
+
+ecommerce_product_inline_tag_search:
+    path:     /inline-tag-search
+    defaults: { _controller: "EcommerceBundle:Product:tagSelect" }
+    options:
+           expose: true
+
+ecommerce_product_inline_update:
+    path:     /inline-Product-update
+    defaults: { _controller: "EcommerceBundle:Product:inlineItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+ecommerce_product_inline_subitem_update:
+    path:     /inline-Product-subitem-update
+    defaults: { _controller: "EcommerceBundle:Product:inlineSubItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+ecommerce_vendoritem_subproduct:
+    path:     /{id}/sub-product
+    defaults: { _controller: "EcommerceBundle:Product:addSubProduct" }
+    methods:  POST
+
+ecommerce_product_subItem_update:
+    path:     /{id}/sub-product-update
+    defaults: { _controller: "EcommerceBundle:Product:updateSubProduct" }
+    methods:  POST
+
+ecommerce_vendoritem_gallery:
+    path:     /{item}/upload
+    defaults: { _controller: "EcommerceBundle:Product:uploadItemImage" }
+    options:
+           expose: true
+
+ecommerce_product_subItem_delete:
+    path:     /{id}/sub-item-delete
+    defaults: { _controller: "EcommerceBundle:Product:subItemDelete" }
+
+ecommerce_product_productkeyvalue_delete:
+    path:     /{id}/item-key-value-delete
+    defaults: { _controller: "EcommerceBundle:Product:keyValueDelete" }
+
+ecommerce_product_attribute_sorted:
+    path:     /{id}/item-key-value-sorted
+    defaults: { _controller: "EcommerceBundle:Product:keyValueSorted" }
+    methods:  POST
+    options:
+           expose: true

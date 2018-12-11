@@ -6,7 +6,6 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
@@ -15,7 +14,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncode;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 

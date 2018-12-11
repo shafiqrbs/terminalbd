@@ -98,7 +98,6 @@ class WebServiceController extends Controller
 	    $siteEntity = $globalOption->getSiteSetting();
 	    $themeName = $siteEntity->getTheme()->getFolderName();
 	    $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'home'));
-
 	    /* Device Detection code desktop or mobile */
 
 	    $detect = new MobileDetect();

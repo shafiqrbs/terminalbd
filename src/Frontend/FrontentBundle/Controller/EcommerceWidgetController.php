@@ -53,19 +53,21 @@ class EcommerceWidgetController extends Controller
         $themeName = $siteEntity->getTheme()->getFolderName();
         $cart = new Cart($request->getSession());
         $data = $_REQUEST;
+	    $categoryTree = '';
         $category = isset($data['category']) ? $data['category'] :'';
 
-        $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
-        $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+       // $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
+      //  $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
         $detect = new MobileDetect();
         $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=> $globalOption->getInventoryConfig(),'status' => 1));
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$category);
+        //    $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$category);
             $theme = 'Template/Mobile/'.$themeName;
         }else{
-            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats,$category);
+          //  $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats,$category);
             $theme = 'Template/Desktop/'.$themeName;
         }
+
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,
             'categoryTree'          => $categoryTree,

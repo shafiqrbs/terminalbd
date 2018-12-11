@@ -103,7 +103,7 @@ class Builder extends ContainerAware
             $result = array_intersect($menuName, array('Ecommerce'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_ECOMMERCE')){
-                    $menu = $this->EcommerceMenu($menu);
+                    $menu = $this->EcommerceMenu($menu,$arrSlugs);
                 }
             }
 
@@ -768,7 +768,7 @@ class Builder extends ContainerAware
 
     }
 
-    public function EcommerceMenu($menu)
+    public function EcommerceMenu($menu,$apps)
     {
         $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
         $menu
@@ -781,7 +781,7 @@ class Builder extends ContainerAware
             $menu['E-commerce']->addChild('Product', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-bookmark')
                 ->setAttribute('dropdown', true);
-            $menu['E-commerce']['Product']->addChild('Product', array('route' => 'inventory_goods'))->setAttribute('icon', 'icon-th-list');
+            $menu['E-commerce']['Product']->addChild('Product', array('route' => 'ecommerce_product'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Item Attribute', array('route' => 'itemattribute'))->setAttribute('icon', 'icon-th-list');
@@ -806,16 +806,16 @@ class Builder extends ContainerAware
 
         }
         $menu['E-commerce']->addChild('Coupon', array('route' => 'ecommerce_coupon'))->setAttribute('icon', 'icon-tags');
-        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
+	    if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
             $menu['E-commerce']->addChild('Configuration', array('route' => 'ecommerce_config_modify'))->setAttribute('icon', 'fa fa-cog');
             $menu['E-commerce']->addChild('Master Data', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-shopping-cart')
                 ->setAttribute('dropdown', true);
-            if (empty($resInventory)) {
-                $menu['E-commerce']['Master Data']->addChild('Master Item', array('route' => 'inventory_product'))->setAttribute('icon', 'icon-th-list');
-               // $menu['E-commerce']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())))->setAttribute('icon', 'icon-th-list');
-                $menu['E-commerce']['Master Data']->addChild('Custom category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-th-list');
-                $menu['E-commerce']['Master Data']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
+            if (!in_array('inventory',$apps)) {
+	            $config = $securityContext->getGlobalOption()->getInventoryConfig()->getId();
+                $menu['E-commerce']['Master Data']->addChild('Item category', array('route' => 'ecommerce_grouping_edit', 'routeParameters' => array('id' => $config)))->setAttribute('icon', 'icon-th-list');
+                $menu['E-commerce']['Master Data']->addChild('Custom category', array('route' => 'ecommerce_category'))->setAttribute('icon', 'icon-th-list');
+                $menu['E-commerce']['Master Data']->addChild('Brand', array('route' => 'ecommerce_brand'))->setAttribute('icon', 'icon-th-list');
             }
         }
 

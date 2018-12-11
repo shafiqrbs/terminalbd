@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\InventoryBundle\Entity;
+namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * PurchaseVendorItem
+ * Item
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Appstore\Bundle\InventoryBundle\Repository\PurchaseVendorItemRepository")
+ * @ORM\Table("ecommerce_item")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\ItemRepository")
  */
-class PurchaseVendorItem
+class Item
 {
     /**
      * @var integer
@@ -30,84 +30,67 @@ class PurchaseVendorItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="purchaseVendorItems" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="items" , cascade={"detach","merge"} )
      **/
-    private  $inventoryConfig;
+    private  $ecommerceConfig;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="masterProducts" )
+	 **/
+	private  $category;
 
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseVendorItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $purchase;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", mappedBy="purchaseVendorItem" , cascade={"remove"} )
-     **/
-    private  $purchaseItems;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSalesItem", mappedBy="purchaseVendorItem" , cascade={"remove"} )
-     **/
-    private  $serviceSalesItems;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="purchaseVendorItem" , cascade={"remove"} )
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", mappedBy="item" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
-    private  $goodsItems;
+    private  $itemSubs;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseVendorItem" , cascade={"remove"}  )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="item" , cascade={"remove"}  )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $orderItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="purchaseVendorItem" )
-     **/
-    private  $masterItem;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemMetaAttribute", mappedBy="purchaseVendorItem" , cascade={"remove"}  )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemMetaAttribute", mappedBy="item" , cascade={"remove"}  )
      **/
     private  $itemMetaAttributes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue", mappedBy="purchaseVendorItem" , cascade={"remove"}  )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemKeyValue", mappedBy="item" , cascade={"remove"}  )
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private  $itemKeyValues;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemGallery", mappedBy="purchaseVendorItem" , cascade={"remove"} )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemGallery", mappedBy="item" , cascade={"remove"} )
      */
     protected $itemGalleries;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="purchaseVendorItems")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="items")
      */
     protected $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="purchaseVendorItems")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="items")
      */
     protected $brand;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="purchaseVendorItems" )
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="items" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $itemColors;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="purchaseVendorItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="items" )
      **/
     private  $size;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="purchaseVendorItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="items" )
      **/
     private  $discount;
 
@@ -117,12 +100,12 @@ class PurchaseVendorItem
     private  $tag;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="items" )
      **/
     private  $promotion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="purchaseVendorItem" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="item" )
      **/
     private  $productUnit;
 
@@ -144,13 +127,12 @@ class PurchaseVendorItem
     /**
      * @Gedmo\Slug(handlers={
      *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="masterItem"),
+     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="category"),
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
      * }, fields={"webName","code"})
      * @Doctrine\ORM\Mapping\Column(length=255, unique=true, nullable = true)
      */
-
     private $slug;
 
     /**
@@ -213,17 +195,10 @@ class PurchaseVendorItem
     /**
      * @var string
      *
-     * @ORM\Column(name="subTotalSalesPrice", type="decimal", nullable = true)
-     */
-    private $subTotalSalesPrice;
-
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="webPrice", type="decimal", nullable = true)
      */
     private $webPrice;
+
 
      /**
      * @var string
@@ -261,13 +236,6 @@ class PurchaseVendorItem
      */
     private $subProduct = false;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="subTotalWebPrice", type="decimal", nullable = true)
-     */
-    private $subTotalWebPrice;
 
     /**
      * @var array()
@@ -352,7 +320,7 @@ class PurchaseVendorItem
     public function removeGoodsItems($group)
     {
         //optionally add a check here to see that $group exists before removing it.
-        return $this->goodsItems->removeElement($group);
+       // return $this->itemSubs->removeElement($group);
     }
 
     /**
@@ -360,7 +328,7 @@ class PurchaseVendorItem
      *
      * @param string $name
      *
-     * @return PurchaseVendorItem
+     * @return Item
      */
     public function setName($name)
     {
@@ -384,7 +352,7 @@ class PurchaseVendorItem
      *
      * @param integer $quantity
      *
-     * @return PurchaseVendorItem
+     * @return Item
      */
     public function setQuantity($quantity)
     {
@@ -408,7 +376,7 @@ class PurchaseVendorItem
      *
      * @param string $purchasePrice
      *
-     * @return PurchaseVendorItem
+     * @return Item
      */
     public function setPurchasePrice($purchasePrice)
     {
@@ -432,7 +400,7 @@ class PurchaseVendorItem
      *
      * @param string $salesPrice
      *
-     * @return PurchaseVendorItem
+     * @return Item
      */
     public function setSalesPrice($salesPrice)
     {
@@ -450,39 +418,7 @@ class PurchaseVendorItem
     {
         return $this->salesPrice;
     }
-
-    /**
-     * Set webPrice
-     *
-     * @param string $webPrice
-     *
-     * @return PurchaseVendorItem
-     */
-    public function setWebPrice($webPrice)
-    {
-        $this->webPrice = $webPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get webPrice
-     *
-     * @return string
-     */
-    public function getWebPrice()
-    {
-        return $this->webPrice;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPurchase()
-    {
-        return $this->purchase;
-    }
-
+	
     /**
      * @param mixed $purchase
      */
@@ -491,15 +427,7 @@ class PurchaseVendorItem
         $this->purchase = $purchase;
     }
 
-    /**
-     * @return PurchaseItem
-     */
-    public function getPurchaseItems()
-    {
-        return $this->purchaseItems;
-
-    }
-
+ 
     /**
      * @return string
      */
@@ -532,22 +460,7 @@ class PurchaseVendorItem
         $this->subTotalSalesPrice = $subTotalSalesPrice;
     }
 
-    /**
-     * @return string
-     */
-    public function getSubTotalWebPrice()
-    {
-        return $this->subTotalWebPrice;
-    }
-
-    /**
-     * @param string $subTotalWebPrice
-     */
-    public function setSubTotalWebPrice($subTotalWebPrice)
-    {
-        $this->subTotalWebPrice = $subTotalWebPrice;
-    }
-
+    
     /**
      * @return boolean
      */
@@ -564,22 +477,7 @@ class PurchaseVendorItem
         $this->isWeb = $isWeb;
     }
 
-    /**
-     * @return Product
-     */
-    public function getMasterItem()
-    {
-        return $this->masterItem;
-    }
-
-    /**
-     * @param Product $masterItem
-     */
-    public function setMasterItem($masterItem)
-    {
-        $this->masterItem = $masterItem;
-    }
-
+   
     /**
      * @return string
      */
@@ -778,7 +676,7 @@ class PurchaseVendorItem
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getInventoryConfig()->getGlobalOption()->getId().'/inventory/item/'.$this->getId().'/';
+        return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/inventory/item/'.$this->getId().'/';
     }
 
     public function upload()
@@ -822,82 +720,6 @@ class PurchaseVendorItem
 
     }
 
-
-    public function  getPurchaseStockItem()
-    {
-        $quantity = 0;
-
-        if(!$this->purchaseItems->isEmpty()) {
-
-            foreach ($this->purchaseItems AS $purchaseItem) {
-                if(!$purchaseItem->getStockItem()->isEmpty()) {
-                    foreach ($purchaseItem->getStockItem() AS $item) {
-                       $quantity += $item->getQuantity(); //$recipecost now $this->recipecost.
-
-                    }
-
-                }
-            }
-            return $quantity;
-        }
-        return false;
-    }
-
-    public function getColors()
-    {
-        if(!$this->purchaseItems->isEmpty()) {
-            $color = array();
-            foreach ($this->purchaseItems as $purchaseItem) {
-                if (!$purchaseItem->getStockItem()->isEmpty()) {
-                    foreach ($purchaseItem->getStockItem() AS $item) {
-                        $color[] = $item->getItem()->getColor()->getName(); //$recipecost now $this->recipecost.
-
-                    }
-                }
-            }
-            return array_unique($color);
-        }
-    }
-    public function getSizes()
-    {
-        if(!$this->purchaseItems->isEmpty()) {
-            $size = array();
-            foreach ($this->purchaseItems as $purchaseItem) {
-                if (!$purchaseItem->getStockItem()->isEmpty()) {
-                    foreach ($purchaseItem->getStockItem() AS $item) {
-                        $size[] = $item->getItem()->getSize()->getName(); //$recipecost now $this->recipecost.
-
-                    }
-                }
-            }
-            return array_unique($size);
-        }
-
-    }
-
-    /**
-     * @return GoodsItem
-     */
-    public function getGoodsItems()
-    {
-        return $this->goodsItems;
-    }
-
-    /**
-     * @return InventoryConfig
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param InventoryConfig $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
 
     /**
      * @return boolean
@@ -1098,37 +920,7 @@ class PurchaseVendorItem
     {
         $this->ageGroup = $ageGroup;
     }
-
-    /**
-     * @return ServiceSalesItem
-     */
-    public function getServiceSalesItems()
-    {
-        return $this->serviceSalesItems;
-    }
-
-    public function stockReminigQnt(){
-        $stockQnt = 0;
-        $purchaseItems = $this->purchaseItems;
-        foreach($purchaseItems as $item ){
-           foreach ($item->getStockItem() as $stock){
-               $stockQnt += $stock->getQuantity();
-           }
-        }
-
-        return $stockQnt;
-    }
-
-    public function getSubProductQuantity(){
-
-        $stockQnt = 0;
-        $goodsItems = $this->goodsItems;
-        foreach($goodsItems as $item ){
-            $stockQnt += $item->getQuantity();
-        }
-        return $stockQnt;
-    }
-
+   
     /**
      * @return string
      */
@@ -1249,6 +1041,41 @@ class PurchaseVendorItem
     {
         $this->preOrder = $preOrder;
     }
+
+	/**
+	 * @return EcommerceConfig
+	 */
+	public function getEcommerceConfig() {
+		return $this->ecommerceConfig;
+	}
+
+	/**
+	 * @param EcommerceConfig $ecommerceConfig
+	 */
+	public function setEcommerceConfig( $ecommerceConfig ) {
+		$this->ecommerceConfig = $ecommerceConfig;
+	}
+
+	/**
+	 * @return ItemSub
+	 */
+	public function getItemSubs() {
+		return $this->itemSubs;
+	}
+
+	/**
+	 * @return Category
+	 */
+	public function getCategory() {
+		return $this->category;
+	}
+
+	/**
+	 * @param Category $category
+	 */
+	public function setCategory( $category ) {
+		$this->category = $category;
+	}
 
 
 }
