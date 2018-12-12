@@ -356,7 +356,7 @@ class WebServiceProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $entity =  $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findOneBy(array('inventoryConfig'=>$globalOption->getEcommerceConfig(),'slug'=>$item));
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$entity->getId(),'masterItem'=>1));
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$entity->getId(),'masterItem'=>1));
 
         $products ='';
         if(!empty($globalOption)){
@@ -414,13 +414,13 @@ class WebServiceProductController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $masterItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$item->getId(),'masterItem'=>1));
+        $masterItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$item->getId(),'masterItem'=>1));
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if(empty($masterItem)){
         $subItem ='';
         }else{
         $subItem = isset($_REQUEST['subItem']) ? $_REQUEST['subItem'] : $masterItem->getId() ;
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $item,'id' => $subItem));
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem' => $item,'id' => $subItem));
         }
         if(!empty($globalOption)){
 
@@ -454,7 +454,7 @@ class WebServiceProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=> $subdomain));
         /* @var GoodsItem $subItem */
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->find($subId);
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->find($subId);
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -490,7 +490,7 @@ class WebServiceProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         /* @var GoodsItem $subItem */
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=> $product,'id'=> $subId));
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=> $product,'id'=> $subId));
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -524,7 +524,7 @@ class WebServiceProductController extends Controller
         $subItem = $_REQUEST['subItem'];
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$product,'id'=>$subItem));
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$product,'id'=>$subItem));
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -617,9 +617,9 @@ class WebServiceProductController extends Controller
         /* @var GoodsItem $subitem */
 
         if(empty($size)){
-            $subitem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$product,'masterItem' => 1));
+            $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$product,'masterItem' => 1));
         }else{
-            $subitem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$product,'id' => $size));
+            $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$product,'id' => $size));
         }
         $quantity = 1;
         $color = !empty($color) ? $color : 0;
@@ -698,7 +698,7 @@ class WebServiceProductController extends Controller
         $quantity = (int)$_REQUEST['quantity'];
         $productId = (int)$_REQUEST['productId'];
         $price = (float)$_REQUEST['price'];
-        $item = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->find($productId);
+        $item = $this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->find($productId);
         if (!empty($item) and  $item->getQuantity() >= $quantity){
             $data = array(
                 'rowid' => $cartid,
