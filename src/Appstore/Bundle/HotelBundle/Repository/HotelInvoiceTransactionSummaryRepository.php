@@ -36,6 +36,8 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 	public function updateTransactionSummary(HotelInvoice $invoice)
 	{
 
+		/* @var $entity HotelInvoiceTransactionSummary */
+
 		$entity = $this->findOneBy(array('hotelConfig' => $invoice->getHotelConfig(),'hotelInvoice'=> $invoice));
 		$em = $this->_em;
 		$res = $em->createQueryBuilder()
@@ -50,12 +52,18 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 		          ->setParameter('process', 'Done')
 		          ->getQuery()->getOneOrNullResult();
 
-    	$due = ($res['total'] - ($res['received'] + $res['discount']));
-		$entity->setDiscount($res['discount']);
-		$entity->setVat($res['vat']);
-		$entity->setSubTotal($res['subTotal']);
-		$entity->setTotal($res['total']);
-		$entity->setReceived($res['received']);
+		$discount = !empty($res['discount']) ? $res['discount'] : 0 ;
+		$vat = !empty($res['vat']) ? $res['vat'] : 0 ;
+		$subTotal = !empty($res['subTotal']) ? $res['subTotal'] : 0 ;
+		$total = !empty($res['total']) ? $res['total'] : 0 ;
+		$received = !empty($res['received']) ? $res['received'] : 0 ;
+		$due = ($total - ($received + $discount));
+
+		$entity->setDiscount($discount);
+		$entity->setVat(floatval($vat));
+		$entity->setSubTotal($subTotal);
+		$entity->setTotal($total);
+		$entity->setReceived($received);
 		$entity->setDue($due);
 		$em->flush();
 

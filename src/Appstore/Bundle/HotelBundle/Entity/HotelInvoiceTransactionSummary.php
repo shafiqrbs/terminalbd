@@ -41,33 +41,31 @@ class HotelInvoiceTransactionSummary
 	 **/
 	private $hotelConfig;
 
-
-
 	/**
      * @var float
      *
-     * @ORM\Column(name="discount", type="float", nullable=true)
+     * @ORM\Column(name="discount", type="float")
      */
-    private $discount;
+    private $discount = 0;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="vat", type="float", nullable=true)
+     * @ORM\Column(name="vat", type="float")
      */
     private $vat;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="subTotal", type="float", nullable=true)
+     * @ORM\Column(name="subTotal", type="float")
      */
     private $subTotal;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="total", type="float", nullable=true)
+     * @ORM\Column(name="total", type="float")
      */
     private $total;
 
@@ -75,7 +73,7 @@ class HotelInvoiceTransactionSummary
     /**
      * @var float
      *
-     * @ORM\Column(name="received", type="float", nullable=true)
+     * @ORM\Column(name="received", type="float")
      */
     private $received;
 
@@ -83,7 +81,7 @@ class HotelInvoiceTransactionSummary
 	/**
 	 * @var float
 	 *
-	 * @ORM\Column(name="due", type="float", nullable=true)
+	 * @ORM\Column(name="due", type="float")
 	 */
 	private $due;
 
@@ -99,70 +97,8 @@ class HotelInvoiceTransactionSummary
     }
 
 
-    /**
-     * @return string
-     */
-    public function getDiscount()
-    {
-        return $this->discount;
-    }
-
-    /**
-     * @param string $discount
-     */
-    public function setDiscount($discount)
-    {
-        $this->discount = $discount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    /**
-     * @param string $vat
-     */
-    public function setVat($vat)
-    {
-        $this->vat = $vat;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @param string $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-    }
 
 
-    /**
-     * @return string
-     */
-    public function getDue()
-    {
-        return $this->due;
-    }
-
-    /**
-     * @param string $due
-     */
-    public function setDue($due)
-    {
-        $this->due = $due;
-    }
 
 	/**
 	 * @return HotelInvoice
@@ -218,6 +154,62 @@ class HotelInvoiceTransactionSummary
 	 */
 	public function setHotelConfig( $hotelConfig ) {
 		$this->hotelConfig = $hotelConfig;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getVat(){
+		return $this->vat;
+	}
+
+	/**
+	 * @param float $vat
+	 */
+	public function setVat( float $vat ) {
+		$this->vat = $vat;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getDiscount(){
+		return $this->discount;
+	}
+
+	/**
+	 * @param float $discount
+	 */
+	public function setDiscount( float $discount ) {
+		$this->discount = $discount;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getTotal(){
+		return $this->total;
+	}
+
+	/**
+	 * @param float $total
+	 */
+	public function setTotal( float $total ) {
+		$this->total = $total;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getDue() {
+		return $this->due;
+	}
+
+	/**
+	 * @param float $due
+	 */
+	public function setDue( float $due ) {
+		$this->due = $due;
 	}
 
 }

@@ -43,7 +43,7 @@ class HotelInvoice
     private $hotelReverse;
 
      /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransactionSummary", mappedBy="hotelInvoice")
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransactionSummary", mappedBy="hotelInvoice", cascade={"remove"})
      **/
     private $hotelInvoiceTransactionSummary;
 

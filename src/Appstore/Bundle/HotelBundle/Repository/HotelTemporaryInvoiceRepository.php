@@ -69,10 +69,20 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 	    $em->flush();
     }
 
+    private function getSummary(User $user){
+
+	    $qb = $this->createQueryBuilder('e');
+	    $qb->select('SUM(e.subTotal) as subTotal');
+	    $qb->andWhere('e.createdBy = :user')->setParameter('user',$user->getId());
+	    $result = $qb->getQuery()->getOneOrNullResult();
+	    return $result['subTotal'];
+	}
 
     public function invoiceGenerate($user)
     {
-    	$entities = $this->findBy(array('createdBy'=>$user));
+    	$entities = $this->findBy(array('createdBy' => $user));
+    	$summary = $this->getSummary($user);
+
 	    $em = $this->_em;
 	    $entity = new HotelInvoice();
 	    $option = $user->getGlobalOption();
@@ -85,8 +95,12 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 	    $entity->setHotelConfig($hotelConfig);
 	    $entity->setPaymentStatus('Pending');
 	    $entity->setCreatedBy($user);
+	    $entity->setSubTotal($summary);
+	    $entity->setTotal($summary);
+	    $entity->setDue($summary);
 	    $em->persist($entity);
 	    $em->flush();
+	    $this->_em->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->insertTransactionSummary($entity);
 
 	    /* @var $room HotelTemporaryInvoice */
 

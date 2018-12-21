@@ -173,6 +173,7 @@ class InvoiceController extends Controller
             $done = array('Check-in');
             if (in_array($entity->getProcess(), $done) and $entity->getTotal() > 0) {
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->insertInvoiceProductItem($entity);
+	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->checkInHotelInvoice($entity);
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertTransaction($entity);
 	            // if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 		            $dispatcher = $this->container->get('event_dispatcher');

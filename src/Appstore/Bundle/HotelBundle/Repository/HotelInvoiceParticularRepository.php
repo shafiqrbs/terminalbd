@@ -232,6 +232,17 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		}
 	}
 
+	public function checkInHotelInvoice(HotelInvoice $invoice){
+
+		/* @var $particular HotelInvoiceTransaction */
+
+		$em = $this->_em;
+		foreach ($invoice->getHotelInvoiceParticulars() as $particular){
+			$particular->setProcess('check-in');
+			$em->flush();
+		}
+	}
+
 	public function salesStockItemUpdate(HotelParticular $stockItem)
     {
         $qb = $this->createQueryBuilder('e');
