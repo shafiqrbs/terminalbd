@@ -244,6 +244,13 @@ class TemplateCustomize
      */
      private $breadcrumbBorderColor;
 
+	/**
+     * @var int
+     *
+     * @ORM\Column(name="breadcrumbHeight",type="smallint", length=3, nullable=true)
+     */
+     private $breadcrumbHeight;
+
 
       /**
      * @var string
@@ -2707,6 +2714,20 @@ class TemplateCustomize
 	 */
 	public function setBreadcrumbPosition( string $breadcrumbPosition ) {
 		$this->breadcrumbPosition = $breadcrumbPosition;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBreadcrumbHeight(){
+		return $this->breadcrumbHeight;
+	}
+
+	/**
+	 * @param int $breadcrumbHeight
+	 */
+	public function setBreadcrumbHeight( int $breadcrumbHeight ) {
+		$this->breadcrumbHeight = $breadcrumbHeight;
 	}
 
 

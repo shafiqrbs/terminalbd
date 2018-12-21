@@ -43,6 +43,11 @@ class HotelInvoice
     private $hotelReverse;
 
      /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransactionSummary", mappedBy="hotelInvoice")
+     **/
+    private $hotelInvoiceTransactionSummary;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction", mappedBy="hotelInvoice")
      **/
     private $hotelInvoiceTransactions;
@@ -143,6 +148,13 @@ class HotelInvoice
     /**
      * @var string
      *
+     * @ORM\Column(name="roomName", type="string", length=256, nullable=true)
+     */
+    private $roomName;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="invoice", type="string", length=50, nullable=true)
      */
     private $invoice;
@@ -161,6 +173,13 @@ class HotelInvoice
      * @ORM\Column(name="paymentStatus", type="string", length=50, nullable=true)
      */
     private $paymentStatus = "Pending";
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceFor", type="string", length=20, nullable=true)
+     */
+    private $invoiceFor = "hotel";
 
     /**
      * @var string
@@ -838,6 +857,41 @@ class HotelInvoice
 	 */
 	public function setPaymentReceived($paymentReceived ) {
 		$this->paymentReceived = $paymentReceived;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getInvoiceFor(){
+		return $this->invoiceFor;
+	}
+
+	/**
+	 * @param string $invoiceFor
+	 */
+	public function setInvoiceFor( string $invoiceFor ) {
+		$this->invoiceFor = $invoiceFor;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRoomName(){
+		return $this->roomName;
+	}
+
+	/**
+	 * @param string $roomName
+	 */
+	public function setRoomName( string $roomName ) {
+		$this->roomName = $roomName;
+	}
+
+	/**
+	 * @return HotelInvoiceTransactionSummary
+	 */
+	public function getHotelInvoiceTransactionSummary() {
+		return $this->hotelInvoiceTransactionSummary;
 	}
 
 }

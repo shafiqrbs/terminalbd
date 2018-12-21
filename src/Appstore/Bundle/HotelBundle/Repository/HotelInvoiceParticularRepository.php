@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HotelBundle\Repository;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceParticular;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelParticular;
 use Appstore\Bundle\HotelBundle\Entity\HotelProductionElement;
 use Appstore\Bundle\HotelBundle\Entity\HotelPurchaseItem;
@@ -61,7 +62,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 	    $bookingDate =array();
 	    foreach ($period as $key => $date) {
-		    $bookingDate[] = (string)$date->format('Y-m-d');
+		    $bookingDate[] = (string)$date->format('d-m-Y');
 	    }
 
     	$em = $this->_em;
@@ -69,12 +70,15 @@ class HotelInvoiceParticularRepository extends EntityRepository
 	    $price = $data['salesPrice'];
 	    $stock = $em->getRepository('HotelBundle:HotelParticular')->find($particular);
 
+	    $category = !empty($stock->getCategory()) ? $stock->getCategory()->getName() :'';
+	    $unit = !empty($stock->getUnit()) ? $stock->getUnit()->getName() :'';
 
+	    $roomName = $category.' '.$stock->getName().' '.$unit;
 
 	    if(!empty($stock)){
 		    $entity = new HotelInvoiceParticular();
 		    $entity->setQuantity((int)$quantity);
-		    $entity->setParticular($stock->getName());
+		    $entity->setParticular(trim($roomName));
 		    $entity->setHotelParticular($stock);
 		    $entity->setGuestName($data['guestName']);
 		    $entity->setGuestMobile($data['guestMobile']);
@@ -92,6 +96,30 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		    $em->flush();
 	    }
     }
+	public function insertFoodItem(HotelInvoice $invoice, $data)
+	{
+
+
+		$em = $this->_em;
+		$particular = $data['particular'];
+		$price = $data['salesPrice'];
+		$stock = $em->getRepository('HotelBundle:HotelParticular')->find($particular);
+
+		if(!empty($stock)){
+			$entity = new HotelInvoiceParticular();
+			$entity->setQuantity((int)$data['quantity']);
+			$entity->setParticular($stock->getName());
+			$entity->setHotelParticular($stock);
+			$entity->setPrice($price);
+			$entity->setPurchasePrice($stock->getPurchasePrice());
+			$subTotal = ($entity->getQuantity() * $price);
+			$entity->setSubTotal($subTotal);
+			$entity->setHotelInvoice($invoice);
+			$em->persist($entity);
+			$em->flush();
+		}
+	}
+
 
 	public function checkBooking(HotelParticular $particular,$data)
 	{
@@ -105,7 +133,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 		$bookingDate =array();
 		foreach ($period as $key => $date) {
-			$bookingDate[] = (string)$date->format('Y-m-d');
+			$bookingDate[] = (string)$date->format('d-m-Y');
 		}
 
 		$qb = $this->createQueryBuilder('e');
@@ -129,6 +157,24 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		return empty($result) ? 'valid':'in-valid';
 
 	}
+
+	public function getCheckinRoom(HotelConfig $config,$date){
+
+	   	$config =  $config->getId();
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.hotelInvoice','h');
+		$qb->join('e.hotelParticular','p');
+		$qb->join('p.hotelParticularType','pt');
+		$qb->select('e.id as id , e.particular as roomName');
+		$qb->andWhere('h.hotelConfig = :config')->setParameter('config',$config);
+		$qb->andWhere('pt.slug IN (:slugs)')->setParameter('slugs', array('room','package'));
+		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('check-in'));
+		$qb->andWhere($qb->expr()->like("e.bookingDate", "'%$date%'"  ));
+		$result = $qb->getQuery()->getArrayResult();
+		return $result;
+	}
+
+
 
 	public function getBookedRoom(HotelConfig $config,$date){
 
@@ -171,10 +217,20 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		$qnt = $qb->getQuery()->getOneOrNullResult();
 		$qnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
 		$stockQuantity = floatval($element->getParticular()->getSalesQuantity());
-		return ($stockQuantity+$qnt);
+		return ($stockQuantity + $qnt);
 
 	}
 
+	public function checkOutHotelInvoice(HotelInvoice $invoice){
+
+		/* @var $particular HotelInvoiceTransaction */
+
+		$em = $this->_em;
+		foreach ($invoice->getHotelInvoiceParticulars() as $particular){
+			$particular->setProcess('check-out');
+			$em->flush();
+		}
+	}
 
 	public function salesStockItemUpdate(HotelParticular $stockItem)
     {
@@ -210,6 +266,38 @@ class HotelInvoiceParticularRepository extends EntityRepository
             $data .= "<td>{$entity->getSubTotal()}</td>";
             $data .= "<td>";
             $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/hotel/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
+            $data .= "</td>";
+            $data .= '</tr>';
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getFoodSalesItems(HotelInvoice $sales)
+    {
+        $entities = $sales->getHotelInvoiceParticulars();
+        $data = '';
+        $i = 1;
+
+        /* @var $entity HotelInvoiceParticular */
+
+        foreach ($entities as $entity) {
+
+	        $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td>{$i}.</td>";
+            $data .= "<td>{$entity->getHotelParticular()->getParticularCode()} - {$entity->getParticular()}</td>";
+	        $data .= "<td>";
+	        $data .= "<input type='hidden' name='salesItem[]' value='{$entity->getId()}'>";
+	        $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getId()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getPrice()}'>";
+	        $data .= "</td>";
+	        $data .= "<td>";
+	        $data .= "<input type='text' class='numeric td-inline-input-qnt quantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='quantity-{$entity->getId()}' name='quantity[]' value='{$entity->getQuantity()}' placeholder='Qnt'>";
+	        $data .= "</td>";
+	        $data .= "<td>{$entity->getHotelParticular()->getUnit()->getName()}</td>";
+	        $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
+            $data .= "<td>";
+	        $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}'  href='javascript:' class='btn blue mini itemUpdate' ><i class='icon-save'></i></a>";
+	        $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/hotel/restaurant-invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
             $data .= "</td>";
             $data .= '</tr>';
             $i++;

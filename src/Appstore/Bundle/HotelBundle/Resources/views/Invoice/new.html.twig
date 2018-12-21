@@ -57,18 +57,18 @@
                                             <div class="span3">
                                                 <div class="input-icon left span6">
                                                     <i class="icon-calendar"></i>
-                                                    <input class="m-wrap span12" style="padding-right:0!important" name="startDate" id="startDate" value=" {{ "now"|date("d-m-Y") }}"  autocomplete="off" placeholder="" >
+                                                    <input class="m-wrap span12" style="padding-right:0!important" name="startDate" id="startDate" value=" {{ "now"|date("d-m-Y") }}"   placeholder="" >
                                                 </div>
                                                 <div class="input-icon left span6">
                                                     <i class="icon-calendar"></i>
-                                                    <input class="m-wrap span12" style="padding-right:0!important;" name="endDate" id="endDate" value=" {{ "tomorrow"|date("d-m-Y") }}"  autocomplete="off" placeholder="">
+                                                    <input class="m-wrap span12" style="padding-right:0!important;" name="endDate" id="endDate" value=" {{ "tomorrow"|date("d-m-Y") }}"   placeholder="">
                                                 </div>
                                             </div>
                                             <div class="span6" >
                                                 <select id="particular" name="particular"  class="span12 m-wrap select2">
                                                     <option value="">--- Select Hotel Room/Package & Others  ---- </option>
                                                     {% for particular in particulars %}
-                                                        <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => BDT. {{ particular.salesPrice }}</option>
+                                                        <option value="{{ particular.id }}">{% if particular.categoryName is not empty %}{{ particular.categoryName }} - {% endif %} {{ particular.name }} {% if particular.unitName is not empty %} - {{ particular.unitName }}{% endif %} => BDT. {{ particular.salesPrice }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -102,7 +102,7 @@
                                             <div class="span3">
                                                 <div class="input-icon left">
                                                     <i class="icon-user"></i>
-                                                    <input class="m-wrap span12 search-input " style="padding-right:0!important" name="guestName" id="guestName" value=""  autocomplete="off" placeholder="Enter room member name" >
+                                                    <input class="m-wrap span12 search-input " style="padding-right:0!important" name="guestName" id="guestName" value=""   placeholder="Enter room member name" >
                                                 </div>
                                             </div>
                                             <div class="span3">
@@ -132,7 +132,7 @@
                                             <th class="">Guest</th>
                                             <th class="">Adult</th>
                                             <th class="">Child</th>
-                                            <th class="">Unit</th>
+                                            <th class="">Unit Price</th>
                                             <th class="">Days</th>
                                             <th class="">Amount</th>
                                             <th class=""><i class="icon-trash"></i></th>
@@ -215,7 +215,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">First Name</span> <span class="pull-right input-right">
-                                                       <input type="text" id="firstName" name="firstName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="* First name" value="">
+                                                       <input type="text" id="firstName" name="firstName" class="m-wrap span12 customer-input"  placeholder="* First name" value="">
                                                     </span>
                                             </label>
                                         </div>
@@ -223,7 +223,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Last Name</span> <span class="pull-right input-right">
-                                                        <input type="text" id="lastName" name="lastName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="* Last name" value="">
+                                                        <input type="text" id="lastName" name="lastName" class="m-wrap span12 customer-input"  placeholder="* Last name" value="">
                                                     </span>
                                             </label>
                                         </div>
@@ -234,7 +234,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Mobile no</span> <span class="pull-right input-right">
-                                                       <input type="text" id="mobile" name="mobile" class="m-wrap span12 customer-input" autocomplete="off" placeholder="* Enter mobile no" value="">
+                                                       <input type="text" id="mobile" name="mobile" class="m-wrap span12 customer-input"  placeholder="* Enter mobile no" value="">
                                                     </span>
                                             </label>
                                         </div>
@@ -242,7 +242,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Email</span> <span class="pull-right input-right">
-                                                        <input type="text" id="email" name="email" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Enter e-mail address" value="">
+                                                        <input type="text" id="email" name="email" class="m-wrap span12 customer-input"  placeholder="Enter e-mail address" value="">
                                                     </span>
                                             </label>
                                         </div>
@@ -253,7 +253,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Profession</span> <span class="pull-right input-right">
-                                                       <input type="text" id="profession" name="profession" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Enter profession" value="">
+                                                       <input type="text" id="profession" name="profession" class="m-wrap span12 customer-input"  placeholder="Enter profession" value="">
                                                     </span>
                                             </label>
                                         </div>
@@ -261,7 +261,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Organization</span> <span class="pull-right input-right">
-                                                        <input type="text" id="organization" name="organization" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Enter organization name" value="">
+                                                        <input type="text" id="organization" name="organization" class="m-wrap span12 customer-input"  placeholder="Enter organization name" value="">
                                                     </span>
                                             </label>
                                         </div>
@@ -273,7 +273,7 @@
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Mailing Address</span>
                                                 <span class="pull-right input-right" style="width:84% !important;">
-                                                        <input type="text" style="width: 100% !important;" id="address" name="address" class="m-wrap span12 customer-input" autocomplete="off" placeholder="* Enter mailing address" value="">
+                                                        <input type="text" style="width: 100% !important;" id="address" name="address" class="m-wrap span12 customer-input"  placeholder="* Enter mailing address" value="">
                                                 </span>
                                             </label>
                                         </div>
@@ -284,7 +284,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Location</span> <span class="pull-right input-right">
-                                                       <input type="text" id="location" name="location" class="m-wrap span12 customer-input select2Location" autocomplete="off" placeholder="Enter city/state name" value="">
+                                                       <input type="text" id="location" name="location" class="m-wrap span12 customer-input select2Location"  placeholder="Enter city/state name" value="">
                                                     </span>
                                             </label>
                                         </div>
@@ -292,7 +292,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Postal Code</span> <span class="pull-right input-right">
-                                                        <input type="text" id="postalCode" name="postalCode" class="m-wrap span12 customer-input " autocomplete="off" placeholder="Enter postal code" value="">
+                                                        <input type="text" id="postalCode" name="postalCode" class="m-wrap span12 customer-input "  placeholder="Enter postal code" value="">
                                                     </span>
                                             </label>
                                         </div>
@@ -304,7 +304,7 @@
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Remark</span>
                                                 <span class="pull-right input-right" style="width: 84% !important;">
-                                                        <input type="text" style="width: 100% !important;" id="remark" name="remark" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Enter reason or remarks" value="">
+                                                        <input type="text" style="width: 100% !important;" id="remark" name="remark" class="m-wrap span12 customer-input"  placeholder="Enter reason or remarks" value="">
                                                     </span>
                                             </label>
                                         </div>

@@ -769,15 +769,14 @@ class AccountSalesRepository extends EntityRepository
 	{
 		$em = $this->_em;
 		$accountSales = new AccountSales();
-
 		$accountSales->setAccountBank($entity->getAccountBank());
 		$accountSales->setAccountMobileBank($entity->getAccountMobileBank());
 		$accountSales->setGlobalOption($entity->getHotelInvoice()->getHotelConfig()->getGlobalOption());
 		$accountSales->setHotelInvoice($entity->getHotelInvoice());
 		$accountSales->setCustomer($entity->getHotelInvoice()->getCustomer());
 		$accountSales->setTransactionMethod($entity->getTransactionMethod());
-		$accountSales->setTotalAmount($entity->getPayment());
-		$accountSales->setAmount($entity->getPayment());
+		$accountSales->setTotalAmount($entity->getReceived());
+		$accountSales->setAmount($entity->getReceived());
 		$accountSales->setApprovedBy($entity->getCreatedBy());
 		$accountSales->setProcessHead('hotel');
 		$accountSales->setProcessType('Sales');

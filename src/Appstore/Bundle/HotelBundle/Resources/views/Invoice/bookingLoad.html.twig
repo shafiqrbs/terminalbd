@@ -1,0 +1,45 @@
+{% if entities is not empty  %}
+    {% for entity in entities %}
+        <div class="row-fluid room-box">
+            <div class="span4">{{ entity.particularCode }} - {{ entity.name }}</div>
+            <div class="span2 text-right">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</div>
+            <div class="span2">BDT {{ entity.salesPrice }}</div>
+            <div class="span1">{% if entity.id in bookings %} <button class="btn red mini">Booked</button> {% else %}<button class="btn blue mini">Available</button>{% endif %}</div>
+            <div class="span3">
+                <a data-id="{{ entity.id }}" class="btn green booking-room" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" href="javascript:"><i class="icon-plus-sign"></i> View & Process</a>
+            </div>
+        </div>
+        <div id="room-{{ entity.id }}"></div>
+        <div id="form-{{ entity.id }}"></div>
+    {% endfor %}
+{% endif %}
+<style>
+    .room-box:nth-of-type(odd) {
+        background-color: #eeeeee;
+    }
+
+    .room-box:nth-of-type(even) {
+        background-color: #cecece;
+    }
+
+    .room-box{
+        border: 1px solid #868181;
+        padding: 15px;
+        line-height: 32px;
+        margin-bottom: 5px;
+    }
+
+    #bookingDate{
+        padding-bottom: 0!important;
+        margin-bottom: 0!important;
+        width: 150px;
+        height: 28px!important;
+        background: #fff;
+        line-height: 37px;
+        padding-top: 1px!important;
+        border: 1px solid #c49f47!important;
+        margin-top: -1px;
+    }
+
+</style>
+

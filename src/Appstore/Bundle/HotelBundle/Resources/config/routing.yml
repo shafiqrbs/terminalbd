@@ -14,6 +14,10 @@ hotel_invoice:
     resource: "@HotelBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice
 
+hotel_restaurantinvoice:
+    resource: "@HotelBundle/Resources/config/routing/restaurantinvoice.yml"
+    prefix:   /restaurant-invoice
+
 hotel_stock:
     resource: "@HotelBundle/Resources/config/routing/stock.yml"
     prefix:   /stock
@@ -63,11 +67,15 @@ hotel_booking_room_details:
     path:     /{id}/booking-room-details
     defaults: { _controller: HotelBundle:Default:bookedRoomDetails }
 
+hotel_booking_room_search:
+    path:     /booking-room-search
+    defaults: { _controller: HotelBundle:Default:bookingSearch }
+
 hotel_booking_room:
     path:     /{id}/booking-room-form
     defaults: { _controller: HotelBundle:Default:bookingRoomForm }
 
 hotel_booking_invoice_generate:
-    path:     /{id}/booking-invoice-generate
+    path:     /booking-invoice-generate
     defaults: { _controller: HotelBundle:Default:bookingInvoiceGenerate }
 

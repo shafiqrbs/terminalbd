@@ -35,6 +35,11 @@ class HotelConfig
      **/
     private $hotelInvoices;
 
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransactionSummary", mappedBy="hotelConfig")
+     **/
+    private $hotelInvoiceTransactionSummary;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelReverse", mappedBy="hotelConfig")
@@ -1233,6 +1238,13 @@ class HotelConfig
 	 */
 	public function setNotification( bool $notification ) {
 		$this->notification = $notification;
+	}
+
+	/**
+	 * @return HotelInvoiceTransactionSummary
+	 */
+	public function getHotelInvoiceTransactionSummary() {
+		return $this->hotelInvoiceTransactionSummary;
 	}
 
 

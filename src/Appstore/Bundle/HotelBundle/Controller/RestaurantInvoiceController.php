@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HotelBundle\Controller;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Form\InvoiceTransactionType;
+use Appstore\Bundle\HotelBundle\Form\RestaurantInvoiceType;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceParticular;
@@ -21,7 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
  * HotelInvoiceController controller.
  *
  */
-class InvoiceController extends Controller
+
+class RestaurantInvoiceController extends Controller
 {
 
     public function paginate($entities)
@@ -39,20 +41,20 @@ class InvoiceController extends Controller
     /**
      * Lists all HotelCategory entities.
      *
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      *
      */
-    
+
     public function indexAction()
     {
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entities = $em->getRepository('HotelBundle:HotelInvoice')->invoiceLists( $user,'hotel',$data);
+        $entities = $em->getRepository('HotelBundle:HotelInvoice')->invoiceLists( $user,'restaurant',$data);
         $pagination = $this->paginate($entities);
 
-        return $this->render('HotelBundle:Invoice:index.html.twig', array(
+        return $this->render('HotelBundle:RestaurantInvoice:index.html.twig', array(
             'entities' => $pagination,
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
@@ -75,12 +77,12 @@ class InvoiceController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $entity->setHotelConfig($hotelConfig);
         $entity->setPaymentStatus('Pending');
-	    $entity->setInvoiceFor('hotel');
+        $entity->setInvoiceFor('restaurant');
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->insertTransactionSummary($entity);
-        return $this->redirect($this->generateUrl('hotel_invoice_edit', array('id' => $entity->getId())));
+	    return $this->redirect($this->generateUrl('hotel_restaurantinvoice_edit', array('id' => $entity->getId())));
 
     }
 
@@ -94,9 +96,8 @@ class InvoiceController extends Controller
     private function createEditForm(HotelInvoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new InvoiceType($globalOption,$location), $entity, array(
-            'action' => $this->generateUrl('hotel_invoice_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new RestaurantInvoiceType($globalOption), $entity, array(
+            'action' => $this->generateUrl('hotel_restaurantinvoice_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -109,10 +110,8 @@ class InvoiceController extends Controller
         return $form;
     }
 
-
-
     /**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
 
     public function editAction($id)
@@ -125,21 +124,22 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        if (in_array($entity->getProcess(), array('Check-in','Check-out','Canceled'))) {
-            return $this->redirect($this->generateUrl('hotel_invoice_show', array('id' => $entity->getId())));
+        if (in_array($entity->getProcess(), array('Hold'))) {
+            return $this->redirect($this->generateUrl('hotel_restaurantinvoice_show', array('id' => $entity->getId())));
         }
 	    $date = date('d-m-Y');
-	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($hotelConfig,$date);
-	    $particulars = $em->getRepository('HotelBundle:HotelParticular')->getAvailableRoom($hotelConfig, $type = array('room','package','service'),$bookings);
-        return $this->render("HotelBundle:Invoice:new.html.twig", array(
+	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getCheckinRoom($hotelConfig,$date);
+	    $particulars = $em->getRepository('HotelBundle:HotelParticular')->getAvailableRoom($hotelConfig, $type = array('food','stock','pre-production','post-production'),array());
+        return $this->render("HotelBundle:RestaurantInvoice:new.html.twig", array(
             'entity' => $entity,
+            'bookings' => $bookings,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
     }
 
 	/**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
 
     public function updateAction(Request $request, HotelInvoice $entity)
@@ -154,12 +154,14 @@ class InvoiceController extends Controller
         $editForm->handleRequest($request);
         $data = $request->request->all();
         if ($editForm->isValid()) {
-            if (!empty($data['mobile'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForHotel($globalOption, $mobile, $data);
-                $entity->setCustomer($customer);
-            }
-            if ($entity->getTotal() <= $entity->getReceived()) {
+
+        	if(!empty($data['roomName'])){
+        		$hip = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->find($data['roomName']);
+        		$room = $hip->getParticular();
+        		$entity->setRoomName($room);
+        		$entity->setCustomer($hip->getHotelInvoice()->getCustomer());
+	        }
+	        if ($entity->getTotal() <= $entity->getReceived()) {
                 $entity->setReceived($entity->getTotal());
                 $entity->setDue(0);
                 $entity->setPaymentStatus('Paid');
@@ -167,42 +169,27 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
-	        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            $done = array('Check-in');
-            if (in_array($entity->getProcess(), $done) and $entity->getTotal() > 0) {
-	            $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->insertInvoiceProductItem($entity);
+            if(!empty($entity->getRoomName())){
+	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertRestaurantTransaction($entity,$hip);
+	        }else{
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertTransaction($entity);
-	            // if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-		            $dispatcher = $this->container->get('event_dispatcher');
-		            $dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
-	           // }
-            }
-            $inProgress = array('Booking');
-            if (in_array($entity->getProcess(), $inProgress)) {
-	          //  if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-		            $dispatcher = $this->container->get('event_dispatcher');
-		            $dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
-	          //  }
-                return $this->redirect($this->generateUrl('hotel_invoice_new'));
-            } else {
-                return $this->redirect($this->generateUrl('hotel_invoice_payment', array('id' => $entity->getId())));
-            }
+	        }
+	        return $this->redirect($this->generateUrl('hotel_restaurantinvoice_new'));
         }
-
         $hotelConfig = $entity->getHotelConfig();
 	    $particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('production','stock','service','virtual'));
-	    $view = !empty($hotelConfig->getInvoiceType()) ? $hotelConfig->getInvoiceType():'new';
-	    return $this->render("HotelBundle:Invoice:new.html.twig", array(
-            'entity' => $entity,
-            'particulars' => $particulars,
-            'form' => $editForm->createView(),
+	    return $this->render("HotelBundle:RestaurantInvoice:new.html.twig", array(
+            'entity'        => $entity,
+            'particulars'   => $particulars,
+            'form'          => $editForm->createView(),
         ));
     }
 
 	/**
-	 * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+	 * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
 	 */
 
 	public function invoiceDiscountUpdateAction(Request $request)
@@ -238,24 +225,24 @@ class InvoiceController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
     public function showAction(HotelInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
         $hotelConfig = $this->getUser()->getGlobalOption()->getHotelConfig();
         if ($hotelConfig->getId() == $entity->getHotelConfig()->getId()) {
-            return $this->render('HotelBundle:Invoice:show.html.twig', array(
+            return $this->render('HotelBundle:RestaurantInvoice:show.html.twig', array(
                 'entity' => $entity,
             ));
         } else {
-            return $this->redirect($this->generateUrl('hotel_invoice'));
+            return $this->redirect($this->generateUrl('hotel_restaurantinvoice'));
         }
 
     }
 
     /**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
 
     public function deleteAction(HotelInvoice $entity)
@@ -272,7 +259,7 @@ class InvoiceController extends Controller
 
     public function returnResultData(HotelInvoice $entity, $msg=''){
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getSalesItems($entity);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getFoodSalesItems($entity);
         $invoiceTransactions = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceTransaction')->getHotelInvoiceTransactionItems($entity);
 
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
@@ -299,11 +286,11 @@ class InvoiceController extends Controller
 
     }
 
-	private function createPaymentReceiveForm(HotelInvoiceTransaction $entity,$invoice)
+	private function createPaymentReceiveForm(HotelInvoice $entity)
 	{
 		$globalOption = $this->getUser()->getGlobalOption();
 		$form = $this->createForm(new InvoiceTransactionType($globalOption), $entity, array(
-			'action' => $this->generateUrl('hotel_invoice_payment_receive', array('id' => $invoice->getId())),
+			'action' => $this->generateUrl('hotel_restaurantinvoice_payment_receive', array('id' => $entity->getId())),
 			'method' => 'PUT',
 			'attr' => array(
 				'class' => 'form-horizontal',
@@ -318,7 +305,7 @@ class InvoiceController extends Controller
 
 
 	/**
-	 * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+	 * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
 	 */
 
 	public function paymentAction($id)
@@ -330,40 +317,31 @@ class InvoiceController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find Invoice entity.');
 		}
-		$editForm = $this->createPaymentReceiveForm(new HotelInvoiceTransaction(),$entity);
+		$editForm = $this->createPaymentReceiveForm($entity);
 		if (in_array($entity->getProcess(), array('Cancel','Check-out'))) {
-			return $this->redirect($this->generateUrl('hotel_invoice_show', array('id' => $entity->getId())));
+			return $this->redirect($this->generateUrl('hotel_restaurantinvoice_show', array('id' => $entity->getId())));
 		}
-		$particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('room','package'));
-		$transactions = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceTransaction')->getHotelInvoiceTransactionLists($entity);
-		return $this->render("HotelBundle:Invoice:payment.html.twig", array(
+		$particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('room','package','post-production','pre-production','stock','service','virtual'));
+		return $this->render("HotelBundle:RestaurantInvoice:payment.html.twig", array(
 			'entity' => $entity,
-			'transactions' => $transactions,
 			'particulars' => $particulars,
 			'form' => $editForm->createView(),
 		));
 	}
 
-	/**
-	 * @param Request $request
-	 * @param HotelInvoice $entity
-	 *
-	 * @return Response
-	 */
 	public function paymentReceiveAction(Request $request, HotelInvoice $entity)
 	{
 		$em = $this->getDoctrine()->getManager();
 		if (!$entity) {
-			throw $this->createNotFoundException('Unable to find Hotel Invoice entity.');
+			throw $this->createNotFoundException('Unable to find Hotel Ivoice entity.');
 		}
-		$transaction = new HotelInvoiceTransaction();
-		$editForm = $this->createPaymentReceiveForm( $transaction, $entity);
+		$editForm = $this->createPaymentReceiveForm($entity);
 		$editForm->handleRequest($request);
+
 		if ($editForm->isValid()) {
-			$transaction->setHotelInvoice($entity);
-			$transaction->setReferenceInvoice($entity->getId());
-			$em->persist($transaction);
+			$data = $request->request->all();
 			$em->flush();
+			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertPaymentTransaction($entity,$data);
 		}
 		if ((!empty($entity)) ) {
 			$result = $this->returnResultData($entity);
@@ -378,12 +356,11 @@ class InvoiceController extends Controller
 	public function paymentApproveAction(HotelInvoiceTransaction $entity)
 	{
 		$em = $this->getDoctrine()->getManager();
-		if(!empty($entity) and $entity->getProcess() == 'Created' and $entity->getReceived() > 0) {
+		if(!empty($entity) and $entity->getProcess() == 'In-progress' and $entity->getPayment() > 0) {
 			$entity->setProcess('Done');
 			$em->flush();
-			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updatePaymentReceive($entity);
-			if($entity->getReceived() > 0 ){
-				$this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->updateTransactionSummary($entity->getHotelInvoice());
+			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updatePaymentReceive($entity->getHotelInvoice());
+			if($entity->getPayment() > 0 ){
 				$accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
 				$this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
 			}
@@ -400,8 +377,7 @@ class InvoiceController extends Controller
 		if(!empty($entity) and $entity->getProcess() == 'Check-in') {
 			$entity->setProcess('Check-out');
 			$em->flush();
-			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->checkOutHotelInvoice($entity);
-			if($entity->getHotelInvoiceTransactionSummary()->getDue() > 0){
+			if($entity->getDue() > 0){
 				$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->checkOutHotelAccountInvoice($entity);
 			}
 			//if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
@@ -454,27 +430,21 @@ class InvoiceController extends Controller
 
 	public function particularSearchAction(HotelParticular $particular)
 	{
-		$data = $_REQUEST;
-		$checkBooking = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->checkBooking($particular,$data);
-		if($checkBooking == 'valid' ){
-			$unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
-			return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1,'unit' => $unit,'msg'=>'valid')));
-		}else{
-			return new Response(json_encode(array('msg'=> 'This room alreay booked, please try another room')));
+		$unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
+		return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1,'unit' => $unit,'msg'=>'valid')));
 
-		}
 	}
 
 
 	/**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
 
     public function addParticularAction(Request $request, HotelInvoice $invoice)
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-	    $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->insertStockItem($invoice, $data);
+	    $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->insertFoodItem($invoice, $data);
         $invoice = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->updateInvoiceTotalPrice($invoice);
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -484,7 +454,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
 
     public function invoiceParticularDeleteAction(HotelInvoice $invoice, HotelInvoiceParticular $particular){
@@ -504,7 +474,7 @@ class InvoiceController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
 
     public function invoiceReverseAction(HotelInvoice $invoice)
@@ -518,7 +488,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
 
 
@@ -533,7 +503,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOTEL_RESTAURANT_INVOICE,ROLE_DOMAIN");
      */
 
     public function deleteEmptyInvoiceAction()
@@ -545,7 +515,7 @@ class InvoiceController extends Controller
             $em->remove($entity);
             $em->flush();
         }
-        return $this->redirect($this->generateUrl('hotel_invoice'));
+        return $this->redirect($this->generateUrl('hotel_restaurantinvoice'));
     }
 
     public function invoicePrintPdfAction(HotelInvoice $entity)

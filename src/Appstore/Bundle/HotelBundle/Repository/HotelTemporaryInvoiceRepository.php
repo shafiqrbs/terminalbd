@@ -40,7 +40,7 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 
 	    $bookingDate =array();
 	    foreach ($period as $key => $date) {
-		    $bookingDate[] = (string)$date->format('Y-m-d');
+		    $bookingDate[] = (string)$date->format('d-m-Y');
 	    }
 
 	    $em = $this->_em;
@@ -67,6 +67,51 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 	    $entity->setSubTotal($subTotal);
 	    $em->persist($entity);
 	    $em->flush();
+    }
+
+
+    public function invoiceGenerate($user)
+    {
+    	$entities = $this->findBy(array('createdBy'=>$user));
+	    $em = $this->_em;
+	    $entity = new HotelInvoice();
+	    $option = $user->getGlobalOption();
+	    $hotelConfig = $option->getHotelConfig();
+	    $entity->setCreatedBy($user);
+	    $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
+	    $entity->setCustomer($customer);
+	    $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+	    $entity->setTransactionMethod($transactionMethod);
+	    $entity->setHotelConfig($hotelConfig);
+	    $entity->setPaymentStatus('Pending');
+	    $entity->setCreatedBy($user);
+	    $em->persist($entity);
+	    $em->flush();
+
+	    /* @var $room HotelTemporaryInvoice */
+
+	    foreach ($entities as $room ){
+
+	    	$invoiceParticular = new HotelInvoiceParticular();
+		    $invoiceParticular->setHotelInvoice($entity);
+		    $invoiceParticular->setQuantity($room->getQuantity());
+		    $invoiceParticular->setHotelParticular($room->getHotelParticular());
+		    $invoiceParticular->setParticular($room->getHotelParticular()->getName());
+		    $invoiceParticular->setGuestName($room->getGuestName());
+		    $invoiceParticular->setGuestMobile($room->getGuestMobile());
+		    $invoiceParticular->setChild($room->getChild());
+		    $invoiceParticular->setAdult($room->getAdult());
+		    $invoiceParticular->setStartDate($room->getStartDate());
+		    $invoiceParticular->setEndDate($room->getEndDate());
+		    $invoiceParticular->setBookingDate($room->getBookingDate());
+		    $invoiceParticular->setPrice($room->getPrice());
+		    $invoiceParticular->setPurchasePrice($room->getPurchasePrice());
+		    $subTotal = ($room->getQuantity() * $room->getPrice());
+		    $invoiceParticular->setSubTotal($subTotal);
+		    $em->persist($invoiceParticular);
+		    $em->flush();
+	    }
+	    return $entity;
     }
 
 }

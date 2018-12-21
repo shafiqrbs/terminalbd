@@ -1,38 +1,7 @@
-/*
-$( ".date-picker" ).datepicker({
-    dateFormat: "dd-mm-yy"
-});
-
-$( ".dateCalendar" ).datepicker({
-    dateFormat: "dd-mm-yy",
-    changeMonth: true,
-    changeYear: true,
-    yearRange: "-100:+0",
-});
-
-var bindDatePicker = function(element) {
-    $(element).datetimepicker({
-        showOn: "button",
-        buttonImage: "/img/calendar_icon.png",
-        buttonImageOnly: true,
-        dateFormat: 'mm/dd/yy',
-        timeFormat: 'hh:mm tt',
-        stepMinute: 1,
-        onClose: datePickerClose
-    });
-};
-
-function datePickerReload() {
-    $( ".date-picker" ).datepicker({
-        dateFormat: "dd-mm-yy"
-    });
-}
-*/
 
 $("[id^=startPicker]").each(function() {
     bindDatePicker(this);
 });
-
 
 $( "#mobile" ).autocomplete({
 
@@ -80,10 +49,8 @@ $(".addCustomer").click(function(){
 $(document).on('change', '#particular', function() {
 
     var particular = $('#particular').val();
-    var startDate = $('#startDate').val();
-    var endDate = $('#endDate').val();
     $.ajax({
-        url: Routing.generate('hotel_particular_search',{'id':particular,'startDate':startDate,'endDate':endDate}),
+        url: Routing.generate('hotel_restaurantparticular_search',{'id':particular}),
         type: 'POST',
         success: function (response) {
             obj = JSON.parse(response);
@@ -95,8 +62,6 @@ $(document).on('change', '#particular', function() {
                 $("#particular").select2().select2("val","");
                 alert(obj['msg']);
             }
-
-
         }
     })
 
@@ -108,31 +73,21 @@ var form = $("#stockInvoice").validate({
     rules: {
 
         "particular": {required: true},
-        "startDate": {required: true},
-        "endDate": {required: true},
-        "adult": {required: true},
-        "child": {required: false},
-        "guestName": {required: true},
-        "guestMobile": {required: true}
-    },
+        "salesPrice": {required: true},
+        "quantity": {required: true}
+     },
 
     messages: {
 
         "particular":"Enter select room name/no",
-        "startDate": "Enter start date",
-        "endDate":"Enter end date",
-        "adult": "Select no of adult",
-        "guestName": "Enter specific room gust name",
-        "guestMobile": "Enter specific room gust mobile no"
+        "salesPrice":"Enter sales price date",
+        "quantity": "Enter item quantity"
     },
     tooltip_options: {
         "particular": {placement:'top',html:true},
-        "startDate": {placement:'top',html:true},
-        "endDate": {placement:'top',html:true},
-        "adult": {placement:'top',html:true},
-        "guestName": {placement:'top',html:true},
-        "guestMobile": {placement:'top',html:true},
-    },
+        "salesPrice": {placement:'top',html:true},
+        "quantity": {placement:'top',html:true}
+     },
 
     submitHandler: function(form) {
 
@@ -161,13 +116,12 @@ var form = $("#stockInvoice").validate({
 $(document).on('change', '.quantity , .salesPrice', function() {
 
     var id = $(this).attr('data-id');
-
     var quantity = parseFloat($('#quantity-'+id).val());
     var price = parseFloat($('#salesPrice-'+id).val());
     var subTotal  = (quantity * price);
     $("#subTotal-"+id).html(subTotal);
     $.ajax({
-        url: Routing.generate('business_invoice_item_update'),
+        url: Routing.generate('hotel_restaurantinvoice_item_update'),
         type: 'POST',
         data:'itemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
         success: function(response) {
@@ -178,7 +132,7 @@ $(document).on('change', '.quantity , .salesPrice', function() {
             $('#paymentTotal').val(obj['due']);
             $('.payment').html(obj['payment']);
             $('.discount').html(obj['discount']);
-        },
+        }
 
     })
 });
@@ -251,10 +205,12 @@ $(document).on('keyup', '#quantity , #salesPrice ', function() {
 
 });
 
-$(document).on('change', '#invoice_discountCalculation', function(e) {
 
-    var discountType = $('#invoice_discountType').val();
-    var discount = parseInt($('#invoice_discountCalculation').val() !="" ? $('#invoice_discountCalculation').val() : 0);
+
+$(document).on('keyup', '#businessInvoice_discountCalculation', function(e) {
+
+    var discountType = $('#businessInvoice_discountType').val();
+    var discount = parseInt($('#businessInvoice_discountCalculation').val() !="" ? $('#businessInvoice_discountCalculation').val() : 0);
     var invoice = $('#invoiceId').val();
     var total =  parseInt($('#dueAmount').val());
     if( discount >= total ){
@@ -262,7 +218,6 @@ $(document).on('change', '#invoice_discountCalculation', function(e) {
         return false;
     }
     $.ajax({
-
         url: Routing.generate('hotel_invoice_discount_update'),
         type: 'POST',
         data:'discount=' + discount+'&discountType='+discountType+'&invoice='+invoice,
@@ -281,9 +236,9 @@ $(document).on('change', '#invoice_discountCalculation', function(e) {
 
 });
 
-$(document).on('keyup', '#invoice_received', function() {
+$(document).on('keyup', '#businessInvoice_received', function() {
 
-    var payment     = parseInt($('#invoice_received').val()  != '' ? $('#invoice_received').val() : 0 );
+    var payment     = parseInt($('#businessInvoice_received').val()  != '' ? $('#businessInvoice_received').val() : 0 );
     var paymentTotal =  parseInt($('#paymentTotal').val());
     var dueAmount = (paymentTotal-payment);
     if(dueAmount > 0){
@@ -361,18 +316,18 @@ var invoiceForm = $("#invoiceForm").validate({
 var invoicePaymentForm = $("#invoicePaymentForm").validate({
 
     rules: {
-        "transaction[received]": {required: true},
-        "transaction[discountCalculation]": {required: false},
-        "transaction[cardNo]": {required: false},
-        "transaction[paymentMobile]": {required: false},
-        "transaction[transactionId]": {required: false}
+        "received": {required: true},
+        "businessInvoice[discountCalculation]": {required: false},
+        "businessInvoice[cardNo]": {required: false},
+        "businessInvoice[paymentMobile]": {required: false},
+        "businessInvoice[transactionId]": {required: false}
     },
 
     messages: {
-        "transaction[received]":"Enter receive amount"
+        "received":"Enter receive amount"
     },
     tooltip_options: {
-        "transaction[received]": {placement:'top',html:true}
+        "received": {placement:'top',html:true},
     },
 
     submitHandler: function(invoicePaymentForm) {
@@ -390,8 +345,7 @@ var invoicePaymentForm = $("#invoicePaymentForm").validate({
                 $('#netTotal').html(obj['netTotal']);
                 $('#paymentTotal').val(obj['due']);
                 $('#discount').html(obj['discount']);
-                $('transaction[discount]').val('');
-                $('transaction[received]').val('');
+                $('businessInvoice[received]').val('');
             }
         });
     }

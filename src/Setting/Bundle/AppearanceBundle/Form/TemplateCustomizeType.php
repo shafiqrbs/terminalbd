@@ -66,7 +66,9 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('breadcrumb')
-            ->add('breadcrumbPosition', 'choice', array(
+	        ->add('breadcrumbHeight','number', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Breadcrumb height')))
+
+	        ->add('breadcrumbPosition', 'choice', array(
                 'attr'=>array('class'=>' span12'),
                 'choices' => array('' => 'Select Breadcrumb Position', 'flat-left' => 'Flat-Left','flat-right' => 'Flat-Right',  'left' => 'Left','center' => 'Center'),
             ))
@@ -90,10 +92,10 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
-            ->add('breadcrumbBorderColor','text', array('attr'=>array(
+           /* ->add('breadcrumbBorderColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
-            ))
+            ))*/
             
             ->add('siteBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',

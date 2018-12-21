@@ -101,15 +101,18 @@ class HotelParticularRepository extends EntityRepository
 
 	public function getAvailableRoom($config,$type,$booked = array()){
 
-		$qb = $this->createQueryBuilder('e');
+    	$qb = $this->createQueryBuilder('e');
+       $qb->leftJoin('e.category','c');
+       $qb->leftJoin('e.unit','u');
        $qb->join('e.hotelParticularType','p');
-       $qb->select('e.name as name, e.id as id , e.salesPrice as salesPrice, e.particularCode as particularCode');
+       $qb->select('e.name as name,c.name as categoryName,u.name as unitName, e.id as id , e.salesPrice as salesPrice, e.particularCode as particularCode');
        $qb->where('e.hotelConfig = :config')->setParameter('config', $config);
        $qb->andWhere('e.status = :status')->setParameter('status', 1);
-       $qb->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type));if(!empty($booked)){
-			$qb->andWhere('e.id NOT IN(:ids)')->setParameter('ids',$booked);
-			//		$qb->andWhere($qb->expr()->notIn('e.id', $booked));
-		}
+       $qb->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type));
+       if(!empty($booked)){
+         $qb->andWhere('e.id NOT IN(:ids)')->setParameter('ids',$booked);
+		// $qb->andWhere($qb->expr()->notIn('e.id', $booked));
+       }
        $qb->orderBy('e.sorting','ASC');
        $qb->orderBy('e.name','ASC');
        $result = $qb->getQuery()->getArrayResult();

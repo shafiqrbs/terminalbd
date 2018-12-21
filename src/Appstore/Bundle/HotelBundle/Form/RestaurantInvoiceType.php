@@ -2,6 +2,13 @@
 
 namespace Appstore\Bundle\HotelBundle\Form;
 
+use Appstore\Bundle\DomainUserBundle\Form\CustomerForHotelType;
+use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
+use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Appstore\Bundle\HospitalBundle\Entity\Category;
+use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
+use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
+use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -10,19 +17,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class InvoiceType extends AbstractType
+class RestaurantInvoiceType extends AbstractType
 {
-
-    /** @var  LocationRepository */
-    private $location;
 
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption ,  LocationRepository $location)
+    function __construct(GlobalOption $globalOption)
     {
-        $this->location         = $location;
         $this->globalOption     = $globalOption;
     }
 
@@ -51,10 +54,9 @@ class InvoiceType extends AbstractType
                 'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
-                'empty_value' => '---Choose Process---',
                 'choices' => array(
-                    'Booking'   => 'Booking',
-                    'Check-in'  => 'Check-in',
+                    'Done'   => 'Done',
+                    'Hold'   => 'Hold',
                 ),
             ))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
@@ -140,7 +142,7 @@ class InvoiceType extends AbstractType
      */
     public function getName()
     {
-        return 'invoice';
+        return 'businessInvoice';
     }
 
 }

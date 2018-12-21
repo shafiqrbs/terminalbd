@@ -124,6 +124,20 @@ function jqueryTemporaryLoad() {
 
     });
 
+    $(document).on("click", "#bookingSearch", function(e) {
+        var url = $(this).attr('data-url');
+        var bookingDate = $('#bookingDate').val();
+        if(bookingDate === ""){
+            return false;
+        }
+        $.get(url,{'bookingDate':bookingDate}, function( response ) {
+            obj = JSON.parse(response);
+            $('#bookingLoad').html(obj['data']);
+            $('#date').html(obj['date']);
+        });
+    });
+
+
     $(document).on('click', '.booking-submit', function(e) {
 
         var particular = $(this).attr('data-id');
@@ -138,10 +152,6 @@ function jqueryTemporaryLoad() {
             }
         });
     })
-
-
-
-
 
 }
 

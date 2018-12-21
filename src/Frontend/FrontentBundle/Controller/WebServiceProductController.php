@@ -2,11 +2,9 @@
 
 namespace Frontend\FrontentBundle\Controller;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
-use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
-use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Core\UserBundle\Form\CustomerRegisterType;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -355,8 +353,8 @@ class WebServiceProductController extends Controller
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $entity =  $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findOneBy(array('inventoryConfig'=>$globalOption->getEcommerceConfig(),'slug'=>$item));
-        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$entity->getId(),'masterItem'=>1));
+        $entity =  $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig'=>$globalOption->getEcommerceConfig(),'slug'=>$item));
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$entity->getId(),'masterItem'=>1));
 
         $products ='';
         if(!empty($globalOption)){
@@ -368,9 +366,9 @@ class WebServiceProductController extends Controller
 
             /*==========Related Product===============================*/
 
-            if(!empty($entity->getMasterItem()) && !empty ($entity->getMasterItem()->getCategory())){
+            if(!empty ($entity->getCategory())){
 
-                $cat = $entity->getMasterItem()->getCategory()->getId();
+                $cat = $entity->getCategory()->getId();
                 $data = array('category' => $cat);
                 $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
                 $products = $this->paginate($entities, $limit = 12 , $globalOption->getTemplateCustomize()->getPagination());
@@ -410,17 +408,17 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productModalAction($subdomain,PurchaseVendorItem $item)
+    public function productModalAction($subdomain,Item $item)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $masterItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$item->getId(),'masterItem'=>1));
+        $masterItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$item->getId(),'masterItem'=>1));
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if(empty($masterItem)){
         $subItem ='';
         }else{
         $subItem = isset($_REQUEST['subItem']) ? $_REQUEST['subItem'] : $masterItem->getId() ;
-        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem' => $item,'id' => $subItem));
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item' => $item,'id' => $subItem));
         }
         if(!empty($globalOption)){
 
@@ -459,8 +457,8 @@ class WebServiceProductController extends Controller
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             /* Device Detection code desktop or mobile */
-            $next = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->frontendProductNext($subItem->getPurchaseVendorItem());
-            $previous = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->frontendProductPrev($subItem->getPurchaseVendorItem());
+            $next = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->frontendProductNext($subItem->getItem());
+            $previous = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->frontendProductPrev($subItem->getItem());
 
             $detect = new MobileDetect();
             if($detect->isMobile() || $detect->isTablet() ) {
@@ -471,7 +469,7 @@ class WebServiceProductController extends Controller
             $html =  $this->renderView('FrontendBundle:'.$theme.':subProduct.html.twig',
                 array(
                     'globalOption'      => $globalOption,
-                    'product'           => $subItem->getPurchaseVendorItem(),
+                    'product'           => $subItem->getItem(),
                     'next'              => $next,
                     'previous'          => $previous,
                     'subItem'           => $subItem
@@ -483,14 +481,14 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function inlineSubProductAction($subdomain ,PurchaseVendorItem $product)
+    public function inlineSubProductAction($subdomain ,Item $product)
     {
 
         $subId = $_REQUEST['subItem'];
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         /* @var GoodsItem $subItem */
-        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=> $product,'id'=> $subId));
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=> $product,'id'=> $subId));
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -519,12 +517,12 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productSubProductCartAction($subdomain ,PurchaseVendorItem $product)
+    public function productSubProductCartAction($subdomain ,Item $product)
     {
         $subItem = $_REQUEST['subItem'];
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$product,'id'=>$subItem));
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'id'=>$subItem));
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -546,7 +544,7 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productAddCartAction(Request $request , $subdomain , PurchaseVendorItem $product, GoodsItem $subitem)
+    public function productAddCartAction(Request $request , $subdomain , Item $product, GoodsItem $subitem)
     {
 
         $cart = new Cart($request->getSession());
@@ -567,16 +565,16 @@ class WebServiceProductController extends Controller
 
         $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
         $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
-        $masterItem = (!empty($product->getMasterItem()) and $showMaster == 1) ? $product->getMasterItem()->getName() . ' ' : '';
+       // $masterItem = (!empty($product->getMasterItem()) and $showMaster == 1) ? $product->getMasterItem()->getName() . ' ' : '';
         $sizeUnit = !empty($subitem->getProductUnit()) ? $subitem->getProductUnit()->getName() : '';
-        $productUnit = (!empty($product->getMasterItem()) and !empty($product->getMasterItem()->getProductUnit())) ? $product->getMasterItem()->getProductUnit()->getName() : '';
+        $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
 
         if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {
             $data = array(
                 'id' => $subitem->getId(),
-                'name' => $masterItem . ' ' . $product->getWebName(),
+                'name' => $product->getWebName(),
                 'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
-                'category' => !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName() : '',
+                'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
                 'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
                 'sizeUnit' => $sizeUnit,
                 'productUnit' => $productUnit,
@@ -602,7 +600,7 @@ class WebServiceProductController extends Controller
     }
 
 
-    public function productAddSingleCartAction(Request $request , $subdomain , PurchaseVendorItem $product)
+    public function productAddSingleCartAction(Request $request , $subdomain , Item $product)
     {
 
         $cart = new Cart($request->getSession());
@@ -617,9 +615,9 @@ class WebServiceProductController extends Controller
         /* @var GoodsItem $subitem */
 
         if(empty($size)){
-            $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$product,'masterItem' => 1));
+            $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'masterItem' => 1));
         }else{
-            $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('purchaseVendorItem'=>$product,'id' => $size));
+            $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'id' => $size));
         }
         $quantity = 1;
         $color = !empty($color) ? $color : 0;
@@ -789,7 +787,7 @@ class WebServiceProductController extends Controller
 
     }
 
-    public function productAddWishListAction($subdomain ,PurchaseVendorItem $product)
+    public function productAddWishListAction($subdomain ,Item $product)
     {
 
 

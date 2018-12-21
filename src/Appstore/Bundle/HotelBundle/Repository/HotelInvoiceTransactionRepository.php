@@ -135,41 +135,44 @@ class HotelInvoiceTransactionRepository extends EntityRepository
         $entity->setProcess('Done');
         $entity->setTransactionCode($transactionCode);
         $entity->setDiscount($invoice->getDiscount());
-        $entity->setTotal($invoice->getSubTotal());
-        $entity->setPayment($invoice->getPayment());
+        $entity->setTotal($invoice->getTotal());
+        $entity->setReceived($invoice->getPayment());
+        $entity->setDue($invoice->getDue());
         $this->_em->persist($entity);
         $this->_em->flush($entity);
         return $entity;
 
     }
+
     public function insertTransaction(HotelInvoice $invoice)
     {
-            $entity = New HotelInvoiceTransaction();
-            $code = $this->getLastCode($invoice);
-            $entity->setHotelInvoice($invoice);
-            $entity->setCode($code + 1);
-            $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
-            $entity->setTransactionCode($transactionCode);
-            $entity->setProcess('Done');
-            $entity->setPayment($invoice->getPayment());
-            $entity->setTransactionMethod($invoice->getTransactionMethod());
-            $entity->setAccountBank($invoice->getAccountBank());
-            $entity->setPaymentCard($invoice->getPaymentCard());
-            $entity->setCardNo($invoice->getCardNo());
-            $entity->setBank($invoice->getBank());
-            $entity->setAccountMobileBank($invoice->getAccountMobileBank());
-            $entity->setPaymentMobile($invoice->getPaymentMobile());
-            $entity->setTransactionId($invoice->getTransactionId());
-            $entity->setComment($invoice->getComment());
-            $this->_em->persist($entity);
-            $this->_em->flush($entity);
-            if($invoice->getPayment() > 0){
-                $accountHotelInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountHotelInvoice($entity);
-                $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountHotelInvoice);
-            }
-
+        $entity = New HotelInvoiceTransaction();
+        $code = $this->getLastCode($invoice);
+        $entity->setHotelInvoice($invoice);
+        $entity->setCode($code + 1);
+        $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+        $entity->setTransactionCode($transactionCode);
+        $entity->setProcess('Done');
+        $entity->setPayment($invoice->getPayment());
+        $entity->setTransactionMethod($invoice->getTransactionMethod());
+        $entity->setAccountBank($invoice->getAccountBank());
+        $entity->setPaymentCard($invoice->getPaymentCard());
+        $entity->setCardNo($invoice->getCardNo());
+        $entity->setBank($invoice->getBank());
+        $entity->setAccountMobileBank($invoice->getAccountMobileBank());
+        $entity->setPaymentMobile($invoice->getPaymentMobile());
+        $entity->setTransactionId($invoice->getTransactionId());
+        $entity->setComment($invoice->getComment());
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
+        if($invoice->getPayment() > 0){
+            $accountHotelInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountHotelInvoice($entity);
+            $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountHotelInvoice);
+        }
 
     }
+
+
     public function insertPaymentTransaction(HotelInvoice $invoice)
     {
         $entity = New HotelInvoiceTransaction();
@@ -285,7 +288,7 @@ class HotelInvoiceTransactionRepository extends EntityRepository
         $em = $this->_em;
         $qb = $em->createQueryBuilder();
         $query = $qb->delete('HotelBundle:HotelInvoiceTransaction', 'e')
-            ->where('e.businessHotelInvoice = :businessHotelInvoice')
+            ->where('e.hotelInvoice = :businessHotelInvoice')
             ->setParameter('businessHotelInvoice', $entity->getId())
             ->andWhere('e.process IN (:process)')
             ->setParameter('process',array('Pending','In-progress'))
@@ -301,9 +304,21 @@ class HotelInvoiceTransactionRepository extends EntityRepository
         return round($vat);
     }
 
+    public function getHotelInvoiceTransactionLists(HotelInvoice $invoice){
+
+	    $qb = $this->createQueryBuilder('hi');
+	    $qb->join('hi.hotelInvoice','e');
+	    $qb->where('e.hotelConfig = :config')->setParameter('config', $invoice->getHotelConfig()->getId());
+	    $qb->andWhere('hi.referenceInvoice = :reference')->setParameter('reference', $invoice->getId());
+	    $qb->orderBy('hi.updated','DESC');
+	    $result = $qb->getQuery()->getResult();
+	    return $result;
+
+    }
+
     public function getHotelInvoiceTransactionItems(HotelInvoice $invoice)
     {
-        $entities = $invoice->getHotelInvoiceTransactions();
+        $entities = $this->getHotelInvoiceTransactionLists($invoice);
         $data = '';
         $i = 1;
 
@@ -316,16 +331,16 @@ class HotelInvoiceTransactionRepository extends EntityRepository
             if(!empty($transaction->getTransactionMethod())){
                 $transactionMethod = $transaction->getTransactionMethod()->getName();
             }
-            $data .= "<tr>";
+            $data .= "<tr id='delete-{$transaction->getId()}'>";
             $data .= "<td class='numeric' >{$i}</td>";
             $data .= "<td class='numeric' >{$date}</td>";
-	        $data .= "<td class='numeric' >{$transaction->getCreatedBy()}</td>";
-	        $data .= "<td class='numeric' >{$transaction->getProcess()}</td>";
-	        $data .= "<td class='numeric' >{$transactionMethod}</td>";
-	        $data .= "<td class='numeric' >{$transaction->getPayment()}</td>";
+            $data .= "<td class='numeric' >{$transaction->getHotelInvoice()->getInvoice()}/{$transaction->getHotelInvoice()->getInvoiceFor()}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getSubTotal()}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getDiscount()}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getTotal()}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getReceived()}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getDue()}</td>";
 	        $data .= "<td> <span id='approved-{$transaction->getId()}'>";
-
-
 			$arrs = array('Created','Pending','In-progress');
 	        if(in_array($transaction->getProcess(),$arrs)){
 		        $data .= "<a id='{$transaction->getId()}' data-id='{$transaction->getId()}' data-url='/hotel-restaurant/invoice/{$transaction->getId()}/payment-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";

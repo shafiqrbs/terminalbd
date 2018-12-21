@@ -23,6 +23,9 @@
         {% if globalOption.templateCustomize.breadcrumbColor is not empty %}
          color: {{ globalOption.templateCustomize.breadcrumbColor }} !important;
         {% endif %}
+        {% if globalOption.templateCustomize.breadcrumbHeight is not empty %}
+            padding: {{ globalOption.templateCustomize.breadcrumbHeight }}px 0 !important;
+        {% endif %}
     }
     {% endif %}
 
@@ -31,6 +34,20 @@
             color: {{ globalOption.templateCustomize.breadcrumbColor }} !important;
         }
     {% endif %}
+
+    .ultra-breadcrumb li a{
+        {% if globalOption.templateCustomize.breadcrumbColor is not empty %}
+            color: {{ globalOption.templateCustomize.breadcrumbColor }} !important;
+        {% endif %}
+        {% if globalOption.templateCustomize.breadcrumbFontSize is not empty %}
+            font-size: {{ globalOption.templateCustomize.breadcrumbFontSize }} !important;
+        {% endif %}
+    }
+    .ultra-breadcrumb li.active a{
+    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
+        color: {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
+    {% endif %}
+    }
 
 
     {% if globalOption.templateCustomize.breadcrumbHome is not empty %}

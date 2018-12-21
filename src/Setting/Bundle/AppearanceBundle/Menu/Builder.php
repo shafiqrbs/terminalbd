@@ -1317,16 +1317,25 @@ class Builder extends ContainerAware
 
 		$menu
 			->addChild('Hotel & Restaurant')
-			->setAttribute('icon', 'icon-briefcase')
+			->setAttribute('icon', 'fa fa-hotel')
 			->setAttribute('dropdown', true);
 
 		if ($securityContext->isGranted('ROLE_HOTEL_INVOICE')) {
 
-			$menu['Hotel & Restaurant']->addChild('Add Invoice', array('route' => 'hotel_invoice_new'))
-			                            ->setAttribute('icon', 'icon-plus-sign');
-			$menu['Hotel & Restaurant']->addChild('Invoice', array('route' => 'hotel_invoice'))
-			                            ->setAttribute('icon', 'icon-th-list');
+			$menu['Hotel & Restaurant']->addChild('Hotel')->setAttribute('icon', 'fa fa-bed')->setAttribute('dropdown', true);
+			$menu['Hotel & Restaurant']['Hotel']->addChild('Create Invoice', array('route' => 'hotel_invoice_new'))
+			                                         ->setAttribute('icon', 'icon-plus-sign');
+			$menu['Hotel & Restaurant']['Hotel']->addChild('Invoice', array('route' => 'hotel_invoice'))
+			                           ->setAttribute('icon', 'icon-th-list');
+
+			$menu['Hotel & Restaurant']->addChild('Restaurant')->setAttribute('icon', 'icon icon-food')->setAttribute('dropdown', true);
+			$menu['Hotel & Restaurant']['Restaurant']->addChild('Create Invoice', array('route' => 'hotel_restaurantinvoice_new'))
+			                                         ->setAttribute('icon', 'icon-plus-sign');
+			$menu['Hotel & Restaurant']['Restaurant']->addChild('Invoice', array('route' => 'hotel_restaurantinvoice'))
+			                           ->setAttribute('icon', 'icon-th-list');
+
 		}
+
 		if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
 			$menu['Hotel & Restaurant']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
 			$menu['Hotel & Restaurant']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');

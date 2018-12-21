@@ -47,7 +47,7 @@
                             <div class="row-fluid" >
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label"  for="category" >Product<span class="required">*</span></label>
+                                        <label class="control-label"  for="category" >Particular Name<span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-medkit"></i>
@@ -165,14 +165,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-actions portlet box purple">
+                            {% if(entity.itemGalleries is defined and entity.itemGalleries is not empty ) %}
+                                <div class="form-actions portlet box purple">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Item Gallery</div>
                                 </div>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-                            <div class="row-fluid">
-                                {% if(entity.itemGalleries) %}
+                                </div>
+                                <div class="clearfix">&nbsp;</div>
+                                <div class="row-fluid">
                                     {% for photo in entity.itemGalleries %}
                                         <div class="span2">
                                             <input type="checkbox" data-placement="left" class="checker popovers"
@@ -180,22 +180,22 @@
                                                    data-content="Are you remove image, Please click here."
                                                    data-original-title="Remove image" name="imageId[]"
                                                    value="{{ photo.id }}">
-                                            <a href="/{{ photo.getWebPath(entity.inventoryConfig.globalOption.id,entity.id) }}"
+                                            <a href="/{{ photo.getWebPath(entity.hotelConfig.globalOption.id,entity.id) }}"
                                                target="_blank"> <img
-                                                        src="{{ image(photo.getAbsolutePath(entity.inventoryConfig.globalOption.id,entity.id)).resize(100,100) }}"/></a>
+                                                        src="{{ image(photo.getAbsolutePath(entity.hotelConfig.globalOption.id,entity.id)).resize(100,100) }}"/></a>
                                         </div>
                                     {% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div id="pluploadUploader">
-                                        <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5
-                                            support.</p>
+
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div id="pluploadUploader">
+                                            <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5
+                                                support.</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
+                            {% endif %}
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
                                     <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>

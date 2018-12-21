@@ -2,20 +2,11 @@
 {% block body %}
     <section class="siteBgColor">
     <div class="clearfix"></div>
-    <section id="breadcrumb">
-        <div class="container">
-            <ul class="breadcrumb">
-                <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class="active"><a href="javascript:void(0);">Product</a></li>
-            </ul>
-        </div>
-    </section>
-    <div class="clearfix"></div>
     {% if globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'flat-left'  %}
         <div class="pageheader">
             <div class="container">
                 <div class="col-md-6">
-                    <ul class="simple-breadcrumb-left">
+                    <ul class="simple-breadcrumb-left ultra-breadcrumb">
                         <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
                         {% if category is defined and category is not empty %}
                             <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a></li>
@@ -37,7 +28,7 @@
                     <h2 class="title">{% if category is defined and category is not empty %}{{ category.name }}{% else %}{{ menu.menu }}{% endif %}</h2>
                 </div>
                 <div class="col-md-6">
-                    <ul class="simple-breadcrumb-right">
+                    <ul class="simple-breadcrumb-right ultra-breadcrumb">
                         {% if category is defined and category is not empty %}
                             <li class="active"><a href="javascript:void(0);">{{ category.name }}</a></li>
                             <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a></li>

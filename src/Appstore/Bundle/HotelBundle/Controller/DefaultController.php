@@ -96,7 +96,7 @@ class DefaultController extends Controller
 
     public function bookingAction()
     {
-		$curDate = date('Y-m-d');
+		$curDate = date('m-d-Y');
 	    $user = $this->getUser();
 	    $config = $user->getGlobalOption()->getHotelConfig();
 	    $date = !empty($_REQUEST['bookingDate']) ? $_REQUEST['bookingDate']:$curDate;
@@ -107,14 +107,37 @@ class DefaultController extends Controller
 	    foreach ($bookings as $booking){
 	    	$books[] = $booking['id'];
 	    }
-
 	    $html = $this->renderView('HotelBundle:Invoice:booking.html.twig', array(
+		    'date' => date('d-F-Y'),
 		    'entities' => $entities,
 		    'bookings' => $books,
 
 		 ));
 	    return New Response($html);
 
+    }
+
+    public function bookingSearchAction()
+    {
+
+	    $date = date('d-m-Y',strtotime($_REQUEST['bookingDate']));
+	    $user = $this->getUser();
+	    $config = $user->getGlobalOption()->getHotelConfig();
+	    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($config,$type = array('room','package'));
+	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($config,$date);
+
+	    $books = array();
+	    foreach ($bookings as $booking){
+		    $books[] = $booking['id'];
+	    }
+	    $html = $this->renderView('HotelBundle:Invoice:bookingLoad.html.twig', array(
+		    'date' => $date,
+		    'entities' => $entities,
+		    'bookings' => $books,
+
+	    ));
+	    $resDate = date('d-F-Y',strtotime($date));
+	    return new Response(json_encode(array('data' => $html,'date'=> $resDate)));
     }
 
     public function bookedRoomDetailsAction(HotelParticular $particular)
@@ -129,6 +152,7 @@ class DefaultController extends Controller
 		    'temp' => $temp,
 	    ));
 	    return New Response($html);
+
     }
 
     public function bookingRoomFormAction(HotelParticular $particular)
@@ -163,6 +187,9 @@ class DefaultController extends Controller
 
     public function bookingInvoiceGenerateAction()
     {
+	    $user = $this->getUser();
+    	$entity = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->invoiceGenerate($user);
+	    return $this->redirect($this->generateUrl('hotel_invoice_edit', array('id' => $entity->getId())));
 
     }
 

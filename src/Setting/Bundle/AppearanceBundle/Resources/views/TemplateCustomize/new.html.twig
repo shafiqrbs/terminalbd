@@ -1100,6 +1100,15 @@
                             </div>
                             <div class="span3">
                                 <div class="control-group">
+                                    <label class="control-label" for="firstName">Breadcrumb Height</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.breadcrumbHeight) }}
+                                        {{ form_errors(form.breadcrumbHeight) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
                                     <label class="control-label" for="firstName">Breadcrumb Font Size</label>
                                     <div class="controls">
                                         {{ form_widget(form.breadcrumbFontSize) }}
@@ -1107,17 +1116,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span3">
-                                <div class="control-group">
-                                    <label class="control-label" for="firstName">Breadcrumb Home</label>
-                                    <div class="controls">
-                                        {{ form_widget(form.breadcrumbHome) }}
-                                        {{ form_errors(form.breadcrumbHome) }}
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="row-fluid">
+
                             <div class="span3">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">Breadcrumb Bg</label>
@@ -1130,10 +1132,18 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="firstName">Breadcrumb Active Bg</label>
+                                    <label class="control-label" for="firstName">Breadcrumb Home</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.breadcrumbHome) }}
+                                        {{ form_errors(form.breadcrumbHome) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Breadcrumb Active Color</label>
                                     <div class="controls">
                                         <div class="input-icon left">
                                             <i class="icon-magic"></i>
@@ -1155,7 +1165,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span3">
+                            {#<div class="span3">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">Breadcrumb Border Color</label>
                                     <div class="controls">
@@ -1166,11 +1176,49 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>#}
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Breadcrumb Image</div>
+                                <div class="pull-right">Remove Breadcrumb Image<input type="checkbox" class="checkbox" id="removeHeaderImage" name="removeHeaderImage" value="1"></div>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
                         <!--/row-->
-                        <div class="form-actions portlet box grey">
+                        <div class="row-fluid" >
+
+                            <div class="span12">
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <div data-provides="fileupload" class="fileupload fileupload-new">
+                                            <div style="height:250px;" class="fileupload-new  span12">
+                                                {% if(entity.webPath('headerBgImage') is defined ) %}
+                                                    <img class="fileupload-preview fileupload-exists  span12" alt="" src="/{{ entity.webPath('headerBgImage') }}">
+                                                {% else %}
+                                                    <img alt="" src="http://www.placehold.it/1024x250/EFEFEF/AAAAAA&amp;text=no+image">
+                                                {% endif %}
+                                            </div>
+                                            <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                            <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        <input type="file" name="headerBgImage" id="headerBgImage">
+                                                    </span>
+                                                <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                            </div>
+                                        </div>
+                                        <span class="label label-important">NOTE!</span>
+                                        <span> Image size must be use 1024px x 250 px or more</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <!--/row-->
+                        <div class="form-actions portlet box green">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Divider</div>
                             </div>
@@ -1364,43 +1412,7 @@
                             </div>
                         </div>
                         <!--/span-->
-                        <div class="form-actions portlet box blue">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="icon-reorder"></i>Header Image</div>
-                                <div class="pull-right">Remove Header Image<input type="checkbox" class="checkbox" id="removeHeaderImage" name="removeHeaderImage" value="1"></div>
-                            </div>
-                        </div>
-                        <div class="clearfix">&nbsp;</div>
-                        <!--/row-->
-                        <div class="row-fluid" >
 
-                            <div class="span12">
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <div data-provides="fileupload" class="fileupload fileupload-new">
-                                            <div style="height:450px;" class="fileupload-new thumbnail span12">
-                                                {% if(entity.webPath('headerBgImage') is defined ) %}
-                                                    <img class="fileupload-preview fileupload-exists thumbnail span12" alt="" src="/{{ entity.webPath('headerBgImage') }}">
-                                                {% else %}
-                                                    <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                                {% endif %}
-                                            </div>
-                                            <div  class="fileupload-preview fileupload-exists thumbnail"></div>
-                                            <div>
-													<span class="btn btn-file">
-                                                        <span class="fileupload-new">Select image</span>
-													    <span class="fileupload-exists">Change</span>
-                                                        <input type="file" name="headerBgImage" id="headerBgImage">
-                                                    </span>
-                                                <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
-                                            </div>
-                                        </div>
-                                        <span class="label label-important">NOTE!</span>
-                                        <span> Image size must be use 1024px x 450 px or more</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <!--/span-->
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
