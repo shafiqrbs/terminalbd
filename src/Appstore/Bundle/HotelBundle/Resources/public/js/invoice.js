@@ -334,8 +334,8 @@ var invoiceForm = $("#invoiceForm").validate({
         "address": {required: true},
         "location": {required: false},
         "postalCode": {required: false},
-        "businessInvoice[discountCalculation]": {required: false},
-        "businessInvoice[received]": {required: false},
+        "invoice[discountCalculation]": {required: false},
+        "invoice[received]": {required: false},
         "remark": {required: false}
     },
 
@@ -362,7 +362,7 @@ var invoicePaymentForm = $("#invoicePaymentForm").validate({
 
     rules: {
         "transaction[received]": {required: true},
-        "transaction[discountCalculation]": {required: false},
+        "transaction[discount]": {required: false},
         "transaction[cardNo]": {required: false},
         "transaction[paymentMobile]": {required: false},
         "transaction[transactionId]": {required: false}

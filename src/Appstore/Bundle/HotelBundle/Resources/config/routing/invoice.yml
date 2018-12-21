@@ -62,7 +62,7 @@ hotel_invoice_reverse_show:
 
 
 hotel_invoice_particular_delete:
-    path:     /{invoice}/{id}/particular-delete
+    path:     /{invoice}/{id}/room-delete
     defaults: { _controller: "HotelBundle:Invoice:invoiceParticularDelete" }
 
 hotel_invoice_print:

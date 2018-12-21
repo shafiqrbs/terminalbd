@@ -96,10 +96,11 @@ class DefaultController extends Controller
 
     public function bookingAction()
     {
-		$curDate = date('m-d-Y');
+		$curDate = date('d-m-Y');
 	    $user = $this->getUser();
 	    $config = $user->getGlobalOption()->getHotelConfig();
 	    $date = !empty($_REQUEST['bookingDate']) ? $_REQUEST['bookingDate']:$curDate;
+	    $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->removeTemporaryRoom($user);
 	    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($config,$type = array('room','package'));
 	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($config,$date);
 
@@ -178,7 +179,7 @@ class DefaultController extends Controller
 
     	$em = $this->getDoctrine()->getManager();
 	    $user = $this->getUser();
-    	$entity = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->findOneBy(array('createdBy'=>$user,'hotelParticular'=>$particular));
+    	$entity = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->findOneBy(array('createdBy' => $user,'hotelParticular'=>$particular));
 	    $em->remove($entity);
 	    $em->flush();
 	    exit;

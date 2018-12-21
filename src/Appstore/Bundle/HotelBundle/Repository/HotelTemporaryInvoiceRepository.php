@@ -114,4 +114,11 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 	    return $entity;
     }
 
+    public function removeTemporaryRoom(User $user)
+    {
+	    $em = $this->_em;
+	    $transaction = $em->createQuery("DELETE HotelBundle:HotelTemporaryInvoice e WHERE e.createdBy = {$user->getId()}");
+	    $transaction->execute();
+    }
+
 }

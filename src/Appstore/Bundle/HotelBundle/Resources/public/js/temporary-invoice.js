@@ -26,7 +26,7 @@ function pageReload() {
 $(document).on('click', '#booking', function() {
 
     var title = $(this).attr('data-title');
-    $('.dialogModal_header').html(title);
+    $('.dialogModal_header').html('');
     $('.overview-title').html(title);
     $('.dialog_content').dialogModal({
         topOffset: 0,
@@ -109,7 +109,6 @@ function jqueryTemporaryLoad() {
                 success: function (response) {
                     obj = JSON.parse(response);
                     if(obj['msg'] === 'valid'){
-                        alert('This room is available');
                         $('#addRoom-'+particular).prop('disabled', false);
                     }else{
                         alert(obj['msg']);
@@ -148,7 +147,7 @@ function jqueryTemporaryLoad() {
             processData : false,
             contentType : false,
             success: function(response){
-               aletr('This room is added temporary');
+               alert('This room is booked temporarily.');
             }
         });
     })

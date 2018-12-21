@@ -460,7 +460,7 @@ class InvoiceController extends Controller
 			$unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
 			return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1,'unit' => $unit,'msg'=>'valid')));
 		}else{
-			return new Response(json_encode(array('msg'=> 'This room alreay booked, please try another room')));
+			return new Response(json_encode(array('msg'=> 'This room is already booked or checked in, Please try another room.')));
 
 		}
 	}
@@ -482,10 +482,6 @@ class InvoiceController extends Controller
         exit;
 
     }
-
-    /**
-     * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
-     */
 
     public function invoiceParticularDeleteAction(HotelInvoice $invoice, HotelInvoiceParticular $particular){
 

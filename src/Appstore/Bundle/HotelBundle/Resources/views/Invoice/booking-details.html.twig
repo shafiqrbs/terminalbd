@@ -13,7 +13,8 @@
             <thead>
             <tr class="head-blue">
                 <th class="">Si/No</th>
-                <th class="">Particular</th>
+                <th class="">Created</th>
+                <th class="">Invoice</th>
                 <th class="">Booking Date</th>
                 <th class="">Guest</th>
                 <th class="">Adult</th>
@@ -28,6 +29,7 @@
                 <tr id="remove-{{ item.id }}">
                     <td  class="">{{ loop.index }}.</td>
                     <td  class="">{{ item.hotelInvoice.created|date('d-m-Y') }}</td>
+                    <td  class="">{{ item.hotelInvoice.invoice }}</td>
                     <td class="">{% for date in item.bookingDate %}{{ date }} {% if not loop.last %},{% endif %}{% endfor %}</td>
                     <td class="">{{ item.hotelInvoice.customer.name }}/{{ item.hotelInvoice.customer.mobile }}</td>
                     <td class="">{{ item.adult }}</td>

@@ -1,10 +1,10 @@
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption"><i class="icon-reorder"></i> <strong class="overview-title"><span id="date">{{ date }}</span> Booking Overview</strong></div>
+        <div class="caption"><i class="icon-reorder"></i> <strong class="overview-title"><span id="date">{{ date }}</span> Booking Dashboard</strong></div>
         <div class="actions">
             <div class="btn-group">
                 <input type="date" class="m-wrap span6" name="bookingDate" id="bookingDate"><button type="button" data-url="{{ path('hotel_booking_room_search') }}" class="btn yellow" id="bookingSearch" name="bookingSearch"><i class="icon-search"></i></button>
-                <a class="btn black" href="{{ path('hotel_booking_invoice_generate') }}"><i class="icon-refresh"></i> Generate Process</a>
+                <a class="btn red" href="{{ path('hotel_booking_invoice_generate') }}"><i class="icon-refresh"></i> Generate Process</a>
             </div>
         </div>
     </div>
@@ -12,11 +12,11 @@
         {% if entities is not empty  %}
             {% for entity in entities %}
                 <div class="row-fluid room-box">
-                    <div class="span4">{{ entity.particularCode }} - {{ entity.name }}</div>
+                    <div class="span5">{{ entity.name }}</div>
                     <div class="span2 text-right">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</div>
                     <div class="span2">BDT {{ entity.salesPrice }}</div>
                     <div class="span1">{% if entity.id in bookings %} <button class="btn red mini">Booked</button> {% else %}<button class="btn blue mini">Available</button>{% endif %}</div>
-                    <div class="span3">
+                    <div class="span2">
                         <a data-id="{{ entity.id }}" class="btn green booking-room" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" href="javascript:"><i class="icon-plus-sign"></i> View & Process</a>
                     </div>
                 </div>
