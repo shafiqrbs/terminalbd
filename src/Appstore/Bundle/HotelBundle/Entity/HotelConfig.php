@@ -36,6 +36,11 @@ class HotelConfig
     private $hotelInvoices;
 
 	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", mappedBy="hotelConfig")
+     **/
+    private $hotelOptions;
+
+	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransactionSummary", mappedBy="hotelConfig")
      **/
     private $hotelInvoiceTransactionSummary;

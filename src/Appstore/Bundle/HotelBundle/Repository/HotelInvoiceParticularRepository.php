@@ -142,7 +142,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		$qb->join('p.hotelParticularType','hpt');
 		$qb->select('e.bookingDate AS bookingDate');
 		$qb->where('e.hotelParticular = :particular')->setParameter('particular', $particular->getId());
-		$qb->andWhere('e.process = :process')->setParameter('process','booked');
+		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('booked','check-in'));
 		$qb->andWhere('hpt.slug IN (:slugs)')->setParameter('slugs', array('room','package'));
 		$result = $qb->getQuery()->getArrayResult();
 		$booked =array();
@@ -168,7 +168,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		$qb->select('e.id as id , e.particular as roomName');
 		$qb->andWhere('h.hotelConfig = :config')->setParameter('config',$config);
 		$qb->andWhere('pt.slug IN (:slugs)')->setParameter('slugs', array('room','package'));
-		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('check-in'));
+		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('check-in','booked'));
 		$qb->andWhere($qb->expr()->like("e.bookingDate", "'%$date%'"  ));
 		$result = $qb->getQuery()->getArrayResult();
 		return $result;
@@ -176,14 +176,17 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 
 
-	public function getBookedRoom(HotelConfig $config,$date){
+	public function getBookedRoom(HotelConfig $config){
+
+		$date = date('d-m-Y');
 
 		$config =  $config->getId();
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.hotelInvoice','h');
 		$qb->join('e.hotelParticular','p');
-		$qb->select('p.id as id');
-		$qb->andWhere('h.hotelConfig = :config')->setParameter('config',$config);
+		$qb->leftJoin('p.category','c');
+		$qb->select('p.id as id, e.process as roomStatus');
+		$qb->where('h.hotelConfig = :config')->setParameter('config',$config);
 		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('booked','check-in'));
 		$qb->andWhere($qb->expr()->like("e.bookingDate", "'%$date%'"  ));
 		$qb->groupBy('p.id');
@@ -238,7 +241,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 		$em = $this->_em;
 		foreach ($invoice->getHotelInvoiceParticulars() as $particular){
-			$particular->setProcess('check-in');
+			$particular->setProcess('check-i n');
 			$em->flush();
 		}
 	}

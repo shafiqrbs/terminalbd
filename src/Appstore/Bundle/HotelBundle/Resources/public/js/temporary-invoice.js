@@ -57,6 +57,7 @@ function jqueryTemporaryLoad() {
         defaultDate: "+1w",
         changeMonth: true,
         numberOfMonths: 2,
+        dateFormat: "dd-mm-yy",
         minDate: dateToday,
         onSelect: function(selectedDate) {
             var option = this.id == "bookingStartDate" ? "minDate" : "maxDate",
@@ -65,6 +66,19 @@ function jqueryTemporaryLoad() {
             dates.not(this).datepicker("option", option, date);
         }
     });
+
+    $(".booking-roomx").click(function(){
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        $.get(url, function( data ) {
+            $('#room-'+id).html(data).slideToggle( "slow" );
+        });
+    }).toggle( function() {
+        $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+    }, function() {
+        $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+    });
+
 
     $(document).on("click", ".booking-room", function(e) {
 
@@ -125,11 +139,14 @@ function jqueryTemporaryLoad() {
 
     $(document).on("click", "#bookingSearch", function(e) {
         var url = $(this).attr('data-url');
-        var bookingDate = $('#bookingDate').val();
-        if(bookingDate === ""){
+        var bookingStartDate = $('#bookingStartDate').val();
+        var bookingEndDate = $('#bookingEndDate').val();
+        var process = $('#processStatus').val();
+        var category = $('#category').val();
+        if(bookingStartDate === "" || bookingStartDate === "" ){
             return false;
         }
-        $.get(url,{'bookingDate':bookingDate}, function( response ) {
+        $.get(url,{'bookingStartDate':bookingStartDate,'bookingEndDate':bookingEndDate,'process':process,'category':category}, function( response ) {
             obj = JSON.parse(response);
             $('#bookingLoad').html(obj['data']);
             $('#date').html(obj['date']);

@@ -1,12 +1,43 @@
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption"><i class="icon-reorder"></i> <strong class="overview-title"><span id="date">{{ date }}</span> Booking Dashboard</strong></div>
+        <div class="caption"><i class="icon-reorder"></i> <strong class="overview-title"><span id="date">{{ date }}</span></strong></div>
         <div class="actions">
             <div class="btn-group">
-                <input type="date" class="m-wrap span6" name="bookingDate" id="bookingDate"><button type="button" data-url="{{ path('hotel_booking_room_search') }}" class="btn yellow" id="bookingSearch" name="bookingSearch"><i class="icon-search"></i></button>
-                <a class="btn red" href="{{ path('hotel_booking_invoice_generate') }}"><i class="icon-refresh"></i> Generate Process</a>
+                 <a class="btn red" href="{{ path('hotel_booking_invoice_generate') }}"><i class="icon-refresh"></i> Generate Process</a>
             </div>
         </div>
+    </div>
+    <div class="portlet-body" style="background-color:#514f4f; padding-bottom: 0!important;">
+        <form id="search" name="search" method="get">
+        <div class="row-fluid">
+            <div class="span3">
+                <input type="text" required="required" class="m-wrap span12" value="{{ "now"|date("d-m-Y") }}" name="bookingStartDate" id="bookingStartDate">
+            </div>
+            <div class="span3">
+                <input type="text" required="required" class="m-wrap span12" value="{{ "now"|date("d-m-Y") }}" name="bookingEndDate" id="bookingEndDate">
+            </div>
+            <div class="span3">
+                <select class="m-wrap span12" name="category" id="category">
+                    <option value="">All Room Type</option>
+                    {% for category in categories  %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="span3">
+                <div class="btn-group input-append">
+                    <select class="m-wrap span12" name="processStatus" id="processStatus" >
+                        <option value="">All Status</option>
+                        {% set process = ['check-in','check-out','booked','available'] %}
+                        {% for process in process %}
+                            <option value="{{ process }}">{{ process|capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button" data-url="{{ path('hotel_booking_room_search') }}" class="btn yellow" id="bookingSearch" name="bookingSearch"><i class="icon-filter"></i> Filter</button>
+                </div>
+            </div>
+        </div>
+        </form>
     </div>
     <div class="portlet-body form" id="bookingLoad">
         {% if entities is not empty  %}
@@ -15,9 +46,9 @@
                     <div class="span5">{{ entity.name }}</div>
                     <div class="span2 text-right">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</div>
                     <div class="span2">BDT {{ entity.salesPrice }}</div>
-                    <div class="span1">{% if entity.id in bookings %} <button class="btn red mini">Booked</button> {% else %}<button class="btn blue mini">Available</button>{% endif %}</div>
+                    <div class="span1">{% if bookings[entity.id]['id'] is defined and bookings[entity.id]['id'] == entity.id  %} <button class="btn red mini {{ bookings[entity.id]['roomStatus'] }}">{{ bookings[entity.id]['roomStatus'] }}</button> {% else %}<button class="btn blue mini">Available</button>{% endif %}</div>
                     <div class="span2">
-                        <a data-id="{{ entity.id }}" class="btn green booking-room" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" href="javascript:"><i class="icon-plus-sign"></i> View & Process</a>
+                        <a data-id="{{ entity.id }}" class="btn blue booking-room" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" href="javascript:"><i class="icon-plus-sign"></i> View & Process</a>
                     </div>
                 </div>
                 <div id="room-{{ entity.id }}"></div>
@@ -44,16 +75,17 @@
         padding-left: 15px;
     }
 
-    #bookingDate{
-        padding-bottom: 0!important;
-        margin-bottom: 0!important;
-        width: 150px;
-        height: 28px!important;
+    #bookingStartDate , #bookingEndDate{
         background: #fff;
-        line-height: 37px;
-        padding-top: 1px!important;
-        border: 1px solid #c49f47!important;
-        margin-top: -1px;
+    }
+    .check-in{
+        background: red!important;
+    }
+    .booked{
+        background: #c49f47!important;
+    }
+    .check-out{
+        background: green !important;
     }
 
 </style>

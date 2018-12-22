@@ -10,10 +10,10 @@ use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
- * HotelParticular
+ * HotelParticularMeta
  *
  * @ORM\Table( name = "hotel_particular_meta")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HotelBundle\Repository\HotelParticularRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HotelBundle\Repository\HotelParticularMetaRepository")
  */
 class HotelParticularMeta
 {

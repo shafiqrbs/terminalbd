@@ -70,6 +70,8 @@ hotel_booking_room_details:
 hotel_booking_room_search:
     path:     /booking-room-search
     defaults: { _controller: HotelBundle:Default:bookingSearch }
+    options:
+            expose: true
 
 hotel_booking_room:
     path:     /{id}/booking-room-form

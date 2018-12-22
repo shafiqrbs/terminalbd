@@ -96,23 +96,21 @@ class DefaultController extends Controller
 
     public function bookingAction()
     {
-		$curDate = date('d-m-Y');
-	    $user = $this->getUser();
+		$user = $this->getUser();
 	    $config = $user->getGlobalOption()->getHotelConfig();
-	    $date = !empty($_REQUEST['bookingDate']) ? $_REQUEST['bookingDate']:$curDate;
-	    $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->removeTemporaryRoom($user);
+	  	$this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->removeTemporaryRoom($user);
 	    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($config,$type = array('room','package'));
-	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($config,$date);
-
+	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($config);
+		$categories = $this->getDoctrine()->getRepository('HotelBundle:Category')->findBy(array('status'=>1));
 	    $books = array();
 	    foreach ($bookings as $booking){
-	    	$books[] = $booking['id'];
+	    	$books[$booking['id']] = $booking;
 	    }
 	    $html = $this->renderView('HotelBundle:Invoice:booking.html.twig', array(
 		    'date' => date('d-F-Y'),
 		    'entities' => $entities,
 		    'bookings' => $books,
-
+		    'categories' => $categories
 		 ));
 	    return New Response($html);
 
@@ -121,23 +119,25 @@ class DefaultController extends Controller
     public function bookingSearchAction()
     {
 
-	    $date = date('d-m-Y',strtotime($_REQUEST['bookingDate']));
+	    $data = $_REQUEST;
 	    $user = $this->getUser();
 	    $config = $user->getGlobalOption()->getHotelConfig();
-	    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($config,$type = array('room','package'));
-	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($config,$date);
+	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getBookedRoom($config,$data);
+		var_dump($bookings);
+	    exit;
+	    //    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getAvailableRoom($config, $type = array('room','package','service'),$bookings);
 
 	    $books = array();
 	    foreach ($bookings as $booking){
 		    $books[] = $booking['id'];
 	    }
 	    $html = $this->renderView('HotelBundle:Invoice:bookingLoad.html.twig', array(
-		    'date' => $date,
 		    'entities' => $entities,
 		    'bookings' => $books,
 
 	    ));
-	    $resDate = date('d-F-Y',strtotime($date));
+
+	    $resDate = date('d-F-Y',strtotime($data['bookingStartDate']));
 	    return new Response(json_encode(array('data' => $html,'date'=> $resDate)));
     }
 

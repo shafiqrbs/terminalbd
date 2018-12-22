@@ -27,12 +27,24 @@ class HotelParticularType
      **/
     private $hotelParticulars;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", mappedBy="hotelParticularType" )
+     **/
+    private $hotelOptions;
+
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="parent", type="string", length=255, nullable=true)
+     */
+    private $parent;
 
     /**
      * @Gedmo\Translatable
@@ -117,6 +129,27 @@ class HotelParticularType
     {
         return $this->hotelParticulars;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getParent() {
+		return $this->parent;
+	}
+
+	/**
+	 * @param string $parent
+	 */
+	public function setParent( $parent ) {
+		$this->parent = $parent;
+	}
+
+	/**
+	 * @return HotelOption
+	 */
+	public function getHotelOptions() {
+		return $this->hotelOptions;
+	}
 
 
 }

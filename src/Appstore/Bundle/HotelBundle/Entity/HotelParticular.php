@@ -47,6 +47,31 @@ class HotelParticular
      **/
     private $hotelFeature;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularRoomTypes" )
+     **/
+    private $roomTypes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularCategories" )
+     **/
+    private $roomCategory;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularViewPositions" )
+     **/
+    private $viewPosition;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularComplimentary" )
+     **/
+    private $complimentary;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularAmenities" )
+     **/
+    private $amenities;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceParticular", mappedBy="hotelParticular" )
      * @ORM\OrderBy({"id" = "ASC"})
@@ -1031,6 +1056,76 @@ class HotelParticular
 	 */
 	public function getRoomGalleries() {
 		return $this->roomGalleries;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getRoomTypes() {
+		return $this->roomTypes;
+	}
+
+	/**
+	 * @param mixed $roomTypes
+	 */
+	public function setRoomTypes( $roomTypes ) {
+		$this->roomTypes = $roomTypes;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getRoomCategory() {
+		return $this->roomCategory;
+	}
+
+	/**
+	 * @param mixed $roomCategory
+	 */
+	public function setRoomCategory( $roomCategory ) {
+		$this->roomCategory = $roomCategory;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getViewPosition() {
+		return $this->viewPosition;
+	}
+
+	/**
+	 * @param mixed $viewPosition
+	 */
+	public function setViewPosition( $viewPosition ) {
+		$this->viewPosition = $viewPosition;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getComplimentary() {
+		return $this->complimentary;
+	}
+
+	/**
+	 * @param mixed $complimentary
+	 */
+	public function setComplimentary( $complimentary ) {
+		$this->complimentary = $complimentary;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getAmenities() {
+		return $this->amenities;
+	}
+
+	/**
+	 * @param mixed $amenities
+	 */
+	public function setAmenities( $amenities ) {
+		$this->amenities = $amenities;
 	}
 
 

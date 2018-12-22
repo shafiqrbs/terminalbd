@@ -99,6 +99,66 @@ class HotelParticularRepository extends EntityRepository
             return  $qb;
     }
 
+	public function getBookedRoom(HotelConfig $config,$data){
+
+		$startDate = isset($data['bookingStartDate'])? $data['bookingStartDate'] :'';
+		$endDate = isset($data['bookingEndDate'])? $data['bookingEndDate'] :'';
+		$process = isset($data['process'])? $data['process'] :'';
+		$category = isset($data['category'])? $data['category'] :'';
+
+		$begin = new \DateTime( $data['bookingStartDate']);
+		$end = new \DateTime( $data['bookingEndDate'] );
+		$end = $end->modify( '+1 day' );
+
+		$interval = new \DateInterval('P1D');
+		$period = new \DatePeriod($begin, $interval ,$end);
+
+		$bookingDate =array();
+		foreach ($period as $key => $date) {
+			$bookingDate[] = (string)$date->format('d-m-Y');
+		}
+		$config =  $config->getId();
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.category','c');
+		$qb->join('e.hotelParticularType','hpt');
+		$qb->leftJoin('e.hotelInvoiceParticulars','ip');
+		$qb->select('e.id as id');
+		$qb->where('e.hotelConfig = :config')->setParameter('config',$config);
+		$qb->andWhere('hpt.slug IN (:slugs)')->setParameter('slugs', array('room','package'));
+		if(!empty($process) and $process == 'available'){
+			//$qb->andWhere($qb->expr()->notIn('ip.process', array('check-in','booked')));
+		}elseif(!empty($process)){
+			$qb->andWhere('ip.process = :process')->setParameter('process',$process);
+		}
+		if(!empty($category)){
+			$qb->andWhere('c.id = :category')->setParameter('category',$category);
+		}
+		$orStatements = $qb->expr()->orX();
+		foreach ($period as $key => $date) {
+			$orStatements->add(
+				$qb->expr()->like('ip.bookingDate', $qb->expr()->literal('%' . (string)$date->format('d-m-Y') . '%'))
+			);
+		}
+		$qb->andWhere($orStatements);
+
+		/*
+		if (!empty($startDate)) {
+			$compareTo = new \DateTime($startDate);
+			$created =  $compareTo->format('Y-m-d 00:00:00');
+			$qb->andWhere("ip.startDate >= :created");
+			$qb->setParameter('created', $created);
+		}
+		if (!empty($endDate)) {
+			$compareTo = new \DateTime($endDate);
+			$createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+			$qb->andWhere("ip.endDate <= :createdEnd");
+			$qb->setParameter('createdEnd', $createdEnd);
+		}*/
+		//$qb->groupBy('e.id');
+		$result = $qb->getQuery()->getArrayResult();
+		return $result;
+	}
+
 	public function getAvailableRoom($config,$type,$booked = array()){
 
     	$qb = $this->createQueryBuilder('e');
@@ -116,7 +176,7 @@ class HotelParticularRepository extends EntityRepository
        $qb->orderBy('e.sorting','ASC');
        $qb->orderBy('e.name','ASC');
        $result = $qb->getQuery()->getArrayResult();
-		return  $result;
+	   return  $result;
 	}
 
 	public function getServiceWithParticular($config,$services){
