@@ -122,7 +122,7 @@ class InvoiceAdmissionType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
-                        ->andWhere("b.globalOption =".$this->globalOption->getId()->getId())
+                        ->andWhere("b.globalOption =".$this->globalOption->getId())
                         ->orderBy("b.name", "ASC");
                 }
             ))
