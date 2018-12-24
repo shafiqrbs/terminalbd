@@ -10,11 +10,13 @@
     <div class="portlet-body" style="background-color:#514f4f; padding-bottom: 0!important;">
         <form id="search" name="search" method="get">
         <div class="row-fluid">
-            <div class="span2">
+            <div class="input-icon left span2">
+                <i class="icon-calendar"></i>
                 <input type="text" required="required" class="m-wrap span12" value="{{ "now"|date("d-m-Y") }}" name="bookingStartDate" id="bookingStartDate">
             </div>
-            <div class="span2">
-                <input type="text" required="required" class="m-wrap span12" value="{{ "now"|date("d-m-Y") }}" name="bookingEndDate" id="bookingEndDate">
+            <div class="input-icon left span2">
+                <i class="icon-calendar"></i>
+                <input type="text" required="required" class="m-wrap span12" value="{{ "now"|date("d-m-Y") }}" name="bookingStartDate" id="bookingStartDate">
             </div>
             <div class="span2">
                 <select name="category" id="category" class="m-wrap span12">
@@ -60,6 +62,67 @@
             </div>
         </div>
         </form>
+    </div>
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i> Add Rooms</div>
+        </div>
+        <div class="row-fluid" style="background:#f9f9f9;">
+            <form class="" id="stockInvoice" name="stockInvoice" action="" method="post">
+                <div class="span12">
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="row-fluid particular-info" >
+                                <div class="span3">
+                                    <div class="input-icon left span6">
+                                        <i class="icon-calendar"></i>
+                                        <input type="text" class="m-wrap span12" style="padding-right:0!important" name="startDate" id="bookingStartDate" value=" {{ "now"|date("d-m-Y") }}"  autocomplete="off" placeholder="" >
+                                    </div>
+                                    <div class="input-icon left span6">
+                                        <i class="icon-calendar"></i>
+                                        <input type="text" class="m-wrap span12" style="padding-right:0!important;" name="endDate" id="bookingEndDate" value=" {{ "tomorrow"|date("d-m-Y") }}"  autocomplete="off" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="span3">
+
+                                </div>
+
+                                <div class="span3">
+                                    <div class="input-group">
+                                        <input class="m-wrap span7 form-control" name="guestName" id="guestName" value=""  autocomplete="off" placeholder="Enter room member name" >
+                                        <input class="m-wrap span5 form-control"  name="guestMobile" id="guestMobile" value=""  autocomplete="off" placeholder="Enter mobile no" >
+                                    </div>
+
+                                </div>
+                                <div class="span3">
+                                    <div class="input-append span12" style="margin-bottom:0!important">
+                                        <div class="input-group">
+                                            {% set counts =[1,2,3,4,5,6,7,8,9,10] %}
+                                            <input type="text" class="m-wrap span4 form-control input-number" id="salesPrice" name="salesPrice" placeholder="Price" value="" min="">
+                                            <select id="adult" name="adult" class="m-wrap span4">
+                                                <option value="">Adult</option>
+                                                {% for count in counts  %}
+                                                    <option value="{{ count }}">{{ count }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <select id="child" name="child" class="m-wrap span4">
+                                                <option value="">Child</option>
+                                                {% for count in counts  %}
+                                                    <option value="{{ count }}">{{ count }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit" class="btn blue" id="addRoom" ><i class="icon-save"></i> Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="portlet-body form" >
         {% if entities is not empty  %}

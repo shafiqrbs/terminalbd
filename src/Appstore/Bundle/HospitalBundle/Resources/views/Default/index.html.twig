@@ -7,7 +7,7 @@
         <div id="dashboard">
             {% if 'hms' in apps %}
                 <div class="row-fluid pull-center" >
-                    {% if is_granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") %}
                     <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat green">
                             <a class="visual addPatient" href="javascript:">
@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     {% endif %}
-                    {% if is_granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") %}
                         <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                             <div class="dashboard-stat purple">
                                 <a class="visual" href="{{ path('hms_invoice_admission_new') }}">
@@ -31,7 +31,7 @@
                             </div>
                         </div>
                     {% endif %}
-                    {% if is_granted("ROLE_DOMAIN_HOSPITAL_MANAGER") %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") %}
                         <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                             <div class="dashboard-stat blue">
                                 <a class="visual" href="{{ path('hms_doctor_commission_invoice') }}">
@@ -43,7 +43,8 @@
                             </div>
                         </div>
                     {% endif %}
-                    {% if is_granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") or is_granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") or app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") %}
+
                         <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                             <div class="dashboard-stat yellow">
                                 <a class="visual" href="{{ path('hms_invoice_particular') }}">
