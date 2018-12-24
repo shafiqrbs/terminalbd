@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * HotelParticular
+ * HotelOption
  *
  * @ORM\Table( name = "hotel_option")
  * @ORM\Entity(repositoryClass="")
@@ -48,14 +48,19 @@ class HotelOption
 	private $particularViewPositions;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="complimentary" )
+	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="complimentary" )
 	 **/
 	private $particularComplimentary;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="amenities" )
+	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="amenities" )
 	 **/
 	private $particularAmenities;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="roomFloor" )
+	 **/
+	private $particularRoomFloors;
 
 	/**
 	 * @var string

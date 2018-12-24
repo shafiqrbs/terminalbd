@@ -213,19 +213,7 @@
                     </div>
                 </div>
             </div>
-            <div class="portlet box green">
-                <div class="portlet-body">
-                    <div class="row-fluid" >
-                        <div class="span12">
-                            <div id="optionsYearlyMonthlyPurchase" style="height: 330px; width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-    </div>
+        </div>
     </div>
 
 
@@ -309,33 +297,6 @@
     }]
     };
     $("#optionsYearlyMonthlySales").CanvasJSChart(optionsYearlyMonthlySales);
-
-    var optionsYearlyMonthlyPurchase = {
-    animationEnabled: true,
-    title: {
-    text: "Monthly Purchase - {{ "now"|date("Y") }}"
-    },
-    axisY: {
-    title: "",
-    suffix: "",
-    includeZero: false
-    },
-    axisX: {
-    title: "Monthly Purchase - {{ "now"|date("Y") }} "
-    },
-    data: [{
-    type: "column",
-    yValueFormatString: "#,##0.0#",
-    dataPoints: [
-    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
-    {% for key,month in months %}
-        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlyPurchase|keys %}{{ monthlyPurchase[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlyPurchase|keys %}{{ monthlyPurchase[key]|number_format }}{% endif %}" },
-    {% endfor %}
-    ]
-    }]
-    };
-    $("#optionsYearlyMonthlyPurchase").CanvasJSChart(optionsYearlyMonthlyPurchase);
-
     }
 
 {% endblock %}

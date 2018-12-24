@@ -67,6 +67,21 @@ function jqueryTemporaryLoad() {
         }
     });
 
+    $(document).on("click", ".toggle", function(e) {
+
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        $.get(url, function(data) {
+            $('#room-'+id).html(data);
+        });
+        $("#show-"+id).slideToggle(100);
+    }).toggle( function() {
+        $(this).children("span").text("[-]");
+    }, function() {
+        $(this).children("span").text("[+]");
+    });
+
+
     $(".booking-roomx").click(function(){
         var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
@@ -143,14 +158,18 @@ function jqueryTemporaryLoad() {
         var bookingEndDate = $('#bookingEndDate').val();
         var process = $('#processStatus').val();
         var category = $('#category').val();
+        var type = $('#type').val();
+        var floor = $('#floor').val();
         if(bookingStartDate === "" || bookingStartDate === "" ){
             return false;
         }
-        $.get(url,{'bookingStartDate':bookingStartDate,'bookingEndDate':bookingEndDate,'process':process,'category':category}, function( response ) {
+        $.get(url,{'bookingStartDate':bookingStartDate,'bookingEndDate':bookingEndDate,'process':process,'category':category,'type':type,'floor':floor}, function( response ) {
             obj = JSON.parse(response);
             $('#bookingLoad').html(obj['data']);
             $('#date').html(obj['date']);
         });
+        e.stopImmediatePropagation();
+        e.preventDefault();
     });
 
 

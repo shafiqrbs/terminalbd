@@ -2,6 +2,10 @@ account_sales_hospital:
     path:     /sales
     defaults: { _controller: "AccountingBundle:AccountHospital:sales" }
 
+account_sales_hospital_new:
+    path:     /sales-new
+    defaults: { _controller: "AccountingBundle:AccountHospital:purchaseNew" }
+
 account_purchase_hospital:
     path:     /purchase
     defaults: { _controller: "AccountingBundle:AccountHospital:purchase" }

@@ -22,6 +22,10 @@ hotel_stock:
     resource: "@HotelBundle/Resources/config/routing/stock.yml"
     prefix:   /stock
 
+hotel_room:
+    resource: "@HotelBundle/Resources/config/routing/room.yml"
+    prefix:   /room
+
 hotel_product:
     resource: "@HotelBundle/Resources/config/routing/product.yml"
     prefix:   /product
@@ -37,6 +41,10 @@ hotel_damage:
 hotel_category:
     resource: "@HotelBundle/Resources/config/routing/category.yml"
     prefix:   /category
+
+hotel_option:
+    resource: "@HotelBundle/Resources/config/routing/option.yml"
+    prefix:   /option
 
 hotel_config:
     resource: "@HotelBundle/Resources/config/routing/config.yml"

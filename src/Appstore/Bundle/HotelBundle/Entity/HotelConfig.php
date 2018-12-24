@@ -128,23 +128,38 @@ class HotelConfig
 
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="vatPercentage", type="smallint",  nullable=true)
+     * @ORM\Column(name="vatForHotel", type="float",  nullable=true)
      */
-    private $vatPercentage;
+    private $vatForHotel;
+
+	/**
+     * @var float
+     *
+     * @ORM\Column(name="vatForRestaurant", type="float",  nullable=true)
+     */
+    private $vatForRestaurant;
+
+	/**
+     * @var float
+     *
+     * @ORM\Column(name="serviceCharge", type="float",  nullable=true)
+     */
+    private $serviceCharge;
+
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="fontSizeLabel", type="smallint",  nullable=true)
+     * @ORM\Column(name="fontSizeLabel", type="float",  nullable=true)
      */
     private $fontSizeLabel;
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="fontSizeValue", type="smallint",  nullable=true)
+     * @ORM\Column(name="fontSizeValue", type="float",  nullable=true)
      */
     private $fontSizeValue;
 
@@ -164,17 +179,17 @@ class HotelConfig
     private $vatEnable = false;
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="printMarginTop", type="smallint",  nullable=true)
+     * @ORM\Column(name="printMarginTop", type="float",  nullable=true)
      */
     private $printTopMargin = 0;
 
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="printMarginBottom", type="smallint",  nullable=true)
+     * @ORM\Column(name="printMarginBottom", type="float",  nullable=true)
      */
     private $printMarginBottom = 0;
 
@@ -194,16 +209,16 @@ class HotelConfig
     private $headerRightWidth = 0;
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="printMarginReportTop", type="smallint",  nullable=true)
+     * @ORM\Column(name="printMarginReportTop", type="float",  nullable=true)
      */
     private $printMarginReportTop = 0;
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="printMarginReportLeft", type="smallint",  nullable=true)
+     * @ORM\Column(name="printMarginReportLeft", type="float",  nullable=true)
      */
     private $printMarginReportLeft = 0;
 
@@ -288,9 +303,9 @@ class HotelConfig
 
 
     /**
-     * @var smallint
+     * @var float
      *
-     * @ORM\Column(name="printLeftMargin", type="smallint", nullable = true)
+     * @ORM\Column(name="printLeftMargin", type="float", nullable = true)
      */
     private $printLeftMargin = 0;
 
@@ -417,7 +432,7 @@ class HotelConfig
     }
 
     /**
-     * @return smallint
+     * @return float
      */
     public function getPrintLeftMargin()
     {
@@ -425,7 +440,7 @@ class HotelConfig
     }
 
     /**
-     * @param smallint $printLeftMargin
+     * @param float $printLeftMargin
      */
     public function setPrintLeftMargin($printLeftMargin)
     {
@@ -466,7 +481,7 @@ class HotelConfig
     }
 
     /**
-     * @return smallint
+     * @return float
      */
     public function getPrintMarginBottom()
     {
@@ -474,7 +489,7 @@ class HotelConfig
     }
 
     /**
-     * @param smallint $printMarginBottom
+     * @param float $printMarginBottom
      */
     public function setPrintMarginBottom($printMarginBottom)
     {
@@ -497,21 +512,6 @@ class HotelConfig
         $this->printer = $printer;
     }
 
-    /**
-     * @return smallint
-     */
-    public function getVatPercentage()
-    {
-        return $this->vatPercentage;
-    }
-
-    /**
-     * @param smallint $vatPercentage
-     */
-    public function setVatPercentage($vatPercentage)
-    {
-        $this->vatPercentage = $vatPercentage;
-    }
 
     /**
      * @return string
@@ -563,7 +563,7 @@ class HotelConfig
     }
 
     /**
-     * @return smallint
+     * @return float
      */
     public function getPrintTopMargin()
     {
@@ -571,7 +571,7 @@ class HotelConfig
     }
 
     /**
-     * @param smallint $printTopMargin
+     * @param float $printTopMargin
      */
     public function setPrintTopMargin($printTopMargin)
     {
@@ -645,7 +645,7 @@ class HotelConfig
     }
 
     /**
-     * @return smallint
+     * @return float
      */
     public function getPrintMarginReportTop()
     {
@@ -653,7 +653,7 @@ class HotelConfig
     }
 
     /**
-     * @param smallint $printMarginReportTop
+     * @param float $printMarginReportTop
      */
     public function setPrintMarginReportTop($printMarginReportTop)
     {
@@ -713,7 +713,7 @@ class HotelConfig
 
 
     /**
-     * @return smallint
+     * @return float
      */
     public function getPrintMarginReportLeft()
     {
@@ -721,7 +721,7 @@ class HotelConfig
     }
 
     /**
-     * @param smallint $printMarginReportLeft
+     * @param float $printMarginReportLeft
      */
     public function setPrintMarginReportLeft($printMarginReportLeft)
     {
@@ -729,7 +729,7 @@ class HotelConfig
     }
 
     /**
-     * @return smallint
+     * @return float
      */
     public function getFontSizeLabel()
     {
@@ -737,7 +737,7 @@ class HotelConfig
     }
 
     /**
-     * @param smallint $fontSizeLabel
+     * @param float $fontSizeLabel
      */
     public function setFontSizeLabel($fontSizeLabel)
     {
@@ -745,7 +745,7 @@ class HotelConfig
     }
 
     /**
-     * @return smallint
+     * @return float
      */
     public function getFontSizeValue()
     {
@@ -753,21 +753,13 @@ class HotelConfig
     }
 
     /**
-     * @param smallint $fontSizeValue
+     * @param float $fontSizeValue
      */
     public function setFontSizeValue($fontSizeValue)
     {
         $this->fontSizeValue = $fontSizeValue;
     }
 
-
-    /**
-     * @return HotelVendor
-     */
-    public function getHotelVendors()
-    {
-        return $this->hotelVendors;
-    }
 
     /**
      * @return HotelPurchase
@@ -1250,6 +1242,48 @@ class HotelConfig
 	 */
 	public function getHotelInvoiceTransactionSummary() {
 		return $this->hotelInvoiceTransactionSummary;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getVatForHotel(){
+		return $this->vatForHotel;
+	}
+
+	/**
+	 * @param float $vatForHotel
+	 */
+	public function setVatForHotel( float $vatForHotel ) {
+		$this->vatForHotel = $vatForHotel;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getVatForRestaurant(){
+		return $this->vatForRestaurant;
+	}
+
+	/**
+	 * @param float $vatForRestaurant
+	 */
+	public function setVatForRestaurant( float $vatForRestaurant ) {
+		$this->vatForRestaurant = $vatForRestaurant;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getServiceCharge(){
+		return $this->serviceCharge;
+	}
+
+	/**
+	 * @param float $serviceCharge
+	 */
+	public function setServiceCharge( float $serviceCharge ) {
+		$this->serviceCharge = $serviceCharge;
 	}
 
 

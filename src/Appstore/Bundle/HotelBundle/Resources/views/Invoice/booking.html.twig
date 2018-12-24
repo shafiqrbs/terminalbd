@@ -10,25 +10,47 @@
     <div class="portlet-body" style="background-color:#514f4f; padding-bottom: 0!important;">
         <form id="search" name="search" method="get">
         <div class="row-fluid">
-            <div class="span3">
+            <div class="span2">
                 <input type="text" required="required" class="m-wrap span12" value="{{ "now"|date("d-m-Y") }}" name="bookingStartDate" id="bookingStartDate">
             </div>
-            <div class="span3">
+            <div class="span2">
                 <input type="text" required="required" class="m-wrap span12" value="{{ "now"|date("d-m-Y") }}" name="bookingEndDate" id="bookingEndDate">
             </div>
-            <div class="span3">
-                <select class="m-wrap span12" name="category" id="category">
-                    <option value="">All Room Type</option>
-                    {% for category in categories  %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
+            <div class="span2">
+                <select name="category" id="category" class="m-wrap span12">
+                    <option value="" >--All Category--</option>
+                    {% for cat in options %}
+                        {% if cat.hotelParticularType.slug == 'room-category' %}
+                            <option value="{{ cat.id }}" {% if searchForm.category is defined and searchForm.category == cat.id %} selected="selected" {% endif %} >{{ cat.name }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>
-            <div class="span3">
+            <div class="span2">
+                <select name="type" id="type" class="m-wrap span12">
+                    <option value="" >--All Room Type--</option>
+                    {% for cat in options %}
+                        {% if cat.hotelParticularType.slug == 'room-type' %}
+                            <option value="{{ cat.id }}" {% if searchForm.category is defined and searchForm.category == cat.id %} selected="selected" {% endif %} >{{ cat.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="span2">
+                <select name="floor" id="floor" class="m-wrap span12">
+                    <option value="" >--All Floor--</option>
+                    {% for cat in options %}
+                        {% if cat.hotelParticularType.slug == 'floor' %}
+                            <option value="{{ cat.id }}" {% if searchForm.category is defined and searchForm.category == cat.id %} selected="selected" {% endif %} >{{ cat.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="span2">
                 <div class="btn-group input-append">
-                    <select class="m-wrap span12" name="processStatus" id="processStatus" >
+                    <select class="m-wrap span7" name="processStatus" id="processStatus" >
                         <option value="">All Status</option>
-                        {% set process = ['check-in','check-out','booked','available'] %}
+                        {% set process = ['available','check-in','booked'] %}
                         {% for process in process %}
                             <option value="{{ process }}">{{ process|capitalize }}</option>
                         {% endfor %}
@@ -39,21 +61,46 @@
         </div>
         </form>
     </div>
-    <div class="portlet-body form" id="bookingLoad">
+    <div class="portlet-body form" >
         {% if entities is not empty  %}
-            {% for entity in entities %}
-                <div class="row-fluid room-box">
-                    <div class="span5">{{ entity.name }}</div>
-                    <div class="span2 text-right">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</div>
-                    <div class="span2">BDT {{ entity.salesPrice }}</div>
-                    <div class="span1">{% if bookings[entity.id]['id'] is defined and bookings[entity.id]['id'] == entity.id  %} <button class="btn red mini {{ bookings[entity.id]['roomStatus'] }}">{{ bookings[entity.id]['roomStatus'] }}</button> {% else %}<button class="btn blue mini">Available</button>{% endif %}</div>
-                    <div class="span2">
-                        <a data-id="{{ entity.id }}" class="btn blue booking-room" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" href="javascript:"><i class="icon-plus-sign"></i> View & Process</a>
-                    </div>
-                </div>
-                <div id="room-{{ entity.id }}"></div>
-                <div id="form-{{ entity.id }}"></div>
-            {% endfor %}
+        <table class="table table-bordered table-striped table-condensed flip-content ">
+            <thead class="flip-content ">
+                <tr class="head-blue">
+                    <th class="numeric" ><i class="fa fa-th"></i> </th>
+                    <th class="numeric" >Category</th>
+                    <th class="numeric" >Name</th>
+                    <th class="numeric" >Room Mode</th>
+                    <th class="numeric" >Room Type</th>
+                    <th class="numeric" >View Position</th>
+                    <th class="numeric" >Floor</th>
+                    <th class="numeric" >Price</th>
+                    <th class="numeric" >Booking Date</th>
+                    <th class="numeric" >Status</th>
+                </tr>
+            </thead>
+            <tbody id="bookingLoad">
+                {% for entity in entities %}
+                    <tr>
+                        <td><span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span></td>
+                        <td class="numeric" >{% if entity.roomCategory is not empty %}{{ entity.roomCategory.name }}{% endif %}</td>
+                        <td class="numeric" >{{ entity.name }}</td>
+                        <td class="numeric" >{{ entity.hotelParticularType.name }}</td>
+                        <td class="numeric" >{% if entity.roomType is not empty %}{{ entity.roomType.name }}{% endif %}</td>
+                        <td class="numeric" >{% if entity.viewPosition is not empty %}{{ entity.viewPosition.name }}{% endif %}</td>
+                        <td class="numeric" >{% if entity.roomFloor is not empty %}{{ entity.roomFloor.name }}{% endif %}</td>
+                        <td class="numeric" >{{ entity.salesPrice }}</td>
+                        <td class="numeric" ></td>
+                        <td class="numeric">{% if bookings[entity.id]['id'] is defined and bookings[entity.id]['id'] == entity.id  %} <button class="btn red mini {{ bookings[entity.id]['roomStatus'] }}">{{ bookings[entity.id]['roomStatus'] }}</button> {% else %}<button class="btn blue mini">Available</button>{% endif %}</td>
+                    </tr>
+                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                        <td colspan="9">
+                            <div id="room-{{ entity.id }}"></div>
+                            <div id="form-{{ entity.id }}"></div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% endif %}
         <div class="clearfix"></div>
     </div>

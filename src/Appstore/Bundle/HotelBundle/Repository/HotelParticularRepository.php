@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HotelBundle\Repository;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceAccessories;
+use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelParticularMeta;
 use Appstore\Bundle\HotelBundle\Entity\HotelProductionElement;
 use Appstore\Bundle\HotelBundle\Entity\HotelProductionExpense;
@@ -63,13 +64,21 @@ class HotelParticularRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function findWithSearch($config, $data){
+    public function findWithSearch($config,$parent, $data){
 
-        $name = isset($data['name'])? $data['name'] :'';
+	    $sort = isset($data['sort'])? $data['sort'] :'e.name';
+	    $direction = isset($data['direction'])? $data['direction'] :'ASC';
+	    $name = isset($data['name'])? $data['name'] :'';
         $category = isset($data['category'])? $data['category'] :'';
         $type = isset($data['type'])? $data['type'] :'';
         $qb = $this->createQueryBuilder('e');
+	    $qb->join('e.hotelParticularType','pt');
+	    $qb->leftJoin('e.roomCategory','rc');
+	    $qb->leftJoin('e.roomType','rt');
+	    $qb->leftJoin('e.viewPosition','vp');
+	    $qb->leftJoin('e.roomFloor','rf');
         $qb->where('e.hotelConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('pt.parent = :parent')->setParameter('parent', $parent) ;
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }
@@ -81,7 +90,7 @@ class HotelParticularRepository extends EntityRepository
             $qb->andWhere("e.hotelParticularType = :type");
             $qb->setParameter('type', $type);
         }
-        $qb->orderBy('e.name','ASC');
+	    $qb->orderBy("{$sort}",$direction);
         $qb->getQuery();
         return  $qb;
     }
@@ -101,67 +110,61 @@ class HotelParticularRepository extends EntityRepository
 
 	public function getBookedRoom(HotelConfig $config,$data){
 
-		$startDate = isset($data['bookingStartDate'])? $data['bookingStartDate'] :'';
-		$endDate = isset($data['bookingEndDate'])? $data['bookingEndDate'] :'';
+		$bookings = $this->_em->getRepository('HotelBundle:HotelInvoiceParticular')->checkRoomProcessing($config->getId(),$data);
+		$roomIds = array();
+		$bookingIds = array();
+		/* @var $booking HotelInvoiceParticular */
+		foreach ($bookings as $booking){
+			$bookingIds[] = $booking['roomId'];
+			$roomIds[] = $booking['id'];
+		}
+		//var_dump($roomIds);
 		$process = isset($data['process'])? $data['process'] :'';
 		$category = isset($data['category'])? $data['category'] :'';
+		$type = isset($data['type'])? $data['type'] :'';
+		$floor = isset($data['floor'])? $data['floor'] :'';
 
-		$begin = new \DateTime( $data['bookingStartDate']);
-		$end = new \DateTime( $data['bookingEndDate'] );
-		$end = $end->modify( '+1 day' );
-
-		$interval = new \DateInterval('P1D');
-		$period = new \DatePeriod($begin, $interval ,$end);
-
-		$bookingDate =array();
-		foreach ($period as $key => $date) {
-			$bookingDate[] = (string)$date->format('d-m-Y');
-		}
 		$config =  $config->getId();
-		$qb = $this->createQueryBuilder('e');
-		$qb->join('e.category','c');
+		if(!empty($process) and $process == 'available') {
+			$qb = $this->createQueryBuilder('e');
+		}else{
+			$qb = $this->_em->createQueryBuilder();
+			$qb->from( 'HotelBundle:HotelInvoiceParticular', 'hip' );
+			$qb->join('hip.hotelParticular','e');
+		}
+		$qb->leftJoin('e.roomCategory','c');
+		$qb->leftJoin('e.roomType','t');
+		$qb->leftJoin('e.roomFloor','f');
 		$qb->join('e.hotelParticularType','hpt');
-		$qb->leftJoin('e.hotelInvoiceParticulars','ip');
-		$qb->select('e.id as id');
+		if(!empty($process) and $process == 'available') {
+			$qb->select('e');
+		}else{
+			$qb->select('hip');
+		}
 		$qb->where('e.hotelConfig = :config')->setParameter('config',$config);
 		$qb->andWhere('hpt.slug IN (:slugs)')->setParameter('slugs', array('room','package'));
 		if(!empty($process) and $process == 'available'){
-			//$qb->andWhere($qb->expr()->notIn('ip.process', array('check-in','booked')));
-		}elseif(!empty($process)){
-			$qb->andWhere('ip.process = :process')->setParameter('process',$process);
+			$qb->andWhere('e.id NOT IN(:ids)')->setParameter('ids',array_unique($bookingIds));
+		}elseif((empty($process) or  $process == 'booked' or $process == 'check-in')){
+			$qb->andWhere('hip.id IN(:ids)')->setParameter('ids',array_values($roomIds));
 		}
 		if(!empty($category)){
 			$qb->andWhere('c.id = :category')->setParameter('category',$category);
 		}
-		$orStatements = $qb->expr()->orX();
-		foreach ($period as $key => $date) {
-			$orStatements->add(
-				$qb->expr()->like('ip.bookingDate', $qb->expr()->literal('%' . (string)$date->format('d-m-Y') . '%'))
-			);
+		if(!empty($type)){
+			$qb->andWhere('t.id = :type')->setParameter('type',$type);
 		}
-		$qb->andWhere($orStatements);
-
-		/*
-		if (!empty($startDate)) {
-			$compareTo = new \DateTime($startDate);
-			$created =  $compareTo->format('Y-m-d 00:00:00');
-			$qb->andWhere("ip.startDate >= :created");
-			$qb->setParameter('created', $created);
+		if(!empty($floor)){
+			$qb->andWhere('f.id = :floor')->setParameter('floor',$floor);
 		}
-		if (!empty($endDate)) {
-			$compareTo = new \DateTime($endDate);
-			$createdEnd =  $compareTo->format('Y-m-d 23:59:59');
-			$qb->andWhere("ip.endDate <= :createdEnd");
-			$qb->setParameter('createdEnd', $createdEnd);
-		}*/
-		//$qb->groupBy('e.id');
-		$result = $qb->getQuery()->getArrayResult();
-		return $result;
+		$result = $qb->getQuery()->getResult();
+		$data = array('room' => $result,'booking' => $bookings);
+		return $data;
 	}
 
 	public function getAvailableRoom($config,$type,$booked = array()){
 
-    	$qb = $this->createQueryBuilder('e');
+		$qb = $this->createQueryBuilder('e');
        $qb->leftJoin('e.category','c');
        $qb->leftJoin('e.unit','u');
        $qb->join('e.hotelParticularType','p');

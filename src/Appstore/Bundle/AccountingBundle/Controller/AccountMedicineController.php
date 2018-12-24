@@ -190,7 +190,6 @@ class AccountMedicineController extends Controller
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
 	 */
 
-
 	public function salesNewAction()
     {
         $em = $this->getDoctrine()->getManager();

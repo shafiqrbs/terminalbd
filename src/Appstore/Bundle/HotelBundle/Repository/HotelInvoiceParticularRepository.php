@@ -158,6 +158,44 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 	}
 
+	public function checkRoomProcessing($config,$data)
+	{
+
+		$process = isset($data['process'])? $data['process'] :'';
+		$begin = new \DateTime( $data['bookingStartDate']);
+		$end = new \DateTime( $data['bookingEndDate'] );
+		$end = $end->modify( '+1 day' );
+
+		$interval = new \DateInterval('P1D');
+		$period = new \DatePeriod($begin, $interval ,$end);
+
+		$bookingDate =array();
+		foreach ($period as $key => $date) {
+			$bookingDate[] = (string)$date->format('d-m-Y');
+		}
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.hotelParticular','p');
+		$qb->join('p.hotelParticularType','hpt');
+		$qb->select('e.id as id , p.id as roomId');
+		$qb->where('p.hotelConfig = :config')->setParameter('config', $config);
+		if(!empty($process) and $process != 'available'){
+			$qb->andWhere('e.process = :process')->setParameter('process',$process);
+		}else{
+			$qb->andWhere('e.process IN (:process)')->setParameter('process',array('booked','check-in'));
+		}
+		$qb->andWhere('hpt.slug IN (:slugs)')->setParameter('slugs', array('room','package'));
+		$orStatements = $qb->expr()->orX();
+		foreach ($bookingDate as $date) {
+			$orStatements->add(
+				$qb->expr()->like('e.bookingDate', $qb->expr()->literal("%$date%"))
+			);
+		}
+		$qb->andWhere($orStatements);
+		return $result = $qb->getQuery()->getArrayResult();
+
+	}
+
+
 	public function getCheckinRoom(HotelConfig $config,$date){
 
 	   	$config =  $config->getId();
@@ -178,7 +216,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 	public function getBookedRoom(HotelConfig $config){
 
-		$date = date('d-m-Y');
+		 $date = date('d-m-Y');
 
 		$config =  $config->getId();
 		$qb = $this->createQueryBuilder('e');

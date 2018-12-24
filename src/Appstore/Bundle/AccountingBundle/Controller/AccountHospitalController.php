@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Form\AccountHmsPurchaseType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -54,7 +55,24 @@ class AccountHospitalController extends Controller
         ));
     }
 
-    /**
+	/**
+	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
+	 */
+
+	public function salesNewAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$entity = new AccountSales();
+		$form   = $this->salesCreateForm($entity);
+		return $this->render('AccountingBundle:AccountHospital:new.html.twig', array(
+			'entity' => $entity,
+			'form'   => $form->createView(),
+		));
+	}
+
+
+
+	/**
      * Lists all AccountSales entities.
      *
      */

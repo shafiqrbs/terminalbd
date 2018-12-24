@@ -3,6 +3,9 @@
 namespace Appstore\Bundle\HotelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\LocationBundle\Entity\Location;
@@ -50,7 +53,12 @@ class HotelParticular
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularRoomTypes" )
      **/
-    private $roomTypes;
+    private $roomType;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularRoomFloors" )
+     **/
+    private $roomFloor;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularCategories" )
@@ -63,14 +71,23 @@ class HotelParticular
     private $viewPosition;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularComplimentary" )
-     **/
+     * @ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption")
+     * @JoinTable(name="hotel_room_complimentary",
+     *      joinColumns={@JoinColumn(name="particular_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="hotel_option_id", referencedColumnName="id")}
+     *      )
+     */
     private $complimentary;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularAmenities" )
-     **/
+     * @ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption")
+     * @JoinTable(name="hotel_room_amenities",
+     *      joinColumns={@JoinColumn(name="particular_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="hotel_option_id", referencedColumnName="id")}
+     *      )
+     */
     private $amenities;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceParticular", mappedBy="hotelParticular" )
@@ -1058,74 +1075,89 @@ class HotelParticular
 		return $this->roomGalleries;
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getRoomTypes() {
-		return $this->roomTypes;
-	}
 
 	/**
-	 * @param mixed $roomTypes
-	 */
-	public function setRoomTypes( $roomTypes ) {
-		$this->roomTypes = $roomTypes;
-	}
-
-	/**
-	 * @return mixed
+	 * @return HotelOption
 	 */
 	public function getRoomCategory() {
 		return $this->roomCategory;
 	}
 
 	/**
-	 * @param mixed $roomCategory
+	 * @param HotelOption $roomCategory
 	 */
 	public function setRoomCategory( $roomCategory ) {
 		$this->roomCategory = $roomCategory;
 	}
 
 	/**
-	 * @return mixed
+	 * @return HotelOption
 	 */
 	public function getViewPosition() {
 		return $this->viewPosition;
 	}
 
 	/**
-	 * @param mixed $viewPosition
+	 * @param HotelOption $viewPosition
 	 */
 	public function setViewPosition( $viewPosition ) {
 		$this->viewPosition = $viewPosition;
 	}
 
 	/**
-	 * @return mixed
+	 * @return HotelOption
 	 */
 	public function getComplimentary() {
 		return $this->complimentary;
 	}
 
 	/**
-	 * @param mixed $complimentary
+	 * @param HotelOption $complimentary
 	 */
 	public function setComplimentary( $complimentary ) {
 		$this->complimentary = $complimentary;
 	}
 
 	/**
-	 * @return mixed
+	 * @return HotelOption
 	 */
 	public function getAmenities() {
 		return $this->amenities;
 	}
 
 	/**
-	 * @param mixed $amenities
+	 * @param HotelOption $amenities
 	 */
 	public function setAmenities( $amenities ) {
 		$this->amenities = $amenities;
+	}
+
+	/**
+	 * @return HotelOption
+	 */
+	public function getRoomType() {
+		return $this->roomType;
+	}
+
+	/**
+	 * @param HotelOption $roomType
+	 */
+	public function setRoomType( $roomType ) {
+		$this->roomType = $roomType;
+	}
+
+	/**
+	 * @return HotelOption
+	 */
+	public function getRoomFloor() {
+		return $this->roomFloor;
+	}
+
+	/**
+	 * @param HotelOption $roomFloor
+	 */
+	public function setRoomFloor( $roomFloor ) {
+		$this->roomFloor = $roomFloor;
 	}
 
 

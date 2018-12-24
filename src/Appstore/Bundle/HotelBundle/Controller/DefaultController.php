@@ -101,7 +101,7 @@ class DefaultController extends Controller
 	  	$this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->removeTemporaryRoom($user);
 	    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($config,$type = array('room','package'));
 	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getBookedRoom($config);
-		$categories = $this->getDoctrine()->getRepository('HotelBundle:Category')->findBy(array('status'=>1));
+	    $options = $this->getDoctrine()->getRepository('HotelBundle:HotelOption')->findBy(array('hotelConfig' => $config,'status'=>1),array('hotelParticularType' =>'asc' ));
 	    $books = array();
 	    foreach ($bookings as $booking){
 	    	$books[$booking['id']] = $booking;
@@ -110,7 +110,7 @@ class DefaultController extends Controller
 		    'date' => date('d-F-Y'),
 		    'entities' => $entities,
 		    'bookings' => $books,
-		    'categories' => $categories
+		    'options' => $options
 		 ));
 	    return New Response($html);
 
@@ -122,21 +122,17 @@ class DefaultController extends Controller
 	    $data = $_REQUEST;
 	    $user = $this->getUser();
 	    $config = $user->getGlobalOption()->getHotelConfig();
-	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getBookedRoom($config,$data);
-		var_dump($bookings);
-	    exit;
-	    //    $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getAvailableRoom($config, $type = array('room','package','service'),$bookings);
-
+	    $result = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->getBookedRoom($config,$data);
 	    $books = array();
-	    foreach ($bookings as $booking){
-		    $books[] = $booking['id'];
+	    foreach ($result['booking'] as $booking){
+		    $books[$booking['id']] = $booking;
 	    }
 	    $html = $this->renderView('HotelBundle:Invoice:bookingLoad.html.twig', array(
-		    'entities' => $entities,
+		    'entities' => $result['room'],
 		    'bookings' => $books,
+		    'searchForm' => $data,
 
 	    ));
-
 	    $resDate = date('d-F-Y',strtotime($data['bookingStartDate']));
 	    return new Response(json_encode(array('data' => $html,'date'=> $resDate)));
     }

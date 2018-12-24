@@ -1358,7 +1358,9 @@ class Builder extends ContainerAware
 			$menu['Hotel & Restaurant']->addChild('Master Data')
 			                            ->setAttribute('icon', 'icon icon-cog')
 			                            ->setAttribute('dropdown', true);
+			$menu['Hotel & Restaurant']['Master Data']->addChild('Room', array('route' => 'hotel_room'))->setAttribute('icon', 'icon-th-list');
 			$menu['Hotel & Restaurant']['Master Data']->addChild('Category', array('route' => 'hotel_category'))->setAttribute('icon', 'icon-th-list');
+			$menu['Hotel & Restaurant']['Master Data']->addChild('Option', array('route' => 'hotel_option'))->setAttribute('icon', 'icon-th-list');
 			$menu['Hotel & Restaurant']['Master Data']->addChild('Configuration', array('route' => 'hotel_config_manage'))->setAttribute('icon', 'icon-cog');
 		}
 		if ($securityContext->isGranted('ROLE_HOTEL_REPORT')) {
