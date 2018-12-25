@@ -20,6 +20,12 @@ hotel_particular_search:
     options:
             expose: true
 
+hotel_available_room_search:
+    path:     /available-room-search
+    defaults: { _controller: "HotelBundle:Invoice:availableRoom" }
+    options:
+            expose: true
+
 hotel_invoice_particular_search:
     path:     /invoice-particular-search
     defaults: { _controller: "HotelBundle:Invoice:autoParticularSearch" }

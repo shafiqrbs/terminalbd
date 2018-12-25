@@ -61,7 +61,7 @@ hotel_booking:
             expose: true
 
 hotel_booking_temporary_create:
-    path:      /{id}/booking-temporary-create
+    path:      /booking-temporary-create
     defaults: { _controller: HotelBundle:Default:createTemporary }
     methods:  POST
     options:

@@ -15,6 +15,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
@@ -886,6 +887,11 @@ class User extends BaseUser
 	protected $hotelDamage;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $hotelTemporary;
+
+	/**
 	 *  =========================================== Election System============================================
 	 */
 
@@ -1704,6 +1710,13 @@ class User extends BaseUser
 	 */
 	public function isEnabled(){
 		return $this->enabled;
+	}
+
+	/**
+	 * @return HotelTemporaryInvoice
+	 */
+	public function getHotelTemporary() {
+		return $this->hotelTemporary;
 	}
 
 

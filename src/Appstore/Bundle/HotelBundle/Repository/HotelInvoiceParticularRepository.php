@@ -216,8 +216,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 	public function getBookedRoom(HotelConfig $config){
 
-		 $date = date('d-m-Y');
-
+		$date = date('d-m-Y');
 		$config =  $config->getId();
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.hotelInvoice','h');
@@ -309,7 +308,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
             $data .= "<td>{$entity->getParticular()}</td>";
-            $data .= "<td>{$startDate}To{$endDate}</td>";
+            $data .= "<td>{$startDate} To {$endDate}</td>";
             $data .= "<td>{$entity->getGuestName()}/{$entity->getGuestMobile()}</td>";
             $data .= "<td>{$entity->getAdult()}</td>";
             $data .= "<td>{$entity->getChild()}</td>";

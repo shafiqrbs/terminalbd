@@ -29,9 +29,72 @@ function datePickerReload() {
 }
 */
 
-$("[id^=startPicker]").each(function() {
-    bindDatePicker(this);
-});
+/*
+
+var dateToday = new Date();
+var dates = $("#startDatex, #endDatex").datepicker({
+    defaultDate: "+1w",
+    changeMonth: true,
+    dateFormat: "dd-mm-yy",
+    numberOfMonths: 2,
+    minDate: dateToday,
+    onSelect: function(selectedDate) {
+        var option = this.id == "startDate" ? "minDate" : "maxDate",
+            instance = $(this).data("datepicker"),
+            date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+        dates.not(this).datepicker("option", option, date);
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        if(startDate !== '' && endDate  !== '' ){
+            $.ajax({
+                url: Routing.generate('hotel_available_room_search',{'bookingStartDate':startDate,'bookingEndDate':endDate}),
+                type: 'POST',
+                success: function (response) {
+                    obj = JSON.parse(response);
+                    $('#room-load').html(obj['rooms']);
+                    if(obj['msg'] === 'valid'){
+                        $('#addRoom').prop('disabled', false);
+                    }else{
+                        $('#addRoom').prop('disabled', true);
+                    }
+                }
+            })
+        }
+    }
+});*/
+$('#reservation').daterangepicker(
+    {
+        format: 'dd-MM-yyyy',
+        numberOfMonths: 2,
+        startDate: Date.today(),
+        minDate: Date.today(),
+        endDate: Date.today().add({ days: +1 }),
+        separator: ' To ',
+        onClose:'Close',
+        buttonClasses: ['btn-danger']
+    },
+    function(start, end) {
+        var startDate = start.toString('yyyy-MM-dd');
+        var endDate = end.toString('yyyy-MM-dd');
+        if(startDate !== '' && endDate  !== '' ){
+            $('#startDate').val(startDate);
+            $('#endDate').val(endDate);
+            $.ajax({
+                url: Routing.generate('hotel_available_room_search',{'bookingStartDate':startDate,'bookingEndDate':endDate}),
+                type: 'POST',
+                success: function (response) {
+                    obj = JSON.parse(response);
+                    $('#room-load').html(obj['rooms']);
+                    if(obj['msg'] === 'valid'){
+                        $('#addRoom').prop('disabled', false);
+                    }else{
+                        $('#addRoom').prop('disabled', true);
+                    }
+                }
+            })
+        }
+    }
+);
 
 
 $( "#mobile" ).autocomplete({
@@ -80,15 +143,12 @@ $(".addCustomer").click(function(){
 $(document).on('change', '#particular', function() {
 
     var particular = $('#particular').val();
-    var startDate = $('#startDate').val();
-    var endDate = $('#endDate').val();
     $.ajax({
-        url: Routing.generate('hotel_particular_search',{'id':particular,'startDate':startDate,'endDate':endDate}),
+        url: Routing.generate('hotel_particular_search',{'id':particular}),
         type: 'POST',
         success: function (response) {
             obj = JSON.parse(response);
             if(obj['msg'] === 'valid'){
-                $('#unit').html(obj['unit']);
                 $('#salesPrice').val(obj['salesPrice']);
                 $('#subTotal').html(obj['salesPrice']);
             }else{
@@ -148,6 +208,8 @@ var form = $("#stockInvoice").validate({
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
                 $('.due').html(obj['due']);
+                $('.vat').html(obj['vat']);
+                $('.serviceCharge').html(obj['serviceCharge']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
                 $('#paymentTotal').val(obj['due']);
@@ -175,6 +237,8 @@ $(document).on('change', '.quantity , .salesPrice', function() {
             $('.subTotal').html(obj['subTotal']);
             $('.netTotal').html(obj['netTotal']);
             $('.due').html(obj['due']);
+            $('.vat').html(obj['vat']);
+            $('.serviceCharge').html(obj['serviceCharge']);
             $('#paymentTotal').val(obj['due']);
             $('.payment').html(obj['payment']);
             $('.discount').html(obj['discount']);
@@ -198,6 +262,8 @@ $(document).on("click", ".particularDelete", function() {
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
                 $('.due').html(obj['due']);
+                $('.vat').html(obj['vat']);
+                $('.serviceCharge').html(obj['serviceCharge']);
                 $('#paymentTotal').val(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
@@ -275,6 +341,9 @@ $(document).on('change', '#invoice_discountCalculation', function(e) {
             $('.discount').html(obj['discount']);
             $('#due').val(obj['due']);
             $('.due').html(obj['due']);
+            $('.vat').html(obj['vat']);
+            $('.serviceCharge').html(obj['serviceCharge']);
+
         }
 
     })
@@ -390,6 +459,8 @@ var invoicePaymentForm = $("#invoicePaymentForm").validate({
                 $('#netTotal').html(obj['netTotal']);
                 $('#paymentTotal').val(obj['due']);
                 $('#discount').html(obj['discount']);
+                $('.vat').html(obj['vat']);
+                $('.serviceCharge').html(obj['serviceCharge']);
                 $('transaction[discount]').val('');
                 $('transaction[received]').val('');
             }

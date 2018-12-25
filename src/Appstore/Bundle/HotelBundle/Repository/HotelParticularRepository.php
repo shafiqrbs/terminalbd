@@ -165,10 +165,10 @@ class HotelParticularRepository extends EntityRepository
 	public function getAvailableRoom($config,$type,$booked = array()){
 
 		$qb = $this->createQueryBuilder('e');
-       $qb->leftJoin('e.category','c');
-       $qb->leftJoin('e.unit','u');
+        $qb->leftJoin('e.roomCategory','c');
+       $qb->leftJoin('e.roomType','t');
        $qb->join('e.hotelParticularType','p');
-       $qb->select('e.name as name,c.name as categoryName,u.name as unitName, e.id as id , e.salesPrice as salesPrice, e.particularCode as particularCode');
+       $qb->select('e.name as name,c.name as categoryName,t.name as type, e.id as id , e.salesPrice as salesPrice, e.particularCode as particularCode');
        $qb->where('e.hotelConfig = :config')->setParameter('config', $config);
        $qb->andWhere('e.status = :status')->setParameter('status', 1);
        $qb->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type));

@@ -218,6 +218,13 @@ class HotelInvoice
      */
     private $vat;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="serviceCharge", type="float", nullable=true)
+     */
+    private $serviceCharge;
+
     /**
      * @var float
      *
@@ -892,6 +899,20 @@ class HotelInvoice
 	 */
 	public function getHotelInvoiceTransactionSummary() {
 		return $this->hotelInvoiceTransactionSummary;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getServiceCharge(){
+		return $this->serviceCharge;
+	}
+
+	/**
+	 * @param float $serviceCharge
+	 */
+	public function setServiceCharge( float $serviceCharge ) {
+		$this->serviceCharge = $serviceCharge;
 	}
 
 }

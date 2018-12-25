@@ -52,28 +52,82 @@ $(document).on('click', '#booking', function() {
 
 function jqueryTemporaryLoad() {
 
-    var dateToday = new Date();
-    var dates = $("#bookingStartDate, #bookingEndDate").datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 2,
-        dateFormat: "dd-mm-yy",
-        minDate: dateToday,
-        onSelect: function(selectedDate) {
-            var option = this.id == "bookingStartDate" ? "minDate" : "maxDate",
-                instance = $(this).data("datepicker"),
-                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-            dates.not(this).datepicker("option", option, date);
+    $('#searchReservation').daterangepicker(
+        {
+            format: 'dd-MM-yyyy',
+            numberOfMonths: 2,
+            startDate: Date.today(),
+            minDate: Date.today(),
+            endDate: Date.today(),
+            separator: ' To ',
+        },
+        function(start, end) {
+            var startDate = start.toString('yyyy-MM-dd');
+            var endDate = end.toString('yyyy-MM-dd');
+            if(startDate !== '' && endDate  !== '' ){
+                $('#bookingStartDate').val(startDate);
+                $('#bookingEndDate').val(endDate);
+            }
         }
+    );
+
+    $('#tempReservation').daterangepicker(
+        {
+            format: 'dd-MM-yyyy',
+            numberOfMonths: 2,
+            startDate: Date.today(),
+            minDate: Date.today(),
+            endDate: Date.today(),
+            separator: ' To ',
+        },
+        function(start, end) {
+            var startDate = start.toString('yyyy-MM-dd');
+            var endDate = end.toString('yyyy-MM-dd');
+            if(startDate !== '' && endDate  !== '' ){
+                $('#tempBookingStartDate').val(startDate);
+                $('#tempBookingEndDate').val(endDate);
+                $.ajax({
+                    url: Routing.generate('hotel_available_room_search',{'bookingStartDate':startDate,'bookingEndDate':endDate}),
+                    type: 'POST',
+                    success: function (response) {
+                        obj = JSON.parse(response);
+                        $('#room-load').html(obj['rooms']);
+                        if(obj['msg'] === 'valid'){
+                            $('#addRoom').prop('disabled', false);
+                        }else{
+                            $('#addRoom').prop('disabled', true);
+                        }
+                    }
+                })
+            }
+        }
+    );
+
+    $(document).on('change', '#particular', function() {
+
+        var particular = $('#particular').val();
+        $.ajax({
+            url: Routing.generate('hotel_particular_search',{'id':particular}),
+            type: 'POST',
+            success: function (response) {
+                obj = JSON.parse(response);
+                if(obj['msg'] === 'valid'){
+                    $('#salesPrice').val(obj['salesPrice']);
+                    $('#subTotal').html(obj['salesPrice']);
+                }else{
+                    $("#particular").select2().select2("val","");
+                    alert(obj['msg']);
+                }
+           }
+        })
+
     });
+
 
     $(document).on("click", ".toggle", function(e) {
 
         var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
-        $.get(url, function(data) {
-            $('#room-'+id).html(data);
-        });
         $("#show-"+id).slideToggle(100);
     }).toggle( function() {
         $(this).children("span").text("[-]");
@@ -83,79 +137,26 @@ function jqueryTemporaryLoad() {
 
 
     $(".booking-roomx").click(function(){
-        var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
-        $.get(url, function( data ) {
-            $('#room-'+id).html(data).slideToggle( "slow" );
-        });
+        $('#room-'+id).html(data).slideToggle( "slow" );
     }).toggle( function() {
         $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
     }, function() {
         $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
     });
 
-
-    $(document).on("click", ".booking-room", function(e) {
-
-        var url = $(this).attr('data-url');
-        var id = $(this).attr('data-id');
-        $.get(url, function( data ) {
-            $('#room-'+id).html(data);
-        });
-    });
-
-    $(document).on("click", ".booking-form", function(e) {
-        var url = $(this).attr('data-url');
-        var id = $(this).attr('data-id');
-        $.get(url, function( data ) {
-            $('#form-'+id).html(data);
-        });
-    });
-
     $(document).on("click", ".room-cancel", function(e) {
         var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
         $.get(url, function( data ) {
-            $('form#stockInvoice-'+id)[0].reset();
+            $('#remove-'+id).remove();
         });
-    });
-
-    $(document).on("click", ".room-close", function(e) {
-        var id = $(this).attr('data-id');
-        $('#room-close-'+id).slideUp();
-    });
-
-
-    $(document).on('change', '.bookingEndDate', function(e) {
-
-        var particular = $(this).attr('data-id');
-        var startDate = $('#bookingStartDate-'+particular).val();
-        var endDate = $('#bookingEndDate-'+particular).val();
-        if(startDate !== '' && endDate  !== '' ){
-            $.ajax({
-                url: Routing.generate('hotel_particular_search',{'id':particular,'startDate':startDate,'endDate':endDate}),
-                type: 'POST',
-                success: function (response) {
-                    obj = JSON.parse(response);
-                    if(obj['msg'] === 'valid'){
-                        $('#addRoom-'+particular).prop('disabled', false);
-                    }else{
-                        alert(obj['msg']);
-                        var startDate = $('#bookingStartDate-'+particular).val('');
-                        var endDate = $('#bookingEndDate-'+particular).val('');
-                        $('#addRoom-'+particular).prop('disabled', true);
-
-                    }
-                }
-            })
-        }
-
     });
 
     $(document).on("click", "#bookingSearch", function(e) {
         var url = $(this).attr('data-url');
-        var bookingStartDate = $('#bookingStartDate').val();
-        var bookingEndDate = $('#bookingEndDate').val();
+        var bookingStartDate = $('#tempBookingStartDate').val();
+        var bookingEndDate = $('#tempBookingEndDate').val();
         var process = $('#processStatus').val();
         var category = $('#category').val();
         var type = $('#type').val();
@@ -175,15 +176,16 @@ function jqueryTemporaryLoad() {
 
     $(document).on('click', '.booking-submit', function(e) {
 
-        var particular = $(this).attr('data-id');
         $.ajax({
-            url         : $('form#stockInvoice-'+particular).attr( 'action' ),
-            type        : $('form#stockInvoice-'+particular).attr( 'method' ),
-            data        : new FormData($('form#stockInvoice-'+particular)[0]),
+            url         : $('form#stockInvoice').attr( 'action' ),
+            type        : $('form#stockInvoice').attr( 'method' ),
+            data        : new FormData($('form#stockInvoice')[0]),
             processData : false,
             contentType : false,
             success: function(response){
-               alert('This room is booked temporarily.');
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('.subTotal').html(obj['subTotal']);
             }
         });
     })

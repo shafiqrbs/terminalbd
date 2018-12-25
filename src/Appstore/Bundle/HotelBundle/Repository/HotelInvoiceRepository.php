@@ -450,14 +450,25 @@ class HotelInvoiceRepository extends EntityRepository
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         if($subTotal > 0){
 
-            if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getHotelConfig()->getVatPercentage() > 0) {
+            if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getHotelConfig()->getServiceCharge() > 0) {
                 $totalAmount = ($subTotal- $invoice->getDiscount());
-                $vat = $this->getCulculationVat($invoice,$totalAmount);
+                $service = $this->getCalculationService($invoice,$totalAmount);
+                $invoice->setServiceCharge($service);
+            }
+            if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getInvoiceFor() == "hotel" && $invoice->getHotelConfig()->getVatForHotel() > 0) {
+                $totalAmount = ($subTotal- $invoice->getDiscount());
+                $vat = $this->getCalculationVat($invoice,$totalAmount);
                 $invoice->setVat($vat);
             }
+			if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getInvoiceFor() == "restaurant" && $invoice->getHotelConfig()->getVatForRestaurant() > 0) {
+                $totalAmount = ($subTotal- $invoice->getDiscount());
+                $vat = $this->getCalculationRestaurant($invoice,$totalAmount);
+                $invoice->setVat($vat);
+            }
+
             $invoice->setSubTotal($subTotal);
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
-            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() + $invoice->getServiceCharge() - $invoice->getDiscount());
             $invoice->setDue($invoice->getTotal() - $invoice->getReceived() );
 
         }else{
@@ -467,6 +478,7 @@ class HotelInvoiceRepository extends EntityRepository
             $invoice->setDue(0);
             $invoice->setDiscount(0);
             $invoice->setVat(0);
+            $invoice->setServiceCharge(0);
         }
 
         $em->persist($invoice);
@@ -651,9 +663,21 @@ class HotelInvoiceRepository extends EntityRepository
         return $discount;
     }
 
-    public function getCulculationVat(HotelInvoice $sales,$totalAmount)
+    public function getCalculationVat(HotelInvoice $sales,$totalAmount)
     {
-        $vat = ( ($totalAmount * (int)$sales->getHotelConfig()->getVatPercentage())/100 );
+        $vat = ( ($totalAmount * (int)$sales->getHotelConfig()->getVatForHotel())/100 );
+        return round($vat);
+    }
+	
+    public function getCalculationRestaurant(HotelInvoice $sales,$totalAmount)
+    {
+        $vat = ( ($totalAmount * (int)$sales->getHotelConfig()->getVatForRestaurant())/100 );
+        return round($vat);
+    }
+    
+    public function getCalculationService(HotelInvoice $sales,$totalAmount)
+    {
+        $vat = ( ($totalAmount * (int)$sales->getHotelConfig()->getServiceCharge())/100 );
         return round($vat);
     }
 

@@ -24,15 +24,16 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class HotelTemporaryInvoiceRepository extends EntityRepository
 {
 
-	public function insertTemporaryRoom(User $user , HotelParticular $particular, $data)
+	public function insertTemporaryRoom(User $user , $data)
     {
 
-	    $start = strtotime($data['startDate']);
-	    $end = strtotime($data['endDate']);
+	    $room = $data['particular'];
+	    $start = strtotime($data['tempBookingStartDate']);
+	    $end = strtotime($data['tempBookingEndDate']);
 	    $quantity = ceil(abs($end - $start) / 86400)+1;
 
-	    $begin = new \DateTime( $data['startDate']);
-	    $end = new \DateTime( $data['endDate'] );
+	    $begin = new \DateTime( $data['tempBookingStartDate']);
+	    $end = new \DateTime( $data['tempBookingEndDate'] );
 	    $end = $end->modify( '+1 day' );
 
 	    $interval = new \DateInterval('P1D');
@@ -44,6 +45,7 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 	    }
 
 	    $em = $this->_em;
+	    $particular = $this->_em->getRepository('HotelBundle:HotelParticular')->find($room);
 	    $existRoom = $this->findOneBy(array('createdBy'=> $user, 'hotelParticular'=>$particular));
 	    if(!empty($existRoom)){
 		    $entity =  $existRoom;
@@ -58,8 +60,8 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 	    $entity->setGuestMobile($data['guestMobile']);
 	    $entity->setChild($data['child']);
 	    $entity->setAdult($data['adult']);
-	    $entity->setStartDate((new \DateTime( $data['startDate'])));
-	    $entity->setEndDate((new \DateTime( $data['endDate'])));
+	    $entity->setStartDate((new \DateTime( $data['tempBookingStartDate'])));
+	    $entity->setEndDate((new \DateTime( $data['tempBookingEndDate'])));
 	    $entity->setBookingDate($bookingDate);
 	    $entity->setPrice($data['salesPrice']);
 	    $entity->setPurchasePrice($particular->getPurchasePrice());
@@ -127,6 +129,48 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 	    }
 	    return $entity;
     }
+
+	public function getSalesItems(User $user)
+	{
+		$entities = $user->getHotelTemporary();
+		$data = '';
+		$i = 1;
+
+		/* @var $entity HotelInvoiceParticular */
+
+		foreach ($entities as $entity) {
+
+			$startDate =  $entity->getStartDate()->format('d-m-Y');
+			$endDate =  $entity->getEndDate()->format('d-m-Y');
+
+			$data .= "<tr id='remove-{$entity->getId()}'>";
+			$data .= "<td>{$i}.</td>";
+			$data .= "<td>{$entity->getHotelParticular()->getName()}</td>";
+			$data .= "<td>{$startDate} To {$endDate}</td>";
+			$data .= "<td>{$entity->getGuestName()}/{$entity->getGuestMobile()}</td>";
+			$data .= "<td>{$entity->getAdult()}</td>";
+			$data .= "<td>{$entity->getChild()}</td>";
+			$data .= "<td>{$entity->getPrice()}</td>";
+			$data .= "<td>{$entity->getQuantity()}</td>";
+			$data .= "<td>{$entity->getSubTotal()}</td>";
+			$data .= "<td>";
+			$data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/hotel/{$entity->getId()}/booking-room-reset' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
+			$data .= "</td>";
+			$data .= '</tr>';
+			$i++;
+		}
+		return $data;
+	}
+
+	public function getSubTotalAmount(User $user)
+	{
+		$qb = $this->createQueryBuilder('e');
+		$qb->join('e.createdBy','u');
+		$qb->select('SUM(e.subTotal) AS subTotal');
+		$qb->where('u.id = :user')->setParameter('user', $user->getId());
+		$res = $qb->getQuery()->getOneOrNullResult();
+		return $res;
+	}
 
     public function removeTemporaryRoom(User $user)
     {
