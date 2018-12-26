@@ -516,15 +516,7 @@
                                                                 <div class="span8">
                                                                     <div class="fileupload fileupload-new" data-provides="fileupload">
                                                                         <div class="input-append span12">
-                                                                            <div class="uneditable-input">
-                                                                                <i class="icon-file fileupload-exists"></i>
-                                                                                <span class="fileupload-preview"></span>
-                                                                            </div>
-                                                                            <span class="btn yellow btn-file">
-                                                                            <span class="fileupload-new">Select File</span>
-                                                                            <span class="fileupload-exists">Change</span>
-                                                                            <input type="file" name="file" id="file"  class="default span12">
-                                                                            </span><a href="#" class="btn red fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                                                            <input type="file" name="file" id="file"  class="default">
                                                                             <button type="button"  class="btn blue addInvestigation" id="" data-id="{{ service.slug }}" data-tab="tab-{{ service.slug }}"  data-url="{{ path('dms_invoice_investigation_procedure',{'invoice':entity.id,'service':service.slug}) }}" ><i class="icon-save"></i> Upload</button>
                                                                         </div>
                                                                     </div>
