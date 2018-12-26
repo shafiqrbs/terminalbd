@@ -211,13 +211,14 @@ class PurchaseSimpleController extends Controller
         $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
         $em->getRepository('InventoryBundle:StockItem')->insertPurchaseStockItem($purchase);
         $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($purchase);
-        if($purchase->getAsInvestment() == 1){
+        /*if($purchase->getAsInvestment() == 1){
             $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountPurchaseJournal($purchase);
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
         }
         $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($purchase);
         $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($purchase,$accountPurchase);
+        */
         return new Response(json_encode(array('success'=>'success')));
 
     }

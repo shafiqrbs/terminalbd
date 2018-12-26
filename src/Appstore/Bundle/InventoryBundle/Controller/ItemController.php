@@ -509,7 +509,7 @@ class ItemController extends Controller
 
     }
 
-    public function updatePurchaseQuantity()
+    public function updatePurchaseQuantityAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
@@ -517,14 +517,37 @@ class ItemController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $items = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findItemWithPurchaseQuantity($inventory);
         foreach ($items as $row){
-           $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($row['item']);
+           $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($row['itemId']);
            $item->setPurchaseQuantity($row['quantity']);
            $em->flush();
         }
         return $this->redirect($this->generateUrl('item'));
     }
 
-
+	public function updateStockQuantityAction()
+	{
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$em = $this->getDoctrine()->getManager();
+		$inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+		$items = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findItemWithPurchaseQuantity($inventory);
+		foreach ($items as $row){
+			$item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($row['itemId']);
+			$salesQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'sales');
+			$salesReturnQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'salesReturn');
+			$purchaseReturnQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'purchaseReturn');
+			$damageQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getItemQuantity($row['itemId'],'damage');
+			$item->setPurchaseQuantity($row['quantity']);
+			$item->setSalesQuantity($salesQnt);
+			$item->setSalesQuantityReturn($salesReturnQnt);
+			$item->setPurchaseQuantityReturn($purchaseReturnQnt);
+			$item->setPurchaseQuantityReturn($damageQnt);
+			$remainingQnt = ($item->getPurchaseQuantity() + $item->getSalesQuantityReturn()) - ($item->getSalesQuantity() + $item->getPurchaseQuantityReturn()+$item->getDamageQuantity());
+			$item->setRemainingQnt($remainingQnt);
+			$em->flush();
+		}
+		return $this->redirect($this->generateUrl('item'));
+	}
 
 	public function inlineUpdateAction(Request $request)
 	{
@@ -534,6 +557,7 @@ class ItemController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
 		}
+
 		if($data['name'] == 'SalesPrice' and 0 < (float)$data['value']){
 			$process = 'set'.$data['name'];
 			$entity->$process((float)$data['value']);
