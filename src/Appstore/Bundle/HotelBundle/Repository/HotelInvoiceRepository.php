@@ -450,7 +450,7 @@ class HotelInvoiceRepository extends EntityRepository
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         if($subTotal > 0){
 
-            if ($invoice->getHotelConfig()->getVatEnable() == 1 && $invoice->getHotelConfig()->getServiceCharge() > 0) {
+            if ($invoice->getHotelConfig()->getServiceCharge() > 0) {
                 $totalAmount = ($subTotal- $invoice->getDiscount());
                 $service = $this->getCalculationService($invoice,$totalAmount);
                 $invoice->setServiceCharge($service);
