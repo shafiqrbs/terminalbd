@@ -8,6 +8,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -143,6 +144,11 @@ class AccountCash
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $preOrderPayments;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountCashes" )
+	 **/
+	private  $toUser;
 
     /**
      * @var string
@@ -687,6 +693,20 @@ class AccountCash
 	 */
 	public function setBalanceTransfer( $balanceTransfer ) {
 		$this->balanceTransfer = $balanceTransfer;
+	}
+
+	/**
+	 * @return User
+	 */
+	public function getToUser() {
+		return $this->toUser;
+	}
+
+	/**
+	 * @param User $toUser
+	 */
+	public function setToUser( $toUser ) {
+		$this->toUser = $toUser;
 	}
 
 

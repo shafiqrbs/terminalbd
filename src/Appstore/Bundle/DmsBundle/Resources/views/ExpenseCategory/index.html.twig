@@ -63,11 +63,11 @@
                                         <td class="numeric">{% if entity.parent is not empty %}{{ entity.parent.name|default('---') }}{% endif %}</td>
                                         <td class="numeric">{% if entity.accountHead is not empty %}{{ entity.accountHead.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >
-                                            {% if( entity.status == 1) %}
+                                           {# {% if( entity.status == 1) %}
                                                 <a class="btn mini green-stripe btn-action" href="{{ path('dms_expensecategory_status', { 'id': entity.id}) }}"><span class="badge badge-success">x</span></a>
                                             {% else %}
                                                 <a class="btn mini green-stripe btn-action" href="{{ path('dms_expensecategory_status', { 'id': entity.id}) }}"><span class="badge badge-important">a</span>    </a>
-                                            {% endif %}
+                                            {% endif %}#}
                                             <a class="btn mini green-stripe btn-action" href="{{ path('dms_expensecategory_edit', { 'id': entity.id }) }}">Edit</a>
                                             <a class="btn mini blue-stripe btn-action" href="{{ path('dms_expensecategory_show', { 'id': entity.id }) }}">View</a>
                                             <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('dms_expensecategory_delete', { 'id': entity.id }) }}" >Delete</a>

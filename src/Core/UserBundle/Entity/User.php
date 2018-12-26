@@ -2,6 +2,7 @@
 
 namespace Core\UserBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Branch;
@@ -366,6 +367,11 @@ class User extends BaseUser
 
 	/* ----------------------------------Accounting------------------*/
 
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="toUser" , cascade={"persist", "remove"} )
+	 */
+	protected $accountCashes;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="createdBy" , cascade={"persist", "remove"} )
@@ -1717,6 +1723,13 @@ class User extends BaseUser
 	 */
 	public function getHotelTemporary() {
 		return $this->hotelTemporary;
+	}
+
+	/**
+	 * @return AccountCash
+	 */
+	public function getAccountCashes() {
+		return $this->accountCashes;
 	}
 
 

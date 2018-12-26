@@ -271,9 +271,6 @@ function InventoryPurchasePage(){
             "purchase[totalAmount]": {placement:'top',html:true},
             "purchase[paymentAmount]": {placement:'top',html:true}
 
-        },
-        submitHandler: function() {
-            $("#purchaseForm").submit();
         }
 
     });

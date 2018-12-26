@@ -41,8 +41,8 @@ class DmsInvoiceRepository extends EntityRepository
         $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
-        $createdStart = isset($data['createdStart'])? $data['createdStart'] :'';
-        $createdEnd = isset($data['createdEnd'])? $data['createdEnd'] :'';
+	    $startDate = isset($data['createdStart'])? $data['createdStart'] :'';
+        $endDate = isset($data['createdEnd'])? $data['createdEnd'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
@@ -56,21 +56,19 @@ class DmsInvoiceRepository extends EntityRepository
             $qb->join('e.customer','m');
             $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
         }
-        if (!empty($createdStart)) {
-            $compareTo = new \DateTime($createdStart);
-            $created =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.created >= :created");
-            $qb->setParameter('created', $created);
-        }
+	    if (!empty($startDate)) {
+		    $datetime = new \DateTime($startDate);
+		    $start = $datetime->format('Y-m-d 00:00:00');
+		    $qb->andWhere("e.created >= :startDate")->setParameter('startDate',$start);
+	    }
 
-        if (!empty($createdEnd)) {
-            $compareTo = new \DateTime($createdEnd);
-            $createdEnd =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.created <= :createdEnd");
-            $qb->setParameter('createdEnd', $createdEnd);
-        }
+	    if (!empty($endDate)) {
+		    $datetime = new \DateTime($endDate);
+		    $end = $datetime->format('Y-m-d 23:59:59');
+		    $qb->andWhere("e.created <= :endDate")->setParameter('endDate',$end);
+	    }
 
-        if(!empty($assignDoctor)){
+	    if(!empty($assignDoctor)){
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
         }

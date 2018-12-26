@@ -383,6 +383,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setAccountMobileBank($entity->getAccountMobileBank());
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountJournal($entity);
+        $cash->setToUser($entity->getToUser());
         $cash->setTransactionMethod($entity->getTransactionMethod());
         $cash->setProcessHead($processHead);
         $cash->setAccountRefNo($entity->getAccountRefNo());
@@ -660,7 +661,8 @@ class AccountCashRepository extends EntityRepository
             $cash->setBranches($entity->getBranches());
         }
         $cash->setExpenditure($entity);
-        $cash->setTransactionMethod($entity->getTransactionMethod());
+	    $cash->setToUser($entity->getToUser());
+	    $cash->setTransactionMethod($entity->getTransactionMethod());
         $cash->setAccountBank($entity->getAccountBank());
         $cash->setAccountMobileBank($entity->getAccountMobileBank());
         $cash->setProcessHead('Expenditure');

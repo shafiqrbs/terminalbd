@@ -345,7 +345,7 @@ class AccountJournalController extends Controller
 	public function journalReverseAction(AccountJournal $entity){
 
 		$em = $this->getDoctrine()->getManager();
-		$this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountReverse($entity);
+		$this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountReverse($entity);
 		$entity->setProcess(null);
 		$entity->setApprovedBy(null);
 		$entity->setAmount(0);

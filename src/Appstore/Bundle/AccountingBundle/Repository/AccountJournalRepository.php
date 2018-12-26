@@ -134,9 +134,7 @@ class AccountJournalRepository extends EntityRepository
                 $qb->andWhere("e.updated <= :endDate");
                 $qb->setParameter('endDate', $endDate.' 23:59:59');
             }
-
         }
-
     }
 
     public function accountJournalOverview($globalOption,$data)
@@ -150,7 +148,6 @@ class AccountJournalRepository extends EntityRepository
         $endDate =   isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate'].' 23:59:59' : $today_enddatetime;
         $toUser =    isset($data['toUser'])? $data['toUser'] :'';
         $accountHead = isset($data['accountHead'])? $data['accountHead'] :'';
-
 
         $qb->from('AccountingBundle:AccountJournal','s');
         $qb->select('sum(s.amount) as amount');
@@ -195,7 +192,7 @@ class AccountJournalRepository extends EntityRepository
     }
 
 
-    public function   insertAccountPurchaseJournal(Purchase $purchase)
+    public function  insertAccountPurchaseJournal(Purchase $purchase)
     {
         $journalSource = "inventory-{$purchase->getId()}";
         $entity = new AccountJournal();
@@ -318,7 +315,7 @@ class AccountJournalRepository extends EntityRepository
 		$em = $this->_em;
 		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Journal'");
 		$transaction->execute();
-		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Journal'");
+		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountJournal =".$entity->getId()." AND e.processHead = 'Journal'");
 		$accountCash->execute();
 	}
 

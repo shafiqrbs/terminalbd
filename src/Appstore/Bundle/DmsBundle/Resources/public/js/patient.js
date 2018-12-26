@@ -10,6 +10,8 @@ $( ".dateCalendar" ).datepicker({
 });
 
 
+
+
 $(document).on('click', '.addPatient', function() {
 
     $('.dialogModal_header').html('Patient Information');
