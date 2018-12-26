@@ -153,12 +153,12 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if entity.process != 'approved' %}
-                                        {% if entity.purchaseVendorItems is empty %}
-                                            <a href="{{ path('inventory_purchasesimple_edit', { 'id': entity.id }) }}" class="btn green" ><i class="icon-edit"></i></a>
-                                        {% endif %}
+                                        <a href="{{ path('inventory_purchasesimple_edit', { 'id': entity.id }) }}" class="btn green" ><i class="icon-edit"></i></a>
+                                    {% endif %}
                                     {% if (("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process == 'approved' and app.user.granted("ROLE_DOMAIN_INVENTORY_REVERSE")) or (entity.process == 'approved' and app.user.granted("ROLE_DOMAIN")) %}
                                         <a href="{{ path('inventory_purchasesimple_reverse', { 'id': entity.id }) }}" class="btn purple" ><i class="icon-retweet"></i> Reverse</a>
                                     {% endif %}
+
                                     {% if ((app.user.granted("ROLE_DOMAIN")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY_APPROVAL")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'complete') )  %}
                                         <a class="btn purple approve"  data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('inventory_purchasesimple_approve', { 'id': entity.id,'reject':'reject'  }) }}" ><i class="icon-refresh"></i>&nbsp;Reject</a>
                                         <a class="btn green approve approved-{{ entity.id }}" data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('inventory_purchasesimple_approve', { 'id': entity.id }) }}"><i class="icon-ok"></i>&nbsp;Approve</a>
