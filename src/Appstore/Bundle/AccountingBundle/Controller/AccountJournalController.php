@@ -288,7 +288,9 @@ class AccountJournalController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity,'Journal');
+            if(!empty($entity->getTransactionMethod())){
+	            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity,'Journal');
+            }
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
             return new Response('success');
         } else {

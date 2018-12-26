@@ -77,3 +77,19 @@ medicine_medicine_reverse:
 medicine_homepage:
     path:     /
     defaults: { _controller: MedicineBundle:Default:index }
+
+medicine_update_expiration:
+    path:     /update-expiration-medicine
+    defaults: { _controller: MedicineBundle:Default:updateExpirationMedicine }
+
+medicine_particular_migration:
+    path:     /{id}/copy-particular-migration
+    defaults: { _controller: MedicineBundle:Default:copyToMedicineParticular }
+
+medicine_stock_migration:
+    path:     /{id}/copy-stock-migration
+    defaults: { _controller: MedicineBundle:Default:copyToMedicineStock }
+
+medicine_vendor_migration:
+    path:     /{id}/copy-vendor-migration
+    defaults: { _controller: MedicineBundle:Default:copyToMedicineVendor }
