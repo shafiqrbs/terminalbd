@@ -54,16 +54,16 @@
                                     <div class="span2">
                                         <input type="text" id="grn" name="grn"  class="leftMargin span12 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="Enter purchase grn no">
                                     </div>
-                                    <div class="span3">
+                                    <div class="span4">
                                         <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" >
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="endDate" name="endDate"  class="span10 m-wrap search-input  m-ctrl-medium datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <input type="text" id="endDate" name="endDate"  class="span10 m-wrap search-input  m-ctrl-medium dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -101,7 +101,8 @@
                                     <th class="numeric" >Company Name</th>
                                     <th class="numeric" >Purchase GRN</th>
                                     <th class="numeric" >Ref no.</th>
-                                    <th class="numeric" >Transaction Method</th>
+                                    <th class="numeric" >Transaction</th>
+                                    <th class="numeric" >Process</th>
                                     <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Balance</th>
@@ -111,11 +112,12 @@
                                 <tbody>
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
-                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.vendor.companyName }}</td>
-                                        <td class="numeric" >{% if entity.purchase is not empty %}{{ entity.purchase.grn }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.companyName }}</td>
+                                        <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.processType }}</td>
                                         <td class="numeric" >{{ entity.purchaseAmount|number_format }}</td>
                                         <td class="numeric" >
                                                 {% if entity.process == 'approved'  %}

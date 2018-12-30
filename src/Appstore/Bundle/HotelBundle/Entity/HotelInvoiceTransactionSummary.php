@@ -58,6 +58,13 @@ class HotelInvoiceTransactionSummary
     /**
      * @var float
      *
+     * @ORM\Column(name="serviceCharge", type="float")
+     */
+    private $serviceCharge;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="subTotal", type="float")
      */
     private $subTotal;
@@ -210,6 +217,20 @@ class HotelInvoiceTransactionSummary
 	 */
 	public function setDue( float $due ) {
 		$this->due = $due;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getServiceCharge(){
+		return $this->serviceCharge;
+	}
+
+	/**
+	 * @param float $serviceCharge
+	 */
+	public function setServiceCharge( float $serviceCharge ) {
+		$this->serviceCharge = $serviceCharge;
 	}
 
 }

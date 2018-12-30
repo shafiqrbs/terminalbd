@@ -154,7 +154,7 @@ class HotelTemporaryInvoiceRepository extends EntityRepository
 			$data .= "<td>{$entity->getQuantity()}</td>";
 			$data .= "<td>{$entity->getSubTotal()}</td>";
 			$data .= "<td>";
-			$data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/hotel/{$entity->getId()}/booking-room-reset' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
+			$data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/hotel/{$entity->getId()}/booking-room-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
 			$data .= "</td>";
 			$data .= '</tr>';
 			$i++;

@@ -450,7 +450,7 @@ class HotelInvoiceRepository extends EntityRepository
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         if($subTotal > 0){
 
-            if ($invoice->getHotelConfig()->getServiceCharge() > 0) {
+            if ($invoice->getHotelConfig()->getServiceCharge() > 0 && $invoice->getInvoiceFor() == "hotel") {
                 $totalAmount = ($subTotal- $invoice->getDiscount());
                 $service = $this->getCalculationService($invoice,$totalAmount);
                 $invoice->setServiceCharge($service);
@@ -465,11 +465,10 @@ class HotelInvoiceRepository extends EntityRepository
                 $vat = $this->getCalculationRestaurant($invoice,$totalAmount);
                 $invoice->setVat($vat);
             }
-
             $invoice->setSubTotal($subTotal);
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() + $invoice->getServiceCharge() - $invoice->getDiscount());
-            $invoice->setDue($invoice->getTotal() - $invoice->getReceived() );
+            $invoice->setDue($invoice->getTotal() - $invoice->getReceived());
 
         }else{
 
@@ -513,7 +512,7 @@ class HotelInvoiceRepository extends EntityRepository
 		return $invoice;
 	}
 
-	public function updateTransactionPaymentReceive(HotelInvoice $invoice, HotelInvoiceTransaction $transaction)
+	public function updateTransactionPaymentReceive(HotelInvoiceTransaction $transaction)
 	{
 		$em = $this->_em;
 		$res = $em->createQueryBuilder()
@@ -521,14 +520,15 @@ class HotelInvoiceRepository extends EntityRepository
 		          ->join('si.hotelInvoice','e')
 		          ->select('sum(si.total) as total, sum(si.received) as received')
 		          ->where('si.referenceInvoice = :invoice')
-		          ->setParameter('invoice', $invoice->getId())
+		          ->setParameter('invoice', $transaction->getReferenceInvoice())
 		          ->andWhere('e.hotelConfig = :config')
-		          ->setParameter('config', $invoice->getHotelConfig()->getId())
+		          ->setParameter('config', $transaction->getHotelInvoice()->getHotelConfig()->getId())
 		          ->andWhere('si.process = :process')
 		          ->setParameter('process', 'Done')
 		          ->getQuery()->getOneOrNullResult();
 		$due = ($res['total'] - $res['received']);
 		$transaction->setDue($due);
+		$em->persist($transaction);
 		$em->flush();
 	}
 
@@ -556,16 +556,36 @@ class HotelInvoiceRepository extends EntityRepository
 		$entity->setSubTotal($invoice->getSubTotal());
 		$entity->setDiscount($invoice->getDiscount());
 		$entity->setVat($invoice->getVat());
+		$entity->setServiceCharge($invoice->getServiceCharge());
 		$entity->setTotal($invoice->getTotal());
 		$entity->setReceived($invoice->getReceived());
 		$entity->setDue($invoice->getDue());
+		$entity->setMain(true);
 		$this->_em->persist($entity);
 		$this->_em->flush($entity);
-		$this->updateTransactionPaymentReceive($invoice,$entity);
+		$this->updateTransactionPaymentReceive($entity);
 		$this->_em->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->updateTransactionSummary($invoice);
 		if($entity->getReceived() > 0 ){
 			$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
 			$this->_em->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
+		}
+	}
+
+	public function updateInvoiceTransaction(HotelInvoice $invoice)
+	{
+		$entity = $this->_em->getRepository('HotelBundle:HotelInvoiceTransaction')->findOneBy(array('hotelInvoice' => $invoice,'main' => 1));
+		if(!empty($entity)){
+			$entity->setSubTotal($invoice->getSubTotal());
+			$entity->setDiscount($invoice->getDiscount());
+			$entity->setVat($invoice->getVat());
+			$entity->setServiceCharge($invoice->getServiceCharge());
+			$entity->setTotal($invoice->getTotal());
+			$entity->setReceived($invoice->getReceived());
+			$entity->setDue($invoice->getDue());
+			$this->_em->persist($entity);
+			$this->_em->flush($entity);
+			$this->updateTransactionPaymentReceive($entity);
+			$this->_em->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->updateTransactionSummary($invoice);
 		}
 	}
 
@@ -596,12 +616,13 @@ class HotelInvoiceRepository extends EntityRepository
 			$entity->setSubTotal($invoice->getSubTotal());
 			$entity->setDiscount($invoice->getDiscount());
 			$entity->setVat($invoice->getVat());
+			$entity->setServiceCharge($invoice->getServiceCharge());
 			$entity->setTotal($invoice->getTotal());
 			$entity->setReceived($invoice->getReceived());
 			$entity->setDue($invoice->getDue());
 			$this->_em->persist($entity);
 			$this->_em->flush($entity);
-			$this->updateTransactionPaymentReceive($invoice,$entity);
+			$this->updateTransactionPaymentReceive($entity);
 			$this->_em->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->updateTransactionSummary($hip->getHotelInvoice());
 			if($entity->getReceived() > 0 ){
 				$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);

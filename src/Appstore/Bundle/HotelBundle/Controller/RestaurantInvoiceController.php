@@ -161,7 +161,7 @@ class RestaurantInvoiceController extends Controller
         		$entity->setRoomName($room);
         		$entity->setCustomer($hip->getHotelInvoice()->getCustomer());
 	        }
-	        if ($entity->getTotal() <= $entity->getReceived()) {
+	        if (empty($entity->getRoomName()) and $entity->getTotal() > 0) {
                 $entity->setReceived($entity->getTotal());
                 $entity->setDue(0);
                 $entity->setPaymentStatus('Paid');
@@ -180,9 +180,12 @@ class RestaurantInvoiceController extends Controller
 	        return $this->redirect($this->generateUrl('hotel_restaurantinvoice_new'));
         }
         $hotelConfig = $entity->getHotelConfig();
+	    $date = date('d-m-Y');
+	    $bookings = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->getCheckinRoom($hotelConfig,$date);
 	    $particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($hotelConfig, $type = array('production','stock','service','virtual'));
 	    return $this->render("HotelBundle:RestaurantInvoice:new.html.twig", array(
             'entity'        => $entity,
+            'bookings'   => $bookings,
             'particulars'   => $particulars,
             'form'          => $editForm->createView(),
         ));

@@ -48,3 +48,17 @@ account_purchase_delete:
     defaults: { _controller: "AccountingBundle:AccountPurchase:delete" }
     options:
            expose: true
+
+account_purchase_vendor_search:
+    path:     /search
+    defaults: { _controller: "AccountingBundle:AccountPurchase:autoSearch" }
+    options:
+            expose: true
+
+account_purchase_vendor_name:
+    path:      /{vendor}/vendor-name
+    defaults: { _controller: "AccountingBundle:AccountPurchase:searchVendorName" }
+    options:
+            expose: true
+
+

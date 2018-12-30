@@ -142,7 +142,7 @@ class RestaurantInvoiceType extends AbstractType
      */
     public function getName()
     {
-        return 'businessInvoice';
+        return 'invoice';
     }
 
 }

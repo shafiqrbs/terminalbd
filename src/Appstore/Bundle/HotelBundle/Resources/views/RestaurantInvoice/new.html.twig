@@ -122,13 +122,13 @@
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="5" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
-                                            <td class="span1"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
+                                            <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                            <td class="span1"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
-                                            <td class="span1"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
+                                            <td colspan="5" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                                            <td class="span1"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
@@ -324,24 +324,11 @@
     {{ parent() }}
     {% javascripts
     '@HotelBundle/Resources/public/js/restaurant-invoice.js'
-    '@HotelBundle/Resources/public/js/temporary-invoice.js'
+    '@HotelBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    var dateToday = new Date();
-    var dates = $("#startDate, #endDate").datepicker({
-    defaultDate: "+1w",
-    changeMonth: true,
-    numberOfMonths: 2,
-    minDate: dateToday,
-    onSelect: function(selectedDate) {
-    var option = this.id == "startDate" ? "minDate" : "maxDate",
-    instance = $(this).data("datepicker"),
-    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-    dates.not(this).datepicker("option", option, date);
-    }
-    });
 {% endblock %}

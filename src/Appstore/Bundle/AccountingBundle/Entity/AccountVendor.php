@@ -55,10 +55,28 @@ class AccountVendor
      */
     protected $businessPurchases;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountVendor")
+     */
+    protected $medicinePurchases;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn", mappedBy="vendor")
      */
     protected $businessPurchasesReturns;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="accountVendor")
+	 * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+	 */
+	protected $customer;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="module", type="string", length = 50, nullable=true)
+     */
+    private $module;
 
 
     /**
@@ -119,6 +137,21 @@ class AccountVendor
     private $email;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="oldId", type="integer", length=10 , nullable=true)
+     */
+    private $oldId;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="mode", type="string", length= 50, nullable=true)
+	 */
+	private $mode;
+
+
+	/**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean" )
@@ -356,6 +389,48 @@ class AccountVendor
     {
         return $this->accountPurchases;
     }
+
+	/**
+	 * @return int
+	 */
+	public function getOldId(){
+		return $this->oldId;
+	}
+
+	/**
+	 * @param int $oldId
+	 */
+	public function setOldId( int $oldId ) {
+		$this->oldId = $oldId;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMode(){
+		return $this->mode;
+	}
+
+	/**
+	 * @param string $mode
+	 */
+	public function setMode($mode ) {
+		$this->mode = $mode;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getModule() {
+		return $this->module;
+	}
+
+	/**
+	 * @param string $module
+	 */
+	public function setModule( string $module ) {
+		$this->module = $module;
+	}
 
 
 }

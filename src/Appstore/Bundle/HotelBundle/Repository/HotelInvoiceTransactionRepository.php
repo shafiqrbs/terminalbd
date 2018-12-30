@@ -307,9 +307,9 @@ class HotelInvoiceTransactionRepository extends EntityRepository
     public function getHotelInvoiceTransactionLists(HotelInvoice $invoice){
 
 	    $qb = $this->createQueryBuilder('hi');
-	    $qb->join('hi.hotelInvoice','e');
-	    $qb->where('e.hotelConfig = :config')->setParameter('config', $invoice->getHotelConfig()->getId());
-	    $qb->andWhere('hi.referenceInvoice = :reference')->setParameter('reference', $invoice->getId());
+	   // $qb->join('hi.hotelInvoice','e');
+	   // $qb->where('e.hotelConfig = :config')->setParameter('config', $invoice->getHotelConfig()->getId());
+	    $qb->where('hi.referenceInvoice = :reference')->setParameter('reference', $invoice->getId());
 	    $qb->orderBy('hi.updated','DESC');
 	    $result = $qb->getQuery()->getResult();
 	    return $result;
@@ -338,10 +338,12 @@ class HotelInvoiceTransactionRepository extends EntityRepository
 	        $data .= "<td class='numeric' >{$transaction->getSubTotal()}</td>";
 	        $data .= "<td class='numeric' >{$transaction->getDiscount()}</td>";
 	        $data .= "<td class='numeric' >{$transaction->getTotal()}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getVat()}</td>";
+	        $data .= "<td class='numeric' >{$transaction->getServiceCharge()}</td>";
 	        $data .= "<td class='numeric' >{$transaction->getReceived()}</td>";
 	        $data .= "<td class='numeric' >{$transaction->getDue()}</td>";
 	        $data .= "<td> <span id='approved-{$transaction->getId()}'>";
-			$arrs = array('Created','Pending','In-progress');
+			$arrs = array('created','pending','in-progress');
 	        if(in_array($transaction->getProcess(),$arrs)){
 		        $data .= "<a id='{$transaction->getId()}' data-id='{$transaction->getId()}' data-url='/hotel-restaurant/invoice/{$transaction->getId()}/payment-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";
 		        $data .= "<a id='{$transaction->getId()}' data-id='{$transaction->getId()}' data-url='/hotel-restaurant/invoice/{$transaction->getId()}/payment-approved' href='javascript:' class='btn blue mini approve' ><i class='icon-ok'></i> Approve</a>";

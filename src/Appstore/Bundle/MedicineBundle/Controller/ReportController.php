@@ -139,6 +139,7 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
+        exit;
 	    $purchaseCashOverview   = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
         $transactionCash        = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseTransactionOverview($user,$data);
         $purchaseMode           = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseModeOverview($user,$data);
@@ -363,5 +364,15 @@ class ReportController extends Controller
             'searchForm'            => $data,
         ));
     }
+
+	public function vendorCustomerAccountAction()
+	{
+		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+		$vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->listForVendorCustomer($config);
+		return $this->render('MedicineBundle:Report:purchase/vendorSales.html.twig', array(
+			'vendors' => $vendors,
+			'entity' => '',
+		));
+	}
 
 }

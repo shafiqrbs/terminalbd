@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="medicine_vendor")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\MedicineVendorRepository")
- * @UniqueEntity(fields="mobile",message="User mobile no already existing,Please try again.")
+ * @UniqueEntity(fields="mobile",message="User mobile no already exist,Please try again.")
  */
 class MedicineVendor
 {

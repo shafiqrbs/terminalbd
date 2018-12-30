@@ -6,6 +6,8 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn;
 use Appstore\Bundle\MedicineBundle\Form\MedicineSalesReturnType;
+use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
+use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -34,13 +36,54 @@ class SalesReturnController extends Controller
 
     public function newAction(MedicineSalesItem $item){
 
-        return $this->render('MedicineBundle:SalesReturn:new.html.twig', array(
+	    $user = $this->getUser();
+	    $entity = new MedicineSales();
+    	$salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
+	    $editForm = $this->createCreateForm($entity);
+	    $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
+
+	    return $this->render('MedicineBundle:SalesReturn:new.html.twig', array(
             'entity' => $item->getMedicineSales(),
-            'salesItem' => $item,
+            'salesItem' => $salesItemForm->createView(),
+            'form' => $editForm->createView(),
+            'user'   => $user,
+            'result'   => $result,
         ));
     }
 
-    /**
+	private function createMedicineSalesItemForm(MedicineSalesItem $salesItem )
+	{
+		$form = $this->createForm(new SalesTemporaryItemType(), $salesItem, array(
+			'action' => $this->generateUrl('medicine_sales_temporary_item_add'),
+			'method' => 'POST',
+			'attr' => array(
+				'class' => 'form-horizontal',
+				'id' => 'salesTemporaryItemForm',
+				'novalidate' => 'novalidate',
+			)
+		));
+		return $form;
+	}
+
+	private function createCreateForm(MedicineSales $entity)
+	{
+		$globalOption = $this->getUser()->getGlobalOption();
+		$location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+		$form = $this->createForm(new SalesTemporaryType($globalOption,$location), $entity, array(
+			'action' => $this->generateUrl('medicine_sales_temporary_create'),
+			'method' => 'POST',
+			'attr' => array(
+				'class' => 'form-horizontal',
+				'id' => 'salesTemporaryForm',
+				'novalidate' => 'novalidate',
+			)
+		));
+		return $form;
+	}
+
+
+
+	/**
      * Creates a new SalesReturn entity.
      *
      */

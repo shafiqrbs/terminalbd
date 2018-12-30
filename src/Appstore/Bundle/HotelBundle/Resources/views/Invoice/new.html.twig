@@ -164,12 +164,12 @@
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Vat/Tax ({{ entity.hotelConfig.vatForHotel }}%) TK.</strong> =</span></td>
                                             <td class="span1"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Service Charge TK.</strong> =</span></td>
+                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Service Charge ({{ entity.hotelConfig.serviceCharge }}%) TK.</strong> =</span></td>
                                             <td class="span1"><strong class="serviceCharge">{{ entity.serviceCharge|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
@@ -190,141 +190,146 @@
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="form-actions portlet box blue">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="icon-reorder"></i>Guest Booking Information</div>
-                            </div>
-                        </div>
-                        <div class="clearfix">&nbsp;</div>
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="clearfix"></div>
+
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i> Guest Booking & Payment information</div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
                         <div class="row-fluid">
-                            <div class="span12 guest-info">
+                            <div class="span8" style="padding-right: 30px; border-right: 2px solid #0378ad" >
                                 <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Title</span>
-                                                <span><input type="checkbox" id="title" value="1" name="namePrefix[]"> Mr.</span>
-                                                <span><input type="checkbox" id="title" value="2" name="namePrefix[]"> Mrs.</span>
-                                                <span><input type="checkbox" id="title" value="3" name="namePrefix[]"> Dr.</span>
-                                                <span><input type="checkbox" id="title" value="4" name="namePrefix[]"> Prof.</span>
-                                            </label>
+                                    <div class="span12 guest-info">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Title</span>
+                                                        <span><input type="checkbox" id="title" value="1" name="namePrefix[]"> Mr.</span>
+                                                        <span><input type="checkbox" id="title" value="2" name="namePrefix[]"> Mrs.</span>
+                                                        <span><input type="checkbox" id="title" value="3" name="namePrefix[]"> Dr.</span>
+                                                        <span><input type="checkbox" id="title" value="4" name="namePrefix[]"> Prof.</span>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">First Name</span> <span class="pull-right input-right">
-                                                       <input type="text" id="firstName" name="firstName" class="m-wrap span12 customer-input"  placeholder="* First name" value="">
-                                                    </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Last Name</span> <span class="pull-right input-right">
+                                        <div class="clearfix"></div>
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">First Name</span>
+                                                        <span class="pull-right">
+                                                            <input type="text" id="firstName" name="firstName" class="m-wrap span12 customer-input"  placeholder="* First name" value="">
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Last Name</span>
+                                                        <span class="pull-right">
                                                         <input type="text" id="lastName" name="lastName" class="m-wrap span12 customer-input"  placeholder="* Last name" value="">
                                                     </span>
-                                            </label>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Mobile no</span> <span class="pull-right input-right">
+                                        <div class="clearfix"></div>
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Mobile no</span>
+                                                        <span class="pull-right">
                                                        <input type="text" id="mobile" name="mobile" class="m-wrap span12 customer-input"  placeholder="* Enter mobile no" value="">
                                                     </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Email</span> <span class="pull-right input-right">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Email</span>
+                                                        <span class="pull-right">
                                                         <input type="text" id="email" name="email" class="m-wrap span12 customer-input"  placeholder="Enter e-mail address" value="">
                                                     </span>
-                                            </label>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Profession</span> <span class="pull-right input-right">
+                                        <div class="clearfix"></div>
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Profession</span>
+                                                        <span class="pull-right">
                                                        <input type="text" id="profession" name="profession" class="m-wrap span12 customer-input"  placeholder="Enter profession" value="">
                                                     </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Organization</span> <span class="pull-right input-right">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Organization</span>
+                                                        <span class="pull-right">
                                                         <input type="text" id="organization" name="organization" class="m-wrap span12 customer-input"  placeholder="Enter organization name" value="">
                                                     </span>
-                                            </label>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Mailing Address</span>
-                                                <span class="pull-right input-right" style="width:84% !important;">
+                                        <div class="clearfix"></div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Mailing Address</span>
+                                                        <span class="pull-right" style="width: 76.7% !important;">
                                                         <input type="text" style="width: 100% !important;" id="address" name="address" class="m-wrap span12 customer-input"  placeholder="* Enter mailing address" value="">
                                                 </span>
-                                            </label>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Location</span> <span class="pull-right input-right">
+                                        <div class="clearfix"></div>
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Location</span>
+                                                        <span class="pull-right">
                                                        <input type="text" id="location" name="location" class="m-wrap span12 customer-input select2Location"  placeholder="Enter city/state name" value="">
                                                     </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Postal Code</span> <span class="pull-right input-right">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Postal Code</span>
+                                                        <span class="pull-right">
                                                         <input type="text" id="postalCode" name="postalCode" class="m-wrap span12 customer-input "  placeholder="Enter postal code" value="">
                                                     </span>
-                                            </label>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Remark</span>
-                                                <span class="pull-right input-right" style="width: 84% !important;">
+                                        <div class="clearfix"></div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">Remark</span>
+                                                        <span class="pull-right" style="width: 76.7% !important;">
                                                         <input type="text" style="width: 100% !important;" id="remark" name="remark" class="m-wrap span12 customer-input"  placeholder="Enter reason or remarks" value="">
                                                     </span>
-                                            </label>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="clearfix"></div>
+                                <div class="clearfix">&nbsp;</div>
                             </div>
-                        </div>
-                        <div class="clearfix">&nbsp;</div>
-                        <div class="form-actions portlet box green">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="icon-reorder"></i> Payment information</div>
-                            </div>
-                        </div>
-                        <div class="clearfix">&nbsp;</div>
-                        <div class="row-fluid">
-                            <div class="span8" ></div>
                             <div class="span4 payment-info">
                                 <div class="row-fluid">
                                     <div class="span12">
@@ -465,6 +470,7 @@
     {% javascripts
     '@HotelBundle/Resources/public/js/invoice.js'
     '@HotelBundle/Resources/public/js/temporary-invoice.js'
+    '@HotelBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

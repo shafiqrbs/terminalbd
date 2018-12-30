@@ -45,11 +45,12 @@ class VendorController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
-        if ($form->isValid()) {
-
-            $em = $this->getDoctrine()->getManager();
+	    $company = $data['vendor']['companyName'];
+	    $exitVendor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findOneBy(array('medicineConfig'=>$config,'companyName'=>$company));
+        if ($form->isValid() and empty($exitVendor)) {
+	        $em = $this->getDoctrine()->getManager();
             $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$config->getGlobalOption(),'mobile' => $data['customer']));
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $config->getGlobalOption(),'mobile' => $data['customer']));
             if($customer){
                 $entity->setCustomer($customer);
             }
@@ -61,7 +62,9 @@ class VendorController extends Controller
             );
             return $this->redirect($this->generateUrl('medicine_vendor', array('id' => $entity->getId())));
         }
-
+	    $this->get('session')->getFlashBag()->add(
+		    'success',"User mobile no already exist,Please try again."
+	    );
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
@@ -234,9 +237,7 @@ class VendorController extends Controller
         return $this->redirect($this->generateUrl('medicine_vendor'));
     }
 
-
-
-    public function autoSearchAutoCompleteAction(Request $request)
+	public function autoSearchAutoCompleteAction(Request $request)
     {
         $item = $_REQUEST['term'];
         $items = array();

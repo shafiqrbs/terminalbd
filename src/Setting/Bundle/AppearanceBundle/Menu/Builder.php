@@ -391,6 +391,33 @@ class Builder extends ContainerAware
             ->addChild('Accounting')
             ->setAttribute('icon', 'fa fa-building-o')
             ->setAttribute('dropdown', true);
+
+	    $menu['Accounting']->addChild('Manage Sales', array('route' => ''))
+	                       ->setAttribute('icon', 'fa fa-shopping-cart')
+	                       ->setAttribute('dropdown', true);
+	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
+		    $menu['Accounting']['Manage Sales']->addChild('Sales', array('route' => 'account_sales'));
+		    $menu['Accounting']['Manage Sales']->addChild('Receive', array('route' => 'account_sales_new'));
+		    $menu['Accounting']['Manage Sales']->addChild('Customer Ledger', array('route' => 'report_customer_ledger'));
+
+	    }
+	    $menu['Accounting']->addChild('Manage Purchase', array('route' => ''))
+	                       ->setAttribute('icon', 'fa fa-truck')
+	                       ->setAttribute('dropdown', true);
+	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
+		    $menu['Accounting']['Manage Purchase']->addChild('Purchase', array('route' => 'account_purchase'));
+		    $menu['Accounting']['Manage Purchase']->addChild('Payment', array('route' => 'account_purchase_new'));
+		    $menu['Accounting']['Manage Purchase']->addChild('Vendor Ledger', array('route' => 'report_vendor_ledger'));
+
+	    }
+	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE')){
+		    $menu['Accounting']->addChild('Expenditure', array('route' => 'account_expenditure'))
+		                       ->setAttribute('icon', 'fa  icon-table')
+		                       ->setAttribute('dropdown', true);
+		    $menu['Accounting']['Expenditure']->addChild('Expense', array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
+		    $menu['Accounting']['Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
+	    }
+
         if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
 
             $menu['Accounting']->addChild('Transaction & Report', array('route' => 'account_transaction'))
@@ -458,13 +485,7 @@ class Builder extends ContainerAware
             $menu['Accounting']['Cash']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Cash']->addChild('Mobile Transaction', array('route' => 'account_transaction_mobilebank'))->setAttribute('icon', 'icon-th-list');
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE')){
-            $menu['Accounting']->addChild('Expenditure', array('route' => 'account_expenditure'))
-                ->setAttribute('icon', 'fa fa-money')
-                ->setAttribute('dropdown', true);
-            $menu['Accounting']['Expenditure']->addChild('Expense', array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
-        }
+
         /*$menu['Finance']->addChild('Petty Cash & Expense', array('route' => 'account_pettycash'))
             ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
@@ -509,18 +530,7 @@ class Builder extends ContainerAware
                 $menu['Accounting']->addChild('Payment', array('route' => 'account_purchase_hospital'))->setAttribute('icon', 'icon-th-list');
             }
         }
-        $medicine = array('miss');
-        $result = array_intersect($arrSlugs, $medicine);
-        if (!empty($result)) {
-            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
-                $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_medicine'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']->addChild('Receive', array('route' => 'account_sales_medicine_new'))->setAttribute('icon', 'icon-th-list');
-            }
-            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
-                $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_medicine'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']->addChild('Payment ', array('route' => 'account_purchase_medicine_new'))->setAttribute('icon', 'icon-th-list');
-            }
-        }
+
         $business = array('business');
         $result = array_intersect($arrSlugs, $business);
         if (!empty($result)) {
@@ -1222,6 +1232,7 @@ class Builder extends ContainerAware
                 $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Ledger', array('route' => 'medicine_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
+                $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Purchase & Sales', array('route' => 'medicine_report_vendor_sales'))->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Details', array('route' => 'medicine_report_purchase_vendor_details'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Stock', array('route' => 'medicine_report_product_stock_sales'))->setAttribute('icon', 'icon-th-list');
 	            /*$menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))->setAttribute('icon', 'icon-th-list');*/

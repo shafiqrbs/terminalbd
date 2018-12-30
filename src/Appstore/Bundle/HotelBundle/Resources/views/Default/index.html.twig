@@ -12,12 +12,12 @@
                 </div>
                 <div class="span2">
                     {% if (app.user.granted("ROLE_HOTEL_INVOICE"))  %}
-                        <a href="{{ path('hotel_invoice_new') }}"  class="btn green big"><i class="icon-plus-sign"></i> Add Invoice </a>
+                        <a href="{{ path('hotel_invoice_new') }}"  class="btn green big"><i class="icon-plus-sign"></i> Add Hotel </a>
                     {% endif %}
                 </div>
                 <div class="span2">
-                    {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
-                        <a href="{{ path('account_sales_hotel_new') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
+                    {% if (app.user.granted("ROLE_HOTEL_INVOICE_RESTAURANT"))  %}
+                        <a href="{{ path('hotel_restaurantinvoice_new') }}" class="btn yellow big"><i class="icon-plus-sign"></i> Restaurant</a>
                     {% endif %}
                 </div>
                 <div class="span2">

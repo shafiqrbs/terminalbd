@@ -16,33 +16,33 @@ class MedicineVendorRepository extends EntityRepository
 {
     public function searchAutoComplete(MedicineConfig $config,$q)
     {
-        $query = $this->createQueryBuilder('e');
-        $query->join('e.medicineConfig', 'ic');
-        $query->select('e.id as id');
-        $query->addSelect('e.companyName as text');
-        $query->where($query->expr()->like("e.companyName", "'%$q%'"  ));
-        $query->andWhere("ic.id = :config");
-        $query->setParameter('config', $config->getId());
-        $query->groupBy('e.id');
-        $query->orderBy('e.companyName', 'ASC');
-        $query->setMaxResults( '30' );
-        return $query->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.medicineConfig', 'ic');
+        $qb->select('e.id as id');
+        $qb->addSelect('e.companyName as text');
+        $qb->where($qb->expr()->like("e.companyName", "'%$q%'"  ));
+        $qb->andWhere("ic.id = :config");
+        $qb->setParameter('config', $config->getId());
+        $qb->groupBy('e.id');
+        $qb->orderBy('e.companyName', 'ASC');
+        $qb->setMaxResults( '30' );
+        return $qb->getQuery()->getResult();
 
     }
 
     public function searchVendor(MedicineConfig $config,$q)
     {
-        $query = $this->createQueryBuilder('e');
-        $query->join('e.medicineConfig', 'ic');
-        $query->select('e.companyName as id');
-        $query->addSelect('e.companyName as text');
-        $query->where($query->expr()->like("e.companyName", "'%$q%'"  ));
-        $query->andWhere("ic.id = :config");
-        $query->setParameter('config', $config->getId());
-        $query->groupBy('e.id');
-        $query->orderBy('e.companyName', 'ASC');
-        $query->setMaxResults( '30' );
-        return $query->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.medicineConfig', 'ic');
+        $qb->select('e.companyName as id');
+        $qb->addSelect('e.companyName as text');
+        $qb->where($qb->expr()->like("e.companyName", "'%$q%'"  ));
+        $qb->andWhere("ic.id = :config");
+        $qb->setParameter('config', $config->getId());
+        $qb->groupBy('e.id');
+        $qb->orderBy('e.companyName', 'ASC');
+        $qb->setMaxResults( '30' );
+        return $qb->getQuery()->getResult();
 
     }
 
@@ -59,6 +59,18 @@ class MedicineVendorRepository extends EntityRepository
             $this->_em->flush();
         }
         return $entity;
+    }
+
+    public function listForVendorCustomer(MedicineConfig $config)
+    {
+	    $qb = $this->createQueryBuilder('e');
+	    $qb->join('e.medicineConfig', 'ic');
+	    $qb->select('e.companyName, e.id');
+	    $qb->where("ic.id = :config")->setParameter('config', $config->getId());
+	    $qb->andWhere("e.customer IS NOT NULL");
+	    $qb->orderBy('e.companyName', 'ASC');
+	    $result = $qb->getQuery()->getArrayResult();
+	    return $result;
     }
 
 }

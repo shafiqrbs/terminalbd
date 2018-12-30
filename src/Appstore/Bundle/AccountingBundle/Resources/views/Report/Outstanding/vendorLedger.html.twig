@@ -71,9 +71,9 @@
                                 <ul class="unstyled">
                                     {% if vendor is not empty %}<li><strong>Vendor #:</strong>&nbsp;{{ vendor.name }}</li>{% endif %}
                                     {% if vendor is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ vendor.mobile }}</li>{% endif %}
-                                    {% if vendor is not empty %}<li><strong>Address #:</strong>&nbsp;{{ vendor.address }}</li>{% endif %}
+                          {#          {% if vendor is not empty %}<li><strong>Address #:</strong>&nbsp;{{ vendor.address }}</li>{% endif %}
                                     {% if vendor is not empty and vendor.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ vendor.location.name }}, {{ vendor.location.parent.name }}</li>{% endif %}
-                                </ul>
+                         #}       </ul>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>

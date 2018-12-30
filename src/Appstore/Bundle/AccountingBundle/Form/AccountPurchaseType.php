@@ -49,33 +49,11 @@ class AccountPurchaseType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-            ->add('vendor', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
-                'empty_value' => '---Choose a vendor---',
-                'property' => 'companyName',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.inventoryConfig =".$this->inventoryConfig->getId());
-                },
-            ))
-           /* ->add('purchase', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\Purchase',
-                'empty_value' => '---Choose a purchase---',
-                'property' => 'grn',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                          ->where("wt.inventoryConfig =".$this->inventoryConfig->getId());
-                },
-            ))
-             */
+	        ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span12 select2Vendor leftMargin','placeholder'=>'Enter vendor company name'),
+              'constraints' =>array(
+                  new NotBlank(array('message'=>'Please enter vendor company name'))
+              )
+	        ))
             ->add('accountBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
@@ -120,7 +98,7 @@ class AccountPurchaseType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_accountingbundle_accountpurchase';
+        return 'purchase';
     }
 
 

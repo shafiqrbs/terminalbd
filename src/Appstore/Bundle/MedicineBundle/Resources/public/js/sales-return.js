@@ -15,11 +15,16 @@ $(document).on("click", "#submitBtn", function() {
 });
 
 $(document).on('keyup', '.quantity , .price', function() {
+
+    var returnSubTotal     = parseFloat($('#returnTotal').val()  != '' ? $('#returnTotal').val() : 0 );
     var id = $(this).attr('data-id');
     var quantity = parseFloat($('#quantity-'+id).val());
     var price = parseFloat($('#price-'+id).val());
     var subTotal  = (quantity * price);
     $("#subTotal-"+id).html(subTotal);
+    var total = (returnSubTotal + subTotal)
+    $('.returnSubTotal').html(total);
+    $('.returnSubTotal').val(total);
 
 });
 

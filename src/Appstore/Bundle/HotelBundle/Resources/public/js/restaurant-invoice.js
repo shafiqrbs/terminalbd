@@ -103,6 +103,7 @@ var form = $("#stockInvoice").validate({
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
                 $('.due').html(obj['due']);
+                $('.vat').html(obj['vat']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
                 $('#paymentTotal').val(obj['due']);
@@ -132,6 +133,7 @@ $(document).on('change', '.quantity , .salesPrice', function() {
             $('#paymentTotal').val(obj['due']);
             $('.payment').html(obj['payment']);
             $('.discount').html(obj['discount']);
+            $('.vat').html(obj['vat']);
         }
 
     })
@@ -155,6 +157,7 @@ $(document).on("click", ".particularDelete", function() {
                 $('#paymentTotal').val(obj['due']);
                 $('.payment').html(obj['payment']);
                 $('.discount').html(obj['discount']);
+                $('.vat').html(obj['vat']);
 
             });
         }
@@ -181,6 +184,7 @@ $(document).on("click", ".approve", function() {
                 $('.discount').html(obj['discount']);
                 $('#due').val(obj['due']);
                 $('.due').html(obj['due']);
+                $('.vat').html(obj['vat']);
             });
         }
     });
@@ -207,10 +211,10 @@ $(document).on('keyup', '#quantity , #salesPrice ', function() {
 
 
 
-$(document).on('keyup', '#businessInvoice_discountCalculation', function(e) {
+$(document).on('keyup', '#invoice_discountCalculation', function(e) {
 
-    var discountType = $('#businessInvoice_discountType').val();
-    var discount = parseInt($('#businessInvoice_discountCalculation').val() !="" ? $('#businessInvoice_discountCalculation').val() : 0);
+    var discountType = $('#invoice_discountType').val();
+    var discount = parseInt($('#invoice_discountCalculation').val() !="" ? $('#invoice_discountCalculation').val() : 0);
     var invoice = $('#invoiceId').val();
     var total =  parseInt($('#dueAmount').val());
     if( discount >= total ){
@@ -230,15 +234,16 @@ $(document).on('keyup', '#businessInvoice_discountCalculation', function(e) {
             $('.discount').html(obj['discount']);
             $('#due').val(obj['due']);
             $('.due').html(obj['due']);
+            $('.vat').html(obj['vat']);
         }
 
     })
 
 });
 
-$(document).on('keyup', '#businessInvoice_received', function() {
+$(document).on('keyup', '#invoice_received', function() {
 
-    var payment     = parseInt($('#businessInvoice_received').val()  != '' ? $('#businessInvoice_received').val() : 0 );
+    var payment     = parseInt($('#invoice_received').val()  != '' ? $('#invoice_received').val() : 0 );
     var paymentTotal =  parseInt($('#paymentTotal').val());
     var dueAmount = (paymentTotal-payment);
     if(dueAmount > 0){
@@ -276,79 +281,6 @@ $('form#salesForm').on('keypress', '.salesInput', function (e) {
     }
 });
 
-var invoiceForm = $("#invoiceForm").validate({
 
-    rules: {
-
-        "firstName": {required: true},
-        "lastName": {required: true},
-        "mobile": {required: true},
-        "email": {required: false},
-        "profession": {required: false},
-        "organization": {required: false},
-        "address": {required: true},
-        "location": {required: false},
-        "postalCode": {required: false},
-        "businessInvoice[discountCalculation]": {required: false},
-        "businessInvoice[received]": {required: false},
-        "remark": {required: false}
-    },
-
-    messages: {
-
-        "firstName":"Enter first name",
-        "lastName": "Enter last name",
-        "mobile":"Enter guest mobile no",
-        "address":"Enter guest address"
-
-    },
-    tooltip_options: {
-        "firstName": {placement:'top',html:true},
-        "lastName": {placement:'top',html:true},
-        "mobile": {placement:'top',html:true}
-    },
-
-    submitHandler: function(invoiceForm) {
-        $('form#invoiceForm').submit();
-    }
-});
-
-var invoicePaymentForm = $("#invoicePaymentForm").validate({
-
-    rules: {
-        "received": {required: true},
-        "businessInvoice[discountCalculation]": {required: false},
-        "businessInvoice[cardNo]": {required: false},
-        "businessInvoice[paymentMobile]": {required: false},
-        "businessInvoice[transactionId]": {required: false}
-    },
-
-    messages: {
-        "received":"Enter receive amount"
-    },
-    tooltip_options: {
-        "received": {placement:'top',html:true},
-    },
-
-    submitHandler: function(invoicePaymentForm) {
-
-        $.ajax({
-            url         : $('form#invoicePaymentForm').attr( 'action' ),
-            type        : $('form#invoicePaymentForm').attr( 'method' ),
-            data        : new FormData($('form#invoicePaymentForm')[0]),
-            processData : false,
-            contentType : false,
-            success: function(response){
-                obj = JSON.parse(response);
-                $('#invoiceTransaction').html(obj['invoiceTransactions']);
-                $('#subTotal').html(obj['subTotal']);
-                $('#netTotal').html(obj['netTotal']);
-                $('#paymentTotal').val(obj['due']);
-                $('#discount').html(obj['discount']);
-                $('businessInvoice[received]').val('');
-            }
-        });
-    }
-});
 
 

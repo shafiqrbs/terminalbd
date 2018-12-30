@@ -108,9 +108,9 @@ $('.horizontal-form').submit(function(){
 
     $(".select2Vendor").select2({
 
-        placeholder: "Search vendor name",
+        placeholder: "Search purchase vendor name",
         ajax: {
-            url: Routing.generate('inventory_vendor_search'),
+            url: Routing.generate('account_purchase_vendor_search'),
             dataType: 'json',
             delay: 250,
             data: function (params, page) {
@@ -133,10 +133,10 @@ $('.horizontal-form').submit(function(){
         formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
         initSelection: function (element, callback) {
             var id = $(element).val();
-            $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
+            $.ajax(Routing.generate('account_purchase_vendor_name', { vendor : id}), {
                 dataType: "json"
             }).done(function (data) {
-                return  callback(data);
+                  return  callback(data);
             });
         },
         allowClear: true,

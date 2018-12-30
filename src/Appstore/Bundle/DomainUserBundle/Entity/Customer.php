@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
@@ -40,8 +41,13 @@ class Customer
 
     protected $globalOption;
 
+	/**
+	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", mappedBy="customer")
+	 * @ORM\OrderBy({"companyName" = "ASC"})
+	 */
+	protected $accountVendor;
 
-    /**
+	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="customer")
      * @ORM\OrderBy({"id" = "DESC"})
      */
@@ -89,6 +95,7 @@ class Customer
      * @ORM\OrderBy({"companyName" = "ASC"})
      */
     protected $medicineVendor;
+
 
 
     /**
@@ -1193,6 +1200,13 @@ class Customer
 	 */
 	public function setNamePrefix( array $namePrefix ) {
 		$this->namePrefix = $namePrefix;
+	}
+
+	/**
+	 * @return AccountVendor
+	 */
+	public function getAccountVendor() {
+		return $this->accountVendor;
 	}
 
 }

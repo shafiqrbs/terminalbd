@@ -72,7 +72,6 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 	    $category = !empty($stock->getCategory()) ? $stock->getCategory()->getName() :'';
 	    $unit = !empty($stock->getUnit()) ? $stock->getUnit()->getName() :'';
-
 	    $roomName = $category.' '.$stock->getName().' '.$unit;
 
 	    if(!empty($stock)){
@@ -88,6 +87,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		    $entity->setEndDate((new \DateTime( $data['endDate'])));
 		    $entity->setBookingDate($bookingDate);
 		    $entity->setPrice($price);
+		    $entity->setProcess(strtolower($invoice->getProcess()));
 		    $entity->setPurchasePrice($stock->getPurchasePrice());
 		    $subTotal = ($entity->getQuantity() * $price);
 		    $entity->setSubTotal($subTotal);
@@ -96,6 +96,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		    $em->flush();
 	    }
     }
+
 	public function insertFoodItem(HotelInvoice $invoice, $data)
 	{
 
@@ -195,6 +196,18 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 	}
 
+	public function updateRoomProcess(HotelInvoice $entity){
+
+    	$em = $this->_em;
+    	if(!empty($entity->getHotelInvoiceParticulars())){
+    		/* @var $room HotelInvoiceParticular */
+    		foreach ($entity->getHotelInvoiceParticulars()  as $room):
+			    $room->setProcess(strtolower($entity->getProcess()));
+			    $em->flush();
+		    endforeach;
+	    }
+	}
+
 
 	public function getCheckinRoom(HotelConfig $config,$date){
 
@@ -206,7 +219,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		$qb->select('e.id as id , e.particular as roomName');
 		$qb->andWhere('h.hotelConfig = :config')->setParameter('config',$config);
 		$qb->andWhere('pt.slug IN (:slugs)')->setParameter('slugs', array('room','package'));
-		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('check-in','booked'));
+		$qb->andWhere('e.process IN (:process)')->setParameter('process',array('check-in'));
 		$qb->andWhere($qb->expr()->like("e.bookingDate", "'%$date%'"  ));
 		$result = $qb->getQuery()->getArrayResult();
 		return $result;
@@ -278,7 +291,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 
 		$em = $this->_em;
 		foreach ($invoice->getHotelInvoiceParticulars() as $particular){
-			$particular->setProcess('check-i n');
+			$particular->setProcess('check-in');
 			$em->flush();
 		}
 	}
@@ -333,7 +346,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
         /* @var $entity HotelInvoiceParticular */
 
         foreach ($entities as $entity) {
-
+			$unit = !empty($entity->getHotelParticular()->getUnit()) ? $entity->getHotelParticular()->getUnit()->getName():'';
 	        $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
             $data .= "<td>{$entity->getHotelParticular()->getParticularCode()} - {$entity->getParticular()}</td>";
@@ -344,7 +357,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 	        $data .= "<td>";
 	        $data .= "<input type='text' class='numeric td-inline-input-qnt quantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='quantity-{$entity->getId()}' name='quantity[]' value='{$entity->getQuantity()}' placeholder='Qnt'>";
 	        $data .= "</td>";
-	        $data .= "<td>{$entity->getHotelParticular()->getUnit()->getName()}</td>";
+	        $data .= "<td>{$unit}</td>";
 	        $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
             $data .= "<td>";
 	        $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}'  href='javascript:' class='btn blue mini itemUpdate' ><i class='icon-save'></i></a>";

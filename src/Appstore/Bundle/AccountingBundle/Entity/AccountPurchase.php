@@ -181,6 +181,21 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         /**
          * @var string
          *
+         * @ORM\Column(name="companyName", type="string", length = 256, nullable=true)
+         */
+        private $companyName;
+
+        /**
+         * @var string
+         *
+         * @ORM\Column(name="grn", type="string", length = 50, nullable=true)
+         */
+        private $grn;
+
+
+        /**
+         * @var string
+         *
          * @ORM\Column(name="sourceInvoice", type="string", length=50, nullable=true)
          */
         private $sourceInvoice;
@@ -866,6 +881,34 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 	     */
 	    public function setHotelPurchase( $hotelPurchase ) {
 		    $this->hotelPurchase = $hotelPurchase;
+	    }
+
+	    /**
+	     * @return string
+	     */
+	    public function getCompanyName(){
+		    return $this->companyName;
+	    }
+
+	    /**
+	     * @param string $companyName
+	     */
+	    public function setCompanyName( string $companyName ) {
+		    $this->companyName = $companyName;
+	    }
+
+	    /**
+	     * @return string
+	     */
+	    public function getGrn(){
+		    return $this->grn;
+	    }
+
+	    /**
+	     * @param string $grn
+	     */
+	    public function setGrn( string $grn ) {
+		    $this->grn = $grn;
 	    }
 
     }

@@ -53,8 +53,8 @@ class InvoiceType extends AbstractType
                 'multiple'      =>false,
                 'empty_value' => '---Choose Process---',
                 'choices' => array(
-                    'Booking'   => 'Booking',
-                    'Check-in'  => 'Check-in',
+                    'booked'   => 'Booked',
+                    'check-in'  => 'Check-in',
                 ),
             ))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))

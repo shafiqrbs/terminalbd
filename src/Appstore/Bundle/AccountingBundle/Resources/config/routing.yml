@@ -99,3 +99,11 @@ accounting_print:
     resource: "@AccountingBundle/Resources/config/routing/print.yml"
     prefix:   /finance/print
 
+accounting_migration_vendor:
+    defaults: { _controller: "AccountingBundle:Default:migration" }
+    path:   /finance/migration
+
+accounting_migration_account_purchase:
+    defaults: { _controller: "AccountingBundle:Default:migrationPurchaseVendor" }
+    path:   /finance/migration-purchase
+

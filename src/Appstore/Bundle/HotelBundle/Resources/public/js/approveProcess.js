@@ -29,6 +29,14 @@ $('.horizontal-form').submit(function(){
     return true;
 });
 
+$('.form-horizontal').submit(function(){
+    $("button[type='submit']", this)
+        .html("Please Wait...")
+        .attr('disabled', 'disabled');
+    return true;
+});
+
+
 
 $(document).on( "click", "#show", function(e){
     $('#hide').slideToggle(2000);

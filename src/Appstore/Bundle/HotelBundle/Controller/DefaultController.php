@@ -173,11 +173,11 @@ class DefaultController extends Controller
 	    exit;
     }
 
-    public function roomResetAction(Particular $particular)
+    public function roomDeleteAction(HotelTemporaryInvoice $particular)
     {
     	$em = $this->getDoctrine()->getManager();
 	    $user = $this->getUser();
-    	$entity = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->findOneBy(array('createdBy' => $user,'hotelParticular'=>$particular));
+	    $entity = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->findOneBy(array('createdBy' => $user,'id'=> $particular));
 	    $em->remove($entity);
 	    $em->flush();
 	    exit;

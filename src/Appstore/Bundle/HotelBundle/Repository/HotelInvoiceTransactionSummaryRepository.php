@@ -25,6 +25,7 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 		$entity->setHotelConfig($invoice->getHotelConfig());
 		$entity->setDiscount(0);
 		$entity->setVat(0);
+		$entity->setServiceCharge(0);
 		$entity->setSubTotal(0);
 		$entity->setTotal(0);
 		$entity->setReceived(0);
@@ -43,7 +44,7 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 		$res = $em->createQueryBuilder()
 		          ->from('HotelBundle:HotelInvoiceTransaction','si')
 		          ->join('si.hotelInvoice','e')
-		          ->select('sum(si.discount) as discount , sum(si.vat) as vat , sum(si.subTotal) as subTotal , sum(si.total) as total, sum(si.received) as received')
+		          ->select('sum(si.discount) as discount , sum(si.vat) as vat, sum(si.serviceCharge) as serviceCharge , sum(si.subTotal) as subTotal , sum(si.total) as total, sum(si.received) as received')
 		          ->where('si.referenceInvoice = :invoice')
 		          ->setParameter('invoice', $invoice->getId())
 		          ->andWhere('e.hotelConfig = :config')
@@ -54,6 +55,7 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 
 		$discount = !empty($res['discount']) ? $res['discount'] : 0 ;
 		$vat = !empty($res['vat']) ? $res['vat'] : 0 ;
+		$charge = !empty($res['serviceCharge']) ? $res['serviceCharge'] : 0 ;
 		$subTotal = !empty($res['subTotal']) ? $res['subTotal'] : 0 ;
 		$total = !empty($res['total']) ? $res['total'] : 0 ;
 		$received = !empty($res['received']) ? $res['received'] : 0 ;
@@ -61,6 +63,7 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 
 		$entity->setDiscount($discount);
 		$entity->setVat(floatval($vat));
+		$entity->setServiceCharge(floatval($charge));
 		$entity->setSubTotal($subTotal);
 		$entity->setTotal($total);
 		$entity->setReceived($received);

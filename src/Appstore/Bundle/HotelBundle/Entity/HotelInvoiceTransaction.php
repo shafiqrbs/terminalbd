@@ -119,12 +119,19 @@ class HotelInvoiceTransaction
      */
     private $transactionId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="process", type="string", length=50, nullable=true)
-     */
-    private $process ='Created';
+	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="main", type="boolean", nullable=true)
+	 */
+	private $main;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="process", type="string", length=50, nullable=true)
+	 */
+	private $process ='created';
 
     /**
      * @var string
@@ -176,6 +183,13 @@ class HotelInvoiceTransaction
      * @ORM\Column(name="vat", type="float", nullable=true)
      */
     private $vat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="serviceCharge", type="float", nullable=true)
+     */
+    private $serviceCharge;
 
     /**
      * @var float
@@ -733,6 +747,34 @@ class HotelInvoiceTransaction
 	 */
 	public function setSubTotal( float $subTotal ) {
 		$this->subTotal = $subTotal;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getServiceCharge(){
+		return $this->serviceCharge;
+	}
+
+	/**
+	 * @param float $serviceCharge
+	 */
+	public function setServiceCharge($serviceCharge ) {
+		$this->serviceCharge = $serviceCharge;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isMain(){
+		return $this->main;
+	}
+
+	/**
+	 * @param bool $main
+	 */
+	public function setMain( bool $main ) {
+		$this->main = $main;
 	}
 
 }

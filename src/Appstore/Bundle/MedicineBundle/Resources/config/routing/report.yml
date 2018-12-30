@@ -65,6 +65,10 @@ medicine_report_sales_user:
     path:     /sales-user
     defaults: { _controller: "MedicineBundle:Report:salesUser" }
 
+medicine_report_vendor_sales:
+    path:     /vendor-purchase-sales
+    defaults: { _controller: "MedicineBundle:Report:vendorCustomerAccount" }
+
 medicine_report_sales_user_monthly:
     path:     /sales-user-monthly
     defaults: { _controller: "MedicineBundle:Report:monthlyUserSales" }

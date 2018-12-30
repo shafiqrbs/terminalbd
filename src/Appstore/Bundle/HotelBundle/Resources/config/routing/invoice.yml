@@ -124,3 +124,15 @@ hotel_invoice_payment_approve:
     options:
             expose: true
 
+hotel_invoice_inline_process_search:
+    path:     /inline-process-search
+    defaults: { _controller: "HotelBundle:Invoice:processSelect" }
+    options:
+           expose: true
+
+hotel_invoice_inline_update:
+    path:     /inline-process-update
+    defaults: { _controller: "HotelBundle:Invoice:processUdate" }
+    methods:  POST
+    options:
+            expose: true

@@ -67,9 +67,9 @@ hotel_booking_temporary_create:
     options:
             expose: true
 
-hotel_booking_temporary_reset:
-    path:     /{id}/booking-room-reset
-    defaults: { _controller: HotelBundle:Default:roomReset }
+hotel_booking_temporary_delete:
+    path:     /{id}/booking-room-delete
+    defaults: { _controller: HotelBundle:Default:roomDelete }
 
 hotel_booking_room_details:
     path:     /{id}/booking-room-details

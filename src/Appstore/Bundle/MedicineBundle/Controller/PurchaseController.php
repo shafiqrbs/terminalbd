@@ -428,8 +428,6 @@ class PurchaseController extends Controller
 
 	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 	    $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
-
-
 	    if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
@@ -645,7 +643,4 @@ class PurchaseController extends Controller
         return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
 
     }
-
-
-
 }

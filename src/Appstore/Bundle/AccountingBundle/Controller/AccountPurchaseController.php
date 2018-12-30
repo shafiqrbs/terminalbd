@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -52,6 +53,8 @@ class AccountPurchaseController extends Controller
         ));
     }
 
+
+
     /**
      * Lists all AccountPurchase entities.
      *
@@ -93,19 +96,58 @@ class AccountPurchaseController extends Controller
      * Creates a new AccountPurchase entity.
      *
      */
+
     public function createAction(Request $request)
     {
         $entity = new AccountPurchase();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        if ($form->isValid()) {
+	    $global = $this->getUser()->getGlobalOption();
+	    $data = $request->request->all();
+	    $company = $data['purchase']['companyName'];
+	    $exitVendor = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $global,'companyName' => $company));
+		$head = $exitVendor->getProcessHead();
+	    $company = $exitVendor->getMedicineVendor()->getCompanyName();
+
+	    if ($form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
-            $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setProcessHead('inventory');
-            $entity->setProcessType('Payment');
+            $entity->setGlobalOption($global);
+		    $entity->setProcessType('Payment');
+            if($head == "medicine"){
+	            $entity->setProcessHead($head);
+	            $entity->setCompanyName($company);
+	            $entity->setMedicineVendor($exitVendor->getMedicineVendor());
+            }
+            if($head == "inventory"){
+	            $entity->setProcessHead($head);
+	            $entity->setCompanyName($company);
+	            $entity->setVendor($exitVendor->getVendor());
+            }
+            if($head == "dms"){
+	            $entity->setProcessHead($head);
+	            $entity->setCompanyName($company);
+	            $entity->setDmsVendor($exitVendor->getDmsVendor());
+            }
+            if($head == "hms"){
+	            $entity->setProcessHead($head);
+	            $entity->setCompanyName($company);
+	            $entity->setHmsVendor($exitVendor->getHmsVendor());
+            }
+            if($head == "restaurant"){
+	            $entity->setProcessHead($head);
+	            $entity->setCompanyName($company);
+	            $entity->setRestaurantVendor($exitVendor->getRestaurantVendor());
+            }
+            if($head == "business" or $head == "hotel" ){
+	            $entity->setProcessHead($head);
+	            $entity->setCompanyName($company);
+	            $entity->setAccountVendor($exitVendor->getAccountVendor());
+            }
             if($entity->getPayment() < 0){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
+	            $entity->setProcessType('Opening');
                 $entity->setTransactionMethod(null);
             }
             $em->persist($entity);
@@ -287,7 +329,6 @@ class AccountPurchaseController extends Controller
 	        }
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($entity);
-
 	        if($entity->getProcessType() == 'Outstanding'){
 		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertVendorOpeningTransaction($entity);
 	        }elseif($entity->getProcessType() == 'Discount'){
@@ -319,5 +360,23 @@ class AccountPurchaseController extends Controller
         return new Response('success');
         exit;
     }
+
+	public function autoSearchAction(Request $request)
+	{
+		$item = $_REQUEST['q'];
+		if ($item) {
+			$global = $this->getUser()->getGlobalOption();
+			$item = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->searchAutoComplete($item,$global);
+		}
+		return new JsonResponse($item);
+	}
+
+	public function searchVendorNameAction($vendor)
+	{
+		return new JsonResponse(array(
+			'id' => $vendor,
+			'text' => $vendor
+		));
+	}
 
 }

@@ -56,8 +56,8 @@
                                         <div class="control-group">
                                             <label class="control-label" for="vendor">Vendor name</label>
                                             <div class="controls">
-                                                {{ form_widget(form.vendor) }}
-                                                {{ form_errors(form.vendor) }}
+                                                {{ form_widget(form.companyName) }}
+                                                {{ form_errors(form.companyName) }}
                                             </div>
                                         </div>
                                     </div>
@@ -155,11 +155,11 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/common.js' %}
+    '@AccountingBundle/Resources/public/js/approveProcess.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    CommonJs();
+    AccountingApproveProcess();
 {% endblock %}

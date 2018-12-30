@@ -29,39 +29,7 @@ function datePickerReload() {
 }
 */
 
-/*
 
-var dateToday = new Date();
-var dates = $("#startDatex, #endDatex").datepicker({
-    defaultDate: "+1w",
-    changeMonth: true,
-    dateFormat: "dd-mm-yy",
-    numberOfMonths: 2,
-    minDate: dateToday,
-    onSelect: function(selectedDate) {
-        var option = this.id == "startDate" ? "minDate" : "maxDate",
-            instance = $(this).data("datepicker"),
-            date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-        dates.not(this).datepicker("option", option, date);
-        var startDate = $('#startDate').val();
-        var endDate = $('#endDate').val();
-        if(startDate !== '' && endDate  !== '' ){
-            $.ajax({
-                url: Routing.generate('hotel_available_room_search',{'bookingStartDate':startDate,'bookingEndDate':endDate}),
-                type: 'POST',
-                success: function (response) {
-                    obj = JSON.parse(response);
-                    $('#room-load').html(obj['rooms']);
-                    if(obj['msg'] === 'valid'){
-                        $('#addRoom').prop('disabled', false);
-                    }else{
-                        $('#addRoom').prop('disabled', true);
-                    }
-                }
-            })
-        }
-    }
-});*/
 $('#reservation').daterangepicker(
     {
         format: 'dd-MM-yyyy',
@@ -90,11 +58,13 @@ $('#reservation').daterangepicker(
                     }else{
                         $('#addRoom').prop('disabled', true);
                     }
+                    FormComponents.init();
                 }
             })
         }
     }
 );
+
 
 
 $( "#mobile" ).autocomplete({
@@ -203,7 +173,7 @@ var form = $("#stockInvoice").validate({
             processData : false,
             contentType : false,
             success: function(response){
-                obj = JSON.parse(response);
+                /*obj = JSON.parse(response);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
@@ -214,7 +184,8 @@ var form = $("#stockInvoice").validate({
                 $('.discount').html(obj['discount']);
                 $('#paymentTotal').val(obj['due']);
                 $("#particular").select2().select2("val","");
-                $('#stockInvoice')[0].reset();
+                $('#stockInvoice')[0].reset();*/
+                location.reload();
             }
         });
     }
@@ -233,7 +204,8 @@ $(document).on('change', '.quantity , .salesPrice', function() {
         type: 'POST',
         data:'itemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
         success: function(response) {
-            obj = JSON.parse(response);
+            location.reload();
+            /*obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
             $('.netTotal').html(obj['netTotal']);
             $('.due').html(obj['due']);
@@ -241,7 +213,7 @@ $(document).on('change', '.quantity , .salesPrice', function() {
             $('.serviceCharge').html(obj['serviceCharge']);
             $('#paymentTotal').val(obj['due']);
             $('.payment').html(obj['payment']);
-            $('.discount').html(obj['discount']);
+            $('.discount').html(obj['discount']);*/
         },
 
     })
@@ -257,7 +229,8 @@ $(document).on("click", ".particularDelete", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( response ) {
-                obj = JSON.parse(response);
+                location.reload();
+                /*obj = JSON.parse(response);
                 $('#remove-'+id).remove();
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
@@ -266,7 +239,7 @@ $(document).on("click", ".particularDelete", function() {
                 $('.serviceCharge').html(obj['serviceCharge']);
                 $('#paymentTotal').val(obj['due']);
                 $('.payment').html(obj['payment']);
-                $('.discount').html(obj['discount']);
+                $('.discount').html(obj['discount']);*/
 
             });
         }
@@ -283,7 +256,8 @@ $(document).on("click", ".approve", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( response ) {
-                $('#approved-'+id).hide();
+                location.reload();
+               /* $('#approved-'+id).hide();
                 obj = JSON.parse(response);
                 $('#subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
@@ -292,30 +266,12 @@ $(document).on("click", ".approve", function() {
                 $('#sales_discount').val(obj['discount']);
                 $('.discount').html(obj['discount']);
                 $('#due').val(obj['due']);
-                $('.due').html(obj['due']);
+                $('.due').html(obj['due']);*/
             });
         }
     });
 });
 
-
-
-$(document).on('keyup', '#quantity , #salesPrice ', function() {
-
-    var width = parseFloat($('#width').val());
-    var height = parseFloat($('#height').val());
-    var salesPrice = parseFloat($('#salesPrice').val());
-    var quantity = parseInt($('#quantity').val());
-
-    if(isNaN(width) && !jQuery.isNumeric(width)) {
-        $('#subTotal').html(quantity * salesPrice);
-    }else{
-        $('#subQuantity').html(width * height);
-        var total = (width * height) * quantity;
-        $('#subTotal').html(total * salesPrice);
-    }
-
-});
 
 $(document).on('change', '#invoice_discountCalculation', function(e) {
 
@@ -333,7 +289,8 @@ $(document).on('change', '#invoice_discountCalculation', function(e) {
         type: 'POST',
         data:'discount=' + discount+'&discountType='+discountType+'&invoice='+invoice,
         success: function(response) {
-            obj = JSON.parse(response);
+            location.reload();
+           /* obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);
             $('.netTotal').html(obj['netTotal']);
             $('#paymentTotal').val(obj['due']);
@@ -342,7 +299,7 @@ $(document).on('change', '#invoice_discountCalculation', function(e) {
             $('#due').val(obj['due']);
             $('.due').html(obj['due']);
             $('.vat').html(obj['vat']);
-            $('.serviceCharge').html(obj['serviceCharge']);
+            $('.serviceCharge').html(obj['serviceCharge']);*/
 
         }
 
@@ -420,10 +377,6 @@ var invoiceForm = $("#invoiceForm").validate({
         "firstName": {placement:'top',html:true},
         "lastName": {placement:'top',html:true},
         "mobile": {placement:'top',html:true}
-    },
-
-    submitHandler: function(invoiceForm) {
-        $('form#invoiceForm').submit();
     }
 });
 
@@ -453,7 +406,8 @@ var invoicePaymentForm = $("#invoicePaymentForm").validate({
             processData : false,
             contentType : false,
             success: function(response){
-                obj = JSON.parse(response);
+                location.reload();
+                /*obj = JSON.parse(response);
                 $('#invoiceTransaction').html(obj['invoiceTransactions']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#netTotal').html(obj['netTotal']);
@@ -462,7 +416,7 @@ var invoicePaymentForm = $("#invoicePaymentForm").validate({
                 $('.vat').html(obj['vat']);
                 $('.serviceCharge').html(obj['serviceCharge']);
                 $('transaction[discount]').val('');
-                $('transaction[received]').val('');
+                $('transaction[received]').val('');*/
             }
         });
     }

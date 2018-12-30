@@ -23,16 +23,11 @@ use Symfony\Component\HttpFoundation\Response;
 class MedicineSalesTemporaryController extends Controller
 {
 
-
-
     public function newAction()
     {
 
         $user = $this->getUser();
         $entity = new MedicineSales();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MedicineSales entity.');
-        }
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
         $editForm = $this->createCreateForm($entity);
         $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);

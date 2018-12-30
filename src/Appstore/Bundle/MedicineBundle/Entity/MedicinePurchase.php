@@ -5,6 +5,7 @@ namespace Appstore\Bundle\MedicineBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Core\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,6 +38,12 @@ class MedicinePurchase
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="medicinePurchases" , cascade={"detach","merge"} )
      **/
     private  $medicineVendor;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="medicinePurchases" , cascade={"detach","merge"} )
+     **/
+    private  $accountVendor;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn", inversedBy="medicinePurchase" , cascade={"detach","merge"} )
@@ -794,6 +801,20 @@ class MedicinePurchase
 	 */
 	public function setMedicinePurchaseReturn( $medicinePurchaseReturn ) {
 		$this->medicinePurchaseReturn = $medicinePurchaseReturn;
+	}
+
+	/**
+	 * @return AccountVendor
+	 */
+	public function getAccountVendor() {
+		return $this->accountVendor;
+	}
+
+	/**
+	 * @param AccountVendor $accountVendor
+	 */
+	public function setAccountVendor( $accountVendor ) {
+		$this->accountVendor = $accountVendor;
 	}
 
 

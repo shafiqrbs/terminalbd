@@ -24,7 +24,7 @@ var EditableInit = function () {
 
 };
 
-$(document).on("click", ". editable-reload", function() {
+$(document).on("click", ".editable-reload", function() {
     setTimeout(pageReload, 3000);
 });
 
