@@ -45,3 +45,12 @@ account_journal_approve_delete:
     defaults: { _controller: "AccountingBundle:AccountJournal:approveDelete" }
     options:
            expose: true
+
+account_journal_pdf:
+    path:     /report-pdf
+    defaults: { _controller: "AccountingBundle:AccountJournal:journalPdf" }
+
+account_journal_excel:
+    path:     /report-pdf
+    defaults: { _controller: "AccountingBundle:AccountJournal:journalExcel" }
+

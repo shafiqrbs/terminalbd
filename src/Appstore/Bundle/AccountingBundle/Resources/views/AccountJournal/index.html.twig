@@ -37,6 +37,17 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('account_journal_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add New</a>
+                                {% set accountHeadDebit = searchForm.accountHeadDebit is defined ? searchForm.accountHeadDebit :'' %}
+                                {% set accountHeadCredit = searchForm.accountHeadCredit is defined ? searchForm.accountHeadCredit :'' %}
+                                {% set toUser = searchForm.toUser is defined ? searchForm.toUser :'' %}
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
+                              {#  <a class="btn purple" target="_blank" href="{{ path('account_journal_pdf',{'accountHeadDebit':accountHeadDebit,'accountHeadCredit':accountHeadCredit,'toUser':toUser,'endDate':endDate,'startDate':startDate}) }}" >
+                                    <i class=" icon-download"></i>&nbsp;PDF
+                                </a>#}
+                                <a class="btn blue" target="_blank"  href="{{ path('account_journal_excel',{'accountHeadDebit':accountHeadDebit,'accountHeadCredit':accountHeadCredit,'toUser':toUser,'endDate':endDate,'startDate':startDate}) }}" >
+                                    <i class="fa fa-file-excel-o"></i>&nbsp;Excel
+                                </a>
                             </div>
                         </div>
                     </div>

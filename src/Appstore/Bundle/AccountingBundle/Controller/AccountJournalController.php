@@ -350,4 +350,52 @@ class AccountJournalController extends Controller
 
 	}
 
+	public function journalPdfAction()
+	{
+
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$array = array();
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$entities = $em->getRepository('AccountingBundle:AccountJournal')->findWithSearch( $this->getUser(),$data);
+		$entities = $entities->getResult();
+		$array[] = 'Created,User Name,Method,Ref No,Account Head Debit,Account Head Credit,Debit,Credit';
+
+		/* @var $entity AccountJournal */
+
+		foreach ($entities as $key => $entity){
+
+			$method = !empty($entity->getTransactionMethod()) ? $entity->getTransactionMethod()->getName():'';
+			$creditHead = !empty($entity->getAccountHeadCredit()) ? $entity->getAccountHeadCredit()->getName():'';
+			$debitHead = !empty($entity->getAccountHeadDebit()) ? $entity->getAccountHeadDebit()->getName():'';
+
+			$debit = $entity->getTransactionType() == 'Debit' ? $entity->getAmount():'';
+			$credit = $entity->getTransactionType() == 'Credit' ? $entity->getAmount():'';
+			$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+			$rows = array(
+				$entity->getCreated()->format('d-m-Y'),
+				$entity->getToUser(),
+				$method,
+				$entity->getAccountRefNo(),
+				$debitHead,
+				$creditHead,
+				$debit,
+				$credit
+			);
+			$array[] = implode(',', $rows);
+		}
+		$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+		$compareStart = new \DateTime($startDate);
+		$start =  $compareStart->format('d-m-Y');
+		$fileName = $start.'-account-journal.csv';
+		$content = implode("\n", $array);
+		$response = new Response($content);
+		$response->headers->set('Content-Type', 'text/csv');
+		$response->headers->set('Content-Type', 'application/octet-stream');
+		$response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+		return $response;
+		exit;
+	}
+
 }
