@@ -29,12 +29,6 @@ class AccountJournalController extends Controller
         return $pagination;
     }
 
-
-    /**
-     * Lists all AccountJournal entities.
-     *
-     */
-
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
 	 */
@@ -56,6 +50,7 @@ class AccountJournalController extends Controller
             'accountHead' => $accountHead,
         ));
     }
+
     /**
      * Creates a new AccountJournal entity.
      *
@@ -66,7 +61,6 @@ class AccountJournalController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
-
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             if(!empty($this->getUser()->getProfile()->getBranches())){

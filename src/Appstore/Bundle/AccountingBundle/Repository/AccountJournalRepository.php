@@ -90,50 +90,47 @@ class AccountJournalRepository extends EntityRepository
     {
         if(!empty($data))
         {
-            $datetime = new \DateTime("now");
-            $accountRefNo = isset($data['accountRefNo'])  ? $data['accountRefNo'] : '';
-            $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
-            $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+
+        	$accountRefNo = isset($data['accountRefNo'])  ? $data['accountRefNo'] : '';
             $toUser = isset($data['toUser']) ? $data['toUser'] :'';
             $accountHeadDebit = isset($data['accountHeadDebit']) ? $data['accountHeadDebit'] :'';
             $accountHeadCredit = isset($data['accountHeadCredit']) ? $data['accountHeadCredit'] :'';
-            $startDate = isset($data['startDate']) and $data['startDate'] != '' ? $data['startDate'].' 00:00:00' : $today_startdatetime;
-            $endDate =   isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate'].' 23:59:59' : $today_enddatetime;
-
+            $startDate = isset($data['startDate']) ? $data['startDate'] : '';
+            $endDate =   isset($data['endDate']) ? $data['endDate'] : '';
 
             if (!empty($accountRefNo)) {
-
                 $qb->andWhere("e.accountRefNo = :accountRefNo");
                 $qb->setParameter('accountRefNo', $accountRefNo);
             }
 
             if (!empty($toUser)) {
-
-
-                $qb->andWhere("e.toUser = :toUser");
-                $qb->setParameter('toUser', $toUser);
+	            $qb->join('e.toUser','u');
+	            $qb->andWhere("u.username = :toUser");
+	            $qb->setParameter('toUser', $toUser);
             }
-            if (!empty($accountHeadCredit)) {
 
+            if (!empty($accountHeadCredit)) {
                 $qb->andWhere("e.accountHeadCredit = :accountHeadCredit");
                 $qb->setParameter('accountHeadCredit', $accountHeadCredit);
             }
 
             if (!empty($accountHeadDebit)) {
-
                 $qb->andWhere("e.accountHeadDebit = :accountHeadDebit");
                 $qb->setParameter('accountHeadDebit', $accountHeadDebit);
             }
 
-            if (!empty($data['startDate']) ) {
-
-                $qb->andWhere("e.updated >= :startDate");
-                $qb->setParameter('startDate', $startDate.' 00:00:00');
+			if (!empty($startDate) ) {
+				$datetime = new \DateTime($data['startDate']);
+				$startDate = $datetime->format('Y-m-d 00:00:00');
+		        $qb->andWhere("e.created >= :startDate");
+                $qb->setParameter('startDate', $startDate);
             }
-            if (!empty($data['endDate'])) {
 
-                $qb->andWhere("e.updated <= :endDate");
-                $qb->setParameter('endDate', $endDate.' 23:59:59');
+            if (!empty($data['endDate'])) {
+	            $datetime = new \DateTime($data['endDate']);
+	            $date = $datetime->format('Y-m-d 23:59:59');
+	            $qb->andWhere("e.created <= :endDate");
+	            $qb->setParameter('endDate', $date);
             }
         }
     }
@@ -164,7 +161,8 @@ class AccountJournalRepository extends EntityRepository
             $qb->setParameter('endDate', $endDate);
         }
         if (!empty($toUser)) {
-            $qb->andWhere("s.toUser = :toUser");
+	        $qb->join('s.toUser','u');
+            $qb->andWhere("u.username = :toUser");
             $qb->setParameter('toUser', $toUser);
         }
         if (!empty($accountHead)) {

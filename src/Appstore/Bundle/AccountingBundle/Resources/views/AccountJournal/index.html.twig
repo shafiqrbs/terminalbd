@@ -40,7 +40,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="portlet-body">
                         <div class="portlet-body">
                             {% include('flash-message.html.twig') %}
@@ -79,7 +78,7 @@
                                         </select>
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin " value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="Search user name">
+                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Search user name">
                                     </div>
                                     <div class="span2">
                                         <input type="text" id="startDate" name="startDate"  class="span12 m-wrap search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
