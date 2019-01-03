@@ -26,7 +26,7 @@ $(function() {
 		rt = 'rightTop',
 		rc = 'rightCenter',
 		currentID;
-	
+
 		var methods = {
 			init : function(params) {
 				var _defaults = {
@@ -52,7 +52,7 @@ $(function() {
 					$('html.' + elemClass + 'Open').off('.' + elemClass + 'Event').removeClass(elemClass + 'Open');
 					$('.' + elemClass + '_source').replaceWith($('.' + elemClass + '_content').children());
 					$('.' + elemClass).remove();
-					
+
 					if (_options.asMenu) {
 						asMenuClass = ' ' + elemClass + '_asMenu';
 					} else {
@@ -64,14 +64,14 @@ $(function() {
 							overflowContentClass = ' ' + elemClass + '_contentOverflow';
 						}
 					}
-					
+
 					currentID = new Date().getMilliseconds();
 					elem.attr(elemData + '_id', currentID);
-					
+
 					var tooltipContainer = $('<div class="' + elemClass + ' animated" style="' + (elem.css('position') == 'fixed' ? 'position:fixed;' : '') + '" ' + elemData + '_id="' + currentID + '" ' + elemData + '="open"></div>');
 					var tooltipContent = $('<div class="' + elemClass + '_content' + overflowContentClass + asMenuClass + '"></div>');
 					tooltipContainer.append(closeBut, tooltipContent);
-					
+
 					if ($.isFunction(_options.html)) {
 						var beforeLoadingContent = _options.beforeLoadingContent;
 						tooltipContent.append(beforeLoadingContent);
@@ -89,19 +89,19 @@ $(function() {
 					if ($(window).width() <= 500) {
 						_options.inline = true;
 					}
-					
+
 					if (_options.inline) {
 						elem.after(tooltipContainer);
 					} else {
 						$('body').append(tooltipContainer);
 					}
-					
+
 					elemObj = $('div[' + elemData + ']');
 					var elemObjFooter = elemObj.find('.' + elemClass + '_footer');
 					if (elemObjFooter.length != 0) {
 						elemObj.find('.' + elemClass + '_content').css({marginBottom: elemObjFooter.outerHeight() + 15 + 'px'});
 					}
-					
+
 					if (!$.isFunction(_options.html)) {
             var htmlStr;
 						if ($.type(_options.html) == 'string') {
@@ -109,7 +109,7 @@ $(function() {
 						} else {
 							htmlStr = _options.html[0].outerHTML;
 						}
-					}					
+					}
 
 					if (_options.onLoad && $.isFunction(_options.onLoad)) {
 						_options.onLoad(elemObj);
@@ -155,16 +155,16 @@ $(function() {
 							}
 						});
 					}
-					
+
 					$(window).resize(function() {
 						getPlacement();
 					});
-					
+
 					elemObj.find('.close').on('click', function() {
 						popModalClose();
 						$(this).off('click');
 					});
-					
+
 					elemObj.find('[' + elemData + '-but="close"]').on('click', function() {
 						popModalClose();
 						$(this).off('click');
@@ -204,7 +204,7 @@ $(function() {
 				popModalClose();
 			}
 		};
-		
+
 		function getPlacement() {
 			if (_options.inline) {
 				var eLeft = elem.position().left;
@@ -221,7 +221,7 @@ $(function() {
 			eWidth = elem.outerWidth(),
 			eObjWidth = elemObj.outerWidth(),
 			eObjHeight = elemObj.outerHeight();
-			
+
 			var placement,
 			eOffsetLeft = elem.offset().left,
 			eOffsetRight = $(window).width() - elem.offset().left - eWidth,
@@ -251,13 +251,13 @@ $(function() {
 				}
 				return optimal;
 			}
-			
+
 			function isCurrentFits(current) {
-			  return current == bl ? deltaBR > 0 
-				: current == br ? deltaBL > 0 
+			  return current == bl ? deltaBR > 0
+				: current == br ? deltaBL > 0
 				: deltaC > 0;
 			}
-			
+
 			if ((/^top/).test(_options.placement) || _options.placement == '') {
 				_options.placement = bl;
 			}
@@ -284,7 +284,7 @@ $(function() {
 					placement = optimalPosition(br);
 				}
 			}
-			
+
 			elemObj.removeAttr('class').addClass(elemClass + ' animated ' + placement);
 			switch (placement){
 				case (bl):
@@ -331,7 +331,7 @@ $(function() {
 				break;
 			}
 		}
-		
+
 		function popModalClose() {
 			elemObj = $('div[' + elemData + ']');
 			elem.removeAttr(elemData + '_id');
@@ -345,7 +345,7 @@ $(function() {
 				}, animTime);
 			}
 		}
-		
+
 		function getAnimTime() {
 			if (!animTime) {
 				animTime = elemObj.css('animationDuration');
@@ -356,7 +356,7 @@ $(function() {
 				}
 			}
 		}
-		
+
 		function reverseEffect() {
 			var animClassOld = elemObj.attr('class'),
 			animClassNew = animClassOld.replace(effectIn, effectOut);
@@ -400,7 +400,7 @@ $(function() {
 		}
 		$(this).popModal(params);
 	});
-	
+
   $.event.special.destroyed = {
     remove: function(o) {
       if (o.handler) {
@@ -419,7 +419,7 @@ $(function() {
 		elemClass = 'notifyModal',
 		_options,
 		animTime;
-		
+
 		var methods = {
 			init : function(params) {
 				var _defaults = {
@@ -432,7 +432,7 @@ $(function() {
 					onClose: function() {}
 				};
 				_options = $.extend(_defaults, params);
-				
+
 				$('.' + elemClass).remove();
 				var notifyContainer = $('<div class="' + elemClass + ' ' + _options.placement + ' ' + (_options.overlay ? 'overlay' : '') + ' ' + _options.type + ' ' + (_options.icon ? 'icon' : '') + '"></div>');
 				var notifyContent = $('<div class="' + elemClass + '_content"></div>');
@@ -448,12 +448,12 @@ $(function() {
 
 				elemObj = $('.' + elemClass);
 				getAnimTime();
-				
+
 				if (_options.onLoad && $.isFunction(_options.onLoad)) {
 					_options.onLoad(elemObj);
 				}
 				notifyContainer.trigger('load', {el: elemObj});
-				
+
 				elemObj.addClass('open');
 				elemObj.click(function() {
 					notifyModalClose();
@@ -467,7 +467,7 @@ $(function() {
 				notifyModalClose();
 			}
 		};
-		
+
 		function notifyModalClose() {
 			var elemObj = $('.' + elemClass);
 			elemObj.removeClass('open');
@@ -493,7 +493,7 @@ $(function() {
 				}
 			}
 		}
-		
+
 		$('html').keydown(function(event) {
 			if (event.keyCode == 27) {
 				notifyModalClose();
@@ -507,7 +507,7 @@ $(function() {
 		}
 
 	};
-	
+
 	$('* [data-notifymodal-bind]').bind('click', function() {
 		var elemBind = $(this).attr('data-notifymodal-bind');
 		var params = {};
@@ -522,7 +522,7 @@ $(function() {
 		}
 		$(elemBind).notifyModal(params);
 	});
-	
+
 })(jQuery);
 
 
@@ -530,7 +530,7 @@ $(function() {
 (function($) {
 	$.fn.hintModal = function(method){
 		$('.hintModal').off();
-	
+
 		var methods = {
 			init : function() {
 
@@ -541,7 +541,7 @@ $(function() {
 						getPlacement($(this), elem);
 					}
 				});
-				
+
 				$(this).on('mouseleave', function() {
 					var elem = $(this).find('> .hintModal_container');
 					if (elem[0].textContent.length > 1) {
@@ -564,7 +564,7 @@ $(function() {
 					bl = 'bottomLeft',
 					bc = 'bottomCenter',
 					br = 'bottomRight';
-					
+
 					if (elemObj.hasClass(bl)) {
 						placementDefault = bl;
 					} else if (elemObj.hasClass(bc)) {
@@ -574,7 +574,7 @@ $(function() {
 					} else {
 						placementDefault = bl;
 					}
-					
+
 					if (elemObj.data('placement') === undefined) {
 						elemObj.data('placement', placementDefault);
 					}
@@ -595,16 +595,16 @@ $(function() {
 						}
 						return optimal;
 					}
-					
+
 					function isCurrentFits(current) {
-						return current == bl ? deltaBR > 0 
-						: current == br ? deltaBL > 0 
+						return current == bl ? deltaBR > 0
+						: current == br ? deltaBL > 0
 						: deltaC > 0;
 					}
-					
+
 					elemObj.removeAttr('class').addClass(classDefault + ' ' + optimalPosition(elemObj.data('placement')));
 				}
-			
+
 			}
 		};
 
@@ -613,7 +613,7 @@ $(function() {
 		} else if (typeof method === 'object' || ! method) {
 			return methods.init.apply(this, arguments);
 		}
-		
+
 	};
 	$('.hintModal').hintModal();
 	document.addEventListener("DOMNodeInserted", function(event) {
@@ -634,7 +634,7 @@ $(function() {
 		nextBut = 'dialogNext',
 		_options,
 		animTime;
-	
+
 		var methods = {
 			init : function(params) {
 				var _defaults = {
@@ -656,7 +656,7 @@ $(function() {
 				if (_options.type != '') {
 					_options.top = 'calc(' + _options.top + ' + 60px)';
 				}
-				
+
 				var currentDialog = 0,
 				maxDialog = elem.length - 1,
 				dialogMain = $('<div class="' + elemClass + ' ' + _options.type + '" style="top:' + (isNaN(_options.topOffset) ? _options.topOffset : _options.topOffset + 'px') + '"></div>'),
@@ -675,14 +675,14 @@ $(function() {
 					dialogHeader.append($('<div class="' + nextBut + '">&rsaquo;</div><div class="' + prevBut + ' notactive">&lsaquo;</div>'));
 				}
 				dialogHeader.append('<span>' + elem.find('.' + elemClass + '_header')[currentDialog].innerHTML + '</span>');
-				
+
 				$('body').append(dialogMain).addClass(elemClass + 'Open');
 				if (_options.type == '') {
 					var getScrollBarWidth = dialogMain.outerWidth() - dialogContainer[0].scrollWidth;
 					console.log(getScrollBarWidth)
 					dialogTop.css({right:getScrollBarWidth + 'px'});
 				}
-				
+
 				elemObj = $('.' + elemClass);
 				getAnimTime();
 
@@ -697,7 +697,7 @@ $(function() {
 					}
 					elem.trigger('close', {el: elemObj, current: currentDialog + 1});
 				});
-				
+
 				elemObj.addClass('open');
 				setTimeout(function() {
 					if (_options.type != '') {
@@ -706,9 +706,9 @@ $(function() {
 					dialogTop.addClass('fadeInTopBig');
 					dialogBody.addClass('fadeInTopBig');
 				}, animTime + 100);
-				
+
 				bindFooterButtons();
-				
+
 				function bindFooterButtons() {
 					elemObj.find('[data-dialogmodal-but="close"]').on('click', function() {
 						dialogModalClose();
@@ -735,11 +735,11 @@ $(function() {
 						$(this).off('click');
 						elem.trigger('cancelbut', {event: event, el: elemObj, current: currentDialog + 1});
 					});
-					
+
 					elemObj.find('[data-dialogmodal-but="prev"]').on('click', function() {
 						elemObj.find('.' + prevBut).click();
 					});
-					
+
 					elemObj.find('[data-dialogmodal-but="next"]').on('click', function() {
 						elemObj.find('.' + nextBut).click();
 					});
@@ -757,7 +757,7 @@ $(function() {
 						changeDialogContent();
 					}
 				});
-				
+
 				elemObj.find('.' + nextBut).on('click', function() {
 					if (currentDialog < maxDialog) {
 						++currentDialog;
@@ -770,7 +770,7 @@ $(function() {
 						changeDialogContent();
 					}
 				});
-				
+
 				function changeDialogContent() {
 					dialogBody.empty().append(elem[currentDialog].innerHTML);
 					dialogHeader.find('span').html(elem.find('.' + elemClass + '_header')[currentDialog].innerHTML);
@@ -785,7 +785,7 @@ $(function() {
 					dialogModalClose();
 					$(this).off('click');
 				});
-				
+
 				$('html').on('keydown.' + elemClass + 'Event', function(event) {
 					if (event.keyCode == 27) {
 						dialogModalClose();
@@ -795,13 +795,13 @@ $(function() {
 						elemObj.find('.' + nextBut).click();
 					}
 				});
-					
+
 			},
 			hide : function() {
 				dialogModalClose();
 			}
 		};
-		
+
 		function dialogModalClose() {
 		var elemObj = $('.' + elemClass);
 			elemObj.removeClass('open');
@@ -813,7 +813,7 @@ $(function() {
 				elemObj.find('.' + nextBut).off('click');
 			}, animTime);
 		}
-		
+
 		function getAnimTime() {
 			if (!animTime) {
 				animTime = elemObj.css('transitionDuration');
@@ -832,7 +832,7 @@ $(function() {
 		}
 
 	};
-	
+
 	$('* [data-dialogmodal-bind]').bind('click', function() {
 		var elemBind = $(this).attr('data-dialogmodal-bind');
 		var params = {};
@@ -862,7 +862,7 @@ $(function() {
 (function($) {
 	$.fn.titleModal = function(method) {
 	$('.titleModal').off();
-	
+
 		var methods = {
 			init : function() {
 				var elem,
@@ -908,7 +908,7 @@ $(function() {
 						elemObj.remove();
 					}
 				});
-				
+
 				function getPlacement(placement) {
 					elemObj = $('.' + elemClass + '_container');
 					var eLeft = elem.position().left,
@@ -925,29 +925,29 @@ $(function() {
 							elemObj.css({
 								top: eTop + parseInt(eMTop) + eHeight - 5 + 'px',
 								left: eLeft + parseInt(eMLeft) + (eWidth - eObjWidth) / 2  + 'px'
-							}).addClass(effectIn + 'Bottom');	
+							}).addClass(effectIn + 'Bottom');
 						break;
 						case 'top':
 							elemObj.css({
 								top: eTop + parseInt(eMTop) - eObjHeight + 'px',
 								left: eLeft + parseInt(eMLeft) + (eWidth - eObjWidth) / 2 + 'px'
-							}).addClass('top ' + effectIn + 'Top');	
+							}).addClass('top ' + effectIn + 'Top');
 						break;
 						case 'left':
 							elemObj.css({
 								top: eTop + parseInt(eMTop) + eHeight / 2 - eObjHeight / 2 + 'px',
 								left: eLeft + parseInt(eMLeft) - eObjWidth - 10 + 'px'
-							}).addClass('left ' + effectIn + 'Left');	
+							}).addClass('left ' + effectIn + 'Left');
 						break;
 						case 'right':
 							elemObj.css({
 								top: eTop + parseInt(eMTop) + eHeight / 2 - eObjHeight / 2 + 'px',
 								left: eLeft + parseInt(eMLeft) + eWidth + 10 + 'px'
-							}).addClass('right ' + effectIn + 'Right');	
+							}).addClass('right ' + effectIn + 'Right');
 						break;
 					}
 				}
-				
+
 				function reverseEffect() {
 					var animClassOld = elemObj.attr('class'),
 					animClassNew = animClassOld.replace(effectIn, effectOut);
@@ -962,7 +962,7 @@ $(function() {
 		} else if (typeof method === 'object' || ! method) {
 			return methods.init.apply( this, arguments );
 		}
-		
+
 	};
 	$('.titleModal').titleModal();
 	document.addEventListener("DOMNodeInserted", function(event) {
@@ -981,7 +981,7 @@ $(function() {
 		elemClass = 'confirmModal',
 		_options,
 		animTime;
-	
+
 		var methods = {
 			init : function(params) {
 				var _defaults = {
@@ -1001,12 +1001,12 @@ $(function() {
 				dialogBody = $('<div class="' + elemClass + '_body animated' + (_options.top != 0 ? ' modal' : '' ) + '" style="top:' + (isNaN(_options.top) ? _options.top : _options.top + 'px') + '"></div>');
 				dialogMain.append(dialogBody);
 				dialogBody.append(elem[0].innerHTML);
-				
+
 				$('body').append(dialogMain).addClass(elemClass + 'Open');
-				
+
 				elemObj = $('.' + elemClass);
 				getAnimTime();
-				
+
 				if (_options.onLoad && $.isFunction(_options.onLoad)) {
 					_options.onLoad(elemObj);
 				}
@@ -1018,19 +1018,19 @@ $(function() {
 					}
 					elem.trigger('close', {el: elemObj});
 				});
-				
+
 				elemObj.addClass('open');
 				setTimeout(function() {
 					dialogBody.addClass('fadeInTopBig');
-					
+
 					setTimeout(function() {
 						dialogBody.removeClass('fadeInTopBig').addClass('open');
 					}, animTime + 100);
-					
+
 				}, animTime + 100);
-				
+
 				bindFooterButtons();
-				
+
 				function bindFooterButtons() {
 					elemObj.find('[data-confirmmodal-but="close"]').on('click', function() {
 						confirmModalClose();
@@ -1057,36 +1057,36 @@ $(function() {
 						confirmModalClose();
 						$(this).off('click');
 					});
-					
-					
+
+
 					function needConfirm() {
 						dialogBody.addClass('needConfirm');
 						setTimeout(function() {
 							dialogBody.removeClass('needConfirm');
 						}, animTime + 100);
 					}
-					
+
 					elemObj.on('click', function(event) {
 						var target = $(event.target);
-						if (!target.parents().addBack().is(dialogBody)) {	
+						if (!target.parents().addBack().is(dialogBody)) {
 							needConfirm();
 						}
 					});
-					
+
 					$('html').on('keydown.' + elemClass + 'Event', function(event) {
 						if (event.keyCode == 27) {
 							needConfirm();
 						}
 					});
-					
+
 				}
-				
+
 			},
 			hide : function() {
 				confirmModalClose();
 			}
 		};
-		
+
 		function confirmModalClose() {
 		var elemObj = $('.' + elemClass);
 			elemObj.removeClass('open');
@@ -1096,7 +1096,7 @@ $(function() {
 				$('html.' + elemClass + 'Open').off('.' + elemClass + 'Event').removeClass(elemClass + 'Open');
 			}, animTime);
 		}
-		
+
 		function getAnimTime() {
 			if (!animTime) {
 				animTime = elemObj.css('transitionDuration');
@@ -1115,7 +1115,7 @@ $(function() {
 		}
 
 	};
-	
+
 	$('* [data-confirmmodal-bind]').bind('click', function() {
 		var elemBind = $(this).attr('data-confirmmodal-bind');
 		var params = {};

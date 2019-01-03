@@ -43,16 +43,6 @@ $(document).on( "click", "#show", function(e){
     $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
 });
 
-$(document).on("click", ".confirmSubmit", function() {
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $('form').submit();
-        }
-    });
-
-});
 
 $(document).on("click", ".invoiceConfirm", function() {
     $('#confirm-content').confirmModal({

@@ -345,7 +345,7 @@ $( ".select2mobile" ).autocomplete({
         var customerId = ui.item.id;
         var invoice = $('#invoice').val();
         $.ajax({
-            url: Routing.generate('hms_invoice_customer_details'),
+            url: Routing.generate('dms_invoice_customer_details'),
             type: 'POST',
             data:'customer='+customerId+'&invoice='+invoice,
             success: function(response) {

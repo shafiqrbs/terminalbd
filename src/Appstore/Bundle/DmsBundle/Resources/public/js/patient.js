@@ -58,48 +58,29 @@ $(document).on("click", ".saveButton", function() {
 
 function formSubmit() {
 
-    $("#invoicePatientForm").validate({
+    $("form#invoicePatientForm").validate({
 
         rules: {
 
-            "appstore_bundle_dmsinvoice[customer][name]": {required: true},
-            "appstore_bundle_dmsinvoice[customer][mobile]": {required: true},
-            "appstore_bundle_dmsinvoice[customer][age]": {required: true},
-            "appstore_bundle_dmsinvoice[customer][address]": {required: false},
-            "appstore_bundle_dmsinvoice[customer][weight]": {required: false},
+            "patient[customer][name]": {required: true},
+            "patient[customer][mobile]": {required: true},
+            "patient[customer][age]": {required: true},
+            "patient[customer][address]": {required: false},
+            "patient[customer][weight]": {required: false},
         },
 
         messages: {
 
-            "appstore_bundle_dmsinvoice[customer][name]": "Enter patient name",
-            "appstore_bundle_dmsinvoice[customer][mobile]": "Enter patient mobile no",
-            "appstore_bundle_dmsinvoice[customer][age]": "Enter patient age",
+            "patient[customer][name]": "Enter patient name",
+            "patient[customer][mobile]": "Enter patient mobile no",
+            "patient[customer][age]": "Enter patient age",
         },
         tooltip_options: {
-            "appstore_bundle_dmsinvoice[customer][name]": {placement: 'top', html: true},
-            "appstore_bundle_dmsinvoice[customer][mobile]": {placement: 'top', html: true},
-            "appstore_bundle_dmsinvoice[customer][age]": {placement: 'top', html: true},
-        },
-
-        submitHandler: function (form) {
-
-            $.ajax({
-                url         : $('form#invoicePatientForm').attr( 'action' ),
-                type        : $('form#invoicePatientForm').attr( 'method' ),
-                data        : new FormData($('form#invoicePatientForm')[0]),
-                processData : false,
-                contentType : false,
-                beforeSend: function() {
-                    $('#saveNewPatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
-                    $('.btn-ajax-loading').attr("disabled", true);
-                },
-                success: function(response){
-                    $('.btn-ajax-loading').attr("disabled", false);
-                    $('#saveNewPatientButton').removeClass('btn-ajax-loading').fadeOut(3000);
-                    window.location.href = '/dms/invoice/'+response+'/edit';
-                }
-            });
+            "patient[customer][name]": {placement: 'top', html: true},
+            "patient[customer][mobile]": {placement: 'top', html: true},
+            "patient[customer][age]": {placement: 'top', html: true},
         }
+
     });
 }
 

@@ -8,6 +8,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 
 /**
  * DpsInvoiceParticular
@@ -44,6 +45,7 @@ class MedicineDoctorPrescribe
      **/
     private $medicine;
 
+
      /**
      * @var string
      *
@@ -57,6 +59,13 @@ class MedicineDoctorPrescribe
      * @ORM\Column(name="medicineDose", type="string", length=100, nullable=true)
      */
     private $medicineDose;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="totalQuantity", type="string", length=100, nullable=true)
+     */
+    private $totalQuantity;
 
     /**
      * @var string
@@ -78,6 +87,14 @@ class MedicineDoctorPrescribe
      * @ORM\Column(name="medicineDuration", type="string", length=10, nullable=true)
      */
     private $medicineDuration;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="unit", type="string", length=50, nullable=true)
+     */
+    private $unit;
 
 
     /**
@@ -291,6 +308,35 @@ class MedicineDoctorPrescribe
     {
         $this->dmsInvoice = $dmsInvoice;
     }
+
+
+	/**
+	 * @return string
+	 */
+	public function getUnit() {
+		return $this->unit;
+	}
+
+	/**
+	 * @param string $unit
+	 */
+	public function setUnit( $unit ) {
+		$this->unit = $unit;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTotalQuantity(){
+		return $this->totalQuantity;
+	}
+
+	/**
+	 * @param string $totalQuantity
+	 */
+	public function setTotalQuantity($totalQuantity ) {
+		$this->totalQuantity = $totalQuantity;
+	}
 
 
 }

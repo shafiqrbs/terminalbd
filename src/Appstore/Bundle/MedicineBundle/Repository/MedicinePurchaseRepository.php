@@ -1,7 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -106,9 +108,63 @@ class MedicinePurchaseRepository extends EntityRepository
 
         $em->persist($entity);
         $em->flush();
-
         return $entity;
+    }
 
+    public function checkInstantPurchaseToday(MedicineVendor $vendor)
+    {
+
+	    $compare = new \DateTime();
+	    $today =  $compare->format('Y-m-d');
+	    $sql = "SELECT id
+                FROM medicine_purchase as purchase
+                WHERE purchase.medicineVendor_id = :vendor AND purchase.process = :process  AND DATE (purchase.receiveDate) =:receive AND  purchase.instantPurchase = :instantPurchase";
+	    $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+	    $stmt->bindValue('vendor', $vendor->getId());
+	    $stmt->bindValue('process', 'In-progress');
+	    $stmt->bindValue('receive', $today);
+	    $stmt->bindValue('instantPurchase', 1);
+	    $stmt->execute();
+	    $result =  $stmt->fetch();
+	    if(!empty($result['id'])){
+	    	return $data = array('purchase' => $result['id'],'status'=>'valid');
+	    }else{
+		    return $data = array('status'=>'in-valid');
+	    }
+
+    }
+
+
+    public function insertInstantPurchase(User $user ,$data)
+    {
+
+	    $config = $user->getGlobalOption()->getMedicineConfig();
+	    $em = $this->_em;
+
+	    $vendor = $em->getRepository('MedicineBundle:MedicineVendor')->checkInInsert($config,$data['vendor']);
+	    $check = $this->checkInstantPurchaseToday($vendor);
+	    if($check['status'] == 'valid'){
+	    	return $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->find($check['purchase']);
+	    }else{
+		    $entity = new MedicinePurchase();
+	    	$entity->setMedicineConfig($config);
+		    $entity->setMedicineVendor($vendor);
+		    $entity->setInstantPurchase(1);
+		    if(!empty($data['purchasesBy'])){
+			    $purchaseBy = $em->getRepository('UserBundle:User')->findOneBy(array('username' => $data['purchasesBy']));
+			    $entity->setPurchaseBy($purchaseBy);
+		    }
+		    $entity->setProcess('In-progress');
+		    $entity->setMode('instant');
+		    $receiveDate = new \DateTime('now');
+		    $entity->setReceiveDate($receiveDate);
+		    $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+		    $entity->setTransactionMethod($transactionMethod);
+		    $em->persist($entity);
+		    $em->flush();
+		    return $entity;
+
+	    }
     }
 
     public function getUpdateDiscount(MedicinePurchase $invoice,$subTotal)

@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('business_purchase') }}">Purchase</a>
+                    <a href="{{ path('hotel_purchase') }}">Purchase</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Manage Purchase</a></li>
@@ -36,8 +36,8 @@
             <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn red" href="{{ path('business_purchase_new') }}"><i class="icon-plus-sign"></i> Purchase Receive</a>
-                    <a class="btn" href="{{ path('business_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
+                    <a class="btn red" href="{{ path('hotel_purchase_new') }}"><i class="icon-plus-sign"></i> Purchase Receive</a>
+                    <a class="btn" href="{{ path('hotel_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
         <div class="portlet-body form">
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
-            <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('business_purchase_particular_add',{'invoice':entity.id}) }}">
+            <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('hotel_purchase_particular_add',{'invoice':entity.id}) }}">
             <div class="row-fluid">
                 <div class="span12">
                     <div class="row-fluid particular-info" >
@@ -53,7 +53,7 @@
                             <select id="particular" name="particular" class="span12 select2">
                                 <option value="">--- Select product name ---</option>
                                 {% for particular in particulars %}
-                                    <option value="{{ path('business_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }}</option>
+                                    <option value="{{ path('hotel_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -93,13 +93,13 @@
                             {% for item in entity.purchaseItems %}
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}</td>
-                                    <td  class="span1">{{ item.businessParticular.particularCode }}</td>
-                                    <td class="span3">{{ item.businessParticular.name }}</td>
+                                    <td  class="span1">{{ item.hotelParticular.particularCode }}</td>
+                                    <td class="span3">{{ item.hotelParticular.name }}</td>
                                     <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.purchasePrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
-                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('business_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                    <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hotel_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -204,12 +204,12 @@
                             <div class="control-group">
                                 <div class="span5">
                                 {{ form_widget(form.memo) }}
-                                {{ form_errors(form.memo) }}
-                                </div>
+                               </div>
                                 <div class="span7">
                                 {{ form_widget(form.receiveDate) }}
-                                {{ form_errors(form.receiveDate) }}
                                 </div>
+                                {{ form_errors(form.memo) }}
+                                {{ form_errors(form.receiveDate) }}
                             </div>
                         </div>
                     </div>
@@ -263,7 +263,7 @@
                 <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">
                 <input type="hidden" name="paymentTotal" id="paymentTotal" class="netTotal" value="{{ entity.netTotal }}">
                 <div class="pull-right">
-                    <button type="button" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Payment</button>
+                    <button type="submit" class="btn blue span12"><i class="icon-save"></i> Save</button>
                 </div>
             </div>
             {{ form_end(form) }}

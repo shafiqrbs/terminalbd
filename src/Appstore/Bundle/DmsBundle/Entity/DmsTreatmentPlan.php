@@ -77,6 +77,13 @@ class DmsTreatmentPlan
     private $cardNo;
 
     /**
+     * @var text
+     *
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    private $comment;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="paymentMobile", type="string", length=50, nullable=true)
@@ -584,6 +591,20 @@ class DmsTreatmentPlan
     {
         $this->transactionId = $transactionId;
     }
+
+	/**
+	 * @return text
+	 */
+	public function getComment(){
+		return $this->comment;
+	}
+
+	/**
+	 * @param text $comment
+	 */
+	public function setComment($comment) {
+		$this->comment = $comment;
+	}
 
 
 }

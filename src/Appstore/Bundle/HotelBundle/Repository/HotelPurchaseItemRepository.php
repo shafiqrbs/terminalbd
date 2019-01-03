@@ -22,7 +22,7 @@ class HotelPurchaseItemRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->from('HotelBundle:HotelPurchaseItem','e');
         $qb->select('AVG(e.purchasePrice) AS avgPurchasePrice');
-        $qb->where('e.businessParticular = :particular')->setParameter('particular', $particular) ;
+        $qb->where('e.hotelParticular = :particular')->setParameter('particular', $particular) ;
         $res = $qb->getQuery()->getOneOrNullResult();
         if(!empty($res)){
             $particular->setPurchaseAverage($res['avgPurchasePrice']);
@@ -71,7 +71,7 @@ class HotelPurchaseItemRepository extends EntityRepository
             $data .= "<td>{$entity->getPurchasePrice()}</td>";
             $data .= "<td>{$entity->getQuantity()}</td>";
             $data .= "<td>{$entity->getPurchaseSubTotal()}</td>";
-            $data .= "<td><a id='{$entity->getId()}'  data-url='/business/purchase/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
+            $data .= "<td><a id='{$entity->getId()}' data-id='{$entity->getId()}'  data-url='/hotel-restaurant/purchase/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a></td>";
             $data .= '</tr>';
             $i++;
         }
@@ -81,9 +81,9 @@ class HotelPurchaseItemRepository extends EntityRepository
     public function purchaseStockItemUpdate(HotelParticular $stockItem)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.businessPurchase', 'mp');
+        $qb->join('e.hotelPurchase', 'mp');
         $qb->select('SUM(e.quantity) AS quantity');
-        $qb->where('e.businessParticular = :particular')->setParameter('particular', $stockItem->getId());
+        $qb->where('e.hotelParticular = :particular')->setParameter('particular', $stockItem->getId());
         $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];

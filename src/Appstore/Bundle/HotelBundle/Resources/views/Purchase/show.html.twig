@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_purchase') }}">Purchase</a>
+                        <a href="{{ path('hotel_purchase') }}">Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Purchase</a></li>
@@ -38,8 +38,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('business_purchase_new') }}"><i class="icon-plus-sign"></i> Add purchase</a>
-                                <a class="btn black" href="{{ path('business_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
+                                <a class="btn red" href="{{ path('hotel_purchase_new') }}"><i class="icon-plus-sign"></i> Add purchase</a>
+                                <a class="btn black" href="{{ path('hotel_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                             </div>
                         </div>
 
@@ -100,8 +100,8 @@
                                         {% for item in entity.purchaseItems %}
                                             <tr id="remove-{{ item.id }}">
                                                 <td  class="span1">{{ loop.index }}</td>
-                                                <td  class="span1">{{ item.businessParticular.particularCode }}</td>
-                                                <td class="span4">{{ item.businessParticular.name }}</td>
+                                                <td  class="span1">{{ item.hotelParticular.particularCode }}</td>
+                                                <td class="span4">{{ item.hotelParticular.name }}</td>
                                                 <td class="span1">{{ item.quantity }}</td>
                                                 <td class="span2">{{ item.salesPrice }}</td>
                                                 <td class="span2">{{ item.purchasePrice }}</td>
@@ -116,10 +116,10 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if ( entity.process == 'Done') %}
-                                    <a  href="javascript:"  data-url="{{ path('business_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                    <a  href="javascript:"  data-url="{{ path('hotel_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
-                                    {% if (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_PURCHASE_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}
-                                        <a  href="javascript:" data-id="{{ path('business_purchase_edit',{'id':entity.id}) }}"  data-url="{{ path('business_purchase_reverse',{'id':entity.id}) }}" class="btn red reverse"><i class="icon-retweet"></i>&nbsp;Reverse</a>
+                                    {% if (entity.process == 'Approved' and app.user.granted("ROLE_hotel_PURCHASE_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}
+                                        <a  href="javascript:" data-id="{{ path('hotel_purchase_edit',{'id':entity.id}) }}"  data-url="{{ path('hotel_purchase_reverse',{'id':entity.id}) }}" class="btn red reverse"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                     <span  class="btn green"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>

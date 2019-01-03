@@ -87,9 +87,11 @@ dms_invoice_accessories_add:
     options:
             expose: true
 
+
 dms_invoice_accessories_delete:
     path:     /{id}/accessories-delete
     defaults: { _controller: "DmsBundle:Invoice:deleteAccessories" }
+
 
 dms_invoice_accessories_approved:
     path:     /{id}/accessories-approved
@@ -107,6 +109,8 @@ dms_invoice_update:
     path:     /{id}/update
     defaults: { _controller: "DmsBundle:Invoice:update" }
     methods:  [POST, PUT]
+    options:
+           expose: true
 
 dms_invoice_delete:
     path:     /{id}/delete

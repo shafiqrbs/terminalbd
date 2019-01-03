@@ -249,7 +249,7 @@ $(document).on( "click", ".receivePayment", function(e){
 $(document).on( "change", "#invoiceParticular", function(e){
 
     var price = $(this).val();
-    $('#appstore_bundle_dmsinvoice_payment').val(price);
+    $('#invoice_payment').val(price);
 });
 
 $(document).on('click', '.addProcedure', function() {
@@ -349,11 +349,16 @@ $(document).on('click', '#addPrescriptionParticular', function() {
     var medicineDoseTime = $('#medicineDoseTime').val();
     var medicineDuration = $('#medicineDuration').val();
     var medicineDurationType = $('#medicineDurationType').val();
+    var totalQuantity = $('#totalQuantity').val();
+    var unit = $('#unit').val();
     var url = $('#addPrescriptionParticular').attr('data-url');
+    if(medicineId === ""){
+        return false;
+    }
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'medicine='+medicine+'&medicineId='+medicineId+'&medicineQuantity='+medicineQuantity+'&medicineDose='+medicineDose+'&medicineDoseTime='+medicineDoseTime+'&medicineDuration='+medicineDuration+'&medicineDurationType='+medicineDurationType,
+        data: 'medicine='+medicine+'&medicineId='+medicineId+'&medicineQuantity='+medicineQuantity+'&medicineDose='+medicineDose+'&medicineDoseTime='+medicineDoseTime+'&medicineDuration='+medicineDuration+'&medicineDurationType='+medicineDurationType+'&totalQuantity='+totalQuantity+'&unit='+unit,
         success: function (response) {
             $('#invoiceMedicine').html(response);
             $('#medicine').val('');
@@ -432,7 +437,7 @@ $(document).on('change', '#appointmentDate', function() {
     if(appointmentDate == ''){
         return false;
     }
-    var assignDoctor = $('#appstore_bundle_dmsinvoice_assignDoctor').val();
+    var assignDoctor = $('#invoice_assignDoctor').val();
     $.get(Routing.generate('dms_invoice_appointment_schedule_time',{assignDoctor:assignDoctor,appointmentDate:appointmentDate}),
             function(data){
                $('#appointmentTime').html(data);
@@ -527,18 +532,19 @@ $(document).on('click', '#received2Btn', function() {
     }
     var receive = $('#receive').val();
     var discount = $('#discount').val();
-    var transactionMethod = $('#appstore_bundle_dmsinvoice_transactionMethod').val();
-    var transactionId = $('#appstore_bundle_dmsinvoice_transactionId').val();
-    var paymentMobile = $('#appstore_bundle_dmsinvoice_paymentMobile').val();
-    var mobileBank = $('#appstore_bundle_dmsinvoice_accountMobileBank').val();
-    var accountBank = $('#appstore_bundle_dmsinvoice_accountBank').val();
-    var paymentCard = $('#appstore_bundle_dmsinvoice_paymentCard').val();
-    var cardNo = $('#appstore_bundle_dmsinvoice_cardNo').val();
+    var transactionMethod = $('#invoice_transactionMethod').val();
+    var transactionId = $('#invoice_transactionId').val();
+    var paymentMobile = $('#invoice_paymentMobile').val();
+    var mobileBank = $('#invoice_accountMobileBank').val();
+    var accountBank = $('#invoice_accountBank').val();
+    var paymentCard = $('#invoice_paymentCard').val();
+    var cardNo = $('#invoice_cardNo').val();
+    var comment = $('#invoice_comment').val();
     var url = $(this).attr('data-url');
     $.ajax({
         url: url,
         type: 'POST',
-        data: 'treatment='+treatment+'&discount='+discount+'&receive='+receive+'&transactionMethod='+transactionMethod+'&transactionId='+transactionId+'&paymentMobile='+paymentMobile+'&mobileBank='+mobileBank+'&accountBank='+accountBank+'&paymentCard='+paymentCard+'&cardNo='+cardNo+'&adjustment='+adjustment,
+        data: 'treatment='+treatment+'&discount='+discount+'&receive='+receive+'&transactionMethod='+transactionMethod+'&transactionId='+transactionId+'&paymentMobile='+paymentMobile+'&mobileBank='+mobileBank+'&accountBank='+accountBank+'&paymentCard='+paymentCard+'&cardNo='+cardNo+'&adjustment='+adjustment+'&comment='+comment,
         success: function (response) {
             obj = JSON.parse(response);
             if(obj['success'] == 'success'){
@@ -551,6 +557,7 @@ $(document).on('click', '#received2Btn', function() {
                 $("#treatment").val($("#treatment option:first").val());
                 $('#discount').val('');
                 $('#receive').val('');
+                $('#invoice_comment').val('');
                 $('#uniform-adjustment span').removeClass('checked');
                 $('#adjustment').attr('checked', false);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
@@ -661,43 +668,47 @@ $(document).on('click', '#searchAppointment', function() {
 
 });
 
-var form = $("#invoiceForm").validate({
+var invoiceForm = $("form#invoiceForm").validate({
 
     rules: {
 
-        "appstore_bundle_dmsinvoice[customer][name]": {required: true},
-        "appstore_bundle_dmsinvoice[customer][mobile]": {required: true},
-        "appstore_bundle_dmsinvoice[customer][age]": {required: true},
-        "appstore_bundle_dmsinvoice[customer][address]": {required: false},
+        "dms_invoice[customer][name]": {required: true},
+        "dms_invoice[customer][mobile]": {required: true},
+        "dms_invoice[customer][age]": {required: true},
+        "dms_invoice[customer][address]": {required: false},
+        "dms_invoice[comment]": {required: false},
+
     },
 
     messages: {
 
-        "appstore_bundle_dmsinvoice[customer][name]":"Enter patient name",
-        "appstore_bundle_dmsinvoice[customer][mobile]":"Enter patient mobile no",
-        "appstore_bundle_dmsinvoice[customer][age]": "Enter patient age",
+        "dms_invoice[customer][name]":"Enter patient name",
+        "dms_invoice[customer][mobile]":"Enter patient mobile no",
+        "dms_invoice[customer][age]": "Enter patient age",
     },
     tooltip_options: {
-        "appstore_bundle_dmsinvoice[customer][name]": {placement:'top',html:true},
-        "appstore_bundle_dmsinvoice[customer][mobile]": {placement:'top',html:true},
-        "appstore_bundle_dmsinvoice[customer][age]": {placement:'top',html:true},
+        "dms_invoice[customer][name]": {placement:'top',html:true},
+        "dms_invoice[customer][mobile]": {placement:'top',html:true},
+        "dms_invoice[customer][age]": {placement:'top',html:true},
     },
 
-    submitHandler: function(form) {
-
+    submitHandler: function(invoiceForm) {
         $.ajax({
             url         : $('form#invoiceForm').attr( 'action' ),
             type        : $('form#invoiceForm').attr( 'method' ),
-            data        : new FormData($('form#invoiceForm')[0]),
             processData : false,
             contentType : false,
+            data        : new FormData($('form#invoiceForm')[0]),
+            type        : 'POST',
             beforeSend: function() {
                 $('#savePatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
                 $('.btn-ajax-loading').attr("disabled", true);
             },
             complete: function(){
                 $('.btn-ajax-loading').attr("disabled", false);
+                $('#savePatientButton').html('<i class="icon-save"></i> Save & Continue');
                 $('#savePatientButton').removeClass('btn-ajax-loading');
+
             },
             success: function(response){
 
@@ -706,35 +717,35 @@ var form = $("#invoiceForm").validate({
     }
 });
 
-$('#appstore_bundle_dmsinvoice_customer_name').on('click', function(){
+/*$('#invoice_customer_name').on('click', function(){
     form.element($(this));
 });
-$('#appstore_bundle_dmsinvoice_customer_mobile').on('click', function(){
+$('#invoice_customer_mobile').on('click', function(){
     form.element($(this));
 });
-$('#appstore_bundle_dmsinvoice_customer_age').on('click', function(){
+$('#invoice_customer_age').on('click', function(){
     form.element($(this));
-});
+});*/
 
 
-$(document).on("click", ".saveButton", function() {
-
+$(document).on("click", ".saveButton", function(e) {
     var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
     var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
+    e.stopPropagation();
+    e.stopImmediatePropagation();
     $.ajax({
         url:url ,
         type: 'POST',
         processData: false,
         contentType: false,
         data:formData,
-        success: function(response){
-
-        }
+        success: function(response){}
     });
+
 
 });
 
-$(document).on("change", ".invoiceProcess", function() {
+$(document).on("change", ".invoiceProcess", function(e) {
 
     var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
     var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance

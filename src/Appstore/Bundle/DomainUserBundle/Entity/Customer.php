@@ -510,7 +510,7 @@ class Customer
      *
      * @param string $address
      *
-     * @return Customer
+     * @return string
      */
     public function setAddress($address)
     {

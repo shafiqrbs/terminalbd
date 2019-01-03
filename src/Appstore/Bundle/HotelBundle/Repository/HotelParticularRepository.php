@@ -363,12 +363,15 @@ class HotelParticularRepository extends EntityRepository
 
     public function insertInvoiceProductItem(HotelInvoice $invoice){
 	    $em = $this->_em;
+
         if(!empty($invoice->getHotelInvoiceParticulars())) {
 
             /* @var  $item HotelInvoiceParticular */
 
             foreach ($invoice->getHotelInvoiceParticulars() as $item) {
+
 				if(!empty($item->getHotelParticular())) {
+
 					if ( $item->getHotelParticular()->getHotelParticularType()->getSlug() == 'production' and $invoice->getHotelConfig()->getProductionType() == 'post-production' ) {
 						$this->productionExpense( $item );
 						$particular = $item->getHotelParticular();
@@ -430,10 +433,13 @@ class HotelParticularRepository extends EntityRepository
 
     public function getSalesUpdateQnt(HotelInvoiceParticular  $item){
 
-        $em = $this->_em;
+	    /* @var $particular HotelParticular */
+
+		$em = $this->_em;
         $particular = $item->getHotelParticular();
-        $qnt = $particular->getSalesQuantity() + $item->getTotalQuantity();
+        $qnt = $particular->getSalesQuantity() + $item->getQuantity();
         $particular->setSalesQuantity($qnt);
+        $particular->setRemainingQuantity($particular->getRemainingQuantity() - $particular->getSalesQuantity());
         $em->persist($particular);
         $em->flush();
 

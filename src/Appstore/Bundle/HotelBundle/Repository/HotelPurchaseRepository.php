@@ -21,7 +21,7 @@ class HotelPurchaseRepository extends EntityRepository
 
 		$grn = isset($data['grn'])? $data['grn'] :'';
 		$vendor = isset($data['vendor'])? $data['vendor'] :'';
-		$business = isset($data['name'])? $data['name'] :'';
+		$hotel = isset($data['name'])? $data['name'] :'';
 		$brand = isset($data['brandName'])? $data['brandName'] :'';
 		$mode = isset($data['mode'])? $data['mode'] :'';
 		$vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
@@ -31,8 +31,8 @@ class HotelPurchaseRepository extends EntityRepository
 		if (!empty($grn)) {
 			$qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
 		}
-		if(!empty($business)){
-			$qb->andWhere($qb->expr()->like("ms.name", "'%$business%'"  ));
+		if(!empty($hotel)){
+			$qb->andWhere($qb->expr()->like("ms.name", "'%$hotel%'"  ));
 		}
 		if(!empty($brand)){
 			$qb->andWhere($qb->expr()->like("ms.brandName", "'%$brand%'"  ));
@@ -41,11 +41,11 @@ class HotelPurchaseRepository extends EntityRepository
 			$qb->andWhere($qb->expr()->like("ms.mode", "'%$mode%'"  ));
 		}
 		if(!empty($vendor)){
-			$qb->join('e.businessVendor','v');
+			$qb->join('e.hotelVendor','v');
 			$qb->andWhere("v.companyName = :vendor")->setParameter('vendor', $vendor);
 		}
 		if(!empty($vendorId)){
-			$qb->join('e.businessVendor','v');
+			$qb->join('e.hotelVendor','v');
 			$qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
 		}
 		if (!empty($startDate) ) {
@@ -70,7 +70,7 @@ class HotelPurchaseRepository extends EntityRepository
         $total = $em->createQueryBuilder()
             ->from('HotelBundle:HotelPurchaseItem','si')
             ->select('sum(si.purchaseSubTotal) as total')
-            ->where('si.businessPurchase = :entity')
+            ->where('si.hotelPurchase = :entity')
             ->setParameter('entity', $entity ->getId())
             ->getQuery()->getSingleResult();
 
@@ -114,8 +114,8 @@ class HotelPurchaseRepository extends EntityRepository
 		$year =  $compare->format('Y');
 		$year = isset($data['year'])? $data['year'] :$year;
 		$sql = "SELECT MONTH (purchase.created) as month,SUM(purchase.netTotal) AS total
-                FROM business_purchase as purchase
-                WHERE purchase.businessConfig_id = :config AND purchase.process = :process  AND YEAR(purchase.updated) =:year
+                FROM hotel_purchase as purchase
+                WHERE purchase.hotelConfig_id = :config AND purchase.process = :process  AND YEAR(purchase.updated) =:year
                 GROUP BY month ORDER BY month ASC";
 		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
 		$stmt->bindValue('config', $config);
@@ -169,7 +169,7 @@ class HotelPurchaseRepository extends EntityRepository
 		$config =  $user->getGlobalOption()->getHotelConfig()->getId();
 		$qb = $this->createQueryBuilder('s');
 		$qb->select('e.process as name , sum(e.subTotal) as subTotal , sum(e.netTotal) as total ,sum(e.payment) as totalPayment , count(e.id) as totalVoucher, sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
-		$qb->where('e.businessConfig = :config');
+		$qb->where('e.hotelConfig = :config');
 		$qb->setParameter('config', $config);
 		$this->handleSearchBetween($qb,$data);
 		$qb->groupBy("e.process");
@@ -182,7 +182,7 @@ class HotelPurchaseRepository extends EntityRepository
 		$config =  $user->getGlobalOption()->getHotelConfig()->getId();
 		$qb = $this->createQueryBuilder('e');
 		$qb->select('sum(e.netTotal) as total , sum(e.payment) as totalPayment ,  sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
-		$qb->where('e.businessConfig = :config');
+		$qb->where('e.hotelConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('e.process = :process');
 		$qb->setParameter('process', 'Approved');

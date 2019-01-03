@@ -40,7 +40,7 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHotelConfig();
-        $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelPurchase')->findBy(array('businessConfig' => $config),array('created'=>'DESC'));
+        $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelPurchase')->findBy(array('hotelConfig' => $config),array('created'=>'DESC'));
         $pagination = $this->paginate($entities);
         return $this->render('HotelBundle:Purchase:index.html.twig', array(
             'entities' => $pagination,
@@ -70,7 +70,7 @@ class PurchaseController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('business_purchase_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('hotel_purchase_edit', array('id' => $entity->getId())));
 
     }
 
@@ -79,7 +79,7 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHotelConfig();
-        $entity = $em->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+        $entity = $em->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('hotelConfig' => $config , 'id' => $id));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -106,7 +106,7 @@ class PurchaseController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseType($globalOption), $entity, array(
-            'action' => $this->generateUrl('business_purchase_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('hotel_purchase_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -217,7 +217,7 @@ class PurchaseController extends Controller
             $entity->setProcess('Done');
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();
-            return $this->redirect($this->generateUrl('business_purchase_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hotel_purchase_show', array('id' => $entity->getId())));
         }
         $particulars = $em->getRepository('HotelBundle:HotelParticular')->getFindWithParticular($entity->getHotelConfig(),$type = array('consumable','stock'));
         return $this->render('HotelBundle:Purchase:new.html.twig', array(
@@ -237,7 +237,7 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
 
 	    $config = $this->getUser()->getGlobalOption()->getHotelConfig();
-	    $entity = $em->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+	    $entity = $em->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('hotelConfig' => $config , 'id' => $id));
 
 
 	    if (!$entity) {
@@ -252,7 +252,7 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getHotelConfig();
-	    $purchase = $em->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+	    $purchase = $em->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('hotelConfig' => $config , 'id' => $id));
 	    if (!empty($purchase) and empty($purchase->getApprovedBy())) {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
@@ -286,7 +286,7 @@ class PurchaseController extends Controller
     {
 
     	$config = $this->getUser()->getGlobalOption()->getHotelConfig();
-	    $entity = $this->getDoctrine()->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+	    $entity = $this->getDoctrine()->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('hotelConfig' => $config , 'id' => $id));
 
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -294,7 +294,7 @@ class PurchaseController extends Controller
         }
         $em->remove($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('business_purchase'));
+        return $this->redirect($this->generateUrl('hotel_purchase'));
     }
 
 	public function reverseAction($id)
@@ -312,7 +312,7 @@ class PurchaseController extends Controller
 		 * Delete Journal & Account Purchase
 		 */
 		$config = $this->getUser()->getGlobalOption()->getHotelConfig();
-		$purchase = $this->getDoctrine()->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+		$purchase = $this->getDoctrine()->getRepository('HotelBundle:HotelPurchase')->findOneBy(array('hotelConfig' => $config , 'id' => $id));
 
 		set_time_limit(0);
 		ignore_user_abort(true);
@@ -332,7 +332,7 @@ class PurchaseController extends Controller
 			'config' => $purchase->getHotelConfig(),
 		));
 		$this->getDoctrine()->getRepository('HotelBundle:HotelReverse')->purchaseReverse($purchase, $template);
-		return $this->redirect($this->generateUrl('business_purchase_edit',array('id' => $purchase->getId())));
+		return $this->redirect($this->generateUrl('hotel_purchase_edit',array('id' => $purchase->getId())));
 	}
 
 

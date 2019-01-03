@@ -532,8 +532,6 @@ class HotelInvoiceRepository extends EntityRepository
 		$em->flush();
 	}
 
-
-
 	public function insertTransaction(HotelInvoice $invoice)
 	{
 		$entity = new HotelInvoiceTransaction();
@@ -543,7 +541,7 @@ class HotelInvoiceRepository extends EntityRepository
 		$entity->setCode($code + 1);
 		$transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
 		$entity->setTransactionCode($transactionCode);
-		$entity->setProcess('Done');
+		$entity->setProcess('done');
 		$entity->setTransactionMethod($invoice->getTransactionMethod());
 		$entity->setAccountBank($invoice->getAccountBank());
 		$entity->setPaymentCard($invoice->getPaymentCard());
@@ -565,10 +563,15 @@ class HotelInvoiceRepository extends EntityRepository
 		$this->_em->flush($entity);
 		$this->updateTransactionPaymentReceive($entity);
 		$this->_em->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->updateTransactionSummary($invoice);
-		if($entity->getReceived() > 0 ){
+		$arrs= array('check-in','booked');
+		if(in_array($entity->getHotelInvoice()->getProcess(),$arrs)  and $entity->getHotelInvoice()->getInvoiceFor() == 'hotel' and $entity->getProcess() == 'done' and $entity->getReceived() > 0 ){
+			$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
+			$this->_em->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
+		}elseif($entity->getHotelInvoice()->getInvoiceFor() == 'restaurant'){
 			$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
 			$this->_em->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
 		}
+
 	}
 
 	public function updateInvoiceTransaction(HotelInvoice $invoice)
@@ -603,7 +606,7 @@ class HotelInvoiceRepository extends EntityRepository
 			$entity->setCode($code + 1);
 			$transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
 			$entity->setTransactionCode($transactionCode);
-			$entity->setProcess('Done');
+			$entity->setProcess('done');
 			$entity->setTransactionMethod($invoice->getTransactionMethod());
 			$entity->setAccountBank($invoice->getAccountBank());
 			$entity->setPaymentCard($invoice->getPaymentCard());
@@ -624,10 +627,9 @@ class HotelInvoiceRepository extends EntityRepository
 			$this->_em->flush($entity);
 			$this->updateTransactionPaymentReceive($entity);
 			$this->_em->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->updateTransactionSummary($hip->getHotelInvoice());
-			if($entity->getReceived() > 0 ){
-				$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
-				$this->_em->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
-			}
+			$accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
+			$this->_em->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
+
 		}
 
 	}
@@ -644,7 +646,7 @@ class HotelInvoiceRepository extends EntityRepository
 		$entity->setTransactionCode($transactionCode);
 		$entity->setDiscount($data['invoice']['discount']);
 		$entity->setReceived($data['invoice']['received']);
-		$entity->setProcess('In-progress');
+		$entity->setProcess('in-progress');
 		$entity->setTransactionMethod($invoice->getTransactionMethod());
 		$entity->setAccountBank($invoice->getAccountBank());
 		$entity->setPaymentCard($invoice->getPaymentCard());

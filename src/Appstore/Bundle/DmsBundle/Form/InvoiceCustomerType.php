@@ -78,7 +78,7 @@ class InvoiceCustomerType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_dmsinvoice';
+        return 'patient';
     }
 
 }

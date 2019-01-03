@@ -62,7 +62,7 @@
                                     {% set netTotal = netTotal+ overview.total  %}
                                     {% set netReceive = netReceive+ overview.receive  %}
                                 <tr>
-                                    <td class="numeric" ><strong>{{ overview.processHead }}</strong></td>
+                                    <td class="numeric" ><strong>{{ overview.processHead|capitalize }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.totalCount }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.total|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.receive|number_format }}</strong></td>
@@ -121,7 +121,8 @@
                                     <th class="numeric" >Invoice</th>
                                     <th {% if entities.isSorted('e.processHead') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Receive Mode', 'e.processHead') }}{% if( direction == 'desc' and sort == 'e.processHead') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Ref No.</th>
-                                    <th class="numeric" >Trans. Method</th>
+                                    <th class="numeric" >Method</th>
+                                    <th class="numeric" >Type</th>
                                     <th class="numeric" >Sales</th>
                                     <th class="numeric" >Received</th>
                                     <th class="numeric" >Due</th>
@@ -134,14 +135,13 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                        <td class="numeric" >
-                                            {% if entity.sales is not empty %}{{ entity.sales.invoice }} {% endif %}
-                                        </td>
+                                        <td class="numeric" >{{ entity.sourceInvoice }}</td>
                                         <td class="numeric" >{{ entity.processHead|capitalize }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                          <td class="numeric" >
                                              {% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}
                                          </td>
+                                       <td>{{ entity.processType }}</td>
                                         <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
                                         <td class="numeric" >
                                                 {% if entity.process == 'approved'  %}

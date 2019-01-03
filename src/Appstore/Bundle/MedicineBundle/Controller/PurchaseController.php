@@ -424,8 +424,8 @@ class PurchaseController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
 
+        $em = $this->getDoctrine()->getManager();
 	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 	    $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
 	    if (!$entity) {

@@ -44,7 +44,7 @@ class StockController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getHotelConfig();
-        $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->findWithSearch($config,$data);
+        $entities = $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->findWithSearch($config,'stock',$data);
         $pagination = $this->paginate($entities);
         $type = $this->getDoctrine()->getRepository('HotelBundle:HotelParticularType')->findBy(array('status'=>1));
         $category = $this->getDoctrine()->getRepository('HotelBundle:Category')->findBy(array('status'=>1));

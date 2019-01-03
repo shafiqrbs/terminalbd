@@ -205,11 +205,11 @@ class UserRepository extends EntityRepository
         $result = array_intersect($arrSlugs, $dms);
         if (!empty($result)) {
             $array['DMS'] = array(
-                'ROLE_DMS'                                  => 'Dental',
-                'ROLE_DOMAIN_DMS_LAB'                       => 'Dental Lab',
-                'ROLE_DOMAIN_DMS_DOCTOR'                    => 'Dental Doctor',
-                'ROLE_DOMAIN_DMS_MANAGER'                   => 'Dental Manager',
-                'ROLE_DOMAIN_DMS_ADMIN'                     => 'Dental Admin',
+                'ROLE_DMS'                           => 'Dental',
+                'ROLE_DMS_LAB'                       => 'Dental Lab',
+                'ROLE_DMS_DOCTOR'                    => 'Dental Doctor',
+                'ROLE_DMS_MANAGER'                   => 'Dental Manager',
+                'ROLE_DMS_ADMIN'                     => 'Dental Admin',
             );
         }
 

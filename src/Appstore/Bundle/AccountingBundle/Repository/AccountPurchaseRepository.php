@@ -27,7 +27,6 @@ class AccountPurchaseRepository extends EntityRepository
     public function findWithSearch($globalOption,$data = '')
     {
         $qb = $this->createQueryBuilder('e');
-
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
@@ -265,7 +264,6 @@ class AccountPurchaseRepository extends EntityRepository
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $vendor =    isset($data['vendor'])? $data['vendor'] :'';
 	            $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
-
                 if (!empty($startDate) and !empty($endDate) ) {
 	                $compareTo = new \DateTime($startDate);
 	                $startDate =  $compareTo->format('Y-m-d 00:00:00');
@@ -384,7 +382,7 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setPayment($entity->getPaymentAmount());
         $accountPurchase->setProcessHead('inventory');
         $accountPurchase->setProcessType('Purchase');
-        $accountPurchase->setCompanyName($entity->getVendor()->getComapnyName());
+        $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
         $accountPurchase->setGrn($entity->getGrn());
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
         $accountPurchase->setProcess('approved');
@@ -400,9 +398,6 @@ class AccountPurchaseRepository extends EntityRepository
     public function insertDmsAccountPurchase(DmsPurchase $entity)
     {
 
-        $data = array('dmsVendor' => $entity->getDmsVendor()->getCompanyName());
-        $result = $this->accountPurchaseOverview($entity->getDmsConfig()->getGlobalOption(),$data);
-        $balance = ( $result['purchaseAmount'] - $result['payment']);
 
         $em = $this->_em;
         $accountPurchase = new AccountPurchase();
@@ -416,7 +411,7 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setPayment($entity->getPayment());
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
         $accountPurchase->setBalance(($balance + $entity->getNetTotal()) - $accountPurchase->getPayment() );
-	    $accountPurchase->setCompanyName($entity->getDmsVendor()->getComapnyName());
+	    $accountPurchase->setCompanyName($entity->getDmsVendor()->getCompanyName());
 	    $accountPurchase->setGrn($entity->getGrn());
 	    $accountPurchase->setProcessHead('dms');
         $accountPurchase->setProcessType('Purchase');
@@ -424,6 +419,7 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setApprovedBy($entity->getApprovedBy());
         $em->persist($accountPurchase);
         $em->flush();
+	    $this->updateVendorBalance($accountPurchase);
         if($accountPurchase->getPayment() > 0 ){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
         }
@@ -447,7 +443,7 @@ class AccountPurchaseRepository extends EntityRepository
 	    }
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
-        $accountPurchase->setCompanyName($entity->getMedicineVendor()->getComapnyName());
+        $accountPurchase->setCompanyName($entity->getMedicineVendor()->getCompanyName());
 	    $accountPurchase->setGrn($entity->getGrn());
 	    $accountPurchase->setProcessHead('medicine');
         $accountPurchase->setProcessType('Purchase');
@@ -472,7 +468,7 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setGlobalOption($global);
         $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
         $accountPurchase->setPayment($entity->getTotal());
-	    $accountPurchase->setCompanyName($entity->getMedicineVendor()->getComapnyName());
+	    $accountPurchase->setCompanyName($entity->getMedicineVendor()->getCompanyName());
 	    $accountPurchase->setGrn($entity->getGrn());
 	    $accountPurchase->setProcessHead('medicine');
         $accountPurchase->setProcessType('Purchase-return');
@@ -498,7 +494,7 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
-	    $accountPurchase->setCompanyName($entity->getVendor()->getComapnyName());
+	    $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
 	    $accountPurchase->setGrn($entity->getGrn());
 	    $accountPurchase->setProcess('hms');
         $accountPurchase->setProcessType('Purchase');
@@ -527,7 +523,7 @@ class AccountPurchaseRepository extends EntityRepository
 	    $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
-	    $accountPurchase->setCompanyName($entity->getVendor()->getComapnyName());
+	    $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
 	    $accountPurchase->setGrn($entity->getGrn());
 	    $accountPurchase->setProcess('restaurant');
         $accountPurchase->setProcessType('Purchase');
@@ -558,7 +554,7 @@ class AccountPurchaseRepository extends EntityRepository
 		}
 		$accountPurchase->setPurchaseAmount($entity->getNetTotal());
 		$accountPurchase->setPayment($entity->getPayment());
-		$accountPurchase->setCompanyName($entity->getVendor()->getComapnyName());
+		$accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
 		$accountPurchase->setGrn($entity->getGrn());
 		$accountPurchase->setProcessHead('business');
 		$accountPurchase->setProcessType('Purchase');
@@ -577,11 +573,11 @@ class AccountPurchaseRepository extends EntityRepository
 
 	public function insertHotelAccountPurchase(HotelPurchase $entity) {
 
-		$global          = $entity->getBusinessConfig()->getGlobalOption();
+		$global          = $entity->getHotelConfig()->getGlobalOption();
 		$em              = $this->_em;
 		$accountPurchase = new AccountPurchase();
 		$accountPurchase->setGlobalOption( $global );
-		$accountPurchase->setBusinessPurchase( $entity );
+		$accountPurchase->setHotelPurchase($entity);
 		$accountPurchase->setAccountVendor( $entity->getVendor() );
 		$accountPurchase->setAccountBank( $entity->getAccountBank() );
 		$accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
@@ -590,7 +586,7 @@ class AccountPurchaseRepository extends EntityRepository
 		}
 		$accountPurchase->setPurchaseAmount($entity->getNetTotal());
 		$accountPurchase->setPayment($entity->getPayment());
-		$accountPurchase->setCompanyName($entity->getVendor()->getComapnyName());
+		$accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
 		$accountPurchase->setGrn($entity->getGrn());
 		$accountPurchase->setProcessHead('hotel');
 		$accountPurchase->setProcessType('Purchase');

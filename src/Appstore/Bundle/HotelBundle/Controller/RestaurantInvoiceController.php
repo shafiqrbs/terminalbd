@@ -172,7 +172,8 @@ class RestaurantInvoiceController extends Controller
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            if(!empty($entity->getRoomName())){
+            $this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->insertInvoiceProductItem($entity);
+	        if(!empty($entity->getRoomName())){
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertRestaurantTransaction($entity,$hip);
 	        }else{
 	            $this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertTransaction($entity);

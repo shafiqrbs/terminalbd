@@ -188,13 +188,13 @@ class InvoiceController extends Controller
 			if (in_array($entity->getProcess(), $done) and $entity->getTotal() > 0) {
 				//$this->getDoctrine()->getRepository('HotelBundle:HotelParticular')->insertInvoiceProductItem($entity);
 				$this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->checkInHotelInvoice($entity);
-				$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertTransaction($entity);
 				// if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 				$dispatcher = $this->container->get('event_dispatcher');
 				$dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
 				// }
 			}
 			$inProgress = array('booked');
+			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoice')->insertTransaction($entity);
 			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->updateRoomProcess($entity);
 			if (in_array($entity->getProcess(), $inProgress)) {
 				//  if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
@@ -267,9 +267,11 @@ class InvoiceController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getHotelConfig();
+		$transactions = $this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceTransaction')->getHotelInvoiceTransactionLists($entity);
 		if ($config->getId() == $entity->getHotelConfig()->getId()) {
 			return $this->render('HotelBundle:Invoice:show.html.twig', array(
 				'entity' => $entity,
+				'transactions' => $transactions,
 			));
 		} else {
 			return $this->redirect($this->generateUrl('hotel_invoice'));
@@ -435,20 +437,18 @@ class InvoiceController extends Controller
 	public function checkoutAction(HotelInvoice $entity)
 	{
 		$em = $this->getDoctrine()->getManager();
-		if(!empty($entity) and $entity->getProcess() == 'check-in') {
+		if(!empty($entity) and $entity->getHotelInvoiceTransactionSummary()->getDue() == 0  and $entity->getProcess() == 'check-in') {
 			$entity->setProcess('check-out');
 			$em->flush();
 			$this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceParticular')->updateRoomProcess($entity);
-			if($entity->getHotelInvoiceTransactionSummary()->getDue() > 0){
-				$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->checkOutHotelAccountInvoice($entity);
-			}
+			$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->checkOutHotelAccountInvoice($entity);
 			//if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 			$dispatcher = $this->container->get('event_dispatcher');
 			$dispatcher->dispatch('setting_tool.post.hotel_book_sms', new \Setting\Bundle\ToolBundle\Event\HotelInvoiceSmsEvent($entity));
 			//}
 			return new Response('success');
 		}else{
-			return new Response('failed');
+			return new Response('Payment of the invoice is due, Please confirm payment.');
 		}
 		exit;
 	}

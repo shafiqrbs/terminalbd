@@ -107,10 +107,7 @@ class AccountPurchaseController extends Controller
 	    $company = $data['purchase']['companyName'];
 	    $exitVendor = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $global,'companyName' => $company));
 		$head = $exitVendor->getProcessHead();
-	    $company = $exitVendor->getMedicineVendor()->getCompanyName();
-
-	    if ($form->isValid()) {
-
+		if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($global);
 		    $entity->setProcessType('Payment');

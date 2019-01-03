@@ -440,7 +440,7 @@
                                 <div class="action">
                                     <div class="btn-group">
                                         <a target="_blank" href="{{ path('hotel_invoice_print',{'id':entity.id}) }}"  class="btn purple" ><i class="icon-print"></i>&nbsp; Print</a>
-                                        <a href="javascript:" data-url="{{ path('hotel_invoice_checkout',{'id':entity.id}) }}"  class="btn green approve" ><i class="icon-refresh"></i>&nbsp; Check-out</a>
+                                        <a href="javascript:" data-url="{{ path('hotel_invoice_checkout',{'id':entity.id}) }}"  class="btn green" id="checkout" ><i class="icon-refresh"></i>&nbsp; Check-out</a>
                                         <button type="submit" class="btn blue" id="receiveBtn" ><i class="icon-save"></i>&nbsp; Save</button>
                                     </div>
                                 </div>

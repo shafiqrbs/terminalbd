@@ -1232,9 +1232,14 @@ class Builder extends ContainerAware
                 $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Ledger', array('route' => 'medicine_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
-                $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Purchase & Sales', array('route' => 'medicine_report_vendor_sales'))->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Details', array('route' => 'medicine_report_purchase_vendor_details'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Stock', array('route' => 'medicine_report_product_stock_sales'))->setAttribute('icon', 'icon-th-list');
+		        $menu['Medicine']['Reports']->addChild('Purchase & Sales')
+		                                    ->setAttribute('icon', 'icon icon-bar-chart')
+		                                    ->setAttribute('dropdown', true);
+		        $menu['Medicine']['Reports']['Purchase & Sales']->addChild('Vendor Accounts', array('route' => 'medicine_report_vendor_sales'))->setAttribute('icon', 'icon-th-list');
+		        $menu['Medicine']['Reports']['Purchase & Sales']->addChild('Vendor Medicine', array('route' => 'medicine_report_vendor_sales_medicine'))->setAttribute('icon', 'icon-th-list');
+
 	            /*$menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))->setAttribute('icon', 'icon-th-list');*/
 	            $menu['Medicine']['Reports']->addChild('Brand', array('route' => 'medicine_report_purchase_brand_sales'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']->addChild('Brand Details', array('route' => 'medicine_report_purchase_brand_sales_details'))->setAttribute('icon', 'icon-th-list');

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -13,7 +14,7 @@ class DefaultController extends Controller
         return $this->render('AccountingBundle:Default:index.html.twig', array('name' => $name));
     }
 
-	public function migrationAction()
+	public function vendorMigrationAction()
 	{
 		set_time_limit(0);
 		ignore_user_abort(true);
@@ -115,7 +116,7 @@ class DefaultController extends Controller
 		exit;
 	}
 
-	public function migrationPurchaseVendorAction()
+	public function purchaseMigrationAction()
 	{
 		set_time_limit(0);
 		ignore_user_abort(true);
@@ -173,6 +174,53 @@ class DefaultController extends Controller
 			$em->flush();
 		}
 		exit;
+
+	}
+
+
+	public function salesMigrationAction()
+	{
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$globalOption = $this->getUser()->getGlobalOption();
+		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->findAll();
+
+		/* @var $entity AccountSales */
+
+		foreach ($entities as $entity){
+
+			if (!empty($entity->getSales())){
+				$entity->setSourceInvoice($entity->getSales()->getInvoice());
+				$entity->setProcessHead('inventory');
+			}elseif (!empty($entity->getBusinessInvoice())){
+				$entity->setSourceInvoice($entity->getBusinessInvoice()->getInvoice());
+				$entity->setProcessHead('business');
+			}elseif (!empty($entity->getHotelInvoice())){
+				$entity->setSourceInvoice($entity->getHotelInvoice()->getInvoice());
+				$entity->setProcessHead('hotel');
+			}elseif (!empty($entity->getDmsInvoices())){
+				$entity->setSourceInvoice($entity->getDmsInvoices()->getInvoice());
+				$entity->setProcessHead('dental');
+			}elseif (!empty($entity->getHmsInvoices())){
+				$entity->setSourceInvoice($entity->getHmsInvoices()->getInvoice());
+				$entity->setProcessHead('diagnostic');
+			}elseif (!empty($entity->getDpsInvoice())){
+				$entity->setSourceInvoice($entity->getDpsInvoice()->getInvoice());
+				$entity->setProcessHead('prescription');
+			}elseif (!empty($entity->getRestaurantInvoice())){
+				$entity->setSourceInvoice($entity->getRestaurantInvoice()->getInvoice());
+				$entity->setProcessHead('restaurant');
+			}elseif (!empty($entity->getMedicineSales())){
+				$entity->setSourceInvoice($entity->getMedicineSales()->getInvoice());
+				$entity->setProcessHead('medicine');
+			}
+			$em->flush();
+
+		}
+		exit;
+
 
 	}
 

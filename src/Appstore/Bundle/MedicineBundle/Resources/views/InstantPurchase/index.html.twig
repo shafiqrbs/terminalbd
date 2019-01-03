@@ -99,13 +99,13 @@
                                     <th class="numeric" >Barcode</th>
                                     <th class="numeric" >Rack</th>
                                     <th class="numeric" >Medicine Name</th>
-                                    <th class="numeric" >Qnt</th>
-                                    <th class="numeric" >Rmin. Qnt</th>
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Vendor Name</th>
-                                    <th class="numeric" >Total</th>
-                                    <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Due</th>
+                                    <th class="numeric" >Qnt</th>
+                                    <th class="numeric" >Rmin. Qnt</th>
+                                    <th class="numeric" >SS</th>
+                                    <th class="numeric" >PP</th>
+                                    <th class="numeric" >SubTotal</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -117,21 +117,21 @@
                                         <td class="numeric" >{{ entity.barcode }}</td>
                                         <td class="numeric" >{% if entity.medicineStock.rackNo is not empty %}{{ entity.medicineStock.rackNo.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.medicineStock.name }}</td>
-                                        <td class="numeric" >{{ entity.quantity }}</td>
-                                        <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                         <td class="numeric" >{{ entity.medicinePurchase.grn }}</td>
                                         <td class="numeric" >{% if entity.medicinePurchase.medicineVendor is defined and entity.medicinePurchase.medicineVendor is not empty %}{{ entity.medicinePurchase.medicineVendor.companyName }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.medicinePurchase.netTotal|number_format }}</td>
-                                        <td class="numeric" >{{ entity.medicinePurchase.payment|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.medicinePurchase.netTotal - entity.medicinePurchase.payment)|number_format }}</td>
+                                        <td class="numeric" >{{ entity.quantity }}</td>
+                                        <td class="numeric" >{{ entity.remainingQuantity }}</td>
+                                        <td class="numeric" >{{ entity.salesPrice }}</td>
+                                        <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
+                                        <td class="numeric" >{{ entity.purchaseSubTotal|number_format }}</td>
                                         <td class="numeric" >
                                             {% if entity.medicinePurchase.process == 'In-progress' %}
                                             <a href="{{ path('medicine_purchase_edit', { 'id': entity.medicinePurchase.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
                                             {% if entity.salesQuantity == 0 %}
-                                                <a title="Are you sure went to delete ?" id="{{ entity.medicinePurchase.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                <a  id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_purchase_particular_delete', {'invoice':entity.medicinePurchase.id, 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% endif %}
-                                            <a href="{{ path('medicine_purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                            <a href="{{ path('medicine_purchase_show', { 'id': entity.medicinePurchase.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

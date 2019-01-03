@@ -22,7 +22,7 @@ class MedicinePurchaseListener
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $entity->setGrn(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
+            $entity->setGrn(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
 
         }
     }

@@ -10,10 +10,9 @@ use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * MedicineBrand
+ * MedicineMinimumStock
  *
  * @ORM\Table("medicine_minimum_stock")
- * @UniqueEntity(fields="unit",message="This unit name already existing,Please try again.")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\MedicineStockRepository")
  */
 class MedicineMinimumStock

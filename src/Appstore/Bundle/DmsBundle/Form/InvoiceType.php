@@ -55,6 +55,7 @@ class InvoiceType extends AbstractType
                     'Canceled' => 'Canceled',
                 ),
             ))
+            ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 comment','rows'=>3,'placeholder'=>'Add any comment','data-original-title'=>'Add any comment','autocomplete'=>'off')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
@@ -145,7 +146,7 @@ class InvoiceType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_dmsinvoice';
+        return 'dms_invoice';
     }
 
 }

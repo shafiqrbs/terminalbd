@@ -367,10 +367,68 @@ class ReportController extends Controller
 
 	public function vendorCustomerAccountAction()
 	{
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$vendorResults = '';
+		$customerResults = '';
+		$data = $_REQUEST;
 		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 		$vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->listForVendorCustomer($config);
-		return $this->render('MedicineBundle:Report:purchase/vendorSales.html.twig', array(
+		if(!empty($data) and !empty($data['startDate']) and !empty($data['endDate'])){
+			$vendor = array('vendor' => $data['vendor'],'startDate'=>$data['startDate'],'endDate'=>$data['endDate']);
+			$vendorLedger = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($this->getUser()->getGlobalOption(),$vendor);
+			$vendorResults = $vendorLedger->getResult();
+		}
+		if(!empty($data) and !empty($data['startDate']) and !empty($data['endDate'])){
+			$customer = array('customer' => $data['vendor'],'startDate'=>$data['startDate'],'endDate'=>$data['endDate']);
+			$customerLedger = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->findWithSearch($this->getUser(),$customer);
+			$customerResults = $customerLedger->getResult();
+		}
+		return $this->render('MedicineBundle:Report:purchase/vendorPurchaseSalesLedger.html.twig', array(
 			'vendors' => $vendors,
+			'vendorLedger' => $vendorResults,
+			'customerLedger' => $customerResults,
+			'searchForm'            => $data,
+			'entity' => '',
+		));
+	}
+
+	public function vendorCustomerMedicineAction()
+	{
+		set_time_limit(0);
+		ignore_user_abort(true);
+		$vendorResults = '';
+		$customerResults = '';
+		$data = $_REQUEST;
+		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+		$vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->listForVendorCustomer($config);
+		if(!empty($data) and !empty($data['startDate'])){
+
+			$end = $data['endDate'];
+			$date = strtotime($data['startDate']);
+			$date = strtotime("+$end day", $date);
+			$endDate = date('Y-m-d', $date);
+			$vendor = array('vendor' => $data['vendor'],'startDate'=>$data['startDate'],'endDate'=>$endDate);
+			$vendorLedger = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->findWithSearch($config,$vendor);
+			$vendorResults = $vendorLedger->getQuery()->getResult();
+		}
+
+		if(!empty($data) and !empty($data['startDate'])){
+
+				$end = $data['endDate'];
+			$date = strtotime($data['startDate']);
+			$date = strtotime("+$end day", $date);
+			$endDate = date('Y-m-d', $date);
+			$customer = array('customer' => $data['vendor'],'startDate'=>$data['startDate'],'endDate' => $endDate);
+			$customerLedger = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->salesItemLists($this->getUser(),$customer);
+			$customerResults = $customerLedger->getQuery()->getResult();
+		}
+
+		return $this->render('MedicineBundle:Report:purchase/vendorPurchaseSalesItem.html.twig', array(
+			'vendors' => $vendors,
+			'vendorLedger' => $vendorResults,
+			'customerLedger' => $customerResults,
+			'searchForm'            => $data,
 			'entity' => '',
 		));
 	}

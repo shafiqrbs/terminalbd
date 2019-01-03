@@ -128,7 +128,6 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-
 	public function salesOverview(User $user,$data)
     {
         $globalOption = $user->getGlobalOption();
@@ -148,8 +147,6 @@ class AccountSalesRepository extends EntityRepository
         return $data;
 
     }
-
-
 
     public function findWithSearch(User $user,$data = '',$process = '')
     {
@@ -203,7 +200,6 @@ class AccountSalesRepository extends EntityRepository
 		return $result;
 
 	}
-
 
     public function lastInsertSales($globalOption,$entity)
     {
@@ -272,6 +268,206 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    /* =============  Sales Reports Module ======================= */
+
+	public function reportSalesIncome(User $user,$data)
+	{
+		if(empty($data)){
+			$datetime = new \DateTime("now");
+			$data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+			$data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+		}
+		$salesOverview = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
+		$purchasePrice = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
+		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
+		$revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
+		$data =  array('salesAmount' => $salesOverview['total'] ,'purchasePrice' => $purchasePrice['purchasePrice'],'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesOverview['totalVat']);
+		return $data;
+
+	}
+
+	public function reportMonthlyIncome(User $user,$data)
+	{
+		if(empty($data)){
+
+			$datetime = new \DateTime("now");
+			$data['startDate'] = $datetime->format('Y-m-01 00:00:00');
+			$data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+
+		}else{
+
+			$data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
+			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+		}
+
+		$salesPrice             = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
+		$purchasePrice          = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
+		$salesVat               = $this->_em->getRepository('InventoryBundle:SalesItem')->reportProductVat($user, $data);
+		$expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37,23), $data);
+		$revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
+		$administrative         = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(23), $data);
+		$data =  array('salesAmount' => $salesPrice['total'] ,'purchasePrice' => $purchasePrice['purchasePrice'],'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
+		return $data;
+
+	}
+
+	public function reportHmsMonthlyIncome(User $user,$data)
+	{
+		$globalOption = $user->getGlobalOption();
+		if(empty($data)){
+
+			$datetime = new \DateTime("now");
+			$data['startDate'] = $datetime->format('Y-m-01 00:00:00');
+			$data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+
+		}else{
+
+			$data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
+			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+		}
+
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('SUM(e.totalAmount) AS salesAmount');
+		$qb->where("e.globalOption = :globalOption");
+		$qb->setParameter('globalOption', $globalOption);
+		$this->handleSearchBetween($qb,$data);
+		$result  = $qb->getQuery()->getOneOrNullResult();
+		$salesAmount = $result['salesAmount'];
+
+		$purchase = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->reportSalesAccessories($globalOption, $data);
+		$salesVat               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
+		$expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37,23), $data);
+		$revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
+		$administrative         = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(23), $data);
+		$data =  array('salesAmount' => $salesAmount ,'purchase' => $purchase,'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
+		return $data;
+
+	}
+
+	public function reportHmsIncome($globalOption,$data)
+	{
+		if(empty($data)){
+			$datetime = new \DateTime("now");
+			$data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+			$data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+		}else{
+			$data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+			$data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+		}
+
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('SUM(e.totalAmount) AS salesAmount');
+		$qb->where("e.globalOption = :globalOption");
+		$qb->setParameter('globalOption', $globalOption);
+		$this->handleSearchBetween($qb,$data);
+		$result  = $qb->getQuery()->getOneOrNullResult();
+		$salesAmount = $result['salesAmount'];
+
+		$purchase = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->reportSalesAccessories($globalOption, $data);
+		$revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+		$salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
+		$data =  array('salesAmount' => $salesAmount ,'purchase' => $purchase, 'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
+		return $data;
+
+	}
+
+	public function reportMedicineMonthlyIncome(User $user,$data)
+	{
+		$globalOption = $user->getGlobalOption();
+		if(empty($data)){
+
+			$datetime = new \DateTime("now");
+			$data['startDate'] = $datetime->format('Y-m-01 00:00:00');
+			$data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+
+		}else{
+
+			$data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
+			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+		}
+
+		$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+		$purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
+		$data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+		return $data;
+
+	}
+
+	public function reportMedicineIncome(User $user,$data)
+	{
+		$globalOption = $user->getGlobalOption()->getId();
+		if(empty($data)){
+			$datetime = new \DateTime("now");
+			$data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+			$data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+		}else{
+			$data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+			$data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+		}
+
+		$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+		$purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+		$data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+		return $data;
+
+	}
+
+	public function reportHmsTransactionIncome()
+	{
+
+	}
+
+	public function reportBusinessMonthlyIncome(User $user,$data)
+	{
+		$globalOption = $user->getGlobalOption();
+		if(empty($data)){
+
+			$datetime = new \DateTime("now");
+			$data['startDate'] = $datetime->format('Y-m-01 00:00:00');
+			$data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+
+		}else{
+
+			$data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
+			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+		}
+
+		$sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
+		$purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
+		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
+		$data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+		return $data;
+
+	}
+
+	public function reportBusinessIncome(User $user,$data)
+	{
+		$globalOption = $user->getGlobalOption()->getId();
+		if(empty($data)){
+			$datetime = new \DateTime("now");
+			$data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+			$data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+		}else{
+			$data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+			$data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+		}
+
+		$sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
+		$purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
+		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+		$data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+		return $data;
+
+	}
+
+
+
+	/* =============   Inventory Module ================= */
+
     public function insertAccountSales(Sales $entity) {
 
 	    $em = $this->_em;
@@ -280,6 +476,7 @@ class AccountSalesRepository extends EntityRepository
 	    $accountSales->setAccountMobileBank( $entity->getAccountMobileBank() );
 	    $accountSales->setGlobalOption( $entity->getInventoryConfig()->getGlobalOption() );
 	    $accountSales->setSales( $entity );
+	    $accountSales->setSourceInvoice( $entity->getInvoice() );
 	    $accountSales->setCustomer( $entity->getCustomer() );
 	    $accountSales->setTotalAmount( $entity->getTotal() );
 	    $accountSales->setAmount( $entity->getPayment() );
@@ -290,7 +487,7 @@ class AccountSalesRepository extends EntityRepository
         if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
         }
-        $accountSales->setProcessHead('Inventory');
+        $accountSales->setProcessHead('inventory');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
@@ -302,6 +499,29 @@ class AccountSalesRepository extends EntityRepository
         return $accountSalesClose;
 
     }
+
+	public function insertInventoryAccountSalesReturn(SalesReturn $entity)
+	{
+		$global = $entity->getInventoryConfig()->getGlobalOption();
+		$sales = $entity->getSales();
+		$em = $this->_em;
+		$accountSales = new AccountSales();
+		$accountSales->setGlobalOption($global);
+		$accountSales->setCustomer($sales->getCustomer());
+		$accountSales->setAmount($entity->getTotal());
+		$accountSales->setProcessHead('inventory-return');
+		$accountSales->setProcessType('Sales-Return');
+		$accountSales->setProcess('approved');
+		$accountSales->setApprovedBy($entity->getCreatedBy());
+		$accountSales->setSales($sales);
+		$accountSales->setSourceInvoice( $entity->getInvoice() );
+		//	$accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+		$em->persist($accountSales);
+		$em->flush();
+		$this->updateCustomerBalance($accountSales);
+		return $accountSales;
+
+	}
 
 	public function resetAccountSales(Sales $entity) {
 
@@ -322,178 +542,36 @@ class AccountSalesRepository extends EntityRepository
 			}
 			return $accountSalesClose;
 		}else{
-    		return $this->insertAccountSales($entity);
+			return $this->insertAccountSales($entity);
 		}
 
 	}
 
-	public function insertInventoryAccountSalesReturn(SalesReturn $entity)
+	public function accountSalesReverse(Sales $entity)
 	{
-		$global = $entity->getInventoryConfig()->getGlobalOption();
-		$sales = $entity->getSales();
 		$em = $this->_em;
-		$accountSales = new AccountSales();
-		$accountSales->setGlobalOption($global);
-		$accountSales->setCustomer($sales->getCustomer());
-		$accountSales->setAmount($entity->getTotal());
-		$accountSales->setProcessHead('Sales-Return');
-		$accountSales->setProcessType('Sales');
-		$accountSales->setProcess('approved');
-		$accountSales->setApprovedBy($entity->getCreatedBy());
-		$accountSales->setSales($sales);
-	//	$accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
-		$em->persist($accountSales);
-		$em->flush();
-		$this->updateCustomerBalance($accountSales);
-		return $accountSales;
-
+		if(!empty($entity->getAccountSales())){
+			/* @var AccountSales $sales*/
+			foreach ($entity->getAccountSales() as $sales ){
+				$globalOption = $sales->getGlobalOption()->getId();
+				$accountRefNo = $sales->getAccountRefNo();
+				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+				$transaction->execute();
+				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+				$accountCash->execute();
+			}
+		}
+		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.sales = '.$entity->getId());
+		if(!empty($accountCash)){
+			$accountCash->execute();
+		}
 	}
 
-    public function reportSalesIncome(User $user,$data)
-    {
-        if(empty($data)){
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        }
-        $salesOverview = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
-        $purchasePrice = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
-        $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
-        $data =  array('salesAmount' => $salesOverview['total'] ,'purchasePrice' => $purchasePrice['purchasePrice'],'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesOverview['totalVat']);
-        return $data;
-
-    }
-
-    public function reportMonthlyIncome(User $user,$data)
-    {
-        if(empty($data)){
-
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
-
-        }else{
-
-            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
-            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
-        }
-
-        $salesPrice             = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
-        $purchasePrice          = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
-        $salesVat               = $this->_em->getRepository('InventoryBundle:SalesItem')->reportProductVat($user, $data);
-        $expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37,23), $data);
-        $revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
-        $administrative         = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(23), $data);
-        $data =  array('salesAmount' => $salesPrice['total'] ,'purchasePrice' => $purchasePrice['purchasePrice'],'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
-	    return $data;
-
-    }
-
-    public function reportHmsMonthlyIncome(User $user,$data)
-    {
-        $globalOption = $user->getGlobalOption();
-        if(empty($data)){
-
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
-
-        }else{
-
-            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
-            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
-        }
+	/* =============  End Inventory Module ================= */
 
 
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS salesAmount');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        $this->handleSearchBetween($qb,$data);
-        $result  = $qb->getQuery()->getOneOrNullResult();
-        $salesAmount = $result['salesAmount'];
+	/* =============  Hospital Module ================= */
 
-        $purchase = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->reportSalesAccessories($globalOption, $data);
-        $salesVat               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
-        $expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37,23), $data);
-        $revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
-        $administrative         = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(23), $data);
-        $data =  array('salesAmount' => $salesAmount ,'purchase' => $purchase,'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
-        return $data;
-
-    }
-
-    public function reportHmsIncome($globalOption,$data)
-    {
-        if(empty($data)){
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        }else{
-            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
-        }
-
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS salesAmount');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        $this->handleSearchBetween($qb,$data);
-        $result  = $qb->getQuery()->getOneOrNullResult();
-        $salesAmount = $result['salesAmount'];
-
-        $purchase = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->reportSalesAccessories($globalOption, $data);
-        $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-        $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
-        $data =  array('salesAmount' => $salesAmount ,'purchase' => $purchase, 'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
-        return $data;
-
-    }
-
-    public function reportMedicineMonthlyIncome(User $user,$data)
-    {
-        $globalOption = $user->getGlobalOption();
-        if(empty($data)){
-
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
-
-        }else{
-
-            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
-            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
-        }
-
-        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
-        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
-        return $data;
-
-    }
-
-    public function reportMedicineIncome(User $user,$data)
-    {
-        $globalOption = $user->getGlobalOption()->getId();
-        if(empty($data)){
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        }else{
-            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
-        }
-
-        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
-        return $data;
-
-    }
 
     public function insertAccountInvoice(InvoiceTransaction $entity)
     {
@@ -504,7 +582,8 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setGlobalOption($entity->getHmsInvoice()->getHospitalConfig()->getGlobalOption());
         $accountSales->setHmsInvoices($entity->getHmsInvoice());
-        $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
+	    $accountSales->setSourceInvoice( $entity->getHmsInvoice()->getInvoice() );
+	    $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getPayment());
         $accountSales->setAmount($entity->getPayment());
@@ -512,7 +591,7 @@ class AccountSalesRepository extends EntityRepository
         if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
         }
-        $accountSales->setProcessHead('hms');
+        $accountSales->setProcessHead('diagnostic');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
@@ -522,7 +601,11 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
-    public function insertRestaurantAccountInvoice(Invoice $entity)
+
+	/* =============  Restaurant Module ================= */
+
+
+	public function insertRestaurantAccountInvoice(Invoice $entity)
     {
         $em = $this->_em;
         $accountSales = new AccountSales();
@@ -531,6 +614,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setGlobalOption($entity->getRestaurantConfig()->getGlobalOption());
         $accountSales->setRestaurantInvoice($entity);
+        $accountSales->setSourceInvoice($entity->getInvoice());
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getPayment());
@@ -546,7 +630,10 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
-    public function insertMedicineAccountInvoice(MedicineSales $entity)
+	/* =============  Medicine Module ================= */
+
+
+	public function insertMedicineAccountInvoice(MedicineSales $entity)
     {
         $em = $this->_em;
         $accountSales = new AccountSales();
@@ -559,7 +646,8 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setMedicineSales($entity);
-        $accountSales->setProcessHead('Sales');
+        $accountSales->setSourceInvoice($entity->getInvoice());
+        $accountSales->setProcessHead('medicine');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
@@ -579,44 +667,41 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setGlobalOption($global);
         $accountSales->setCustomer($sales->getCustomer());
         $accountSales->setAmount($entity->getSubTotal());
-        $accountSales->setProcessHead('Sales-Return');
+        $accountSales->setProcessHead('medicine-return');
         $accountSales->setProcessType('Sales-Return');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($entity->getCreatedBy());
 	    $accountSales->setMedicineSales($entity->getMedicineSalesItem()->getMedicineSales());
+	    $accountSales->setSourceInvoice($entity->getMedicineSalesItem()->getMedicineSales()->getInvoice());
         $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
-      //$this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
 
     }
 
-    public function reportHmsTransactionIncome()
-    {
+	public function accountMedicineSalesReverse(MedicineSales $entity)
+	{
+		$em = $this->_em;
+		if(!empty($entity->getAccountSales())){
+			/* @var AccountSales $sales*/
+			foreach ($entity->getAccountSales() as $sales ){
+				$globalOption = $sales->getGlobalOption()->getId();
+				$accountRefNo = $sales->getAccountRefNo();
+				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+				$transaction->execute();
+				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+				$accountCash->execute();
+			}
+		}
+		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.medicineSales = '.$entity->getId());
+		if(!empty($accountCash)){
+			$accountCash->execute();
+		}
+	}
 
-    }
-
-    public function accountSalesReverse(Sales $entity)
-    {
-        $em = $this->_em;
-        if(!empty($entity->getAccountSales())){
-            /* @var AccountSales $sales*/
-            foreach ($entity->getAccountSales() as $sales ){
-                $globalOption = $sales->getGlobalOption()->getId();
-                $accountRefNo = $sales->getAccountRefNo();
-                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $transaction->execute();
-                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $accountCash->execute();
-            }
-        }
-        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.sales = '.$entity->getId());
-        if(!empty($accountCash)){
-            $accountCash->execute();
-        }
-    }
+	/* =============  Business Module ================= */
 
 
     public function insertBusinessAccountInvoice(BusinessInvoice $entity)
@@ -632,6 +717,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setBusinessInvoice($entity);
+        $accountSales->setSourceInvoice($entity->getInvoice());
         $accountSales->setProcessHead('business');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
@@ -644,11 +730,12 @@ class AccountSalesRepository extends EntityRepository
 
     public function insertBusinessAccountPurchaseReturn(MedicineSalesReturn $entity)
     {
-        $global = $entity->getMedicineConfig()->getGlobalOption();
+       /* $global = $entity->getMedicineConfig()->getGlobalOption();
         $sales = $entity->getMedicineSalesItem()->getMedicineSales();
         $em = $this->_em;
         $accountSales = new AccountSales();
         $accountSales->setGlobalOption($global);
+        $accountSales->setCustomer($sales->getCustomer());
         $accountSales->setCustomer($sales->getCustomer());
         $accountSales->setAmount($entity->getSubTotal());
         $accountSales->setProcessHead('business');
@@ -660,73 +747,9 @@ class AccountSalesRepository extends EntityRepository
         $em->flush();
         $this->updateCustomerBalance($accountSales);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-        return $accountSales;
+        return $accountSales;*/
 
     }
-
-    public function accountMedicineSalesReverse(MedicineSales $entity)
-    {
-        $em = $this->_em;
-        if(!empty($entity->getAccountSales())){
-            /* @var AccountSales $sales*/
-            foreach ($entity->getAccountSales() as $sales ){
-                $globalOption = $sales->getGlobalOption()->getId();
-                $accountRefNo = $sales->getAccountRefNo();
-                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $transaction->execute();
-                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $accountCash->execute();
-            }
-        }
-        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.medicineSales = '.$entity->getId());
-        if(!empty($accountCash)){
-            $accountCash->execute();
-        }
-    }
-
-    public function reportBusinessMonthlyIncome(User $user,$data)
-    {
-        $globalOption = $user->getGlobalOption();
-        if(empty($data)){
-
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
-
-        }else{
-
-            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
-            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
-        }
-
-	    $sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
-	    $purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
-	    $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
-        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
-        return $data;
-
-    }
-
-    public function reportBusinessIncome(User $user,$data)
-    {
-        $globalOption = $user->getGlobalOption()->getId();
-        if(empty($data)){
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        }else{
-            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
-        }
-
-        $sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
-        $purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
-        return $data;
-
-    }
-
 
 	public function accountBusinessSalesReverse(BusinessInvoice $entity)
 	{
@@ -753,37 +776,47 @@ class AccountSalesRepository extends EntityRepository
 	}
 
 
-	public function accountReverse(AccountSales $entity)
-	{
-		$em = $this->_em;
-		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Sales'");
-		$transaction->execute();
-		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Sales'");
-		$accountCash->execute();
-	}
-
-
+	/* =============  Hotel Module ================= */
 	/* Start Account sales for Hotel Module */
 
 	public function insertHotelAccountInvoice(HotelInvoiceTransaction $entity)
 	{
+		/*
+		 * Hotel Invoice if check-in/Booked => Advance
+		 * Restaurant Invoice always Sales & Receive
+		 * Hotel Invoice if check-out => Sales
+		 * */
+
 		$em = $this->_em;
 		$accountSales = new AccountSales();
 		$accountSales->setAccountBank($entity->getAccountBank());
 		$accountSales->setAccountMobileBank($entity->getAccountMobileBank());
 		$accountSales->setGlobalOption($entity->getHotelInvoice()->getHotelConfig()->getGlobalOption());
 		$accountSales->setHotelInvoice($entity->getHotelInvoice());
+		$accountSales->setSourceInvoice($entity->getHotelInvoice()->getInvoice());
 		$accountSales->setCustomer($entity->getHotelInvoice()->getCustomer());
 		$accountSales->setTransactionMethod($entity->getTransactionMethod());
-		$accountSales->setTotalAmount($entity->getReceived());
-		$accountSales->setAmount($entity->getReceived());
+		$arrs= array('check-in','booked');
+		if(in_array($entity->getHotelInvoice()->getProcess(),$arrs)  and $entity->getHotelInvoice()->getInvoiceFor() == 'hotel' and $entity->getProcess() == 'done' ){
+			$accountSales->setAmount($entity->getReceived());
+			$accountSales->setProcessType('Advance');
+		}elseif($entity->getHotelInvoice()->getInvoiceFor() == 'hotel' and $entity->getHotelInvoice()->getProcess() == 'check-out' ){
+			$accountSales->setTotalAmount($entity->getHotelInvoice()->getTotal());
+			$accountSales->setAmount($entity->getReceived());
+			$accountSales->setProcessType('Sales');
+		}elseif($entity->getHotelInvoice()->getInvoiceFor() == 'restaurant'){
+			$accountSales->setTotalAmount($entity->getHotelInvoice()->getTotal());
+			$accountSales->setAmount($entity->getReceived());
+			$accountSales->setProcessType('Sales');
+		}
 		$accountSales->setApprovedBy($entity->getCreatedBy());
-		$accountSales->setProcessHead('hotel');
-		$accountSales->setProcessType('Sales');
+		$accountSales->setProcessHead($entity->getHotelInvoice()->getInvoiceFor());
 		$accountSales->setProcess('approved');
 		$em->persist($accountSales);
 		$em->flush();
-		$this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+		if($entity->getReceived() > 0 ){
+			$this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+		}
 		return $accountSales;
 
 	}
@@ -795,8 +828,9 @@ class AccountSalesRepository extends EntityRepository
 		$accountSales->setGlobalOption($entity->getHotelConfig()->getGlobalOption());
 		$accountSales->setCustomer($entity->getCustomer());
 		$accountSales->setHotelInvoice($entity);
+		$accountSales->setSourceInvoice($entity->getInvoice());
 		$accountSales->setTransactionMethod(NUll);
-		$accountSales->setTotalAmount($entity->getDue());
+		$accountSales->setTotalAmount($entity->getTotal());
 		$accountSales->setAmount(0);
 		$accountSales->setApprovedBy($entity->getCreatedBy());
 		$accountSales->setProcessHead('hotel');
@@ -805,12 +839,25 @@ class AccountSalesRepository extends EntityRepository
 		$em->persist($accountSales);
 		$em->flush();
 		$this->updateCustomerBalance($accountSales);
-		//$this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
 		return $accountSales;
 
 	}
 
 	/* End Account sales for Hotel Module */
+
+
+	/* =============  All Sales Reverse Module ================= */
+
+
+	public function accountReverse(AccountSales $entity)
+	{
+		$em = $this->_em;
+		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Sales'");
+		$transaction->execute();
+		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Sales'");
+		$accountCash->execute();
+	}
+
 
 
 

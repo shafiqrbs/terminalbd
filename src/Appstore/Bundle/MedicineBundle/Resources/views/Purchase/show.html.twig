@@ -151,12 +151,15 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if ( entity.process == 'Complete') %}
-                                    <a  href="javascript:"  data-url="{{ path('medicine_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                    <a  href="javascript:"  data-url="{{ path('medicine_purchase_approved',{'id':entity.id}) }}" class="btn green approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                    {% endif %}
+                                    {% if ( entity.process == 'In-progress') %}
+                                    <a  href="{{ path('medicine_purchase_edit',{'id':entity.id}) }}"  class="btn red"><i class="icon-edit"></i>&nbsp;Edit</a>
                                     {% endif %}
                                     {% if (entity.process == 'Approved' and app.user.granted("ROLE_MEDICINE_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}
                                         <a  href="{{ path('medicine_purchase_reverse',{'id':entity.id}) }}" class="btn yellow"><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                     {% endif %}
-                                    <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
+                                    <span  class="btn blue"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>
                            </div>
                         </div>

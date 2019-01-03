@@ -247,7 +247,7 @@ $(document).on("click", ".particularDelete", function() {
 });
 
 
-$(document).on("click", ".approve", function() {
+$(document).on("click", "#checkout", function() {
 
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
@@ -256,17 +256,12 @@ $(document).on("click", ".approve", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( response ) {
-                location.reload();
-               /* $('#approved-'+id).hide();
-                obj = JSON.parse(response);
-                $('#subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('.payment').html(obj['payment']);
-                $('#paymentTotal').val(obj['due']);
-                $('#sales_discount').val(obj['discount']);
-                $('.discount').html(obj['discount']);
-                $('#due').val(obj['due']);
-                $('.due').html(obj['due']);*/
+              if(response == 'success'){
+                  location.reload();
+              }else{
+                  alert(response);
+              }
+
             });
         }
     });

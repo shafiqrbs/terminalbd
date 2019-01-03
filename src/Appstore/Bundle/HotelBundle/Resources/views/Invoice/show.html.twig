@@ -149,25 +149,33 @@
                                     <tr class="head-blue">
                                         <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
                                         <th class="numeric">Created</th>
-                                        <th class="numeric">Created By</th>
-                                        <th class="numeric">Process</th>
-                                        <th class="numeric">Payment Method</th>
+                                        <th class="numeric">RefInvoice</th>
+                                        <th class="numeric">Sub-Total</th>
+                                        <th class="numeric">Discount</th>
+                                        <th class="numeric">Vat</th>
+                                        <th class="numeric">Charge</th>
+                                        <th class="numeric">Total</th>
                                         <th class="numeric">Payment</th>
+                                        <th class="numeric">Balance</th>
                                         <th class="numeric"></th>
                                     </tr>
                                     </thead>
                                     <tbody id="invoiceTransaction">
-                                    {% for transaction in entity.hotelInvoiceTransactions %}
+                                    {% for transaction in transactions %}
                                         <tr id="delete-{{ transaction.id }}" >
-                                            <td  class="numeric">{{ transaction.transactionCode }}</td>
-                                            <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                                            <td class="numeric">{{ transaction.createdBy }}</td>
-                                            <td class="numeric">{{ transaction.process }}</td>
-                                            <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
-                                            <td class="numeric">{{ transaction.payment }}</td>
+                                            <td class="numeric">{{ loop.index }}.</td>
+                                            <td class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
+                                            <td class="numeric">{% if transaction.hotelInvoice %}{{ transaction.hotelInvoice.invoice }}/{{ transaction.hotelInvoice.invoiceFor }}{% else %}Payment{% endif %}</td>
+                                            <td class="numeric">{{ transaction.subTotal }}</td>
+                                            <td class="numeric">{{ transaction.discount }}</td>
+                                            <td class="numeric">{{ transaction.vat }}</td>
+                                            <td class="numeric">{{ transaction.serviceCharge }}</td>
+                                            <td class="numeric">{{ transaction.total }}</td>
+                                            <td class="numeric">{{ transaction.received }}</td>
+                                            <td class="numeric">{{ transaction.due }}</td>
                                             <td class="numeric">
                                                 <span id="approved-{{ transaction.id }}">
-                                                    {% set processArr = ['Created','Pending','In-progress'] %}
+                                                    {% set processArr = ['created','pending','in-progress'] %}
                                                     {% if transaction.process in  processArr %}
                                                         <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hotel_invoice_payment_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
                                                         <a href="javascript:"  data-id="{{ transaction.id }}" data-url="{{ path('hotel_invoice_payment_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
@@ -175,21 +183,25 @@
                                                         <a target="_blank" href="{{ path('hotel_invoice_payment_print',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
                                                     {% endif %}
                                                 </span>
-
                                             </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td class="numeric" colspan="5"><span class="pull-right"><strong>Total Received</strong></span></td>
-                                        <td class="numeric"><strong class="payment">{{ entity.received|number_format }}</strong></td>
+                                        <td class="numeric" colspan="3"><span class="pull-right"><strong>Total Received</strong></span></td>
+                                        <td class="numeric"><strong class="total">{{ entity.hotelInvoiceTransactionSummary.subTotal|number_format }}</strong></td>
+                                        <td class="numeric"><strong class="total">{{ entity.hotelInvoiceTransactionSummary.discount|number_format }}</strong></td>
+                                        <td class="numeric"><strong class="total">{{ entity.hotelInvoiceTransactionSummary.vat|number_format }}</strong></td>
+                                        <td class="numeric"><strong class="total">{{ entity.hotelInvoiceTransactionSummary.serviceCharge|number_format }}</strong></td>
+                                        <td class="numeric"><strong class="total">{{ entity.hotelInvoiceTransactionSummary.total|number_format }}</strong></td>
+                                        <td class="numeric"><strong class="payment">{{ entity.hotelInvoiceTransactionSummary.received|number_format }}</strong></td>
+                                        <td class="numeric"><strong>{{ entity.hotelInvoiceTransactionSummary.due|number_format }}</strong></td>
                                         <td class="numeric"></td>
                                     </tr>
                                     </tfoot>
                                 </table>
                             </div>
-
                         </div>
                         <div class="clearfix">&nbsp;</div>
 

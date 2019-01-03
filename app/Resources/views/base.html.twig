@@ -462,6 +462,20 @@
 
         });
 
+        $('.horizontal-form').submit(function(){
+            $("button[type='submit']", this)
+                .html("Please Wait...")
+                .attr('disabled', 'disabled');
+            return true;
+        });
+
+        $('.form-horizontal').submit(function(){
+            $("button[type='submit']", this)
+                .html("Please Wait...")
+                .attr('disabled', 'disabled');
+            return true;
+        });
+
         $(document).on('change', '.targetTo', function() {
 
             var targetTo = $(this).val();

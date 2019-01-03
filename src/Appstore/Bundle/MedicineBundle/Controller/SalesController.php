@@ -437,17 +437,7 @@ class SalesController extends Controller
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
 
 		}
-
-
 	}
-
-
-
-	/**
-     * Status a Page entity.
-     *
-     */
-
 
     public function autoSearchAction(Request $request)
     {

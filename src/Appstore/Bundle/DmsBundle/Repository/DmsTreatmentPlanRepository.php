@@ -278,16 +278,19 @@ class DmsTreatmentPlanRepository extends EntityRepository
                 $action ='<a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/treatment-delete" href="javascript:" class="btn red mini treatmentDelete" ><i class="icon-trash"></i></a>';
             }
 
-            $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class="numeric" >' . $i . '</td>';
-            $data .= '<td class="numeric" >' . $entity->getUpdated()->format('d-m-Y'). '</td>';
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td><span class='badge badge-success toggle badge-custom' id='{$entity->getId()}' ><span>[+]</span></span></td>";
+	        $data .= '<td class="numeric" >' . $entity->getUpdated()->format('d-m-Y'). '</td>';
             $data .= '<td class="numeric" >' . $entity->getDmsParticular()->getName(). '</td>';
             $data .= '<td class="numeric" >' . $appointmentDate .$appointmentTime. '</td>';
             $data .= '<td class="numeric" >' . $entity->getPrice() . '</td>';
             $data .= '<td class="numeric" >' . $payment . '</td>';
             $data .= '<td class="numeric" id="treatment-approved-'.$entity->getId().'" >'.$action.'</td>';
             $data .= '</tr>';
-            $i++;
+	        if(!empty($entity->getComment())){
+		    $data .= "<tr id='show-{$entity->getId()}' class='showing-overview'><td colspan='7'>{$entity->getComment()}</td></tr>";
+	        }
+	        $i++;
         }
         return $data;
     }
@@ -311,6 +314,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
         $adjustment = $data['adjustment'];
         $discount = $data['discount'] !="" ? $data['discount'] : 0 ;
         $payment = $data['receive'] !="" ? $data['receive'] : 0 ;
+        $comment = $data['comment'] !="" ? $data['comment'] : '' ;
 
         if($treatmentId > 0){
             $treatmentPlan = $this->_em->getRepository('DmsBundle:DmsTreatmentPlan')->find($treatmentId);
@@ -319,6 +323,7 @@ class DmsTreatmentPlanRepository extends EntityRepository
             $treatmentPlan = new DmsTreatmentPlan();
             $treatmentPlan->setDmsInvoice($entity);
             $treatmentPlan->setDmsParticular($particular);
+            $treatmentPlan->setComment($comment);
             if($adjustment != 1){
                 $treatmentPlan->setEstimatePrice($payment);
                 $treatmentPlan->setPrice($payment);

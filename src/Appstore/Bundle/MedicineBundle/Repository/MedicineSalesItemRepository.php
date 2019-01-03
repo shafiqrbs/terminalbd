@@ -113,17 +113,12 @@ class MedicineSalesItemRepository extends EntityRepository
 		$salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
 		$process = isset($data['process'])? $data['process'] :'';
 		$customer = isset($data['customer'])? $data['customer'] :'';
-		$customerName = isset($data['customer'])? $data['customer'] :'';
 		$customerMobile = isset($data['mobile'])? $data['mobile'] :'';
 		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
 		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
 		$medicineName = isset($data['medicineName'])? $data['medicineName'] :'';
 		if (!empty($invoice)) {
 			$qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
-		}
-		if (!empty($customerName)) {
-			$qb->join('s.customer','c');
-			$qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
 		}
 
 		if (!empty($customerMobile)) {

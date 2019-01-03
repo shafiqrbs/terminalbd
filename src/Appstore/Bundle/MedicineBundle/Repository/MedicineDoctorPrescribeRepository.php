@@ -62,7 +62,12 @@ class MedicineDoctorPrescribeRepository extends EntityRepository
         if(!empty($data['medicineDuration'])){
             $entity->setMedicineDuration($data['medicineDuration']);
         }
-
+        if(!empty($data['unit'])){
+            $entity->setUnit($em->getRepository('MedicineBundle:PrescriptionAttribute')->find($data['unit'])->getNameBn());
+        }
+        if(!empty($data['totalQuantity'])){
+            $entity->setTotalQuantity($data['totalQuantity']);
+        }
         $entity->setDmsInvoice($invoice);
         if(!empty($data['medicineId'])) {
             $medicine = $this->_em->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineId']);
@@ -90,14 +95,15 @@ class MedicineDoctorPrescribeRepository extends EntityRepository
             }
             if($entity->getUpdated()->format('d-m-Y') != $date ){
                 $date = $entity->getUpdated()->format('d-m-Y');
-                $data .= '<tr><th colspan="6">'.$entity->getUpdated()->format('d-m-Y').'</th></tr>';
+                $data .= '<tr><th colspan="7">'.$entity->getUpdated()->format('d-m-Y').'</th></tr>';
             }
             $data .= '<tr id="medicine-'.$entity->getId().'">';
             $data .= '<td class="numeric" >' . $i . '</td>';
             $data .= '<td class="numeric" >' . $medicine . '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineQuantity(). '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineDose() .'-'. $entity->getMedicineDoseTime() . '</td>';
-            $data .= '<td class="numeric" >' . $entity->getMedicineDuration(). $entity->getMedicineDurationType() . '</td>';
+            $data .= '<td class="numeric" >' . $entity->getMedicineDuration().' '. $entity->getMedicineDurationType() . '</td>';
+            $data .= '<td class="numeric" >' . $entity->getTotalQuantity().' '. $entity->getUnit() . '</td>';
             $data .= '<td class="numeric" >
             <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/'. $entity->getId(). '/medicine-delete" href="javascript:" class="btn red mini deleteMedicine" ><i class="icon-trash"></i></a>
             </td>';
@@ -186,6 +192,7 @@ class MedicineDoctorPrescribeRepository extends EntityRepository
             $data .= '<td class="numeric" >' . $entity->getMedicineQuantity(). '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineDose() .'-'. $entity->getMedicineDoseTime() . '</td>';
             $data .= '<td class="numeric" >' . $entity->getMedicineDuration(). $entity->getMedicineDurationType() . '</td>';
+            $data .= '<td class="numeric" >' . $entity->getTotalQuantity(). $entity->getUnit() . '</td>';
             $data .= '<td class="numeric" >
             <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/dms/invoice/'. $entity->getId(). '/medicine-delete" href="javascript:" class="btn red mini deleteMedicine" ><i class="icon-trash"></i></a>
             </td>';

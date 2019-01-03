@@ -41,9 +41,9 @@ class InvoiceController extends Controller
         return $pagination;
     }
 
-    /**
-     * @Secure(roles="ROLE_DMS")
-     */
+	/**
+	 * @Secure(roles="ROLE_DMS,ROLE_DMS_DOCTOR,ROLE_DOMAIN");
+	 */
 
     public function indexAction()
     {
@@ -88,9 +88,9 @@ class InvoiceController extends Controller
        // $form->handleRequest($request);
 
         $data = $request->request->all();
-        $customer = $data['appstore_bundle_dmsinvoice'];
-	    if (!empty($customer['customer']['name'])) {
-		    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer['customer']['mobile']);
+        $customer = $data['patient']['customer'];
+        if (!empty($customer['name'])) {
+		    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer['mobile']);
 		    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $customer);
 	    }
 	    $entity->setDmsConfig($dmsConfig);
@@ -108,7 +108,7 @@ class InvoiceController extends Controller
 	    if($dmsConfig->getIsDefaultMedicine() == 1 ){
 		    $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->defaultDmsBeforeMedicine($entity,$lastObject);
 	    }
-	    return new Response($entity->getId());
+	    return $this->redirect($this->generateUrl('dms_invoice_edit',array('id'=>$entity->getId())));
 
     }
 
@@ -157,7 +157,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DMS,ROLE_DMS_DOCTOR,ROLE_DOMAIN");
      */
 
     public function editAction($id)
@@ -189,10 +189,10 @@ class InvoiceController extends Controller
 
         $teethPlans ='';
         if($entity->getCustomer()){
-            $ageGroup = $entity->getCustomer()->getAgeGroup();
-            $teethPlans         = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array('ageGroup' => $ageGroup),array('sorting'=>'ASC'));
+	        $ageGroup       = $entity->getCustomer()->getAgeGroup();
+            $teethPlans     = $em->getRepository('DmsBundle:DmsTeethPlan')->findBy(array('ageGroup' => $ageGroup),array('sorting'=>'ASC'));
         }
-        $services    = $em->getRepository('DmsBundle:DmsService')->getServiceLists($dmsConfig);
+	    $services    = $em->getRepository('DmsBundle:DmsService')->getServiceLists($dmsConfig);
         $accessories ='';
         if($entity->getDmsConfig()->isShowAccessories() == 1 ){
             $accessories        = $em->getRepository('DmsBundle:DmsParticular')->getAccessoriesParticular($dmsConfig,array('accessories'),'true');
@@ -215,7 +215,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DMS,ROLE_DMS_DOCTOR,ROLE_DOMAIN");
      */
     public function updateAction(Request $request, DmsInvoice $entity)
     {
@@ -227,17 +227,15 @@ class InvoiceController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
-        $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->insertInvoiceItems($entity,$data);
         if($editForm->isValid() and !empty($entity->getInvoiceParticulars())) {
-
-            if (!empty($data['customer']['name'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $data);
-                $entity->setCustomer($customer);
-                $entity->setMobile($mobile);
-            }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+		    if (!empty($data['dms_invoice']['customer']['name'])) {
+			    $customer = $data['dms_invoice']['customer'];
+		        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer['mobile']);
+		        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->updateExistingCustomer($this->getUser()->getGlobalOption(),$entity->getCustomer(), $mobile, $customer);
+		        $entity->setCustomer($customer);
+		        $entity->setMobile($mobile);
+	        }
+	    	$amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             if(!empty($entity->getCustomer()) and  $entity->getProcess() == 'Created'){
                 $entity->setProcess('Visit');
@@ -251,7 +249,7 @@ class InvoiceController extends Controller
                     $entity->setSendSms(1);
                 }
             }
-            $em->flush();
+
             $file = $request->files->all();
             if(!empty($file) and !empty($data['investigation'])){
                 $this->getDoctrine()->getRepository('DmsBundle:DmsInvoiceParticular')->fileUpload($entity,$data,$file);
@@ -259,11 +257,13 @@ class InvoiceController extends Controller
                 return new Response($data);
             }
         }
+	    $em->flush();
         exit;
     }
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DMS,ROLE_DMS_DOCTOR,ROLE_DOMAIN");
      */
+
     public function showAction(DmsInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -278,8 +278,9 @@ class InvoiceController extends Controller
 
     }
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DMS,ROLE_DMS_DOCTOR,ROLE_DOMAIN");
      */
+
     public function deleteAction(DmsInvoice $entity)
     {
 
@@ -498,8 +499,10 @@ class InvoiceController extends Controller
         $medicineDoseTime = $request->request->get('medicineDoseTime');
         $medicineDuration = $request->request->get('medicineDuration');
         $medicineDurationType = $request->request->get('medicineDurationType');
+        $unit = $request->request->get('unit');
+        $totalQuantity = $request->request->get('totalQuantity');
         if(!empty($medicine)  OR $medicineId > 0){
-            $invoiceItems = array('medicine' => $medicine ,'medicineId' => $medicineId , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType);
+            $invoiceItems = array('medicine' => $medicine ,'medicineId' => $medicineId , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType,'totalQuantity' => $totalQuantity,'unit' => $unit);
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->insertDmsInvoiceMedicine($invoice, $invoiceItems);
             $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->getDmsInvoiceMedicines($invoice);
             return new Response($result);
@@ -555,7 +558,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DMS")
+     * @Secure(roles="ROLE_DMS,ROLE_DMS_DOCTOR,ROLE_DOMAIN");
      */
 
     public function deleteEmptyInvoiceAction()

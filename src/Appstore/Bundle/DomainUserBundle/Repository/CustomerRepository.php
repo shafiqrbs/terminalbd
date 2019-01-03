@@ -231,13 +231,13 @@ class CustomerRepository extends EntityRepository
     public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$data)
     {
         $em = $this->_em;
-
-        $name = $data['customer']['name'];
-        $gender = $data['customer']['gender'];
-        $age = $data['customer']['age'];
-        $ageType = $data['customer']['ageType'];
-        $location = $data['customer']['location'];
-        $address = $data['customer']['address'];
+		$name = $data['name'];
+        $gender = $data['gender'];
+        $ageGroup = $data['ageGroup'];
+        $age = $data['age'];
+        $ageType = $data['ageType'];
+        $location = $data['location'];
+        $address = $data['address'];
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
         if($entity){
             return $entity;
@@ -252,6 +252,7 @@ class CustomerRepository extends EntityRepository
             $entity->setName($name);
             $entity->setGender($gender);
             $entity->setAge($age);
+            $entity->setAgeGroup($ageGroup);
             $entity->setAgeType($ageType);
             $entity->setAddress($address);
             $entity->setGlobalOption($globalOption);
@@ -262,7 +263,47 @@ class CustomerRepository extends EntityRepository
 
     }
 
-    public function findWithSearch($globalOption,$data)
+	public function updateExistingCustomer(GlobalOption $globalOption,Customer $entity, $mobile,$data)
+	{
+		$em = $this->_em;
+		$name       = isset($data['name'])? $data['name']:'';
+		$gender     = isset($data['gender'])? $data['gender']:'';
+		$ageGroup   = isset($data['ageGroup'])? $data['ageGroup']:'';
+		$age        = isset($data['age'])? $data['age']:'';
+		$ageType    = isset($data['ageType'])? $data['ageType']:'';
+		$location   = isset($data['location'])? $data['location']:'';
+		$address       = isset($data['address'])? $data['address']:'';
+		if(!empty($location)){
+			$location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+			$entity->setLocation($location);
+		}
+		$entity->setMobile($mobile);
+		if(!empty($name)){
+			$entity->setName($name);
+		}
+		if(!empty($gender)){
+			$entity->setGender($gender);
+		}
+		if(!empty($age)){
+			$entity->setAge($age);
+		}
+		if(!empty($ageGroup)){
+			$entity->setAgeGroup($ageGroup);
+		}
+		if(!empty($ageType)){
+			$entity->setAgeType($ageType);
+		}
+		if(!empty($address)){
+			$entity->setAddress($address);
+		}
+		$em->persist($entity);
+		$em->flush($entity);
+		return $entity;
+
+	}
+
+
+	public function findWithSearch($globalOption,$data)
     {
 
         $qb = $this->createQueryBuilder('customer');

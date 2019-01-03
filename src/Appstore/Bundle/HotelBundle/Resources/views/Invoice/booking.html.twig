@@ -47,7 +47,7 @@
             <div class="span2">
                 <div class="btn-group input-append">
                     <select class="m-wrap span7" name="processStatus" id="processStatus" >
-                        <option value="">All Status</option>
+                        <option value="">All Process</option>
                         {% set process = ['available','check-in','booked'] %}
                         {% for process in process %}
                             <option value="{{ process }}">{{ process|capitalize }}</option>
@@ -204,7 +204,7 @@
             <tbody id="bookingLoad">
                 {% for entity in entities %}
                     <tr>
-                        <td><span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span></td>
+                        <td>{#<span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span>#}{{ loop.index }}.</td>
                         <td class="numeric" >{% if entity.roomCategory is not empty %}{{ entity.roomCategory.name }}{% endif %}</td>
                         <td class="numeric" >{{ entity.name }}</td>
                         <td class="numeric" >{{ entity.hotelParticularType.name }}</td>

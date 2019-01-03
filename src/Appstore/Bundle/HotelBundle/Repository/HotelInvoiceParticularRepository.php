@@ -300,7 +300,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.quantity) AS quantity');
-        $qb->where('e.businessParticular = :stock')->setParameter('stock', $stockItem->getId());
+        $qb->where('e.hotelParticular = :stock')->setParameter('stock', $stockItem->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
     }
@@ -401,12 +401,12 @@ class HotelInvoiceParticularRepository extends EntityRepository
 			$qb->setParameter('category', $category);
 		}
 		if(!empty($type)){
-			$qb->andWhere("mds.businessParticularType = :type");
+			$qb->andWhere("mds.hotelParticularType = :type");
 			$qb->setParameter('type', $type);
 		}
 
 		if (!empty($category)) {
-			$qb->join('e.businessCategory','c');
+			$qb->join('e.hotelCategory','c');
 			$qb->andWhere("c.id = :cid");
 			$qb->setParameter('cid', $category);
 		}
@@ -434,19 +434,19 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		$config =  $user->getGlobalOption()->getHotelConfig()->getId();
 
 		$qb = $this->createQueryBuilder('si');
-		$qb->join('si.businessInvoice','e');
-		$qb->join('si.businessParticular','mds');
+		$qb->join('si.hotelInvoice','e');
+		$qb->join('si.hotelParticular','mds');
 		$qb->select('SUM(si.quantity) AS quantity');
 		$qb->addSelect('SUM(si.totalQuantity * si.purchasePrice) AS purchasePrice');
 		$qb->addSelect('SUM(si.subTotal) AS salesPrice');
 		$qb->addSelect('mds.name AS name');
 		$qb->addSelect('mds.particularCode AS sku');
-		$qb->where('e.businessConfig = :config');
+		$qb->where('e.hotelConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('e.process IN (:process)');
 		$qb->setParameter('process', array('Done','Delivered','Chalan'));
 		$this->handleSearchStockBetween($qb,$data);
-		$qb->groupBy('si.businessParticular');
+		$qb->groupBy('si.hotelParticular');
 		$qb->orderBy('mds.name','ASC');
 		return $qb->getQuery()->getArrayResult();
 	}
@@ -457,8 +457,8 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		$config =  $user->getGlobalOption()->getHotelConfig()->getId();
 
 		$qb = $this->createQueryBuilder('si');
-		$qb->join('si.businessInvoice','e');
-		$qb->join('si.businessParticular','mds');
+		$qb->join('si.hotelInvoice','e');
+		$qb->join('si.hotelParticular','mds');
 		$qb->leftJoin('mds.unit','u');
 		$qb->select('si.totalQuantity AS quantity');
 		$qb->addSelect('si.totalQuantity * si.purchasePrice AS purchasePrice');
@@ -468,7 +468,7 @@ class HotelInvoiceParticularRepository extends EntityRepository
 		$qb->addSelect('mds.name AS name');
 		$qb->addSelect('u.name AS unit');
 		$qb->addSelect('mds.particularCode AS sku');
-		$qb->where('e.businessConfig = :config');
+		$qb->where('e.hotelConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('e.process IN (:process)');
 		$qb->setParameter('process', array('Done','Delivered','Chalan'));
@@ -480,10 +480,10 @@ class HotelInvoiceParticularRepository extends EntityRepository
     public function searchAutoComplete(HotelConfig $config,$q)
     {
         $query = $this->createQueryBuilder('e');
-        $query->join('e.businessInvoice', 'i');
+        $query->join('e.hotelInvoice', 'i');
         $query->select('e.particular as id');
         $query->where($query->expr()->like("e.particular", "'$q%'"  ));
-        $query->andWhere("i.businessConfig = :config");
+        $query->andWhere("i.hotelConfig = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.particular');
         $query->orderBy('e.particular', 'ASC');
