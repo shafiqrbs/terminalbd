@@ -57,9 +57,6 @@ ims:
     resource: "@ImsBundle/Resources/config/routing.yml"
     prefix:   /
 
-config:
-    resource: "@ConfigBundle/Resources/config/routing.yml"
-    prefix:   /
 
 accounting:
     resource: "@AccountingBundle/Resources/config/routing.yml"
@@ -67,10 +64,6 @@ accounting:
 
 domain_user:
     resource: "@DomainUserBundle/Resources/config/routing.yml"
-    prefix:   /
-
-appstore_billing:
-    resource: "@AppstoreBillingBundle/Resources/config/routing.yml"
     prefix:   /
 
 appstore_inventory:

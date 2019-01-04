@@ -123,9 +123,9 @@ function jqueryTemporaryLoad() {
 
     });
 
+/*
 
-    $(document).on("click", ".toggle", function(e) {
-
+    $(".toggle").click(function(){
         var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
         $("#show-"+id).slideToggle(100);
@@ -134,6 +134,8 @@ function jqueryTemporaryLoad() {
     }, function() {
         $(this).children("span").text("[+]");
     });
+
+*/
 
 
     $(".booking-roomx").click(function(){

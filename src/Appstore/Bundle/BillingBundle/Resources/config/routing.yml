@@ -1,3 +1,0 @@
-appstore_billing_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: AppstoreBillingBundle:Default:index }

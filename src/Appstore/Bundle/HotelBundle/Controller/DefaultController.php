@@ -187,7 +187,8 @@ class DefaultController extends Controller
     public function bookingInvoiceGenerateAction()
     {
 	    $user = $this->getUser();
-    	$entity = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->invoiceGenerate($user);
+	    $entity = $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->invoiceGenerate($user);
+	    $this->getDoctrine()->getRepository('HotelBundle:HotelTemporaryInvoice')->removeTemporaryRoom($user);
 	    return $this->redirect($this->generateUrl('hotel_invoice_edit', array('id' => $entity->getId())));
 
     }

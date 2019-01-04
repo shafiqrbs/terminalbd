@@ -50,11 +50,9 @@ class AppKernel extends Kernel
             new Bindu\BinduBundle\BinduBundle(),
             new Appstore\Bundle\EcommerceBundle\EcommerceBundle(),
             new Appstore\Bundle\InventoryBundle\InventoryBundle(),
-            new Appstore\Bundle\BillingBundle\AppstoreBillingBundle(),
-            new Appstore\Bundle\DomainUserBundle\DomainUserBundle(),
+           new Appstore\Bundle\DomainUserBundle\DomainUserBundle(),
            /* new SunCat\MobileDetectBundle\MobileDetectBundle(),*/
             new Appstore\Bundle\AccountingBundle\AccountingBundle(),
-            new Appstore\Bundle\ConfigBundle\ConfigBundle(),
             new Appstore\Bundle\ImsBundle\ImsBundle(),
             new Xiidea\Bundle\DomainBundle\XiideaDomainBundle(),
             new Appstore\Bundle\CustomerBundle\CustomerBundle(),

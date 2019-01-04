@@ -1,3 +1,7 @@
+education_education:
+    resource: "@EducationBundle/Resources/config/routing/option.yml"
+    prefix:   /option
+
 education_homepage:
     path:     /hello/{name}
     defaults: { _controller: EducationBundle:Default:index }

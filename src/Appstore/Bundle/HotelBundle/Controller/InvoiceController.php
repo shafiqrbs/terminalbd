@@ -586,8 +586,6 @@ class InvoiceController extends Controller
 	/**
 	 * @Secure(roles="ROLE_HOTEL_INVOICE,ROLE_DOMAIN");
 	 */
-
-
 	public function invoiceReverseShowAction(HotelInvoice $invoice)
 	{
 		$config = $this->getUser()->getGlobalOption()->getHotelConfig();
@@ -649,7 +647,6 @@ class InvoiceController extends Controller
 					'treatmentSchedule' => $treatmentSchedule,
 				)
 			);
-
 			$wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
 			$snappy = new Pdf($wkhtmltopdfPath);
 			$pdf = $snappy->getOutputFromHtml($html);
@@ -716,7 +713,7 @@ class InvoiceController extends Controller
 			}else{
 				$template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
 			}
-			$amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
+			$amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getHotelInvoiceTransactionSummary()->getTotal());
 			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($config->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
 			$balance = empty($result) ? 0 :$result[0]['customerBalance'];
 			return  $this->render("HotelBundle:Print:{$template}.html.twig",

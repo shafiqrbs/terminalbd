@@ -2,7 +2,8 @@
     {% if searchForm.process is defined and searchForm.process == 'available' %}
         {% for entity in entities %}
             <tr>
-                <td><span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span></td>
+                {#<td><span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span></td>#}
+                <td class="numeric" >{{ loop.index }}</td>
                 <td class="numeric" >{% if entity.roomCategory is not empty %}{{ entity.roomCategory.name }}{% endif %}</td>
                 <td class="numeric" >{{ entity.name }}</td>
                 <td class="numeric" >{{ entity.hotelParticularType.name }}</td>
@@ -13,17 +14,18 @@
                 <td class="numeric" ></td>
                 <td class="numeric" ></td>
             </tr>
-            <tr id="show-{{ entity.id }}" class="showing-overview">
+            {#<tr id="show-{{ entity.id }}" class="showing-overview">
                 <td colspan="9">
                     <div id="room-{{ entity.id }}"></div>
                     <div id="form-{{ entity.id }}"></div>
                 </td>
-            </tr>
+            </tr>#}
         {% endfor %}
     {% else %}
         {% for entity in entities %}
             <tr>
-                <td><span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span></td>
+                {#<td><span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span></td>#}
+                <td class="numeric" >{{ loop.index }}</td>
                 <td class="numeric" >{% if entity.hotelParticular.roomCategory is not empty %}{{ entity.hotelParticular.roomCategory.name }}{% endif %}</td>
                 <td class="numeric" >{{ entity.particular }}</td>
                 <td class="numeric" >{{ entity.hotelParticular.hotelParticularType.name }}</td>
@@ -34,12 +36,12 @@
                 <td class="numeric" >{% for date in entity.bookingDate %}{{ date }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
                 <td class="numeric"><button class="btn red mini {{ entity.process }}">{{ entity.process }}</button></td>
             </tr>
-            <tr id="show-{{ entity.id }}" class="showing-overview">
+            {#<tr id="show-{{ entity.id }}" class="showing-overview">
                 <td colspan="9">
                     <div id="room-{{ entity.id }}"></div>
                     <div id="form-{{ entity.id }}"></div>
                 </td>
-            </tr>
+            </tr>#}
         {% endfor %}
     {% endif %}
 {% endif %}

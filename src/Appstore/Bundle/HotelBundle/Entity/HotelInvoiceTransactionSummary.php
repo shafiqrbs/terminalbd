@@ -92,6 +92,13 @@ class HotelInvoiceTransactionSummary
 	 */
 	private $due;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="paymentInWord", type="string", length=255, nullable=true)
+	 */
+	private $paymentInWord;
+
 
     /**
      * Get id
@@ -102,10 +109,6 @@ class HotelInvoiceTransactionSummary
     {
         return $this->id;
     }
-
-
-
-
 
 	/**
 	 * @return HotelInvoice
@@ -231,6 +234,20 @@ class HotelInvoiceTransactionSummary
 	 */
 	public function setServiceCharge( float $serviceCharge ) {
 		$this->serviceCharge = $serviceCharge;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPaymentInWord() {
+		return $this->paymentInWord;
+	}
+
+	/**
+	 * @param string $paymentInWord
+	 */
+	public function setPaymentInWord( string $paymentInWord ) {
+		$this->paymentInWord = $paymentInWord;
 	}
 
 }

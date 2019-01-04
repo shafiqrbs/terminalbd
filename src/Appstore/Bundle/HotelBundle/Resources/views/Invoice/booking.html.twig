@@ -204,7 +204,8 @@
             <tbody id="bookingLoad">
                 {% for entity in entities %}
                     <tr>
-                        <td>{#<span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span>#}{{ loop.index }}.</td>
+                        {# <td><span data-trigger="hover" class="btn blue mini toggle badge-custom" data-id="{{ entity.id }}" data-url="{{ path('hotel_booking_room_details',{'id':entity.id}) }}" ><span>[+]</span></span>{{ loop.index }}.</td>#}
+                        <td class="numeric" >{{ loop.index }}</td>
                         <td class="numeric" >{% if entity.roomCategory is not empty %}{{ entity.roomCategory.name }}{% endif %}</td>
                         <td class="numeric" >{{ entity.name }}</td>
                         <td class="numeric" >{{ entity.hotelParticularType.name }}</td>
@@ -214,12 +215,6 @@
                         <td class="numeric" >{{ entity.salesPrice }}</td>
                         <td class="numeric" ></td>
                         <td class="numeric">{% if bookings[entity.id]['id'] is defined and bookings[entity.id]['id'] == entity.id  %} <button class="btn red mini {{ bookings[entity.id]['roomStatus'] }}">{{ bookings[entity.id]['roomStatus'] }}</button> {% else %}<button class="btn blue mini">Available</button>{% endif %}</td>
-                    </tr>
-                    <tr id="show-{{ entity.id }}" class="showing-overview">
-                        <td colspan="9">
-                            <div id="room-{{ entity.id }}"></div>
-                            <div id="form-{{ entity.id }}"></div>
-                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -50,7 +50,7 @@ class ConfigType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12'),
                 'choices' => array(
                 	'' => '-- Select invoice type --',
-	                'new' => 'General',
+	                'print' => 'General',
 	                'banner-print' => 'Banner-Print'),
             ))
 	        ->add('stockFormat',

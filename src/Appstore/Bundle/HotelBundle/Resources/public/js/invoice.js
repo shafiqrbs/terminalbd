@@ -317,6 +317,22 @@ $(document).on('keyup', '#invoice_received', function() {
     }
 });
 
+$(document).on('keyup', '#transaction_received, #transaction_discount', function() {
+
+    var payment     = parseInt($('#transaction_received').val()  != '' ? $('#transaction_received').val() : 0 );
+    var discount     = parseInt($('#transaction_discount').val()  != '' ? $('#transaction_discount').val() : 0 );
+    var paymentTotal =  parseInt($('#paymentTotal').val());
+    var dueAmount = (paymentTotal - (payment+discount ));
+    if(dueAmount > 0){
+        $('#balance').html('Due Tk.');
+        $('.due').html(dueAmount);
+    }else{
+        var balance =  payment - paymentTotal ;
+        $('#balance').html('Return Tk.');
+        $('.due').html(balance);
+    }
+});
+
 $('form#salesForm').on('keypress', '.salesInput', function (e) {
 
     if (e.which === 13) {

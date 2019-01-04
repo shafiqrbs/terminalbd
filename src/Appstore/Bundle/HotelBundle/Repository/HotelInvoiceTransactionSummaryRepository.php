@@ -65,7 +65,7 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 		$entity->setVat(floatval($vat));
 		$entity->setServiceCharge(floatval($charge));
 		$entity->setSubTotal($subTotal);
-		$entity->setTotal($total);
+		$entity->setTotal($total - $discount);
 		$entity->setReceived($received);
 		$entity->setDue($due);
 		$em->flush();
