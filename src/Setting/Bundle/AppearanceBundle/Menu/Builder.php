@@ -1144,15 +1144,18 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon icon-th-large')
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_MEDICINE_SALES')) {
-                $menu['Medicine']->addChild('Manage Sales', array('route' => 'medicine_sales'))
+	        $menu['Medicine']->addChild('Manage Sales')
+	                         ->setAttribute('icon', 'icon-shopping-cart')
+	                         ->setAttribute('dropdown', true);
+        	    $menu['Medicine']['Manage Sales']->addChild('Manage Sales', array('route' => 'medicine_sales'))
                     ->setAttribute('icon', 'icon-list');
-                $menu['Medicine']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
+                $menu['Medicine']['Manage Sales']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
                     ->setAttribute('icon', 'icon-list');
                 if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
-	                $menu['Medicine']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
-	                $menu['Medicine']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
+	                $menu['Medicine']['Manage Sales']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
+	                $menu['Medicine']['Manage Sales']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
                 }
-            }
+        }
 	    if ($securityContext->isGranted('ROLE_MEDICINE_PURCHASE')) {
 
 		    $menu['Medicine']->addChild('Manage Purchase')
@@ -1170,8 +1173,16 @@ class Builder extends ContainerAware
 		    $menu['Medicine']['Manage Purchase']->addChild('Vendor', array('route' => 'medicine_vendor'))->setAttribute('icon', 'icon-tag');
 
 	    }
-        if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
-	            $menu['Medicine']->addChild('Manage Stock')
+
+
+	    if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
+		    $menu['Medicine']->addChild('Purchase & Sales')
+		                     ->setAttribute('icon', 'icon icon-bar-chart')
+		                     ->setAttribute('dropdown', true);
+		    $menu['Medicine']['Purchase & Sales']->addChild('Vendor Accounts', array('route' => 'medicine_report_vendor_sales'))->setAttribute('icon', 'icon-th-list');
+		    $menu['Medicine']['Purchase & Sales']->addChild('Vendor Medicine', array('route' => 'medicine_report_vendor_sales_medicine'))->setAttribute('icon', 'icon-th-list');
+
+		    $menu['Medicine']->addChild('Manage Stock')
 	                             ->setAttribute('icon', 'icon icon-truck')
 	                             ->setAttribute('dropdown', true);
                 $menu['Medicine']['Manage Stock']->addChild('Stock Item', array('route' => 'medicine_stock'))
@@ -1189,7 +1200,7 @@ class Builder extends ContainerAware
 		                                             ->setAttribute( 'icon', 'icon-th-list' );
 	            }
 
-            }
+        }
         if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
             $menu['Medicine']->addChild('Master Data')
                 ->setAttribute('icon', 'icon icon-cog')
@@ -1234,13 +1245,7 @@ class Builder extends ContainerAware
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Ledger', array('route' => 'medicine_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Details', array('route' => 'medicine_report_purchase_vendor_details'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Stock', array('route' => 'medicine_report_product_stock_sales'))->setAttribute('icon', 'icon-th-list');
-		        $menu['Medicine']['Reports']->addChild('Purchase & Sales')
-		                                    ->setAttribute('icon', 'icon icon-bar-chart')
-		                                    ->setAttribute('dropdown', true);
-		        $menu['Medicine']['Reports']['Purchase & Sales']->addChild('Vendor Accounts', array('route' => 'medicine_report_vendor_sales'))->setAttribute('icon', 'icon-th-list');
-		        $menu['Medicine']['Reports']['Purchase & Sales']->addChild('Vendor Medicine', array('route' => 'medicine_report_vendor_sales_medicine'))->setAttribute('icon', 'icon-th-list');
-
-	            /*$menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))->setAttribute('icon', 'icon-th-list');*/
+		        /*$menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))->setAttribute('icon', 'icon-th-list');*/
 	            $menu['Medicine']['Reports']->addChild('Brand', array('route' => 'medicine_report_purchase_brand_sales'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']->addChild('Brand Details', array('route' => 'medicine_report_purchase_brand_sales_details'))->setAttribute('icon', 'icon-th-list');
 
