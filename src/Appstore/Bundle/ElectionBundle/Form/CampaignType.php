@@ -58,7 +58,7 @@ class CampaignType extends AbstractType
 	        ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12 inputs','rows' => 5,'autocomplete'=>'off','placeholder'=>'Enter campaign content')))
 	        ->add('analysisType', 'entity', array(
 		        'required'    => true,
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'empty_value' => '---Choose a settings type ---',
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span12 inputs'),
@@ -72,7 +72,7 @@ class CampaignType extends AbstractType
 	        ))
             ->add('priority', 'entity', array(
 		        'required'    => true,
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'empty_value' => '---Choose a settings type ---',
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span12 inputs'),

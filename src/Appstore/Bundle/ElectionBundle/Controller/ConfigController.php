@@ -105,7 +105,7 @@ class ConfigController extends Controller
     	$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticularMaster')->findBy(array('status'=>1));
 	    foreach ($entities as $entity){
-	        $exist = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->findOneBy(array('electionConfig' => $config , 'defineSlug' => $entity->getSlug(),'particularType' => $entity->getParticularType()));
+	        $exist = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->findOneBy(array( 'electionConfig' => $config , 'defineSlug' => $entity->getSlug(), 'particularType' => $entity->getParticularType()));
 	        if(empty($exist)){
 		        $particular = new ElectionParticular();
 		        $particular->setElectionConfig($config);

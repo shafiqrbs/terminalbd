@@ -48,7 +48,7 @@ class CommitteeController extends Controller
 		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
 
-		$locationTypes = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->getListOfParticular($config,'location');
+		$locationTypes = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->getListOfParticular($config,'location');
 		return $this->render('ElectionBundle:Committee:index.html.twig', array(
 			'entities' => $pagination,
 			'locationTypes' => $locationTypes,

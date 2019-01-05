@@ -26,7 +26,7 @@ class ParticularController extends Controller
         $entity = new ElectionParticular();
         $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->findBy(array('electionConfig' => $config),array('particularType'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->findBy(array( 'electionConfig' => $config),array( 'particularType' =>'ASC'));
         return $this->render('ElectionBundle:Particular:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
@@ -41,7 +41,7 @@ class ParticularController extends Controller
     {
         $entity = new ElectionParticular();
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->findBy(array('electionConfig' => $config),array('particularType'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->findBy(array( 'electionConfig' => $config),array( 'particularType' =>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -93,9 +93,9 @@ class ParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->findBy(array('electionConfig' => $config),array('particularType'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->findBy(array( 'electionConfig' => $config),array( 'particularType' =>'ASC'));
 
-        $entity = $em->getRepository('ElectionBundle:ElectionParticular')->find($id);
+        $entity = $em->getRepository( 'EducationParticular.php' )->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -137,9 +137,9 @@ class ParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->findBy(array('electionConfig' => $config),array('particularType'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->findBy(array( 'electionConfig' => $config),array( 'particularType' =>'ASC'));
 
-        $entity = $em->getRepository('ElectionBundle:ElectionParticular')->find($id);
+        $entity = $em->getRepository( 'EducationParticular.php' )->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -170,7 +170,7 @@ class ParticularController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('ElectionBundle:ElectionParticular')->find($id);
+        $entity = $em->getRepository( 'EducationParticular.php' )->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -205,7 +205,7 @@ class ParticularController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('ElectionBundle:ElectionParticular')->find($id);
+        $entity = $em->getRepository( 'EducationParticular.php' )->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -229,7 +229,7 @@ class ParticularController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getElectionConfig();
-            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticular')->searchAutoComplete($item,$inventory);
+            $item = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->searchAutoComplete($item,$inventory);
         }
         return new JsonResponse($item);
     }

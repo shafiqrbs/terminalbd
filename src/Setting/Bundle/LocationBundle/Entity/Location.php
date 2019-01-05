@@ -40,6 +40,11 @@ class Location
      */
     protected $educations;
 
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", mappedBy="location")
+     */
+    protected $education;
+
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", mappedBy="district")
@@ -51,7 +56,6 @@ class Location
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", mappedBy="district")
      */
     protected $electionLocations;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", mappedBy="location")

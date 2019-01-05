@@ -38,7 +38,7 @@ class SetupType extends AbstractType
 
 	        ->add('electionType', 'entity', array(
 		        'required'    => true,
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'empty_value' => '--- Choose the type of election ---',
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span12 inputs'),

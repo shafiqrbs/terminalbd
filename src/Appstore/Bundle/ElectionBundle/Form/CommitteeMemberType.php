@@ -46,7 +46,7 @@ class CommitteeMemberType extends AbstractType
 
 	        ->add('designation', 'entity', array(
 		        'required'    => true,
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'property' => 'name',
 		        'empty_value' => 'Choose a member designation',
 		        'attr'=>array('class'=>'m-wrap span9 inputs'),

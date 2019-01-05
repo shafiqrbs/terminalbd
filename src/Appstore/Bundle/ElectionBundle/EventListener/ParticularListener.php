@@ -35,7 +35,7 @@ class ParticularListener
     {
 
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository('ElectionBundle:ElectionParticular')->createQueryBuilder('s');
+        $qb = $entityManager->getRepository( 'EducationParticular.php' )->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
             ->where('s.electionConfig = :config')

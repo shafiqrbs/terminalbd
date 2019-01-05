@@ -48,7 +48,7 @@ class LocationType extends AbstractType
             ))
 	        ->add('locationType', 'entity', array(
 		        'required'    => true,
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'empty_value' => '--- Choose type of location ---',
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span12 inputs'),

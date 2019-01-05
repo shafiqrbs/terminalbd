@@ -84,7 +84,7 @@ class MemberType extends AbstractType
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member family political status ---',
 		        'attr'=>array('class'=>'m-wrap span12'),
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")
@@ -99,7 +99,7 @@ class MemberType extends AbstractType
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member previous political party ---',
 		        'attr'=>array('class'=>'m-wrap span12'),
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")
@@ -114,7 +114,7 @@ class MemberType extends AbstractType
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member political designation ---',
 		        'attr'=>array('class'=>'m-wrap span12'),
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")
@@ -142,7 +142,7 @@ class MemberType extends AbstractType
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member profession ---',
 		        'attr'=>array('class'=>'m-wrap span12'),
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")
@@ -156,7 +156,7 @@ class MemberType extends AbstractType
 		        'property' => 'name',
 		        'empty_value' => '--- Choose a member education degree ---',
 		        'attr'=>array('class'=>'m-wrap span12'),
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionParticular',
+		        'class' => 'EducationParticular.php',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")

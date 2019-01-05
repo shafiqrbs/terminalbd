@@ -218,14 +218,6 @@
         </div>
     </div>
 {% endblock %}
-{% block javascriptBlock %}
-    {{ parent() }}
-    {% javascripts
-    '@HospitalBundle/Resources/public/js/invoice.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock  %}
 {% block documentready %}
     {{ parent() }}
 {% endblock %}

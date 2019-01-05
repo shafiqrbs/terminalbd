@@ -106,7 +106,7 @@ class Voter
      */
     private function getElectionParticularRepository()
     {
-        return $this->getDoctrain()->getRepository('ElectionBundle:ElectionParticular');
+        return $this->getDoctrain()->getRepository( 'EducationParticular.php' );
     }
 
 
