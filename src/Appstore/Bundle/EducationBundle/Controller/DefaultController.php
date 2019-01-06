@@ -8,6 +8,8 @@ class DefaultController extends Controller
 {
     public function indexAction($name)
     {
-        return $this->render('EducationBundle:Default:index.html.twig', array('name' => $name));
+	    return $this->render('ElectionBundle:Default:index.html.twig', array(
+
+	    ));
     }
 }

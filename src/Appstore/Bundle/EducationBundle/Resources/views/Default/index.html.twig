@@ -1,1 +1,123 @@
-Hello {{ name }}!
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div id="dashboard">
+        <!-- BEGIN DASHBOARD STATS -->
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"><br/></div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@MedicineBundle/Resources/public/css/dashboard.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@MedicineBundle/Resources/public/js/jquery-canvas.js'
+    '@ElectionBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+
+{% block documentready %}
+    {{ parent() }}
+
+    $('.box-inner-scroll').slimScroll({
+        height: '248px'
+    });
+
+    $('.candidate-box').slimScroll({
+        height: '440px',
+        width: '100%'
+    });
+
+    $('.campaign-box').slimScroll({
+        height: '515px',
+        width: '100%'
+    });
+
+    window.onload = function () {
+
+        var optionsElection = {
+        animationEnabled: true,
+        title: {
+        text: "{{ setup.setupName }}, Total Vote :{{ setup.resultTotalVote }} "
+        },
+        axisY: {
+        title: "Growth Rate (in %)",
+        suffix: "%",
+        includeZero: false
+        },
+        axisX: {
+        title: "Result - {{ setup.setupName }}, Total Vote :{{ setup.resultTotalVote }}"
+        },
+        data: [{
+        type: "column",
+        yValueFormatString: "#,##0.0#"%"",
+        dataPoints: [
+        {% for employee in setup.candidates %}
+            { label: "{{ employee.marka.name|capitalize }}", y: {% if employee is defined and employee is not empty %} {{ ((employee.totalVote * 100)/setup.resultTotalVote)|number_format }}{% else %}0{% endif %} , indexLabel: "{% if  employee is defined and employee is not empty %} {{ employee.totalVote|number_format }}{% else %}0{% endif %}" },
+        {% endfor %}
+        ]
+        }]
+        };
+        $("#chartContainer").CanvasJSChart(optionsElection);
+
+        var unionBaseMember = {
+        animationEnabled: true,
+        title: {
+        text: "Union Base Member - {{ members.totalMember }}"
+        },
+        axisY: {
+        title: "Growth Rate (in %)",
+        suffix: "%",
+        includeZero: false
+        },
+        axisX: {
+        title: "Union Base Voter"
+        },
+        data: [{
+        type: "column",
+        yValueFormatString: "#,##0.0#"%"",
+        dataPoints: [
+        {% for unionMember in unionMembers %}
+            { label: "{{ unionMember.unionName|capitalize }}", y: {% if unionMember is defined and unionMember is not empty %} {{ ((unionMember.total * 100)/members.totalMember) }}{% else %}0{% endif %} , indexLabel: "Member {% if  unionMember is defined and unionMember is not empty %} {{ unionMember.total }}{% else %}0{% endif %}" },
+        {% endfor %}
+        ]
+        }]
+        };
+
+        $("#chartOfUnion").CanvasJSChart(unionBaseMember);
+
+        var unionBaseVoter = {
+        animationEnabled: true,
+        title: {
+        text: "Total Center - {{ setup.voteCenter }}"
+        },
+        axisY: {
+        title: "Growth Rate (in %)",
+        suffix: "%",
+        includeZero: false
+        },
+        axisX: {
+        title: "Total Voter - {{ setup.totalVoter }}"
+        },
+        data: [{
+        type: "column",
+        yValueFormatString: "#,##0.0#"%"",
+        dataPoints: [
+        {% for unionMember in unionVoters %}
+            { label: "{{ unionMember.unionName|capitalize }}", y: {% if unionMember is defined and unionMember is not empty %} {{ ((unionMember.totalVoter * 100)/setup.totalVoter)|number_format }}{% else %}0{% endif %} , indexLabel: "Center: {% if  unionMember is defined and unionMember is not empty %} {{ unionMember.totalCenter }} & Voter: {{ unionMember.totalVoter }}{% else %}0{% endif %}" },
+        {% endfor %}
+        ]
+        }]
+        };
+        $("#chartOfUnionVoter").CanvasJSChart(unionBaseVoter);
+
+    }
+{% endblock %}
+

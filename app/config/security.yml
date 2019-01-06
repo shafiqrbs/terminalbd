@@ -50,6 +50,13 @@ security:
 
         # THIS IS PART OF OFFICE MANAGEMENT
 
+        ROLE_EDUCATION:                                 [ROLE_EDUCATION]
+        ROLE_EDUCATION_OPERATOR:                        [ROLE_EDUCATION,ROLE_EDUCATION_OPERATOR]
+        ROLE_EDUCATION_MANAGER:                         [ROLE_EDUCATION,ROLE_EDUCATION_OPERATOR,ROLE_EDUCATION_MANAGER]
+        ROLE_EDUCATION_ADMIN:                           [ROLE_EDUCATION_MANAGER,ROLE_EDUCATION_OPERATOR,ROLE_EDUCATION_ADMIN]
+
+        # THIS IS PART OF OFFICE MANAGEMENT
+
         ROLE_ELECTION:                                  [ROLE_ELECTION]
         ROLE_ELECTION_OPERATOR:                         [ROLE_ELECTION,ROLE_ELECTION_OPERATOR]
         ROLE_ELECTION_MANAGER:                          [ROLE_ELECTION,ROLE_ELECTION_OPERATOR,ROLE_ELECTION_MANAGER]
@@ -233,6 +240,7 @@ security:
         - { path: ^/payroll,            role: ROLE_PAYROLL }
         - { path: ^/inventory,          role: ROLE_INVENTORY }
         - { path: ^/hms,                role: ROLE_HOSPITAL }
+        - { path: ^/education,          role: ROLE_EDUCATION }
         - { path: ^/restaurant,         role: ROLE_RESTAURANT }
         - { path: ^/election,           role: ROLE_ELECTION }
         - { path: ^/dms,                role: ROLE_DMS }

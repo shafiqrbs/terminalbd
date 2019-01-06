@@ -2,6 +2,18 @@ education_education:
     resource: "@EducationBundle/Resources/config/routing/option.yml"
     prefix:   /option
 
+education_config:
+    resource: "@EducationBundle/Resources/config/routing/config.yml"
+    prefix:   /config
+
+education_student:
+    resource: "@EducationBundle/Resources/config/routing/student.yml"
+    prefix:   /student
+
+education_particular:
+    resource: "@EducationBundle/Resources/config/routing/particular.yml"
+    prefix:   /particular
+
 education_homepage:
-    path:     /hello/{name}
+    path:     /dashboard
     defaults: { _controller: EducationBundle:Default:index }

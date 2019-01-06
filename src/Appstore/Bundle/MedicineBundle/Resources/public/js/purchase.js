@@ -179,7 +179,8 @@ var formStock = $("#stockItemForm").validate({
                 $("#medicineStock_name").select2("val", "");
                 $("#medicineId").val();
                 $('#stockItemForm')[0].reset();
-                EditableInit();
+                $('#stockItemCreate').html('<i class="icon-save"></i> Add Stock Item').attr("disabled", false);
+
             }
         });
     }
@@ -232,7 +233,7 @@ var form = $("#purchaseItemForm").validate({
                 $('#msg').html(obj['msg']);
                 $("#purchaseItem_stockName").select2("val", "");
                 $('#purchaseItemForm')[0].reset();
-                EditableInit();
+                $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
             }
         });
     }
@@ -313,6 +314,7 @@ $(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurch
             $('#msg').html(obj['msg']);
             $('#discount').html(obj['discount']);
             $('#medicinepurchase_discount').val(obj['discount']);
+
         }
 
     })

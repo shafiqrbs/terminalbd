@@ -1,17 +1,17 @@
 <?php
 
-namespace Appstore\Bundle\ElectionBundle\Controller;
+namespace Appstore\Bundle\EducationBundle\Controller;
 
-use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
-use Appstore\Bundle\ElectionBundle\Entity\ElectionParticular;
-use Appstore\Bundle\ElectionBundle\Form\ConfigType;
+use Appstore\Bundle\EducationBundle\Entity\EducationConfig;
+use Appstore\Bundle\EducationBundle\Entity\EducationParticular;
+use Appstore\Bundle\EducationBundle\Form\ConfigType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * ElectionConfigController.
+ * EducationConfigController.
  *
  */
 class ConfigController extends Controller
@@ -21,12 +21,12 @@ class ConfigController extends Controller
     public function manageAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $this->getUser()->getGlobalOption()->getElectionConfig();
+        $entity = $this->getUser()->getGlobalOption()->getEducationConfig();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
         }
         $form = $this->createEditForm($entity);
-        return $this->render('ElectionBundle:Config:manage.html.twig', array(
+        return $this->render('EducationBundle:Config:manage.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView(),
         ));
@@ -39,12 +39,11 @@ class ConfigController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(ElectionConfig $entity)
+    private function createEditForm(EducationConfig $entity)
     {
 
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new ConfigType($location), $entity, array(
-            'action' => $this->generateUrl('election_config_update'),
+        $form = $this->createForm(new ConfigType(), $entity, array(
+            'action' => $this->generateUrl('education_config_update'),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -61,8 +60,8 @@ class ConfigController extends Controller
     public function updateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		/* @var $entity ElectionConfig */
-        $entity = $this->getUser()->getGlobalOption()->getElectionConfig();
+		/* @var $entity EducationConfig */
+        $entity = $this->getUser()->getGlobalOption()->getEducationConfig();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
@@ -83,16 +82,16 @@ class ConfigController extends Controller
 
 	        $entity->upload();
         	$em->flush();
-	        $this->getDoctrine()->getRepository('ElectionBundle:ElectionConfig')->fileUploader($entity,$file);
+	        $this->getDoctrine()->getRepository('EducationBundle:EducationConfig')->fileUploader($entity,$file);
 
 	        $this->get('session')->getFlashBag()->add(
                 'success',"Data has been created successfully"
             );
-            $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->initialDistrict($entity);
-            return $this->redirect($this->generateUrl('election_config_manage'));
+            $this->getDoctrine()->getRepository('EducationBundle:EducationLocation')->initialDistrict($entity);
+            return $this->redirect($this->generateUrl('education_config_manage'));
         }
 
-        return $this->render('ElectionBundle:Config:manage.html.twig', array(
+        return $this->render('EducationBundle:Config:manage.html.twig', array(
             'entity'        => $entity,
             'form'          => $editForm->createView(),
         ));
@@ -101,23 +100,6 @@ class ConfigController extends Controller
     public function restoreMasterParticularAction()
     {
 
-	    $em = $this->getDoctrine()->getManager();
-    	$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionParticularMaster')->findBy(array('status'=>1));
-	    foreach ($entities as $entity){
-	        $exist = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->findOneBy(array( 'electionConfig' => $config , 'defineSlug' => $entity->getSlug(), 'particularType' => $entity->getParticularType()));
-	        if(empty($exist)){
-		        $particular = new ElectionParticular();
-		        $particular->setElectionConfig($config);
-		        $particular->setParticularType($entity->getParticularType());
-		        $particular->setName($entity->getName());
-		        $particular->setDefineSlug($entity->getSlug());
-		        $particular->setStatus(true);
-		        $em->persist($particular);
-		        $em->flush();
-	        }
-	   }
-	   return $this->redirect($this->generateUrl('election_config_manage'));
     }
 
     public function autoSearchAction(Request $request)

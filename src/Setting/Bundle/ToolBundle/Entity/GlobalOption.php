@@ -19,6 +19,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\EducationBundle\Entity\EducationConfig;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
@@ -689,6 +690,14 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $dpsConfig;
+
+
+     /*================================= PRESCRIPTION BUNDLE===========================================*/
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $educationConfig;
 
 
      /*================================= MEDICINE BUNDLE===========================================*/
@@ -1925,6 +1934,14 @@ class GlobalOption
 	 */
 	public function setLinkedin( string $linkedin ) {
 		$this->linkedin = $linkedin;
+	}
+
+	/**
+	 * @return EducationConfig
+	 */
+
+	public function getEducationConfig() {
+		return $this->educationConfig;
 	}
 
 

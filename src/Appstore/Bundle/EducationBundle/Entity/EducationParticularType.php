@@ -29,6 +29,12 @@ class EducationParticularType
 
   
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", mappedBy="type")
+     */
+    protected $educationConfig;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)

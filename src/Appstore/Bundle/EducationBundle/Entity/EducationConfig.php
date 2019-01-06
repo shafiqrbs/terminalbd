@@ -44,6 +44,12 @@ class EducationConfig
 	private $particulars;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularType", inversedBy="educationConfig")
+	 * @ORM\OrderBy({"name" = "ASC"})
+	 **/
+	private $type;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", mappedBy="education")
 	 * @ORM\OrderBy({"level" = "ASC"})
 	 **/
@@ -598,6 +604,19 @@ class EducationConfig
 		}
 	}
 
+	/**
+	 * @return EducationParticularType
+	 */
+	public function getType() {
+		return $this->type;
+	}
+
+	/**
+	 * @param EducationParticularType $type
+	 */
+	public function setType( $type ) {
+		$this->type = $type;
+	}
 
 
 }

@@ -163,6 +163,7 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
                     $("#salesTemporaryItem_stockName").select2("val", "");
                     $('#salesTemporaryItemForm')[0].reset();
+                    $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", false);
                 }
             });
         }

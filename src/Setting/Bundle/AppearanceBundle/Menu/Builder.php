@@ -92,6 +92,13 @@ class Builder extends ContainerAware
                 }
             }
 
+            $result = array_intersect($menuName, array('Institute'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_EDUCATION')){
+                    $menu = $this->InstituteMenu($menu);
+                }
+            }
+
             $result = array_intersect($menuName, array('Dps'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_DPS')){
@@ -280,6 +287,30 @@ class Builder extends ContainerAware
 		                                                    ->setAttribute( 'icon', 'icon-th-list' );
 		    $menu['Business Management']['Reports']['Sales']->addChild( 'Product Wise Sales', array( 'route' => 'business_report_sales_stock' ) )
 		                                                    ->setAttribute( 'icon', 'icon-th-list' );
+	    }
+	    return $menu;
+
+    }
+
+    public function InstituteMenu($menu)
+    {
+
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
+        $config = $securityContext->getGlobalOption()->getEducationConfig();
+
+        $menu
+            ->addChild('Institute Management')
+            ->setAttribute('icon', 'icon-briefcase')
+            ->setAttribute('dropdown', true);
+
+	    if ($securityContext->isGranted('ROLE_BUSINESS_MANAGER')) {
+
+		    $menu['Institute Management']->addChild('Master Data')
+		                                ->setAttribute('icon', 'icon icon-cog')
+		                                ->setAttribute('dropdown', true);
+		    $menu['Institute Management']['Master Data']->addChild('Option', array('route' => 'education_particular'))->setAttribute('icon', 'icon-th-list');
+		    $menu['Institute Management']['Master Data']->addChild('Configuration', array('route' => 'education_config_manage'))->setAttribute('icon', 'icon-cog');
 	    }
 	    return $menu;
 
