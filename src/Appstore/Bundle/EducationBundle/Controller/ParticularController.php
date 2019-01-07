@@ -26,7 +26,7 @@ class ParticularController extends Controller
         $entity = new EducationParticular();
         $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationParticular' )->findBy(array( 'EducationConfig' => $config),array( 'particularType' =>'ASC'));
+        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationParticular' )->findBy(array( 'educationConfig' => $config),array( 'particularType' =>'ASC'));
         return $this->render('EducationBundle:Particular:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
@@ -41,7 +41,7 @@ class ParticularController extends Controller
     {
         $entity = new EducationParticular();
         $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationParticular' )->findBy(array( 'EducationConfig' => $config),array( 'particularType' =>'ASC'));
+        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationParticular' )->findBy(array( 'educationConfig' => $config),array( 'particularType' =>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -93,7 +93,7 @@ class ParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationParticular' )->findBy(array( 'EducationConfig' => $config),array( 'particularType' =>'ASC'));
+        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationParticular' )->findBy(array( 'educationConfig' => $config),array( 'particularType' =>'ASC'));
 
         $entity = $em->getRepository( 'EducationBundle:EducationParticular' )->find($id);
 
@@ -137,7 +137,7 @@ class ParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationParticular' )->findBy(array( 'EducationConfig' => $config),array( 'particularType' =>'ASC'));
+        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationParticular' )->findBy(array( 'educationConfig' => $config),array( 'particularType' =>'ASC'));
 
         $entity = $em->getRepository( 'EducationBundle:EducationParticular' )->find($id);
 

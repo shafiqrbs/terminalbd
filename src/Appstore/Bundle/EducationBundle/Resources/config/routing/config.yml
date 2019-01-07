@@ -7,8 +7,3 @@ education_config_update:
     defaults: { _controller: "EducationBundle:Config:update" }
     methods:  [POST, PUT]
 
-education_restore_master:
-    path:     /restore-master-data
-    defaults: { _controller: "EducationBundle:Config:restoreMasterParticular" }
-
-

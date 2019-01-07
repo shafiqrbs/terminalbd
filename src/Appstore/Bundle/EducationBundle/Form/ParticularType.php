@@ -35,6 +35,16 @@ class ParticularType extends AbstractType
                     new NotBlank(array('message'=>'Enter particular name')),
                 )
             ))
+	        /*->add('assignType', 'choice', array(
+		        'attr'=>array('class'=>'m-wrap discount-type span12'),
+		        'expanded'      =>false,
+		        'multiple'      =>false,
+		        'choices' => array(
+			        'student' => 'Student',
+			        'fee' => 'Fees',
+			        'others' => 'Others',
+		        ),
+	        ))*/
 	        ->add('particularType', 'entity', array(
 		        'required'    => true,
 		        'class' => 'Appstore\Bundle\EducationBundle\Entity\EducationParticularType',
@@ -45,7 +55,7 @@ class ParticularType extends AbstractType
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 				        ->join('e.educationConfig','c')
-			                  ->where("wt.status = 1")
+			                  ->where("e.status = 1")
 			                  ->andWhere("c.id = {$this->config->getId()}");
 		        },
 	        ))

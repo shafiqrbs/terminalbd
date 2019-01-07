@@ -29,7 +29,7 @@ class EducationParticularType
 
   
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", mappedBy="type")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", mappedBy="type")
      */
     protected $educationConfig;
 

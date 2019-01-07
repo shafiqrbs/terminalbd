@@ -54,27 +54,6 @@ class MedicinePurchaseItemRepository extends EntityRepository
         if(!empty($vendor)){
             $qb->andWhere("e.medicineVendor = :vendor")->setParameter('vendor', $vendor);
         }
-
-	    if(empty($data)){
-		    $datetime = new \DateTime("now");
-		    $start = $datetime->format('Y-m-d 00:00:00');
-		    $end = $datetime->format('Y-m-t 23:59:59');
-	    }else{
-		    $datetime = new \DateTime($data['startDate']);
-		    $start = $datetime->format('Y-m-d 00:00:00');
-		    $datetime = new \DateTime($data['endDate']);
-		    $end = $datetime->format('Y-m-d 23:59:59');
-	    }
-	    if (!empty($start) ) {
-		    $qb->andWhere("mpi.expirationEndDate >= :startDate");
-		    $qb->setParameter('startDate', $start);
-	    }
-
-	    if (!empty($end)) {
-		    $qb->andWhere("mpi.expirationEndDate <= :endDate");
-		    $qb->setParameter('endDate', $end);
-	    }
-
 	    if (!empty($data['startDate']) ) {
 		    $datetime = new \DateTime($data['endDate']);
 	    	$qb->andWhere("e.created >= :startDate");
@@ -128,14 +107,28 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
     public function findWithSearch(MedicineConfig $config,$data = array(),$instant = ''){
 
-
-    	$qb = $this->createQueryBuilder('mpi');
+	    $startExpiryDate = isset($data['startExpiryDate'])? $data['startExpiryDate'] :'';
+	    $endExpiryDate = isset($data['endExpiryDate'])? $data['endExpiryDate'] :'';
+	    $qb = $this->createQueryBuilder('mpi');
         $qb->join('mpi.medicinePurchase','e');
         $qb->join('mpi.medicineStock','s');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
         $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
-       // $qb->andWhere('mpi.remainingQuantity > 0');
+        $qb->andWhere('mpi.remainingQuantity > 0');
         $this->handleSearchBetween($qb,$data);
+	    if (!empty($startExpiryDate) ) {
+		    $datetime = new \DateTime($startExpiryDate);
+		    $start = $datetime->format('Y-m-d 00:00:00');
+		    $qb->andWhere("mpi.expirationEndDate >= :startDate");
+		    $qb->setParameter('startDate', $start);
+	    }
+
+	    if (!empty($endExpiryDate)) {
+		    $datetime = new \DateTime($endExpiryDate);
+		    $end = $datetime->format('Y-m-d 23:59:59');
+		    $qb->andWhere("mpi.expirationEndDate <= :endDate");
+		    $qb->setParameter('endDate', $end);
+	    }
         $qb->orderBy('s.name','ASC');
         $qb->getQuery();
         return  $qb;
@@ -149,7 +142,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
 		$qb->select('COUNT(mpi.id) as countId');
 		$qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
 		$qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
-		$qb->andWhere('mpi.expirationStartDate IS NOT NULL');
+		$qb->andWhere('mpi.expirationEndDate IS NOT NULL');
 		$qb->andWhere('mpi.remainingQuantity > 0');
 		$datetime = new \DateTime();
 		$start = $datetime->format('Y-m-d 00:00:00');
@@ -162,18 +155,40 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
 	public function expiryMedicineSearch($config,$data = array(),$instant = ''){
 
-        $qb = $this->createQueryBuilder('mpi');
+		$startExpiryDate = isset($data['startExpiryDate'])? $data['startExpiryDate'] :'';
+		$endExpiryDate = isset($data['endExpiryDate'])? $data['endExpiryDate'] :'';
+
+		$qb = $this->createQueryBuilder('mpi');
         $qb->join('mpi.medicinePurchase','e');
         $qb->join('mpi.medicineStock','s');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
-        $qb->andWhere('mpi.expirationStartDate IS NOT NULL');
+        $qb->andWhere('mpi.expirationEndDate IS NOT NULL');
         $qb->andWhere('mpi.remainingQuantity > 0');
         if($instant == 1 ) {
             $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant);
         }
+		if(empty($data)){
+			$datetime = new \DateTime("now");
+			$startExpiryDate = $datetime->format('Y-m-01 00:00:00');
+			$endExpiryDate = $datetime->format('Y-m-t 23:59:59');
+		}else{
+			$datetime = new \DateTime($startExpiryDate);
+			$startExpiryDate = $datetime->format('Y-m-d 00:00:00');
+			$datetime = new \DateTime($endExpiryDate);
+			$endExpiryDate = $datetime->format('Y-m-d 23:59:59');
+		}
+		if (!empty($startExpiryDate) ) {
+			$qb->andWhere("mpi.expirationEndDate >= :startDate");
+			$qb->setParameter('startDate', $startExpiryDate);
+		}
+
+		if (!empty($endExpiryDate)) {
+			$qb->andWhere("mpi.expirationEndDate <= :endDate");
+			$qb->setParameter('endDate', $endExpiryDate);
+		}
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('mpi.expirationStartDate','ASC');
+        $qb->orderBy('mpi.expirationEndDate','ASC');
         $qb->getQuery();
         return  $qb;
     }

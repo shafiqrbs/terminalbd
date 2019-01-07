@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * ElectionParticular
  *
  * @ORM\Table( name ="education_particular")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\EducationBundle\Repository\ElectionParticularRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\EducationBundle\Repository\EducationParticularRepository")
  */
 class EducationParticular
 {
@@ -45,9 +45,9 @@ class EducationParticular
 	/**
      * @var string
      *
-     * @ORM\Column(name="defineSlug", type="string", length=100, nullable=true)
+     * @ORM\Column(name="assignType", type="string", length=50, nullable=true)
      */
-    private $defineSlug;
+    private $assignType ='student';
 
 	/**
 	 * @Gedmo\Slug(fields={"name"})
@@ -61,6 +61,13 @@ class EducationParticular
      * @ORM\Column(name="code", type="string", length=10, nullable=true)
      */
     private $code;
+
+	 /**
+     * @var string
+     *
+     * @ORM\Column(name="particularCode", type="string", length=20, nullable=true)
+     */
+    private $particularCode;
 
 	/**
 	 * @var string
@@ -209,17 +216,48 @@ class EducationParticular
 
 	
 	/**
-	 * @return mixed
+	 * @return string
 	 */
-	public function getDefineSlug() {
-		return $this->defineSlug;
+	public function getAssignType(){
+		return $this->assignType;
 	}
 
 	/**
-	 * @param mixed $defineSlug
+	 * @param string $assignType
+	 * student
+	 * fees
+	 * others
 	 */
-	public function setDefineSlug( $defineSlug ) {
-		$this->defineSlug = $defineSlug;
+	public function setAssignType( string $assignType ) {
+		$this->assignType = $assignType;
+	}
+
+	/**
+	 * @return EducationConfig
+	 */
+	public function getEducationConfig() {
+		return $this->educationConfig;
+	}
+
+	/**
+	 * @param EducationConfig $educationConfig
+	 */
+	public function setEducationConfig( $educationConfig ) {
+		$this->educationConfig = $educationConfig;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getParticularCode(){
+		return $this->particularCode;
+	}
+
+	/**
+	 * @param string $particularCode
+	 */
+	public function setParticularCode( string $particularCode ) {
+		$this->particularCode = $particularCode;
 	}
 
 

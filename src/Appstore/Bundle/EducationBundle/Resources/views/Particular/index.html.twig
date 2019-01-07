@@ -40,7 +40,7 @@
                             {{ form_row(form._token) }}
 
                             <div class="row-fluid">
-                                <div class="span4">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Particular Type</label>
                                         <div class="controls">
@@ -49,7 +49,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span8">
+                                <div class="span6">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Name</label>
                                         <div class="controls">
@@ -90,17 +90,17 @@
                                 {% for entity in entities %}
                                     <tr>
 
-                                        <td class="numeric" >{{ entity.sku }}</td>
+                                        <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" >{% if entity.particularType is not empty %}{{ entity.particularType.name }}{% endif %}</td>
-                                        <td class="numeric" ><a href="{{ path('election_particular_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" ><a href="{{ path('education_particular_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
-                                                <a href="{{ path('election_particular_status', { 'id': entity.id}) }}" class="btn yellow mini"><i class="icon-ok"></i></a>
+                                                <a href="{{ path('education_particular_status', { 'id': entity.id}) }}" class="btn yellow mini"><i class="icon-ok"></i></a>
                                             {% else %}
-                                                <a  href="{{ path('election_particular_status', { 'id': entity.id}) }}" class="btn yellow mini" >x</a>
+                                                <a  href="{{ path('education_particular_status', { 'id': entity.id}) }}" class="btn yellow mini" >x</a>
                                             {% endif %}
-                                            <a href="{{ path('election_particular_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a title="Are you sure went to delete ?" href="{{ path('election_particular_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a href="{{ path('education_particular_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                            <a title="Are you sure went to delete ?" href="{{ path('education_particular_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

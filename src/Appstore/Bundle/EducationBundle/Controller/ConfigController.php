@@ -60,8 +60,10 @@ class ConfigController extends Controller
     public function updateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		/* @var $entity EducationConfig */
-        $entity = $this->getUser()->getGlobalOption()->getEducationConfig();
+
+        /* @var $entity EducationConfig */
+
+		$entity = $this->getUser()->getGlobalOption()->getEducationConfig();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
@@ -74,20 +76,11 @@ class ConfigController extends Controller
 	        if($entity->getRemoveImage() == 1 ){
 		        $entity->removeUpload();
 	        }
-	        if(isset($data['removeLogo']) || (isset($file['logo']) && !empty($entity->getLogo()))  ){
-		        exit;
-	        	$entity->removeLogo();
-		        $entity->setLogo(NULL);
-	        }
-
 	        $entity->upload();
         	$em->flush();
-	        $this->getDoctrine()->getRepository('EducationBundle:EducationConfig')->fileUploader($entity,$file);
-
 	        $this->get('session')->getFlashBag()->add(
                 'success',"Data has been created successfully"
             );
-            $this->getDoctrine()->getRepository('EducationBundle:EducationLocation')->initialDistrict($entity);
             return $this->redirect($this->generateUrl('education_config_manage'));
         }
 
@@ -97,10 +90,6 @@ class ConfigController extends Controller
         ));
     }
 
-    public function restoreMasterParticularAction()
-    {
-
-    }
 
     public function autoSearchAction(Request $request)
     {

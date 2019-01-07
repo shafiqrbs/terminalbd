@@ -18,26 +18,17 @@ class DmsConfigRepository extends EntityRepository
     {
 
         $em = $this->_em;
-        $config = $option->getHospitalConfig()->getId();
+        $config = $option->getDmsConfig()->getId();
 
-        $DoctorInvoice = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hospitalConfig = '.$config);
+        $DoctorInvoice = $em->createQuery('DELETE DmsBundle:DmsInvoice e WHERE e.dmsConfig = '.$config);
         $DoctorInvoice->execute();
 
-        $Invoice = $em->createQuery('DELETE HospitalBundle:Invoice e WHERE e.hospitalConfig = '.$config);
+        $Invoice = $em->createQuery('DELETE DmsBundle:Invoice e WHERE e.dmsConfig = '.$config);
         $Invoice->execute();
 
-
-        $reverse = $em->createQuery('DELETE HospitalBundle:HmsReverse e WHERE e.hospitalConfig = '.$config);
-        $reverse->execute();
-
-        // $PathologicalReport = $em->createQuery('DELETE HospitalBundle:PathologicalReport e WHERE e.hospitalConfig = '.$config);
-        // $PathologicalReport->execute();
-
-        $hmsPurchase = $em->createQuery('DELETE HospitalBundle:HmsPurchase e WHERE e.hospitalConfig = '.$config);
+        $hmsPurchase = $em->createQuery('DELETE DmsBundle:DmsPurchase e WHERE e.dmsConfig = '.$config);
         $hmsPurchase->execute();
 
-        //  $Particular = $em->createQuery('DELETE HospitalBundle:Particular e WHERE e.hospitalConfig = '.$config);
-        // $Particular->execute();
 
     }
 }

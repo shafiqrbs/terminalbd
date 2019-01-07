@@ -129,9 +129,7 @@ class DomainController extends Controller
         $items[]=array('value' =>2,'text'=> 'Hold');
         $items[]=array('value' =>3,'text'=> 'Suspended');
         return new JsonResponse($items);
-
-
-    }
+   }
 
     public function optionStatusUpdateAction(Request $request)
     {
@@ -237,6 +235,12 @@ class DomainController extends Controller
         }
         if(!empty($option->getMedicineConfig()) and $option->getMedicineConfig()) {
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineConfig')->medicineReset($option);
+        }
+        if(!empty($option->getBusinessConfig()) and $option->getBusinessConfig()) {
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessConfig')->businessReset($option);
+        }
+        if(!empty($option->getDmsConfig()) and $option->getDmsConfig()) {
+            $this->getDoctrine()->getRepository('DmsBundle:DmsConfig')->dmsReset($option);
         }
         $em->remove($option);
         $em->flush();
