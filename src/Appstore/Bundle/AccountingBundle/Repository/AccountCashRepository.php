@@ -778,7 +778,7 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function closingInsertCash($entity,$globalOption,$processHead)
+    public function closingInsertCash(DmsTreatmentPlan $entity,$globalOption,$processHead)
     {
         $em = $this->_em;
         if($entity->getTransactionMethod()->getId() == 2){

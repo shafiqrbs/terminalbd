@@ -297,13 +297,11 @@ class DmsTreatmentPlanRepository extends EntityRepository
 
     public function insertPaymentTransaction($entity,$data)
     {
-        $em = $this->_em;
+    	$em = $this->_em;
         $id = $data['treatment'];
         $item = explode("-", $data['treatment']);
         $particular =  $item[0]; // piece1
         $treatmentId = $item[1]; // piece2
-
-
         $transactionMethod = $data['transactionMethod'];
         $paymentMobile = $data['paymentMobile'];
         $transactionId = $data['transactionId'];

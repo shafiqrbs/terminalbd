@@ -437,7 +437,7 @@ $(document).on('change', '#appointmentDate', function() {
     if(appointmentDate == ''){
         return false;
     }
-    var assignDoctor = $('#invoice_assignDoctor').val();
+    var assignDoctor = $('#dms_invoice_assignDoctor').val();
     $.get(Routing.generate('dms_invoice_appointment_schedule_time',{assignDoctor:assignDoctor,appointmentDate:appointmentDate}),
             function(data){
                $('#appointmentTime').html(data);
@@ -532,14 +532,14 @@ $(document).on('click', '#received2Btn', function() {
     }
     var receive = $('#receive').val();
     var discount = $('#discount').val();
-    var transactionMethod = $('#invoice_transactionMethod').val();
-    var transactionId = $('#invoice_transactionId').val();
-    var paymentMobile = $('#invoice_paymentMobile').val();
-    var mobileBank = $('#invoice_accountMobileBank').val();
-    var accountBank = $('#invoice_accountBank').val();
-    var paymentCard = $('#invoice_paymentCard').val();
-    var cardNo = $('#invoice_cardNo').val();
-    var comment = $('#invoice_comment').val();
+    var transactionMethod = $('#dms_invoice_transactionMethod').val();
+    var transactionId = $('#dms_invoice_transactionId').val();
+    var paymentMobile = $('#dms_invoice_paymentMobile').val();
+    var mobileBank = $('#dms_invoice_accountMobileBank').val();
+    var accountBank = $('#dms_invoice_accountBank').val();
+    var paymentCard = $('#dms_invoice_paymentCard').val();
+    var cardNo = $('#dms_invoice_cardNo').val();
+    var comment = $('#dms_invoice_comment').val();
     var url = $(this).attr('data-url');
     $.ajax({
         url: url,
