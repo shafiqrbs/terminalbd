@@ -254,9 +254,7 @@ class BarcodeController extends Controller
 
     public function addedAction(PurchaseItem $purchaseItem)
     {
-
         $data = array();
-
         $em = $this->getDoctrine()->getManager();
         if(is_null($purchaseItem)) {
             return $this->redirect($this->generateUrl('inventory_barcode'));

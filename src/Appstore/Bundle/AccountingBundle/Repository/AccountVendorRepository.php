@@ -1,5 +1,7 @@
 <?php
 namespace Appstore\Bundle\AccountingBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -41,6 +43,23 @@ class AccountVendorRepository extends EntityRepository
         $qb->setMaxResults( '30' );
         return $qb->getQuery()->getResult();
 
+    }
+
+    public function insertVendor(MedicineVendor $vendor)
+    {
+    	$em = $this->_em;
+    	$entity = new AccountVendor();
+	    $entity->setCompanyName($vendor->getCompanyName());
+	    $entity->setName($vendor->getName());
+	    $entity->setMobile($vendor->getMobile());
+	    $entity->setEmail($vendor->getEmail());
+	    $entity->setEmail($vendor->getAddress());
+	    $entity->setModule('medicine');
+	    $entity->setMode($vendor->getMode());
+	    $entity->setOldId($vendor->getId());
+	    $entity->setGlobalOption($vendor->getMedicineConfig()->getGlobalOption());
+	    $em->persist($entity);
+	    $em->flush();
     }
 
 }

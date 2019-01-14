@@ -136,15 +136,20 @@ class InstantPurchaseController extends Controller
 
     public function returnTemporaryResultData(User $user,$msg=''){
 
-        $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
-        $subTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-        $data = array(
-            'subTotal' => $subTotal,
-            'initialGrandTotal' => $subTotal,
-            'salesItems' => $salesItems ,
-            'msg' => $msg ,
-            'success' => 'success'
-        );
+	    $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
+	    $total = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
+	    $subTotal = floor($total['subTotal']);
+	    $purchaseSubTotal = floor($total['purchaseSubTotal']);
+	    $data = array(
+		    'subTotal' => $subTotal,
+		    'purchaseSubTotal' => $purchaseSubTotal,
+		    'initialGrandTotal' => $subTotal,
+		    'discount' => $subTotal,
+		    'profit' => ($subTotal - $purchaseSubTotal),
+		    'salesItems' => $salesItems ,
+		    'msg' => $msg ,
+		    'success' => 'success'
+	    );
         return $data;
 
     }

@@ -21,7 +21,7 @@
                             <a class="btn blue big" style="width: 50%" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-shopping-cart"></i> Sales</a>
                         {% endif %}
                         {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="{{ path('account_sales_medicine_new') }}" style="width: 50%" class="btn yellow big"><i class="icon-money"></i> Receive</a>
+                            <a href="{{ path('account_sales_new') }}" style="width: 50%" class="btn yellow big"><i class="icon-money"></i> Receive</a>
                         {% endif %}
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                             <a href="{{ path('medicine_purchase_new') }}" style="width: 50%" class="btn green big"><i class="icon-truck"></i> Purchase</a>
                         {% endif %}
                         {% if ( app.user.granted("ROLE_MEDICINE_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="{{ path('account_purchase_medicine_new') }}" style="width: 50%" class="btn yellow big"><i class="icon-money"></i> Payment</a>
+                            <a href="{{ path('account_purchase_new') }}" style="width: 50%" class="btn yellow big"><i class="icon-money"></i> Payment</a>
                         {% endif %}
                     </div>
                 </div>

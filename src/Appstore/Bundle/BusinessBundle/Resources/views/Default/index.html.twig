@@ -14,7 +14,7 @@
                         <a href="{{ path('business_invoice_new') }}" class="btn green big"><i class="icon-plus-sign"></i> Add Invoice </a>
                         {% endif %}
                         {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
-                            <a href="{{ path('account_sales_business_new') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
+                            <a href="{{ path('account_sales_new') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>
                         {% endif %}
                      </div>
                 </div>
@@ -24,7 +24,7 @@
                             <a href="{{ path('business_purchase_new') }}" class="btn blue big"><i class="icon-plus-sign"></i> Add Purchase</a>
                         {% endif %}
                         {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE"))  %}
-                            <a href="{{ path('account_purchase_business_new') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
+                            <a href="{{ path('account_purchase_new') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
                         {% endif %}
 
                     </div>

@@ -170,8 +170,8 @@ class AccountPurchaseController extends Controller
      */
     private function createCreateForm(AccountPurchase $entity)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $form = $this->createForm(new AccountPurchaseType($inventory), $entity, array(
+        $global = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new AccountPurchaseType($global), $entity, array(
             'action' => $this->generateUrl('account_purchase_create'),
             'method' => 'POST',
             'attr' => array(
@@ -231,7 +231,7 @@ class AccountPurchaseController extends Controller
 
         $editForm = $this->createEditForm($entity);
 
-        return $this->render('AccountingBundle:AccountPurchase:edit.html.twig', array(
+        return $this->render('AccountingBundle:AccountPurchase:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

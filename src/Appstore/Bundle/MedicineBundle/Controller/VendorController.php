@@ -62,6 +62,7 @@ class VendorController extends Controller
             );
             return $this->redirect($this->generateUrl('medicine_vendor', array('id' => $entity->getId())));
         }
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->insertVendor($entity);
 	    $this->get('session')->getFlashBag()->add(
 		    'success',"User mobile no already exist,Please try again."
 	    );
@@ -101,16 +102,12 @@ class VendorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
-
         $entity = $em->getRepository('MedicineBundle:MedicineVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-
         $editForm = $this->createEditForm($entity);
-
-
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
             'entities'      => $entities,
             'entity'      => $entity,

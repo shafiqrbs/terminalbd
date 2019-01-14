@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Form;
 
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -12,11 +13,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class AccountPurchaseType extends AbstractType
 {
 
-    public  $inventoryConfig;
+    public  $global;
 
-    public function __construct(InventoryConfig $inventoryConfig)
+    public function __construct(GlobalOption $global)
     {
-        $this->inventoryConfig = $inventoryConfig;
+        $this->global = $global;
 
     }
 
@@ -49,6 +50,18 @@ class AccountPurchaseType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
+	        ->add('processType', 'choice', array(
+		        'attr'=>array('class'=>'span12 m-wrap'),
+		        'expanded'      =>false,
+		        'multiple'      =>false,
+		        'choices' => array(
+			        'Due' => 'Due',
+			        'Advance' => 'Advance',
+			        'Discount' => 'Discount',
+			        'Outstanding' => 'Outstanding',
+		        ),
+	        ))
+
 	        ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span12 select2Vendor leftMargin','placeholder'=>'Enter vendor company name'),
               'constraints' =>array(
                   new NotBlank(array('message'=>'Please enter vendor company name'))
@@ -63,7 +76,7 @@ class AccountPurchaseType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
-                        ->andWhere("b.globalOption =".$this->inventoryConfig->getGlobalOption()->getId())
+                        ->andWhere("b.globalOption =".$this->global->getId())
                         ->orderBy("b.name", "ASC");
                 },
             ))
@@ -75,6 +88,8 @@ class AccountPurchaseType extends AbstractType
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
+	                    ->where("b.status = 1")
+	                    ->andWhere("b.globalOption =".$this->global->getId())
                         ->orderBy("b.name", "ASC");
                 },
             ))

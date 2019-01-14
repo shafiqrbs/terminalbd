@@ -31,7 +31,6 @@ class MedicineSalesTemporaryController extends Controller
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
         $editForm = $this->createCreateForm($entity);
         $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-
         $html = $this->renderView('MedicineBundle:Sales:temporary.html.twig', array(
             'entity' => $entity,
             'salesItem' => $salesItemForm->createView(),
@@ -226,7 +225,7 @@ class MedicineSalesTemporaryController extends Controller
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         if (!$particular) {
-            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+            throw $this->createNotFoundException('Unable to find Sales Item entity.');
         }
         $em->remove($particular);
         $em->flush();
