@@ -60,6 +60,21 @@ class GlobalOptionModifyType extends AbstractType
                         new Length(array('max'=>200))
                     )
                 ))
+                ->add('mainApp', 'entity', array(
+                    'required'    => true,
+                    'class' => 'Setting\Bundle\ToolBundle\Entity\AppModule',
+                    'constraints' =>array(
+                        new NotBlank(array('message'=>'Please select main application')),
+                    ),
+                    'empty_value' => '---Select Main Application ---',
+                    'property' => 'name',
+                    'attr'     =>array('id' => '' , 'class' => 'm-wrap span12'),
+                    'query_builder' => function(EntityRepository $er){
+                        return $er->createQueryBuilder('s')
+                            ->andWhere("s.status = 1")
+                            ->orderBy('s.name','ASC');
+                    },
+                ))
                 /*->add('syndicate', 'entity', array(
                     'required'    => true,
                     'class' => 'Setting\Bundle\ToolBundle\Entity\Syndicate',

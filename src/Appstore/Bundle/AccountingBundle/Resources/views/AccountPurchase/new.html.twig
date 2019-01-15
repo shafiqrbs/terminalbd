@@ -49,21 +49,49 @@
                         {{ form_row(form._token) }}
 
                         <div class="row-fluid">
-
+                            {% if option.mainApp.slug == 'miss' %}
                             <div class="span4">
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="vendor">Vendor name</label>
                                             <div class="controls">
-                                                {{ form_widget(form.companyName) }}
-                                                {{ form_errors(form.companyName) }}
+                                                {{ form_widget(form.medicineVendor) }}
+                                                {{ form_errors(form.medicineVendor) }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
+                            {% elseif option.mainApp.slug == 'invventory' %}
+                            <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="vendor">Vendor name</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.vendor) }}
+                                                {{ form_errors(form.vendor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="vendor">Vendor name</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.accountVendor) }}
+                                                {{ form_errors(form.accountVendor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                             <div class="span4">
                                 <div class="row-fluid">
                                     <div class="span12">

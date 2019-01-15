@@ -61,19 +61,18 @@ class GlobalOptionType extends AbstractType
                         new Length(array('max'=>200))
                     )
                 ))
-                /*->add('syndicate', 'entity', array(
+                ->add('mainApp', 'entity', array(
                     'required'    => true,
-                    'class' => 'Setting\Bundle\ToolBundle\Entity\Syndicate',
-                    'empty_value' => '---Select Syndicate ---',
+                    'class' => 'Setting\Bundle\ToolBundle\Entity\AppModule',
+                    'empty_value' => '---Select Main Application ---',
                     'property' => 'name',
-                    'attr'     =>array('id' => '' , 'class' => 'm-wrap placeholder-no-fix selectbox'),
+                    'attr'     =>array('id' => '' , 'class' => 'm-wrap span12'),
                     'query_builder' => function(EntityRepository $er){
                             return $er->createQueryBuilder('s')
                                 ->andWhere("s.status = 1")
-                                ->andWhere("s.parent is null")
                                 ->orderBy('s.name','ASC');
                         },
-                ))*/
+                ))
 
                 ->add('domain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter domain name'),
                     'constraints' =>array(

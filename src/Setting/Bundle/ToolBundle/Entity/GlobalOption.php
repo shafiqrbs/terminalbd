@@ -71,6 +71,10 @@ class GlobalOption
      **/
     protected $users;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule", inversedBy="appDomains" , cascade={"persist", "remove"})
+     */
+    protected $mainApp;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="globalOptionAgents" )
@@ -259,7 +263,7 @@ class GlobalOption
      */
     protected $accountMobileBank;
 
- /**
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $paymentSalary;
@@ -1943,6 +1947,22 @@ class GlobalOption
 	public function getEducationConfig() {
 		return $this->educationConfig;
 	}
+
+    /**
+     * @return AppModule
+     */
+    public function getMainApp()
+    {
+        return $this->mainApp;
+    }
+
+    /**
+     * @param AppModule $mainApp
+     */
+    public function setMainApp($mainApp)
+    {
+        $this->mainApp = $mainApp;
+    }
 
 
 }

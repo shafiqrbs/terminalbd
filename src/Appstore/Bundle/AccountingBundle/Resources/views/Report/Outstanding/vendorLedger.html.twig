@@ -42,10 +42,19 @@
                     <div class="portlet-body">
                         <form class="search-form" action="" method="get" name="itemSearch" id="itemSearch">
                             <div class="row-fluid">
-                                <div class="span4"></div>
-                                <div class="span4">
-                                    <input type="text" id="mobile" name="mobile" required="required"  class="leftMargin span12 select2Customer" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Search customer name/mobile no">
-                                </div>
+                                {% if option.mainApp.slug == 'invventory' %}
+                                    <div class="span6">
+                                        <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2Vendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
+                                    </div>
+                                {% elseif option.mainApp.slug == 'mss' %}
+                                    <div class="span6">
+                                        <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2MedicineVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
+                                    </div>
+                                {% else %}
+                                    <div class="span6">
+                                        <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2AccountVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
+                                    </div>
+                                {% endif %}
                                 <div class="span2">
                                     <input type="text" id="startDate" name="startDate"  class="span12 m-wrap search-input  dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                 </div>
@@ -69,62 +78,45 @@
                             <div class="span4">
                                 <h4>About:</h4>
                                 <ul class="unstyled">
-                                    {% if vendor is not empty %}<li><strong>Vendor #:</strong>&nbsp;{{ vendor.name }}</li>{% endif %}
-                                    {% if vendor is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ vendor.mobile }}</li>{% endif %}
-                          {#          {% if vendor is not empty %}<li><strong>Address #:</strong>&nbsp;{{ vendor.address }}</li>{% endif %}
-                                    {% if vendor is not empty and vendor.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ vendor.location.name }}, {{ vendor.location.parent.name }}</li>{% endif %}
-                         #}       </ul>
+                                    {% if vendor is not empty %}<li><strong>Vendor Company #:</strong>&nbsp;{{ vendor.companyName }}</li>{% endif %}
+                                    {% if vendor is not empty %}<li><strong>Vendor Name #:</strong>&nbsp;{{ vendor.name }}</li>{% endif %}
+                                    {% if vendor is not empty %}<li><strong>Mobile No #:</strong>&nbsp;{{ vendor.mobile }}</li>{% endif %}
+                                    {% if vendor is not empty %}<li><strong>Address #:</strong>&nbsp;{{ vendor.address|raw }}</li>{% endif %}
+                                </ul>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
-                        <table  class="table table-bordered table-striped table-condensed flip-content ">
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+
                             <thead class="flip-content ">
                             <tr class="head-blue">
-                                <th class="numeric" >S/N</th>
                                 <th class="numeric" >Created</th>
-                                <th class="numeric" >Invoice</th>
-                                <th class="numeric" >Receive Mode</th>
-                                <th class="numeric" >Method</th>
-                                <th class="numeric" >Total</th>
-                                <th class="numeric" >Received</th>
-                                <th class="numeric" >Due</th>
+                                <th class="numeric" >Purchase GRN</th>
+                                <th class="numeric" >Ref no.</th>
+                                <th class="numeric" >Transaction</th>
+                                <th class="numeric" >Process</th>
+                                <th class="numeric" >Purchase</th>
+                                <th class="numeric" >Payment</th>
+                                <th class="numeric" >Balance</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for entity in entities %}
                                 <tr id="remove-{{ entity.id }}">
-                                    <td class="numeric" >{{ loop.index }}</td>
-                                    <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                    <td class="numeric" >
-                                        {% if entity.businessInvoice is not empty %}{{ entity.businessInvoice.invoice }} {% endif %}
-                                    </td>
-                                    <td class="numeric" >{{ entity.processHead }}</td>
-                                    <td class="numeric" >
-                                        {% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}
-                                    </td>
-                                    <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
-                                    <td class="numeric" >
-                                        {% if entity.process == 'approved'  %}
-                                            {{ entity.amount|number_format }}
-                                        {% else %}
-                                            <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
-                                        {% endif %}
-                                    </td>
+                                    <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                    <td class="numeric" >{{ entity.grn }}</td>
+                                    <td class="numeric" >{{ entity.accountRefNo }}</td>
+                                    <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
+                                    <td class="numeric" >{{ entity.processType }}</td>
+                                    <td class="numeric" >{{ entity.purchaseAmount|number_format }}</td>
+                                    <td class="numeric" >{{ entity.payment|number_format }}</td>
                                     <td class="numeric" >{{ entity.balance|number_format }}</td>
+
                                 </tr>
                             {% endfor %}
                             </tbody>
-                            {% if searchForm['mobile'] is defined and searchForm['mobile'] is not empty  %}
-                                <tfoot>
-                                <tr>
-                                    <td class="numeric" colspan="5" ></td>
-                                    <td class="numeric" ><strong>{{ overview.totalAmount|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.receiveAmount|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ (overview.totalAmount - overview.receiveAmount)|number_format }}</strong></td>
-                                </tr>
-                                </tfoot>
-                            {% endif %}
                         </table>
+
                     </div>
                 </div>
 

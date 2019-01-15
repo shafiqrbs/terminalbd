@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class AccountPurchaseType extends AbstractType
 {
 
+    /* @var $global GlobalOption */
+
     public  $global;
 
     public function __construct(GlobalOption $global)
@@ -61,12 +63,6 @@ class AccountPurchaseType extends AbstractType
 			        'Outstanding' => 'Outstanding',
 		        ),
 	        ))
-
-	        ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span12 select2Vendor leftMargin','placeholder'=>'Enter vendor company name'),
-              'constraints' =>array(
-                  new NotBlank(array('message'=>'Please enter vendor company name'))
-              )
-	        ))
             ->add('accountBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
@@ -94,8 +90,60 @@ class AccountPurchaseType extends AbstractType
                 },
             ))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-
         ;
+        if($this->global->getMainApp()->getSlug() == 'miss'){
+
+            $builder->add('medicineVendor', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
+                'empty_value' => '---Choose a vendor company---',
+                'property' => 'companyName',
+                'attr'=>array('class'=>'span12 select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('wt')
+                        ->where("wt.status = 1")
+                        ->andWhere("wt.medicineConfig =".$this->global->getMedicineConfig()->getId());
+                },
+            ));
+
+        }elseif($this->global->getMainApp()->getSlug() == 'miss'){
+
+            $builder->add('vendor', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
+                'empty_value' => '---Choose a vendor company---',
+                'property' => 'companyName',
+                'attr'=>array('class'=>'span12 select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('wt')
+                        ->where("wt.status = 1")
+                        ->andWhere("wt.inventoryConfig =".$this->global->getInventoryConfig()->getId());
+                },
+            ));
+        }else{
+            $builder->add('accountVendor', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
+                'empty_value' => '---Choose a vendor company---',
+                'property' => 'companyName',
+                'attr'=>array('class'=>'span12 select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('wt')
+                        ->where("wt.status = 1")
+                        ->andWhere("wt.globalOption =".$this->global->getId());
+                },
+            ));
+        }
+
     }
     
     /**

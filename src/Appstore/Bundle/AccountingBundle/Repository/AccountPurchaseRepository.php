@@ -13,6 +13,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn;
 use Doctrine\ORM\EntityRepository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Event\Glo;
 
 
 /**
@@ -29,7 +30,7 @@ class AccountPurchaseRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        $this->handleSearchBetween($qb,$data);
+        $this->handleSearchBetween($qb,$globalOption,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
         return $result;
@@ -75,7 +76,7 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = :process");
         $qb->setParameter('process', 'approved');
-        $this->handleSearchBetween($qb,$data);
+        $this->handleSearchBetween($qb,$globalOption,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
         $data =  array('purchaseAmount'=> $result['purchaseAmount'],'payment'=> $result['payment']);
         return $data;
@@ -85,8 +86,8 @@ class AccountPurchaseRepository extends EntityRepository
     public function vendorInventoryOutstanding($globalOption,$head, $data = array())
     {
 
-        $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
-        $amount =   isset($data['amount'])  ? $data['amount'] : '';
+        $mode = isset($data['outstanding'])  ? $data['outstanding'] : 'Payable';
+        $amount =   isset($data['amount'])  ? $data['amount'] : 1;
         $vendor =   isset($data['vendor'])  ? $data['vendor'] : '';
 
         $outstanding = '';
@@ -94,19 +95,19 @@ class AccountPurchaseRepository extends EntityRepository
         if($vendor){
             $company =  "AND subVendor.companyName LIKE '%{$vendor}%'";
         }
-        if($mode == 'Receivable' and $amount !="" ){
+        if($mode == 'Receivable'  and $amount !=""){
             $outstanding ="AND purchase.balance <= -{$amount}";
         }
-        if($mode == 'Payable' and $amount !=""){
+        if($mode == 'Payable'){
             $outstanding ="AND purchase.balance >= {$amount}";
         }
         $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName,purchase.balance as customerBalance
                 FROM account_purchase as purchase
-                JOIN supplier as vendor ON purchase.vendor_id = vendor.id
+                LEFT JOIN supplier as vendor ON purchase.vendor_id = vendor.id
                 WHERE purchase.id IN (
                     SELECT MAX(sub.id)
                     FROM account_purchase AS sub
-                    JOIN supplier as subVendor ON sub.vendor_id = subVendor.id
+                    LEFT JOIN supplier as subVendor ON sub.vendor_id = subVendor.id
                    WHERE sub.globalOption_id = :globalOption AND sub.processHead = :head AND sub.process = 'approved' {$company}
                     GROUP BY sub.vendor_id
                   
@@ -124,28 +125,28 @@ class AccountPurchaseRepository extends EntityRepository
     public function vendorMedicineOutstanding($globalOption,$data = array())
     {
 
-        $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
-        $amount =   isset($data['amount'])  ? $data['amount'] : '';
-        $vendor =   isset($data['vendor'])  ? $data['vendor'] : '';
+        $mode = isset($data['outstanding'])  ? $data['outstanding'] : 'Payable';
+        $amount =   isset($data['amount']) ? $data['amount'] : 1;
+        $vendor =   isset($data['vendor']) ? $data['vendor'] : '';
 
         $outstanding = '';
         $company = '';
         if($vendor){
             $company =  "AND subVendor.companyName LIKE '%{$vendor}%'";
         }
-        if($mode == 'Receivable' and $amount !="" ){
+        if($mode == 'Receivable'  and $amount !="" ){
             $outstanding ="AND purchase.balance <= -{$amount}";
         }
-        if($mode == 'Payable' and $amount !=""){
+        if($mode == 'Payable'){
             $outstanding ="AND purchase.balance >= {$amount}";
         }
         $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName,purchase.balance as customerBalance
                 FROM account_purchase as purchase
-                JOIN medicine_vendor as vendor ON purchase.medicineVendor_id = vendor.id
+                LEFT JOIN medicine_vendor as vendor ON purchase.medicineVendor_id = vendor.id
                 WHERE purchase.id IN (
                     SELECT MAX(sub.id)
                     FROM account_purchase AS sub
-                    JOIN medicine_vendor as subVendor ON sub.medicineVendor_id = subVendor.id
+                    LEFT JOIN medicine_vendor as subVendor ON sub.medicineVendor_id = subVendor.id
                    WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$company}
                     GROUP BY sub.medicineVendor_id
                   
@@ -162,8 +163,8 @@ class AccountPurchaseRepository extends EntityRepository
     public function vendorBusinessOutstanding($globalOption,$data = array())
     {
 
-        $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
-        $amount =   isset($data['amount'])  ? $data['amount'] : '';
+        $mode = isset($data['outstanding'])  ? $data['outstanding'] : 'Payable';
+        $amount =   isset($data['amount'])  ? $data['amount'] : 1;
         $vendor =   isset($data['accountVendor'])  ? $data['accountVendor'] : '';
         $outstanding = '';
         $company = '';
@@ -173,18 +174,18 @@ class AccountPurchaseRepository extends EntityRepository
         if($mode == 'Receivable' and $amount !="" ){
             $outstanding ="AND purchase.balance <= -{$amount}";
         }
-        if($mode == 'Payable' and $amount !=""){
-            $outstanding ="AND purchase.balance >= {$amount}";
+        if($mode == 'Payable'){
+	        $outstanding ="AND purchase.balance >= {$amount}";
         }
         $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName, purchase.balance as customerBalance
                 FROM account_purchase as purchase
-                JOIN account_vendor as vendor ON purchase.accountVendor_id = vendor.id
+                LEFT JOIN account_vendor as vendor ON purchase.accountVendor_id = vendor.id
                 WHERE purchase.id IN (
                     SELECT MAX(sub.id)
                     FROM account_purchase AS sub
-                    JOIN account_vendor as subVendor ON sub.accountVendor_id = subVendor.id
+                    LEFT JOIN account_vendor as subVendor ON sub.accountVendor_id = subVendor.id
                    WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$company}
-                    GROUP BY sub.accountVendor_id
+                    GROUP BY sub.companyName
                   
                 ) {$outstanding}
                 ORDER BY purchase.id DESC";
@@ -205,19 +206,14 @@ class AccountPurchaseRepository extends EntityRepository
 		$qb->setParameter('globalOption', $globalOption);
 		$qb->andWhere("e.process = :process");
 		$qb->setParameter('process', 'approved');
-		if(in_array($head,array('business','hotel','school'))){
-			$qb->andWhere("e.accountVendor = :vendor");
-		}elseif($head == 'medicine'){
-			$qb->andWhere("e.medicineVendor = :vendor");
-		}elseif($head == 'dental'){
-			$qb->andWhere("e.dmsVendor = :vendor");
-		}elseif($head == 'restaurant'){
-			$qb->andWhere("e.restaurantVendor = :vendor");
-		}elseif($head == 'hospital'){
-			$qb->andWhere("e.hmsVendor = :vendor");
-		}else{
-			$qb->andWhere("e.vendor = :vendor");
-		}
+        if($globalOption->getMainApp()->getSlug() == 'miss'){
+            $qb->join('e.medicineVendor','v');
+        }elseif($globalOption->getMainApp()->getSlug() == 'inventory'){
+            $qb->join('e.vendor','v');
+        }else{
+            $qb->join('e.accountVendor','v');
+        }
+		$qb->andWhere('vendor.id', $vendor);
 		$qb->setParameter('vendor', $vendor);
 		$qb->orderBy('e.id', 'DESC');
 		$qb->setMaxResults(1);
@@ -226,9 +222,50 @@ class AccountPurchaseRepository extends EntityRepository
 
 	}
 
+    public function vendorLedger(GlobalOption $globalOption,$data)
+    {
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+        $vendor =    isset($data['vendor'])? $data['vendor'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = :process");
+        $qb->setParameter('process', 'approved');
+
+        if($globalOption->getMainApp()->getSlug() == 'miss'){
+            $qb->join('e.medicineVendor','v');
+        }elseif($globalOption->getMainApp()->getSlug() == 'inventory'){
+            $qb->join('e.vendor','v');
+        }else{
+            $qb->join('e.accountVendor','v');
+        }
+        $qb->andWhere("v.companyName = :vendor");
+        $qb->setParameter('vendor', $vendor);
+        if (!empty($startDate) and !empty($endDate) ) {
+            $compareTo = new \DateTime($startDate);
+            $startDate =  $compareTo->format('Y-m-d 00:00:00');
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($startDate) and !empty($endDate) ) {
+            $compareTo = new \DateTime($endDate);
+            $endDate =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+
+        }
+        $qb->orderBy('e.created', 'DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
 
     public function vendorOutstanding($globalOption,$head,$data)
     {
+
 
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.purchaseAmount) AS purchaseAmount, SUM(e.payment) AS payment');
@@ -251,7 +288,7 @@ class AccountPurchaseRepository extends EntityRepository
      * @param $data
      */
 
-    protected function handleSearchBetween($qb,$data)
+    protected function handleSearchBetween($qb,GlobalOption $globalOption,$data)
     {
         if(empty($data))
         {
@@ -264,6 +301,18 @@ class AccountPurchaseRepository extends EntityRepository
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $vendor =    isset($data['vendor'])? $data['vendor'] :'';
 	            $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
+                $globalOption->getMainApp()->getSlug();
+                if($globalOption->getMainApp()->getSlug() == 'miss'){
+                    $qb->join('e.medicineVendor','v');
+                }elseif($globalOption->getMainApp()->getSlug() == 'inventory'){
+                    $qb->join('e.vendor','v');
+                }else{
+                    $qb->join('e.accountVendor','v');
+                }
+                if(!empty($vendor)){
+                    $qb->andWhere("v.companyName = :vendor");
+                    $qb->setParameter('vendor', $vendor);
+                }
                 if (!empty($startDate) and !empty($endDate) ) {
 	                $compareTo = new \DateTime($startDate);
 	                $startDate =  $compareTo->format('Y-m-d 00:00:00');
@@ -275,13 +324,7 @@ class AccountPurchaseRepository extends EntityRepository
 	                $endDate =  $compareTo->format('Y-m-d 23:59:59');
 	                $qb->andWhere("e.created <= :endDate");
                     $qb->setParameter('endDate', $endDate);
-
                 }
-                if (!empty($vendor)) {
-                    $qb->andWhere("e.companyName = :vendor");
-                    $qb->setParameter('vendor', $vendor);
-                }
-
                 if (!empty($grn)) {
                     $qb->andWhere("e.grn = :grn");
                     $qb->setParameter('grn', $grn);
@@ -399,7 +442,7 @@ class AccountPurchaseRepository extends EntityRepository
     {
 
 
-        $em = $this->_em;
+       /* $em = $this->_em;
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getDmsConfig()->getGlobalOption());
         $accountPurchase->setDmsPurchase($entity);
@@ -423,7 +466,7 @@ class AccountPurchaseRepository extends EntityRepository
         if($accountPurchase->getPayment() > 0 ){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
         }
-        return $accountPurchase;
+        return $accountPurchase;*/
 
     }
 

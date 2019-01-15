@@ -30,6 +30,11 @@ class AppModule
 
     private $siteSettings;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", mappedBy="mainApp")
+     **/
+    private $appDomains;
+
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ApplicationTestimonial", mappedBy="appModules")
      **/
@@ -420,5 +425,13 @@ class AppModule
 	public function setShortContent( string $shortContent ) {
 		$this->shortContent = $shortContent;
 	}
+
+    /**
+     * @return GlobalOption
+     */
+    public function getAppDomains()
+    {
+        return $this->appDomains;
+    }
 }
 

@@ -13,10 +13,6 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('account_purchase_business') }}">Vendor Outstanding</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
                     <li><a href="javascript:">Vendor Outstanding lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
@@ -38,22 +34,30 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="portlet-body">
                         <form class="search-form" action="" method="get" name="itemSearch">
                             <div class="row-fluid">
-                                {% set modes = ['Receivable','Payable'] %}
+                                {% set modes = ['Payable','Receivable'] %}
                                 <div class="span3">
                                     <select name="outstanding" id="outstanding" class="leftMargin span12 m-wrap">
-                                        <option value="" >--Outstanding Type--</option>
                                         {% for mode in modes %}
                                             <option {% if searchForm.outstanding is defined and searchForm.outstanding == mode %} selected="selected" {% endif %} value="{{ mode }}" >{{ mode }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
+                                {% if option.mainApp.slug == 'invventory' %}
                                 <div class="span6">
-                                    <input type="text" id="accountVendor" name="accountVendor"  class="leftMargin span12 select2AccountVendor m-wrap" value="{% if searchForm.accountVendor is defined %}{{ searchForm.accountVendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
+                                    <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2Vendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
                                 </div>
+                                {% elseif option.mainApp.slug == 'mss' %}
+                                <div class="span6">
+                                    <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2MedicineVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
+                                </div>
+                                {% else %}
+                                <div class="span6">
+                                    <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2AccountVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
+                                </div>
+                                {% endif %}
                                 <div class="span3">
                                     <div class="controls">
                                         <div class="input-append span11">

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -45,6 +46,7 @@ class AccountPurchaseController extends Controller
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(5));
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:AccountPurchase:index.html.twig', array(
+            'option' => $globalOption,
             'entities' => $pagination,
             'overview' => $overview,
             'accountHead' => $accountHead,
@@ -52,13 +54,6 @@ class AccountPurchaseController extends Controller
             'searchForm' => $data,
         ));
     }
-
-
-
-    /**
-     * Lists all AccountPurchase entities.
-     *
-     */
 
     /**
      * Lists all AccountSales entities.
@@ -102,44 +97,46 @@ class AccountPurchaseController extends Controller
         $entity = new AccountPurchase();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+
+        /* @var $global GlobalOption */
 	    $global = $this->getUser()->getGlobalOption();
-	    $data = $request->request->all();
-	    $company = $data['purchase']['companyName'];
-	    $exitVendor = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $global,'companyName' => $company));
-		$head = $exitVendor->getProcessHead();
-		if ($form->isValid()) {
+
+	    if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($global);
 		    $entity->setProcessType('Payment');
-            if($head == "medicine"){
-	            $entity->setProcessHead($head);
-	            $entity->setCompanyName($company);
-	            $entity->setMedicineVendor($exitVendor->getMedicineVendor());
-            }
-            if($head == "inventory"){
-	            $entity->setProcessHead($head);
-	            $entity->setCompanyName($company);
-	            $entity->setVendor($exitVendor->getVendor());
-            }
-            if($head == "dms"){
-	            $entity->setProcessHead($head);
-	            $entity->setCompanyName($company);
-	            $entity->setDmsVendor($exitVendor->getDmsVendor());
-            }
-            if($head == "hms"){
-	            $entity->setProcessHead($head);
-	            $entity->setCompanyName($company);
-	            $entity->setHmsVendor($exitVendor->getHmsVendor());
-            }
-            if($head == "restaurant"){
-	            $entity->setProcessHead($head);
-	            $entity->setCompanyName($company);
-	            $entity->setRestaurantVendor($exitVendor->getRestaurantVendor());
-            }
-            if($head == "business" or $head == "hotel" ){
-	            $entity->setProcessHead($head);
-	            $entity->setCompanyName($company);
-	            $entity->setAccountVendor($exitVendor->getAccountVendor());
+            if($global->getMainApp()->getSlug() == 'miss'){
+	            $entity->setProcessHead('medicine');
+	            $entity->setCompanyName($entity->getMedicineVendor()->getCompanyName());
+	            $entity->setMedicineVendor($entity->getMedicineVendor());
+            }elseif($global->getMainApp()->getSlug() == 'inventory'){
+	            $entity->setProcessHead('inventory');
+	            $entity->setCompanyName($entity->getVendor()->getCompanyName());
+	            $entity->setVendor($entity->getVendor());
+            }elseif($global->getMainApp()->getSlug() == 'hms'){
+	            $entity->setProcessHead('hospital');
+	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+	            $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'restaurant'){
+	            $entity->setProcessHead('restaurant');
+	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+	            $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'hotel'){
+	            $entity->setProcessHead('hotel');
+	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+	            $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'institute'){
+	            $entity->setProcessHead('institute');
+	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+	            $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'business'){
+	            $entity->setProcessHead('business');
+	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+	            $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'dms'){
+	            $entity->setProcessHead('dms');
+	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+	            $entity->setAccountVendor($entity->getAccountVendor());
             }
             if($entity->getPayment() < 0){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
@@ -156,6 +153,7 @@ class AccountPurchaseController extends Controller
         }
 
         return $this->render('AccountingBundle:AccountPurchase:new.html.twig', array(
+            'global' => $global,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -189,10 +187,12 @@ class AccountPurchaseController extends Controller
     public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
         $entity = new AccountPurchase();
         $form   = $this->createCreateForm($entity);
         $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
         return $this->render('AccountingBundle:AccountPurchase:new.html.twig', array(
+            'option'    => $globalOption,
             'entity'    => $entity,
             'banks'     => $banks,
             'form'      => $form->createView(),

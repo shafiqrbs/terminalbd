@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Knp\Snappy\Pdf;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ReportController extends Controller
@@ -207,14 +208,22 @@ class ReportController extends Controller
 	 *
 	 */
 	public function vendorOutstandingAction()
-	{
-		$em = $this->getDoctrine()->getManager();
-		$data =$_REQUEST;
-		$globalOption = $this->getUser()->getGlobalOption();
-		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorBusinessOutstanding($globalOption,$data);
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        /* @var $globalOption GlobalOption */
+        $globalOption = $this->getUser()->getGlobalOption();
+        if ($globalOption->getMainApp()->getSlug() == 'inventory'){
+            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorInventoryOutstanding($globalOption, $data);
+        }else if ($globalOption->getMainApp()->getSlug() == 'miss'){
+            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorMedicineOutstanding($globalOption, $data);
+        }else{
+            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorBusinessOutstanding($globalOption, $data);
+        }
 		$pagination = $this->paginate($entities);
 		return $this->render('AccountingBundle:Report/Outstanding:vendorOutstanding.html.twig', array(
-			'entities' => $pagination,
+            'option' => $globalOption,
+            'entities' => $pagination,
 			'searchForm' => $data,
 		));
 	}
@@ -224,14 +233,26 @@ class ReportController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
-		$user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
 		$overview = '';
-
-		$entities = $em->getRepository('AccountingBundle:AccountSales')->customerLedger($user,$data);
+        $vendor = '';
+        $entities = '';
+        if ($globalOption->getMainApp()->getSlug() == 'inventory' and !empty($data['vendor'])){
+            $vendor = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->findOneBy(array('companyName'=>$data['vendor']));
+        }else if ($globalOption->getMainApp()->getSlug() == 'miss' and !empty($data['vendor'])){
+            $vendor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findOneBy(array('companyName'=>$data['vendor']));
+        }elseif(!empty($data['vendor'])){
+            $vendor = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findOneBy(array('companyName'=>$data['vendor']));
+        }
+		if(!empty($data) and !empty($data['vendor'])){
+            $entities = $em->getRepository('AccountingBundle:AccountPurchase')->vendorLedger($globalOption,$data);
+            $entities = $entities->getResult();
+		}
 		return $this->render('AccountingBundle:Report/Outstanding:vendorLedger.html.twig', array(
-			'entities' => $entities->getResult(),
+			'vendor' => $vendor,
+			'entities' => $entities,
 			'overview' => $overview,
-			'customer' => $customer,
+			'option' => $globalOption,
 			'searchForm' => $data,
 		));
 	}
