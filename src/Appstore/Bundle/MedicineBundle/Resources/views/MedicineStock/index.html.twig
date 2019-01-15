@@ -145,12 +145,10 @@
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER" and entity.remainingQuantity == 0 ) or app.user.granted("ROLE_DOMAIN") and entity.remainingQuantity == 0 )  %}
                                              <a title="Are you sure went to delete ?" href="{{ path('medicine_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            <a title="" href="{{ path('medicine_stock_show', { 'id': entity.id }) }}" class="btn green mini" ><i class=" icon-eye-open"></i> View</a>
+                                            {#<a title="" href="{{ path('medicine_stock_show', { 'id': entity.id }) }}" class="btn green mini" ><i class=" icon-eye-open"></i> View</a>#}
                                         </td>
                                     </tr>
-
                                 {% endfor %}
-
                                 </tbody>
                             </table>
                             <div class="pagination pull-center" >

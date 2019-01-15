@@ -136,9 +136,10 @@ class AccountPurchaseRepository extends EntityRepository
         }
         if($mode == 'Receivable'  and $amount !="" ){
             $outstanding ="AND purchase.balance <= -{$amount}";
-        }
-        if($mode == 'Payable'){
+        }elseif($mode == 'Payable' and $amount !=""){
             $outstanding ="AND purchase.balance >= {$amount}";
+        }else{
+            $outstanding ="AND purchase.balance >= 1";
         }
         $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName,purchase.balance as customerBalance
                 FROM account_purchase as purchase
