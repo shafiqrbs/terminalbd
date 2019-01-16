@@ -178,7 +178,6 @@ class ParticularRepository extends EntityRepository
         $em = $this->_em;
 
         $name = $data['referredDoctor']['name'];
-        $department = $data['referredDoctor']['department'];
         $location = $data['referredDoctor']['location'];
         $address = $data['referredDoctor']['address'];
         $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
@@ -192,10 +191,6 @@ class ParticularRepository extends EntityRepository
             if(!empty($location)){
                 $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
                 $entity->setLocation($location);
-            }
-            if(!empty($department)){
-                $department = $em->getRepository('HospitalBundle:HmsCategory')->find($department);
-                $entity->setDepartment($department);
             }
             $entity->setService($em->getRepository('HospitalBundle:Service')->find(6));
             $entity->setMobile($mobile);

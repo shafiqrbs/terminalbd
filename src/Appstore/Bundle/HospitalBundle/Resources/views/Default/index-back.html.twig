@@ -1,0 +1,102 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+
+        <!-- END PAGE HEADER-->
+        <div id="dashboard">
+            {% if 'hms' in apps %}
+                <div class="row-fluid pull-center" >
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") %}
+                    <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat green">
+                            <a class="visual addPatient" href="javascript:">
+                                <i class="fa fa-hospital-o"></i>
+                            </a>
+                            <a class="more addPatient" href="javascript:">
+                                Diagnostic Invoice <i class="m-icon-swapright m-icon-white"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") %}
+                        <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                            <div class="dashboard-stat purple">
+                                <a class="visual" href="{{ path('hms_invoice_admission_new') }}">
+                                    <i class="fa fa-ambulance"></i>
+                                </a>
+                                <a class="more" href="{{ path('hms_invoice_admission_new') }}">
+                                    Admission Invoice <i class="m-icon-swapright m-icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") %}
+                        <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                            <div class="dashboard-stat blue">
+                                <a class="visual" href="">
+                                    <i class="fa fa-user-md"></i>
+                                </a>
+                                <a class="more" href="{{ path('hms_doctor_commission_invoice') }}">
+                                    Commission Invoice <i class="m-icon-swapright m-icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") or app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") %}
+
+                        <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                            <div class="dashboard-stat yellow">
+                                <a class="visual" href="{{ path('hms_invoice_particular') }}">
+                                    <i class="fa fa-stethoscope"></i>
+                                </a>
+                                <a class="more" href="{{ path('hms_invoice_particular') }}">
+                                    Pathological Report <i class="m-icon-swapright m-icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <style>
+        .dashboard-stat .visual{
+            width: auto;
+            float: none;
+            padding:0;
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+        }
+        .dashboard-stat .visual:hover{
+            text-decoration: none;
+        }
+        .dashboard-stat .more {
+            clear: both;
+            display: block;
+            padding: 5px 10px 5px 10px;
+            text-transform: uppercase;
+            font-size: 16px;
+            color: #fff;
+            opacity:1;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@HospitalBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HospitalBundle/Resources/public/js/patient.js'
+    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}

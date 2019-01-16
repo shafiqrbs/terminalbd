@@ -54,20 +54,3 @@ report_expenditure_details:
     path:     /expenditure
     defaults: { _controller: "AccountingBundle:Report:expenditureDetails" }
 
-report_vendor_outstanding:
-    path:     /vendor-outstanding
-    defaults: { _controller: "AccountingBundle:Report:vendorOutstanding" }
-
-report_vendor_ledger:
-    path:     /vendor-ledger
-    defaults: { _controller: "AccountingBundle:Report:vendorLedger" }
-
-
-report_customer_outstanding:
-    path:     /customer-outstanding
-    defaults: { _controller: "AccountingBundle:Report:customerOutstanding" }
-
-report_customer_ledger:
-    path:     /customer-ledger
-    defaults: { _controller: "AccountingBundle:Report:customerLedger" }
-

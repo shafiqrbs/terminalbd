@@ -60,7 +60,7 @@ ims:
 
 accounting:
     resource: "@AccountingBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /accounting
 
 domain_user:
     resource: "@DomainUserBundle/Resources/config/routing.yml"

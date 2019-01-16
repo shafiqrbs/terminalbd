@@ -231,13 +231,14 @@ class CustomerRepository extends EntityRepository
     public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$data)
     {
         $em = $this->_em;
-		$name = $data['name'];
-        $gender = $data['gender'];
-        $ageGroup = $data['ageGroup'];
-        $age = $data['age'];
-        $ageType = $data['ageType'];
-        $location = $data['location'];
-        $address = $data['address'];
+        $customer = $data['customer'];
+		$name = $customer['name'];
+        $gender = $customer['gender'];
+        $ageGroup = isset($customer['ageGroup']) ? $customer['ageGroup']:'';
+        $age = $customer['age'];
+        $ageType = $customer['ageType'];
+        $location = $customer['location'];
+        $address = $customer['address'];
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
         if($entity){
             return $entity;

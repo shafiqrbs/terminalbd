@@ -1,113 +1,131 @@
 accounting_account_sales_hotel:
     resource: "@AccountingBundle/Resources/config/routing/accounthotel.yml"
-    prefix:   /finance/hotel
+    prefix:   /hotel
 
 accounting_account_sales_hospital:
     resource: "@AccountingBundle/Resources/config/routing/accounthospital.yml"
-    prefix:   /finance/hms
+    prefix:   /hms
 
 accounting_account_medicine:
     resource: "@AccountingBundle/Resources/config/routing/accountmedicine.yml"
-    prefix:   /finance/medicine
+    prefix:   /medicine
 
 accounting_account_sales_restaurant:
     resource: "@AccountingBundle/Resources/config/routing/accountrestaurant.yml"
-    prefix:   /finance/restaurant
+    prefix:   /restaurant
 
 accounting_account_business:
     resource: "@AccountingBundle/Resources/config/routing/accountbusiness.yml"
-    prefix:   /finance/business
+    prefix:   /business
 
 accounting_report:
     resource: "@AccountingBundle/Resources/config/routing/accountreport.yml"
-    prefix:   /finance/report
+    prefix:   /report
 
 accounting_hms_report:
     resource: "@AccountingBundle/Resources/config/routing/hmsaccountreport.yml"
-    prefix:   /finance/report-hms
+    prefix:   /report-hms
 
 accounting_expensecategory:
     resource: "@AccountingBundle/Resources/config/routing/expensecategory.yml"
-    prefix:   /finance/expensecategory
+    prefix:   /expensecategory
 
 accounting_paymentsalary:
     resource: "@AccountingBundle/Resources/config/routing/paymentsalary.yml"
-    prefix:   /finance/paymentsalary
+    prefix:   /paymentsalary
 
 accounting_salarysetting:
     resource: "@AccountingBundle/Resources/config/routing/salarysetting.yml"
-    prefix:   /finance/salary-invoice
+    prefix:   /salary-invoice
 
 accounting_journal:
     resource: "@AccountingBundle/Resources/config/routing/accountjournal.yml"
-    prefix:   /finance/journal
+    prefix:   /journal
 
 accounting_balancetransfer:
     resource: "@AccountingBundle/Resources/config/routing/accountbalancetransfer.yml"
-    prefix:   /finance/balance-transfer
+    prefix:   /balance-transfer
 
 accounting_expenditure:
     resource: "@AccountingBundle/Resources/config/routing/expenditure.yml"
-    prefix:   /finance/expenditure
+    prefix:   /expenditure
 
 accounting_bank:
     resource: "@AccountingBundle/Resources/config/routing/accountbank.yml"
-    prefix:   /finance/bank
+    prefix:   /bank
 
 accounting_pettycash:
     resource: "@AccountingBundle/Resources/config/routing/pettycash.yml"
-    prefix:   /finance/pettycash
+    prefix:   /pettycash
 
 accounting_transaction:
     resource: "@AccountingBundle/Resources/config/routing/transaction.yml"
-    prefix:   /finance/transaction
+    prefix:   /transaction
 
 accounting_accounthead:
     resource: "@AccountingBundle/Resources/config/routing/accounthead.yml"
-    prefix:   /finance/accounthead
+    prefix:   /accounthead
 
 accounting_accountbank:
     resource: "@AccountingBundle/Resources/config/routing/accountbank.yml"
-    prefix:   /finance/bank-account
+    prefix:   /bank-account
 
 accounting_accountmobilebank:
     resource: "@AccountingBundle/Resources/config/routing/accountmobilebank.yml"
-    prefix:   /finance/mobile-bank-account
+    prefix:   /mobile-bank-account
 
 accounting_account_purchase:
     resource: "@AccountingBundle/Resources/config/routing/accountpurchase.yml"
-    prefix:   /finance/purchase
+    prefix:   /purchase
 
 accounting_account_sales:
     resource: "@AccountingBundle/Resources/config/routing/accountsales.yml"
-    prefix:   /finance/sales
+    prefix:   /sales
 
 accounting_account_online_order:
     resource: "@AccountingBundle/Resources/config/routing/accountonlineorder.yml"
-    prefix:   /finance/online-order
+    prefix:   /online-order
 
 
 accounting_account_report:
     resource: "@AccountingBundle/Resources/config/routing/report.yml"
-    prefix:   /finance/report
+    prefix:   /report
 
 accounting_vendor:
     resource: "@AccountingBundle/Resources/config/routing/vendor.yml"
-    prefix:   /finance/vendor
+    prefix:   /vendor
 
 accounting_print:
     resource: "@AccountingBundle/Resources/config/routing/print.yml"
-    prefix:   /finance/print
+    prefix:   /print
 
 accounting_migration_sales:
     defaults: { _controller: "AccountingBundle:Default:salesMigration" }
-    path:   /finance/migration-sales
+    path:   /migration-sales
 
 accounting_migration_vendor:
     defaults: { _controller: "AccountingBundle:Default:vendorMigration" }
-    path:   /finance/migration-vendor
+    path:   /migration-vendor
 
 accounting_migration_account_purchase:
     defaults: { _controller: "AccountingBundle:Default:purchaseMigration" }
-    path:   /finance/migration-purchase
+    path:   /migration-purchase
+
+report_vendor_outstanding:
+    path:     /vendor/outstanding
+    defaults: { _controller: "AccountingBundle:Report:vendorOutstanding" }
+
+report_vendor_ledger:
+    path:     /vendor/ledger
+    defaults: { _controller: "AccountingBundle:Report:vendorLedger" }
+
+report_customer_outstanding:
+    path:     /customer/outstanding
+    defaults: { _controller: "AccountingBundle:Report:customerOutstanding" }
+
+report_customer_ledger:
+    path:     /customer/ledger
+    defaults: { _controller: "AccountingBundle:Report:customerLedger" }
+
+
 

@@ -377,8 +377,6 @@ class Builder extends ContainerAware
                     $menu['Manage Appearance']['E-commerce']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');
                     $menu['Manage Appearance']['E-commerce']->addChild('Feature Category', array('route' => 'featurecategory'))->setAttribute('icon', 'icon-th-list');
                     $menu['Manage Appearance']['E-commerce']->addChild('Feature Brand', array('route' => 'featurebrand'))->setAttribute('icon', 'icon-th-list');
-
-
                 }
             }
             $menu['Manage Appearance']->addChild('Website')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
@@ -432,7 +430,6 @@ class Builder extends ContainerAware
             $menu['Accounting']['Manage Sales']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
 		    $menu['Accounting']['Manage Sales']['Reports']->addChild('Outstanding', array('route' => 'report_customer_outstanding'));
             $menu['Accounting']['Manage Sales']['Reports']->addChild('Ledger', array('route' => 'report_customer_ledger'));
-
         }
 	    $menu['Accounting']->addChild('Manage Purchase', array('route' => ''))
 	                       ->setAttribute('icon', 'fa fa-truck')
@@ -918,31 +915,27 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
             if (!empty($config) and in_array('diagnostic', $config)) {
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'))
-                    ->setAttribute('icon', 'fa fa-hospital-o');
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'));
             }
             if (!empty($config) and in_array('admission', $config)) {
-            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'))
-                ->setAttribute('icon', 'fa fa-ambulance');
+            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
             if (!empty($config) and in_array('doctor', $config)) {
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission', array('route' => 'hms_doctor_commission_invoice'))
-                    ->setAttribute('icon', 'fa fa-user-md');
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission', array('route' => 'hms_doctor_commission_invoice'));
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
             if (!empty($config)) {
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'))
-                    ->setAttribute('icon', 'fa fa-user');
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'));
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_LAB') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_DOCTOR')) {
-            $menu['Hospital & Diagnostic']->addChild('Diagnostic Report')
+            $menu['Hospital & Diagnostic']->addChild('Pathological')
                 ->setAttribute('icon', 'fa fa-stethoscope')
                 ->setAttribute('dropdown', true);
-            $menu['Hospital & Diagnostic']['Diagnostic Report']->addChild('Collection & Process', array('route' => 'hms_invoice_particular'))
+            $menu['Hospital & Diagnostic']['Pathological']->addChild('Collection & Process', array('route' => 'hms_invoice_particular'))
                 ->setAttribute('icon', 'fa fa-stethoscope');
         }
 
