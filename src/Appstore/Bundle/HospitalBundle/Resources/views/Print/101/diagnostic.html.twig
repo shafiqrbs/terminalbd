@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td>
-                    <ul class="unstyled" style="height:110px">
+                    <ul class="unstyled" style="min-height:80px">
                         {% if entity.customer is not empty %}<li><strong>Pt. ID:</strong>&nbsp;{{ entity.customer.customerId }}</li>{% endif %}
                         {% if entity.customer is not empty %}<li><strong>Name:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                         {% if entity.customer is not empty %}<li><strong>Mobile No:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
@@ -33,10 +33,6 @@
                     <ul class="unstyled">
                         <li><strong>Invoice: </strong>&nbsp;<strong>{{ entity.invoice }}</strong></li>
                         <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
-                        {% if entity.transactionMethod is not empty %}<li><strong>Method: </strong>&nbsp;{{ entity.transactionMethod.name }}</li>{% endif %}
-                        {% if entity.paymentMobile is not empty %}<li><strong><i class="icon-money"></i></strong>&nbsp;{{ entity.paymentMobile }}/{{ entity.transactionId }}</li>{% endif %}
-                        {% if entity.cardNo is not empty %}<li><strong><i class="icon-money"></i>&nbsp;</strong>&nbsp;{{ entity.bank.name  }}/{{ entity.cardNo }}</li>{% endif %}
-                        <li><hr></li>
                         <li><strong>Report status:</strong>&nbsp;{{  entity.process|capitalize }}</li>
                         {% if entity.referredDoctor is not empty %}<li><strong>Referred By:</strong>&nbsp;{{ entity.referredDoctor.particularCode }}-{{ entity.referredDoctor.name }}</li>{% endif %}
                     </ul>
@@ -55,13 +51,9 @@
                 <tbody>
 
                 {% for key, serviceDetails in invoiceDetails %}
-                    {% if key != 'Pathology' %}
-                        <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
-                    {% endif %}
-                    {% set colSpan = serviceDetails.hasQuantity ? 2 : 3 %}
                     {% for item in serviceDetails.items %}
                         <tr>
-                            <td class="span9" colspan="{{ colSpan }}">{{ item.particular.particularCode }} - {{ item.particular.name }}</td>
+                            <td class="span9" colspan="3">{{ item.particular.particularCode }} - {{ item.particular.name }}</td>
                             {% if serviceDetails.hasQuantity %}
                                 <td class="span1">{{ item.quantity }}</td>
                             {% endif %}
@@ -78,13 +70,13 @@
                             <tr>
                                 <td class="span8" >
                                     <div class="pull-center text-center">
+                                    <br/>
                                         <h2>{{ entity.paymentStatus|capitalize }}</h2>
-                                        <h3>Delivery Date: {{ entity.deliveryDateTime }}</h3>
+                                        <h4>Delivery Date: {{ entity.deliveryDateTime }}</h4>
                                     </div>
                                 </td>
                                 <td class="span4">
                                     <table class="table table-bordered table-striped">
-                                        <tr><td class="span8" ><strong class="pull-right" >Sub-Total Tk.</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
                                         {% if entity.discount %}<tr><td class="span8"><strong class="pull-right" >Discount Tk.</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
                                         {% if entity.vat %}<tr><td class="span8" ><strong class="pull-right" >Vat/Tax Tk.</strong></td><td class="span4 text-right" ><strong class="text-right" >{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
                                         <tr><td class="span8" ><strong class="pull-right" >Grand Total Tk.</strong></td><td class="span4 text-right" ><strong class="text-right" >{{ entity.total|number_format() }}</strong></td></tr>
@@ -94,9 +86,8 @@
                                 </td>
                             </tr>
                         </table>
-
                     </td></tr>
-                <tr><td colspan="4" style="text-align:right"><strong>Paid In word TK. </strong>({{ inWords|raw }} only).</td></tr>
+                {% if entity.payment > 0 %}<tr><td colspan="4" style="text-align:right"><strong>Paid In word TK. </strong>({{ inWords|raw }} only).</td></tr>{% endif %}
                 <tr><td colspan="4"><strong>Remarks</strong>{{ entity.comment|raw }}.</td></tr>
                </tfoot>
             </table>
@@ -112,6 +103,9 @@
                 </td>
             </tr>
             <tr><td>&nbsp;</td></tr>
+            {% if entity.hospitalConfig.isPrintFooter == 1 %}
+                <tr><td colspan="4" class="text-center">{{ portal_power }}</td></tr>
+            {% endif %}
         </table>
         {% endif %}
 {% endblock %}

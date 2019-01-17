@@ -68,6 +68,17 @@ ul.unstyled {
 }
 */
 
+h1 , h2 , h3 , h4 , h5 , h6,p{
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+h3 {
+    font-size: 24px;
+    line-height: 45px;
+    height: 45px;
+}
+
 body{
     background-color:#fff!important;
     font-family: Helvetica, Arial, sans-serif;
