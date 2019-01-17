@@ -369,7 +369,7 @@ class User extends BaseUser
 
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="toUser" , cascade={"persist", "remove"} )
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="toUser" , cascade={"persist", "remove"} )
 	 */
 	protected $accountCashes;
 

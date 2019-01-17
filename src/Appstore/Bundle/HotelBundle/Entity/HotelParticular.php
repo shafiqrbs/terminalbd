@@ -73,7 +73,7 @@ class HotelParticular
     /**
      * @ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption")
      * @JoinTable(name="hotel_room_complimentary",
-     *      joinColumns={@JoinColumn(name="particular_id", referencedColumnName="id")},
+     *      joinColumns={@JoinColumn(name="particularComplimentary", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="hotel_option_id", referencedColumnName="id")}
      *      )
      */
@@ -82,7 +82,7 @@ class HotelParticular
     /**
      * @ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption")
      * @JoinTable(name="hotel_room_amenities",
-     *      joinColumns={@JoinColumn(name="particular_id", referencedColumnName="id")},
+     *      joinColumns={@JoinColumn(name="particularAmenities", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="hotel_option_id", referencedColumnName="id")}
      *      )
      */

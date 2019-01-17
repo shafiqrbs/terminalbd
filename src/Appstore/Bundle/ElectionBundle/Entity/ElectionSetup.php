@@ -45,7 +45,7 @@ class ElectionSetup
 	protected $voteMatrix;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteMatrix", mappedBy="electionSetup")
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="electionSetup")
 	 **/
 	protected $electionCommittees;
 

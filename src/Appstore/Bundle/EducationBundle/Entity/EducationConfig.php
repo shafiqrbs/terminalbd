@@ -50,11 +50,9 @@ class EducationConfig
 	private $type;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", mappedBy="education")
-	 * @ORM\OrderBy({"level" = "ASC"})
+	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="education")
 	 **/
 	private $location;
-
 
     /**
      * @var boolean

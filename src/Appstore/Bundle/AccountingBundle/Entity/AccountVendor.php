@@ -55,10 +55,6 @@ class AccountVendor
      */
     protected $businessPurchases;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountVendor")
-     */
-    protected $medicinePurchases;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn", mappedBy="vendor")

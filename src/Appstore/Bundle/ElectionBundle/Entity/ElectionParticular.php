@@ -77,12 +77,6 @@ class ElectionParticular
      **/
     private $locations;
 
-	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="committeeType")
-     **/
-    private $electionCommittees;
-
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="designation")
      **/
@@ -196,7 +190,6 @@ class ElectionParticular
     {
         $this->code = $code;
     }
-
 
     /**
      * @return bool

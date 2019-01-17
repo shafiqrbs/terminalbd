@@ -255,19 +255,6 @@ class ElectionCommittee
 		$this->electionConfig = $electionConfig;
 	}
 
-	/**
-	 * @return ElectionParticular
-	 */
-	public function getCommitteeType() {
-		return $this->committeeType;
-	}
-
-	/**
-	 * @param ElectionParticular $committeeType
-	 */
-	public function setCommitteeType( $committeeType ) {
-		$this->committeeType = $committeeType;
-	}
 
 	/**
 	 * @return string
