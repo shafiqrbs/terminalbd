@@ -572,10 +572,14 @@ class InvoiceController extends Controller
                 $lastTransaction = $transaction[0]->getPayment();
                 $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($lastTransaction);
             }
-
         }
 
-        return $this->render('HospitalBundle:Print:'.$entity->getPrintFor().'.html.twig', array(
+        if($hospital->isCustomPrint() == 1){
+            $template = "Print/{$hospital->getGlobalOption()->getId()}:{$entity->getPrintFor()}";
+        }else{
+            $template = "Print:{$entity->getPrintFor()}";
+        }
+        return $this->render("HospitalBundle:{$template}.html.twig", array(
             'entity'                => $entity,
             'invoiceDetails'        => $invoiceDetails,
             'invoiceBarcode'        => $barcode,

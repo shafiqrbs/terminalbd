@@ -67,9 +67,6 @@
 {#    <li class="">
         <a href="javascript:" class=""><img id="show-messenger" src="{{ asset('assets/img/messenger.png') }}" title="Facebook Messenger" width="24" ></a>
     </li>#}
-  {#  <li class="">
-        <a href="javascript:" class=""><img id="show-calculator" src="{{ asset('assets/img/calculator.png') }}" title="Calculator" width="24" ></a>
-    </li>#}
     {% if app.user.granted("ROLE_DOMAIN") and app.user.granted('ROLE_DOMAIN_WEBSITE_SETTING') %}
         <li class="" id="header_notification_bar">
             <a href="{{ path('globaloption_modify') }}" class="btn blue mini"><i class="icon-cogs"></i> Settings</a>

@@ -2,11 +2,11 @@
 
 {% block body %}
     <div class="container-fluid">
-        <!-- BEGIN inventory_warehouse HEADER-->
+        <!-- BEGIN Diagonestic_warehouse HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="inventory_warehouse-title">
-                    Inventory configuration
+                <h3 class="Diagonestic_warehouse-title">
+                    Diagnostic Configuration
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
 
-                    <li><a href="#">Inventory configuration </a></li>
+                    <li><a href="#">Diagnostic Configuration </a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -23,15 +23,15 @@
                 </ul>
             </div>
         </div>
-        <!-- END inventory_warehouse HEADER-->
-        <!-- BEGIN inventory_warehouse CONTENT-->
+        <!-- END Diagonestic_warehouse HEADER-->
+        <!-- BEGIN Diagonestic_warehouse CONTENT-->
         <div class="row-fluid">
             <div class="span12">
 
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Inventory configuration Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Diagnostic configuration Information</div>
                     </div>
 
                     <div class="portlet-body">
@@ -42,7 +42,7 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div class="row-fluid box green">
-                                <div class="span2">
+                                <div class="span3">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
@@ -55,43 +55,53 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="row-fluid">
-                                            <div class="span6">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="invoiceProcess">Invoice Process</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.invoiceProcess) }}
-                                                        {{ form_errors(form.invoiceProcess) }}
-                                                    </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label " for="invoiceProcess">Invoice Process</label>
+                                        <div class="control">
+                                            {{ form_widget(form.invoiceProcess) }}
+                                            {{ form_errors(form.invoiceProcess) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label " for="customerPrefix">Customer Prefix</label>
+                                                <div class="control">
+                                                    {{ form_widget(form.customerPrefix) }}
+                                                    {{ form_errors(form.customerPrefix) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span4">
-                                        <div class="row-fluid">
-                                            <div class="span6">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="customerPrefix">Customer Prefix</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.customerPrefix) }}
-                                                        {{ form_errors(form.customerPrefix) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="span6">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="vatPercentage">Invoice Prefix</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.invoicePrefix) }}
-                                                        {{ form_errors(form.invoicePrefix) }}
-                                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label " for="vatPercentage">Invoice Prefix</label>
+                                                <div class="control">
+                                                    {{ form_widget(form.invoicePrefix) }}
+                                                    {{ form_errors(form.invoicePrefix) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                 </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label " for="">Address</label>
+                                                <div class="control">
+                                                    {{ form_widget(form.address) }}
+                                                    {{ form_errors(form.address) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                                 <div class="form-actions portlet box blue">
                                     <div class="portlet-title">
                                         <div class="caption"><i class="icon-reorder"></i>Vat Information</div>
@@ -143,6 +153,11 @@
                                 <div class="clearfix">&nbsp;</div>
                                 <div class="row-fluid">
                                     <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                {{ form_widget(form.customPrint) }}Custom Print
+                                            </div>
+                                        </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 {{ form_widget(form.invoicePrintLogo) }}Print Logo

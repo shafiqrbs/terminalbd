@@ -140,6 +140,13 @@ class HospitalConfig
      */
     private $barcodePrint = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="customPrint", type="boolean",  nullable = true)
+     */
+    private $customPrint = false;
+
 
     /**
      * @var boolean
@@ -250,6 +257,13 @@ class HospitalConfig
      * @ORM\Column(name="customerPrefix", type="string", length=10,nullable = true)
      */
     private $customerPrefix;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="text", length=10,nullable = true)
+     */
+    private $address;
 
     /**
      * @var smallint
@@ -1065,6 +1079,38 @@ class HospitalConfig
 	public function getStockOuts() {
 		return $this->stockOuts;
 	}
+
+    /**
+     * @return bool
+     */
+    public function isCustomPrint()
+    {
+        return $this->customPrint;
+    }
+
+    /**
+     * @param bool $customPrint
+     */
+    public function setCustomPrint(bool $customPrint)
+    {
+        $this->customPrint = $customPrint;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress(string $address)
+    {
+        $this->address = $address;
+    }
 
 
 }
