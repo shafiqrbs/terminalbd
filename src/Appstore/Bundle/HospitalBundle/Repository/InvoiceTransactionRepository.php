@@ -77,7 +77,8 @@ class InvoiceTransactionRepository extends EntityRepository
         $total = !empty($result['total']) ? $result['total'] :0;
         $discount = !empty($result['discount']) ? $result['discount'] :0;
         $receive = !empty($result['payment']) ? $result['payment'] :0;
-        $data = array('total'=> $total ,'discount'=> $discount ,'receive'=> $receive);
+        $grandTotal = ($total - $discount);
+        $data = array('total'=> $grandTotal ,'discount'=> $discount ,'receive'=> $receive);
         return $data;
     }
 
@@ -200,7 +201,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $entity->setProcess('Done');
             $entity->setDiscount($invoice->getDiscount());
             $entity->setPayment($invoice->getPayment());
-            $entity->setTotal($invoice->getSubTotal());
+            $entity->setTotal($invoice->getTotal());
             $entity->setTransactionMethod($invoice->getTransactionMethod());
             $entity->setAccountBank($invoice->getAccountBank());
             $entity->setPaymentCard($invoice->getPaymentCard());

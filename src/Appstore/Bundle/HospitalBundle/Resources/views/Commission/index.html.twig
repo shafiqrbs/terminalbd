@@ -5,9 +5,7 @@
         <!-- BEGIN PAGE HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="page-title">
-                    Vendor Lists
-                </h3>
+                <h3 class="page-title">Manage Commission</h3>
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
@@ -52,7 +50,10 @@
                                 </div>
                                 <div class="span2">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Status  {{ form_widget(form.status) }}</label>
+                                        <label class="control-label" for="name">&nbsp;</label>
+                                        <div class="controls">
+                                              {{ form_widget(form.status) }} Status
+                                        </div>
                                     </div>
                                 </div>
                             </div>

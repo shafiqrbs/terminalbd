@@ -153,11 +153,11 @@ class ExpenditureRepository extends EntityRepository
         $entity->setTransactionMethod($doctorInvoice->getTransactionMethod());
         $entity->setAccountMobileBank($doctorInvoice->getAccountMobileBank());
         $entity->setAccountBank($doctorInvoice->getAccountBank());
-        $entity->setRemark('From Doctor Commission. Invoice No.-'.$doctorInvoice->getHmsDoctorInvoice());
+        $commission = "From Commission. Invoice No.-{$doctorInvoice->getHmsDoctorInvoice()} Name: {$doctorInvoice->getAssignDoctor()->getName()} and  type of commission: {$doctorInvoice->getHmsCommission()->getName()}";
+        $entity->setRemark($commission);
         $entity->setProcess('approved');
         $em->persist($entity);
         $em->flush();
-
         $em->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($entity);
         $em->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($entity);
 

@@ -99,7 +99,6 @@ class DoctorInvoiceRepository extends EntityRepository
             ->where('e.hmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
-
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         return $subTotal;
     }

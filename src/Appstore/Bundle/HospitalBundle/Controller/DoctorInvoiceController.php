@@ -194,7 +194,6 @@ class DoctorInvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $totalInvoiceAmount = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->updateCommissionInvoice($entity);
-
         if (!empty($entity) and $totalInvoiceAmount == $entity->getCommission() and $entity->getCommissionApproved() == false ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setCommissionApproved(true);
@@ -215,7 +214,6 @@ class DoctorInvoiceController extends Controller
             $entity->setProcess('Paid');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-
             $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateCommissionPayment($entity->getHmsInvoice());
             $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->insertCommissionPayment($entity);
             return new Response('success');
