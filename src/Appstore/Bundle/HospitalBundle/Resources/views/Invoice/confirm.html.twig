@@ -39,13 +39,10 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i> Diagnostic</a>
-                                <a class="btn red addPatient" href="javascript:"><i class="icon-plus-sign"></i> Add Invoice</a>
                             </div>
                         </div>
                     </div>
-
                     <div class="portlet-body">
-
                         <div class="portlet-body form">
                             <div class="row-fluid">
 
@@ -142,7 +139,6 @@
                                             {% if item.particular.service.id == 1 %}
                                             <tr id="show-{{ item.id }}" class="showing-overview">
                                                 <td colspan="11">
-
                                                         <table class="table table-bordered table-striped table-condensed flip-content ">
                                                             <tr class="">
                                                                 <th class="span3" >Instruction</th>
@@ -301,12 +297,8 @@
                                             <div class="input-append span12" style="margin-bottom:0!important">
                                                 <input type="text" class="m-wrap span3" id="discount" name="discount" placeholder="Discount amount"  >
                                                 <input type="text" class="m-wrap span3" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount">
-                                                <select id="process" name="process" class="span3 m-wrap">
-                                                    <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
-                                                    <option {% if entity.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
-                                                </select>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
+                                                    <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_add_invoice_payment',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Receive</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -318,8 +310,14 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
-                                    <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
+                                    {% if entity.payment == entity.total and entity.process == 'In-progress'  %}
+                                        <a  href="javascript:" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" class="btn purple approve"><i class=" icon-refresh"></i> Waiting for Done</a>
+                                    {% else %}
+                                        <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
+                                    {% endif %}
+                                    {% if entity.process == 'Created' %}
                                     <a  href="{{ path('hms_invoice_edit',{'id':entity.id}) }}" class="btn purple"><i class=" icon-pencil"></i>&nbsp;Manage Patient</a>
+                                    {% endif %}
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
                                 </div>
                             </div>

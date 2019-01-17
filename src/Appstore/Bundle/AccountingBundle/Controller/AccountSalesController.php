@@ -116,7 +116,6 @@ class AccountSalesController extends Controller
             );
             return $this->redirect($this->generateUrl('account_sales'));
         }
-
         return $this->render('AccountingBundle:AccountSales:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),

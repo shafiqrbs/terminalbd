@@ -217,11 +217,9 @@ class InvoiceTransactionRepository extends EntityRepository
             $this->_em->persist($entity);
             $this->_em->flush($entity);
             if($invoice->getPayment() > 0){
-                $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
+                $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
                 $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
             }
-
-
     }
     public function insertPaymentTransaction(Invoice $invoice, $data)
     {
@@ -264,14 +262,13 @@ class InvoiceTransactionRepository extends EntityRepository
         }
         $this->_em->persist($entity);
         $this->_em->flush($entity);
-        $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
+        $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
         $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
 
     }
 
     public function hmsSalesTransactionReverse(Invoice $entity)
     {
-
 
         $em = $this->_em;
 

@@ -573,7 +573,7 @@ class AccountSalesRepository extends EntityRepository
 	/* =============  Hospital Module ================= */
 
 
-    public function insertAccountInvoice(InvoiceTransaction $entity)
+    public function insertHospitalAccountInvoice(InvoiceTransaction $entity)
     {
         $em = $this->_em;
         $accountSales = new AccountSales();
@@ -585,18 +585,42 @@ class AccountSalesRepository extends EntityRepository
 	    $accountSales->setSourceInvoice( $entity->getHmsInvoice()->getInvoice() );
 	    $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
-        $accountSales->setTotalAmount($entity->getPayment());
         $accountSales->setAmount($entity->getPayment());
+        $accountSales->setProcessHead('advance');
         $accountSales->setApprovedBy($entity->getCreatedBy());
         if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
         }
-        $accountSales->setProcessHead('diagnostic');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
+        $this->updateCustomerBalance($accountSales);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+
+    }
+
+    public function insertHospitalFinalAccountInvoice($entity)
+    {
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setAccountBank($entity->getAccountBank());
+        $accountSales->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
+        $accountSales->setHmsInvoices($entity);
+        $accountSales->setSourceInvoice( $entity->getInvoice() );
+        $accountSales->setCustomer($entity->getCustomer());
+        $accountSales->setTotalAmount($entity->getTotal());
+        $accountSales->setProcessHead('diagnostic');
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+            $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        }
+        $accountSales->setProcessType('Sales');
+        $accountSales->setProcess('approved');
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
         return $accountSales;
 
     }

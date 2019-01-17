@@ -37,12 +37,17 @@ hms_invoice_discount_update:
     options:
             expose: true
 
-hms_invoice_approved:
-    path:     /{id}/invoice-approved
-    defaults: { _controller: "HospitalBundle:Invoice:approve" }
+hms_add_invoice_payment:
+    path:     /{id}/add-invoice-payment
+    defaults: { _controller: "HospitalBundle:Invoice:addPayment" }
     methods:  POST
     options:
             expose: true
+
+hms_invoice_approved:
+    path:     /{id}/invoice-approved
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceApprove" }
+
 
 hms_invoice_update:
     path:     /{id}/update
@@ -105,6 +110,18 @@ hms_invoice_add_patient:
     path:     /{id}/invoice-patient-add
     defaults: { _controller: "HospitalBundle:Invoice:addPatient" }
     methods:  [POST, PUT]
+    options:
+            expose: true
+
+hms_invoice_item_approve:
+    path:      /{id}/invoice-payment-approve
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceTransactionApprove" }
+    options:
+            expose: true
+
+hms_invoice_item_delete:
+    path:      /{transaction}/{id}/invoice-payment-delete
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceParticularDelete" }
     options:
             expose: true
 

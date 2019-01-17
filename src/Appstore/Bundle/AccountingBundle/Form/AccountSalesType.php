@@ -28,7 +28,7 @@ class AccountSalesType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add Received Amount BDT'),
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Received Amount'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add payment amount'))
                 )))
@@ -74,10 +74,10 @@ class AccountSalesType extends AbstractType
 		        'expanded'      =>false,
 		        'multiple'      =>false,
 		        'choices' => array(
-			        'Due' => 'Due',
-			        'Advance' => 'Advance',
-			        'Discount' => 'Discount',
-			        'Outstanding' => 'Outstanding',
+			        'due' => 'Due',
+			        'advance' => 'Advance',
+			        'discount' => 'Discount',
+			        'outstanding' => 'Outstanding',
 		        ),
 	        ))
             ->add('accountMobileBank', 'entity', array(

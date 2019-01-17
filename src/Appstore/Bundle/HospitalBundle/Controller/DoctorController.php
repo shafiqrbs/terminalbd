@@ -193,13 +193,10 @@ class DoctorController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-
         $globalOption = $this->getUser()->getGlobalOption();
         $editForm = $this->createEditForm($entity,$globalOption);
         $editForm->handleRequest($request);

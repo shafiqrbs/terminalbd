@@ -136,7 +136,6 @@ class InvoiceController extends Controller
         $due = $entity->getDue() > 0 ? $entity->getDue() : 0;
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
 
-
        $data = array(
            'subTotal' => $subTotal,
            'netTotal' => $netTotal,
@@ -389,14 +388,12 @@ class InvoiceController extends Controller
         return $form;
     }
 
-    public function approveAction(Request $request , Invoice $entity)
+    public function addPaymentAction(Request $request , Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
         $payment = $request->request->get('payment');
         $discount = (float)$request->request->get('discount');
         $discount = $discount !="" ? $discount : 0 ;
-        $process = $request->request->get('process');
-
         if ( (!empty($entity) and !empty($payment)) or (!empty($entity) and $discount > 0 ) ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('In-progress');
@@ -404,15 +401,6 @@ class InvoiceController extends Controller
             $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
             return new Response('success');
-
-        } elseif(!empty($entity) and $process == 'Done' and $entity->getTotal() <= $entity->getPayment()  ) {
-
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess($process);
-            $entity->setPaymentStatus('Paid');
-            $em->flush();
-            return new Response('success');
-
         } else {
             return new Response('failed');
         }
@@ -543,8 +531,6 @@ class InvoiceController extends Controller
         return $data;
     }
 
-
-
     public function invoicePrintAction(Invoice $entity)
     {
 
@@ -599,5 +585,39 @@ class InvoiceController extends Controller
             'inWordTransaction'     => $inWordTransaction,
         ));
     }
+
+    public function invoiceTransactionApproveAction(InvoiceTransaction $transaction)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$transaction) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $transaction->setCreatedBy($this->getUser());
+        $transaction->setProcess('Done');
+        $em->persist($transaction);
+        $em->flush();
+        if($transaction->getPayment() > 0){
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->admissionInvoiceTransactionUpdate($transaction);
+        }
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
+        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);
+        exit;
+    }
+
+    public function invoiceApproveAction(Invoice $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $invoice->setApprovedBy($this->getUser());
+        $invoice->setProcess('Done');
+        $em->persist($invoice);
+        $em->flush();
+        if($invoice->getPayment() >= $invoice->getTotal()){
+            $accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalFinalAccountInvoice($invoice);
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hmsSalesFinal($invoice, $accountInvoice);
+        }
+        exit;
+    }
+
 }
 

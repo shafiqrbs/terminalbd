@@ -110,8 +110,6 @@ hms_invoice_admission_daily_particular_delete:
     options:
             expose: true
 
-
-
 hms_invoice_admission_daily_invoice_transaction_submit:
     path:     /{id}/admitted-patient-particular-submit
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:submitTransaction" }

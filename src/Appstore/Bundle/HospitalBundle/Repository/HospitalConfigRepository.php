@@ -26,7 +26,6 @@ class HospitalConfigRepository extends EntityRepository
         $Invoice = $em->createQuery('DELETE HospitalBundle:Invoice e WHERE e.hospitalConfig = '.$config);
         $Invoice->execute();
 
-
         $reverse = $em->createQuery('DELETE HospitalBundle:HmsReverse e WHERE e.hospitalConfig = '.$config);
         $reverse->execute();
 

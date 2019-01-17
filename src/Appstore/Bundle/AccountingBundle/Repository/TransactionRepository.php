@@ -1284,7 +1284,7 @@ class TransactionRepository extends EntityRepository
                 $transaction->setBranches($accountSales->getBranches());
             }
             $transaction->setAccountRefNo($accountSales->getAccountRefNo());
-            $transaction->setProcessHead('Sales');
+            $transaction->setProcessHead('Sales Advance');
             $transaction->setUpdated($entity->getUpdated());
 
             /* Cash - Cash various */
@@ -1318,10 +1318,10 @@ class TransactionRepository extends EntityRepository
 		    $transaction->setBranches($accountSales->getBranches());
 	    }
 	    $transaction->setAccountRefNo($accountSales->getAccountRefNo());
-        $transaction->setProcessHead('Sales');
-        $transaction->setProcess('Operating Revenue');
+        $transaction->setProcessHead('Sales Advance');
+        $transaction->setProcess('AccountPayable');
         $transaction->setUpdated($entity->getUpdated());
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
         $transaction->setAmount('-'.$entity->getPayment());
         $transaction->setCredit($entity->getPayment());
         $this->_em->persist($transaction);
@@ -1354,6 +1354,53 @@ class TransactionRepository extends EntityRepository
         }
 
     }
+
+    public function hmsSalesFinal(Invoice $entity,$accountSales)
+    {
+        $this->insertHmsFinalCashDebit($accountSales);
+        $this->insertHmsFinalCashCredit($accountSales);
+    }
+
+    private function insertHmsFinalCashDebit(AccountSales $accountSales)
+    {
+        $amount = $accountSales->getTotalAmount();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setUpdated($accountSales->getUpdated());
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+
+    public function insertHmsFinalCashCredit( AccountSales $accountSales)
+    {
+        $amount = $accountSales->getTotalAmount();
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($accountSales->getGlobalOption());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
+        }
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+        $transaction->setProcessHead('Sales');
+        $transaction->setProcess('Operating Revenue');
+        $transaction->setUpdated($accountSales->getUpdated());
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
+        $transaction->setAmount('-'.$amount);
+        $transaction->setCredit($amount);
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+        return $transaction;
+
+    }
+
 
     /** =========================== HOSPITAL MANAGEMENT SYSTEM    =========================== */
 

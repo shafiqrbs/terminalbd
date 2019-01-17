@@ -86,10 +86,6 @@ class DoctorType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->where("e.enabled = 1")
                         ->andWhere("e.globalOption =".$this->globalOption->getId())
-                 /*       ->join('e.profile','p')*/
-                 /*       ->join('p.designation','designation')*/
-                 /*       ->where("e.enabled = 1")*/
-                 /*       ->andWhere("designation.slug = 'operator'")*/
                         ->orderBy("e.id","ASC");
                 }
             ))
