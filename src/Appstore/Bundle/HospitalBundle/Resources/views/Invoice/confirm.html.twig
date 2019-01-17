@@ -176,7 +176,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
-                                            <td class="span2"><strong id="vat">{{ entity.discount|number_format }}</strong></td>
+                                            <td class="span2"><strong id="vat">{{ entity.discount|number_format }}</strong>{% if entity.discountType == 'percentage' %} <span class="btn red mini">{{ entity.discountCalculation }}%</span>{% endif %}</td>
                                             <td></td>
                                             <td></td>
                                         </tr>

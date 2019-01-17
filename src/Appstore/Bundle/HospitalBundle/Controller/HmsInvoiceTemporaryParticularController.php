@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 class HmsInvoiceTemporaryParticularController extends Controller
 {
 
-
-
     public function newAction()
     {
         $user = $this->getUser();
@@ -76,6 +74,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $editForm = $this->createInvoiceCustomerForm($entity);
         $editForm->handleRequest($request);
         $referredId = $request->request->get('referredId');
+        $discountType = $request->request->get('discountType');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
         $entity->setHospitalConfig($hospital);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
@@ -111,6 +110,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $deliveryDateTime = $request->request->get('deliveryDateTime');
         $datetime = (new \DateTime("tomorrow"))->format('d-m-Y 7:30');
         $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
+        $entity->setDiscountType($discountType);
         $entity->setDeliveryDateTime($datetime);
         if($entity->getTotal() > 0 and $entity->getPayment() > $entity->getTotal() ){
 	        $entity->setPayment($entity->getTotal());

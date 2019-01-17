@@ -239,6 +239,13 @@ class Invoice
     private $discount;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="discountCalculation", type="float", nullable=true)
+     */
+    private $discountCalculation;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="percentage", type="smallint" , length=3 , nullable=true)
@@ -373,6 +380,13 @@ class Invoice
      * @ORM\Column(name="printFor", type="string",  length=100, nullable=true)
      */
     private $printFor ='pathological';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountType", type="string",  length=100, nullable=true)
+     */
+    private $discountType ='';
 
     /**
      * @var string
@@ -1276,6 +1290,37 @@ class Invoice
         return $count;
     }
 
+    /**
+     * @return float
+     */
+    public function getDiscountCalculation()
+    {
+        return $this->discountCalculation;
+    }
+
+    /**
+     * @param float $discountCalculation
+     */
+    public function setDiscountCalculation(float $discountCalculation)
+    {
+        $this->discountCalculation = $discountCalculation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountType()
+    {
+        return $this->discountType;
+    }
+
+    /**
+     * @param string $discountType
+     */
+    public function setDiscountType(string $discountType)
+    {
+        $this->discountType = $discountType;
+    }
 
 
 }

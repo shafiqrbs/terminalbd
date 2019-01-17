@@ -123,7 +123,7 @@ function formSubmit() {
     $(document).on('change', '.initialDiscount', function() {
 
         var discountType = $('#discountType').val();
-        var discount = parseInt($('#appstore_bundle_hospitalbundle_invoice_discount').val());
+        var discount = parseInt($('#appstore_bundle_hospitalbundle_invoice_discountCalculation').val());
         $.ajax({
             url: Routing.generate('hms_invoice_temporary_discount_update'),
             type: 'POST',
@@ -134,6 +134,7 @@ function formSubmit() {
                 $('.initialGrandTotal').html(obj['initialGrandTotal']);
                 $('.initialDiscount').html(obj['initialDiscount']);
                 $('#initialDiscount').val(obj['initialDiscount']);
+                $('#appstore_bundle_hospitalbundle_invoice_discount').val(obj['initialDiscount']);
                 $('#initialDue').val(obj['initialGrandTotal']);
 
             }
@@ -158,6 +159,7 @@ function formSubmit() {
                     $('.due').html(obj['due']);
                     $('.discountAmount').html(obj['discount']);
                     $('.discount').val('').attr( "placeholder", obj['discount'] );
+                    $('#appstore_bundle_hospitalbundle_invoice_discount').val(obj['discount']);
                     $('.total'+id).html(obj['total']);
                     $('#msg').html(obj['msg']);
                     $('#remove-'+id).hide();
