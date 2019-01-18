@@ -1,0 +1,176 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    {% set created = searchForm.created is defined ? searchForm.created : '' %}
+                    {% if created is not empty %}
+                    Sales Details Report {{ created }}
+                    {% else %}
+                    Sales Details Report {{ "now"|date("d-m-Y") }}
+                    {% endif %}
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#"> Sales Details Report</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i> {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i> Sales Details Report</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                {% set referred = searchForm.referred is defined ? searchForm.referred :'' %}
+                                {% set name = searchForm.name is defined ? searchForm.name :'' %}
+                                {% set mobile = searchForm.mobile is defined ? searchForm.mobile :'' %}
+                                {% set created = searchForm.created is defined ? searchForm.created :'' %}
+                                <a class="btn red" target="_blank" href="{{ path('hms_report_sales_details_pdf',{'referred':referred,'name':name,created:created,mobile:mobile}) }}" >
+                                    <i class=" icon-download"></i>&nbsp;Download PDF
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="portlet-body flip-scroll">
+                        {% include('flash-message.html.twig')  %}
+                        <div class="row-fluid" >
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid" style="margin-bottom: 10px">
+                                    <div class="span3">
+                                        <select name="referred" id="referred" class="m-wrap span12">
+                                            <option value="" >--Patient Referred--</option>
+                                            {% for referred in referredDoctors %}
+                                                <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span3">
+                                        <div class="input-icon left">
+                                            <i class="icon-user"></i>
+                                            <input class="m-wrap span12 search-input" name="name" id="name" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Patient name{% endif %}">
+                                        </div>
+                                    </div>
+                                    <div class="span3">
+                                        <div class="input-icon left">
+                                            <i class="icon-phone"></i>
+                                            <input class="m-wrap span12 search-input" name="mobile" id="mobile" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% else %}Patient mobile{% endif %}">
+                                        </div>
+                                    </div>
+
+                                    <div class="span3">
+                                        <div class="input-append span11">
+                                            <input class="m-wrap span10 search-input dateCalendar" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.deliveryDate is defined %}{{ searchForm.created }}{% else %} Date{% endif %}">
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                            <thead class="flip-content ">
+                            <tr class="head-green">
+                                <th class="numeric" >Invoice No</th>
+                                <th class="numeric" >Name</th>
+                                <th class="numeric" >Referred</th>
+                                {#<th class="numeric" >Description</th>#}
+                                <th class="numeric" >Total</th>
+                                {% for com in commissionEntity %}
+                                <th class="numeric" >{{ com.name }}</th>
+                                {% endfor %}
+                                <th class="numeric" >Commission</th>
+                                <th class="numeric" >Balance</th>
+                                <th class="numeric" >Report</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% set grandTotal = 0 %}
+                            {% set grandCommission = 0 %}
+                            {% set grandTotal = 0 %}
+                            {% for entity in entities %}
+                                {% set  grandTotal = grandTotal + entity.total %}
+                                {% set  grandCommission = grandCommission + entity.commission %}
+                                <tr id="delete-{{ entity.id }}">
+                                    <td class="numeric" >{{ entity.invoice }}</td>
+                                    <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+                                    <td class="numeric" >{% if entity.referredDoctor is defined and entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</td>
+                                    {#<td class="numeric" >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>#}
+                                    <td class="numeric" >{{ entity.total }}</td>
+                                    {% for com in commissionEntity %}
+                                        <td class="numeric" >
+                                            {% set commissionId = entity.id~'-'~com.id %}
+                                            {% if commissions[commissionId] is defined and commissions[commissionId] is not empty  %}
+                                                {{ commissions[commissionId].payment }}
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                    <td class="numeric" >{{ entity.commission }}</td>
+                                    <td class="numeric" >{{ entity.total - entity.commission }}</td>
+                                    <td class="numeric" > {{ entity.process }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4"><span class="pull-right">Grand Total</span></th><td>{{ grandTotal }}</td>
+                                    {% for com in commissionEntity %}
+                                        <td>
+                                        {% if commissionSummary[com.id] is defined and commissionSummary[com.id] is not empty  %}
+                                            {{ commissionSummary[com.id].payment }}
+                                        {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                    <td>{{ grandCommission }}</td>
+                                    <td>{{ grandTotal - grandCommission }}</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+
+
+    </style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@InventoryBundle/Resources/public/css/jquery-ui.css'
+    '@HospitalBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HospitalBundle/Resources/public/js/patient.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+    $(document).on('click', '.print', function(e){});
+{% endblock %}

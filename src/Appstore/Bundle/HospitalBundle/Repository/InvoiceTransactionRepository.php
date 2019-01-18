@@ -24,9 +24,6 @@ class InvoiceTransactionRepository extends EntityRepository
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
             $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        } elseif (!empty($data['startDate']) and !empty($data['endDate'])) {
-            $data['startDate'] = date('Y-m-d', strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d', strtotime($data['endDate']));
         }
 
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
@@ -37,35 +34,39 @@ class InvoiceTransactionRepository extends EntityRepository
         if ($previous == 'true'){
 
             if (!empty($data['startDate'])) {
+                $compareTo = new \DateTime($data['startDate']);
+                $startDate =  $compareTo->format('Y-m-d 00:00:00');
+                $qb->andWhere("e.created < :startDate");
+                $qb->setParameter('startDate', $startDate);
                 $qb->andWhere("it.updated >= :startDate");
-                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+                $qb->setParameter('startDate', $startDate);
+
             }
             if (!empty($data['endDate'])) {
-                $qb->andWhere("it.updated <= :endDate");
-                $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
-            }
-            if (!empty($data['startDate'])) {
-                $qb->andWhere("e.created >= :startDate");
-                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
-            }
-            if (!empty($data['endDate'])) {
-                $qb->andWhere("e.created <= :endDate");
-                $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
+
+                $compareTo = new \DateTime($data['endDate']);
+                $endDate =  $compareTo->format('Y-m-d 00:00:00');
+                $qb->andWhere("e.created < :endDate");
+                $qb->setParameter('endDate', $endDate);
+                $qb->andWhere("it.updated >= :endDate");
+                $qb->setParameter('endDate', $endDate);
             }
 
         }elseif ($previous == 'false'){
 
             if (!empty($data['startDate'])) {
+                $compareTo = new \DateTime($data['startDate']);
+                $startDate =  $compareTo->format('Y-m-d 00:00:00');
                 $qb->andWhere("e.created < :startDate");
-                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
-            }
-            if (!empty($data['startDate'])) {
+                $qb->setParameter('startDate', $startDate);
                 $qb->andWhere("it.updated >= :startDate");
-                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+                $qb->setParameter('startDate', $startDate);
             }
             if (!empty($data['endDate'])) {
+                $compareTo = new \DateTime($data['endDate']);
+                $endDate =  $compareTo->format('Y-m-d 23:59:59');
                 $qb->andWhere("it.updated <= :endDate");
-                $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
+                $qb->setParameter('endDate', $endDate);
             }
 
         }

@@ -38,7 +38,9 @@ class HmsReportController extends Controller
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportHmsIncome($globalOption,$data);
         $html = $this->renderView(
             'AccountingBundle:Report/Hms:incomePdf.html.twig', array(
+                'globalOption' => $globalOption,
                 'overview' => $overview,
+                'searchForm' => $data,
                 'print' => ''
             )
         );
@@ -59,7 +61,9 @@ class HmsReportController extends Controller
         $data = $_REQUEST;
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportHmsIncome($globalOption,$data);
         return $this->render('AccountingBundle:Report/Hms:incomePdf.html.twig', array(
+            'globalOption' => $globalOption,
             'overview' => $overview,
+            'searchForm' => $data,
             'print' => '<script>window.print();</script>'
         ));
 
@@ -76,5 +80,45 @@ class HmsReportController extends Controller
             'searchForm' => $data,
         ));
     }
+
+    public function monthlyIncomePdfAction()
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $data = $_REQUEST;
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportHmsMonthlyIncome( $this->getUser(),$data);
+        $html = $this->renderView(
+            'AccountingBundle:Report/Hms:monthlyIncomePdf.html.twig', array(
+                'globalOption' => $globalOption,
+                'overview' => $overview,
+                'searchForm' => $data,
+                'print' => ''
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="monthlyIncomePdf.pdf"');
+        echo $pdf;
+
+        return new Response('');
+    }
+
+    public function monthlyIncomePrintAction()
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $data = $_REQUEST;
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportHmsMonthlyIncome( $this->getUser(),$data);
+        exit;
+        return $this->render('AccountingBundle:Report/Hms:monthlyIncomePdf.html.twig', array(
+            'globalOption' => $globalOption,
+            'overview' => $overview,
+            'searchForm' => $data,
+            'print' => '<script>window.print();</script>'
+        ));
+
+    }
+
 
 }

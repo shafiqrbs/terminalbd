@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -90,7 +91,6 @@ class DoctorInvoiceRepository extends EntityRepository
         return $data;
     }
 
-
     public function updateCommissionInvoice(Invoice $invoice)
     {
         $em = $this->_em;
@@ -103,8 +103,49 @@ class DoctorInvoiceRepository extends EntityRepository
         return $subTotal;
     }
 
+    public function getInvoiceBaseCommission(HospitalConfig $config , $entities)
+    {
+        $ids = array();
+        foreach ($entities->getQuery()->getArrayResult() as $row){
+            $ids[] = $row['id'];
+        }
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('i.id as invoiceId , particular.name,particular.id as commissionId');
+        $qb->addSelect('SUM(e.payment) as payment');
+        $qb->innerJoin('e.hmsInvoice','i');
+        $qb->innerJoin('e.hmsCommission','particular');
+        $qb->where('i.id IN (:invoices)');
+        $qb->setParameter('invoices',$ids);
+        $qb->groupBy('particular.id,i.id');
+        $result = $qb->getQuery()->getArrayResult();
+        $resDatas = array();
+        foreach ($result as $row){
+            $uniqueId = $row['invoiceId'].'-'.$row['commissionId'];
+            $resDatas[$uniqueId]= $row;
+        }
+        return $resDatas;
 
+    }
 
+    public function getInvoiceBaseCommissionSummary(HospitalConfig $config , $entities)
+    {
+        $ids = array();
+        foreach ($entities->getQuery()->getArrayResult() as $row){
+            $ids[] = $row['id'];
+        }
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('particular.id as commissionId');
+        $qb->addSelect('SUM(e.payment) as payment');
+        $qb->innerJoin('e.hmsInvoice','i');
+        $qb->innerJoin('e.hmsCommission','particular');
+        $qb->where('i.id IN (:invoices)');
+        $qb->setParameter('invoices',$ids);
+        $qb->groupBy('particular.name');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
 
+    }
 
 }

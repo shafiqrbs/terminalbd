@@ -109,20 +109,22 @@ class InvoiceParticularRepository extends EntityRepository
     {
         if(empty($data)){
             $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $endDate = $datetime->format('Y-m-d 23:59:59');
         }else{
-            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+            $datetime = new \DateTime($data['startDate']);
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $datetime = new \DateTime($data['endDate']);
+            $endDate= $datetime->format('Y-m-d 23:59:59');
         }
 
         if (!empty($data['startDate']) ) {
             $qb->andWhere("e.created >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+            $qb->setParameter('startDate',$startDate);
         }
         if (!empty($data['endDate'])) {
             $qb->andWhere("e.created <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+            $qb->setParameter('endDate', $endDate);
         }
     }
 
@@ -381,12 +383,8 @@ class InvoiceParticularRepository extends EntityRepository
 
     public function serviceParticularDetails(User $user, $data)
     {
-
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
         if(!empty($data['service'])){
-
             $qb = $this->createQueryBuilder('ip');
             $qb->leftJoin('ip.particular','p');
             $qb->leftJoin('ip.hmsInvoice','e');
@@ -404,7 +402,6 @@ class InvoiceParticularRepository extends EntityRepository
             $qb->groupBy('p.id');
             $res = $qb->getQuery()->getArrayResult();
             return $res;
-
         }else{
 
             return false;

@@ -22,6 +22,15 @@ hms_report_monthly_income:
     path:     /monthly-income
     defaults: { _controller: "AccountingBundle:HmsReport:monthlyIncome" }
 
+hms_report_monthly_income_pdf:
+    path:     /monthly-income-pdf
+    defaults: { _controller: "AccountingBundle:HmsReport:monthlyIncomePdf" }
+
+hms_report_monthly_income_print:
+    path:     /monthly-income-print
+    defaults: { _controller: "AccountingBundle:HmsReport:monthlyIncomePrint" }
+
+
 hms_report_expenditure_details:
     path:     /expenditure-details
     defaults: { _controller: "AccountingBundle:HmsReport:expenditureDetails" }

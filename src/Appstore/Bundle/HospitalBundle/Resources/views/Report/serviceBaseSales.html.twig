@@ -43,12 +43,12 @@
                                     </select>
                                 </div>
                                 <div class="span3">
-                                    <input type="text" id="startDate" name="startDate"  class="m-wrap  span12 datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                    <input type="text" id="startDate" name="startDate"  class="m-wrap  span12 dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                 </div>
                                 <div class="span3">
                                     <div class="controls">
                                         <div class="input-append span11">
-                                            <input type="text" id="endDate" name="endDate"  class="span11 m-wrap datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                            <input type="text" id="endDate" name="endDate"  class="span11 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                             <div class="btn-group">
                                                 <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                             </div>
@@ -69,12 +69,14 @@
                         <div class="clearfix">&nbsp;</div>
                         {% if serviceGroup is defined and serviceGroup is not empty %}
                         <table class="table table-bordered table-striped table-condensed flip-content ">
-                            <thead>
+                            <thead class="flip-content ">
+                            <tr class="head-green">
                             <th class="numeric">Particular</th>
                             <th class="numeric">Quantity</th>
                             <th class="numeric">Purchase Price</th>
                             <th class="numeric">Sales Price</th>
                             <th class="numeric">Profit</th>
+                            </tr>
                             </thead>
                             <tbody>
                                 {% set sumSalesTotal = 0 %}
@@ -110,7 +112,8 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
