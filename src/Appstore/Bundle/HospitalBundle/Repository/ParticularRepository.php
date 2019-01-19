@@ -176,26 +176,15 @@ class ParticularRepository extends EntityRepository
     public function findHmsExistingCustomer($hospital, $mobile,$data)
     {
         $em = $this->_em;
-
         $name = $data['referredDoctor']['name'];
-        $location = $data['referredDoctor']['location'];
-        $address = $data['referredDoctor']['address'];
         $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
         if($entity){
-
             return $entity;
-
         }else{
-
             $entity = new Particular();
-            if(!empty($location)){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
             $entity->setService($em->getRepository('HospitalBundle:Service')->find(6));
             $entity->setMobile($mobile);
             $entity->setName($name);
-            $entity->setAddress($address);
             $entity->setHospitalConfig($hospital);
             $em->persist($entity);
             $em->flush($entity);

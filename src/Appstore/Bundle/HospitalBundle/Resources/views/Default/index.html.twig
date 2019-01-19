@@ -9,7 +9,7 @@
                 </div>
                 <div class="span2">
                     <div class="btn-group">
-                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") or app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") %}
                         <a href="{{ path('hms_invoice_particular') }}" style="width: 100%" class="btn blue big"><i class="fa fa-stethoscope"></i> Pathological </a>
                     {% endif %}
                     </div>
@@ -41,7 +41,7 @@
             <div class="span3">
                 <div class="row-fluid">
                     <div class="row-fluid">
-                        <div class="portlet box purple">
+                        <div class="portlet box red">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Today Overview</div>
                             </div>
@@ -53,7 +53,6 @@
                                         height: 40px!important;
                                         padding: 7px 0 0 0!important;
                                     }
-
                                 </style>
                                 <div class="row-fluid">
                                     <div class="span8" style="margin-top:-10px">

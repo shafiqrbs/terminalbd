@@ -237,7 +237,6 @@ class CustomerRepository extends EntityRepository
         $ageGroup = isset($customer['ageGroup']) ? $customer['ageGroup']:'';
         $age = $customer['age'];
         $ageType = $customer['ageType'];
-        $location = $customer['location'];
         $address = $customer['address'];
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
         if($entity){
@@ -245,10 +244,6 @@ class CustomerRepository extends EntityRepository
         }else{
 
             $entity = new Customer();
-            if(!empty($location)){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
             $entity->setMobile($mobile);
             $entity->setName($name);
             $entity->setGender($gender);

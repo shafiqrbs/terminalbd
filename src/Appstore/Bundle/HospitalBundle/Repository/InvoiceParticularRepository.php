@@ -403,7 +403,6 @@ class InvoiceParticularRepository extends EntityRepository
             $res = $qb->getQuery()->getArrayResult();
             return $res;
         }else{
-
             return false;
         }
 

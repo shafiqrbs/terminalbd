@@ -205,7 +205,6 @@ class HospitalConfig
      */
     private $isInvoiceTitle = true;
 
-
     /**
      * @var boolean
      *
@@ -213,6 +212,12 @@ class HospitalConfig
      */
     private $isPrintFooter = true;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPrintReportHeader", type="boolean",  nullable=true)
+     */
+    private $isPrintReportHeader = true;
 
     /**
      * @var boolean
@@ -220,7 +225,6 @@ class HospitalConfig
      * @ORM\Column(name="barcodeColor", type="boolean" ,  nullable=true)
      */
     private $barcodeColor;
-
 
     /**
      * @var boolean
@@ -1110,6 +1114,38 @@ class HospitalConfig
     public function setAddress(string $address)
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintReportHeader()
+    {
+        return $this->isPrintReportHeader;
+    }
+
+    /**
+     * @param bool $isPrintReportHeader
+     */
+    public function setIsPrintReportHeader(bool $isPrintReportHeader)
+    {
+        $this->isPrintReportHeader = $isPrintReportHeader;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintReportTopMargin()
+    {
+        return $this->printReportTopMargin;
+    }
+
+    /**
+     * @param smallint $printReportTopMargin
+     */
+    public function setPrintReportTopMargin($printReportTopMargin)
+    {
+        $this->printReportTopMargin = $printReportTopMargin;
     }
 
 

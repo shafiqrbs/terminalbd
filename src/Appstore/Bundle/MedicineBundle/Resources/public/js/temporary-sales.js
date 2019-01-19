@@ -333,7 +333,7 @@ function jqueryTemporaryLoad() {
                         obj = JSON.parse(response);
                         $('#salesTemporaryForm')[0].reset();
                         if( obj['process'] === 'print'){
-                            window.location.replace("/medicine/sales/"+obj['sales']+"/show");
+                            window.open("/medicine/sales/"+obj['sales']+"/print");
                         }
                         $('#invoiceParticulars').html('');
                         $('#subTotal').html('');
@@ -658,7 +658,6 @@ function jqueryInstantTemporaryLoad(){
         changeMonth: true,
         changeYear: true,
     });
-
     $( "#expirationEndDate" ).datepicker({
         dateFormat: "dd-mm-yy",
         changeMonth: true,

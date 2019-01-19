@@ -1,7 +1,7 @@
 {% extends '::hms-print.html.twig' %}
 {% block body %}
     <div style="margin-top:{{  entity.hmsInvoice.hospitalConfig.printMarginReportTop }}px;margin-left:{{ entity.hmsInvoice.hospitalConfig.printMarginReportLeft }}px;">
-    {%  if entity.hmsInvoice.hospitalConfig.isPrintHeader == 1 %}
+    {%  if entity.hmsInvoice.hospitalConfig.isPrintReportHeader == 1 %}
         <table class="table">
             <tr>
                 <td>

@@ -15,23 +15,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class InvoiceReferredDoctorType extends AbstractType
 {
 
-    /** @var  LocationRepository */
-    private $location;
-
-    /** @var  HmsCategoryRepository */
-    private $emCategory;
-
-    /** @var  GlobalOption */
-    private $globalOption;
-
-
-    function __construct(HmsCategoryRepository $emCategory , GlobalOption $globalOption, LocationRepository $location)
-    {
-        $this->location         = $location;
-        $this->emCategory       = $emCategory;
-        $this->globalOption     = $globalOption;
-    }
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -39,19 +22,8 @@ class InvoiceReferredDoctorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Doctor/Reference name')))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')))
-            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Enter doctor/agent address')))
-            ->add('location', 'entity', array(
-                'required'    => false,
-                'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 span12'),
-                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                'choices'=> $this->LocationChoiceList(),
-                'choices_as_values' => true,
-                'choice_label' => 'nestedLabel',
-            ));
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Referred/agent name')))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')));
     }
     
     /**
@@ -72,26 +44,6 @@ class InvoiceReferredDoctorType extends AbstractType
         return 'appstore_bundle_hospitalbundle_referred_doctor';
     }
 
-    protected function LocationChoiceList()
-    {
-        return $this->location->getLocationOptionGroup();
 
-    }
 
-    /**
-     * @return mixed
-     */
-    protected function PathologyChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
-
-    }
-    /**
-     * @return mixed
-     */
-    protected function DepartmentChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
-
-    }
 }

@@ -70,7 +70,7 @@ class InvoiceType extends AbstractType
 
             ))
             ->add('printFor', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
@@ -131,8 +131,8 @@ class InvoiceType extends AbstractType
                 }
             ))
         ;
-        $builder->add('referredDoctor', new InvoiceReferredDoctorType( $this->emCategory ,$this->globalOption,$this->location));
-        $builder->add('customer', new CustomerForHospitalType( $this->location ));
+        $builder->add('referredDoctor', new InvoiceReferredDoctorType());
+        $builder->add('customer', new CustomerForHospitalType());
     }
     
     /**

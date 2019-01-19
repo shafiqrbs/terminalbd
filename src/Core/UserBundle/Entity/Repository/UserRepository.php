@@ -182,10 +182,13 @@ class UserRepository extends EntityRepository
                 'ROLE_HOSPITAL'                              => 'Hms',
                 'ROLE_DOMAIN_HOSPITAL_ADMISSION'             => 'Hms Patient Admission',
                 'ROLE_DOMAIN_HOSPITAL_MANAGER'               => 'Hms Manager',
-                'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Hms Officer',
+                'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Hms Operator',
                 'ROLE_DOMAIN_HOSPITAL_LAB'                   => 'Hms Lab Assistant',
                 'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Hms Doctor',
                 'ROLE_DOMAIN_HOSPITAL_ADMIN'                 => 'Hms Admin',
+                'ROLE_DOMAIN_HOSPITAL_PURCHASE'              => 'Hms Purchase',
+                'ROLE_DOMAIN_HOSPITAL_STOCK'                 => 'Hms Issue',
+                'ROLE_DOMAIN_HOSPITAL_REPORT'                => 'Hms Report',
                 'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Hms Config',
             );
         }

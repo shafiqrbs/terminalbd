@@ -9,7 +9,6 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
-
 $(document).on('click', '.addPatient', function() {
 
     $('.dialogModal_header').html('Patient Information');
@@ -55,24 +54,13 @@ $(document).on("click", ".saveButton", function() {
 
 function formSubmit() {
 
-    $(".addReferred").click(function(){
+    $('#saveDiagnosticButton').attr("disabled", true);
 
-        if ($(this).attr("id") == 'show') {
-
-            $('#hide').addClass('btn-show');
-            $( ".referred-add" ).slideDown( "slow" );
-            $( ".referred-search" ).slideUp( "slow" );
-
-        }else {
-            $( ".referred-add" ).slideUp( "slow" );
-            $( ".referred-search" ).slideDown( "slow" );
-
-        }
-
+    $("form#invoicePatientForm").on('click', '.addCustomer', function() {
+        $( ".customer" ).slideToggle( "slow" );
     });
 
     $(document).on('change', '#particular', function() {
-
         var url = $(this).val();
         if(url == ''){
             alert('You have to add particulars from drop down and this not service item');
@@ -98,24 +86,33 @@ function formSubmit() {
         var quantity = parseInt($('#quantity').val());
         var price = parseInt($('#price').val());
         var url = $('#temporaryParticular').attr('data-url');
+        if(particularId == ''){
+            $("#particular").select2('open');
+            return false;
+        }
         $.ajax({
             url: url,
             type: 'POST',
             data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
             success: function (response) {
                 obj = JSON.parse(response);
+                $('#invoiceParticulars').show();
                 $('.subTotal').html(obj['subTotal']);
                 $('.initialGrandTotal').html(obj['initialGrandTotal']);
                 $('#initialDue').val(obj['initialGrandTotal']);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('.msg-hidden').show();
                 $('#msg').html(obj['msg']);
-                $("#particular").select2().select2("val","");
+                $("#particular").select2().select2("val","").select2('open');
                 $('#price').val('');
                 $('#quantity').val('1');
+                $('#particularId').val('');
                 $('#addParticular').attr("disabled", true);
-                $('#addPatientParticular').attr("disabled", true);
-
+                if(obj['initialGrandTotal'] > 0 ){
+                    $('#saveDiagnosticButton').attr("disabled", false);
+                }else{
+                    $('#saveDiagnosticButton').attr("disabled", true);
+                }
             }
         })
     });
@@ -142,7 +139,6 @@ function formSubmit() {
         })
     });
 
-
     $(document).on("click", ".initialParticularDelete , .particularDelete", function() {
 
         var id = $(this).attr("data-id");
@@ -163,12 +159,17 @@ function formSubmit() {
                     $('.total'+id).html(obj['total']);
                     $('#msg').html(obj['msg']);
                     $('#remove-'+id).hide();
+                    if(obj['initialGrandTotal'] > 0 ){
+                        $('#saveDiagnosticButton').attr("disabled", false);
+                    }else{
+                        $('#saveDiagnosticButton').attr("disabled", true);
+                    }
                 });
             }
         });
     });
 
-    $(document).on('change', '.payment', function() {
+    $(document).on('keyup', '.payment', function() {
 
         var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
         var due  = parseInt($('#initialDue').val()  != '' ? $('#initialDue').val() : 0 );
@@ -184,7 +185,7 @@ function formSubmit() {
     });
 
 
-    $("#invoicePatientForm").validate({
+    var form = $("#invoicePatientForm").validate({
 
         rules: {
 
@@ -196,12 +197,11 @@ function formSubmit() {
             "appstore_bundle_hospitalbundle_invoice[customer][address]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[customer][location]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[referredDoctor][name]": {required: false},
-            "appstore_bundle_hospitalbundle_invoice[referredDoctor][address]": {required: false},
+            "appstore_bundle_hospitalbundle_invoice[referredDoctor][mobile]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[comment]": {required: false},
         },
 
         messages: {
-
             "appstore_bundle_hospitalbundle_invoice[customer][name]": "Enter patient name",
             "appstore_bundle_hospitalbundle_invoice[customer][mobile]": "Enter patient mobile no",
             "appstore_bundle_hospitalbundle_invoice[customer][age]": "Enter patient age",
@@ -211,9 +211,7 @@ function formSubmit() {
             "appstore_bundle_hospitalbundle_invoice[customer][mobile]": {placement: 'top', html: true},
             "appstore_bundle_hospitalbundle_invoice[customer][age]": {placement: 'top', html: true},
         },
-
         submitHandler: function (form) {
-
             $.ajax({
                 url         : $('form#invoicePatientForm').attr( 'action' ),
                 type        : $('form#invoicePatientForm').attr( 'method' ),
@@ -221,15 +219,17 @@ function formSubmit() {
                 processData : false,
                 contentType : false,
                 beforeSend: function() {
-                    $('#saveNewPatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
-                    $('.btn-ajax-loading').attr("disabled", true);
+                    $('#saveNewPatientButton').html("Please Wait...").attr('disabled', 'disabled');
                 },
                 success: function(response){
-                    $('.btn-ajax-loading').attr("disabled", false);
-                    $('#saveNewPatientButton').removeClass('btn-ajax-loading').fadeOut(3000);
-                    window.location.href = '/hms/invoice/'+response+'/invoice-confirm';
+                    $('form#invoicePatientForm')[0].reset();
+                    $('#saveNewPatientButton').html("<i class='icon-save'></i> Save").attr('disabled', 'disabled');
+                    $('.subTotal, .initialGrandTotal, .due, .discountAmount').html('');
+                    $('#invoiceParticulars').hide();
+                    window.open('/hms/invoice/'+response+'/print', '_blank');
                 }
             });
+
         }
     });
 }

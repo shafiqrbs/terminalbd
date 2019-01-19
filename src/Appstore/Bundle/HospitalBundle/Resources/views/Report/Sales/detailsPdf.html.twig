@@ -72,6 +72,7 @@
           <th >Invoice No</th>
           <th >Name</th>
           <th >Referred</th>
+          <th >Sub-Total</th>
           <th >Total</th>
           {% for com in commissionEntity %}
               <th >{{ com.name }}</th>
@@ -82,10 +83,12 @@
       </tr>
       </thead>
       <tbody>
+      {% set subGrandTotal = 0 %}
       {% set grandTotal = 0 %}
       {% set grandCommission = 0 %}
       {% set grandTotal = 0 %}
       {% for entity in entities %}
+          {% set  subGrandTotal = subGrandTotal + entity.subTotal %}
           {% set  grandTotal = grandTotal + entity.total %}
           {% set  grandCommission = grandCommission + entity.commission %}
           <tr>
@@ -93,6 +96,7 @@
               <td >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
               <td >{% if entity.referredDoctor is defined and entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</td>
              {# <td >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>#}
+              <td >{{ entity.subTotal }}</td>
               <td >{{ entity.total }}</td>
               {% for com in commissionEntity %}
                   <td >
@@ -110,7 +114,7 @@
       </tbody>
       <tfoot>
       <tr>
-          <th colspan="4"><span class="pull-right">Grand Total</span></th><td>{{ grandTotal }}</td>
+          <th colspan="3"><span class="pull-right">Grand Total</span></th><td>{{ subGrandTotal }}</td><td>{{ grandTotal }}</td>
           {% for com in commissionEntity %}
               <td>
                   {% if commissionSummary[com.id] is defined and commissionSummary[com.id] is not empty  %}

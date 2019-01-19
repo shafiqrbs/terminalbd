@@ -34,7 +34,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,8,7));
         $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         $subTotal = $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->getSubTotalAmount($user);
-        $html = $this->renderView('HospitalBundle:Invoice:patient.html.twig', array(
+        $html = $this->renderView('HospitalBundle:Invoice:diagnostic.html.twig', array(
             'temporarySubTotal'   => $subTotal,
             'initialDiscount'   => 0,
             'user'   => $user,
@@ -56,7 +56,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
             'action' => $this->generateUrl('hms_invoice_temporary_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal',
                 'id' => 'invoicePatientForm',
                 'novalidate' => 'novalidate',
             )
@@ -132,6 +132,8 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->removeInitialParticular($user);
         }
         return new Response($entity->getId());
+       // return $this->redirect($this->generateUrl('hms_doctor_invoice_confirm',array('id'=>$entity->getId())));
+
         exit;
 
     }

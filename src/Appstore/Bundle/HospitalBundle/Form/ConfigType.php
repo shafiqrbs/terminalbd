@@ -33,7 +33,7 @@ class ConfigType extends AbstractType
                     'choices' => array(
                         'diagnostic'    => 'Diagnostic',
                         'admission'   => 'Admission',
-                        'doctor'  => 'Doctor',
+                        'commission'  => 'Commission ',
                     ),
                     'required'    => true,
                     'multiple'    => true,
@@ -44,6 +44,7 @@ class ConfigType extends AbstractType
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')
             ->add('isPrintHeader')
+            ->add('isPrintReportHeader')
             ->add('isPrintFooter')
             ->add('printInstruction')
             ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','rows'=>5)))
