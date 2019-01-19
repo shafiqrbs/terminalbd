@@ -311,7 +311,7 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
-                                    {% if entity.payment == entity.total and entity.process == 'In-progress'  %}
+                                    {% if entity.paymentStatus == "Paid" and entity.process == 'In-progress'  %}
                                         <a  href="javascript:" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" class="btn purple approve"><i class=" icon-refresh"></i> Waiting for Done</a>
                                     {% else %}
                                         <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>

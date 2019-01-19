@@ -34,11 +34,10 @@ class ReportController extends Controller
         $user = $this->getUser();
 
         $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data);
-        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true');
-        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false');
-
-        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'diagnostic');
-        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'admission');
+        $salesTodayTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic','admission'));
+        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic','admission'));
+        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,'diagnostic');
+        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,'admission');
         $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
         $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user,$data);
         $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user,$data);
@@ -46,7 +45,7 @@ class ReportController extends Controller
         return $this->render('HospitalBundle:Report:salesSumary.html.twig', array(
 
             'salesTotalTransactionOverview'      => $salesTotalTransactionOverview,
-            'salesTransactionOverview'      => $salesTransactionOverview,
+            'salesTodayTransactionOverview'      => $salesTodayTransactionOverview,
             'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
             'diagnosticOverview'            => $diagnosticOverview,
             'admissionOverview'             => $admissionOverview,

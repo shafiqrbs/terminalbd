@@ -224,7 +224,7 @@ function formSubmit() {
                 success: function(response){
                     $('form#invoicePatientForm')[0].reset();
                     $('#saveNewPatientButton').html("<i class='icon-save'></i> Save").attr('disabled', 'disabled');
-                    $('.subTotal, .initialGrandTotal, .due, .discountAmount').html('');
+                    $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                     $('#invoiceParticulars').hide();
                     window.open('/hms/invoice/'+response+'/print', '_blank');
                 }

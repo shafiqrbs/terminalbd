@@ -220,8 +220,9 @@ class InvoiceParticularController extends Controller
             $em = $this->getDoctrine()->getManager();
             $invoice->setProcess('Done');
             $em->flush();
+            $accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalFinalAccountInvoice($invoice);
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hmsSalesFinal($invoice, $accountInvoice);
         }
-
         return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getHmsInvoice()->getId())));
     }
 

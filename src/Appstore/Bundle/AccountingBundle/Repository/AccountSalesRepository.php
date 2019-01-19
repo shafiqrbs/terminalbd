@@ -128,7 +128,7 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-	public function salesOverview(User $user,$data)
+	public function salesOverview(User $user,$data, $process = array())
     {
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
@@ -136,6 +136,10 @@ class AccountSalesRepository extends EntityRepository
         $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount, SUM(e.amount) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        if(!empty($process)){
+            $qb->andWhere("e.processHead IN (:process)");
+            $qb->setParameter('process', $process);
+        }
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);

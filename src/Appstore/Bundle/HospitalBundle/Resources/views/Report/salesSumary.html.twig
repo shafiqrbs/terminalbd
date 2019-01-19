@@ -36,13 +36,11 @@
                         <div class="row-fluid">
                             <div class="span3"></div>
                             <div class="span3">
+                                {% set processes = ['Admission','Admitted','Released','Dead'] %}
                                 <select id="process" name="process" class="span12 m-wrap">
-                                    <option {% if searchForm.process is defined and searchForm.process == 'Admission' %} selected="selected" {% endif %} value="Admission">Admission</option>
-                                    <option {% if searchForm.process is defined and searchForm.process == 'Admitted' %} selected="selected" {% endif %} value="Admitted">Admitted</option>
-                                    <option {% if searchForm.process is defined and searchForm.process == 'Release' %} selected="selected" {% endif %} value="Release">Release</option>
-                                    <option {% if searchForm.process is defined and searchForm.process == 'Death' %} selected="selected" {% endif %} value="Death">Death</option>
-                                    <option {% if searchForm.process is defined and searchForm.process == 'Released' %} selected="selected" {% endif %} value="Released">Released</option>
-                                    <option {% if searchForm.process is defined and searchForm.process == 'Dead' %} selected="selected" {% endif %} value="Dead">Dead</option>
+                                    {% for pro in processes %}
+                                    <option {% if searchForm.process is defined and searchForm.process == pro %} selected="selected" {% endif %} value="{{ pro }}">{{ pro }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="span3">
@@ -81,30 +79,30 @@
                         </tr>
                         <tr>
                             <td class="numeric span11">Received</td>
-                            <td class="numeric">{{ (previousSalesTransactionOverview.receive + salesTransactionOverview.receive)|number_format }}</td>
+                            <td class="numeric">{{ (salesTotalTransactionOverview.receive)|number_format }}</td>
 
                         </tr>
                         <tr>
                             <th class="numeric span11">Due Total</th>
-                            <th class="numeric">{{  ((salesTotalTransactionOverview.total) - (previousSalesTransactionOverview.receive + salesTransactionOverview.receive))|number_format }}</th>
+                            <th class="numeric">{{  (salesTotalTransactionOverview.total - salesTotalTransactionOverview.receive)|number_format }}</th>
                         </tr>
                         <tr class="green"><th colspan="3">Today Sales Overview</th></tr>
                         <tr>
                             <td class="numeric span11">Total Sales</td>
-                            <td class="numeric">{{ salesTransactionOverview.total|number_format }}</td>
+                            <td class="numeric">{{ salesTodayTransactionOverview.total|number_format }}</td>
                         </tr>
                         <tr>
                             <td class="numeric span11">Receive</td>
-                            <td class="numeric">{{ salesTransactionOverview.receive|number_format }}</td>
+                            <td class="numeric">{{ salesTodayTransactionOverview.receive|number_format }}</td>
                         </tr>
                         <tr>
                             <th class="numeric span11">Due</th>
-                            <th>{{ (salesTransactionOverview.total - salesTransactionOverview.receive)|number_format }}</th>
+                            <th>{{ (salesTodayTransactionOverview.total - salesTodayTransactionOverview.receive)|number_format }}</th>
                         </tr>
                         <tr class="blue"><th colspan="3">Previous Overview</th></tr>
                         <tr>
                             <td class="numeric span11">Previous Due</td>
-                            <td class="numeric">{{ (salesTotalTransactionOverview.total-salesTransactionOverview.total)|number_format }}</td>
+                            <td class="numeric">{{ (previousSalesTransactionOverview.total )|number_format }}</td>
                         </tr>
                         <tr>
                             <td class="numeric span11">Receive</td>
@@ -112,7 +110,7 @@
                         </tr>
                         <tr>
                             <th class="numeric span11">Due</th>
-                            <th>{{( salesTotalTransactionOverview.total - previousSalesTransactionOverview.receive-salesTransactionOverview.total)|number_format }}</th>
+                            <th>{{( previousSalesTransactionOverview.total - previousSalesTransactionOverview.receive)|number_format }}</th>
                         </tr>
                         </tbody>
                     </table>

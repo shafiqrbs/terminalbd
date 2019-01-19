@@ -17,7 +17,7 @@ use Doctrine\ORM\EntityRepository;
 class InvoiceTransactionRepository extends EntityRepository
 {
 
-    public function todaySalesOverview(User $user , $data , $previous ='', $mode='')
+    public function todaySalesOverview(User $user , $data , $previous ='', $modes =array())
     {
 
         if (empty($data)) {
@@ -25,18 +25,18 @@ class InvoiceTransactionRepository extends EntityRepository
             $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
             $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
         }
-
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('it');
         $qb->join('it.hmsInvoice', 'e');
         $qb->select('sum(it.total) as total ,sum(it.discount) as discount , sum(it.payment) as payment');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+
         if ($previous == 'true'){
 
             if (!empty($data['startDate'])) {
                 $compareTo = new \DateTime($data['startDate']);
                 $startDate =  $compareTo->format('Y-m-d 00:00:00');
-                $qb->andWhere("e.created < :startDate");
+                $qb->andWhere("e.created <:startDate");
                 $qb->setParameter('startDate', $startDate);
                 $qb->andWhere("it.updated >= :startDate");
                 $qb->setParameter('startDate', $startDate);
@@ -45,10 +45,8 @@ class InvoiceTransactionRepository extends EntityRepository
             if (!empty($data['endDate'])) {
 
                 $compareTo = new \DateTime($data['endDate']);
-                $endDate =  $compareTo->format('Y-m-d 00:00:00');
-                $qb->andWhere("e.created < :endDate");
-                $qb->setParameter('endDate', $endDate);
-                $qb->andWhere("it.updated >= :endDate");
+                $endDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("it.updated <= :endDate");
                 $qb->setParameter('endDate', $endDate);
             }
 
@@ -57,7 +55,7 @@ class InvoiceTransactionRepository extends EntityRepository
             if (!empty($data['startDate'])) {
                 $compareTo = new \DateTime($data['startDate']);
                 $startDate =  $compareTo->format('Y-m-d 00:00:00');
-                $qb->andWhere("e.created < :startDate");
+                $qb->andWhere("e.created >= :startDate");
                 $qb->setParameter('startDate', $startDate);
                 $qb->andWhere("it.updated >= :startDate");
                 $qb->setParameter('startDate', $startDate);
@@ -65,21 +63,22 @@ class InvoiceTransactionRepository extends EntityRepository
             if (!empty($data['endDate'])) {
                 $compareTo = new \DateTime($data['endDate']);
                 $endDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("e.created <= :endDate");
+                $qb->setParameter('endDate', $startDate);
                 $qb->andWhere("it.updated <= :endDate");
                 $qb->setParameter('endDate', $endDate);
             }
 
         }
         if (!empty($mode)){
-            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+            $qb->andWhere('e.invoiceMode IN (:modes)')->setParameter('modes', $modes);
         }
         $qb->andWhere('it.process = :process')->setParameter('process', 'Done');
         $result = $qb->getQuery()->getOneOrNullResult();
         $total = !empty($result['total']) ? $result['total'] :0;
         $discount = !empty($result['discount']) ? $result['discount'] :0;
         $receive = !empty($result['payment']) ? $result['payment'] :0;
-        $grandTotal = ($total - $discount);
-        $data = array('total'=> $grandTotal ,'discount'=> $discount ,'receive'=> $receive);
+        $data = array('total'=> $total ,'discount'=> $discount ,'receive'=> $receive);
         return $data;
     }
 

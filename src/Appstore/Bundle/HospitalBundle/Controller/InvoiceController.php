@@ -414,7 +414,6 @@ class InvoiceController extends Controller
 
     public function deleteAction(Invoice $entity)
     {
-
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -611,12 +610,12 @@ class InvoiceController extends Controller
 
     public function invoiceApproveAction(Invoice $invoice)
     {
-        $em = $this->getDoctrine()->getManager();
-        $invoice->setApprovedBy($this->getUser());
-        $invoice->setProcess('Done');
-        $em->persist($invoice);
-        $em->flush();
-        if($invoice->getPayment() >= $invoice->getTotal()){
+        if($invoice->getPaymentStatus() == 'Paid' and $invoice->getReportCount() == $invoice->getDeliveryCount()){
+            $em = $this->getDoctrine()->getManager();
+            $invoice->setApprovedBy($this->getUser());
+            $invoice->setProcess('Done');
+            $em->persist($invoice);
+            $em->flush();
             $accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalFinalAccountInvoice($invoice);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hmsSalesFinal($invoice, $accountInvoice);
         }

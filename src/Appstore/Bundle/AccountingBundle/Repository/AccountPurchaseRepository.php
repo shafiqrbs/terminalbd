@@ -10,6 +10,7 @@ use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -67,9 +68,9 @@ class AccountPurchaseRepository extends EntityRepository
     }
 
 
-    public function accountPurchaseOverview($globalOption,$data)
+    public function accountPurchaseOverview(User $user ,$data)
     {
-
+        $globalOption = $user->getGlobalOption();
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.purchaseAmount) AS purchaseAmount, SUM(e.payment) AS payment');
         $qb->where("e.globalOption = :globalOption");

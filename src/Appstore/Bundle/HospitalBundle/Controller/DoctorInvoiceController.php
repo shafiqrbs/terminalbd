@@ -95,7 +95,6 @@ class DoctorInvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
-
         foreach ($invoice->getInvoiceParticulars() as $item) {
             /** @var InvoiceParticular $item */
             $serviceName = $item->getParticular()->getService()->getName();
@@ -156,7 +155,7 @@ class DoctorInvoiceController extends Controller
         $form = $this->createCreateForm($entity,$invoice);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() and $invoice->getPayment() > $entity -> getPayment() ) {
             $em = $this->getDoctrine()->getManager();
             $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
             $entity->setHospitalConfig($hospital);
@@ -168,9 +167,29 @@ class DoctorInvoiceController extends Controller
             );
             return $this->redirect($this->generateUrl('hms_doctor_invoice_new', array('id' => $invoice->getId())));
         }
+        $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+        foreach ($invoice->getInvoiceParticulars() as $item) {
+            /** @var InvoiceParticular $item */
+            $serviceName = $item->getParticular()->getService()->getName();
+            $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
+
+            if(!isset($invoiceDetails[$serviceName])) {
+                $invoiceDetails[$serviceName]['items'] = [];
+                $invoiceDetails[$serviceName]['total'] = 0;
+                $invoiceDetails[$serviceName]['hasQuantity'] = ( $hasQuantity == 1);
+            }
+
+            $invoiceDetails[$serviceName]['items'][] = $item;
+            $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
+        }
+
+        if(count($invoiceDetails['Pathology']['items']) == 0) {
+            unset($invoiceDetails['Pathology']);
+        }
 
         return $this->render('HospitalBundle:DoctorInvoice:new.html.twig', array(
             'entity' => $entity,
+            'invoiceDetails'      => $invoiceDetails,
             'invoice' => $invoice,
             'form'   => $form->createView(),
         ));
