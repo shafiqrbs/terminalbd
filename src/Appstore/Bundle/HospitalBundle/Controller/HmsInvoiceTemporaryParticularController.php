@@ -114,6 +114,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $entity->setDeliveryDateTime($datetime);
         if($entity->getTotal() > 0 and $entity->getPayment() > $entity->getTotal() ){
 	        $entity->setPayment($entity->getTotal());
+	        $entity->setPaymentStatus("Paid");
 	        $entity->setDue(0);
         }
 	    $entity->setProcess('In-progress');
