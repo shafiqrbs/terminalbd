@@ -292,6 +292,7 @@
                 </div>
             </div>
             <div class="clearfix"></div>
+
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
@@ -302,7 +303,13 @@
                     </div>
                 </div>
             </div>
-            <div class="clearfix"></div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="control-group">
+                        {{ form_widget(form.assignDoctor) }}
+                    </div>
+                </div>
+            </div>
             <div class="row-fluid">
                 <div class="span12">
                     <div class="input-group">
@@ -331,7 +338,7 @@
                 <div class="span12 input-append-border">
                     <div class="row-fluid">
                         <div class="input-icon left input-height">
-                            <i class="icon-user"></i>
+                            <i class="icon-mobile"></i>
                             {{ form_widget(form.referredDoctor.mobile) }}
                          </div>
                     </div>

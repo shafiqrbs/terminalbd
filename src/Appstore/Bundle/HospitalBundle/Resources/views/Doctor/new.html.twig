@@ -51,15 +51,26 @@
                 <!--/span-->
                 <div class="span4">
                     <div class="control-group">
-                        <label class="control-label" for="name">Assign Doctor<span class="required">*</span></label>
+                        <label class="control-label" for="name">Doctor Name<span class="required">*</span></label>
                         <div class="controls">
-                            {{ form_widget(form.assignDoctor) }}
-                            {{ form_errors(form.assignDoctor) }}
+                            {{ form_widget(form.name) }}
+                            {{ form_errors(form.name) }}
                         </div>
                     </div>
                 </div>
-
                 <div class="span4">
+                    <div class="control-group">
+                        <label class="control-label" for="name">Designation</label>
+                        <div class="controls">
+                            <div class="input-icon left">
+                                <i class="icon-font"></i>
+                                {{ form_widget(form.designation) }}
+                                {{ form_errors(form.designation) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span2">
                     <div class="control-group">
                         <label class="control-label" for="price">Fees</label>
                         <div class="controls">
@@ -71,7 +82,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="span4">
+                <div class="span2">
                     <div class="control-group">
                         <label class="control-label" for="name">Commission<span class="required">%</span></label>
                         <div class="controls">
@@ -98,10 +109,13 @@
                 </div>
                 <div class="span4">
                     <div class="control-group">
-                        <label class="control-label"  for="category" >Category</label>
+                        <label class="control-label" for="name">Current Job</label>
                         <div class="controls">
-                            {{ form_widget(form.category) }}
-                            {{ form_errors(form.category) }}
+                            <div class="input-icon left">
+                                <i class="icon-font"></i>
+                                {{ form_widget(form.currentJob) }}
+                                {{ form_errors(form.currentJob) }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,32 +131,6 @@
             </div>
             <div class="row-fluid">
                 <div class="span8">
-                    <div class="row-fluid">
-                        <div class="span6">
-                            <div class="control-group">
-                                <label class="control-label" for="name">Designation</label>
-                                <div class="controls">
-                                    <div class="input-icon left">
-                                        <i class="icon-font"></i>
-                                        {{ form_widget(form.designation) }}
-                                        {{ form_errors(form.designation) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="span6">
-                            <div class="control-group">
-                                <label class="control-label" for="name">Current Job</label>
-                                <div class="controls">
-                                    <div class="input-icon left">
-                                        <i class="icon-font"></i>
-                                        {{ form_widget(form.currentJob) }}
-                                        {{ form_errors(form.currentJob) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
@@ -170,12 +158,12 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="name">Email</label>
+                                <label class="control-label" for="name">Mobile no</label>
                                 <div class="controls">
                                     <div class="input-icon left">
-                                        <i class="icon-envelope"></i>
-                                        {{ form_widget(form.email) }}
-                                        {{ form_errors(form.email) }}
+                                        <i class="icon-font"></i>
+                                        {{ form_widget(form.mobile) }}
+                                        {{ form_errors(form.mobile) }}
                                     </div>
                                 </div>
                             </div>
@@ -184,12 +172,12 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="name">Phone no</label>
+                                <label class="control-label" for="name">Email</label>
                                 <div class="controls">
                                     <div class="input-icon left">
-                                        <i class="icon-font"></i>
-                                        {{ form_widget(form.phoneNo) }}
-                                        {{ form_errors(form.phoneNo) }}
+                                        <i class="icon-envelope"></i>
+                                        {{ form_widget(form.email) }}
+                                        {{ form_errors(form.email) }}
                                     </div>
                                 </div>
                             </div>

@@ -48,23 +48,6 @@ class ReferredDoctorType extends AbstractType
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')))
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Commission no')))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows' => 4,'placeholder'=>'Enter customer address')))
-            ->add('category', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select pathology---',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'property' => 'nestedLabel',
-                'choices'=> $this->PathologyChoiceList()
-            ))
-
-            ->add('department', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select department---',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'property' => 'nestedLabel',
-                'choices'=> $this->DepartmentChoiceList()
-            ))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',

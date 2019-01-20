@@ -27,7 +27,7 @@
                     <li>Patient Name : <strong>{{ entity.hmsInvoice.customer.name }}</strong></li>
                     <li>Investigation : {{ entity.particular.name }}</li>
                     <li>Sepcimen/Sample : {{ entity.particular.sepcimen }}</li>
-                    <li>Ref. By : {% if entity.hmsInvoice.referredDoctor is not empty %}<strong>{{ entity.hmsInvoice.referredDoctor.name }}</strong>{% endif %}</li>
+                    <li>Ref. By : {% if entity.hmsInvoice.assignDoctor is not empty %}<strong>{{ entity.assignDoctor.name }}</strong>{% endif %}</li>
                 </ul>
             </td>
 
@@ -134,10 +134,7 @@
             </table>
         {% endif %}
         </div>
-        <table class="table print-footer" style="margin-top:30px" >
-            <tr><td colspan="3">&nbsp;</td></tr>
-            <tr><td colspan="3">&nbsp;</td></tr>
-            <tr><td colspan="3">&nbsp;</td></tr>
+        <table class="table print-footer" style="position: fixed; bottom: 40px"  >
             <tr>
                 <td class="left span4">
                     <ul class="unstyled">

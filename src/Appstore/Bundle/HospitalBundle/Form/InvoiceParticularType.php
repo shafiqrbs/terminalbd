@@ -38,6 +38,7 @@ class InvoiceParticularType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'referred',
+                'empty_value' => '---Select Assign Doctor---',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')

@@ -84,6 +84,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Designation</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Department</th>
                                     <th class="numeric" >Fees</th>
@@ -95,8 +96,9 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
-                                        <td class="numeric" >{% if entity.assignDoctor is not empty %}<a href="{{ path('hms_doctor_edit',{'id': entity.id })}}">{{ entity.assignDoctor.profile.name }}</a>{% endif %}</td>
-                                        <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.profile.mobile }}{% endif %}</td>
+                                        <td class="numeric" ><a href="{{ path('hms_doctor_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{{ entity.designation }}</td>
+                                        <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric">{% if entity.department is not empty %}{{ entity.department.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.price|number_format }}</td>
                                         <td class="numeric" >

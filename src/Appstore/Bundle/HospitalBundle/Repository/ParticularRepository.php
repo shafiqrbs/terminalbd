@@ -70,10 +70,7 @@ class ParticularRepository extends EntityRepository
     }
 
     public function getServices($hospital,$services){
-
-
         $particulars = $this->getServiceWithParticular($hospital,$services);
-
         $data = '';
         $service = '';
         foreach ($particulars as $particular) {

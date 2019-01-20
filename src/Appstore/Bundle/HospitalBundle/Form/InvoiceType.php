@@ -52,23 +52,22 @@ class InvoiceType extends AbstractType
             ))
             ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips initialDiscount span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
+            ->add('assignDoctor', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'doctor',
+                'empty_value' => '---Select Assign Doctor---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
+                        ->andWhere("e.service = 5")
+                        ->andWhere("e.status = 1")
+                        ->orderBy("e.name","ASC");
+                }
+            ))
             ->add('discount','hidden')
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('referredDoctor', 'entity', array(
-                  'required'    => true,
-                  'property' => 'referred',
-                  'empty_value' => '--- Select Referred Doctor/Agent ---',
-                  'attr'=>array('class'=>'m-wrap span12 select2'),
-                  'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                  'query_builder' => function(EntityRepository $er){
-                      return $er->createQueryBuilder('e')
-                          ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                          ->andWhere("e.service = 6")
-                          ->andWhere("e.status = 1")
-                          ->orderBy("e.name","ASC");
-                  }
-
-            ))
             ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'expanded'      =>false,
@@ -116,7 +115,6 @@ class InvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
-
             ->add('accountMobileBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',

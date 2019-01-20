@@ -38,11 +38,14 @@ class DoctorType extends AbstractType
     {
         $builder
 
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Doctor name'),
+                    'constraints' =>array(new NotBlank(array('message'=>'Please enter doctor name'))))
+            )
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter fees')))
             ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter doctor designation')))
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Commission no')))
-            ->add('phoneNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter additional phone no')))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter additional phone no')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter valid email')))
             ->add('currentJob','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter current job')))
             ->add('specialist','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter specialist')))
@@ -56,7 +59,8 @@ class DoctorType extends AbstractType
                 'choices' => array('Sunday' => 'Sunday',  'Monday' => 'Monday', 'Tuesday' => 'Tuesday', 'Wednesday' => 'Wednesday', 'Thursday' => 'Thursday', 'Friday' => 'Friday', 'Saturday' => 'Saturday'),
             ))
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
-            ->add('assignDoctor', 'entity', array(
+            /*
+             ->add('assignDoctor', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select doctor from employee list---',
                 'class' => 'Core\UserBundle\Entity\User',
@@ -74,7 +78,7 @@ class DoctorType extends AbstractType
                         ->setParameter('roles', '%"ROLE_DOMAIN_HOSPITAL_DOCTOR"%')
                         ->orderBy("p.name","ASC");
                 }
-            ))
+            ))*/
 
             ->add('assignOperator', 'entity', array(
                 'required'    => false,
@@ -86,18 +90,19 @@ class DoctorType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->where("e.enabled = 1")
                         ->andWhere("e.globalOption =".$this->globalOption->getId())
+                        ->andWhere('e.roles LIKE :roles')
+                        ->setParameter('roles', '%"ROLE_DOMAIN_OPERATOR"%')
                         ->orderBy("e.id","ASC");
                 }
             ))
-
-            ->add('category', 'entity', array(
+            /*->add('category', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select category---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->PathologyChoiceList()
-            ))
+            ))*/
 
             ->add('department', 'entity', array(
                 'required'    => true,

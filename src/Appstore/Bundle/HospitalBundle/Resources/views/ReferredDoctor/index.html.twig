@@ -95,7 +95,6 @@
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
-                                    <th class="numeric" >Department</th>
                                     <th class="numeric" >Commission</th>
                                     <th class="numeric" >Location</th>
                                     <th class="numeric" >Action</th>
@@ -108,7 +107,6 @@
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('hms_referreddoctor_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
-                                        <td class="numeric">{% if entity.department is not empty %}{{ entity.department.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.commission|number_format }}<span class="required">&nbsp;%</span></td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name|default('---') }},{{ entity.location.parent.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >

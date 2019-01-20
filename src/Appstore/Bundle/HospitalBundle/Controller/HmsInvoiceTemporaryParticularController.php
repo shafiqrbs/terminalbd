@@ -32,7 +32,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $em = $this->getDoctrine()->getManager();
         $form = $this->createInvoiceCustomerForm($entity);
         $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,8,7));
-        $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
+        $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($hospital,array(5,6));;
         $subTotal = $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->getSubTotalAmount($user);
         $html = $this->renderView('HospitalBundle:Invoice:diagnostic.html.twig', array(
             'temporarySubTotal'   => $subTotal,
@@ -100,9 +100,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['referredDoctor']['mobile']);
             $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingCustomer($hospital , $mobile,$data);
             $entity->setReferredDoctor($referred);
-
         }else{
-
             $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital, 'service' => 6, 'id' => $referredId ));
             $entity->setReferredDoctor($referred);
 

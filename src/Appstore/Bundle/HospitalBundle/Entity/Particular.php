@@ -455,11 +455,12 @@ class Particular
 
      public function getReferred(){
 
-        return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')/'.$this->getService()->getName();
+        return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')';
     }
 
     public function getDoctor(){
-        return $this->particularCode.' - '.$this->name;
+         $designation = empty($this->designation) ? '' : " (".$this->designation.")";
+        return $this->particularCode.' - '.$this->name.$designation;
     }
 
     /**
