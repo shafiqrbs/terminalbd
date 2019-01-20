@@ -62,7 +62,6 @@ $('#purchaseItem_stockName').on("select2-selecting", function (e) {
     }, 2000)
 });
 
-
 $('form#purchaseItemForm').on('keyup', '#purchaseItem_purchasePrice', function (e) {
     var mrp = $('#purchaseItem_purchasePrice').val();
     $('#purchaseItem_salesPrice').val(mrp);
@@ -123,47 +122,41 @@ $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
     }
 });
 
-var formStock = $("#stockItemForm").validate({
+var formStock = $("#medicineStock").validate({
     rules: {
-
-        "stockItemForm[name]": {required: true},
-        "stockItemForm[rackNo]": {required: true},
-        "stockItemForm[unit]": {required: true},
-        "stockItemForm[purchasePrice]": {required: true},
-        "stockItemForm[salesPrice]": {required: true},
-        "stockItemForm[purchaseQuantity]": {required: true}
+        "medicineStock[name]": {required: true},
+        "medicineStock[accessoriesBrand]": {required: false},
+        "medicineStock[rackNo]": {required: true},
+        "medicineStock[purchaseQuantity]": {required: true},
+        "medicineStock[unit]": {required: true},
+        "medicineStock[purchasePrice]": {required: true},
+        "medicineStock[salesPrice]": {required: false}
     },
-
     messages: {
-
-        "stockItemForm[name]":"Enter medicine name",
-        "stockItemForm[rackNo]":"Enter medicine rack no",
-        "stockItemForm[unit]":"Enter medicine unit",
-        "stockItemForm[purchasePrice]":"Enter purchase price",
-        "stockItemForm[salesPrice]":"Enter sales price",
-        "stockItemForm[purchaseQuantity]":"Enter purchase quantity",
-
+        "medicineStock[name]": "Enter medicine name",
+        "medicineStock[rackNo]": "Enter medicine rack no",
+        "medicineStock[unit]": "Enter medicine unit",
+        "medicineStock[purchasePrice]": "Enter purchase price",
+        "medicineStock[purchaseQuantity]": "Enter purchase quantity",
     },
     tooltip_options: {
-        "stockItemForm[name]": {placement:'top',html:true},
-        "stockItemForm[rackNo]": {placement:'top',html:true},
-        "stockItemForm[unit]": {placement:'top',html:true},
-        "stockItemForm[purchasePrice]": {placement:'top',html:true},
-        "stockItemForm[salesPrice]": {placement:'top',html:true},
-        "stockItemForm[purchaseQuantity]": {placement:'top',html:true},
+        "medicineStock[name]": {placement: 'top', html: true},
+        "medicineStock[rackNo]": {placement: 'top', html: true},
+        "medicineStock[unit]": {placement: 'top', html: true},
+        "medicineStock[purchasePrice]": {placement: 'top', html: true},
+        "medicineStock[purchaseQuantity]": {placement: 'top', html: true},
     },
 
-    submitHandler: function(formStock) {
-
+    submitHandler: function (formStock) {
         $.ajax({
-            url         : $('form#stockItemForm').attr( 'action' ),
-            type        : $('form#stockItemForm').attr( 'method' ),
-            data        : new FormData($('form#stockItemForm')[0]),
-            processData : false,
-            contentType : false,
-            success: function(response){
+            url: $('form#medicineStock').attr('action'),
+            type: $('form#medicineStock').attr('method'),
+            data: new FormData($('form#medicineStock')[0]),
+            processData: false,
+            contentType: false,
+            success: function (response) {
                 obj = JSON.parse(response);
-                if(obj['success'] === 'invalid'){
+                if (obj['success'] === 'invalid') {
                     alert('This item already exist in stock item');
                     return false;
                 }
@@ -178,9 +171,7 @@ var formStock = $("#stockItemForm").validate({
                 $('#msg').html(obj['msg']);
                 $("#medicineStock_name").select2("val", "");
                 $("#medicineId").val();
-                $('#stockItemForm')[0].reset();
-                $('#stockItemCreate').html('<i class="icon-save"></i> Add Stock Item').attr("disabled", false);
-
+                $('#medicineStock')[0].reset();
             }
         });
     }
@@ -191,9 +182,8 @@ var form = $("#purchaseItemForm").validate({
 
         "purchaseItem[stockName]": {required: true},
         "purchaseItem[purchasePrice]": {required: true},
-        "purchaseItem[salesPrice]": {required: true},
+        "purchaseItem[salesPrice]": {required: false},
         "purchaseItem[quantity]": {required: true},
-        "purchaseItem[expirationStartDate]": {required: false},
         "purchaseItem[expirationEndDate]": {required: false}
     },
 

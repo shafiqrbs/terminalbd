@@ -186,7 +186,7 @@ class PurchaseController extends Controller
             'action' => $this->generateUrl('medicine_purchase_particular_add', array('invoice' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'custom-form',
                 'id' => 'purchaseItemForm',
                 'novalidate' => 'novalidate',
             )
@@ -201,8 +201,8 @@ class PurchaseController extends Controller
             'action' => $this->generateUrl('medicine_stock_item_create', array('id' => $purchase->getId())),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
-                'id' => 'stockItemForm',
+                'class' => 'custom-form',
+                'id' => 'medicineStock',
                 'novalidate' => 'novalidate',
             )
         ));
