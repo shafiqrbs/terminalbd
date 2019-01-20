@@ -1267,12 +1267,13 @@ class Invoice
     public function getDeliveryCount()
     {
         $count = 0;
-        foreach ($this->getInvoiceParticulars() as $data ){
-
-           /* @var $data InvoiceParticular */
-           if($data->getParticularDeliveredBy()){
-               $count++;
-           }
+        if(!empty($this->getInvoiceParticulars())) {
+            foreach ($this->getInvoiceParticulars() as $data) {
+                /* @var $data InvoiceParticular */
+                if ($data->getParticularDeliveredBy()) {
+                    $count++;
+                }
+            }
         }
         return $count;
     }
@@ -1280,11 +1281,12 @@ class Invoice
     public function getReportCount()
     {
         $count = 0;
-        foreach ($this->getInvoiceParticulars() as $data ){
-
-            /* @var $data InvoiceParticular */
-            if($data->getParticular()->getService()->getSlug() == 'diagnostic'){
-                $count++;
+        if(!empty($this->getInvoiceParticulars())){
+            foreach ($this->getInvoiceParticulars() as $data ){
+                /* @var $data InvoiceParticular */
+                if($data->getParticular()->getService()->getSlug() == 'diagnostic'){
+                    $count++;
+                }
             }
         }
         return $count;

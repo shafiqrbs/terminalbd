@@ -369,15 +369,9 @@ class InvoiceRepository extends EntityRepository
         }
         if($invoice->getPrintFor() == "visit" and $invoice->getPaymentStatus() == "Paid") {
             $invoice->setProcess('Done');
-        }elseif($invoice->getPaymentStatus() == 'Paid' and $invoice->getReportCount() == $invoice->getDeliveryCount()){
-            $accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalFinalAccountInvoice($invoice);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hmsSalesFinal($invoice, $accountInvoice);
         }
         $em->flush();
-
     }
-
-
     public function updateCommissionPayment(Invoice $invoice)
     {
         $em = $this->_em;
