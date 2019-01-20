@@ -34,8 +34,8 @@
                 <div class="portlet-body form">
                     <form class="search-form" action="" method="get" name="itemSearch">
                         <div class="row-fluid">
-                            <div class="span3"></div>
-                            <div class="span3">
+                            <div class="span9"></div>
+                            {#<div class="span3">
                                 {% set processes = ['Admission','Admitted','Released','Dead'] %}
                                 <select id="process" name="process" class="span12 m-wrap">
                                     {% for pro in processes %}
@@ -48,11 +48,11 @@
                                     <option {% if searchForm.mode is defined and searchForm.mode == 'diagnostic' %} selected="selected" {% endif %} value="diagnostic">Diagnostic</option>
                                     <option {% if searchForm.mode is defined and searchForm.mode == 'admission' %} selected="selected" {% endif %} value="admission">Admission</option>
                                 </select>
-                            </div>
+                            </div>#}
                             <div class="span3">
                                 <div class="controls">
                                     <div class="input-append span11">
-                                        <input type="text" id="date" name="date"  class="span11 m-wrap datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                        <input type="text" id="date" name="date"  class="span11 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                         <div class="btn-group">
                                             <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                         </div>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="form-actions portlet box green">
+                    <div class="form-actions portlet box red">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-money"></i>Sales Overview</div>
                             <div class="actions">
@@ -114,12 +114,9 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div class="form-actions portlet box green">
+                    <div class="form-actions portlet box blue">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-money"></i>Mode Base Sales</div>
-                            <div class="actions">
-                                <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
-                            </div>
                         </div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
@@ -173,12 +170,9 @@
 
                     </table>
                     <div class="clearfix">&nbsp;</div>
-                    <div class="form-actions portlet box green">
+                    <div class="form-actions portlet box yellow">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-money"></i>Service Base Sales</div>
-                            <div class="actions">
-                                <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
-                            </div>
                         </div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
@@ -198,9 +192,6 @@
                     <div class="form-actions portlet box green">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-money"></i>Transaction Method Base Sales</div>
-                            <div class="actions">
-                                <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
-                            </div>
                         </div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
@@ -217,19 +208,18 @@
                         </tbody>
                     </table>
                     <div class="clearfix">&nbsp;</div>
-                    <div class="form-actions portlet box green">
+                    <div class="form-actions portlet box purple">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-money"></i>Commission for Referred</div>
-                            <div class="actions">
-                                <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
-                            </div>
                         </div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
                     <table class="table table-bordered table-striped table-condensed flip-content ">
                         <tbody>
                         {% if transactionOverview is defined and transactionOverview is not empty %}
+                            {% set totalCommission = 0 %}
                             {% for commission in commissionOverview %}
+                                {% set totalCommission = totalCommission + commission.paymentTotal %}
                                 <tr>
                                     <th class="numeric span11">{{ loop.index }}. {{ commission.referredName }}</th>
                                     <th class="numeric">{{ commission.paymentTotal|number_format }}</th>
@@ -237,6 +227,7 @@
                             {% endfor %}
                         {% endif %}
                         </tbody>
+                        <tfoot><tr><th><span class="pull-right">Total Commission</span></th><th>{{ totalCommission|number_format }}</th></tr></tfoot>
                     </table>
                 </div>
             </div>
@@ -253,7 +244,7 @@
     {% block javascriptBlock %}
         {{ parent() }}
         {% javascripts
-        '@AccountingBundle/Resources/public/js/approveProcess.js'
+        '@HotelBundle/Resources/public/js/approveProcess.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}

@@ -80,7 +80,7 @@
                     <h4>Particular:</h4>
                     <ul class="unstyled">
                         <li><strong>Particular #:</strong>&nbsp;{{ entity.particular.name }}</li>
-                        <li><strong>Category #:</strong>&nbsp;{{ entity.particular.category.name }}</li>
+                        <li><strong>Category #:</strong>&nbsp;{% if entity.particular.category is not empty %}{{ entity.particular.category.name }}{% endif %}</li>
                         <li><strong>Instruction #:</strong>&nbsp;{{ entity.particular.instruction }}</li>
                     </ul>
                 </div>

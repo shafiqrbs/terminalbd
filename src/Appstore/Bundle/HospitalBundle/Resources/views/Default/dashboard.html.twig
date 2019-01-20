@@ -64,10 +64,13 @@
                                                 <div> Sales Receive Tk. </div>
                                             </a>
                                             <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                <div> Commission Tk. </div>
+                                            </a>
+                                            <a href="javascript:" class="icon-btn icon-btn-mini">
                                                 <div> Due Receive Tk.</div>
                                             </a>
                                             <a href="javascript:" class="icon-btn icon-btn-mini">
-                                                <div> Total Received Tk. </div>
+                                                <div> Grand Total Tk. </div>
                                             </a>
 
                                         </div>
@@ -75,16 +78,19 @@
                                     <div class="span4" style="margin-top:-10px">
                                         <div class="portlet-body">
                                             <a href="javascript:" class="icon-btn icon-btn-mini">
-                                                <div><span style="color: red"> {{ salesTransactionOverview.total|number_format }}</span> </div>
+                                                <div><span style="color: red"> {{ salesTodayTransactionOverview.total|number_format }}</span> </div>
                                             </a>
                                             <a href="javascript:" class="icon-btn icon-btn-mini">
-                                                <div><span style="color: red">{{ salesTransactionOverview.receive|number_format }}</span> </div>
+                                                <div><span style="color: red">{{ salesTodayTransactionOverview.receive|number_format }}</span> </div>
+                                            </a>
+                                            <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                <div><span style="color: red">{{ salesTodaySalesCommission|number_format }}</span> </div>
                                             </a>
                                             <a href="javascript:" class="icon-btn icon-btn-mini">
                                                 <div><span style="color: red">{{ previousSalesTransactionOverview.receive|number_format }}</span> </div>
                                             </a>
                                             <a href="javascript:" class="icon-btn icon-btn-mini">
-                                                <div><span style="color: red">{{ (previousSalesTransactionOverview.receive + salesTransactionOverview.receive)|number_format }}</span> </div>
+                                                <div><span style="color: red">{{ ((previousSalesTransactionOverview.receive + salesTodayTransactionOverview.receive)-salesTodaySalesCommission)|number_format }}</span> </div>
                                             </a>
 
                                         </div>

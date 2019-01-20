@@ -73,7 +73,7 @@
 
                                     <div class="span3">
                                         <div class="input-append span11">
-                                            <input class="m-wrap span10 search-input dateCalendar" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.deliveryDate is defined %}{{ searchForm.created }}{% else %} Date{% endif %}">
+                                            <input style="padding-left: 15px" class="m-wrap span10 search-input dateCalendar" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.deliveryDate is defined %}{{ searchForm.created }}{% else %} Date{% endif %}">
                                             <div class="btn-group">
                                                 <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                             </div>
@@ -88,8 +88,9 @@
                             <tr class="head-green">
                                 <th class="numeric" >Invoice No</th>
                                 <th class="numeric" >Name</th>
-                                <th class="numeric" >Referred</th>
                                 {#<th class="numeric" >Description</th>#}
+                                <th class="numeric" >Sub-Total</th>
+                                <th class="numeric" >Discount</th>
                                 <th class="numeric" >Total</th>
                                 {% for com in commissionEntity %}
                                 <th class="numeric" >{{ com.name }}</th>
@@ -100,17 +101,21 @@
                             </tr>
                             </thead>
                             <tbody>
+                            {% set grandSubTotal = 0 %}
                             {% set grandTotal = 0 %}
                             {% set grandCommission = 0 %}
-                            {% set grandTotal = 0 %}
+                            {% set grandDiscount = 0 %}
                             {% for entity in entities %}
+                                {% set  grandSubTotal = grandSubTotal + entity.subTotal %}
                                 {% set  grandTotal = grandTotal + entity.total %}
+                                {% set  grandDiscount = grandDiscount + entity.discount %}
                                 {% set  grandCommission = grandCommission + entity.commission %}
                                 <tr id="delete-{{ entity.id }}">
                                     <td class="numeric" >{{ entity.invoice }}</td>
                                     <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-                                    <td class="numeric" >{% if entity.referredDoctor is defined and entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</td>
-                                    {#<td class="numeric" >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>#}
+                                   {#<td class="numeric" >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>#}
+                                    <td class="numeric" >{{ entity.subTotal }}</td>
+                                    <td class="numeric" >{{ entity.discount }}</td>
                                     <td class="numeric" >{{ entity.total }}</td>
                                     {% for com in commissionEntity %}
                                         <td class="numeric" >
@@ -121,14 +126,17 @@
                                         </td>
                                     {% endfor %}
                                     <td class="numeric" >{{ entity.commission }}</td>
-                                    <td class="numeric" >{{ entity.total - entity.commission }}</td>
+                                    <td class="numeric" >{{ (entity.total - entity.commission)|number_format }}</td>
                                     <td class="numeric" > {{ entity.process }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4"><span class="pull-right">Grand Total</span></th><td>{{ grandTotal }}</td>
+                                    <th colspan="2"><span class="pull-right">Grand Total</span></th>
+                                    <td>{{ grandSubTotal }}</td>
+                                    <td>{{ grandDiscount }}</td>
+                                    <td>{{ grandTotal }}</td>
                                     {% for com in commissionEntity %}
                                         <td>
                                         {% if commissionSummary[com.id] is defined and commissionSummary[com.id] is not empty  %}

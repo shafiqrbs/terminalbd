@@ -15,7 +15,7 @@ class DefaultController extends Controller
         /* @var GlobalOption $globalOption */
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine();
         $data = $_REQUEST;
         $datetime = new \DateTime("now");
         $data['startDate'] = $datetime->format('Y-m-d');
@@ -24,19 +24,18 @@ class DefaultController extends Controller
         $user = $this->getUser();
         $salesCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('diagnostic','admission'));
         $purchaseCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user,$data);
+        $transactionMethods                 = array(1);
+        $transactionCashOverview            = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
+        $expenditureOverview                = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+        $salesTodayTransactionOverview           = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic','admission'));
+        $salesTodaySalesCommission           = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionSummary($user,$data);
+        $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic','admission'));
 
-        $transactionMethods = array(1);
-        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
-        $expenditureOverview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-
-        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic','admission'));
-        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic','admission'));
-
-
-        return $this->render('HospitalBundle:Default:index.html.twig', array(
+        return $this->render('HospitalBundle:Default:dashboard.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
-            'salesTransactionOverview' => $salesTransactionOverview,
+            'salesTodayTransactionOverview' => $salesTodayTransactionOverview,
+            'salesTodaySalesCommission' => $salesTodaySalesCommission,
             'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
             'transactionCashOverviews' => $transactionCashOverview,
             'expenditureOverview'       => $expenditureOverview ,

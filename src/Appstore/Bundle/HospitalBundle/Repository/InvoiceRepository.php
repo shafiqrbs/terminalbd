@@ -192,7 +192,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('e.invoiceParticulars','ip');
         $qb->leftJoin('ip.particular','p');
         $qb->leftJoin('p.service','s');
-        $qb->select('sum(ip.subTotal) as subTotal');
+        $qb->select('sum(it.payment) as subTotal');
         $qb->addSelect('s.name as serviceName');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         if (!empty($mode)){

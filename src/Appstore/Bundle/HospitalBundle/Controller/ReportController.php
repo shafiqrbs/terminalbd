@@ -114,8 +114,8 @@ class ReportController extends Controller
 
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $datetime = new \DateTime("now");
         if(empty($data['created'])){
-            $datetime = new \DateTime("now");
             $data['created'] = $datetime->format('Y-m-d');
         }
 
@@ -136,15 +136,16 @@ class ReportController extends Controller
                 'searchForm' => $data,
             )
         );
+        $date = $datetime->format('d-m-y');
+        $date = "{$date}-daily-sales.pdf";
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
         $snappy          = new Pdf($wkhtmltopdfPath);
         $pdf             = $snappy->getOutputFromHtml($html);
-
         header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="monthlyIncomePdf.pdf"');
+        header('Content-Disposition: attachment; filename="'.$date.'"');
         echo $pdf;
-
         return new Response('');
+
     }
 
 

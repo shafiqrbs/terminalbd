@@ -28,8 +28,9 @@ class DoctorInvoiceRepository extends EntityRepository
         $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['assignDoctor'])? $data['assignDoctor'] :'';
         $process = isset($data['process'])? $data['process'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
-
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("hmsInvoice.invoice", "'%$invoice%'"  ));
@@ -50,6 +51,16 @@ class DoctorInvoiceRepository extends EntityRepository
             $qb->andWhere("e.transactionMethod = :transactionMethod");
             $qb->setParameter('transactionMethod', $transactionMethod);
         }
+        if (!empty($startDate) ) {
+            $datetime = new \DateTime($startDate);
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $qb->andWhere("e.updated >= :startDate")->setParameter('startDate',$startDate);
+        }
+        if (!empty($endDate) ) {
+            $datetime = new \DateTime($endDate);
+            $endDate = $datetime->format('Y-m-d 23:59:59');
+            $qb->andWhere("e.updated <= :endDate")->setParameter('endDate',$endDate);
+        }
     }
 
     public function findWithList(User $user,$data)
@@ -63,6 +74,21 @@ class DoctorInvoiceRepository extends EntityRepository
         $qb->orderBy('e.updated','DESC');
         $qb->getQuery();
         return  $qb;
+    }
+
+    public function  commissionSummary(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.hmsInvoice','hmsInvoice');
+        $qb->select('sum(e.payment) as subTotal');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Paid') ;
+        $this->handleSearchBetween($qb,$data);
+        $receivable = $qb->getQuery()->getOneOrNullResult();
+        $receivableTotal = !empty($receivable['subTotal']) ? $receivable['subTotal'] :0;
+        return $receivableTotal;
+
     }
 
     public function  findWithOverview(User $user,$data, $mode = '' )
