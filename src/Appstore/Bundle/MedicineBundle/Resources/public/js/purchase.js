@@ -188,7 +188,6 @@ var form = $("#purchaseItemForm").validate({
     },
 
     messages: {
-
         "purchaseItem[stockName]":"Enter medicine name",
         "purchaseItem[purchasePrice]":"Enter purchase price",
         "purchaseItem[salesPrice]":"Enter sales price",
@@ -199,7 +198,6 @@ var form = $("#purchaseItemForm").validate({
         "purchaseItem[purchasePrice]": {placement:'top',html:true},
         "purchaseItem[salesPrice]": {placement:'top',html:true},
         "purchaseItem[quantity]": {placement:'top',html:true}
-
     },
 
     submitHandler: function(form) {
