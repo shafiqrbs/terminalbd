@@ -4,28 +4,28 @@
         <!-- END PAGE HEADER-->
         <div class="portlet-body">
             <div class="row-fluid" >
-                <div class="span2">
-                    {% if globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ globalOption.templateCustomize.webPath('logo') }}">{% endif %}
-                </div>
-                <div class="span2">
-                    <div class="btn-group">
-                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") %}
-                        <a href="{{ path('hms_invoice_particular') }}" style="width: 100%" class="btn blue big"><i class="fa fa-stethoscope"></i> Pathological </a>
-                    {% endif %}
+                <div class="span3">
+                    <div class="btn-group" style="width:88%!important">
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
+                            <a href="{{ path('hms_invoice_particular') }}" style="width: 100%" class="btn yellow big"><i class="fa fa-truck"></i> Delivery Report</a>
+                        {% endif %}
                     </div>
                 </div>
-                <div class="span4">
-                    <div class="btn-group">
+                <div class="span5">
+                    <div class="btn-group" style="width: 100%!important;">
                         {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in  option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
-                        <a class="btn red big addPatient" style="width: 50%" href="javascript:"> <i class="fa fa-ambulance"></i> Diagnostic  </a>
+                        <a class="btn red big addPatient" style="width: 28%" href="javascript:"> <i class="fa fa-ambulance"></i> Diagnostic  </a>
                         {% endif %}
                         {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="{{ path('hms_invoice') }}" style="width: 50%" class="btn green big"><i class="fa fa-money"></i> Invoice</a>
+                            <a href="{{ path('hms_invoice') }}" style="width:24%" class="btn green big"><i class="fa fa-money"></i> Invoice</a>
+                        {% endif %}
+                        {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") %}
+                            <a href="{{ path('hms_invoice_report_process') }}" style="width: 28%" class="btn blue big"><i class="fa fa-stethoscope"></i> Pathological </a>
                         {% endif %}
                     </div>
                 </div>
                 <div class="span4">
-                    <div class="btn-group">
+                    <div class="btn-group" style="width: 83%!important;">
                         {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'admission' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('hms_invoice_admission_new') }}" style="width: 50%" class="btn red big"><i class="fa fa-ambulance"></i> Admission</a>
                         {% endif %}

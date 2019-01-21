@@ -35,13 +35,29 @@ class InvoiceParticularController extends Controller
 
     public function indexAction()
     {
-
-
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-       // $entities = $em->getRepository('HospitalBundle:Invoice')->invoicePathologicalReportLists( $user , $mode = 'diagnostic' , $data);
+        $entities = $em->getRepository('HospitalBundle:InvoiceParticular')->invoicePathologicalReportLists( $user , $mode = 'diagnostic' , $data);
+        $pagination = $this->paginate($entities);
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
+
+        return $this->render('HospitalBundle:InvoiceParticular:index.html.twig', array(
+            'entities' => $pagination,
+            'assignDoctors' => $assignDoctors,
+            'referredDoctors' => $referredDoctors,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function reportProcessAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:InvoiceParticular')->invoicePathologicalReportLists( $user , $mode = 'diagnostic' , $data);
         $pagination = $this->paginate($entities);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
@@ -54,6 +70,7 @@ class InvoiceParticularController extends Controller
             'searchForm' => $data,
         ));
     }
+
 
     public function showAction(Invoice $entity)
     {

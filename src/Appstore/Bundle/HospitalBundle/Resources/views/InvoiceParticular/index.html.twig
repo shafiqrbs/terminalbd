@@ -103,25 +103,49 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Name</th>
-                                    <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Balance</th>
+                                    <th class="numeric" >Test Name</th>
                                     <th class="numeric" >Delivery Date</th>
-                                    <th class="numeric" >Total Report</th>
-                                    <th class="numeric" >Delivered Report</th>
+                                    <th class="numeric" >Process</th>
+                                    <th class="numeric" >Delivered</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {% set processes = ['Collected','In-progress'] %}
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.deliveryDateTime }}</td>
-                                        <td class="numeric" >{{ entity.reportCount }}</td>
-                                        <td class="numeric" >{{ entity.deliveryCount }}</td>
+                                        <td class="numeric" >{{ entity.hmsinvoice.invoice }}</td>
+                                        <td class="numeric" >{% if entity.hmsinvoice.customer is defined and entity.hmsinvoice.customer is not empty %}{{ entity.hmsinvoice.customer.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.hmsinvoice.due > 0 %}{{ entity.hmsinvoice.due|number_format }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.particular.name }}</td>
+                                        <td class="numeric" >{{ entity.hmsinvoice.deliveryDateTime }}</td>
+                                        <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
-                                            <a  href="{{ path('hms_invoice_particular_show',{'id':entity.id}) }}"  class="btn purple mini" ><i class=" icon-plus"></i> Report Process</a>
+                                            <div class="btn-group">
+                                                {% if entity.particularDeliveredBy is not empty %}
+                                                    <a class="btn mini red confirm"   href="javascript:"><i class="icon-truck"></i>&nbsp;Delivered </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td class="numeric" >
+                                            <div class="btn-group">
+                                            {% if entity.sampleCollectedBy is empty %}
+                                                <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':entity.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
+                                            {% elseif entity.process in processes %}
+                                                <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Preparation</a>
+                                            {% endif %}
+                                            {% if entity.particularDeliveredBy is not empty %}
+                                                <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                            {% endif %}
+                                            {% if entity.hmsInvoice.paymentStatus == 'Paid' and entity.process == 'Done'  and entity.particularDeliveredBy is empty %}
+                                                <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
+                                            {% endif %}
+                                            {% if  entity.hmsinvoice.due > 0 %}
+                                            <a target="_blank"  href="{{ path('hms_invoice_confirm',{'id':entity.hmsInvoice.id}) }}"  class="btn red mini" ><i class=" icon-plus"></i> Process</a>
+                                            {% endif %}
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -148,7 +172,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/invoice.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

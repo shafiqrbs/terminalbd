@@ -2,6 +2,10 @@ hms_invoice_particular:
     path:     /
     defaults: { _controller: "HospitalBundle:InvoiceParticular:index" }
 
+hms_invoice_report_process:
+    path:     /collection-process
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:reportProcess" }
+
 hms_invoice_particular_show:
     path:     /{id}/show
     defaults: { _controller: "HospitalBundle:InvoiceParticular:show" }

@@ -915,6 +915,7 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
             if (!empty($config) and in_array('diagnostic', $config)) {
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Report Delivery', array('route' => 'hms_invoice_particular'));
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'));
             }
             if (!empty($config) and in_array('admission', $config)) {
@@ -935,7 +936,7 @@ class Builder extends ContainerAware
             $menu['Hospital & Diagnostic']->addChild('Pathological')
                 ->setAttribute('icon', 'fa fa-stethoscope')
                 ->setAttribute('dropdown', true);
-            $menu['Hospital & Diagnostic']['Pathological']->addChild('Collection & Process', array('route' => 'hms_invoice_particular'))
+            $menu['Hospital & Diagnostic']['Pathological']->addChild('Collection & Process', array('route' => 'hms_invoice_report_process'))
                 ->setAttribute('icon', 'fa fa-stethoscope');
         }
 

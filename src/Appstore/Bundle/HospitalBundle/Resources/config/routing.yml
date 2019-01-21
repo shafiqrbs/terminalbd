@@ -44,7 +44,7 @@ hospital_invoice_admission:
 
 hospital_invoice_particular:
     resource: "@HospitalBundle/Resources/config/routing/invoiceparticular.yml"
-    prefix:   /invoice-particular
+    prefix:   /report-process
 
 hospital_particular:
     resource: "@HospitalBundle/Resources/config/routing/particular.yml"
