@@ -82,14 +82,16 @@
                                         <li><strong>Received By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
                                     </ul>
                                 </div>
-                                <div class="span3">
-                                    <h4>Referred By:</h4>
+                                <<div class="span3">
+                                    <h4>Assign/Referred By:</h4>
                                     {% if entity.referredDoctor is not empty %}
                                         <ul class="unstyled">
-                                            <li><strong>Code:</strong>&nbsp;{{ entity.referredDoctor.particularCode }}</li>
-                                            <li><strong>Name:</strong>&nbsp;{{ entity.referredDoctor.name }}</li>
-                                            <li><strong>Mobile:</strong>&nbsp;{{ entity.referredDoctor.mobile }}</li>
-                                            <li><strong>Address:</strong>&nbsp;{{ entity.referredDoctor.address }}</li>
+                                            <li><strong>Assign Doctor</strong>&nbsp;</li>
+                                            <li>Name:&nbsp;{{ entity.assignDoctor.name }}</li>
+                                            <li>Mobile:&nbsp;{{ entity.assignDoctor.mobile }}</li>
+                                            <li><strong>Referred Doctor/Agent</strong>&nbsp;</li>
+                                            <li>Name:&nbsp;{{ entity.referredDoctor.name }}</li>
+                                            <li>Mobile:&nbsp;{{ entity.referredDoctor.mobile }}</li>
                                         </ul>
                                     {% endif %}
                                 </div>
