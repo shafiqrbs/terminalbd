@@ -93,17 +93,14 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,$data);
             $entity->setCustomer($customer);
             $entity->setMobile($mobile);
-
         }
         if(!empty($data['referredDoctor']['name']) && !empty($data['referredDoctor']['mobile'])) {
-
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['referredDoctor']['mobile']);
             $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingCustomer($hospital , $mobile,$data);
             $entity->setReferredDoctor($referred);
-        }else{
-            $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital, 'service' => 6, 'id' => $referredId ));
+        }elseif(!empty($referredId)){
+            $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->find($referredId);
             $entity->setReferredDoctor($referred);
-
         }
         $deliveryDateTime = $request->request->get('deliveryDateTime');
         $datetime = (new \DateTime("tomorrow"))->format('d-m-Y 7:30');
