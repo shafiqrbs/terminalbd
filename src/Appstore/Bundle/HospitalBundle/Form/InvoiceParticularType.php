@@ -52,7 +52,7 @@ class InvoiceParticularType extends AbstractType
                 'attr'=>array('class'=>'span12 select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
-                'choices' => array('In-progress' => 'In-progress','Done' => 'Done', 'Damage' => 'Damage', 'Impossible' => 'Impossible'),
+                'choices' => array('Done' => 'Done', 'In-progress' => 'In-progress','Damage' => 'Damage', 'Impossible' => 'Impossible'),
             ))
             ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add any comment','autocomplete'=>'off')))
 	        ->add('file')
