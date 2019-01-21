@@ -36,8 +36,8 @@
             <div class="caption"><i class="icon-reorder"></i>Particulars & Payment Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <li><a class="btn red" href="{{ path('hms_doctor_commission_invoice') }}"><i class="icon-th-list"></i>&nbsp;Commission Invoice</a></li>
-                    <li><a class="btn yellow" href="{{ path('hms_doctor_invoice') }}"><i class="icon-th-list"></i>&nbsp;Payment List</a></li>
+                    <a class="btn red" href="{{ path('hms_doctor_commission_invoice') }}"><i class="icon-th-list"></i>&nbsp;Commission Invoice</a>
+                    <a class="btn yellow" href="{{ path('hms_doctor_invoice') }}"><i class="icon-th-list"></i>&nbsp;Payment List</a>
                 </div>
             </div>
         </div>
@@ -79,15 +79,20 @@
                     </ul>
                 </div>
                 <div class="span3">
-                    <h4>Referred By:</h4>
-                    {% if invoice.referredDoctor is not empty %}
+                    <h4>Assign/Referred By:</h4>
                         <ul class="unstyled">
-                            <li><strong>Code:</strong>&nbsp;{{ invoice.referredDoctor.particularCode }}</li>
-                            <li><strong>Name:</strong>&nbsp;{{ invoice.referredDoctor.name }}</li>
-                            <li><strong>Mobile:</strong>&nbsp;{{ invoice.referredDoctor.mobile }}</li>
-                            <li><strong>Address:</strong>&nbsp;{{ invoice.referredDoctor.address }}</li>
+                            {% if invoice.assignDoctor is not empty %}
+                            <li><strong>Assign Doctor</strong>&nbsp;</li>
+                            <li>Name:&nbsp;{{ invoice.assignDoctor.name }}</li>
+                            <li>Mobile:&nbsp;{{ invoice.assignDoctor.mobile }}</li>
+                            {% endif %}
+                            <li><strong>Referred Doctor/Agent</strong>&nbsp;</li>
+                            {% if invoice.referredDoctor is not empty %}
+                            <li>Name:&nbsp;{{ invoice.referredDoctor.name }}</li>
+                            <li>Mobile:&nbsp;{{ invoice.referredDoctor.mobile }}</li>
+                            {% endif %}
                         </ul>
-                    {% endif %}
+
                 </div>
             </div>
             {% include('flash-message.html.twig')  %}
@@ -265,7 +270,6 @@
                     </table>
                 </div>
             </div>
-
             <div class="clearfix">&nbsp;</div>
             {{ form_start(form) }}
             {{ form_row(form._token) }}
