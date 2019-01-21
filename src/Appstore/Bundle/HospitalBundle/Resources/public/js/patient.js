@@ -228,7 +228,7 @@ function formSubmit() {
                     $('#invoiceParticulars').hide();
                     $("#appstore_bundle_hospitalbundle_invoice_assignDoctor").select2().select2("val","");
                     $("#referredId").select2().select2("val","");
-                  //  window.open('/hms/invoice/'+response+'/print', '_blank');
+                    window.open('/hms/invoice/'+response+'/print', '_blank');
                 }
             });
 
