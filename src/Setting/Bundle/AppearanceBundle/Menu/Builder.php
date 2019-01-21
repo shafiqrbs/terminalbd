@@ -926,7 +926,7 @@ class Builder extends ContainerAware
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission', array('route' => 'hms_doctor_commission_invoice'));
             }
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
             if (!empty($config)) {
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'));
             }
@@ -939,7 +939,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-stethoscope');
         }
 
-            if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MASTERDATA')) {
 
                 $menu['Hospital & Diagnostic']->addChild('Master Data')
                     ->setAttribute('icon', 'icon icon-cog')
