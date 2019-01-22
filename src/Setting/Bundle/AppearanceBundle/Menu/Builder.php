@@ -925,6 +925,7 @@ class Builder extends ContainerAware
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
             if (!empty($config) and in_array('commission', $config)) {
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission', array('route' => 'hms_doctor_commission_invoice'));
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission Payment', array('route' => 'hms_doctor_invoice'));
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {

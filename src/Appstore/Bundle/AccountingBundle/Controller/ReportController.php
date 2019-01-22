@@ -172,7 +172,6 @@ class ReportController extends Controller
 	{
         set_time_limit(0);
         ignore_user_abort(true);
-
 	    $em = $this->getDoctrine()->getManager();
 		$data =$_REQUEST;
 		$globalOption = $this->getUser()->getGlobalOption();

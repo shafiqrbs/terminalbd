@@ -301,7 +301,7 @@ class AccountSalesController extends Controller
 		    $em = $this->getDoctrine()->getManager();
 		    $entity->setProcess('approved');
 		    $entity->setApprovedBy($this->getUser());
-		    if(in_array($entity->getProcessHead(),array( 'Due','Advance'))){
+		    if(empty($entity->getTransactionMethod()) and in_array($entity->getProcessHead(),array( 'Due','Advance'))){
 			    $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 			    $entity->setTransactionMethod($method);
 		    }
