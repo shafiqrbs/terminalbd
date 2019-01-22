@@ -88,7 +88,6 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $entity->setPrintFor('diagnostic');
         $entity->setCreatedBy($this->getUser());
         if (!empty($data['customer']['name'])) {
-
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,$data);
             $entity->setCustomer($customer);
@@ -107,7 +106,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
         $entity->setDiscountType($discountType);
         $entity->setDeliveryDateTime($datetime);
-        if($entity->getTotal() > 0 and $entity->getPayment() > $entity->getTotal() ){
+        if($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal() ){
 	        $entity->setPayment($entity->getTotal());
 	        $entity->setPaymentStatus("Paid");
 	        $entity->setDue(0);
@@ -128,8 +127,6 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->removeInitialParticular($user);
         }
         return new Response($entity->getId());
-       // return $this->redirect($this->generateUrl('hms_doctor_invoice_confirm',array('id'=>$entity->getId())));
-
         exit;
 
     }

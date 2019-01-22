@@ -137,13 +137,14 @@ class DoctorInvoiceRepository extends EntityRepository
         }
         $em = $this->_em;
         $qb = $this->createQueryBuilder('e');
-        $qb->select('i.id as invoiceId , particular.name,particular.id as commissionId');
+        $qb->select('i.id as invoiceId , referred.name as referredName,  particular.id as commissionId');
         $qb->addSelect('SUM(e.payment) as payment');
         $qb->innerJoin('e.hmsInvoice','i');
         $qb->innerJoin('e.hmsCommission','particular');
+        $qb->innerJoin('e.assignDoctor','referred');
         $qb->where('i.id IN (:invoices)');
         $qb->setParameter('invoices',$ids);
-        $qb->groupBy('particular.id,i.id');
+        $qb->groupBy('particular.id,i.id,referred.id');
         $result = $qb->getQuery()->getArrayResult();
         $resDatas = array();
         foreach ($result as $row){
@@ -163,7 +164,7 @@ class DoctorInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $qb = $this->createQueryBuilder('e');
         $qb->select('particular.id as commissionId');
-        $qb->addSelect('SUM(e.payment) as payment');
+        $qb->addSelect('SUM(e.payment) as payment,particular.name as commissionName , particular.id as comId');
         $qb->innerJoin('e.hmsInvoice','i');
         $qb->innerJoin('e.hmsCommission','particular');
         $qb->where('i.id IN (:invoices)');

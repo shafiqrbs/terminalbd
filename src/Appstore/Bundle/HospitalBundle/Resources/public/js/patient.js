@@ -117,10 +117,13 @@ function formSubmit() {
         })
     });
 
-    $(document).on('change', '.initialDiscount', function() {
+    $(document).on('change', '#discountType , #appstore_bundle_hospitalbundle_invoice_discountCalculation', function() {
 
         var discountType = $('#discountType').val();
         var discount = parseInt($('#appstore_bundle_hospitalbundle_invoice_discountCalculation').val());
+        if(discount === "NaN"){
+            return false;
+        }
         $.ajax({
             url: Routing.generate('hms_invoice_temporary_discount_update'),
             type: 'POST',

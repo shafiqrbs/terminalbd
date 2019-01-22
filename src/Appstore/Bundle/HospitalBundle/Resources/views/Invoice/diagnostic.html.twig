@@ -189,15 +189,7 @@
                     </div>
                 </div>
             </div>
-            <div class="clearfix"></div>
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label-custom" >Receivable TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span></label>
-                    </div>
-                </div>
-                <!--/span-->
-            </div>
+
             <div class="clearfix"></div>
             <div class="row-fluid">
                 <div class="span12">
@@ -208,7 +200,14 @@
                 <!--/span-->
             </div>
             <div class="clearfix"></div>
-
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="control-group">
+                        <label class="control-label" for="firstName"><span class="label-custom" >Receivable TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span></label>
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
             <div class="clearfix"></div>
             <div class="row-fluid">
                 <div class="span12">
@@ -384,9 +383,9 @@
         color: #ffffff;
     }
     .sales-right input[class*="span"].payment{
-        border: 5px solid red!important;
-        height: 40px!important;
-        font-size: 25px
+        border: 3px solid red!important;
+        height: 31px!important;
+        font-size: 20px;
     }
     .address{
         background: #ffffff!important;

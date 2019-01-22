@@ -5,6 +5,7 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HospitalBundle\Form\InvoiceEditType;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -97,22 +98,23 @@ class InvoiceController extends Controller
 
     }
 
-
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN");
+     */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital , 'id' => $id));
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
+        if (!$entity) { throw $this->createNotFoundException('Unable to find Invoice entity.');}
         $editForm = $this->createEditForm($entity);
-        if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
+        $array = array('In-progress','Created','Revised');
+        if (!in_array($entity->getProcess(),$array)) {
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
+        $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsEditInvoiceTransaction($entity);
         $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,8,7));
-        $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
+        $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'particularService' => $services,
@@ -157,7 +159,6 @@ class InvoiceController extends Controller
 
     public function addParticularAction(Request $request, Invoice $invoice)
     {
-
         $em = $this->getDoctrine()->getManager();
         $particularId = $request->request->get('particularId');
         $quantity = $request->request->get('quantity');
@@ -186,7 +187,6 @@ class InvoiceController extends Controller
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($entity);
         $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-
         $msg = 'Particular deleted successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
@@ -196,17 +196,27 @@ class InvoiceController extends Controller
     public function invoiceDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $discount = (float)$request->request->get('discount');
+        $discountCalculation = (float)$request->request->get('discount');
         $invoice = $request->request->get('invoice');
-
+        $discountType = $request->request->get('discountType');
         $entity = $em->getRepository('HospitalBundle:Invoice')->find($invoice);
-        $total = ($entity->getSubTotal() - $discount);
+        $subTotal = $entity->getSubTotal();
+        $discount = 0;
+        if($discountType == 'flat' and $discountCalculation > 0 ){
+            $total = ($subTotal  - $discountCalculation);
+            $discount = $discountCalculation;
+        }elseif($discountType == 'percentage' and $discountCalculation > 0 ){
+            $discount = ($subTotal * $discountCalculation)/100;
+            $total = ($subTotal  - $discount);
+        }
         if($total > $discount && $discount > 0 ){
-          $entity->setDiscount($discount);
-          $entity->setTotal($entity->getSubTotal() - $entity->getDiscount());
-          $entity->setDue($entity->getTotal() - $entity->getPayment());
-          $em->flush();
-          $msg = 'Discount added successfully';
+              $entity->setDiscountType($discountType);
+              $entity->setDiscountCalculation($discountCalculation);
+              $entity->setDiscount($discount);
+              $entity->setTotal($total);
+              $entity->setDue($entity->getTotal() - $entity->getPayment());
+              $em->flush();
+              $msg = 'Discount added successfully';
         }else{
             $msg = 'Discount is not use properly';
         }
@@ -218,43 +228,33 @@ class InvoiceController extends Controller
     public function updateAction(Request $request, Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $referredId = $request->request->get('referredId');
-        $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
-
+        $data = $request->request->all()['hospitalInvoice'];
+        $referred = $request->request->all()['referred'];
         if($editForm->isValid() and !empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','Pending','Revised'))) {
-
-            if (!empty($data['customer']['name'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,$data);
-                $entity->setCustomer($customer);
-                $entity->setMobile($mobile);
-
-            }
-            if(!empty($data['referredDoctor']['name']) && !empty($data['referredDoctor']['mobile'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['referredDoctor']['mobile']);
-                $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingCustomer($entity->getHospitalConfig() , $mobile,$data);
+            $referred = $request->request->all()['referred'];
+            if(!empty($referred['name'])) {
+                $mobile = '';
+                if(!empty($data['mobile'])){
+                    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+                }
+                $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingReferred($entity->getHospitalConfig() , $mobile,$data);
                 $entity->setReferredDoctor($referred);
-
-            }else{
-
+            }elseif(!empty($referredId)){
                 $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
                 $entity->setReferredDoctor($referred);
-
+            }else{
+                $entity->setReferredDoctor('null');
             }
             $deliveryDateTime = $request->request->get('deliveryDateTime');
             $datetime = (new \DateTime("tomorrow"))->format('d-m-Y 7:30');
             $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
             $entity->setDeliveryDateTime($datetime);
-
             if($entity->getTotal() > 0){
                 $entity->setProcess('In-progress');
             }
@@ -289,10 +289,13 @@ class InvoiceController extends Controller
 
     public function discountDeleteAction(Invoice $entity)
     {
-
+        $em = $this->getDoctrine()->getManager();
         $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-
+        $entity->setDiscountType('null');
+        $entity->setDiscountCalculation(0);
+        $em->persist($entity);
+        $em->flush();
         $msg = 'Discount deleted successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
@@ -360,7 +363,6 @@ class InvoiceController extends Controller
         } else {
             return $this->redirect($this->generateUrl('hms_invoice'));
         }
-
     }
 
     /**
@@ -373,9 +375,7 @@ class InvoiceController extends Controller
     private function createEditForm(Invoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new InvoiceType($globalOption,$category ,$location), $entity, array(
+        $form = $this->createForm(new InvoiceEditType($globalOption), $entity, array(
             'action' => $this->generateUrl('hms_invoice_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -416,9 +416,13 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $em->remove($entity);
-        $em->flush();
-        return new Response(json_encode(array('success' => 'success')));
+        if($entity->getDeliveryCount() ==  0){
+            $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsEditInvoiceTransaction($entity);
+            $em->remove($entity);
+            $em->flush();
+            return new Response(json_encode(array('success' => 'success')));
+        }
+        return new Response(json_encode(array('success' => 'failed')));
         exit;
     }
 

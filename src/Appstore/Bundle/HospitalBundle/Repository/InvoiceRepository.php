@@ -326,7 +326,11 @@ class InvoiceRepository extends EntityRepository
             $invoice->setSubTotal($subTotal);
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
             $invoice->setEstimateCommission($subCommission);
-            $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
+            $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
+            if($invoice->getTotal() <= $invoice->getPayment()){
+                $invoice->setDue(null);
+                $invoice->setPayment($invoice->getTotal());
+            }
 
         }else{
 
@@ -391,7 +395,6 @@ class InvoiceRepository extends EntityRepository
         $em->flush();
 
     }
-
 
     public function getCulculationVat(Invoice $sales,$totalAmount)
     {

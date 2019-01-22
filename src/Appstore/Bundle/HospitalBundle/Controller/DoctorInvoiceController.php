@@ -157,8 +157,8 @@ class DoctorInvoiceController extends Controller
         $entity = new DoctorInvoice();
         $form = $this->createCreateForm($entity,$invoice);
         $form->handleRequest($request);
-
-        if ($form->isValid() and $invoice->getPayment() > $entity -> getPayment() ) {
+        $exits = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->findOneBy(array('hmsInvoice'=> $invoice ,'hmsCommission' => $entity->getHmsCommission() ));
+        if (empty($exits) and $form->isValid() and $invoice->getPayment() > $entity -> getPayment() ) {
             $em = $this->getDoctrine()->getManager();
             $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
             $entity->setHospitalConfig($hospital);

@@ -62,22 +62,18 @@
 </style>
   <table class="table">
       <thead>
-      <tr>
-          <td class="pull-center" colspan="10">{{ globalOption.hospitalConfig.address|raw }}</td>
-      </tr>
-      <tr>
-          <th class="pull-center" colspan="10"><h3>DAILY SALES STATEMENT SHEET</h3></th>
-      </tr>
+      <tr><td class="pull-center" colspan="20">{{ globalOption.hospitalConfig.address|raw }}</td></tr>
+      <tr><th class="pull-center" colspan="20"><h3>DAILY SALES STATEMENT SHEET</h3></th></tr>
       <tr>
           <th >Invoice No</th>
           <th >Name</th>
           <th >Sub-Total</th>
           <th >Discount</th>
           <th >Total</th>
-          {% for com in commissionEntity %}
-              <th >{{ com.name }}</th>
+          {% for com in commissionSummary %}
+              <th  colspan="2" >{{ com.commissionName }}</th>
           {% endfor %}
-          <th>Commission</th>
+          <th>Comm.</th>
           <th >Balance</th>
           <th >Report</th>
       </tr>
@@ -93,23 +89,28 @@
           {% set  grandDiscount = grandDiscount + entity.discount %}
           {% set  grandCommission = grandCommission + entity.commission %}
           <tr id="delete-{{ entity.id }}">
-              <td class="numeric" >{{ entity.invoice }}</td>
-              <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-              {#<td class="numeric" >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>#}
-              <td class="numeric" >{{ entity.subTotal }}</td>
-              <td class="numeric" >{{ entity.discount }}</td>
-              <td class="numeric" >{{ entity.total }}</td>
-              {% for com in commissionEntity %}
-                  <td class="numeric" >
-                      {% set commissionId = entity.id~'-'~com.id %}
+              <td  >{{ entity.invoice }}</td>
+              <td  >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+              {#<td  >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>#}
+              <td  >{{ entity.subTotal }}</td>
+              <td  >{{ entity.discount }}</td>
+              <td  >{{ entity.total }}</td>
+              {% for com in commissionSummary %}
+                  {% set commissionId = entity.id~'-'~com.comId %}
+                  <td  >
+                      {% if commissions[commissionId] is defined and commissions[commissionId] is not empty  %}
+                          {{ commissions[commissionId].referredName }}
+                      {% endif %}
+                  </td>
+                  <td  >
                       {% if commissions[commissionId] is defined and commissions[commissionId] is not empty  %}
                           {{ commissions[commissionId].payment }}
                       {% endif %}
                   </td>
               {% endfor %}
-              <td class="numeric" >{{ entity.commission }}</td>
-              <td class="numeric" >{{ (entity.total - entity.commission)|number_format }}</td>
-              <td class="numeric" > {{ entity.process }}</td>
+              <td  >{{ entity.commission }}</td>
+              <td  >{{ (entity.total - entity.commission)|number_format }}</td>
+              <td  > {{ entity.process }}</td>
           </tr>
       {% endfor %}
       </tbody>
@@ -119,12 +120,9 @@
           <td>{{ grandSubTotal }}</td>
           <td>{{ grandDiscount }}</td>
           <td>{{ grandTotal }}</td>
-          {% for com in commissionEntity %}
-              <td>
-                  {% if commissionSummary[com.id] is defined and commissionSummary[com.id] is not empty  %}
-                      {{ commissionSummary[com.id].payment }}
-                  {% endif %}
-              </td>
+          {% for com in commissionSummary %}
+              <th>{{ com.commissionName }}</th>
+              <th>{{ com.payment }}</th>
           {% endfor %}
           <td>{{ grandCommission }}</td>
           <td>{{ grandTotal - grandCommission }}</td>

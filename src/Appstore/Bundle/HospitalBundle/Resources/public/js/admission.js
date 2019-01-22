@@ -46,7 +46,6 @@ $( "#mobile" ).autocomplete({
     minLength: 2,
     select: function( event, ui ) {}
 });
-
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
@@ -129,6 +128,7 @@ $(document).on('click', '#addParticular', function() {
     })
 });
 
+
 $(document).on('change', '#discountType , #hospitalInvoice_discountCalculation', function() {
 
     var discount = parseInt($('#hospitalInvoice_discountCalculation').val());
@@ -177,7 +177,17 @@ $(document).on("click", ".particularDelete", function() {
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.get(url, function( data ) {location.reload();});
+            $.get(url, function( data ) {
+                obj = JSON.parse(data);
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.discountAmount').html(obj['discount']);
+                $('.discount').val('').attr( "placeholder", obj['discount'] );
+                $('.total'+id).html(obj['total']);
+                $('#msg').html(obj['msg']);
+                $('#remove-'+id).hide();
+            });
         }
     });
 });
@@ -217,7 +227,34 @@ $(document).on("click", "#diagnosticReceiveBtn", function() {
 
 });
 
-$(document).on('keyup', '#invoiceHospital_payment', function() {
+$(document).on("click", "#receiveBtn", function() {
+
+    $('#invoice_cabin, #invoice_customer_alternativeContactPerson, #invoice_customer_alternativeRelation, #invoice_customer_alternativeContactMobile').each(function() {
+        if ($(this).val() == '') {
+            $('#invoice_customer_alternativeContactPerson').addClass('input-error').focus;
+            $('#invoice_customer_alternativeRelation').addClass('input-error').focus;
+            $('#invoice_customer_alternativeContactMobile').addClass('input-error').focus;
+            $('#invoice_cabin').addClass('input-error').focus;
+            $('#invoice_disease').addClass('input-error').focus;
+            $('#updatePatient').show();
+            return false;
+
+        }else{
+
+            $('#confirm-content').confirmModal({
+                topOffset: 0,
+                top: '25%',
+                onOkBut: function(event, el) {
+                    $('#invoiceForm').submit();
+                }
+            });
+        }
+
+    });
+});
+
+
+$(document).on('keyup', '#invoice_payment', function() {
 
     var payment  = parseInt($('#invoice_payment').val()  != '' ? $('#invoice_payment').val() : 0 );
     var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
@@ -229,5 +266,39 @@ $(document).on('keyup', '#invoiceHospital_payment', function() {
         var balance =  payment - due ;
         $('#balance').html('Return Tk.');
         $('.due').html(balance);
+    }
+});
+
+$('.particular-info').on('keypress', 'input', function (e) {
+    if (e.which == 13) {
+        e.preventDefault();
+        switch (this.id) {
+
+            case 'quantity':
+                $('#price').focus();
+                break;
+
+            case 'price':
+                $('#addParticular').trigger('click');
+                $('#particular').focus();
+                break;
+        }
+    }
+});
+
+$('form.horizontal-form').on('keypress', 'input', function (e) {
+
+    if (e.which == 13) {
+        e.preventDefault();
+
+        switch (this.id) {
+            case 'invoice_discount':
+                $('#invoice_payment').focus();
+                break;
+
+            case 'paymentAmount':
+                $('#receiveBtn').focus();
+                break;
+        }
     }
 });

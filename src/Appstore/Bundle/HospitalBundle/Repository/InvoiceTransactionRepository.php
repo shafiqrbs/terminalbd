@@ -268,6 +268,34 @@ class InvoiceTransactionRepository extends EntityRepository
 
     }
 
+    public function hmsEditInvoiceTransaction(Invoice $entity)
+    {
+        $em = $this->_em;
+        if(!empty($entity->getAccountSales())){
+            /* @var AccountSales $sales*/
+            foreach ($entity->getAccountSales() as $sales ){
+                $globalOption = $sales->getGlobalOption()->getId();
+                $accountRefNo = $sales->getAccountRefNo();
+                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $transaction->execute();
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $accountCash->execute();
+            }
+        }
+        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.hmsInvoices = '.$entity->getId());
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+        $docter = $em->createQuery('DELETE HospitalBundle:InvoiceTransaction e WHERE e.hmsInvoice = '.$entity->getId());
+        if(!empty( $docter)){
+            $docter->execute();
+        }
+        $docter = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hmsInvoice = '.$entity->getId());
+        if(!empty( $docter)){
+            $docter->execute();
+        }
+    }
+
     public function hmsSalesTransactionReverse(Invoice $entity)
     {
         $em = $this->_em;

@@ -190,6 +190,27 @@ class ParticularRepository extends EntityRepository
 
     }
 
+    public function findHmsExistingReferred($hospital, $mobile = '',$data)
+    {
+        $em = $this->_em;
+        $name = $data['name'];
+        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'name' => $name));
+        if($entity){
+            return $entity;
+        }else{
+            $entity = new Particular();
+            $entity->setService($em->getRepository('HospitalBundle:Service')->find(6));
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setHospitalConfig($hospital);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+
+    }
+
+
     public function getPurchaseUpdateQnt(HmsPurchase $purchase){
 
         $em = $this->_em;

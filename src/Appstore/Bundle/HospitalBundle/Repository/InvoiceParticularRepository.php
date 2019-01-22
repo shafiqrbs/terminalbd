@@ -287,14 +287,12 @@ class InvoiceParticularRepository extends EntityRepository
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="span1"><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
             $data .= '<td class="span1" >' . $i . '</td>';
-            $data .= '<td class="span1" >' . $entity->getParticular()->getParticularCode() . '</td>';
             $data .= '<td class="span4" >' . $entity->getParticular()->getName() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getParticular()->getService()->getName() . '</td>';
             $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
             $data .= '<td class="span2" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/hms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'"  data-url="/hms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;
