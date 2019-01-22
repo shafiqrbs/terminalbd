@@ -493,7 +493,7 @@ class DoctorInvoice
     }
 
     /**
-     * @return mixed
+     * @return Invoice
      */
     public function getHmsInvoice()
     {
@@ -501,7 +501,7 @@ class DoctorInvoice
     }
 
     /**
-     * @param mixed $hmsInvoice
+     * @param Invoice $hmsInvoice
      */
     public function setHmsInvoice($hmsInvoice)
     {

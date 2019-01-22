@@ -217,8 +217,7 @@ class AccountPurchaseRepository extends EntityRepository
         }else{
             $qb->join('e.accountVendor','v');
         }
-		$qb->andWhere('vendor.id', $vendor);
-		$qb->setParameter('vendor', $vendor);
+		$qb->andWhere("v.id = :vendor")->setParameter('vendor', $vendor);
 		$qb->orderBy('e.id', 'DESC');
 		$qb->setMaxResults(1);
 		$result = $qb->getQuery()->getOneOrNullResult()['balance'];
@@ -237,7 +236,6 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = :process");
         $qb->setParameter('process', 'approved');
-
         if($globalOption->getMainApp()->getSlug() == 'miss'){
             $qb->join('e.medicineVendor','v');
         }elseif($globalOption->getMainApp()->getSlug() == 'inventory'){
@@ -258,7 +256,6 @@ class AccountPurchaseRepository extends EntityRepository
             $endDate =  $compareTo->format('Y-m-d 23:59:59');
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $endDate);
-
         }
         $qb->orderBy('e.created', 'DESC');
         $result = $qb->getQuery();
@@ -269,8 +266,6 @@ class AccountPurchaseRepository extends EntityRepository
 
     public function vendorOutstanding($globalOption,$head,$data)
     {
-
-
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.purchaseAmount) AS purchaseAmount, SUM(e.payment) AS payment');
 	    $qb->addSelect('e.companyName as vendorName');

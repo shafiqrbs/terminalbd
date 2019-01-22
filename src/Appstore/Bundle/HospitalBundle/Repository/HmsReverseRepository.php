@@ -25,9 +25,9 @@ class HmsReverseRepository extends EntityRepository
         }else{
             $reverse = $entity->getHmsReverse();
         }
-        $reverse->setName('Pathological Invoice');
+        $reverse->setName('Diagnostic Invoice');
         $reverse->setHospitalConfig($entity->getHospitalConfig());
-        $reverse->setProcess('Pathological Invoice');
+        $reverse->setProcess($entity->getProcess());
         $reverse->setContent($data);
         $reverse->setHmsInvoice($entity);
         $this->_em->persist($reverse);

@@ -219,11 +219,11 @@ function formSubmit() {
                 processData : false,
                 contentType : false,
                 beforeSend: function() {
-                    $('#saveNewPatientButton').html("Please Wait...").attr('disabled', 'disabled');
+                    $('#saveDiagnosticButton').html("Please Wait...").attr('disabled', 'disabled');
                 },
                 success: function(response){
                     $('form#invoicePatientForm')[0].reset();
-                    $('#saveNewPatientButton').html("<i class='icon-save'></i> Save").attr('disabled', 'disabled');
+                    $('#saveDiagnosticButton').html("<i class='icon-save'></i> Save").attr('disabled', 'disabled');
                     $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                     $('#invoiceParticulars').hide();
                     $("#appstore_bundle_hospitalbundle_invoice_assignDoctor").select2().select2("val","");

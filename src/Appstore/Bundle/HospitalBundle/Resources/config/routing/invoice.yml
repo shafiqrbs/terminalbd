@@ -60,7 +60,7 @@ hms_invoice_delete:
 
 hms_invoice_reverse:
     path:     /{invoice}/invoice-reverse-create
-    defaults: { _controller: "HospitalBundle:Invoice:pathologicalInvoiceReverse" }
+    defaults: { _controller: "HospitalBundle:Invoice:diagnoesticInvoiceReverse" }
 
 hms_invoice_reverse_show:
     path:     /{id}/invoice-reverse-show

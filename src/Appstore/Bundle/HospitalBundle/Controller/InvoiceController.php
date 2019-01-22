@@ -35,9 +35,12 @@ class InvoiceController extends Controller
         return $pagination;
     }
 
+    /**
+     * @Secure(roles="ROLE_HMS,ROLE_DOMAIN");
+     */
+
     public function indexAction()
     {
-
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
 
@@ -104,7 +107,6 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
@@ -211,8 +213,6 @@ class InvoiceController extends Controller
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
         exit;
-
-
     }
 
     public function updateAction(Request $request, Invoice $entity)
@@ -348,7 +348,6 @@ class InvoiceController extends Controller
         } else {
             return $this->redirect($this->generateUrl('hms_invoice'));
         }
-
     }
 
     public function confirmAction(Invoice $entity)
@@ -380,7 +379,7 @@ class InvoiceController extends Controller
             'action' => $this->generateUrl('hms_invoice_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal',
                 'id' => 'invoiceForm',
                 'novalidate' => 'novalidate',
             )
@@ -407,9 +406,8 @@ class InvoiceController extends Controller
         exit;
     }
 
-
     /**
-     * @Secure(roles="ROLE_HMS")
+     * @Secure(roles="ROLE_HMS,ROLE_DOMAIN");
      */
 
     public function deleteAction(Invoice $entity)
@@ -424,31 +422,38 @@ class InvoiceController extends Controller
         exit;
     }
 
-    public function pathologicalInvoiceReverseAction($invoice){
+    public function diagnoesticInvoiceReverseAction($invoice){
 
+        /*
+         * Stock Details
+         * Invoice  Transaction Update
+         * Medicine Invoice
+         * Account Sales
+         * Transaction
+         * Delete Journal & Account Purchase
+         */
+
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
-        $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
-        $em->getRepository('HospitalBundle:InvoiceParticular')->hmsInvoiceParticularReverse($entity);
-
-        $em = $this->getDoctrine()->getManager();
         $entity->setRevised(true);
         $entity->setProcess('Revised');
         $entity->setRevised(true);
-        $entity->setTotal($entity->getSubTotal());
         $entity->setPaymentStatus('Due');
-        $entity->setDiscount(null);
-        $entity->setDue($entity->getSubTotal());
+        $entity->setDue($entity->getTotal());
         $entity->setPaymentInWord(null);
+        $entity->setCommission(null);
         $entity->setPayment(null);
         $em->flush();
         $template = $this->get('twig')->render('HospitalBundle:Reverse:reverse.html.twig',array(
             'entity' => $entity,
         ));
         $em->getRepository('HospitalBundle:HmsReverse')->insertInvoice($entity,$template);
+        $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
+        $em->getRepository('HospitalBundle:InvoiceParticular')->hmsInvoiceParticularReverse($entity);
         return $this->redirect($this->generateUrl('hms_invoice_edit',array('id'=>$entity->getId())));
-
     }
 
     public function invoiceReverseAction(Invoice $invoice)
@@ -458,7 +463,6 @@ class InvoiceController extends Controller
         return $this->render('HospitalBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
-
     }
 
     public function invoiceReverseShowAction(Invoice $invoice)

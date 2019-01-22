@@ -170,7 +170,10 @@ class ReportController extends Controller
 	 */
 	public function customerOutstandingAction()
 	{
-		$em = $this->getDoctrine()->getManager();
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+	    $em = $this->getDoctrine()->getManager();
 		$data =$_REQUEST;
 		$globalOption = $this->getUser()->getGlobalOption();
 		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
@@ -209,6 +212,9 @@ class ReportController extends Controller
 	 */
 	public function vendorOutstandingAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         /* @var $globalOption GlobalOption */
@@ -238,11 +244,11 @@ class ReportController extends Controller
         $vendor = '';
         $entities = '';
         if ($globalOption->getMainApp()->getSlug() == 'inventory' and !empty($data['vendor'])){
-            $vendor = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->findOneBy(array('companyName'=>$data['vendor']));
+            $vendor = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->findOneBy(array('companyName'=> $data['vendor']));
         }else if ($globalOption->getMainApp()->getSlug() == 'miss' and !empty($data['vendor'])){
-            $vendor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findOneBy(array('companyName'=>$data['vendor']));
+            $vendor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findOneBy(array('companyName'=> $data['vendor']));
         }elseif(!empty($data['vendor'])){
-            $vendor = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findOneBy(array('companyName'=>$data['vendor']));
+            $vendor = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findOneBy(array('companyName'=> $data['vendor']));
         }
 		if(!empty($data) and !empty($data['vendor'])){
             $entities = $em->getRepository('AccountingBundle:AccountPurchase')->vendorLedger($globalOption,$data);

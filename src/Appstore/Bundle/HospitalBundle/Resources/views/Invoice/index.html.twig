@@ -185,6 +185,7 @@
                                                     <li><a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn purple"><i class="icon-eye-open"></i> View</a></li>
                                                     {#<a href="javascript:EasyWebApp.printUrl('{{ url('hms_invoice_print_invoice',{'id':entity.id}) }}')"> Print URL</a>#}
                                                 </ul>
+                                                {#<a href="{{ path('hms_invoice_reverse', { 'invoice': entity.invoice }) }}" class="btn black mini"><i class="icon-retweet"></i> Revise</a>#}
                                                 {% if entity.revised == 1 %}
                                                     <a href="{{ path('hms_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
                                                 {% endif %}

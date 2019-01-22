@@ -42,7 +42,7 @@ class AccountPurchaseController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($globalOption,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($this->getUser(),$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(5));
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:AccountPurchase:index.html.twig', array(
@@ -104,7 +104,6 @@ class AccountPurchaseController extends Controller
 	    if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($global);
-		    $entity->setProcessType('Payment');
             if($global->getMainApp()->getSlug() == 'miss'){
 	            $entity->setProcessHead('medicine');
 	            $entity->setCompanyName($entity->getMedicineVendor()->getCompanyName());
@@ -138,7 +137,7 @@ class AccountPurchaseController extends Controller
 	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
 	            $entity->setAccountVendor($entity->getAccountVendor());
             }
-            if($entity->getPayment() < 0){
+            if($entity->getPayment() < 0 or $entity->getProcessType() == "Outstanding"){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
 	            $entity->setProcessType('Opening');
@@ -320,7 +319,7 @@ class AccountPurchaseController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
-	        if(in_array($entity->getProcessHead(),array( 'Due Payment','Advance'))){
+	        if(empty($entity->getTransactionMethod()) and in_array($entity->getProcessType(),array( 'Due','Advance'))){
 		        $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 		        $entity->setTransactionMethod($method);
 	        }
@@ -334,7 +333,6 @@ class AccountPurchaseController extends Controller
 		        $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
 		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
 	        }
-
             return new Response('success');
         } else {
             return new Response('failed');

@@ -270,13 +270,10 @@ class InvoiceTransactionRepository extends EntityRepository
 
     public function hmsSalesTransactionReverse(Invoice $entity)
     {
-
         $em = $this->_em;
-
         if(!empty($entity->getAccountSales())){
             /* @var AccountSales $sales*/
             foreach ($entity->getAccountSales() as $sales ){
-
                 $globalOption = $sales->getGlobalOption()->getId();
                 $accountRefNo = $sales->getAccountRefNo();
                 $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
@@ -285,15 +282,17 @@ class InvoiceTransactionRepository extends EntityRepository
                 $accountCash->execute();
             }
         }
-
         $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.hmsInvoices = '.$entity->getId());
         if(!empty($accountCash)){
             $accountCash->execute();
         }
-
-        $transaction = $em->createQuery('DELETE HospitalBundle:InvoiceTransaction e WHERE e.hmsInvoice = '.$entity->getId());
-        if(!empty($transaction)) {
-            $transaction->execute();
+        $docter = $em->createQuery('DELETE HospitalBundle:InvoiceTransaction e WHERE e.hmsInvoice = '.$entity->getId());
+        if(!empty( $docter)){
+            $docter->execute();
+        }
+        $docter = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hmsInvoice = '.$entity->getId());
+        if(!empty( $docter)){
+            $docter->execute();
         }
     }
 
@@ -314,12 +313,10 @@ class InvoiceTransactionRepository extends EntityRepository
                 $accountCash->execute();
             }
         }
-
         $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.hmsInvoices = '.$entity->getId());
         if(!empty($accountCash)){
             $accountCash->execute();
         }
-
         $qb = $this->createQueryBuilder('it');
         $q = $qb->update()
             ->set('it.process', $qb->expr()->literal('In-progress'))

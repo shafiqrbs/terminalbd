@@ -46,14 +46,17 @@ class DoctorInvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->doctorInvoiceLists($user,$data);
         $pagination = $this->paginate($entities);
+        if(!empty($data['created'])){
+            $datetime = new \DateTime($data['created']);
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
         $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);
         $invoiceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithOverview($user,$data);
-
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
         return $this->render('HospitalBundle:DoctorInvoice:index.html.twig', array(
             'entities' => $pagination,

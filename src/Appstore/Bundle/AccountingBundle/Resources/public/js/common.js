@@ -67,6 +67,24 @@ function CommonJs(){
 
     });
 
+    $(document).on("change", ".vendor-ledger-medicine", function() {
+
+        var vendor = $(this).val();
+        $.get( Routing.generate('account_single_vendor_ledger'),{ vendor:vendor,'type':'medicine'} )
+            .done(function( data ) {
+                $('#outstanding').html(data);
+            });
+    });
+
+    $(document).on("change", ".vendor-ledger-inventory", function() {
+
+        var vendor = $(this).val();
+        $.get( Routing.generate('account_single_vendor_ledger'),{ vendor:vendor,'type':'inventory'} )
+            .done(function( data ) {
+                $('#outstanding').html(data);
+            });
+    });
+
     $(document).on("change", ".vendor-ledger-business", function() {
 
         var vendor = $(this).val();

@@ -31,9 +31,9 @@ class AccountPurchaseType extends AbstractType
     {
         $builder
 
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount BDT'),
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add payment amount BDT'))
+                    new NotBlank(array('message'=>'Please add payment amount'))
 
             )))
             ->add('transactionMethod', 'entity', array(
@@ -42,9 +42,6 @@ class AccountPurchaseType extends AbstractType
                 'empty_value' => '---Choose a transaction method---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -98,7 +95,7 @@ class AccountPurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
                 'empty_value' => '---Choose a vendor company---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap vendor-ledger-medicine select2'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -116,7 +113,7 @@ class AccountPurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
                 'empty_value' => '---Choose a vendor company---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 select2 m-wrap vendor-ledger-inventory'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -132,7 +129,7 @@ class AccountPurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor company---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 select2 vendor-ledger-business'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),

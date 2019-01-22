@@ -108,11 +108,13 @@ class InvoiceRepository extends EntityRepository
 
     public function handleDateRangeFind($qb,$data)
     {
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
         if(empty($data)){
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
             $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        }else{
+        }elseif($startDate){
             $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
             $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
         }
