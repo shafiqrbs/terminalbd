@@ -53,7 +53,7 @@ class InvoiceController extends Controller
         $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','diagnostic');
 
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
 
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(
             'entities' => $pagination,
@@ -478,6 +478,8 @@ class InvoiceController extends Controller
         ));
 
     }
+
+
 
     public function deleteEmptyInvoiceAction()
     {

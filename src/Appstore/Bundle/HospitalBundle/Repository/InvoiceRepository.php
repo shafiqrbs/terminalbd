@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
@@ -289,14 +290,13 @@ class InvoiceRepository extends EntityRepository
         return  $qb;
     }
 
-
     public function doctorInvoiceLists(User $user,$data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
-
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Done') ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $qb->getQuery();
@@ -423,6 +423,14 @@ class InvoiceRepository extends EntityRepository
         $em->persist($invoice);
         $em->flush($invoice);
 
+    }
+
+    public function updateProcess(HmsInvoiceReturn $invoice)
+    {
+        $entity = $invoice->getHmsInvoice();
+        $entity->setProcess('Returned');
+        $this->_em->persist($entity);
+        $this->_em->flush();
     }
 
     public function patientAdmissionUpdate($data,Invoice $entity)

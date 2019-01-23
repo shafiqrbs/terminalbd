@@ -147,7 +147,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% set processArr = {'In-progress':'In-progress'} %}
+                                {% set processIntArr = ['Created','Pending','Revised','In-progress'] %}
+                                {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due' ,'Paid':'Paid'} %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
@@ -161,16 +163,15 @@
                                         <td class="numeric" >{{ entity.paymentStatus }}</td>
                                         <td class="numeric" >
                                             {% if entity.revised == 1 %}
-                                                <a href="{{ path('hms_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
+                                                <a target="_blank" href="{{ path('hms_invoice_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
+                                            {% elseif entity.process == 'Returned' %}
+                                               <span class="btn mini yellow">{{ entity.process }}</span>
                                             {% else %}
                                                 {{ entity.process }}
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% set processArr = {'In-progress':'In-progress'} %}
-                                                {% set processIntArr = ['Created','Pending','Revised','In-progress'] %}
-                                                {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due' ,'Paid':'Paid'} %}
                                                 {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
                                                     <a href="{{ path('hms_invoice_confirm', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-refresh"></i> Process</a>
                                                 {% endif %}
@@ -183,7 +184,10 @@
                                                 {% endif %}
                                                 <a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn mini purple"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>
                                                 {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y')) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
-                                                    <a href="{{ path('hms_invoice_reverse', { 'invoice': entity.invoice }) }}" class="btn red mini"><i class="icon-retweet"></i> Revise</a>
+                                                    <a href="{{ path('hms_invoice_reverse', { 'invoice': entity.invoice }) }}" class="btn red mini tooltips" data-trigger = "hover" data-original-title = "Revised" ><i class="icon-retweet"></i> Revise</a>
+                                                {% endif %}
+                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') != "now"|date('d-m-Y')) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process != 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
+                                                    <a href="{{ path('hms_invoicereturn_create', { 'invoice': entity.invoice }) }}" class="btn red mini tooltips" data-trigger = "hover" data-original-title = "Return" ><i class="icon-random"></i></a>
                                                 {% endif %}
                                             </div>
                                         </td>

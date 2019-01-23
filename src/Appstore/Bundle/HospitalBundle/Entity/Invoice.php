@@ -5,7 +5,6 @@ namespace Appstore\Bundle\HospitalBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -92,6 +91,11 @@ class Invoice
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoiceCabin", cascade={"persist"}  )
      **/
     private  $cabin;
+
+   /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn", mappedBy="hmsInvoice", cascade={"remove"})
+     **/
+    private  $hmsInvoiceReturn;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="hmsInvoices", cascade={"persist"}  )
@@ -1318,6 +1322,14 @@ class Invoice
     public function setDiscountType(string $discountType)
     {
         $this->discountType = $discountType;
+    }
+
+    /**
+     * @return HmsInvoiceReturn
+     */
+    public function getHmsInvoiceReturn()
+    {
+        return $this->hmsInvoiceReturn;
     }
 
 

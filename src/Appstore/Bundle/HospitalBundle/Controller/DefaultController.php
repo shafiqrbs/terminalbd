@@ -30,18 +30,20 @@ class DefaultController extends Controller
         $salesTodayTransactionOverview           = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic','admission'));
         $salesTodaySalesCommission           = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionSummary($user,$data);
         $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic','admission'));
+        $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->getInvoiceReturnAmount($user,$data);
 
         return $this->render('HospitalBundle:Default:dashboard.html.twig', array(
-            'option'                    => $user->getGlobalOption() ,
-            'globalOption'              => $globalOption,
-            'salesTodayTransactionOverview' => $salesTodayTransactionOverview,
-            'salesTodaySalesCommission' => $salesTodaySalesCommission,
-            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
-            'transactionCashOverviews' => $transactionCashOverview,
-            'expenditureOverview'       => $expenditureOverview ,
-            'salesCashOverview'         => $salesCashOverview ,
-            'purchaseCashOverview'      => $purchaseCashOverview ,
-            'searchForm'                => $data ,
+            'option'                            => $user->getGlobalOption() ,
+            'globalOption'                      => $globalOption,
+            'salesTodayTransactionOverview'     => $salesTodayTransactionOverview,
+            'salesTodaySalesCommission'         => $salesTodaySalesCommission,
+            'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
+            'transactionCashOverviews'          => $transactionCashOverview,
+            'expenditureOverview'               => $expenditureOverview ,
+            'salesCashOverview'                 => $salesCashOverview ,
+            'invoiceReturn'                     => $invoiceReturn ,
+            'purchaseCashOverview'              => $purchaseCashOverview ,
+            'searchForm'                        => $data ,
         ));
 
     }

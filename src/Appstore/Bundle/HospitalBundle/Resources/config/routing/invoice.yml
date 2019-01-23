@@ -62,6 +62,10 @@ hms_invoice_reverse:
     path:     /{invoice}/invoice-reverse-create
     defaults: { _controller: "HospitalBundle:Invoice:diagnoesticInvoiceReverse" }
 
+hms_invoice_return:
+    path:     /{invoice}/invoice-return
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceReturn" }
+
 hms_invoice_reverse_show:
     path:     /{id}/invoice-reverse-show
     defaults: { _controller: "HospitalBundle:Invoice:InvoiceReverseShow" }

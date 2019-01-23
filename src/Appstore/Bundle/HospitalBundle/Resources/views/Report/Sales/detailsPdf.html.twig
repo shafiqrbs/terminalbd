@@ -75,7 +75,6 @@
           {% endfor %}
           <th>Comm.</th>
           <th >Balance</th>
-          <th >Report</th>
       </tr>
       </thead>
       <tbody>
@@ -110,7 +109,6 @@
               {% endfor %}
               <td  >{{ entity.commission }}</td>
               <td  >{{ (entity.total - entity.commission)|number_format }}</td>
-              <td  > {{ entity.process }}</td>
           </tr>
       {% endfor %}
       </tbody>
@@ -126,7 +124,6 @@
           {% endfor %}
           <td>{{ grandCommission }}</td>
           <td>{{ grandTotal - grandCommission }}</td>
-          <td></td>
       </tr>
       </tfoot>
   </table>

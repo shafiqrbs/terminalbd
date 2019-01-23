@@ -33,6 +33,11 @@ class HospitalConfig
      **/
     private $hmsInvoices;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn", mappedBy="hospitalConfig")
+     **/
+    private $hmsInvoiceReturns;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsStockOut", mappedBy="hospitalConfig")
      **/
@@ -1146,6 +1151,14 @@ class HospitalConfig
     public function setPrintReportTopMargin($printReportTopMargin)
     {
         $this->printReportTopMargin = $printReportTopMargin;
+    }
+
+    /**
+     * @return HmsInvoiceReturn
+     */
+    public function getHmsInvoiceReturns()
+    {
+        return $this->hmsInvoiceReturns;
     }
 
 

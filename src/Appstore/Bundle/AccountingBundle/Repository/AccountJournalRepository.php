@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
+use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
 use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
@@ -350,7 +351,6 @@ class AccountJournalRepository extends EntityRepository
 
 	}
 
-
 	public function insertMedicineAccountSalesReturn(MedicineSalesReturn $salesReturn)
 	{
 		$global = $salesReturn->getMedicineConfig()->getGlobalOption();
@@ -381,6 +381,41 @@ class AccountJournalRepository extends EntityRepository
 		$this->_em->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
 		return $entity->getAccountRefNo();
 
+	}
+
+	public function hmsReturnInvoice(HmsInvoiceReturn $salesReturn)
+	{
+		$global = $salesReturn->getHospitalConfig()->getGlobalOption();
+		$sales = $salesReturn->getHmsInvoice();
+
+		$accountSales = new AccountJournal();
+		$accountSales->setGlobalOption($global);
+
+        $journalSource = "Sales-Return-{$sales->getId()}";
+		$remark = "Diagnostic-Invoice ID: {$sales->getInvoice()}, " .$salesReturn->getRemark();
+
+		$entity = new AccountJournal();
+		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(31);
+		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+
+     	$entity->setTransactionType('Credit');
+		$entity->setAmount($salesReturn->getAmount());
+		$entity->setTransactionMethod($transaction);
+		$entity->setApprovedBy($salesReturn->getCreatedBy());
+		$entity->setCreatedBy($salesReturn->getCreatedBy());
+		$entity->setGlobalOption($salesReturn->getCreatedBy()->getGlobalOption());
+		$entity->setAccountHeadCredit($accountHeadCredit);
+		$entity->setAccountHeadDebit($accountCashHead);
+		$entity->setToUser($salesReturn->getCreatedBy());
+		$entity->setJournalSource($journalSource);
+		$entity->setRemark($remark);
+		$entity->setProcess('approved');
+		$this->_em->persist($entity);
+		$this->_em->flush();
+		$this->_em->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity);
+		$this->_em->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
+		return $entity->getAccountRefNo();
 	}
 
 	public function insertAccountBusinessPurchaseJournal(BusinessPurchase $purchase)

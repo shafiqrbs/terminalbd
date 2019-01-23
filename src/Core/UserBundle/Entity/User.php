@@ -13,6 +13,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
+use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
@@ -631,6 +632,15 @@ class User extends BaseUser
 	 */
 	protected $hmsInvoiceApprovedBy;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $hmsInvoiceReturnCreatedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn", mappedBy="approvedBy" , cascade={"persist", "remove"})
+	 */
+	protected $hmsInvoiceReturnApprovedBy;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particularDeliveredBy" , cascade={"persist", "remove"})
@@ -1731,6 +1741,22 @@ class User extends BaseUser
 	public function getAccountCashes() {
 		return $this->accountCashes;
 	}
+
+    /**
+     * @return HmsInvoiceReturn
+     */
+    public function getHmsInvoiceReturnCreatedBy()
+    {
+        return $this->hmsInvoiceReturnCreatedBy;
+    }
+
+    /**
+     * @return HmsInvoiceReturn
+     */
+    public function getHmsInvoiceReturnApprovedBy()
+    {
+        return $this->hmsInvoiceReturnApprovedBy;
+    }
 
 
 }

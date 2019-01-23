@@ -145,13 +145,12 @@ class ReportController extends Controller
         header('Content-Disposition: attachment; filename="'.$date.'"');
         echo $pdf;
         return new Response('');
-
     }
 
+    public function referredCommissionAction()
+    {
 
-
-
-
+    }
 
 }
 
