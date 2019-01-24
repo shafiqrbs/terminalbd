@@ -43,7 +43,6 @@
                                 </a>
                             </div>
                         </div>
-
                     </div>
                     <div class="portlet-body flip-scroll">
                         {% include('flash-message.html.twig')  %}
@@ -73,7 +72,7 @@
 
                                     <div class="span3">
                                         <div class="input-append span11">
-                                            <input style="padding-left: 15px" class="m-wrap span10 search-input dateCalendar" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.deliveryDate is defined %}{{ searchForm.created }}{% else %} Date{% endif %}">
+                                            <input style="padding-left: 15px" class="m-wrap span10 search-input dateCalendar" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="Date">
                                             <div class="btn-group">
                                                 <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                             </div>

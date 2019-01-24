@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Core\UserBundle\Entity\User;
@@ -51,7 +52,6 @@ class InvoiceTransactionRepository extends EntityRepository
             }
 
         }elseif ($previous == 'false'){
-
             if (!empty($data['startDate'])) {
                 $compareTo = new \DateTime($data['startDate']);
                 $startDate =  $compareTo->format('Y-m-d 00:00:00');
@@ -68,8 +68,8 @@ class InvoiceTransactionRepository extends EntityRepository
                 $qb->andWhere("it.updated <= :endDate");
                 $qb->setParameter('endDate', $endDate);
             }
-
         }
+
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode IN (:modes)')->setParameter('modes', $modes);
         }
@@ -441,5 +441,37 @@ class InvoiceTransactionRepository extends EntityRepository
         }
         return $lastCode;
     }
+
+    public function monthlySales(User $user , $data =array())
+    {
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+
+        $sql = "SELECT DATE_FORMAT(transaction.updated,'%d-%m-%Y') as date ,SUM(transaction.total) as total,SUM(transaction.payment) as receive, (SUM(transaction.total) - SUM(transaction.payment)) as due
+                FROM hms_invoice_transaction as transaction
+                INNER JOIN hms_invoice as invoice ON transaction.hmsInvoice_id = invoice.id
+                WHERE invoice.hospitalConfig_id = :hmsConfig AND transaction.process = :process AND MONTHNAME(transaction.updated) =:month AND YEAR(transaction.updated) =:year
+                GROUP BY date";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('hmsConfig', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+           $arrays[$result['date']] = $result;
+        }
+        return $arrays;
+
+
+    }
+
+
 
 }

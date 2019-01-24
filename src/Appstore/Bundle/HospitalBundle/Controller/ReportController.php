@@ -33,30 +33,31 @@ class ReportController extends Controller
 
         $user = $this->getUser();
 
-        $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data);
-        $salesTodayTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic','admission'));
-        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic','admission'));
-        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,'diagnostic');
-        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,'admission');
-        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
-        $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user,$data);
-        $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user,$data);
+        $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data);
+        $salesTodayTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'false', array('diagnostic', 'admission'));
+        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'true', array('diagnostic', 'admission'));
+        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'diagnostic');
+        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'admission');
+        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user, $data);
+        $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user, $data);
+        $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user, $data);
 
         return $this->render('HospitalBundle:Report:salesSumary.html.twig', array(
 
-            'salesTotalTransactionOverview'      => $salesTotalTransactionOverview,
-            'salesTodayTransactionOverview'      => $salesTodayTransactionOverview,
+            'salesTotalTransactionOverview' => $salesTotalTransactionOverview,
+            'salesTodayTransactionOverview' => $salesTodayTransactionOverview,
             'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
-            'diagnosticOverview'            => $diagnosticOverview,
-            'admissionOverview'             => $admissionOverview,
-            'serviceOverview'               => $serviceOverview,
-            'transactionOverview'           => $transactionOverview,
-            'commissionOverview'            => $commissionOverview,
-            'searchForm'                    => $data,
+            'diagnosticOverview' => $diagnosticOverview,
+            'admissionOverview' => $admissionOverview,
+            'serviceOverview' => $serviceOverview,
+            'transactionOverview' => $transactionOverview,
+            'commissionOverview' => $commissionOverview,
+            'searchForm' => $data,
 
         ));
 
     }
+
     public function serviceBaseSummaryAction()
     {
 
@@ -65,16 +66,16 @@ class ReportController extends Controller
 
         $user = $this->getUser();
         $entity = '';
-        if(!empty($data) and $data['service']){
+        if (!empty($data) and $data['service']) {
             $entity = $em->getRepository('HospitalBundle:Service')->find($data['service']);
         }
-        $services = $em->getRepository('HospitalBundle:Service')->findBy(array(),array('name'=>'ASC'));
-        $serviceGroup = $em->getRepository('HospitalBundle:InvoiceParticular')->serviceParticularDetails($user,$data);
+        $services = $em->getRepository('HospitalBundle:Service')->findBy(array(), array('name' => 'ASC'));
+        $serviceGroup = $em->getRepository('HospitalBundle:InvoiceParticular')->serviceParticularDetails($user, $data);
         return $this->render('HospitalBundle:Report:serviceBaseSales.html.twig', array(
-            'serviceGroup'          => $serviceGroup,
-            'services'              => $services,
-            'entity'                => $entity,
-            'searchForm'            => $data,
+            'serviceGroup' => $serviceGroup,
+            'services' => $services,
+            'entity' => $entity,
+            'searchForm' => $data,
         ));
     }
 
@@ -85,21 +86,19 @@ class ReportController extends Controller
 
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        if(empty($data['created'])){
+        if (empty($data['created'])) {
             $datetime = new \DateTime("now");
             $data['created'] = $datetime->format('Y-m-d');
         }
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'diagnostic' , $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists($user, $mode = 'diagnostic', $data);
         $pagination = $entities->getQuery()->getResult();
-        $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommissionSummary($hospital , $entities);
-        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommission($hospital , $entities);
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
-        $commissionEntity = $this->getDoctrine()->getRepository('HospitalBundle:HmsCommission')->findBy(array('hospitalConfig'=>$hospital));
+        $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommissionSummary($hospital, $entities);
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommission($hospital, $entities);
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(5, 6));
         return $this->render('HospitalBundle:Report/Sales:details.html.twig', array(
             'entities' => $pagination,
             'commissions' => $commissions,
             'commissionSummary' => $commissionSummary,
-            'commissionEntity' => $commissionEntity,
             'referredDoctors' => $referredDoctors,
             'searchForm' => $data,
         ));
@@ -115,23 +114,21 @@ class ReportController extends Controller
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $datetime = new \DateTime("now");
-        if(empty($data['created'])){
+        if (empty($data['created'])) {
             $data['created'] = $datetime->format('Y-m-d');
         }
 
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'diagnostic' , $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists($user, $mode = 'diagnostic', $data);
         $pagination = $entities->getQuery()->getResult();
-        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommission($hospital , $entities);
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
-        $commissionEntity = $this->getDoctrine()->getRepository('HospitalBundle:HmsCommission')->findBy(array('hospitalConfig'=>$hospital));
-        $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommissionSummary($hospital , $entities);
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommission($hospital, $entities);
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(6));
+        $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommissionSummary($hospital, $entities);
         $html = $this->renderView(
             'HospitalBundle:Report/Sales:detailsPdf.html.twig', array(
                 'globalOption' => $user->getGlobalOption(),
                 'entities' => $pagination,
                 'commissionSummary' => $commissionSummary,
                 'commissions' => $commissions,
-                'commissionEntity' => $commissionEntity,
                 'referredDoctors' => $referredDoctors,
                 'searchForm' => $data,
             )
@@ -139,18 +136,216 @@ class ReportController extends Controller
         $date = $datetime->format('d-m-y');
         $date = "{$date}-daily-sales.pdf";
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
         header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$date.'"');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
         echo $pdf;
         return new Response('');
     }
 
-    public function referredCommissionAction()
+    public function monthlyCashAction()
     {
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $monthlySales = $em->getRepository('HospitalBundle:InvoiceTransaction')->monthlySales($user, $data);
+        $monthlyCommissionSales = $em->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommission($user, $data);
+        $monthlySalesReturns = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->monthlySalesReturn($user, $data);
+        $monthlyExpenditures = $em->getRepository('AccountingBundle:Expenditure')->monthlyExpenditure($user, $data);
+
+        return $this->render('HospitalBundle:Report:monthlyCash.html.twig', array(
+            'monthlySales' => $monthlySales,
+            'monthlyCommissionSales' => $monthlyCommissionSales,
+            'monthlySalesReturns' => $monthlySalesReturns,
+            'monthlyExpenditures' => $monthlyExpenditures,
+            'searchForm' => $data
+        ));
+    }
+
+    public function monthlyCashPdfAction()
+    {
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        if (empty($data['month']) and empty($data['year'])) {
+            $data = array();
+        }
+        $monthlySales = $em->getRepository('HospitalBundle:InvoiceTransaction')->monthlySales($user, $data);
+        $monthlyCommissionSales = $em->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommission($user, $data);
+        $monthlySalesReturns = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->monthlySalesReturn($user, $data);
+        $monthlyExpenditures = $em->getRepository('AccountingBundle:Expenditure')->monthlyExpenditure($user, $data);
+        $html = $this->renderView(
+            'HospitalBundle:Report:monthlyCashPdf.html.twig', array(
+                'globalOption' => $user->getGlobalOption(),
+                'monthlySales' => $monthlySales,
+                'monthlyCommissionSales' => $monthlyCommissionSales,
+                'monthlySalesReturns' => $monthlySalesReturns,
+                'monthlyExpenditures' => $monthlyExpenditures,
+                'searchForm' => $data,
+            )
+        );
+        $datetime = new \DateTime("now");
+        $monthYear = $datetime->format('m-Y');
+        $month = !empty($data['month']) ? $data['month'] : '';
+        $year = !empty($data['year']) ? $data['year'] : '';
+        if (!empty($month) and !empty($year)) {
+            $monthYear = $month . '-' . $year;
+        }
+        $date = 'monthly-statement-' . $monthYear;
+        $date = "{$date}.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
 
     }
 
+    public function monthlyCommissionAction()
+    {
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommissionGroup($user, $data);
+        $commissionEntity = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyGroupBaseCommissionSummary($user, $data);
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($user->getGlobalOption()->getHospitalConfig(), array(5, 6));
+        return $this->render('HospitalBundle:Report:monthlyCommission.html.twig', array(
+            'referredDoctors' => $referredDoctors,
+            'commissions' => $commissions,
+            'commissionEntity' => $commissionEntity,
+            'searchForm' => $data
+        ));
+    }
+
+    public function monthlyCommissionPdfAction()
+    {
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        if (empty($data['month']) and empty($data['year'])) {
+            $data = array();
+        }
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommissionGroup($user, $data);
+        $commissionEntity = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyGroupBaseCommissionSummary($user, $data);
+        $html = $this->renderView(
+            'HospitalBundle:Report:monthlyCommissionPdf.html.twig', array(
+                'globalOption' => $user->getGlobalOption(),
+                'commissions' => $commissions,
+                'commissionEntity' => $commissionEntity,
+                'searchForm' => $data
+            )
+        );
+        $datetime = new \DateTime("now");
+        $monthYear = $datetime->format('m-Y');
+        $month = !empty($data['month']) ? $data['month'] : '';
+        $year = !empty($data['year']) ? $data['year'] : '';
+        if (!empty($month) and !empty($year)) {
+            $monthYear = $month . '-' . $year;
+        }
+        $date = 'monthly-commission-statement-' . $monthYear;
+        $date = "{$date}.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
+    }
+
+    public function monthlyCommissionDetailsAction()
+    {
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommissionDetails($user, $data);
+        $monthlyReferredCommissionInvoice = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyReferredCommissionInvoice($user, $data);
+        $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyGroupBaseCommissionSummary($user, $data);
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($user->getGlobalOption()->getHospitalConfig(), array(5, 6));
+        return $this->render('HospitalBundle:Report:monthlyCommissionDetails.html.twig', array(
+            'referredInvoice' => $monthlyReferredCommissionInvoice,
+            'referredDoctors' => $referredDoctors,
+            'commissions' => $commissions,
+            'commissionSummary' => $commissionSummary,
+            'searchForm' => $data
+        ));
+    }
+
+    public function monthlyCommissionDetailsPdfAction()
+    {
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        if (empty($data['month']) and empty($data['year'])) {
+            $data = array();
+        }
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommissionGroup($user, $data);
+        $commissionEntity = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyGroupBaseCommissionSummary($user, $data);
+        $html = $this->renderView(
+            'HospitalBundle:Report:monthlyCommissionPdf.html.twig', array(
+                'globalOption' => $user->getGlobalOption(),
+                'commissions' => $commissions,
+                'commissionEntity' => $commissionEntity,
+                'searchForm' => $data
+            )
+        );
+        $datetime = new \DateTime("now");
+        $monthYear = $datetime->format('m-Y');
+        $month = !empty($data['month']) ? $data['month'] : '';
+        $year = !empty($data['year']) ? $data['year'] : '';
+        if (!empty($month) and !empty($year)) {
+            $monthYear = $month . '-' . $year;
+        }
+        $date = 'monthly-commission-statement-' . $monthYear;
+        $date = "{$date}.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
+    }
+
+    public function commissionGroupAction()
+    {
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->commissionGroup($user, $data);
+        $referreds = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->commissionReferred($user, $data);
+        return $this->render('HospitalBundle:Report:commissionSummary.html.twig', array(
+            'commissions' => $commissions,
+            'referreds' => $referreds,
+            'searchForm' => $data
+        ));
+    }
+
+    public function commissionGroupPdfAction()
+    {
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->commissionGroup($user, $data);
+        $referreds = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->commissionReferred($user, $data);
+        $html = $this->renderView('HospitalBundle:Report:commissionSummaryPdf.html.twig', array(
+            'globalOption' => $user->getGlobalOption(),
+            'commissions' => $commissions,
+            'referreds' => $referreds,
+            'searchForm' => $data
+        ));
+        $datetime = new \DateTime("now");
+        $monthYear = $datetime->format('d-m-Y');
+        $date = 'commission-summary-report'. $monthYear;
+        $date = "{$date}.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
+    }
 }
 

@@ -14,7 +14,36 @@ hms_report_sales_service:
     path:     /service-wise-sales
     defaults: { _controller: "HospitalBundle:Report:serviceBaseSummary" }
 
-hms_report_purchase_summary:
-    path:     /purchase-summary
-    defaults: { _controller: "HospitalBundle:Report:purchaseSummary" }
+hms_report_monthly_cash:
+    path:     /monthly-cash
+    defaults: { _controller: "HospitalBundle:Report:monthlyCash" }
+
+hms_report_monthly_cash_pdf:
+    path:     /monthly-cash-pdf
+    defaults: { _controller: "HospitalBundle:Report:monthlyCashPdf" }
+
+hms_report_monthly_commission:
+    path:     /monthly-commission
+    defaults: { _controller: "HospitalBundle:Report:monthlyCommission" }
+
+hms_report_monthly_commission_pdf:
+    path:     /monthly-commission-pdf
+    defaults: { _controller: "HospitalBundle:Report:monthlyCommissionPdf" }
+
+hms_report_monthly_referred_commission:
+    path:     /monthly-commission-details
+    defaults: { _controller: "HospitalBundle:Report:monthlyCommissionDetails" }
+
+hms_report_monthly_referred_commission_pdf:
+    path:     /monthly-commission-details-pdf
+    defaults: { _controller: "HospitalBundle:Report:monthlyCommissionDetailsPdf" }
+
+hms_report_commission_group:
+    path:     /commission-group
+    defaults: { _controller: "HospitalBundle:Report:commissionGroup" }
+
+hms_report_commission_group_pdf:
+    path:     /commission-group-pdf
+    defaults: { _controller: "HospitalBundle:Report:commissionGroupPdf" }
+
 

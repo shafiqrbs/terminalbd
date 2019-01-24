@@ -144,6 +144,7 @@ class DoctorInvoiceRepository extends EntityRepository
         $qb->innerJoin('e.assignDoctor','referred');
         $qb->where('i.id IN (:invoices)');
         $qb->setParameter('invoices',$ids);
+        $qb->andWhere("e.process = :process")->setParameter('process','Paid');
         $qb->groupBy('particular.id,i.id,referred.id');
         $result = $qb->getQuery()->getArrayResult();
         $resDatas = array();
@@ -169,10 +170,240 @@ class DoctorInvoiceRepository extends EntityRepository
         $qb->innerJoin('e.hmsCommission','particular');
         $qb->where('i.id IN (:invoices)');
         $qb->setParameter('invoices',$ids);
+        $qb->andWhere("e.process = :process")->setParameter('process','Paid');
         $qb->groupBy('particular.name');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
     }
+
+    public function monthlyCommission(User $user , $data =array())
+    {
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(transaction.updated,'%d-%m-%Y') as date,SUM(transaction.payment) as payment
+                FROM hms_doctor_invoice as transaction
+                WHERE transaction.hospitalConfig_id = :hmsConfig AND transaction.process = :process AND MONTHNAME(transaction.updated) =:month AND YEAR(transaction.updated) =:year
+                GROUP BY date";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('hmsConfig', $config);
+        $stmt->bindValue('process', 'Paid');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+            $arrays[$result['date']] = $result;
+        }
+        return $arrays;
+    }
+
+    public function monthlyGroupBaseCommissionSummary(User $user , $data)
+    {
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $referred = isset($data['referred'])? $data['referred'] :'';
+        $referredSql = "";
+        if(!empty($referred)){
+            $referredSql = "AND transaction.assignDoctor_id = :referred";
+        }
+        $sql = "SELECT SUM(transaction.payment) as payment, commission.name as commissionName, commission.id as commissionId
+                FROM hms_doctor_invoice as transaction
+                INNER JOIN hms_commission as commission ON transaction.hmsCommission_id = commission.id
+                WHERE transaction.hospitalConfig_id = :hmsConfig AND transaction.process = :process AND MONTHNAME(transaction.updated) =:month AND YEAR(transaction.updated) =:year
+                {$referredSql} GROUP BY commissionName ";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('hmsConfig', $config);
+        $stmt->bindValue('process', 'Paid');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        if(!empty($referred)) {
+            $stmt->bindValue('referred',$referred);
+        }
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        return $results;
+
+    }
+
+    public function monthlyCommissionGroup(User $user , $data =array())
+    {
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $referred = isset($data['referred'])? $data['referred'] :'';
+        $referredSql = "";
+        if(!empty($referred)){
+         $referredSql = "AND transaction.assignDoctor_id = :referred";
+        }
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(transaction.updated,'%d-%m-%Y') as date,SUM(transaction.payment) as payment, commission.name as commissionName, commission.id as commissionId
+                FROM hms_doctor_invoice as transaction
+                INNER JOIN hms_commission as commission ON transaction.hmsCommission_id = commission.id
+                WHERE transaction.hospitalConfig_id = :hmsConfig AND transaction.process = :process AND MONTHNAME(transaction.updated) = :month AND YEAR(transaction.updated) =:year
+                {$referredSql} GROUP BY date , commissionName ";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('hmsConfig', $config);
+        $stmt->bindValue('process', 'Paid');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        if(!empty($referred)) {
+            $stmt->bindValue('referred',$referred);
+        }
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $row){
+            $uniqueId = $row['date'].'-'.$row['commissionId'];
+            $arrays[$uniqueId]= $row;
+        }
+        return $arrays;
+    }
+
+    public function monthlyReferredCommissionInvoice(User $user , $data =array()){
+        $this->_em;
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $month = isset($data['month'])? $data['month'] : '';
+        $year = isset($data['year'])? $data['year'] : '';
+        $referred = isset($data['referred'])? $data['referred'] :'';
+        if(empty($month) and empty($year)){
+            $datetime = new \DateTime();
+            $startDate = $datetime->format('Y-m-01 00:00:00');
+            $endDate = $datetime->format('Y-m-t 23:59:59');
+        }else{
+            $date = $year.'-'.$month.'-01';
+            $datetime = new \DateTime($date);
+            $startDate = $datetime->format('Y-m-01 00:00:00');
+            $endDate = $datetime->format('Y-m-t 23:59:59');
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.updated as created,i.id as invoiceId,i.invoice as invoice,i.created as invoiceDate,c.name as customerName ');
+        $qb->innerJoin('e.hmsInvoice','i');
+        $qb->innerJoin('i.customer','c');
+        $qb->innerJoin('e.assignDoctor','referred');
+        $qb->where('e.hospitalConfig = :config')->setParameter('config',$config);
+        $qb->andWhere("e.updated >= :startDate")->setParameter('startDate',$startDate);
+        $qb->andWhere("e.updated <= :endDate")->setParameter('endDate',$endDate);
+        $qb->andWhere("e.process = :process")->setParameter('process','Paid');
+        $qb->andWhere('referred.id = :assign');
+        $qb->setParameter('assign',$referred);
+        $qb->groupBy('i.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function monthlyCommissionDetails($user,$data)
+    {
+        $this->_em;
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $month = isset($data['month'])? $data['month'] : '';
+        $year = isset($data['year'])? $data['year'] : '';
+        $referred = isset($data['referred'])? $data['referred'] :'';
+        if(empty($month) and empty($year)){
+            $datetime = new \DateTime();
+            $startDate = $datetime->format('Y-m-01 00:00:00');
+            $endDate = $datetime->format('Y-m-t 23:59:59');
+        }else{
+            $date = $year.'-'.$month.'-01';
+            $datetime = new \DateTime($date);
+            $startDate = $datetime->format('Y-m-01 00:00:00');
+            $endDate = $datetime->format('Y-m-t 23:59:59');
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.updated as created , i.id as invoiceId , referred.name as referredName,  particular.id as commissionId');
+        $qb->addSelect('SUM(e.payment) as payment');
+        $qb->innerJoin('e.hmsInvoice','i');
+        $qb->innerJoin('e.hmsCommission','particular');
+        $qb->innerJoin('e.assignDoctor','referred');
+        $qb->where('e.hospitalConfig = :config')->setParameter('config',$config);
+        $qb->andWhere("e.updated >= :startDate")->setParameter('startDate',$startDate);
+        $qb->andWhere("e.updated <= :endDate")->setParameter('endDate',$endDate);
+        $qb->andWhere("e.process = :process")->setParameter('process','Paid');
+        $qb->andWhere('referred.id = :assign')->setParameter('assign',$referred);
+        $qb->groupBy('particular.id,i.id');
+        $result = $qb->getQuery()->getArrayResult();
+        $resDatas = array();
+        foreach ($result as $row){
+            $uniqueId = $row['invoiceId'].'-'.$row['commissionId'];
+            $resDatas[$uniqueId]= $row;
+        }
+        return $resDatas;
+
+    }
+
+    public function commissionGroup($user,$data)
+    {
+        $this->_em;
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $startDate = isset($data['startDate'])? $data['startDate'] : '';
+        $endDate = isset($data['endDate'])? $data['endDate'] : '';
+        if(empty($startDate) and empty($endDate)){
+            $datetime = new \DateTime();
+            $startDate = $datetime->format('Y-m-01 00:00:00');
+            $endDate = $datetime->format('Y-m-t 23:59:59');
+        }else{
+            $datetime = new \DateTime($startDate);
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $datetime = new \DateTime($endDate);
+            $endDate = $datetime->format('Y-m-d 23:59:59');
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('particular.name as commissionName');
+        $qb->addSelect('SUM(e.payment) as payment');
+        $qb->innerJoin('e.hmsCommission','particular');
+        $qb->where('e.hospitalConfig = :config');
+        $qb->setParameter('config',$config);
+        $qb->andWhere("e.updated >= :startDate")->setParameter('startDate',$startDate);
+        $qb->andWhere("e.updated <= :endDate")->setParameter('endDate',$endDate);
+        $qb->andWhere("e.process = :process")->setParameter('process','Paid');
+        $qb->groupBy('particular.name');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function commissionReferred($user,$data)
+    {
+        $this->_em;
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $startDate = isset($data['startDate'])? $data['startDate'] : '';
+        $endDate = isset($data['endDate'])? $data['endDate'] : '';
+        if(empty($startDate) and empty($endDate)){
+            $datetime = new \DateTime();
+            $startDate = $datetime->format('Y-m-01 00:00:00');
+            $endDate = $datetime->format('Y-m-t 23:59:59');
+        }else{
+            $datetime = new \DateTime($startDate);
+            $startDate = $datetime->format('Y-m-d 00:00:00');
+            $datetime = new \DateTime($endDate);
+            $endDate = $datetime->format('Y-m-d 23:59:59');
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('particular.name as name , particular.mobile as mobile');
+        $qb->addSelect('SUM(e.payment) as payment');
+        $qb->innerJoin('e.assignDoctor','particular');
+        $qb->where('e.hospitalConfig = :config');
+        $qb->setParameter('config',$config);
+        $qb->andWhere("e.updated >= :startDate")->setParameter('startDate',$startDate);
+        $qb->andWhere("e.updated <= :endDate")->setParameter('endDate',$endDate);
+        $qb->andWhere("e.process = :process")->setParameter('process','Paid');
+        $qb->groupBy('particular.name');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+
 
 }

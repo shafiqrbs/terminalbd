@@ -146,4 +146,33 @@ class HmsInvoiceReturnRepository extends EntityRepository
         $total = !empty($result['total']) ? $result['total'] :0;
         return $total;
     }
+
+    public function monthlySalesReturn(User $user , $data =array())
+    {
+        $config = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(transaction.updated,'%d-%m-%Y') as date,SUM(transaction.amount) as payment
+                FROM hms_invoice_return as transaction
+                WHERE transaction.hospitalConfig_id = :hmsConfig AND transaction.process = :process AND MONTHNAME(transaction.updated) =:month AND YEAR(transaction.updated) =:year
+                GROUP BY date";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('hmsConfig', $config);
+        $stmt->bindValue('process', 'Approved');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+            $arrays[$result['date']] = $result;
+        }
+        return $arrays;
+
+
+    }
+
 }
