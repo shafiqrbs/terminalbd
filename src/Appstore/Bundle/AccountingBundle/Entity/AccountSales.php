@@ -148,21 +148,21 @@ class AccountSales
      *
      * @ORM\Column(name="totalAmount", type="float", nullable=true)
      */
-    private $totalAmount;
+    private $totalAmount = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="amount", type="float" , nullable=true)
      */
-    private $amount;
+    private $amount = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="vat", type="float" , nullable=true)
      */
-    private $vat;
+    private $vat ;
 
 
     /**

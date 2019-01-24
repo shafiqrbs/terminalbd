@@ -33,8 +33,8 @@
                                 {% set referred = searchForm.referred is defined ? searchForm.referred :'' %}
                                 {% set month = searchForm.month is defined ? searchForm.month :"now"|date("M") %}
                                 {% set year = searchForm.year is defined ? searchForm.year :"now"|date("Y") %}
-                                <a class="btn purple" target="_blank" href="{{ path('hms_report_monthly_commission_pdf',{'month':month,'year':year,'referred':referred}) }}" >
-                                    <i class=" icon-download"></i>&nbsp;PDF
+                                <a class="btn purple" target="_blank" href="{{ path('hms_report_monthly_referred_commission_pdf',{'month':month,'year':year,'referred':referred}) }}" >
+                                    <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
                             </div>
                         </div>
@@ -117,6 +117,7 @@
                                    </tr>
                                 {% endfor %}
                                 </tbody>
+                                {% if referredInvoice is not empty %}
                                 <tfoot>
                                 <tr>
                                     <th colspan="4"><span class="pull-right">Grand Total</span></th>
@@ -128,6 +129,7 @@
                                     <th>{{ totalCommission|number_format }}</th>
                                 </tr>
                                 </tfoot>
+                                {% endif %}
                             </table>
                         </div>
                     </div>

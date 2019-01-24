@@ -237,6 +237,7 @@ security:
         - { path: ^/website,            role: ROLE_WEBSITE }
         - { path: ^/appearance/,        role: ROLE_APPEARANCE }
         - { path: ^/finance,            role: ROLE_ACCOUNTING }
+        - { path: ^/accounting,         role: ROLE_ACCOUNTING }
         - { path: ^/hr/employee,        role: ROLE_USER }
         - { path: ^/hr,                 role: ROLE_HR }
         - { path: ^/office,             role: ROLE_OFFICE }

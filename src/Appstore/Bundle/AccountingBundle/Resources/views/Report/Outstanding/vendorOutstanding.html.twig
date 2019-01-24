@@ -30,12 +30,16 @@
                         <div class="caption"><i class="icon-reorder"></i>Vendor Outstanding</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn purple" href="{{ path('report_vendor_ledger') }}"><i class="icon-th-list"></i>&nbsp; Vendor Ledger</a>
+                                <a class="btn blue" href="{{ path('report_vendor_ledger') }}"><i class="icon-th-list"></i>&nbsp; Vendor Ledger</a>
+                                <a class="btn red" href="{{ path('account_purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Payment</a>
+                                <a class="btn purple" target="_blank"  href="{{ path("report_vendor_outstanding_pdf") }}" >
+                                    <i class=" icon-download"></i>&nbsp;Download PDF
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <form class="search-form" action="" method="get" name="itemSearch">
+                       {# <form class="search-form" action="" method="get" name="itemSearch">
                             <div class="row-fluid">
                                 {% set modes = ['Payable','Receivable'] %}
                                 <div class="span3">
@@ -69,7 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </form>#}
                         <div class="portlet-body flip-scroll">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
@@ -91,9 +95,7 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination pull-center"  >
-                                {{ knp_pagination_render(entities) }}
-                            </div>
+
                         </div>
                     </div>
                 </div>

@@ -32,9 +32,8 @@
                             <div class="btn-group">
                                 {% set month = searchForm.month is defined ? searchForm.month :"now"|date("F") %}
                                 {% set year = searchForm.year is defined ? searchForm.year :"now"|date("Y") %}
-
                                 <a class="btn purple" target="_blank" href="{{ path('hms_report_monthly_cash_pdf',{'month':month,year:year}) }}" >
-                                    <i class=" icon-download"></i>&nbsp;PDF
+                                    <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
                             </div>
                         </div>

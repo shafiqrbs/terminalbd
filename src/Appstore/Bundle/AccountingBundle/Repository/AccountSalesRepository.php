@@ -175,6 +175,21 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function customerSingleOutstanding($globalOption,$customer)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('(SUM(e.totalAmount) - SUM(e.amount)) as customerBalance ');
+        $qb->join("e.customer" ,'c');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = :process");
+        $qb->setParameter('process', 'approved');
+        $qb->andWhere("c.id = :customer")->setParameter('customer', $customer);
+        $result = $qb->getQuery()->getOneOrNullResult()['customerBalance'];
+        return $result;
+
+    }
+
 	public function customerLedger(User $user,$data = '',$process = '')
 	{
 		$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
@@ -238,6 +253,22 @@ class AccountSalesRepository extends EntityRepository
 
     public function customerOutstanding($globalOption, $data = array())
     {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,(SUM(e.totalAmount) - SUM(e.amount)) as customerBalance ');
+        $qb->join('e.customer','customer');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy('customer.id');
+        $qb->having('customerBalance > :balance')->setParameter('balance', 0);
+        $qb->orHaving('customerBalance < :balance')->setParameter('balance', 0);
+        $qb->orderBy('customer.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function customerOutstandingOld($globalOption, $data = array())
+    {
         $mode = isset($data['outstanding'])  ? $data['outstanding'] : '';
         $amount =   isset($data['amount'])  ? $data['amount'] : 0;
         $mobile =   isset($data['mobile'])  ? $data['mobile'] : '';
@@ -248,9 +279,9 @@ class AccountSalesRepository extends EntityRepository
             $customer =  "AND subCustomer.mobile LIKE '%{$mobile}%'";
         }
         if($mode == 'Payable' and $amount !="") {
-           $outstanding =  "AND sales.balance <= -{$amount}";
+            $outstanding =  "AND sales.balance <= -{$amount}";
         }else{
-	       $outstanding =  "AND sales.balance > {$amount}";
+            $outstanding =  "AND sales.balance > {$amount}";
         }
         $sql = "SELECT customer.`id` as id,customer.`customerId` as customerId,customer.`name` as customerName , customer.mobile as customerMobile, customer.address as customerAddress, sales.balance as customerBalance
                 FROM account_sales as sales

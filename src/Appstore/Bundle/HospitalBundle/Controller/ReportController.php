@@ -230,9 +230,14 @@ class ReportController extends Controller
         }
         $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommissionGroup($user, $data);
         $commissionEntity = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyGroupBaseCommissionSummary($user, $data);
+        $referred = "";
+        if(!empty($data['referred'])){
+            $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->find($data['referred']);
+        }
         $html = $this->renderView(
             'HospitalBundle:Report:monthlyCommissionPdf.html.twig', array(
                 'globalOption' => $user->getGlobalOption(),
+                'referredEntity' => $referred,
                 'commissions' => $commissions,
                 'commissionEntity' => $commissionEntity,
                 'searchForm' => $data
@@ -279,19 +284,23 @@ class ReportController extends Controller
         $user = $this->getUser();
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
-        if (empty($data['month']) and empty($data['year'])) {
-            $data = array();
+        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommissionDetails($user, $data);
+        $monthlyReferredCommissionInvoice = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyReferredCommissionInvoice($user, $data);
+        $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyGroupBaseCommissionSummary($user, $data);
+        $referred = "";
+        if(!empty($data['referred'])){
+            $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->find($data['referred']);
         }
-        $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommissionGroup($user, $data);
-        $commissionEntity = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyGroupBaseCommissionSummary($user, $data);
         $html = $this->renderView(
-            'HospitalBundle:Report:monthlyCommissionPdf.html.twig', array(
-                'globalOption' => $user->getGlobalOption(),
-                'commissions' => $commissions,
-                'commissionEntity' => $commissionEntity,
-                'searchForm' => $data
-            )
-        );
+            'HospitalBundle:Report:monthlyCommissionDetailsPdf.html.twig', array(
+            'referredInvoice' => $monthlyReferredCommissionInvoice,
+            'referredEntity' => $referred,
+            'globalOption' => $user->getGlobalOption(),
+            'commissions' => $commissions,
+            'commissionSummary' => $commissionSummary,
+            'searchForm' => $data
+        ));
+
         $datetime = new \DateTime("now");
         $monthYear = $datetime->format('m-Y');
         $month = !empty($data['month']) ? $data['month'] : '';

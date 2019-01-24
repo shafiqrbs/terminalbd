@@ -183,6 +183,30 @@ class ReportController extends Controller
 		));
 	}
 
+	public function customerOutstandingPdfAction()
+	{
+        set_time_limit(0);
+        ignore_user_abort(true);
+	    $data =$_REQUEST;
+		$globalOption = $this->getUser()->getGlobalOption();
+		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
+        $html = $this->renderView(
+		    'AccountingBundle:Report/Outstanding:customerOutstandingPdf.html.twig', array(
+			'globalOption'  => $globalOption,
+			'entities'      => $entities,
+			'searchForm'    => $data,
+		));
+        $date = "customer-outstanding.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
+
+    }
+
 	public function customerLedgerAction()
 	{
 		$em = $this->getDoctrine()->getManager();
@@ -213,24 +237,41 @@ class ReportController extends Controller
     {
         set_time_limit(0);
         ignore_user_abort(true);
-
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         /* @var $globalOption GlobalOption */
         $globalOption = $this->getUser()->getGlobalOption();
-        if ($globalOption->getMainApp()->getSlug() == 'inventory'){
-            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorInventoryOutstanding($globalOption, $data);
-        }else if ($globalOption->getMainApp()->getSlug() == 'miss'){
-            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorMedicineOutstanding($globalOption, $data);
-        }else{
-            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorBusinessOutstanding($globalOption, $data);
-        }
-		$pagination = $this->paginate($entities);
-		return $this->render('AccountingBundle:Report/Outstanding:vendorOutstanding.html.twig', array(
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorLedgerOutstanding($globalOption);
+        return $this->render('AccountingBundle:Report/Outstanding:vendorOutstanding.html.twig', array(
             'option' => $globalOption,
-            'entities' => $pagination,
+            'entities' => $entities,
 			'searchForm' => $data,
 		));
+	}
+
+    public function vendorOutstandingPdfAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        /* @var $globalOption GlobalOption */
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorLedgerOutstanding($globalOption);
+        $html = $this->renderView(
+            'AccountingBundle:Report/Outstanding:vendorOutstandingPdf.html.twig', array(
+            'globalOption'  => $globalOption,
+            'entities'      => $entities,
+			'searchForm'    => $data,
+		));
+        $date = "vendor-outstanding.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
 	}
 
 

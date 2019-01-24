@@ -84,6 +84,29 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
+    public function vendorLedgerOutstanding(GlobalOption $globalOption)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,(SUM(e.purchaseAmount) - SUM(e.payment)) as customerBalance ');
+        if ($globalOption->getMainApp()->getSlug() == 'inventory'){
+            $qb->join('e.vendor','vendor');
+        }else if ($globalOption->getMainApp()->getSlug() == 'miss') {
+            $qb->join('e.medicineVendor','vendor');
+        }else{
+            $qb->join('e.accountVendor','vendor');
+        }
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy('vendor.id');
+        $qb->having('customerBalance > :balance')->setParameter('balance', 0);
+        $qb->orHaving('customerBalance < :balance')->setParameter('balance', 0);
+        $qb->orderBy('vendor.id','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+
+
     public function vendorInventoryOutstanding($globalOption,$head, $data = array())
     {
 
@@ -124,7 +147,21 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
-    public function vendorMedicineOutstanding($globalOption,$data = array())
+    public function vendorMedicineOutstanding($globalOption)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,(SUM(e.purchaseAmount) - SUM(e.payment)) as customerBalance ');
+        $qb->join('e.medicineVendor','vendor');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy('vendor.id');
+        $qb->having('customerBalance > :balance')->setParameter('balance', 0);
+        $qb->orderBy('vendor.id','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function vendorMedicineOutstandingOld($globalOption,$data = array())
     {
 
         $mode = isset($data['outstanding'])  ? $data['outstanding'] : 'Payable';
@@ -143,18 +180,12 @@ class AccountPurchaseRepository extends EntityRepository
         }else{
             $outstanding ="AND purchase.balance >= 1";
         }
-        $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName,purchase.balance as customerBalance
-                FROM account_purchase as purchase
-                LEFT JOIN medicine_vendor as vendor ON purchase.medicineVendor_id = vendor.id
-                WHERE purchase.id IN (
-                    SELECT MAX(sub.id)
-                    FROM account_purchase AS sub
-                    LEFT JOIN medicine_vendor as subVendor ON sub.medicineVendor_id = subVendor.id
-                   WHERE sub.globalOption_id = :globalOption AND sub.process = 'approved' {$company}
-                    GROUP BY sub.medicineVendor_id
-                  
-                ) {$outstanding}
-                ORDER BY purchase.id DESC";
+        $sql = "SELECT vendor.`companyName` as companyName , vendor.mobile as vendorMobile,vendor.name as vendorName, (SUM(sub.purchaseAmount) - SUM(sub.payment)) as customerBalance
+FROM account_purchase AS sub
+LEFT JOIN medicine_vendor as vendor ON sub.medicineVendor_id = vendor.id
+WHERE sub.globalOption_id  = :globalOption AND sub.process = 'approved'
+GROUP BY sub.medicineVendor_id
+HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $qb = $this->getEntityManager()->getConnection()->prepare($sql);
         $qb->bindValue('globalOption', $globalOption->getId());
         $qb->execute();
@@ -201,11 +232,11 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
-	public function vendorSingleOutstanding($globalOption,$head,$vendor)
+	public function vendorSingleOutstanding($globalOption,$head = '',$vendor)
 	{
 
 		$qb = $this->createQueryBuilder('e');
-		$qb->select('e.balance As balance');
+		$qb->select('SUM(e.purchaseAmount) - SUM(e.payment) As balance');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
 		$qb->andWhere("e.process = :process");
@@ -218,8 +249,6 @@ class AccountPurchaseRepository extends EntityRepository
             $qb->join('e.accountVendor','v');
         }
 		$qb->andWhere("v.id = :vendor")->setParameter('vendor', $vendor);
-		$qb->orderBy('e.id', 'DESC');
-		$qb->setMaxResults(1);
 		$result = $qb->getQuery()->getOneOrNullResult()['balance'];
 		return $result;
 
@@ -262,6 +291,7 @@ class AccountPurchaseRepository extends EntityRepository
         return $result;
 
     }
+
 
 
     public function vendorOutstanding($globalOption,$head,$data)

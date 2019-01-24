@@ -997,6 +997,14 @@ class Builder extends ContainerAware
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Hospital & Diagnostic']['Reports']->addChild('Sales Details', array('route' => 'hms_report_sales_details'))
                     ->setAttribute('icon', 'icon-th-list');
+                $menu['Hospital & Diagnostic']['Reports']->addChild('Monthly Sales & Cash', array('route' => 'hms_report_monthly_cash'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Hospital & Diagnostic']['Reports']->addChild('Monthly Commission', array('route' => 'hms_report_monthly_commission'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Hospital & Diagnostic']['Reports']->addChild('Referred Commission', array('route' => 'hms_report_monthly_referred_commission'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Hospital & Diagnostic']['Reports']->addChild('Commission Summary', array('route' => 'hms_report_commission_group'))
+                    ->setAttribute('icon', 'icon-th-list');
                 $menu['Hospital & Diagnostic']['Reports']->addChild('Service Wise Sales', array('route' => 'hms_report_sales_service'))
                     ->setAttribute('icon', 'icon-th-list');
             }

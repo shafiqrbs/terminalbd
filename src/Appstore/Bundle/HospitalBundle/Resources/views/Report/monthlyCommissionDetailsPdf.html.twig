@@ -71,48 +71,49 @@
     <tr>
         <th class="pull-left"  colspan="9">Printed Date: {{ "now"|date("d-m-Y") }}{% if referredEntity is not empty %}, Referred: {{ referredEntity.name }}, {{ referredEntity.mobile }}{% endif %}</span></th>
     </tr>
-    <tr class="head-green">
-        <th class="numeric" >Date</th>
-        {% for com in commissionEntity %}
-            <th class="numeric">{{ com.commissionName }}</th>
-        {% endfor %}
-        <th class="numeric" >Sub-Total</th>
-    </tr>
+    <th class="numeric" >Date</th>
+    <th class="numeric" >Invoice</th>
+    <th class="numeric" >Invoice Date</th>
+    <th class="numeric" >Customer</th>
+    {% for com in commissionSummary %}
+        <th class="numeric">{{ com.commissionName }}</th>
+    {% endfor %}
+    <th class="numeric" >Sub-Total</th>
     </thead>
     <tbody>
-    {% set fullDate =  date(year~'-'~month~'-1')|date('Y-m-d') %}
-    {% set month =  date(year~'-'~month~'-1')|date('Y-m-') %}
-    {% set max =  fullDate|date("t") %}
-
-    {% for i in 1..max %}
-        {% set created = date(month~i)|date('d-m-Y') %}
+    {% for entity in referredInvoice %}
         <tr>
-            <td class="numeric" >{{ created }}</td>
+            <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+            <td class="numeric" >{{ entity.invoice }}</td>
+            <td class="numeric" >{{ entity.invoiceDate|date('d-m-y') }}</td>
+            <td class="numeric" >{{ entity.customerName }}</td>
             {% set commission = 0 %}
-            {% set dailyCommission = 0 %}
-            {% for com in commissionEntity %}
-                {% set uniqueId = created~'-'~com.commissionId %}
+            {% set subCommission = 0 %}
+            {% for com in commissionSummary %}
+                {% set uniqueId = entity.invoiceId~'-'~com.commissionId %}
                 {% set commission = commissions[uniqueId] is defined and commissions[uniqueId] is not empty ? commissions[uniqueId].payment :0 %}
-                {% set dailyCommission = dailyCommission + commission %}
+                {% set subCommission = subCommission + commission %}
                 <td class="numeric" >
                     {% if commissions[uniqueId] is defined and commissions[uniqueId] is not empty  %}
                         {{ commissions[uniqueId].payment }}
                     {% endif %}
                 </td>
             {% endfor %}
-            <th>{% if dailyCommission > 0 %}{{ dailyCommission|number_format }}{% endif %}</th>
+            <th>{{ subCommission|number_format }}</th>
         </tr>
     {% endfor %}
     </tbody>
-    <tfoot>
-    <tr>
-        <th><span class="pull-right">Grand Total</span></th>
-        {% set totalCommission = 0 %}
-        {% for com in commissionEntity %}
-            {% set totalCommission = totalCommission +  com.payment %}
-            <th class="numeric">{{ com.payment }}</th>
-        {% endfor %}
-        <th>{{ totalCommission|number_format }}</th>
-    </tr>
-    </tfoot>
+    {% if referredInvoice is not empty %}
+        <tfoot>
+        <tr>
+            <th colspan="4"><span class="pull-right">Grand Total</span></th>
+            {% set totalCommission = 0 %}
+            {% for com in commissionSummary %}
+                {% set totalCommission = totalCommission +  com.payment %}
+                <th class="numeric">{{ com.payment }}</th>
+            {% endfor %}
+            <th>{{ totalCommission|number_format }}</th>
+        </tr>
+        </tfoot>
+    {% endif %}
 </table>

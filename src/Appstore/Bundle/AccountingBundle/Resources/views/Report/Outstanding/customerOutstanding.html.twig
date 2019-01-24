@@ -34,15 +34,16 @@
                         <div class="caption"><i class="icon-reorder"></i>Customer Outstanding</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn purple" href="{{ path('report_customer_ledger') }}"><i class="icon-plus-sign"></i>&nbsp; Customer Ledger</a>
-                                <a class="btn red"  href="javascript:" id="printLedger"   >
-                                    <i class=" icon-print"></i>&nbsp;Print
+                                <a class="btn blue" href="{{ path('report_customer_ledger') }}"><i class="icon-plus-sign"></i>&nbsp; Customer Ledger</a>
+                                <a class="btn red" href="{{ path('account_sales_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Receive</a>
+                                <a class="btn purple" target="_blank"  href="{{ path("report_customer_outstanding_pdf") }}" >
+                                    <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <form class="search-form" action="" method="get" name="itemSearch">
+                       {# <form class="search-form" action="" method="get" name="itemSearch">
                             <div class="row-fluid">
                                 {% set modes = ['Receivable','Payable'] %}
                                 <div class="span3">
@@ -67,31 +68,28 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </form>#}
                         <div class="portlet-body flip-scroll" id="DivIdToPrint">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
+                                    <th class="numeric" ><i class="icon-reorder"></i></th>
                                     <th class="numeric" >Customer Name</th>
                                     <th class="numeric" >Mobile</th>
-                                    <th class="numeric" >Address</th>
                                     <th class="numeric" >Outstanding</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in entities %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.customerName }}</td>
+                                        <td>{{ loop.index }}</td>
+                                        <td class="numeric" >{{ entity.customerName|capitalize }}</td>
                                         <td class="numeric" >{{ entity.customerMobile }}</td>
-                                        <td class="numeric" >{{ entity.customerAddress|raw }}</td>
                                         <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination pull-center"  >
-                                {{ knp_pagination_render(entities) }}
-                            </div>
                         </div>
 
                     </div>

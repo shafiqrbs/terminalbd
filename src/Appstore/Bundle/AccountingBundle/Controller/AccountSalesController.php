@@ -367,15 +367,12 @@ class AccountSalesController extends Controller
 	    $globalOption = $this->getUser()->getGlobalOption();
 	    $balance = 0;
 	    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'id'=> $customerId));
-	    $customerMobile = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile'=> $customerId));
 	    if(!empty($customer)){
-		    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption, $data = array('mobile' => $customer->getMobile()));
-		    $balance = empty($result) ? 0 : $result[0]['customerBalance'];
-	    }elseif (!empty($customerMobile)){
-		    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption, $data = array('mobile' => $customerMobile->getMobile()));
-		    $balance = empty($result) ? 0 : $result[0]['customerBalance'];
+		    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($globalOption,$customer);
+		    $balance = empty($result) ? 0 : $result;
 	    }
-	    $taka = number_format($balance).' Taka';
+	    echo $taka = number_format($balance).' Taka';
+	    exit;
 	    return new Response($taka);
 	    exit;
 
