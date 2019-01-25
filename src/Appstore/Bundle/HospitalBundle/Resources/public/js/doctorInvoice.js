@@ -29,6 +29,24 @@ $(document).on("click", ".addPay", function() {
     });
 });
 
+$(document).on("click", ".confirm", function() {
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                if(data == 'success'){
+                    location.reload();
+                }else{
+                    alert ("This invoice does not close because your payment dot approve");
+                }
+            });
+        }
+    });
+});
+
+
 $(document).on("click", ".receiveBtn", function() {
 
     $('#confirm-content').confirmModal({

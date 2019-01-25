@@ -148,8 +148,7 @@
                                         <td class="numeric" >
                                             {% if entity.commissionApproved == false and entity.process == 'Done' %}
                                                 <a href="{{ path('hms_doctor_invoice_new', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-money"></i> Add Commission</a>
-                                            {% elseif entity.commissionApproved == true  %}
-                                                <a href="javascript:" class="btn blue mini" ><i class="icon-ok"></i> Done</a>
+                                                <a href="javascript:" data-url="{{ path('hms_doctor_invoice_confirm',{'id':entity.id}) }}"  class="btn mini red confirm" ><i class="icon-remove"></i> Close</a>
                                             {% endif %}
                                         </td>
                                     </tr>

@@ -393,9 +393,7 @@
                     <input type="hidden" name="invoiceId" id="invoiceId" value="{{ invoice.id }}">
                     <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ invoice.total }}">
                     <input type="hidden" name="due" class="" id="due" value="{{ invoice.due }}">
-                    {% if totalPayment == invoice.commission and invoice.commission > 0  %}
-                    <a href="{{ path('hms_doctor_invoice_confirm',{'id':invoice.id}) }}"  class="btn red" ><i class="icon-ok"></i> Close Invoice</a>
-                    {% endif %}
+                    <a href="javascript:" data-url="{{ path('hms_doctor_invoice_confirm',{'id':invoice.id}) }}"  class="btn red confirm" ><i class="icon-remove"></i> Close</a>
                     <button type="button" class="btn blue receiveBtn" id=""><i class="icon-save"></i> Payment</button>
                 </div>
             </div>

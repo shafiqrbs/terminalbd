@@ -96,7 +96,9 @@ class DoctorInvoiceController extends Controller
     public function newAction(Invoice $invoice)
     {
         $em = $this->getDoctrine()->getManager();
-
+        if($invoice->getCommissionApproved() == 'true'){
+            return $this->redirect($this->generateUrl('hms_doctor_commission_invoice'));
+        }
         $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
         foreach ($invoice->getInvoiceParticulars() as $item) {
             /** @var InvoiceParticular $item */
@@ -214,16 +216,17 @@ class DoctorInvoiceController extends Controller
 
     public function confirmAction(Invoice $entity)
     {
-        $em = $this->getDoctrine()->getManager();
+
         $totalInvoiceAmount = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->updateCommissionInvoice($entity);
         if (!empty($entity) and $totalInvoiceAmount == $entity->getCommission() and $entity->getCommissionApproved() == false ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setCommissionApproved(true);
             $em->flush();
-            return $this->redirect($this->generateUrl('hms_doctor_invoice'));
+            return new Response('success');
         } else {
-            return $this->redirect($this->generateUrl('hms_doctor_invoice_new',array('id' => $entity->getId())));
+            return new Response('success');
         }
+        exit;
 
     }
 
