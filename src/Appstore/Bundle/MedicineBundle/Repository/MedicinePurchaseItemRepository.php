@@ -55,37 +55,30 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $qb->andWhere("e.medicineVendor = :vendor")->setParameter('vendor', $vendor);
         }
 	    if (!empty($data['startDate']) ) {
-		    $datetime = new \DateTime($data['endDate']);
+		    $datetime = new \DateTime($startDate);
 	    	$qb->andWhere("e.created >= :startDate");
 		    $qb->setParameter('startDate', $datetime->format('Y-m-d 00:00:00'));
 	    }
 	    if (!empty($data['endDate'])) {
-		    $datetime = new \DateTime($data['endDate']);
-		    $qb->andWhere("e.created <= :endDate");
+            $datetime = new \DateTime($endDate);
+            $qb->andWhere("e.created <= :endDate");
 		    $qb->setParameter('endDate', $datetime->format('Y-m-d 23:59:59'));
 	    }
-
     }
 
     public function handleDateRangeFind($qb,$data)
     {
-        if(empty($data)){
+        if(empty($data['startDate']) and empty($data['endDate'])){
             $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+            $qb->andWhere("e.created <= :startDate")->setParameter('startDate', $datetime->format('Y-m-d 00:00:00'));
+            $qb->andWhere("e.created >= :endDate")->setParameter('endDate', $datetime->format('Y-m-d 23:59:59'));
         }else{
-            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+            $datetime = new \DateTime($data['startDate']);
+            $qb->andWhere("e.created <= :startDate")->setParameter('startDate', $datetime->format('Y-m-d 00:00:00'));
+            $datetime = new \DateTime($data['endDate']);
+            $qb->andWhere("e.created >= :endDate")->setParameter('endDate', $datetime->format('Y-m-d 23:59:59'));
         }
 
-        if (!empty($data['startDate']) ) {
-            $qb->andWhere("e.created >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
-        }
-        if (!empty($data['endDate'])) {
-            $qb->andWhere("e.created <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
-        }
     }
 
     public function findWithInstantItemSearch($config,$data = array(),$instant = ''){
@@ -129,6 +122,20 @@ class MedicinePurchaseItemRepository extends EntityRepository
 		    $qb->andWhere("mpi.expirationEndDate <= :endDate");
 		    $qb->setParameter('endDate', $end);
 	    }
+        $qb->orderBy('s.name','ASC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+    public function stockLedger(MedicineConfig $config,$data = array()){
+
+        $vendor = isset($data['vendor'])? $data['vendor']:'';
+        $qb = $this->createQueryBuilder('mpi');
+        $qb->join('mpi.medicinePurchase','e');
+        $qb->join('mpi.medicineStock','s');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
+        $qb->andWhere('e.medicineVendor = :vendor')->setParameter('vendor', $vendor);
+        $this->handleDateRangeFind($qb,$data);
         $qb->orderBy('s.name','ASC');
         $qb->getQuery();
         return  $qb;

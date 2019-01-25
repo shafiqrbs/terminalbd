@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Vendor Purchase & Sales Report
+                    Vendor Purchase & Sales
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#"> Vendor Purchase & Sales Report</a></li>
+                    <li><a href="#"> Vendor Purchase & Sales </a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,7 +29,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i> Vendor Purchase & Sales Report</div>
+                        <div class="caption"><i class="icon-reorder"></i> Vendor Purchase & Sales </div>
                     </div>
                     <div class="portlet-body form">
                         <div class="row-fluid">
@@ -38,6 +38,7 @@
                                     <div class="span6">
                                     <select name="vendor" id="vendor" class="m-wrap span12">
                                         {% for vendor in vendors %}
+                                            <option value="">--Select Vendor--</option>
                                             <option {% if searchForm.vendor is defined and searchForm.vendor ==  vendor.companyName %} selected="selected" {% endif %} value="{{ vendor.companyName }}">{{ vendor.companyName }}</option>
                                         {% endfor %}
                                     </select>

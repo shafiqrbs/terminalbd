@@ -218,4 +218,120 @@ class DefaultController extends Controller
 	}
 
 
+    public function vendorCustomerAccountAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $vendorResults = '';
+        $customerResults = '';
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->listForVendorCustomer($config);
+        if(!empty($data) and !empty($data['startDate']) and !empty($data['endDate'])){
+            $vendor = array('vendor' => $data['vendor'],'startDate'=>$data['startDate'],'endDate'=>$data['endDate']);
+            $vendorLedger = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($this->getUser()->getGlobalOption(),$vendor);
+            $vendorResults = $vendorLedger->getResult();
+        }
+        if(!empty($data) and !empty($data['startDate']) and !empty($data['endDate'])){
+            $customer = array('customer' => $data['vendor'],'startDate'=>$data['startDate'],'endDate'=>$data['endDate']);
+            $customerLedger = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->findWithSearch($this->getUser(),$customer);
+            $customerResults = $customerLedger->getResult();
+        }
+        return $this->render('MedicineBundle:PurchaseSales:vendorPurchaseSalesLedger.html.twig', array(
+            'vendors' => $vendors,
+            'vendorLedger' => $vendorResults,
+            'customerLedger' => $customerResults,
+            'searchForm'            => $data,
+            'entity' => '',
+        ));
+    }
+
+    public function vendorCustomerMedicineAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $vendorResults = '';
+        $customerResults = '';
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->listForVendorCustomer($config);
+        if(!empty($data) and !empty($data['startDate'])){
+
+            $end = $data['endDate'];
+            $date = strtotime($data['startDate']);
+            $date = strtotime("+$end day", $date);
+            $endDate = date('Y-m-d', $date);
+            $vendor = array('vendor' => $data['vendor'],'startDate'=> $data['startDate'],'endDate'=> $endDate);
+            $vendorLedger = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->stockLedger($config,$vendor);
+            $vendorResults = $vendorLedger->getQuery()->getResult();
+        }
+
+        if(!empty($data) and !empty($data['startDate'])){
+
+            $end = $data['endDate'];
+            $date = strtotime($data['startDate']);
+            $date = strtotime("+$end day", $date);
+            $endDate = date('Y-m-d', $date);
+            $customer = array('customer' => $data['vendor'],'startDate'=>$data['startDate'],'endDate' => $endDate);
+            $customerLedger = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->salesItemLists($this->getUser(),$customer);
+            $customerResults = $customerLedger->getQuery()->getResult();
+        }
+
+        return $this->render('MedicineBundle:PurchaseSales:vendorPurchaseSalesItem.html.twig', array(
+            'vendors' => $vendors,
+            'vendorLedger' => $vendorResults,
+            'customerLedger' => $customerResults,
+            'searchForm'            => $data,
+            'entity' => '',
+        ));
+    }
+
+    public function vendorPaymentReceiveAction($vendor)
+    {
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getMedicineConfig();
+        $data = $_REQUEST;
+
+        $em = $this->getDoctrine()->getManager();
+        $amount = $data['amount'];
+        $remark = $data['remark'];
+        $vendor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findOneBy(array('medicineConfig'=>$config,'companyName'=>$vendor));
+        $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        if($data['mode'] == 'receive'){
+            $sales = new  AccountSales();
+            $sales->setGlobalOption($user->getGlobalOption());
+            $sales->setProcessHead('medicine');
+            $sales->setCustomer($vendor->getCustomer());
+            $sales->setAmount($amount);
+            $sales->setProcessType('Due');
+            $sales->setTransactionMethod($method);
+            $sales->setProcess('approved');
+            $sales->setRemark($remark);
+            $em->persist($sales);
+            $em->flush();
+            $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($sales);
+            return new Response('success');
+        }elseif($data['mode'] == 'payment'){
+            $purchase = new  AccountPurchase();
+            $purchase->setGlobalOption($user->getGlobalOption());
+            $purchase->setProcessHead('medicine');
+            $purchase->setCompanyName($vendor->getCompanyName());
+            $purchase->setMedicineVendor($vendor);
+            $purchase->setPayment($amount);
+            $purchase->setProcessType('Due');
+            $purchase->setTransactionMethod($method);
+            $purchase->setProcess('approved');
+            $purchase->setRemark($remark);
+            $em->persist($purchase);
+            $em->flush();
+            $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($purchase);
+            return new Response('success');
+        }
+        return new Response('failed');
+        exit;
+
+    }
+
 }
+
+

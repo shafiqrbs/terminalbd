@@ -93,3 +93,16 @@ medicine_stock_migration:
 medicine_vendor_migration:
     path:     /{id}/copy-vendor-migration
     defaults: { _controller: MedicineBundle:Default:copyToMedicineVendor }
+
+medicine_report_vendor_sales:
+    path:     /vendor-purchase-sales
+    defaults: { _controller: "MedicineBundle:Default:vendorCustomerAccount" }
+
+medicine_report_vendor_sales_medicine:
+    path:     /vendor-purchase-sales-medicine
+    defaults: { _controller: "MedicineBundle:Default:vendorCustomerMedicine" }
+
+medicine_report_vendor_payment_receive:
+    path:     /{vendor}/vendor-payment-receive
+    defaults: { _controller: "MedicineBundle:Default:vendorPaymentReceive" }
+
