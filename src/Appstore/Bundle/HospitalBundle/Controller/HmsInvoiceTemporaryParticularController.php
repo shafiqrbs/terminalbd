@@ -102,7 +102,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $entity->setReferredDoctor($referred);
         }
         $deliveryDateTime = $request->request->get('deliveryDateTime');
-        $datetime = (new \DateTime("tomorrow"))->format('d-m-Y 7:30');
+        $datetime = (new \DateTime("now"))->format('d-m-Y 7:30 A');
         $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
         $entity->setDiscountType($discountType);
         $entity->setDeliveryDateTime($datetime);
@@ -118,11 +118,9 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertMasterParticular($user,$entity);
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($entity);
-        if($entity->getTotal() > 0) {
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity);
-            $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-            $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
-        }
+        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
         if($hospital->getInitialDiagnosticShow() != 1){
             $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->removeInitialParticular($user);
         }

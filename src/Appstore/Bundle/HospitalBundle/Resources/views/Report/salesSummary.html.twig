@@ -58,7 +58,7 @@
                             <div class="span3">
                                 <div class="controls">
                                     <div class="input-append span11">
-                                        <input type="text" id="date" name="date"  class="span11 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="Enter Date">
+                                        <input type="text" id="date" name="date"  class="span11 m-wrap dateCalendar" value="{% if searchForm.date is defined %}{{ searchForm.date|date('d-m-Y') }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="Enter Date">
                                         <div class="btn-group">
                                             <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                         </div>

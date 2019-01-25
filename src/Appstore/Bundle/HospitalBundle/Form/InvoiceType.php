@@ -48,9 +48,9 @@ class InvoiceType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('payment','text', array('attr'=>array('class'=>'tooltips payment span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
+            ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid received amount','autocomplete'=>'off'),
             ))
-            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips initialDiscount span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'tooltips initialDiscount span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter valid discount amount','autocomplete'=>'off'),
             ))
             ->add('assignDoctor', 'entity', array(
                 'required'    => false,
@@ -150,24 +150,5 @@ class InvoiceType extends AbstractType
     {
         return 'appstore_bundle_hospitalbundle_invoice';
     }
-
-    /**
-     * @return mixed
-     */
-    protected function PathologyChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
-
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function DepartmentChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
-
-    }
-
 
 }

@@ -69,7 +69,7 @@
         <th class="pull-center" colspan="9"><h3><strong>SERVICE WISE SALES STATEMENT SHEET:</strong></h3></th>
     </tr>
     <tr>
-        <th class="pull-center" colspan="9"><h3><strong>Service For: {% if entity is not empty %}{{ entity.code }}-{{ entity.Name }}{% endif %}</strong></h3></th>
+        <th class="pull-center" colspan="9"><h3><strong>Service For: {% if entity is not empty %}{{ entity.Name }}{% endif %}</strong></h3></th>
     </tr>
     <tr>
         <th class="pull-left"  colspan="9">Printed Date: {{ "now"|date("d-m-Y") }}, Report Date: {{ startDate|date('d-m-Y') }} To {{ endDate|date('d-m-Y') }} </th>

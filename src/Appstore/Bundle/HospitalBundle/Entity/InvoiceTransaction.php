@@ -160,6 +160,13 @@ class InvoiceTransaction
      */
     private $revised = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isMaster", type="boolean" )
+     */
+    private $isMaster = false;
+
 
     /**
      * @var \DateTime
@@ -546,6 +553,22 @@ class InvoiceTransaction
     public function setRevised($revised)
     {
         $this->revised = $revised;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMaster()
+    {
+        return $this->isMaster;
+    }
+
+    /**
+     * @param bool $isMaster
+     */
+    public function setIsMaster($isMaster)
+    {
+        $this->isMaster = $isMaster;
     }
 
 

@@ -210,6 +210,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $entity->setPaymentMobile($invoice->getPaymentMobile());
             $entity->setTransactionId($invoice->getTransactionId());
             $entity->setComment($invoice->getComment());
+            $entity->setIsMaster(true);
             if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
                 $vat = $this->getCulculationVat($invoice, $entity->getPayment());
                 $entity->setVat($vat);

@@ -193,10 +193,10 @@ function formSubmit() {
         rules: {
 
             "appstore_bundle_hospitalbundle_invoice[customer][name]": {required: true},
-            "appstore_bundle_hospitalbundle_invoice[customer][mobile]": {required: true},
-            "appstore_bundle_hospitalbundle_invoice[customer][age]": {required: true},
-            "appstore_bundle_hospitalbundle_invoice[discountCalculation]": {required: false},
-            "appstore_bundle_hospitalbundle_invoice[payment]": {required: false},
+            "appstore_bundle_hospitalbundle_invoice[customer][mobile]": {required: true, digits: true},
+            "appstore_bundle_hospitalbundle_invoice[customer][age]": {required: true, digits: true},
+            "appstore_bundle_hospitalbundle_invoice[discountCalculation]": {required: false, digits: true},
+            "appstore_bundle_hospitalbundle_invoice[payment]": {required: false, digits: true},
             "appstore_bundle_hospitalbundle_invoice[customer][address]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[customer][location]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[referredDoctor][name]": {required: false},
