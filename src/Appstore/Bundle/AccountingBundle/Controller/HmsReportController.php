@@ -71,12 +71,24 @@ class HmsReportController extends Controller
 
     public function monthlyIncomeAction()
     {
-
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportHmsMonthlyIncome( $this->getUser(),$data);
+        if(!empty($data['startMonth']) and !empty($data['endMonth'])){
+            $sm = "01-{$data['startMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($sm);
+            $startMonth =  $compareTo->format('F');
+            $endm = "01-{$data['endMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($endm);
+            $endMonth =  $compareTo->format('F,Y');
+            $dateRange = $startMonth .' To '.$endMonth;
+        }else{
+            $compareTo = new \DateTime("now");
+            $dateRange =  $compareTo->format('F,Y');
+        }
         return $this->render('AccountingBundle:Report/Hms:monthlyIncome.html.twig', array(
             'overview' => $overview,
+            'dateRange' => $dateRange,
             'searchForm' => $data,
         ));
     }
@@ -86,9 +98,22 @@ class HmsReportController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $data = $_REQUEST;
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportHmsMonthlyIncome( $this->getUser(),$data);
+        if(!empty($data['startMonth']) and !empty($data['endMonth'])){
+            $sm = "01-{$data['startMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($sm);
+            $startMonth =  $compareTo->format('F');
+            $endm = "01-{$data['endMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($endm);
+            $endMonth =  $compareTo->format('F,Y');
+            $dateRange = $startMonth .' To '.$endMonth;
+        }else{
+            $compareTo = new \DateTime("now");
+            $dateRange =  $compareTo->format('F,Y');
+        }
         $html = $this->renderView(
             'AccountingBundle:Report/Hms:monthlyIncomePdf.html.twig', array(
                 'globalOption' => $globalOption,
+                'dateRange' => $dateRange,
                 'overview' => $overview,
                 'searchForm' => $data,
                 'print' => ''

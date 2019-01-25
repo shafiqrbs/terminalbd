@@ -67,7 +67,7 @@
           <td class="pull-center" colspan="3">{{ globalOption.hospitalConfig.address|raw }}</td>
       </tr>
       <tr>
-          <th class="pull-center" colspan="3"><h3>INCOME STATEMENT SHEET</h3></th>
+          <th class="pull-center" colspan="3"><h3>MONTHLY INCOME STATEMENT SHEET</h3></th>
       </tr>
       <tr>
           {% set currentMonth = "now"|date("m") %}
@@ -76,7 +76,7 @@
           {% set endMonth = searchForm.endMonth is defined ? searchForm.endMonth : "now"|date("F") %}
           {% set year = searchForm.year is defined ? searchForm.year : "now"|date("Y") %}
           <th colspan="3">
-              <span class="pull-right">Period&nbsp;&nbsp;{{ startMonth }} To {{ endMonth }}, {{ year }}</span>
+              <span class="pull-right">Period:&nbsp;{{ dateRange }}</span>
           </th>
       </tr>
       </thead>
