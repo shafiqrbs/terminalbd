@@ -37,8 +37,8 @@
                                 <div class="row-fluid">
                                     <div class="span6">
                                     <select name="vendor" id="vendor" class="m-wrap span12">
+                                        <option value="">--Select Vendor--</option>
                                         {% for vendor in vendors %}
-                                            <option value="">--Select Vendor--</option>
                                             <option {% if searchForm.vendor is defined and searchForm.vendor ==  vendor.companyName %} selected="selected" {% endif %} value="{{ vendor.companyName }}">{{ vendor.companyName }}</option>
                                         {% endfor %}
                                     </select>
