@@ -121,14 +121,14 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Invoice No</th>
-                                    <th class="numeric" >Invoice Mode</th>
-                                    <th class="numeric" >Net Total</th>
+                                    <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Name</th>
+                                    <th class="numeric" >Referred</th>
+                                    <th class="numeric" >Mode</th>
+                                    <th class="numeric" >Total</th>
                                     <th class="numeric" >Received</th>
                                     <th class="numeric" >Balance</th>
                                     <th class="numeric" >Commission</th>
-                                    <th class="numeric" >Status</th>
-                                    <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -138,13 +138,13 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{{ entity.customer.name }}</td>
+                                        <td class="numeric" >{% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.invoiceMode|capitalize }}</td>
                                         <td class="numeric" >{{ entity.total|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
                                         <td class="numeric" >{{ entity.commission|number_format }}</td>
-                                        <td class="numeric" >{{ entity.paymentStatus }}</td>
-                                        <td class="numeric" >{{ entity.process }}</td>
                                         <td class="numeric" >
                                             {% if entity.commissionApproved == false and entity.process == 'Done' %}
                                                 <a href="{{ path('hms_doctor_invoice_new', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-money"></i> Add Commission</a>

@@ -37,7 +37,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_HMS,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOSPITAL,ROLE_DOMAIN");
      */
 
     public function indexAction()
@@ -407,7 +407,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_HMS,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_HOSPITAL,ROLE_DOMAIN");
      */
 
     public function deleteAction(Invoice $entity)
@@ -476,10 +476,7 @@ class InvoiceController extends Controller
         return $this->render('HospitalBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
-
     }
-
-
 
     public function deleteEmptyInvoiceAction()
     {

@@ -36,7 +36,7 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span6">
-                                    <select name="vendor" id="vendor" class="m-wrap span12">
+                                    <select name="vendor" id="vendor" class="m-wrap span12 select2">
                                         <option value="">--Select Vendor--</option>
                                         {% for vendor in vendors %}
                                             <option {% if searchForm.vendor is defined and searchForm.vendor ==  vendor.companyName %} selected="selected" {% endif %} value="{{ vendor.companyName }}">{{ vendor.companyName }}</option>

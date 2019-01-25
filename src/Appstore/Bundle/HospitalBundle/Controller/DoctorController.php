@@ -30,11 +30,6 @@ class DoctorController extends Controller
         return $pagination;
     }
 
-
-    /**
-     * Lists all Particular entities.
-     *
-     */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();

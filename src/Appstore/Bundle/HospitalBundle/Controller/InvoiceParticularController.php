@@ -33,6 +33,10 @@ class InvoiceParticularController extends Controller
         return $pagination;
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_COMMISSION,ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN");
+     */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();

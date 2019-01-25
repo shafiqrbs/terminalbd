@@ -41,6 +41,10 @@ class DoctorInvoiceController extends Controller
         return $pagination;
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_COMMISSION,ROLE_DOMAIN");
+     */
+
     public function indexAction()
     {
 
