@@ -2,6 +2,10 @@ hms_report_sales_summary:
     path:     /sales-summary
     defaults: { _controller: "HospitalBundle:Report:salesSummary" }
 
+hms_report_sales_summary_pdf:
+    path:     /sales-summary-pdf
+    defaults: { _controller: "HospitalBundle:Report:salesSummaryPdf" }
+
 hms_report_sales_details:
     path:     /sales-details
     defaults: { _controller: "HospitalBundle:Report:salesDetails" }
@@ -13,6 +17,10 @@ hms_report_sales_details_pdf:
 hms_report_sales_service:
     path:     /service-wise-sales
     defaults: { _controller: "HospitalBundle:Report:serviceBaseSummary" }
+
+hms_report_sales_service_pdf:
+    path:     /service-wise-sales-pdf
+    defaults: { _controller: "HospitalBundle:Report:serviceBaseSummaryPdf" }
 
 hms_report_monthly_cash:
     path:     /monthly-cash

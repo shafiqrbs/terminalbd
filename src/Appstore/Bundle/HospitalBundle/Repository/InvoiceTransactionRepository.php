@@ -103,7 +103,6 @@ class InvoiceTransactionRepository extends EntityRepository
         }
     }
 
-
     public function findWithTransactionOverview(User $user, $data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();

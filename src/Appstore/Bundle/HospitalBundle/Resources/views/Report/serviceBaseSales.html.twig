@@ -30,6 +30,14 @@
                 <div class="portlet box green">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Sales Overview</div>
+                        <div class="actions">
+                        {% set startDate = searchForm.startDate is defined ? searchForm.startDate :"now"|date("d-m-Y") %}
+                        {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
+                        {% set service = searchForm.service is defined ? searchForm.service :'' %}
+                        <a class="btn purple" target="_blank" href="{{ path('hms_report_sales_service_pdf',{'startDate':startDate,'endDate':endDate,'service':service}) }}" >
+                            <i class=" icon-download"></i>&nbsp;Download PDF
+                        </a>
+                        </div>
                     </div>
                     <div class="portlet-body form">
                         <form class="search-form" action="" method="get" name="itemSearch">
@@ -61,9 +69,6 @@
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-money"></i>Service for {% if entity is not empty %}{{ entity.code }}-{{ entity.Name }}{% endif %}</div>
-                                <div class="actions">
-                                    <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
-                                </div>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>

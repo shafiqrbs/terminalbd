@@ -1,4 +1,4 @@
-/*
+
 $( ".date-picker" ).datepicker({
     dateFormat: "dd-mm-yy"
 });
@@ -10,7 +10,7 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0"
 });
 
-*/
+
 
 
 /*

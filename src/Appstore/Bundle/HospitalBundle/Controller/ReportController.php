@@ -30,8 +30,12 @@ class ReportController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
         $user = $this->getUser();
+        if (!empty($data['date'])) {
+            $datetime = new \DateTime($data['date']);
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
 
         $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data);
         $salesTodayTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'false', array('diagnostic', 'admission'));
@@ -42,7 +46,7 @@ class ReportController extends Controller
         $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user, $data);
         $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user, $data);
 
-        return $this->render('HospitalBundle:Report:salesSumary.html.twig', array(
+        return $this->render('HospitalBundle:Report:salesSummary.html.twig', array(
 
             'salesTotalTransactionOverview' => $salesTotalTransactionOverview,
             'salesTodayTransactionOverview' => $salesTodayTransactionOverview,
@@ -55,6 +59,54 @@ class ReportController extends Controller
             'searchForm' => $data,
 
         ));
+
+    }
+
+    public function salesSummaryPdfAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        if (!empty($data['date'])) {
+            $datetime = new \DateTime($data['date']);
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+
+        $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data);
+        $salesTodayTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'false', array('diagnostic', 'admission'));
+        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'true', array('diagnostic', 'admission'));
+        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'diagnostic');
+        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'admission');
+        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user, $data);
+        $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user, $data);
+        $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user, $data);
+
+        $html = $this->renderView(
+            'HospitalBundle:Report:salesSummaryPdf.html.twig', array(
+            'salesTotalTransactionOverview' => $salesTotalTransactionOverview,
+            'salesTodayTransactionOverview' => $salesTodayTransactionOverview,
+            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
+            'diagnosticOverview' => $diagnosticOverview,
+            'admissionOverview' => $admissionOverview,
+            'serviceOverview' => $serviceOverview,
+            'transactionOverview' => $transactionOverview,
+            'commissionOverview' => $commissionOverview,
+            'globalOption' => $user->getGlobalOption(),
+            'searchForm' => $data,
+
+        ));
+        $date = isset($data['date'])? $data['date']:date('d-m-Y');
+        $date = "{$date}-daily-sales.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
 
     }
 
@@ -77,6 +129,38 @@ class ReportController extends Controller
             'entity' => $entity,
             'searchForm' => $data,
         ));
+    }
+
+    public function serviceBaseSummaryPdfAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entity = '';
+        if (!empty($data) and $data['service']) {
+            $entity = $em->getRepository('HospitalBundle:Service')->find($data['service']);
+        }
+        $services = $em->getRepository('HospitalBundle:Service')->findBy(array(), array('name' => 'ASC'));
+        $serviceGroup = $em->getRepository('HospitalBundle:InvoiceParticular')->serviceParticularDetails($user, $data);
+        $html = $this->renderView(
+            'HospitalBundle:Report:serviceBaseSalesPdf.html.twig', array(
+            'serviceGroup' => $serviceGroup,
+            'services' => $services,
+            'entity' => $entity,
+            'globalOption' => $user->getGlobalOption(),
+            'searchForm' => $data,
+        ));
+
+        $date = isset($data['startDate'])? $data['startDate']:date('d-m-Y');
+        $date = "{$date}-service-base-sales.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
     }
 
     public function salesDetailsAction()
