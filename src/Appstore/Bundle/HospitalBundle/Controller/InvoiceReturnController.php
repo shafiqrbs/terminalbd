@@ -103,6 +103,7 @@ class InvoiceReturnController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $particular->setProcess('Canceled');
+        $particular->setParticularDeliveredBy(null);
         $em->flush();
         return new Response('success');
     }

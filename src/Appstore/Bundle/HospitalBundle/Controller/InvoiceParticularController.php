@@ -206,7 +206,6 @@ class InvoiceParticularController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
@@ -220,7 +219,6 @@ class InvoiceParticularController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Report has been created successfully"
             );
-
             return $this->redirect($this->generateUrl('hms_invoice_particular_preparation',array('id'=> $entity->getId())));
         }
 

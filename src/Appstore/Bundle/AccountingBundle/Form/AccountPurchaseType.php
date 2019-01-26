@@ -106,7 +106,7 @@ class AccountPurchaseType extends AbstractType
                 },
             ));
 
-        }elseif($this->global->getMainApp()->getSlug() == 'miss'){
+        }elseif($this->global->getMainApp()->getSlug() == 'inventory'){
 
             $builder->add('vendor', 'entity', array(
                 'required'    => true,

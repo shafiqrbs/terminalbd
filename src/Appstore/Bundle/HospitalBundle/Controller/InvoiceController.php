@@ -406,10 +406,6 @@ class InvoiceController extends Controller
         exit;
     }
 
-    /**
-     * @Secure(roles="ROLE_HOSPITAL,ROLE_DOMAIN");
-     */
-
     public function deleteAction(Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
