@@ -18,6 +18,10 @@ report_monthly_income:
     path:     /monthly-income
     defaults: { _controller: "AccountingBundle:Report:monthlyIncome" }
 
+report_monthly_income_pdf:
+    path:     /monthly-income-pdf
+    defaults: { _controller: "AccountingBundle:Report:monthlyIncomePdf" }
+
 report_income_pdf:
     path:     /income-pdf
     defaults: { _controller: "AccountingBundle:Report:pdfIncome" }

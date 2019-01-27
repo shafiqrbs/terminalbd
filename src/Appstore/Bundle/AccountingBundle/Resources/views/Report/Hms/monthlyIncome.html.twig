@@ -33,7 +33,6 @@
                             <div class="btn-group">
                                 {% set currentMonth = "now"|date("m") %}
                                 {% set currentYear = "now"|date("Y") %}
-
                                 {% set startMonth = searchForm.startMonth is defined ? searchForm.startMonth :"now"|date("m") %}
                                 {% set endMonth = searchForm.endMonth is defined ? searchForm.endMonth :"now"|date("m") %}
                                 {% set year = searchForm.year is defined ? searchForm.year :"now"|date("Y") %}
@@ -67,7 +66,6 @@
                                         </div>
                                         <div class="span4">
                                             <div class="controls">
-
                                                 {% set years = [2018,2019,2020,2021,2022,2023,2024,2025] %}
                                                 <div class="input-append span11">
                                                     <select class="span11 m-wrap" name="year" id='year'>

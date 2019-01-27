@@ -167,7 +167,7 @@ class ReportController extends Controller
         $user = $this->getUser();
 
         $currentStockPrice = $em->getRepository('MedicineBundle:MedicineStock')->reportCurrentStockPrice($user);
-        $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user->getGlobalOption(), $data);
+        $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user, $data);
         $accountSales = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($user, $data);
         $accountExpenditure = $em->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user, $data);
 
