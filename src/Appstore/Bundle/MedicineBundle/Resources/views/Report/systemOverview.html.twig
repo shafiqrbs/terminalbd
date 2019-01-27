@@ -98,10 +98,10 @@
                                 </div>
                                 <div class="span6">
                                     <table class="table table-bordered table-striped table-condensed flip-content ">
-                                        <tr><th class="numeric" >Total Sales</th><td>{{ income.total|number_format }}</td></tr>
-                                        <tr><th class="numeric" >Purchase Price</th><td>{{ income.totalPurchase|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Total Sales</th><td>{{ income.sales|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Purchase Price</th><td>{{ income.purchase|number_format }}</td></tr>
                                         <tr><th class="numeric" >Expenditure</th><td>{{ (income.expenditures)|number_format }}</td></tr>
-                                        <tr><th class="numeric" >Net Income</th><td>{{ (income.total - (income.totalPurchase +income.expenditures ))|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Net Income</th><td>{{ (income.sales - (income.purchase +income.expenditures ))|number_format }}</td></tr>
                                     </table>
                                 </div>
                             </div>

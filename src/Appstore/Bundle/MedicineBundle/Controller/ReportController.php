@@ -166,7 +166,7 @@ class ReportController extends Controller
         $user = $this->getUser();
         $transactionMethods = array(1,2,3);
         $datetime = new \DateTime("now");
-        $dataIncome['startDate'] = $user->getGlobalOption()->getCreated();
+        $dataIncome['startDate'] = $user->getGlobalOption()->getCreated()->format('Y-m-d');
         $dataIncome['endDate'] = $datetime->format('Y-m-d');
         $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineTotalIncome($this->getUser(),$dataIncome);
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
