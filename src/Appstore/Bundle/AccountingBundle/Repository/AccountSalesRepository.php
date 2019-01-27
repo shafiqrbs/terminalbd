@@ -418,7 +418,6 @@ class AccountSalesRepository extends EntityRepository
 			$data['endDate'] = $datetime->format('Y-m-t 23:59:59');
 
 		}else{
-
 			$data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
 			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
 		}
@@ -442,7 +441,6 @@ class AccountSalesRepository extends EntityRepository
 			$data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
 			$data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
 		}
-
 		$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
 		$purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
 		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
@@ -450,6 +448,25 @@ class AccountSalesRepository extends EntityRepository
 		return $data;
 
 	}
+
+    public function reportMedicineTotalIncome(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption()->getId();
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
+        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+        return $data;
+
+    }
 
 	public function reportHmsTransactionIncome()
 	{
@@ -514,8 +531,12 @@ class AccountSalesRepository extends EntityRepository
 	    $accountSales->setSourceInvoice( $entity->getInvoice() );
 	    $accountSales->setCustomer( $entity->getCustomer() );
 	    $accountSales->setTotalAmount( $entity->getTotal() );
-	    $accountSales->setAmount( $entity->getPayment() );
-	    if ( $entity->getPayment() > 0 ) {
+        if ($entity->getPayment() > 0){
+            $accountSales->setAmount($entity->getPayment());
+        }else{
+            $accountSales->setAmount(0);
+        }
+        if ( $entity->getPayment() > 0 ) {
 		    $accountSales->setTransactionMethod( $entity->getTransactionMethod() );
 	    }
         $accountSales->setApprovedBy($entity->getApprovedBy());
@@ -620,7 +641,11 @@ class AccountSalesRepository extends EntityRepository
 	    $accountSales->setSourceInvoice( $entity->getHmsInvoice()->getInvoice() );
 	    $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
-        $accountSales->setAmount($entity->getPayment());
+        if ($entity->getPayment() > 0){
+            $accountSales->setAmount($entity->getPayment());
+        }else{
+            $accountSales->setAmount(0);
+        }
         $accountSales->setProcessHead('advance');
         $accountSales->setApprovedBy($entity->getCreatedBy());
         if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
@@ -702,7 +727,11 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getNetTotal());
-        $accountSales->setAmount($entity->getReceived());
+        if ($entity->getReceived() > 0){
+            $accountSales->setAmount($entity->getReceived());
+        }else{
+            $accountSales->setAmount(0);
+        }
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setMedicineSales($entity);
         $accountSales->setSourceInvoice($entity->getInvoice());
@@ -773,7 +802,11 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getTotal());
-        $accountSales->setAmount($entity->getReceived());
+        if ($entity->getReceived() > 0){
+            $accountSales->setAmount($entity->getReceived());
+        }else{
+            $accountSales->setAmount(0);
+        }
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setBusinessInvoice($entity);
         $accountSales->setSourceInvoice($entity->getInvoice());

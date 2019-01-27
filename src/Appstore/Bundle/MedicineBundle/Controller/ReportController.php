@@ -143,7 +143,6 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        exit;
         $purchaseCashOverview = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user, $data);
         $transactionCash = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseTransactionOverview($user, $data);
         $purchaseMode = $em->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseModeOverview($user, $data);
@@ -165,20 +164,25 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-
+        $transactionMethods = array(1,2,3);
+        $datetime = new \DateTime("now");
+        $dataIncome['startDate'] = $user->getGlobalOption()->getCreated();
+        $dataIncome['endDate'] = $datetime->format('Y-m-d');
+        $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineTotalIncome($this->getUser(),$dataIncome);
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
         $currentStockPrice = $em->getRepository('MedicineBundle:MedicineStock')->reportCurrentStockPrice($user);
         $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user, $data);
         $accountSales = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($user, $data);
         $accountExpenditure = $em->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user, $data);
-
         return $this->render('MedicineBundle:Report:systemOverview.html.twig', array(
-            'option' => $user->getGlobalOption(),
-            'currentStockPrice' => $currentStockPrice,
-            'accountPurchase' => $accountPurchase,
-            'accountSales' => $accountSales,
-            'accountExpenditure' => $accountExpenditure,
-            'searchForm' => $data,
-
+            'option'                => $user->getGlobalOption(),
+            'income'     => $income,
+            'transactionCashOverviews'     => $transactionCashOverview,
+            'currentStockPrice'     => $currentStockPrice,
+            'accountPurchase'       => $accountPurchase,
+            'accountSales'          => $accountSales,
+            'accountExpenditure'    => $accountExpenditure,
+            'searchForm'            => $data,
         ));
     }
 
@@ -189,9 +193,9 @@ class ReportController extends Controller
         $user = $this->getUser();
         $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user, $data);
         return $this->render('MedicineBundle:Report:purchase/purchaseVendor.html.twig', array(
-            'option' => $user->getGlobalOption(),
-            'entities' => $entities,
-            'searchForm' => $data,
+            'option'        => $user->getGlobalOption(),
+            'entities'      => $entities,
+            'searchForm'    => $data,
         ));
     }
 
@@ -203,10 +207,10 @@ class ReportController extends Controller
         $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->salesVendorCustomerReport($user, $data);
         $salesVendors = $em->getRepository('MedicineBundle:MedicinePurchase')->vendorCustomerSalesReport($user, $entities);
         return $this->render('MedicineBundle:Report:sales/salesVendorCustomer.html.twig', array(
-            'option' => $user->getGlobalOption(),
-            'entities' => $entities,
-            'salesVendors' => $salesVendors,
-            'searchForm' => $data,
+            'option'        => $user->getGlobalOption(),
+            'entities'      => $entities,
+            'salesVendors'  => $salesVendors,
+            'searchForm'    => $data,
         ));
     }
 
@@ -220,12 +224,12 @@ class ReportController extends Controller
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent = array(5));
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'asc'));
         return $this->render('MedicineBundle:Report:purchase/purchase.html.twig', array(
-            'globalOption' => $globalOption,
-            'entities' => $pagination,
-            'accountHead' => $accountHead,
-            'transactionMethods' => $transactionMethods,
-            'searchForm' => $data,
-            'overview' => $overview,
+            'globalOption'          => $globalOption,
+            'entities'              => $pagination,
+            'accountHead'           => $accountHead,
+            'transactionMethods'    => $transactionMethods,
+            'searchForm'            => $data,
+            'overview'              => $overview,
         ));
     }
 
