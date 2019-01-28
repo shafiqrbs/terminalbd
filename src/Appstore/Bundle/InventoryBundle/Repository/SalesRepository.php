@@ -196,14 +196,12 @@ class SalesRepository extends EntityRepository
 
     public function salesReport( User $user , $data)
     {
-
         $userBranch = $user->getProfile()->getBranches();
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
-
-
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.salesBy', 'u');
         $qb->leftJoin('s.transactionMethod', 't');
+        $qb->innerJoin('s.salesItems', 'si');
         $qb->select('u.username as salesBy');
         $qb->addSelect('t.name as transactionMethod');
         $qb->addSelect('s.id as id');
@@ -217,6 +215,7 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('(s.totalItem) totalItem');
         $qb->addSelect('(s.discount) as discount');
         $qb->addSelect('(s.vat) as vat');
+        $qb->addSelect('SUM(si.purchasePrice * si.quantity) as purchasePrice');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $inventory);
         $qb->andWhere('s.process = :process');
@@ -225,6 +224,7 @@ class SalesRepository extends EntityRepository
             $qb->andWhere("s.branches =".$userBranch);
         }
         $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('s.id');
         $qb->orderBy('s.updated','DESC');
         $result = $qb->getQuery();
         return $result;
@@ -299,10 +299,12 @@ class SalesRepository extends EntityRepository
 		$compare = new \DateTime();
 		$year =  $compare->format('Y');
 		$year = isset($data['year'])? $data['year'] :$year;
-		$sql = "SELECT MONTH (sales.created) as month,SUM(sales.total) AS total
+		$sql = "SELECT DATE_FORMAT(sales.created,'%M') as month , MONTH (sales.created) as monthId ,SUM(sales.total) AS total,SUM(sales.subTotal) AS subTotal,
+                SUM(sales.discount) AS discount,SUM(sales.vat) AS vat,SUM(sales.payment) AS receive,SUM(sales.due) AS due, SUM(SalesItem.quantity * SalesItem.purchasePrice) as purchasePrice 
                 FROM Sales as sales
+                 JOIN  SalesItem on sales.id = SalesItem.sales_id
                 WHERE sales.inventoryConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year
-                GROUP BY month ORDER BY month ASC";
+                GROUP BY month ORDER BY monthId ASC";
 		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
 		$stmt->bindValue('config', $config);
 		$stmt->bindValue('process', 'Done');
@@ -313,6 +315,31 @@ class SalesRepository extends EntityRepository
 
 
 	}
+
+    public function inventorySalesDaily(User $user , $data =array())
+    {
+
+        $config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(sales.created,'%d-%m-%Y') as date , DATE (sales.created) as dateId ,SUM(sales.total) AS total,SUM(sales.subTotal) AS subTotal,
+                SUM(sales.discount) AS discount,SUM(sales.vat) AS vat,SUM(sales.payment) AS receive,SUM(sales.due) AS due , SUM(SalesItem.quantity * SalesItem.purchasePrice) as purchasePrice 
+                FROM Sales as sales
+                JOIN  SalesItem on sales.id = SalesItem.sales_id
+                WHERE sales.inventoryConfig_id = :config AND sales.process = :process AND MONTHNAME(sales.created) =:month  AND YEAR(sales.created) =:year
+                GROUP BY date ORDER BY dateId ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+    }
 
     public function monthlySales(User $user , $data =array())
     {
@@ -334,8 +361,6 @@ class SalesRepository extends EntityRepository
         $stmt->execute();
         $result =  $stmt->fetchAll();
         return $result;
-
-
     }
 
 	public function currentMonthSales(User $user , $data =array())
@@ -364,7 +389,6 @@ class SalesRepository extends EntityRepository
 
 
 	}
-
 
 	public function salesPurchasePriceReport(User $user,$data,$x)
     {
@@ -523,7 +547,10 @@ class SalesRepository extends EntityRepository
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
+        $qb->join('s.salesItems','si');
         $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, count(s.totalItem) as totalItem, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice) as purchasePrice');
+        $qb->addSelect('SUM(si.quantity) as quantity');
         $qb->where('s.inventoryConfig = :inventory');
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');

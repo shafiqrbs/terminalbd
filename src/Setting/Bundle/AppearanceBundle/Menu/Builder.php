@@ -673,9 +673,14 @@ class Builder extends ContainerAware
                     ->setAttribute('icon', 'icon-bar-chart')
                     ->setAttribute('dropdown', true);
                 $menu['Sales']['Reports']->addChild('Sales Overview', array('route' => 'inventory_report_sales_overview'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Daily Sales', array('route' => 'inventory_report_daily_sales'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Monthly Sales', array('route' => 'inventory_report_monthly_sales'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Daily  Sales & Profit', array('route' => 'inventory_report_daily_sales_profit'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Monthly  Sales & Profit', array('route' => 'inventory_report_monthly_sales_profit'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Sales']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('Periodic Sales Item', array('route' => 'inventory_report_sales_item'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('Sales Item Details', array('route' => 'inventory_report_sales_item_details'))->setAttribute('icon', 'icon-bar-chart');
-                $menu['Sales']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('Sales by User', array('route' => 'inventory_report_sales_user'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Sales']['Reports']->addChild('User Sales Target', array('route' => 'inventory_report_sales_user_target'))->setAttribute('icon', 'icon-bar-chart');
             }

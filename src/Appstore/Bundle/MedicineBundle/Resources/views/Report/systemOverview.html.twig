@@ -34,32 +34,31 @@
                         <div class="portlet-body form">
                             <div class="row-fluid">
                                 <div class="span6">
-                                    <div class="form-actions portlet box green">
+                                    <div class="form-actions portlet box yellow">
                                         <div class="portlet-title">
-                                            <div class="caption"><i class="icon-reorder"></i>Medicine Current Stock Purchase & Sales Price</div>
+                                            <div class="caption"><i class="icon-reorder"></i>Medicine Current Stock Sales & Purchase Price</div>
                                         </div>
                                     </div>
                                     <div class="clearfix">&nbsp;</div>
                                     <table class="table table-bordered table-striped table-condensed flip-content ">
                                         <tr>
-                                            <th class="numeric" >Purchase Amount</th>
-                                            <td class="numeric" >{{ currentStockPrice.purchasePrice|number_format }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="numeric" >Sales Amount</th>
+                                            <th class="numeric" >Approximately Sales Prce</th>
                                             <td class="numeric" >{{ currentStockPrice.salesPrice|number_format }}</td>
                                         </tr>
                                         <tr>
-                                            <th class="numeric" >Approximately Profit Amount</th>
+                                            <th class="numeric" >Purchase Price</th>
+                                            <td class="numeric" >{{ currentStockPrice.purchasePrice|number_format }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="numeric" >Approximately Profit</th>
                                             <td class="numeric" >{{ (currentStockPrice.salesPrice - currentStockPrice.purchasePrice)|number_format }}</td>
                                         </tr>
-
                                     </table>
                                 </div>
                                 <div class="span6">
-                                    <div class="form-actions portlet box green">
+                                    <div class="form-actions portlet box red">
                                         <div class="portlet-title">
-                                            <div class="caption"><i class="icon-reorder"></i>Medicine Current Stock Purchase & Sales Price</div>
+                                            <div class="caption"><i class="icon-reorder"></i>Income/Loss</div>
                                         </div>
                                     </div>
                                     <div class="clearfix">&nbsp;</div>

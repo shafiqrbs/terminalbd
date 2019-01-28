@@ -127,10 +127,10 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class="numeric" ><strong>{{ purchaseSalesPrice.quantity }}</strong></td>
+                                    <td class="numeric" ><strong>{{ cashOverview.quantity }}</strong></td>
                                     <td class="numeric" ><strong>{{ cashOverview.total|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ purchaseSalesPrice.purchasePrice|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + purchaseSalesPrice.purchasePrice))|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ cashOverview.purchasePrice|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + cashOverview.purchasePrice))|number_format }}</strong></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -166,8 +166,8 @@
                                     <th class="numeric" >{{ entity.total|number_format  }}</th>
                                     <th class="numeric" >{{ entity.payment|number_format }}</th>
                                     <td class="numeric" >{{ entity.due|number_format }}</td>
-                                    <td class="numeric" >{{ purchasePrice[entity.id]|number_format }}</td>
-                                    <th class="numeric" >{{ (entity.total - purchasePrice[entity.id])|number_format }}</th>
+                                    <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
+                                    <th class="numeric" >{{ (entity.total - entity.purchasePrice)|number_format }}</th>
                                 </tr>
                             {% endfor %}
                             </tbody>

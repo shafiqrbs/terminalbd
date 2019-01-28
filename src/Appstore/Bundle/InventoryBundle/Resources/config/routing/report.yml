@@ -51,6 +51,22 @@ inventory_report_sales:
     path:     /sales-transaction
     defaults: { _controller: "InventoryBundle:Report:salesTransaction" }
 
+inventory_report_monthly_sales:
+    path:     /monthly-sales
+    defaults: { _controller: "InventoryBundle:Report:monthlySales" }
+
+inventory_report_daily_sales:
+    path:     /daily-sales
+    defaults: { _controller: "InventoryBundle:Report:dailySales" }
+
+inventory_report_daily_sales_profit:
+    path:     /daily-sales-profit
+    defaults: { _controller: "InventoryBundle:Report:dailySalesProfit" }
+
+inventory_report_monthly_sales_profit:
+    path:     /monthly-sales-profit
+    defaults: { _controller: "InventoryBundle:Report:monthlySalesProfit" }
+
 inventory_report_sales_overview:
     path:     /sales-transaction-overview
     defaults: { _controller: "InventoryBundle:Report:salesTransactionOverview" }

@@ -6,6 +6,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -243,17 +244,14 @@ class ReportController extends Controller
         $inventory = $user->getGlobalOption()->getInventoryConfig();
         $entities = $em->getRepository('InventoryBundle:Sales')->salesReport($user,$data);
         $pagination = $this->paginate($entities);
-        $salesPurchasePrice = $em->getRepository('InventoryBundle:Sales')->salesPurchasePriceReport($user,$data,$pagination);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-        $purchaseSalesPrice = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
+     //   $purchaseSalesPrice = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
         $cashOverview = $em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
         return $this->render('InventoryBundle:Report:sales/sales.html.twig', array(
             'option'                    => $this->getUser()->getGlobalOption(),
             'inventory'             => $inventory ,
             'entities'              => $pagination ,
-            'purchasePrice'         => $salesPurchasePrice ,
             'cashOverview'          => $cashOverview,
-            'purchaseSalesItem'     => $purchaseSalesPrice,
             'transactionMethods'    => $transactionMethods ,
             'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm'            => $data,
@@ -295,6 +293,108 @@ class ReportController extends Controller
             'entities' => $pagination,
             'branches' => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm' => $data,
+        ));
+    }
+
+    public function dailySalesProfitAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:Sales')->inventorySalesDaily($user,$data);
+        $sales = array();
+        foreach ($entities as $entity){
+            $sales[$entity['date']] = $entity;
+        }
+        $expenses = $em->getRepository('AccountingBundle:Expenditure')->monthlyExpenditure($user,$data);
+        if(empty($data['download'])){
+            return $this->render('InventoryBundle:Report:sales/dailySalesProfit.html.twig', array(
+                'option'                    => $this->getUser()->getGlobalOption(),
+                'monthlySales'              => $sales,
+                'expenses'                  => $expenses,
+                'searchForm'                => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'InventoryBundle:Report:sales/dailySalesProfitPdf.html.twig', array(
+                    'globalOption'              => $this->getUser()->getGlobalOption(),
+                    'monthlySales'              => $sales,
+                    'expenses'                  => $expenses,
+                    'searchForm'                => $data,
+                )
+            );
+            $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+            $snappy          = new Pdf($wkhtmltopdfPath);
+            $pdf             = $snappy->getOutputFromHtml($html);
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="dailySalesProfitPdf.pdf"');
+            echo $pdf;
+            return new Response('');
+        }
+
+    }
+
+    public function monthlySalesProfitAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('InventoryBundle:Sales')->inventorySalesMonthly($user,$data);
+        $sales = array();
+        foreach ($entities as $entity){
+            $sales[$entity['month']] = $entity;
+        }
+        $expenses = $em->getRepository('AccountingBundle:Expenditure')->yearlyExpenditure($user,$data);
+        if(empty($data['download'])){
+            return $this->render('InventoryBundle:Report:sales/monthlySalesProfit.html.twig', array(
+                'option'                    => $this->getUser()->getGlobalOption(),
+                'monthlySales'              => $sales,
+                'expenses'                  => $expenses,
+                'searchForm'                => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'InventoryBundle:Report:sales/monthlySalesProfitPdf.html.twig', array(
+                    'globalOption'              => $this->getUser()->getGlobalOption(),
+                    'monthlySales'              => $sales,
+                    'expenses'                  => $expenses,
+                    'searchForm'                => $data,
+                )
+            );
+            $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+            $snappy          = new Pdf($wkhtmltopdfPath);
+            $pdf             = $snappy->getOutputFromHtml($html);
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="monthlySalesProfitPdf.pdf"');
+            echo $pdf;
+            return new Response('');
+        }
+
+    }
+
+
+    public function dailySalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('InventoryBundle:Sales')->inventorySalesDaily($user,$data);
+        return $this->render('InventoryBundle:Report:sales/dailySales.html.twig', array(
+            'entities'      => $entities ,
+            'searchForm'    => $data ,
+        ));
+    }
+
+    public function monthlySalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('InventoryBundle:Sales')->inventorySalesMonthly($user,$data);
+        return $this->render('InventoryBundle:Report:sales/monthlySales.html.twig', array(
+            'entities'      => $entities ,
+            'searchForm'    => $data ,
         ));
     }
 

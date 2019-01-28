@@ -203,4 +203,29 @@ class ExpenditureRepository extends EntityRepository
         return $arrays;
     }
 
+    public function yearlyExpenditure(User $user , $data =array())
+    {
+        $config = $user->getGlobalOption()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(transaction.updated,'%M') as month,SUM(transaction.amount) as payment
+                FROM Expenditure as transaction
+                WHERE transaction.globalOption_id = :option AND transaction.process = :process AND  YEAR(transaction.updated) =:year
+                GROUP BY month";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('option', $config);
+        $stmt->bindValue('process', 'Approved');
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+            $arrays[$result['month']] = $result;
+        }
+        return $arrays;
+    }
+
 }

@@ -472,6 +472,4 @@ class InvoiceTransactionRepository extends EntityRepository
 
     }
 
-
-
 }
