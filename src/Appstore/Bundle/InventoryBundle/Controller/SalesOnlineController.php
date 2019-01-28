@@ -29,14 +29,14 @@ class SalesOnlineController extends Controller
     public function paginate($entities)
     {
 
-	    $paginator = $this->get('knp_paginator');
-	    $pagination = $paginator->paginate(
-		    $entities,
-		    $this->get('request')->query->get('page', 1)/*page number*/,
-		    25  /*limit per page*/
-	    );
-	    $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
-	    return $pagination;
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
     }
 
     /**
@@ -209,7 +209,7 @@ class SalesOnlineController extends Controller
         } else {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $msg = 'There is no product in our inventory';
+            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
         }
         $data = $this->returnResultData($sales,$msg);
         return new Response(json_encode($data));
@@ -223,21 +223,21 @@ class SalesOnlineController extends Controller
     public function salesDiscountUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-	    $discountType = $request->request->get('discountType');
-	    $discountCal = (float)$request->request->get('discount');
+        $discountType = $request->request->get('discountType');
+        $discountCal = (float)$request->request->get('discount');
         $salesId = $request->request->get('sales');
 
         /* @var $sales Sales */
 
         $sales = $em->getRepository('InventoryBundle:Sales')->find($salesId);
-	    $subTotal = $sales->getSubTotal();
-	    if($discountType == 'Flat'){
-		    $total = ($subTotal  - $discountCal);
-		    $discount = $discountCal;
-	    }else{
-		    $discount = ($subTotal * $discountCal)/100;
-		    $total = ($subTotal  - $discount);
-	    }
+        $subTotal = $sales->getSubTotal();
+        if($discountType == 'Flat'){
+            $total = ($subTotal  - $discountCal);
+            $discount = $discountCal;
+        }else{
+            $discount = ($subTotal * $discountCal)/100;
+            $total = ($subTotal  - $discount);
+        }
 
         if($total > 0 ){
 
@@ -245,24 +245,24 @@ class SalesOnlineController extends Controller
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
                 $sales->setVat($vat);
             }
-	        $sales->setDiscountType($discountType);
-	        $sales->setDiscountCalculation($discountCal);
-	        $sales->setDiscount(round($discount));
+            $sales->setDiscountType($discountType);
+            $sales->setDiscountCalculation($discountCal);
+            $sales->setDiscount(round($discount));
             $sales->setTotal(round($total + $vat));
             $sales->setDue(round($total+$vat));
         }else{
-	        if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-		        $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
-		        $sales->setVat($vat);
-	        }
-	        $sales->setDiscountType('Flat');
-	        $sales->setDiscountCalculation(0);
-	        $sales->setDiscount(0);
-	        $sales->setTotal(round($subTotal + $vat));
-	        $sales->setDue(round($sales->getTotal()));
+            if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
+                $sales->setVat($vat);
+            }
+            $sales->setDiscountType('Flat');
+            $sales->setDiscountCalculation(0);
+            $sales->setDiscount(0);
+            $sales->setTotal(round($subTotal + $vat));
+            $sales->setDue(round($sales->getTotal()));
         }
-	    $em->persist($sales);
-	    $em->flush();
+        $em->persist($sales);
+        $em->flush();
         $data = $this->returnResultData($sales);
         return new Response(json_encode($data));
         exit;
@@ -396,7 +396,7 @@ class SalesOnlineController extends Controller
                 $entity->setCreated($datetime);
             }
             if(empty($entity->getPayment()) AND $entity->getProcess() =="Done"){
-	            $entity->setTransactionMethod(NULL);
+                $entity->setTransactionMethod(NULL);
             }
             $purchaseAmount = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getItemPurchasePrice($entity);
             $entity->setPurchasePrice($purchaseAmount);
@@ -426,7 +426,7 @@ class SalesOnlineController extends Controller
         $device ="";
         $detect = new MobileDetect();
         if( $detect->isMobile() || $detect->isTablet() ) {
-        $device = 'mobile';
+            $device = 'mobile';
         }
         $salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity,$device);
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
@@ -625,7 +625,7 @@ class SalesOnlineController extends Controller
             $em->flush();
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-          //  $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+            //  $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');
@@ -1193,7 +1193,7 @@ class SalesOnlineController extends Controller
 
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-         //   $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+            //   $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return $this->redirect($this->generateUrl('inventory_salesonline_new'));
@@ -1204,29 +1204,29 @@ class SalesOnlineController extends Controller
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory,'invoice' => $invoice));
-            $em = $this->getDoctrine()->getManager();
-            $em->getRepository('InventoryBundle:StockItem')->saleaItemStockReverse($entity);
-            $em->getRepository('InventoryBundle:Item')->getSalesItemReverse($entity);
-            $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
-            $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
-            $em = $this->getDoctrine()->getManager();
-            $entity->setRevised(true);
-            $entity->setProcess('In-progress');
-            $entity->setRevised(true);
-            $entity->setTotal($entity->getSubTotal());
-            $entity->setPaymentStatus('Due');
-            $entity->setDiscount(null);
-            $entity->setDue($entity->getSubTotal());
-            $entity->setPaymentInWord(null);
-            $entity->setPayment(null);
-            $entity->setPaymentStatus('Pending');
-            $em->flush();
-            $template = $this->get('twig')->render('InventoryBundle:Reverse:salesReverse.html.twig', array(
-                'entity' => $entity,
-                'inventoryConfig' => $inventory,
-            ));
-            $em->getRepository('InventoryBundle:Reverse')->insertSales($entity, $template);
-            return $this->redirect($this->generateUrl('inventory_salesonline_edit', array('code' => $entity->getInvoice())));
-        }
+        $em = $this->getDoctrine()->getManager();
+        $em->getRepository('InventoryBundle:StockItem')->saleaItemStockReverse($entity);
+        $em->getRepository('InventoryBundle:Item')->getSalesItemReverse($entity);
+        $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
+        $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
+        $em = $this->getDoctrine()->getManager();
+        $entity->setRevised(true);
+        $entity->setProcess('In-progress');
+        $entity->setRevised(true);
+        $entity->setTotal($entity->getSubTotal());
+        $entity->setPaymentStatus('Due');
+        $entity->setDiscount(null);
+        $entity->setDue($entity->getSubTotal());
+        $entity->setPaymentInWord(null);
+        $entity->setPayment(null);
+        $entity->setPaymentStatus('Pending');
+        $em->flush();
+        $template = $this->get('twig')->render('InventoryBundle:Reverse:salesReverse.html.twig', array(
+            'entity' => $entity,
+            'inventoryConfig' => $inventory,
+        ));
+        $em->getRepository('InventoryBundle:Reverse')->insertSales($entity, $template);
+        return $this->redirect($this->generateUrl('inventory_salesonline_edit', array('code' => $entity->getInvoice())));
+    }
 
 }

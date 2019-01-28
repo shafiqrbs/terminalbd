@@ -127,7 +127,9 @@ class SalesController extends Controller
         $branch = $this->getUser()->getProfile()->getBranches();
         $branchStockItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($this->getUser(),$purchaseItem);
         $msg ='';
+
         /* Device Detection code desktop or mobile */
+
         $detect = new MobileDetect();
         $device = '';
         if( $detect->isMobile() || $detect->isTablet() ) {
@@ -138,7 +140,7 @@ class SalesController extends Controller
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $msg = '<div class="alert"><strong>Warning!</strong> There is no product in '.$branch->getName().' inventory.</div>';
 
-        }elseif(!empty($purchaseItem) and $itemStock >= $checkQuantity) {
+        }elseif(!empty($purchaseItem) and $itemStock > 0 and  $itemStock >= $checkQuantity) {
 
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
