@@ -64,21 +64,15 @@
                                     </div>
                                     <div class="clearfix">&nbsp;</div>
                                     <table class="table table-bordered table-striped table-condensed flip-content ">
-                                        <tr>
-                                            <th class="numeric" >Purchase Amount</th>
-                                            <td class="numeric" >{{ currentStockPrice.purchasePrice|number_format }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="numeric" >Sales Amount</th>
-                                            <td class="numeric" >{{ currentStockPrice.salesPrice|number_format }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="numeric" >Approximately Profit Amount</th>
-                                            <td class="numeric" >{{ (currentStockPrice.salesPrice - currentStockPrice.purchasePrice)|number_format }}</td>
-                                        </tr>
-
+                                        {% set totalExpense = 0 %}
+                                        {% for expense in income.expenditures %}
+                                            {% set totalExpense = totalExpense + expense.amount  %}
+                                        {% endfor %}
+                                        <tr><th class="numeric" >Total Sales</th><td>{{ income.sales|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Purchase Price</th><td>{{ income.purchase|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Expenditure</th><td>{{ totalExpense|number_format }}</td></tr>
+                                        <tr><th class="numeric" >NET INCOME</th><td>{{ (income.sales - (income.purchase + totalExpense ))|number_format }}</td></tr>
                                     </table>
-
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
@@ -98,10 +92,9 @@
                                 </div>
                                 <div class="span6">
                                     <table class="table table-bordered table-striped table-condensed flip-content ">
-                                        <tr><th class="numeric" >Total Sales</th><td>{{ income.sales|number_format }}</td></tr>
-                                        <tr><th class="numeric" >Purchase Price</th><td>{{ income.purchase|number_format }}</td></tr>
-                                        <tr><th class="numeric" >Expenditure</th><td>{{ (income.expenditures)|number_format }}</td></tr>
-                                        <tr><th class="numeric" >Net Income</th><td>{{ (income.sales - (income.purchase +income.expenditures ))|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Total Amount</th><td>{{ accountSales.totalAmount|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Payment Amount</th><td>{{ accountSales.receiveAmount|number_format }}</td></tr>
+                                        <tr><th class="numeric" >Due Amount</th><td>{{ (accountSales.totalAmount - accountSales.receiveAmount)|number_format }}</td></tr>
                                     </table>
                                 </div>
                             </div>
