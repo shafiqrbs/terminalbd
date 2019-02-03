@@ -85,7 +85,7 @@ $(document).on("click", ".delete", function() {
 
 $(document).on("change", "#mobile", function() {
     var customer = $(this).val();
-    $.get( Routing.generate('domain_customer_ledger'),{ customer:customer} )
+    $.get( Routing.generate('domain_customer_sales_ledger'),{ customer:customer} )
         .done(function( data ) {
             $('#outstanding').html(data);
         });
@@ -365,8 +365,6 @@ $(".select2VendorCompany").select2({
     allowClear: true,
     minimumInputLength: 2
 });
-
-
 
 $(document).on( "click", ".btn-number", function(e){
 

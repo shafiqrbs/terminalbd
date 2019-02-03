@@ -230,7 +230,6 @@ class CustomerController extends Controller
 
     public function autoSearchAction(Request $request)
     {
-
         $item = $_REQUEST['q'];
         if ($item) {
             $go = $this->getUser()->getGlobalOption();
@@ -278,8 +277,6 @@ class CustomerController extends Controller
         return new JsonResponse($items);
 
     }
-
-
 
     public function searchCodeAction($customer)
     {

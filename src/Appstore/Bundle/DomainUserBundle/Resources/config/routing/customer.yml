@@ -90,4 +90,10 @@ domain_customer_ledger:
     options:
            expose: true
 
+domain_customer_sales_ledger:
+    path:     /customer-sales-ledger
+    defaults: { _controller: "AccountingBundle:AccountSales:getCustomerSalesLedger" }
+    options:
+           expose: true
+
 

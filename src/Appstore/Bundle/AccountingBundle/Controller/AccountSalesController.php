@@ -371,14 +371,28 @@ class AccountSalesController extends Controller
 		    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($globalOption,$customer);
 		    $balance = empty($result) ? 0 : $result;
 	    }
-	    echo $taka = number_format($balance).' Taka';
-	    exit;
+        $taka = number_format($balance).' Taka';
 	    return new Response($taka);
 	    exit;
 
     }
 
+    public function getCustomerSalesLedgerAction()
+    {
 
+        $customerId = $_REQUEST['customer'];
+        $globalOption = $this->getUser()->getGlobalOption();
+        $balance = 0;
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile'=> $customerId));
+        if(!empty($customer)){
+            $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($globalOption,$customer);
+            $balance = empty($result) ? 0 : $result;
+        }
+        $taka = number_format($balance).' Taka';
+        return new Response($taka);
+        exit;
+
+    }
 
 
 

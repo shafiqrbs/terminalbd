@@ -105,8 +105,8 @@
                                         <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
+                                        <td class="numeric" >{{ entity.due|number_format }}</td>
                                         <td class="numeric" >{{ entity.process }}</td>
                                         <td class="numeric" >{% if entity.isReversed == 1 %}<a href="{{ path('business_reverse_show',{'id':entity.businessReverse.id}) }}">Reversed</a>{% endif %}</td>
                                         <td class="numeric" >

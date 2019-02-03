@@ -398,6 +398,7 @@ $('form#salesForm').on('keypress', '.salesInput', function (e) {
 });
 
 $(document).on("click", "#receiveBtn", function() {
+
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
