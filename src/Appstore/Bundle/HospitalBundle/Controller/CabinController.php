@@ -26,7 +26,6 @@ class CabinController extends Controller
      */
     public function indexAction()
     {
-
         $entity = new Particular();
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();

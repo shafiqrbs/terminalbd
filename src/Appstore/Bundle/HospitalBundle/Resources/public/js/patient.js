@@ -185,9 +185,8 @@ function formSubmit() {
             $('#balance').html('Return Tk.');
             $('#dueable').html(balance);
         }
+
     });
-
-
     var form = $("#invoicePatientForm").validate({
 
         rules: {

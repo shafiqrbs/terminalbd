@@ -53,7 +53,6 @@
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <form class="search-form" action="" method="get" name="itemSearch">
-
                                 <div class="row-fluid">
                                     <div class="span4">
                                         <select class="span12 m-wrap" name="startMonth" id='startMonth'>
@@ -67,7 +66,6 @@
                                     <div class="span4">
                                         <select class="span12 m-wrap" name="endMonth" id='endMonth'>
                                             <option value=''>--Select End Month--</option>
-                                            <option value='01' {% if searchForm.endMonth is defined and searchForm.endMonth == '01' %} selected="selected" {% endif %} >Janaury</option>
                                             {% for key,month in months %}
                                                 <option value='{{ key }}' {% if searchForm.endMonth is defined and searchForm.endMonth == key %} selected="selected" {% endif %} >{{ month }}</option>
                                             {% endfor %}
