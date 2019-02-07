@@ -30,7 +30,7 @@ business_pre_production_show:
     defaults: { _controller: "BusinessBundle:Production:show" }
 
 business_pre_production_delete:
-    path:     /{id}/delete
+    path:     /{particular}/{id}/delete
     defaults: { _controller: "BusinessBundle:Production:delete" }
 
 business_production_particular_search:

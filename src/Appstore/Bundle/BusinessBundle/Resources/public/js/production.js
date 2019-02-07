@@ -50,16 +50,18 @@ $('#invoiceParticulars').on("click", ".delete", function() {
 
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
-    $('#remove-'+id).hide();
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#subTotal').html(obj['subTotal']);
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
+            });
         }
-    })
+    });
+
 });
+
 
 $(document).on( "click", ".btn-number", function(e){
 

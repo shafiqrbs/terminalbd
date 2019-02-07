@@ -25,9 +25,8 @@
     <!-- END category HEADER-->
     <!-- BEGIN category CONTENT-->
     <div class="row-fluid">
-    <div class="span12">
-
-    <div class="portlet box green tabbable">
+        <div class="span12">
+        <div class="portlet box green tabbable">
         <div class="portlet-title">
             <div class="caption"><i class="icon-reorder"></i>Product: {{ entity.name }}</div>
             <div class="actions">
@@ -36,7 +35,7 @@
                 </div>
             </div>
         </div>
-    <div class="portlet-body">
+        <div class="portlet-body">
         <div class="portlet-body form">
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
@@ -106,7 +105,7 @@
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{% if item.particular.unit is not empty %}{{ item.particular.unit.name }}{% endif %}</td>
                                     <td class="span1">{{ (item.salesPrice * item.quantity)|number_format }}</td>
-                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('business_production_delete',{'particular': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                    <td class="span1"><a id="{{ item.id }}" data-url="{{ path('business_pre_production_delete',{'particular': entity.id,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -144,7 +143,10 @@
             {{ form_end(form) }}
             <!-- END FORM-->
         </div>
-
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
  <style>
      .sales-right{

@@ -265,17 +265,17 @@ class ProductionController extends Controller
         exit;
     }
 
-    public function deleteAction( BusinessProduction $element){
+    public function deleteAction(BusinessParticular $particular , $id){
 
         $em = $this->getDoctrine()->getManager();
+        $element = $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionElement')->find($id);
         if (!$element) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
         $em->remove($element);
         $em->flush();
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateSalesPrice($particular);
         exit;
-
-
     }
 
     public function showAction($id)
