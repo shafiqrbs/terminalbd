@@ -236,7 +236,7 @@ class InvoiceController extends Controller
         $referredId = $request->request->get('referredId');
         $data = $request->request->all()['hospitalInvoice'];
         $referred = $request->request->all()['referred'];
-        if($editForm->isValid() and !empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','Pending','Revised'))) {
+        if($editForm->isValid() and !empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','In-progress','Pending','Revised'))) {
             $referred = $request->request->all()['referred'];
             if(!empty($referred['name'])) {
                 $mobile = '';
@@ -270,7 +270,6 @@ class InvoiceController extends Controller
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
             }
-
             return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getId())));
         }elseif (in_array($entity->getProcess(),array('In-progress','Done','Cancel'))){
             return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getId())));

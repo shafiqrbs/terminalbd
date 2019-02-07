@@ -410,7 +410,7 @@
                         <input type="hidden" id="invoice" name="invoice" data-action="{{ path('hms_invoice_print_for',{'id': entity.id}) }}" value="{{ entity.id }}">
                         <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
                         <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ entity.total }}">
-                        <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
+                        <input type="hidden" name="due" class="" id="due" value="{{ entity.total }}">
                         <div class="controls">
                             <div class="input-append span7">
                                 {{ form_widget(form.printFor) }}

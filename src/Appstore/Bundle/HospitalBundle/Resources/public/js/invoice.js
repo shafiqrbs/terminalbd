@@ -217,9 +217,9 @@ $(document).on("click", "#diagnosticReceiveBtn", function() {
 
 });
 
-$(document).on('keyup', '#invoiceHospital_payment', function() {
+$(document).on('keyup', '#hospitalInvoice_payment', function() {
 
-    var payment  = parseInt($('#invoice_payment').val()  != '' ? $('#invoice_payment').val() : 0 );
+    var payment  = parseInt($('#hospitalInvoice_payment').val()  != '' ? $('#hospitalInvoice_payment').val() : 0 );
     var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
     var dueAmount = (due - payment);
     if(dueAmount > 0){
