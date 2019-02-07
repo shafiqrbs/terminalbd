@@ -11,6 +11,7 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
+        $globalOption = $this->getUser()->getGlobalOption();
 
         /* @var GlobalOption $globalOption */
 

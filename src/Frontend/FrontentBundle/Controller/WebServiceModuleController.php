@@ -17,7 +17,6 @@ class WebServiceModuleController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-
         $page ='';
         $pagination ='';
 
@@ -41,9 +40,7 @@ class WebServiceModuleController extends Controller
                     if(!empty($menu->getModule())){
                         //$categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
                     }
-
                 }else{
-
                     $page = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => $module));
                     if(!empty($page->getMenuCustom()) and $page->getMenuCustom()->getId() == 1){
                         $twigName = "index";
@@ -189,7 +186,7 @@ class WebServiceModuleController extends Controller
                 'pagination'    => $pagination,
                 'menu'          => $menu,
                 'page'          => $page,
-                'category'  => $category,
+                'category'      => $category,
                 'pageName'      => 'pageName',
             )
         );

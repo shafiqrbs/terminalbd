@@ -51,5 +51,5 @@ business_config:
     prefix:   /config
 
 business_homepage:
-    path:     /dashoard
+    path:     /dashboard
     defaults: { _controller: BusinessBundle:Default:index }

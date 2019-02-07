@@ -119,9 +119,6 @@ class SecurityController extends Controller
             $authErrorKey = SecurityContextInterface::AUTHENTICATION_ERROR;
             $lastUsernameKey = SecurityContextInterface::LAST_USERNAME;
         }
-
-
-
         // get the error if any (works with forward and redirect -- see below)
         if ($request->attributes->has($authErrorKey)) {
             $error = $request->attributes->get($authErrorKey);
@@ -150,8 +147,6 @@ class SecurityController extends Controller
         if ($error) {
             $error = $error->getMessage();
         }
-
-
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -161,20 +156,20 @@ class SecurityController extends Controller
 
         if ($authChecker->isGranted('ROLE_CUSTOMER')) {
             return new RedirectResponse($router->generate('webservice_customer_home',array('subdomain'=> $subdomain )), 307);
+        }elseif (!empty($authChecker)) {
+            return $this->redirect($this->generateUrl('landing_page'));
         }elseif (!$authChecker->isGranted('ROLE_CUSTOMER')) {
             return new RedirectResponse($router->generate('homepage'), 307);
-        }else{
-
+            $referer = $this->getRequest()->headers->get('referer');
+            return $this->redirect($referer);
+        }/*else{
             return $this->renderDomainLogin(array(
                 'last_username' => $lastUsername,
                 'error' => $error,
                 'csrf_token' => $csrfToken,
                 'globalOption'  => $globalOption,
             ),$themeName);
-        }
-
-
-
+        }*/
     }
 
     /**

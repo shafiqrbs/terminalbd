@@ -378,8 +378,6 @@ class Page
      */
     protected $pricePrefix;
 
-
-
     /**
      * @var text
      *
@@ -390,9 +388,31 @@ class Page
     /**
      * @var text
      *
-     * @ORM\Column(name="longitude", type="string", length=100, type="text", nullable=true )
+     * @ORM\Column(name="longitude", type="string", length=100, nullable=true )
      */
     private $longitude;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="galleryPosition", type="string", length=20, nullable=true )
+     */
+    private $galleryPosition;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="galleryType", type="string", length=20, nullable=true )
+     */
+    private $galleryType;
+
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ordering", type="smallint", length=2,  nullable=true )
+     */
+    private $ordering = 0;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -1369,6 +1389,54 @@ class Page
     public function setPricePrefix($pricePrefix)
     {
         $this->pricePrefix = $pricePrefix;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrdering()
+    {
+        return $this->ordering;
+    }
+
+    /**
+     * @param int $ordering
+     */
+    public function setOrdering($ordering)
+    {
+        $this->ordering = $ordering;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGalleryPosition()
+    {
+        return $this->galleryPosition;
+    }
+
+    /**
+     * @param string $galleryPosition
+     */
+    public function setGalleryPosition($galleryPosition)
+    {
+        $this->galleryPosition = $galleryPosition;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGalleryType()
+    {
+        return $this->galleryType;
+    }
+
+    /**
+     * @param string $galleryType
+     */
+    public function setGalleryType($galleryType)
+    {
+        $this->galleryType = $galleryType;
     }
 
 }

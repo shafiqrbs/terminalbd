@@ -201,6 +201,7 @@ class ModuleCategoryController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entity = $em->getRepository('SettingContentBundle:ModuleCategory')->findOneBy(array('globalOption'=>$globalOption,'id'=>$id));
         if (!empty($entity)) {
+            $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Status has been deleted successfully"

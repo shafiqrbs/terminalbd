@@ -28,7 +28,6 @@ class DefaultController extends Controller
         }else{
             $enable = 0;
         }
-
         $apps = array();
         if (!empty($globalOption ->getSiteSetting())) {
 

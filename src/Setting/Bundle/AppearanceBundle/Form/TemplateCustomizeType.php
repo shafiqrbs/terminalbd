@@ -112,6 +112,10 @@ class TemplateCustomizeType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('H1' => 'H1','H2' => 'H2','H3' => 'H3','H4' => 'H4'),
             ))
+            ->add('siteTitleColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
             ->add('siteSlogan','textarea', array('attr'=>array('class'=>'m-wrap span12','row'=> 4,'placeholder'=>'Site slogan')))
             ->add('homeBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',

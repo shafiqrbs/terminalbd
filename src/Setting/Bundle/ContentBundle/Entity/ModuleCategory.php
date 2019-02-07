@@ -63,12 +63,12 @@ class ModuleCategory
     protected $pages;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="category" )
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="category", cascade={"persist"}  )
      **/
     protected $page;
 
     /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="category" )
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="category" , cascade={"remove"} )
      **/
     protected $nav;
 

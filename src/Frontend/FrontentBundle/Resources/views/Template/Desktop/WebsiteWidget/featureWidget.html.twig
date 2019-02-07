@@ -33,7 +33,7 @@
     {% if globalOption.templateCustomize.siteTitle is not empty %}
         <div class="container wow fadeInDown grid" data-wow-delay="2s" >
             <div class="section-header" style="margin-top:60px">
-                <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
+                <{{ globalOption.templateCustomize.siteTitleSize }}  class="animated fadeInLeftBig slide-delay-1" {% if globalOption.templateCustomize.siteTitleColor is not empty %} style="color:{{ globalOption.templateCustomize.siteTitleColor }}!important" {% endif %} >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
             {% if globalOption.templateCustomize.siteSlogan is not empty %}
                 <p class="animated fadeInUpBig slide-delay-3" data-wow-delay="1s" >{{  globalOption.templateCustomize.siteSlogan }}</p>
             {% endif %}
@@ -77,7 +77,7 @@
         {% if globalOption.templateCustomize.siteTitle is not empty %}
             <div class="container wow fadeInDown grid" data-wow-delay="2s" >
                 <div class="section-header" style="margin-top:60px">
-                    <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
+                    <{{ globalOption.templateCustomize.siteTitleSize }}  class="animated fadeInLeftBig slide-delay-1" {% if globalOption.templateCustomize.siteTitleColor is not empty %} style="color:{{ globalOption.templateCustomize.siteTitleColor }}!important" {% endif %} >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
                 {% if globalOption.templateCustomize.siteSlogan is not empty %}
                     <p  data-animation="animated fadeInUpBig" class="delay-1s" >{{  globalOption.templateCustomize.siteSlogan }}</p>
                 {% endif %}
@@ -118,7 +118,7 @@
         {% if globalOption.templateCustomize.siteTitle is not empty %}
             <div class="container wow fadeInDown grid" data-wow-delay="2s" >
                 <div class="section-header" style="margin-top:60px">
-                    <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
+                    <{{ globalOption.templateCustomize.siteTitleSize }}  class="animated fadeInLeftBig slide-delay-1" {% if globalOption.templateCustomize.siteTitleColor is not empty %} style="color:{{ globalOption.templateCustomize.siteTitleColor }}!important" {% endif %} >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
                 {% if globalOption.templateCustomize.siteSlogan is not empty %}
                     <p data-animation="animated fadeInUpBig" class="delay-1s">{{  globalOption.templateCustomize.siteSlogan }}</p>
                 {% endif %}

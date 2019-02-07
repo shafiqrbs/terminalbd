@@ -79,7 +79,6 @@ class WebServiceController extends Controller
 	    }else{
 		    $theme = 'Template/Desktop/'.$themeName;
 	    }
-
 	    return $this->render('FrontendBundle:'.$theme.':index.html.twig',
 		    array(
 			    'entity'            => $globalOption,

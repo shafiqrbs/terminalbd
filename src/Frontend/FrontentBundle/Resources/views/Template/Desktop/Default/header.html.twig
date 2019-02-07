@@ -292,7 +292,7 @@
                             <i class="fa fa-tasks"></i> {{ app.user }}
                         </a>
                         <ul class="dropdown-menu sign-list">
-                            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i> Dashboard</a></li>
+                            <li><a href="{{ path('business_homepage') }}"><i class="fa fa-home"></i> Dashboard</a></li>
                             <li><a href="{{ path('domain_edit_profile') }}"><i class="fa fa-user"></i> My Profile</a></li>
                             <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out"></i> Logout</a></li>
                         </ul>
@@ -315,7 +315,6 @@
             </button>
             <a class="navbar-brand" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">
                 <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120,50) }}" alt="{{ globalOption.name }}" />
-
             </a>
         </div>
         <!-- End Header Navigation -->
@@ -323,7 +322,6 @@
         <div class="collapse navbar-collapse" id="navbar-menu">
             {{ menuTree|raw }}
         </div><!-- /.navbar-collapse -->
-
     </div>
     <div class="top-search">
         <form action="{{ path(globalOption.subDomain ~ '_webservice_search') }}" class="" method="get">

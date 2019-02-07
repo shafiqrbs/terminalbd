@@ -1,5 +1,5 @@
 homepage:
-    path:     /home
+    path:     /backend
     defaults: { _controller: "UserBundle:Default:landing" }
 
 admin:

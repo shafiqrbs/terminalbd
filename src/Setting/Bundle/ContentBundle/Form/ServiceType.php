@@ -49,18 +49,19 @@ class ServiceType extends AbstractType
             ))
             ->add('moduleCategory', 'entity', array(
                 'required'    => false,
-                'expanded'    => false,
-                'multiple'    => false,
+                'expanded'      =>true,
+                'multiple'      =>true,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
-                'empty_value' => '---Select Category---',
+                'empty_value' => '---Select category---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'check-list  span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
                         ->join('o.module', 'module')
-	                    ->where("o.status = 1")
-	                    ->andWhere("module.slug = :module")
-	                    ->setParameter('module', 'service')
+                        ->where("o.status = 1")
+                        /* ->andWhere(':module MEMBER OF o.module')*/
+                        ->andWhere("module.slug = :module")
+                        ->setParameter('module', 'service')
                         ->andWhere("o.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },

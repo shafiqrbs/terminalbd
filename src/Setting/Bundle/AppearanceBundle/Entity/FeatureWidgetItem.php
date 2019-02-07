@@ -34,6 +34,7 @@ class FeatureWidgetItem
      /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", inversedBy="featureWidgetItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\OrderBy({"ordering" = "ASC"})
      **/
     private  $feature;
 

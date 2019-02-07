@@ -124,7 +124,7 @@ class PageRepository extends EntityRepository
             ->andWhere('p.module = :module')
             ->setParameter('module', $module)
             ->setMaxResults($limit)
-            ->orderBy('p.updated','DESC')
+            ->orderBy('p.ordering','ASC')
             ->getQuery()->getResult();
         return $query;
     }
@@ -143,7 +143,7 @@ class PageRepository extends EntityRepository
             ->setParameter('option', $globalOption->getId())
             ->andWhere('p.module IN  (:modules)')
             ->setParameter('modules',$modArr)
-            ->orderBy('p.updated','DESC')
+            ->orderBy('p.ordering','ASC')
             ->getQuery()->getResult();
             return $query;
     }

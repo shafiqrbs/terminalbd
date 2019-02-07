@@ -184,6 +184,13 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="siteTitleColor", type="string", length=15, nullable=true)
+     */
+    private $siteTitleColor;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="breadcrumbPosition", type="string", length=20, nullable=true)
      */
     private $breadcrumbPosition;
@@ -2729,6 +2736,22 @@ class TemplateCustomize
 	public function setBreadcrumbHeight( int $breadcrumbHeight ) {
 		$this->breadcrumbHeight = $breadcrumbHeight;
 	}
+
+    /**
+     * @return string
+     */
+    public function getSiteTitleColor()
+    {
+        return $this->siteTitleColor;
+    }
+
+    /**
+     * @param string $siteTitleColor
+     */
+    public function setSiteTitleColor(string $siteTitleColor)
+    {
+        $this->siteTitleColor = $siteTitleColor;
+    }
 
 
 }

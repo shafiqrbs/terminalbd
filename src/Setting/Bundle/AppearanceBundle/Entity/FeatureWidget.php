@@ -43,6 +43,7 @@ class FeatureWidget
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="featureWidgets")
+     * @ORM\OrderBy({"ordering" = "ASC"})
      **/
     private $page;
 

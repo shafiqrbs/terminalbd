@@ -189,6 +189,12 @@ class Feature
      */
     private $isSlider = false;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ordering", type="smallint", length=2,  nullable=true )
+     */
+    private $ordering = 0;
 
 
     /**
@@ -694,5 +700,21 @@ class Feature
 	public function setCaptionFontColor( string $captionFontColor ) {
 		$this->captionFontColor = $captionFontColor;
 	}
+
+    /**
+     * @return int
+     */
+    public function getOrdering()
+    {
+        return $this->ordering;
+    }
+
+    /**
+     * @param int $ordering
+     */
+    public function setOrdering($ordering)
+    {
+        $this->ordering = $ordering;
+    }
 
 }

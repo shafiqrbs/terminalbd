@@ -8,6 +8,23 @@ webservice_sms_receive:
     options:
             expose: true
 
+webservice_user_signin:
+    path:     /web/sign-in
+    defaults: { _controller:  FrontendBundle:WebServiceCustomer:domainLogin }
+
+homepage:
+     path:     /backend
+     defaults: { _controller: BusinessBundle:Default:index }
+
+webservice_domain_backend:
+     path:     /business/dashboard
+     defaults: { _controller: BusinessBundle:Default:index }
+
+webservice_security_signin:
+    path:     web/security-signin
+    defaults: { _controller:  "UserBundle:Security:domainLogin" }
+    methods:  POST
+
 webservice_product_cookie_base_list:
     path:     /cookie/product-list
     defaults: { _controller: FrontendBundle:EcommerceWidget:cookieBaseProductList }
@@ -162,10 +179,6 @@ webservice_customer_checking:
     methods:  GET
     options:
             expose: true
-
-webservice_customer_login:
-    path:     /customer-login
-    defaults: { _controller:  FrontendBundle:WebServiceCustomer:domainLogin }
 
 webservice_login:
     path:     /customer-login

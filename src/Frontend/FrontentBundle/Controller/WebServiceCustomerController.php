@@ -115,7 +115,6 @@ class WebServiceCustomerController extends Controller
             $entity->setRoles(array('ROLE_CUSTOMER'));
             $em->persist($entity);
             $em->flush();
-
             //$dispatcher = $this->container->get('event_dispatcher');
             //$dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
             return $this->redirect($this->generateUrl('webservice_customer_confirm',array('subdomain' => $subdomain)));
@@ -166,17 +165,11 @@ class WebServiceCustomerController extends Controller
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
             return new Response('success');
-
         }else{
-
             return new Response('invalid');
         }
-
         exit;
-
-
     }
-
 
     public function confirmAction($subdomain)
     {
@@ -214,6 +207,7 @@ class WebServiceCustomerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new User();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'login'));
         if ($this->has('security.csrf.token_manager')) {
             $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
         } else {
@@ -229,11 +223,13 @@ class WebServiceCustomerController extends Controller
         }else{
             $theme = 'Template/Desktop/'.$themeName;
         }
-        return $this->render('FrontendBundle:'.$theme.':login.html.twig',
+         return $this->render('FrontendBundle:'.$theme.':login.html.twig',
             array(
                 'globalOption'  => $globalOption,
                 'entity' => $entity,
                 'error' => '',
+                'menu' => $menu,
+                'page'          => 'Login',
                 'csrf_token' => $csrfToken,
             )
         );
