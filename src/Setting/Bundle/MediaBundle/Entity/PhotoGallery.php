@@ -42,6 +42,7 @@ class PhotoGallery
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\GalleryImage", mappedBy="photoGallery",  cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"sorting" = "ASC"})
      */
     protected $galleryImages;
 

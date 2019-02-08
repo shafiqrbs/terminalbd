@@ -106,9 +106,14 @@
                         </div>
                         <hr><br/></hr>
                     {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'top' %}
+                        {% if page.webPath is not empty %}
+                            <a href="{{ image(page.webPath) }}" class="swipebox" title="{{ page.name }}">
+                                <img style="margin-bottom: 30px!important;" src="{{ image(page.webPath).forceResize(220,220) }}" alt="{{ page.name }}">
+                            </a>
+                        {% endif %}
                         {% for slide in page.photoGallery.galleryImages %}
-                            <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)) }}" class="swipebox" title="My Caption">
-                                <img style="margin-bottom: 30px!important;" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="image">
+                            <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)) }}" class="swipebox" title="{{ slide.caption }}">
+                                <img style="margin-bottom: 30px!important;" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="{{ slide.caption }}">
                             </a>
                         {% endfor %}
                         <hr><br/></hr>
