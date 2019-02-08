@@ -107,7 +107,7 @@
                         <hr><br/></hr>
                     {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'top' %}
                         {% for slide in page.photoGallery.galleryImages %}
-                            <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512) }}" class="swipebox" title="My Caption">
+                            <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,1024) }}" class="swipebox" title="My Caption">
                                 <img style="margin-bottom: 30px!important;" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="image">
                             </a>
                         {% endfor %}

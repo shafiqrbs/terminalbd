@@ -18,9 +18,7 @@ class WebServiceController extends Controller
 
     	$em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-
         if(!empty($globalOption)){
-
         	if($globalOption->getDomainType() == 'ecommerce'){
 		        return $this->renderEcommerce($request , $globalOption);
 	        }elseif ($globalOption->getDomainType() == 'medicine'){
@@ -28,7 +26,6 @@ class WebServiceController extends Controller
 	        }else{
 		        return $this->renderWebsite($globalOption);
 	        }
-
         }else{
             return $this->redirect($this->generateUrl('homepage'));
         }
