@@ -83,7 +83,7 @@
                                 <div class="carousel-inner">
                                 {% if page.webPath is not empty %}
                                     <div class="carousel-item item active" data-slide-no="0">
-                                        <img class="img-responsive"   src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
+                                        <img class="img-responsive"   src="{{ image(page.webPath).scaleResize(1024,512) }}" alt="{{ page.name }}" />
                                         <div class="carousel-caption " >
                                             <h4>{{ page.name }}</h4>
                                         </div>
@@ -91,7 +91,7 @@
                                 {% endif %}
                                 {% for slide in page.photoGallery.galleryImages %}
                                     <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
-                                        <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512,'#fff') }}" alt="...">
+                                        <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)) }}" alt="...">
                                         <div class="carousel-caption " >
                                             {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
                                             {% if slide.description is not empty %}<p>{{ slide.description|raw }}</p>{% endif %}
