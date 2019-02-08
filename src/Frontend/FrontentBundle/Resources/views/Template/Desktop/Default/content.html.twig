@@ -91,7 +91,7 @@
                                 {% endif %}
                                 {% for slide in page.photoGallery.galleryImages %}
                                     <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
-                                        <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)) }}" alt="...">
+                                        <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512) }}" alt="...">
                                         <div class="carousel-caption " >
                                             {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
                                             {% if slide.description is not empty %}<p>{{ slide.description|raw }}</p>{% endif %}
@@ -107,7 +107,7 @@
                         <hr><br/></hr>
                     {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'top' %}
                         {% for slide in page.photoGallery.galleryImages %}
-                            <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512,'#fff') }}" class="swipebox" title="My Caption">
+                            <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512) }}" class="swipebox" title="My Caption">
                                 <img style="margin-bottom: 30px!important;" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="image">
                             </a>
                         {% endfor %}
