@@ -45,9 +45,14 @@ class EducationConfig
 
 	/**
 	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularType", inversedBy="educationConfig")
-	 * @ORM\OrderBy({"name" = "ASC"})
+	 * @ORM\OrderBy({"ordering" = "ASC"})
 	 **/
 	private $type;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", inversedBy="educationConfig")
+	 **/
+	private $particularPatterns;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="education")

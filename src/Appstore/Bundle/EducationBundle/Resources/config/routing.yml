@@ -14,6 +14,10 @@ education_particular:
     resource: "@EducationBundle/Resources/config/routing/particular.yml"
     prefix:   /particular
 
+education_particular_pattern:
+    resource: "@EducationBundle/Resources/config/routing/particularpattern.yml"
+    prefix:   /particular-pattern
+
 education_homepage:
     path:     /dashboard
     defaults: { _controller: EducationBundle:Default:index }

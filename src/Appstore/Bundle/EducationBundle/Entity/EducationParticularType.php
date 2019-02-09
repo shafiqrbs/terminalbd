@@ -42,11 +42,11 @@ class EducationParticularType
     private $name;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="modeFor", type="string", length=50, nullable=true)
+     * @ORM\Column(name="ordering", type="smallint", length=2, nullable=true)
      */
-    private $modeFor;
+    private $ordering;
 
     /**
      * @Gedmo\Slug(fields={"name"})
@@ -131,35 +131,29 @@ class EducationParticularType
     }
 
     /**
-     * @return MedicineParticular
+     * @return EducationParticular
      */
     public function getParticulars()
     {
         return $this->particulars;
     }
 
+
     /**
-     * @return string
+     * @return int
      */
-    public function getModeFor()
+    public function getOrdering()
     {
-        return $this->modeFor;
+        return $this->ordering;
     }
 
     /**
-     * @param string $modeFor
+     * @param int $ordering
      */
-    public function setModeFor($modeFor)
+    public function setOrdering(int $ordering)
     {
-        $this->modeFor = $modeFor;
+        $this->ordering = $ordering;
     }
-
-	/**
-	 * @return EducationParticularMaster
-	 */
-	public function getParticularMasters() {
-		return $this->particularMasters;
-	}
 
 }
 
