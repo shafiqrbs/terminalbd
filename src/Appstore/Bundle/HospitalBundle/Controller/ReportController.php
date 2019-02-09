@@ -172,7 +172,7 @@ class ReportController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         if (empty($data['created'])) {
             $datetime = new \DateTime("now");
-            $data['created'] = $datetime->format('Y-m-d');
+            $data['created'] = $datetime->format('d-m-Y');
         }
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists($user, $mode = 'diagnostic', $data);
         $pagination = $entities->getQuery()->getResult();

@@ -63,10 +63,11 @@
   <table class="table">
       <thead>
       <tr><td class="pull-center" colspan="20">{{ globalOption.hospitalConfig.address|raw }}</td></tr>
-      <tr><th class="pull-center" colspan="20"><h3>DAILY SALES STATEMENT SHEET</h3></th></tr>
+      <tr><th class="pull-center" colspan="20"><h3>DAILY SALES STATEMENT SHEET: {{ searchForm['created'] }}</h3></th></tr>
       <tr>
           <th >Invoice No</th>
           <th >Name</th>
+          <th >Particulars</th>
           <th >Sub-Total</th>
           <th >Discount</th>
           <th >Total</th>
@@ -90,7 +91,7 @@
           <tr id="delete-{{ entity.id }}">
               <td  >{{ entity.invoice }}</td>
               <td  >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-              {#<td  >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>#}
+              <td  >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>
               <td  >{{ entity.subTotal }}</td>
               <td  >{{ entity.discount }}</td>
               <td  >{{ entity.total }}</td>
@@ -114,7 +115,7 @@
       </tbody>
       <tfoot>
       <tr>
-          <th colspan="2"><span class="pull-right">Grand Total</span></th>
+          <th colspan="3"><span class="pull-right">Grand Total</span></th>
           <td>{{ grandSubTotal }}</td>
           <td>{{ grandDiscount }}</td>
           <td>{{ grandTotal }}</td>
