@@ -178,14 +178,14 @@ class MedicinePurchase
      *
      * @ORM\Column(name="netTotal", type="float", nullable=true)
      */
-    private $netTotal;
+    private $netTotal = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="payment", type="float", nullable=true)
      */
-    private $payment;
+    private $payment = 0;
 
     /**
      * @var float

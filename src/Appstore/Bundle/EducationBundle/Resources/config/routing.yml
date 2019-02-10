@@ -18,6 +18,10 @@ education_particular_pattern:
     resource: "@EducationBundle/Resources/config/routing/particularpattern.yml"
     prefix:   /particular-pattern
 
+education_stock:
+    resource: "@EducationBundle/Resources/config/routing/stock.yml"
+    prefix:   /stock
+
 education_homepage:
     path:     /dashboard
     defaults: { _controller: EducationBundle:Default:index }

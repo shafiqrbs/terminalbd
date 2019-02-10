@@ -10,10 +10,10 @@
                 </div>
                 <div class="span3" style="text-align: right; line-height: 54px">
                     {% set totalExpense = 0 %}
-                    {% for expense in income.expenditures %}
-                        {% set totalExpense = totalExpense + income.amount  %}
-                    {% endfor %}
-                    <strong>INCOME BDT. {{ (income.sales - income.purchase - totalExpense)|number_format }}</strong>
+                   {# {% for expense in income.expenditures %}
+                        {% set totalExpense = totalExpense + expense.amount  %}
+                    {% endfor %}#}
+                    <strong>INCOME BDT. {{ (income.sales - income.purchase)|number_format }}</strong>
                 </div>
                 <div class="span4">
                     <div class="btn-group">

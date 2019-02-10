@@ -111,6 +111,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		$invoice = isset($data['invoice'])? $data['invoice'] :'';
 		$transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
 		$salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
+		$quantity = isset($data['quantity'])? $data['quantity'] :'';
 		$process = isset($data['process'])? $data['process'] :'';
 		$customer = isset($data['customer'])? $data['customer'] :'';
 		$customerMobile = isset($data['mobile'])? $data['mobile'] :'';
@@ -162,6 +163,9 @@ class MedicineSalesItemRepository extends EntityRepository
 		if(!empty($medicineName)){
 			$qb->join("si.medicineStock",'m');
 			$qb->andWhere($qb->expr()->like("m.name", "'%$medicineName%'"  ));
+		}
+        if(!empty($quantity)){
+            $qb->andWhere("si.quantity = :quantity")->setParameter('quantity', $quantity);
 		}
 
 

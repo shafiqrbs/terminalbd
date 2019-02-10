@@ -100,9 +100,10 @@ class AccountPurchaseType extends AbstractType
                     new NotBlank(array('message'=>'Please input required'))
                 ),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.medicineConfig =".$this->global->getMedicineConfig()->getId());
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.medicineConfig =".$this->global->getMedicineConfig()->getId())
+                        ->orderBy('e.companyName','ASC');
                 },
             ));
 
@@ -118,9 +119,10 @@ class AccountPurchaseType extends AbstractType
                     new NotBlank(array('message'=>'Please input required'))
                 ),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.inventoryConfig =".$this->global->getInventoryConfig()->getId());
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.inventoryConfig =".$this->global->getInventoryConfig()->getId())
+                        ->orderBy('e.companyName','ASC');
                 },
             ));
         }else{
@@ -134,9 +136,10 @@ class AccountPurchaseType extends AbstractType
                     new NotBlank(array('message'=>'Please input required'))
                 ),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.globalOption =".$this->global->getId());
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->global->getId())
+                        ->orderBy('e.companyName','ASC');
                 },
             ));
         }
