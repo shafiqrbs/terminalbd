@@ -5,12 +5,14 @@ namespace Appstore\Bundle\EducationBundle\Entity;
 use Appstore\Bundle\EducationBundle\Form\ParticularType;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * ElectionParticular
  *
  * @ORM\Table( name ="education_fee")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\EducationBundle\Repository\EducationParticularRepository")
+ * @UniqueEntity(fields="pattern",message="This pattern already used,Please try another.")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\EducationBundle\Repository\EducationFeesRepository")
  */
 class EducationFees
 {
@@ -34,10 +36,17 @@ class EducationFees
     private  $feesItems;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", inversedBy="fees" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", inversedBy="fees" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(name="pattern_id", referencedColumnName="id", nullable=true, onDelete="cascade" , unique=true)
      **/
     private  $pattern;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="amount", type="float" )
+     */
+    private $amount = 0;
 
     /**
      * @var boolean
@@ -100,6 +109,30 @@ class EducationFees
     public function setPattern($pattern)
     {
         $this->pattern = $pattern;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFeesItems()
+    {
+        return $this->feesItems;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param float $amount
+     */
+    public function setAmount(float $amount)
+    {
+        $this->amount = $amount;
     }
 
 

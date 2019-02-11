@@ -1,14 +1,15 @@
 <?php
 
 namespace Appstore\Bundle\EducationBundle\Controller;
-
+use Appstore\Bundle\EducationBundle\Entity\EducationConfig;
 use Appstore\Bundle\EducationBundle\Entity\EducationFees;
-use Appstore\Bundle\EducationBundle\Form\ParticularPatternType;
-use Appstore\Bundle\EducationBundle\Form\ParticularType;
+use Appstore\Bundle\EducationBundle\Entity\EducationFeesItem;
+use Appstore\Bundle\EducationBundle\Form\FeesType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * FeesController controller.
@@ -17,68 +18,78 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class FeesController extends Controller
 {
 
+    public function paginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
     /**
      * Lists all Particular entities.
-     *
+     * @Secure(roles="ROLE_education_fees,ROLE_DOMAIN");
      */
     public function indexAction()
     {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getEducationConfig();
+        $entities = $this->getDoctrine()->getRepository('EducationBundle:EducationFees')->findWithSearch($config,$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('EducationBundle:Fees:index.html.twig', array(
+            'pagination' => $pagination,
+            'config' => $config,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    /**
+     * Displays a form to create a new Vendor entity.
+     * @Secure(roles="ROLE_EDUCATION_ADMIN,ROLE_DOMAIN");
+     */
+
+    public function newAction()
+    {
         $em = $this->getDoctrine()->getManager();
         $entity = new EducationFees();
-        $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationFees' )->findBy(array( 'educationConfig' => $config));
-        return $this->render('EducationBundle:ParticularPattern:index.html.twig', array(
-            'entities' => $entities,
-            'config' => $config,
-            'form'   => $form->createView(),
-        ));
+        $entity->setEducationConfig($config);
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('education_fees_edit',array('id' => $entity->getId())));
     }
+
+
     /**
      * Creates a new EducationFees entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new EducationFees();
-        $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationFees' )->findBy(array( 'educationConfig' => $config));
-        $form = $this->createCreateForm($entity);
-        $data = $request->request->all();
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            if(isset($data['class']) and !empty($data['class'])){
-                $entity->setStudentClass($this->getDoctrine()->getRepository('EducationBundle:EducationParticular')->find($data['class']));
-            }
-            $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-            $entity->setEducationConfig($config);
-            $em->persist($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been inserted successfully"
-            );
-            return $this->redirect($this->generateUrl('education_particularpattern'));
-        }
-        return $this->render('EducationBundle:ParticularPattern:index.html.twig', array(
-            'entities' => $entities,
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+
     }
 
     /**
      * Creates a form to create a Particular entity.
      *
-     * @param EducationFees $entity The entity
+     * @param Particular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
     private function createCreateForm(EducationFees $entity)
     {
-	    $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-    	$form = $this->createForm(new ParticularPatternType($config), $entity, array(
-            'action' => $this->generateUrl('education_particularpattern_create'),
+
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new FeesType($option), $entity, array(
+            'action' => $this->generateUrl('education_fees_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -88,42 +99,52 @@ class FeesController extends Controller
         return $form;
     }
 
+
     /**
      * Displays a form to edit an existing Particular entity.
+     *
+     * @Secure(roles="ROLE_education_fees,ROLE_DOMAIN");
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationFees' )->findBy(array( 'educationConfig' => $config),array( 'particularType' =>'ASC'));
-
-        $entity = $em->getRepository( 'EducationBundle:EducationFees' )->find($id);
-
+        $entity = $em->getRepository('EducationBundle:EducationFees')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-
+        $config = $this->getUser()->getGlobalOption()->getEducationConfig();
+        $data = array('type'=>'service');
+        //$stocks = $this->getDoctrine()->getRepository('EducationBundle:EducationStock')->findWithSearch($config,$data);
+        $stocks = $this->getDoctrine()->getRepository('EducationBundle:EducationStock')->findAll();
+        $feesItems = array();
+        /* @var $item EducationFeesItem */
+        if(!empty($entity->getFeesItems())){
+            foreach ($entity->getFeesItems() as $item){
+                $feesItems[$item->getStock()->getId()] = $item;
+            }
+        }
         $editForm = $this->createEditForm($entity);
-        return $this->render('EducationBundle:ParticularPattern:index.html.twig', array(
-            'entities'      => $entities,
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
+        return $this->render('EducationBundle:Fees:new.html.twig', array(
+            'entity'                => $entity,
+            'stocks'                => $stocks,
+            'feesItems'             => $feesItems,
+            'form'                  => $editForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a Particular entity.
-    *
-    * @param Particular $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Particular entity.
+     *
+     * @param Particular $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(EducationFees $entity)
     {
-	    $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-    	$form = $this->createForm(new ParticularType($config), $entity, array(
-            'action' => $this->generateUrl('education_particularpattern_update', array('id' => $entity->getId())),
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new FeesType($option), $entity, array(
+            'action' => $this->generateUrl('education_fees_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -138,46 +159,53 @@ class FeesController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getEducationConfig();
-        $entities = $this->getDoctrine()->getRepository( 'EducationBundle:EducationFees' )->findBy(array( 'educationConfig' => $config),array( 'particularType' =>'ASC'));
-
-        $entity = $em->getRepository( 'EducationBundle:EducationFees' )->find($id);
-
+        $entity = $em->getRepository('EducationBundle:EducationFees')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-
+        $data = $request->request->all();
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
+            $total = $this->getDoctrine()->getRepository('EducationBundle:EducationFees')->process($entity,$data);
+            $entity->setAmount($total);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'success',"Data has been changed successfully"
+                'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('education_particularpattern'));
+            return $this->redirect($this->generateUrl('education_fees'));
         }
-
-        return $this->render('EducationBundle:ParticularPattern:index.html.twig', array(
-            'entities'      => $entities,
+        $stocks = $this->getDoctrine()->getRepository('EducationBundle:EducationStock')->findAll();
+        $feesItems = array();
+        /* @var $item EducationFeesItem */
+        if(!empty($entity->getFeesItems())){
+            foreach ($entity->getFeesItems() as $item){
+                $feesItems[$item->getStock()->getId()] = $item;
+            }
+        }
+        return $this->render('EducationBundle:Fees:new.html.twig', array(
             'entity'      => $entity,
+            'stocks'                => $stocks,
+            'feesItems'             => $feesItems,
             'form'   => $editForm->createView(),
         ));
     }
+
     /**
      * Deletes a Particular entity.
-     *
+     * @Secure(roles="ROLE_education_fees,ROLE_DOMAIN");
      */
-    public function deleteAction($id)
-    {
 
+    public function deleteAction(EducationFees $entity)
+    {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository( 'EducationBundle:EducationFees' )->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
+
         try {
 
             $em->remove($entity);
@@ -195,8 +223,7 @@ class FeesController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-
-        return $this->redirect($this->generateUrl('education_particularpattern'));
+        return $this->redirect($this->generateUrl('education_fees'));
     }
 
 
@@ -204,26 +231,59 @@ class FeesController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(Request $request, $id)
+
+    public function statusAction(EducationFees $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository( 'EducationBundle:EducationFees' )->find($id);
-
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Education Particular entity.');
+            throw $this->createNotFoundException('Unable to find District entity.');
         }
-        $status = $entity->isStatus();
+        $status = $entity->getStatus();
         if($status == 1){
-            $entity->setStatus(false);
+            $entity->setStatus(0);
         } else{
-            $entity->setStatus(true);
+            $entity->setStatus(1);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('education_particularpattern'));
+        return $this->redirect($this->generateUrl('education_fees'));
+    }
+
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('EducationBundle:EducationFees')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find particular entity.');
+        }
+        if('openingQuantity' == $data['name']) {
+            $setField = 'set' . $data['name'];
+            $quantity = abs($data['value']);
+            $entity->$setField($quantity);
+            // $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
+            $this->getDoctrine()->getRepository('EducationBundle:EducationFees')->remainingQnt($entity);
+            // $entity->setRemainingQuantity($remainingQuantity);
+        }else{
+            $setField = 'set' . $data['name'];
+            $entity->$setField(abs($data['value']));
+        }
+        $em->flush();
+        exit;
+
+    }
+
+    public function production(EducationFees $particular)
+    {
+
+    }
+
+    public function transfer(EducationFees $particular)
+    {
+
     }
 
     public function autoSearchAction(Request $request)
@@ -231,17 +291,38 @@ class FeesController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getEducationConfig();
-            $item = $this->getDoctrine()->getRepository( 'EducationBundle:EducationFees' )->searchAutoComplete($item,$inventory);
+            $item = $this->getDoctrine()->getRepository('EducationBundle:EducationFees')->searchAutoComplete($inventory,$item);
         }
         return new JsonResponse($item);
     }
 
-    public function searchParticularNameAction($vendor)
+    public function searchNameAction($Fees)
     {
         return new JsonResponse(array(
-            'id' => $vendor,
-            'text'  =>  $vendor
+            'id'=> $Fees,
+            'text'=> $Fees
         ));
     }
+
+    public function FeesQuantityUpdateAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getBussinessConfig();
+        $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineFees')->findBy(array('medicineConfig'=>$config));
+
+        /* @var EducationFees $item */
+
+        foreach ($items as $item){
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineFees')->updateRemovePurchaseQuantity($item,'');
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineFees')->updateRemovePurchaseQuantity($item,'sales');
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineFees')->updateRemovePurchaseQuantity($item,'sales-return');
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineFees')->updateRemovePurchaseQuantity($item,'purchase-return');
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineFees')->updateRemovePurchaseQuantity($item,'damage');
+        }
+        return $this->redirect($this->generateUrl('medicine_fees'));
+    }
+
 
 }

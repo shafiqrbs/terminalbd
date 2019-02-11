@@ -43,7 +43,7 @@
                                     <div class="span4"></div>
                                     <div class="span4">
                                         {%  set months = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
-                                        <select class="span12 m-wrap" name="year" id="year">
+                                        <select class="span12 m-wrap" name="month" id="month">
                                             <option value="">--- Select Month---</option>
                                             {% for month in months %}
                                                 <option {% if searchForm.month is defined and searchForm.month == month %}selected="selected"{% endif %} value="{{ month }}">{{ month }}</option>
