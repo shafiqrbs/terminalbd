@@ -25,7 +25,7 @@ class EducationStock
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", inversedBy="educationStocks" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", inversedBy="stocks" , cascade={"detach","merge"} )
      **/
     private  $educationConfig;
 
@@ -978,6 +978,22 @@ class EducationStock
 	public function getBusinessProductions() {
 		return $this->businessProductions;
 	}
+
+    /**
+     * @return EducationConfig
+     */
+    public function getEducationConfig()
+    {
+        return $this->educationConfig;
+    }
+
+    /**
+     * @param EducationConfig $educationConfig
+     */
+    public function setEducationConfig($educationConfig)
+    {
+        $this->educationConfig = $educationConfig;
+    }
 
 }
 

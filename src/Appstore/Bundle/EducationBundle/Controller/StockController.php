@@ -81,7 +81,7 @@ class StockController extends Controller
         $entity = new EducationStock();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-	    if ($form->isValid() and empty($checkName)) {
+	    if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setEducationConfig($config);
             $entity->upload();

@@ -30,6 +30,11 @@ class EducationParticularPattern
      **/
     private  $educationConfig;
 
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationFees", mappedBy="pattern" , cascade={"detach","merge"} )
+     **/
+    private  $fees;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticular", inversedBy="classPattern" , cascade={"detach","merge"} )
      **/
