@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * ItemBrand
  *
- * @ORM\Table("ecommerc_item_brand")
+ * @ORM\Table("ecommerce_item_brand")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\ItemBrandRepository")
  */
 class ItemBrand  implements CodeAwareEntity

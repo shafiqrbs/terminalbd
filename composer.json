@@ -47,7 +47,8 @@
         "symfony/yaml": "^2.8",
         "symfony/validator": "^2.8",
         "beberlei/DoctrineExtensions": "^1.0",
-        "dompdf/dompdf": "^0.8.2"
+        "dompdf/dompdf": "^0.8.2",
+        "symfony/security-acl": "^3.0"
     },
     "scripts": {
         "symfony-scripts": [
@@ -67,7 +68,10 @@
     "minimum-stability":"dev",
     "prefer-stable": true,
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "platform": {
+            "php": "7.1.11"
+        }
     },
     "extra": {
         "symfony-app-dir": "app",
