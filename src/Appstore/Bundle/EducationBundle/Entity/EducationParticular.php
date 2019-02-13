@@ -34,6 +34,61 @@ class EducationParticular
      **/
     private  $particularType;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentClass" , cascade={"detach","merge"} )
+     **/
+    private  $classPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentGroup" , cascade={"detach","merge"} )
+     **/
+    private  $groupPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentShift" , cascade={"detach","merge"} )
+     **/
+    private  $shiftPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentBranch" , cascade={"detach","merge"} )
+     **/
+    private  $branchPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentDepartment" , cascade={"detach","merge"} )
+     **/
+    private  $departmentPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentDivision" , cascade={"detach","merge"} )
+     **/
+    private  $divisionPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentSemester" , cascade={"detach","merge"} )
+     **/
+    private  $semesterPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentSession" , cascade={"detach","merge"} )
+     **/
+    private  $sessionPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentSection" , cascade={"detach","merge"} )
+     **/
+    private  $sectionPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentSubject" , cascade={"detach","merge"} )
+     **/
+    private  $subjectPattern;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="studentVersion" , cascade={"detach","merge"} )
+     **/
+    private  $versionPattern;
+
 
 	/**
      * @var string

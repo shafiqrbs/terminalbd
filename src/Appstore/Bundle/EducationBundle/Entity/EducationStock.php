@@ -30,7 +30,7 @@ class EducationStock
     private  $educationConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="BusinessStocks" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="educationStocks" )
      **/
     private  $unit;
 

@@ -98,6 +98,11 @@ class ProductUnit
      **/
     private $hotelParticulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationStock", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $educationStocks;
+
 
     /**
      * @var string

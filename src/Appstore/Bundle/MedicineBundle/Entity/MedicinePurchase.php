@@ -39,7 +39,6 @@ class MedicinePurchase
      **/
     private  $medicineVendor;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="medicinePurchases" , cascade={"detach","merge"} )
      **/

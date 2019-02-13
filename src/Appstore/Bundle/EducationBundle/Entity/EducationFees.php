@@ -36,7 +36,7 @@ class EducationFees
     private  $feesItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", inversedBy="fees" , cascade={"detach","merge"} )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", inversedBy="fees" , cascade={"detach","merge"} )
      * @ORM\JoinColumn(name="pattern_id", referencedColumnName="id", nullable=true, onDelete="cascade" , unique=true)
      **/
     private  $pattern;
