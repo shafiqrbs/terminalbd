@@ -349,7 +349,7 @@ class EducationFeesRepository extends EntityRepository
        $qb->join('e.feesItems','i');
        $qb->addSelect('SUM(i.amount) as total');
        $qb->where("e.id ={$fees->getId()}");
-       $total = $qb->getQuery()->getOneOrNullResult();
+       $total = $qb->getQuery()->getOneOrNullResult()['total'];
        return $total;
     }
 

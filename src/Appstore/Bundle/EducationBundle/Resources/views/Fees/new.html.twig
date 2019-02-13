@@ -74,7 +74,7 @@
                                                     <td class="numeric" >
                                                         <input type="hidden" name="feesItemId[]" value="{% if feesItems[stock.id] is defined and feesItems[stock.id] is not empty  %}{{ feesItems[stock.id].id }}{% endif %}" >
                                                         <input type="hidden" name="stockId[]" value="{{ stock.id }}" >
-                                                        <input type="text" name="amount[]" class="m-wrap span12" value="{% if feesItems.stock['id'] is defined and feesItems.stock['id'] is not empty  %}{{ feesItems.stock['id'].amount }} {% else %}{{ stock.salesPrice }}{% endif %}" >
+                                                        <input type="number" name="amount[]" class="m-wrap span12" value="{% if feesItems[stock.id] is defined and feesItems[stock.id] is not empty  %}{{ feesItems[stock.id].amount }} {% else %}{{ stock.salesPrice }}{% endif %}" >
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -97,4 +97,10 @@
             </div>
         </div>
     </div>
+ <style>
+     nput[class*="span"].m-wrap {
+         height: 31px!important;
+         border: 2px solid #e21111!important;
+     }
+ </style>
 {% endblock %}

@@ -30,7 +30,7 @@ class EducationStock
     private  $educationConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="businessParticulars" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="BusinessStocks" )
      **/
     private  $unit;
 
@@ -412,7 +412,7 @@ class EducationStock
     /**
      * Sets file.
      *
-     * @param BusinessParticular $file
+     * @param BusinessStock $file
      */
     public function setFile(UploadedFile $file = null)
     {
@@ -422,7 +422,7 @@ class EducationStock
     /**
      * Get file.
      *
-     * @return BusinessParticular
+     * @return BusinessStock
      */
     public function getFile()
     {
@@ -871,19 +871,19 @@ class EducationStock
     }
 
     /**
-     * @return BusinessParticularType
+     * @return BusinessStockType
      */
-    public function getBusinessParticularType()
+    public function getBusinessStockType()
     {
-        return $this->businessParticularType;
+        return $this->BusinessStockType;
     }
 
     /**
-     * @param BusinessParticularType $businessParticularType
+     * @param BusinessStockType $BusinessStockType
      */
-    public function setBusinessParticularType($businessParticularType)
+    public function setBusinessStockType($BusinessStockType)
     {
-        $this->businessParticularType = $businessParticularType;
+        $this->BusinessStockType = $BusinessStockType;
     }
 
     /**

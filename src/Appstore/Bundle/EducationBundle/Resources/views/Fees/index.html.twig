@@ -53,7 +53,7 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr>
-                                        <td class="numeric" ><a href="{{ path('education_fees_edit',{'id': entity.id })}}">{% if entity.pattern is not empty %}{{ entity.pattern.patternName }} {% else %} Add Pattern Name{% endif %}</a></td>
+                                        <td class="numeric" >{{ loop.index }}. <a href="{{ path('education_fees_edit',{'id': entity.id })}}">{% if entity.pattern is not empty %}{{ entity.pattern.patternName }} {% else %} Add Pattern Name{% endif %}</a></td>
                                         <td class="numeric" >{{ entity.amount }}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
