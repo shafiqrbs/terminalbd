@@ -136,7 +136,7 @@ class Profile
     /**
      * @var string
      *
-     * @ORM\Column(name="nid", type="string", nullable=true,unique=true )
+     * @ORM\Column(name="nid", type="string", nullable=true)
      */
     private $nid;
 

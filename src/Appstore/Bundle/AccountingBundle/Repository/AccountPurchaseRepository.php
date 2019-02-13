@@ -100,7 +100,7 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->groupBy('vendor.id');
         $qb->having('customerBalance > :balance')->setParameter('balance', 0);
         $qb->orHaving('customerBalance < :balance')->setParameter('balance', 0);
-        $qb->orderBy('vendor.id','ASC');
+        $qb->orderBy('vendor.companyName','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }

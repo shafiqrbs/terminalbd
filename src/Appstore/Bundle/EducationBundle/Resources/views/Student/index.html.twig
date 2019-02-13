@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('domain') }}">Member list</a>
+                        <a href="{{ path('domain') }}">Student List</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -35,10 +35,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Member list</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('election_member_new') }}"><i class="icon-th-list"></i>&nbsp;New Member</a>
-                                {% if importCount > 0 %}
-                                <a class="btn yellow" href="{{ path('election_member_import_updated') }}"><i class="icon-th-list"></i>&nbsp;Import Updated</a>
-                                {% endif %}
+                                <a class="btn red" href="{{ path('education_student_new') }}"><i class="icon-th-list"></i>&nbsp;New Member</a>
+                               
                                 {% set thana = searchForm.thana is defined ? searchForm.thana :'' %}
                                 {% set union = searchForm.union is defined ? searchForm.union :'' %}
                                 {% set ward = searchForm.ward is defined ? searchForm.ward :'' %}
@@ -46,8 +44,6 @@
                                 {% set voteCenter = searchForm.voteCenter is defined ? searchForm.voteCenter :'' %}
                                 {% set member = searchForm.member is defined ? searchForm.member :'' %}
                                 {% set keyword = searchForm.keyword is defined ? searchForm.keyword :'' %}
-                                <a class="btn blue" href="{{ path('election_member_export_csv',{'thana':thana,'union':union,'ward':ward,'village':village,'voteCenter':voteCenter,'member':member,'keyword':keyword}) }}"><i class="icon-download"></i>&nbsp;Export</a>
-                                <a class="btn purple" href="{{ path('election_member_generate_idcard') }}">ID Cards</a>
                             </div>
                         </div>
                     </div>
@@ -96,14 +92,12 @@
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
                                     <td><i class="icon-list"></i></td>
-                                    <td>Member ID</td>
+                                    <td>Student ID</td>
                                     <th {% if entities.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Name', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric">Mobile</th>
-                                    <th {% if entities.isSorted('e.village') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Village/Unit', 'e.village') }}{% if( direction == 'desc' and sort == 'e.village') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    <th {% if entities.isSorted('e.voteCenter') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Vote Center', 'e.voteCenter') }}{% if( direction == 'desc' and sort == 'e.voteCenter') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    <th {% if entities.isSorted('e.ward') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Ward', 'e.ward') }}{% if( direction == 'desc' and sort == 'e.ward') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    <th {% if entities.isSorted('e.memberUnion') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Union/Pourasava', 'e.memberUnion') }}{% if( direction == 'desc' and sort == 'e.memberUnion') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    <th {% if entities.isSorted('e.thana') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Thana/Upazila', 'e.thana') }}{% if( direction == 'desc' and sort == 'e.thana') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th {% if entities.isSorted('e.fatherName') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Father Name', 'e.fatherName') }}{% if( direction == 'desc' and sort == 'e.fatherName') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th {% if entities.isSorted('e.motherName') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Mother Name', 'e.motherName') }}{% if( direction == 'desc' and sort == 'e.motherName') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th {% if entities.isSorted('e.location') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Location', 'e.location') }}{% if( direction == 'desc' and sort == 'e.location') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric">Action</th>
                                 </tr>
                                 </thead>
@@ -115,19 +109,15 @@
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</td>
-                                        <td class="numeric">{% if entity.voteCenter is not empty %}{{ entity.voteCenter.name }}{% endif %}</td>
-                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.wardName }}{% endif %}</td>
-                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.unionName }}{% endif %}</td>
-                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.thanaName }}{% endif %}</td>
                                         <td class="numeric">
                                             <div class="btn-group">
                                              {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_ELECTION_MANAGER"))  %}
-                                                <a class="btn mini green" href="{{ path('election_member_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
-                                                <a class="btn mini delete red" href="javascript:" data-url="{{ path('election_member_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
-                                                <a class="btn mini yellow" href="{{ path('election_member_family', { 'id': entity.id }) }}" >&nbsp;<i class="icon-plus"></i> Family</a>
+                                                <a class="btn mini green" href="{{ path('education_student_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn mini delete red" href="javascript:" data-url="{{ path('education_student_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
+                                                <a class="btn mini yellow" href="{{ path('education_student_family', { 'id': entity.id }) }}" >&nbsp;<i class="icon-plus"></i> Family</a>
                                              {% endif %}
-                                            <a data-title="{{ entity.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('election_member_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
-                                            <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_member_sms', { 'id': entity.id }) }}" >SMS</a>
+                                            <a data-title="{{ entity.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('education_student_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
+                                            <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('education_student_sms', { 'id': entity.id }) }}" >SMS</a>
                                             </div>
                                         </td>
                                     </tr>

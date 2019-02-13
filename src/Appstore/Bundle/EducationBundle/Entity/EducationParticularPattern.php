@@ -26,9 +26,14 @@ class EducationParticularPattern
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", inversedBy="EducationParticularPatterns" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", inversedBy="particularPatterns" , cascade={"detach","merge"} )
      **/
     private  $educationConfig;
+
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationFees", mappedBy="pattern" , cascade={"detach","merge"} )
+     **/
+    private  $fees;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticular", inversedBy="classPattern" , cascade={"detach","merge"} )
@@ -66,7 +71,7 @@ class EducationParticularPattern
     private  $studentBranch;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticular", inversedBy="branchPattern" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticular", inversedBy="versionPattern" , cascade={"detach","merge"} )
      **/
     private  $studentVersion;
 

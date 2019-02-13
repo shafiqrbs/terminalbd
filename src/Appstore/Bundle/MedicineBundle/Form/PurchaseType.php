@@ -34,12 +34,13 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'attr'=>array('class'=>'m-wrap span12 select2 inputs'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.medicineConfig =".$this->option->getMedicineConfig()->getId());
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.medicineConfig =".$this->option->getMedicineConfig()->getId())
+                        ->orderBy('e.companyName','ASC');
                 },
             ))
             ->add('medicinePurchaseReturn', 'entity', array(

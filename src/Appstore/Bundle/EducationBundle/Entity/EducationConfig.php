@@ -50,9 +50,19 @@ class EducationConfig
 	private $type;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", inversedBy="educationConfig")
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationParticularPattern", mappedBy="educationConfig")
 	 **/
 	private $particularPatterns;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationStock", mappedBy="educationConfig")
+	 **/
+	private $stocks;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationFees", mappedBy="educationConfig")
+	 **/
+	private $fees;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="education")

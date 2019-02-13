@@ -59,7 +59,7 @@ class ConfigType extends AbstractType
 		        'property' => 'nestedLabel',
 		        'choices'=> $this->locationChoiceList()
 	        ));
-        ;
+
     }
     
     /**

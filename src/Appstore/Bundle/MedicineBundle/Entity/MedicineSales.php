@@ -209,14 +209,14 @@ class MedicineSales
      *
      * @ORM\Column(name="netTotal", type="float", nullable=true)
      */
-    private $netTotal;
+    private $netTotal = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="received", type="float", nullable=true)
      */
-    private $received;
+    private $received = 0;
 
     /**
      * @var string

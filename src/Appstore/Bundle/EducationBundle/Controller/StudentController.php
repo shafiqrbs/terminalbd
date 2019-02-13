@@ -2,10 +2,8 @@
 
 namespace Appstore\Bundle\EducationBundle\Controller;
 
-use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
-use Appstore\Bundle\ElectionBundle\Entity\ElectionMember;
-use Appstore\Bundle\ElectionBundle\Entity\ElectionMemberFamily;
-use Appstore\Bundle\ElectionBundle\Form\MemberType;
+use Appstore\Bundle\EducationBundle\Entity\Student;
+use Appstore\Bundle\EducationBundle\Form\StudentType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +15,7 @@ use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 
 
 /**
- * ElectionMember controller.
+ * Student controller.
  *
  */
 class StudentController extends Controller
@@ -26,7 +24,6 @@ class StudentController extends Controller
 
     public function paginate($entities)
     {
-
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,
@@ -38,72 +35,62 @@ class StudentController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_EDUCATION,ROLE_DOMAIN")
      */
 
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-	    $type = 'member';
-        $entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data,$type);
+	    $config = $this->getUser()->getGlobalOption()->getEducationConfig();
+	    $entities = $em->getRepository('EducationBundle:Student')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
-        $importCount = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getImportCount($config,'Import');
-        return $this->render('ElectionBundle:Member:index.html.twig', array(
+        return $this->render('EducationBundle:Student:index.html.twig', array(
             'entities' => $pagination,
-            'importCount' => $importCount,
-            'selected' => explode(',', $request->cookies->get('memberIds', '')),
             'searchForm' => $data,
         ));
     }
 
     /**
-     * Creates a new ElectionMember entity.
+     * Creates a new Student entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new ElectionMember();
+        $entity = new Student();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $config = $this->getUser()->getGlobalOption()->getElectionConfig();
+            $config = $this->getUser()->getGlobalOption()->getEducationConfig();
             $entity->setElectionConfig($config);
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
-	        $entity->setVillage($entity->getLocation()->getName());
-	        $entity->setVoteCenterName($entity->getVoteCenter()->getName());
-	        $entity->setWard($entity->getLocation()->wardName());
-	        $entity->setMemberUnion($entity->getLocation()->unionName());
-	        $entity->setThana($entity->getLocation()->thanaName());
-	        $entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
 	        $entity->upload();
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('election_member'));
+            return $this->redirect($this->generateUrl('education_student'));
         }
-        return $this->render('ElectionBundle:Member:new.html.twig', array(
+        return $this->render('EducationBundle:Student:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a ElectionMember entity.
+     * Creates a form to create a Student entity.
      *
-     * @param ElectionMember $entity The entity
+     * @param  $entity Student The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(ElectionMember $entity)
+    private function createCreateForm(Student $entity)
     {
-	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation');
-        $form = $this->createForm(new MemberType($config,$location), $entity, array(
-            'action' => $this->generateUrl('election_member_create'),
+	    $config = $this->getUser()->getGlobalOption()->getEducationConfig();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new StudentType($config,$location), $entity, array(
+            'action' => $this->generateUrl('education_student_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -114,38 +101,38 @@ class StudentController extends Controller
     }
 
     /**
-     * Displays a form to create a new ElectionMember entity.
+     * Displays a form to create a new Student entity.
      *
      */
 
     /**
-     * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_EDUCATION,ROLE_DOMAIN")
      */
 
     public function newAction()
     {
-        $entity = new ElectionMember();
+        $entity = new Student();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('ElectionBundle:Member:new.html.twig', array(
+        return $this->render('EducationBundle:Student:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a ElectionMember entity.
+     * Finds and displays a Student entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
-        $entity = $em->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('electionConfig' => $config,'id'=>$id));
+	    $config = $this->getUser()->getGlobalOption()->getEducationConfig();
+        $entity = $em->getRepository('ElectionBundle:Student')->findOneBy(array('electionConfig' => $config,'id'=>$id));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+            throw $this->createNotFoundException('Unable to find Student entity.');
         }
-	    $html = $this->renderView('ElectionBundle:Member:profile.html.twig',
+	    $html = $this->renderView('EducationBundle:Student:profile.html.twig',
 		    array('entity' => $entity)
 	    );
 	    return New Response($html);
@@ -155,44 +142,44 @@ class StudentController extends Controller
 
 
     /**
-     * Displays a form to edit an existing ElectionMember entity.
+     * Displays a form to edit an existing Student entity.
      *
      */
 
     /**
-     * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_EDUCATION,ROLE_DOMAIN")
      */
 
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('ElectionBundle:ElectionMember')->find($id);
+        $entity = $em->getRepository('ElectionBundle:Student')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+            throw $this->createNotFoundException('Unable to find Student entity.');
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('ElectionBundle:Member:new.html.twig', array(
+        return $this->render('EducationBundle:Student:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
     }
 
 	/**
-    * Creates a form to edit a ElectionMember entity.
+    * Creates a form to edit a Student entity.
     *
-    * @param ElectionMember $entity The entity
+    * @param Student $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(ElectionMember $entity)
+    private function createEditForm(Student $entity)
     {
-	    $config = $this->getUser()->getGlobalOption()->getElectionConfig();
+	    $config = $this->getUser()->getGlobalOption()->getEducationConfig();
 	    $location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation');
 	    $form = $this->createForm(new MemberType($config,$location), $entity, array(
-		    'action' => $this->generateUrl('election_member_update', array('id' => $entity->getId())),
+		    'action' => $this->generateUrl('education_student_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -202,17 +189,17 @@ class StudentController extends Controller
         return $form;
     }
     /**
-     * Edits an existing ElectionMember entity.
+     * Edits an existing Student entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('ElectionBundle:ElectionMember')->find($id);
+        $entity = $em->getRepository('ElectionBundle:Student')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+            throw $this->createNotFoundException('Unable to find Student entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -226,16 +213,16 @@ class StudentController extends Controller
 	        $entity->setWard($entity->getLocation()->wardName());
 	        $entity->setMemberUnion($entity->getLocation()->unionName());
 	        $entity->setThana($entity->getLocation()->thanaName());
-	        $entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
+	        $entity->setDistrict($entity->getEducationConfig()->getDistrict()->getName());
 	        if($entity->getRemoveImage() == 1){
 		        $entity->removeUpload();
 	        }
 	        $entity->upload();
 	        $em->flush();
-            return $this->redirect($this->generateUrl('election_member'));
+            return $this->redirect($this->generateUrl('education_student'));
         }
 
-        return $this->render('ElectionBundle:Member:new.html.twig', array(
+        return $this->render('EducationBundle:Student:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -243,16 +230,16 @@ class StudentController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_ELECTION,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_EDUCATION,ROLE_DOMAIN")
      */
 
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('ElectionBundle:ElectionMember')->findOneBy(array('globalOption'=>$globalOption,'id' => $id));
+        $entity = $em->getRepository('ElectionBundle:Student')->findOneBy(array('globalOption'=>$globalOption,'id' => $id));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+            throw $this->createNotFoundException('Unable to find Student entity.');
         }
         try {
 
@@ -267,7 +254,7 @@ class StudentController extends Controller
                 'notice',"Data has been relation another Table"
             );
         }
-        return $this->redirect($this->generateUrl('election_member'));
+        return $this->redirect($this->generateUrl('education_student'));
     }
 
     public function autoSearchAction(Request $request)
@@ -275,8 +262,8 @@ class StudentController extends Controller
 
         $item = $_REQUEST['q'];
         if ($item) {
-            $go = $this->getUser()->getGlobalOption()->getElectionConfig();
-            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->searchAutoComplete($go,$item);
+            $go = $this->getUser()->getGlobalOption()->getEducationConfig();
+            $item = $this->getDoctrine()->getRepository('ElectionBundle:Student')->searchAutoComplete($go,$item);
         }
         return new JsonResponse($item);
     }
@@ -294,12 +281,12 @@ class StudentController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $go = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->searchAutoCompleteName($go,$item);
+            $item = $this->getDoctrine()->getRepository('ElectionBundle:Student')->searchAutoCompleteName($go,$item);
         }
         return new JsonResponse($item);
     }
 
-    public function searchElectionMemberMobileAction($customer)
+    public function searchStudentMobileAction($customer)
     {
         return new JsonResponse(array(
             'id'=> $customer,
@@ -312,7 +299,7 @@ class StudentController extends Controller
 
         $q = $_REQUEST['term'];
         $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->searchAutoCompleteCode($option,$q);
+        $entities = $this->getDoctrine()->getRepository('ElectionBundle:Student')->searchAutoCompleteCode($option,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('id' => $entity['customer'],'value' => $entity['text']);
@@ -354,7 +341,7 @@ class StudentController extends Controller
     {
         $q = $_REQUEST['q'];
         $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->searchAutoCompleteName($option,$q);
+        $entities = $this->getDoctrine()->getRepository('ElectionBundle:Student')->searchAutoCompleteName($option,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('id' => $entity['id'],'value' => $entity['id']);
@@ -367,7 +354,7 @@ class StudentController extends Controller
     {
         $q = $_REQUEST['term'];
         $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->searchAutoComplete($option,$q);
+        $entities = $this->getDoctrine()->getRepository('ElectionBundle:Student')->searchAutoComplete($option,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('id' => $entity['customer'],'value' => $entity['id']);
@@ -380,27 +367,27 @@ class StudentController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 
-		$entity = $em->getRepository('ElectionBundle:ElectionMember')->find($id);
+		$entity = $em->getRepository('ElectionBundle:Student')->find($id);
 
 		if (!$entity) {
-			throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+			throw $this->createNotFoundException('Unable to find Student entity.');
 		}
 		$editForm = $this->createEditForm($entity);
-		return $this->render('ElectionBundle:Member:family.html.twig', array(
+		return $this->render('EducationBundle:Student:family.html.twig', array(
 			'entity'      => $entity,
 			'form'   => $editForm->createView(),
 		));
 	}
 
-	public function addFamilyMemberAction(Request $request , ElectionMember $member)
+	public function addFamilyMemberAction(Request $request , Student $member)
 	{
 
 
 		$em = $this->getDoctrine()->getManager();
 		$data = $request->request->all();
 		if(!empty($data['name'])){
-			$entity = new ElectionMemberFamily();
-			$entity->setElectionMember($member);
+			$entity = new StudentFamily();
+			$entity->setStudent($member);
 			$entity->setName($data['name']);
 			$entity->setMobile($data['mobile']);
 			$entity->setNid($data['nid']);
@@ -414,20 +401,20 @@ class StudentController extends Controller
 		exit;
 	}
 
-	public function returnResultData(ElectionMember $entity,$msg=''){
+	public function returnResultData(Student $entity,$msg=''){
 
-		$familyMembers = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMemberFamily')->getFamilyMember($entity);
+		$familyMembers = $this->getDoctrine()->getRepository('ElectionBundle:StudentFamily')->getFamilyMember($entity);
 		return $familyMembers;
 
 	}
 
-	public function familyMemberDeleteAction(ElectionMemberFamily $entity)
+	public function familyMemberDeleteAction(StudentFamily $entity)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		if($config == $entity->getElectionMember()->getElectionConfig()){
+		$config = $this->getUser()->getGlobalOption()->getEducationConfig();
+		if($config == $entity->getStudent()->getEducationConfig()){
 			if (!$entity) {
-				throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+				throw $this->createNotFoundException('Unable to find Student entity.');
 			}
 			$em->remove($entity);
 			$em->flush();
@@ -453,14 +440,14 @@ class StudentController extends Controller
 		$data = $_REQUEST;
 		$array = array();
 
-		$config =   $global->getElectionConfig();
-		$entities = $em->getRepository('ElectionBundle:ElectionMember')->findWithSearch($config,$data,'member');
+		$config =   $global->getEducationConfig();
+		$entities = $em->getRepository('ElectionBundle:Student')->findWithSearch($config,$data,'member');
 		$entities = $entities->getQuery()->getResult();
 
 
 		$array[] = 'Name,Mobile,Father Name,NID,Village,Vote center,Ward,Union/Purashabva,Thana/Upozila,District';
 
-		/* @var $entity ElectionMember */
+		/* @var $entity Student */
 
 		foreach ($entities as $key => $entity){
 
@@ -499,8 +486,8 @@ class StudentController extends Controller
 		ignore_user_abort( true );
 
 		$em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->findBy(array('electionConfig'=>$config,'process'=>'Import'));
+		$config = $this->getUser()->getGlobalOption()->getEducationConfig();
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:Student')->findBy(array('electionConfig'=>$config,'process'=>'Import'));
 		foreach ($entities as $entity):
 			$location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->getVillageMemberName($config ,$entity->getVillage());
 			$voteCenter = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->getMemberVoteCenter($config ,$entity->getVoteCenterName());
@@ -510,7 +497,7 @@ class StudentController extends Controller
 				$entity->setWard($entity->getLocation()->wardName());
 				$entity->setMemberUnion($entity->getLocation()->unionName());
 				$entity->setThana($entity->getLocation()->thanaName());
-				$entity->setDistrict($entity->getElectionConfig()->getDistrict()->getName());
+				$entity->setDistrict($entity->getEducationConfig()->getDistrict()->getName());
 				if(!empty($voteCenter)){
 					$entity->setVoteCenter($voteCenter);
 					$entity->setVoteCenterName($entity->getVoteCenter()->getName());
@@ -519,7 +506,7 @@ class StudentController extends Controller
 				$em->flush();
 			}
 		endforeach;
-		return $this->redirect($this->generateUrl('election_member'));
+		return $this->redirect($this->generateUrl('education_student'));
 
 	}
 
@@ -528,19 +515,19 @@ class StudentController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$data = explode(',',$request->cookies->get('memberIds'));
 		if(is_null($data)) {
-			return $this->redirect($this->generateUrl('election_member'));
+			return $this->redirect($this->generateUrl('education_student'));
 		}
-		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember')->getBarcodeForPrint($config,$data);
+		$config = $this->getUser()->getGlobalOption()->getEducationConfig();
+		$entities = $this->getDoctrine()->getRepository('ElectionBundle:Student')->getBarcodeForPrint($config,$data);
 
-		return $this->render('ElectionBundle:Member:idcard.html.twig', array(
+		return $this->render('EducationBundle:Student:idcard.html.twig', array(
 			'entities'      => $entities,
 			'config'      => $config
 		));
 	}
 
 /*
-	public function itemBarcoder(ElectionConfig $config , ElectionMember $entity )
+	public function itemBarcoder(ElectionConfig $config , Student $entity )
 	{
 
 

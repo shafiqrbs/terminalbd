@@ -48,13 +48,13 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                      <div class="row-fluid">
-                                        <div class="span6">
-                                            <input type="text" id="customer" name="customer"  class="span4 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
-                                            &nbsp;<input type="text" id="salesBy" name="salesBy"  class="span4 m-wrap select2User" value="{% if searchForm.salesBy is defined %}{{ searchForm.salesBy }}{% endif %}"  autocomplete="off" placeholder="Enter sales by ">
+                                        <div class="span4">
+                                            <input type="text" id="customer" name="customer"  class="span8 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
                                             <input type="text" id="invoice" name="invoice"  class="span4 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no ">
-                                         </div>
-                                         <div class="span3">
-                                             <input type="text" id="medicineName" name="medicineName"  class="span12 m-wrap select2StockMedicineName" value="{% if searchForm.medicineName is defined %}{{ searchForm.medicineName }}{% endif %}"  autocomplete="off" placeholder="Enter medicine name">
+                                        </div>
+                                         <div class="span5">
+                                             <input type="text" id="medicineName" name="medicineName"  class="span9 m-wrap select2StockMedicineName" value="{% if searchForm.medicineName is defined %}{{ searchForm.medicineName }}{% endif %}"  autocomplete="off" placeholder="Enter medicine name">
+                                             <input type="text" id="quantity" name="quantity"  class="span3 m-wrap " value="{% if searchForm.quantity is defined %}{{ searchForm.quantity }}{% endif %}"  autocomplete="off" placeholder="Enter quantity ">
                                          </div>
                                          <div class="span3">
                                             <div class="controls">
