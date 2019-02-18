@@ -21,7 +21,6 @@
                         <tr>
                             <th class="numeric span11">Received</th>
                             <th class="numeric">{{ (salesOverview.receive)|number_format }}</th>
-
                         </tr>
                         <tr>
                             <th class="numeric span11">Closing</th>
@@ -188,4 +187,25 @@
         }
     </style>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@MedicineBundle/Resources/public/css/dashboard.css'
+    '@RestaurantBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@RestaurantBundle/Resources/public/js/temporary.js'
+    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}
+
 

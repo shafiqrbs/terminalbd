@@ -104,7 +104,7 @@ class InvoiceController extends Controller
             'entity'                => $entity,
             'salesLists'            => $salesLists,
             'form'                  => $editForm->createView(),
-            'particularForm'           => $invoiceParticularForm->createView(),
+            'particularForm'        => $invoiceParticularForm->createView(),
         ));
 
     }
@@ -218,7 +218,7 @@ class InvoiceController extends Controller
                 }
                 $entity->setCustomer($customer);
             }
-            $due = $entity->getTotal()- $entity->getPayment();
+            $due = $entity->getTotal() - $entity->getPayment();
             $entity->setDue($due);
             $em->flush();
             if ($entity->getTotal() > 0) {

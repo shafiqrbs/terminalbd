@@ -13,16 +13,32 @@ class DefaultController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $option = $user->getGlobalOption();
-        $salesOverview = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($this->getUser(),$data);
-        $salesTransactionOverview = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'true');
-        $previousSalesTransactionOverview = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'false');
+        $data = $_REQUEST;
+        $datetime = new \DateTime("now");
+        $data['startDate'] = $datetime->format('Y-m-d');
+        $data['endDate'] = $datetime->format('Y-m-d');
+        $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineIncome($this->getUser(),$data);
+        $user = $this->getUser();
+        $salesCashOverview                  = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('diagnostic','admission'));
+        $purchaseCashOverview               = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user,$data);
+        $transactionMethods                 = array(1);
+        $transactionCashOverview            = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
+        $expenditureOverview                = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+        $salesOverview                      = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($this->getUser(),$data);
+        $salesTransactionOverview           = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'true');
+        $previousSalesTransactionOverview   = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'false');
 
-        return $this->render('RestaurantBundle:Default:index.html.twig', array(
-            'salesOverview' => $salesOverview,
-            'salesTransactionOverview' => $salesTransactionOverview,
-            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
-            'option' => $option,
-            'searchForm' => $data,
+        return $this->render('RestaurantBundle:Default:dashboard.html.twig', array(
+            'salesOverview'                     => $salesOverview,
+            'salesTransactionOverview'          => $salesTransactionOverview,
+            'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
+            'option'                            => $user->getGlobalOption() ,
+            'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
+            'transactionCashOverviews'          => $transactionCashOverview,
+            'expenditureOverview'               => $expenditureOverview ,
+            'salesCashOverview'                 => $salesCashOverview ,
+            'purchaseCashOverview'              => $purchaseCashOverview ,
+            'searchForm'                        => $data ,
         ));
 
     }
