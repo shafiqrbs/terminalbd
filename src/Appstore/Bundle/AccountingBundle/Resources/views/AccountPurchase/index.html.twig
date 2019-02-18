@@ -127,7 +127,7 @@
                                         <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.processType }}</td>
+                                        <td class="numeric" >{{ entity.processType|capitalize }}</td>
                                         <td class="numeric" >{{ entity.purchaseAmount|number_format }}</td>
                                         <td class="numeric" >
                                                 {% if entity.process == 'approved'  %}
