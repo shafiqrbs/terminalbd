@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 class ReportController extends Controller
 {
 
-
     public function paginate($entities)
     {
         $paginator  = $this->get('knp_paginator');
@@ -269,13 +268,13 @@ class ReportController extends Controller
         $entities = $em->getRepository('InventoryBundle:Sales')->reportSalesItem($user,$data);
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Report:sales/salesStock.html.twig', array(
-            'option'                    => $this->getUser()->getGlobalOption(),
-            'inventory' => $inventory,
-            'entities' => $pagination,
-            'cashOverview' => $cashOverview,
-            'purchaseSalesItem' => $purchaseSalesPrice,
-            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
-            'searchForm' => $data,
+            'option'                => $this->getUser()->getGlobalOption(),
+            'inventory'             => $inventory,
+            'entities'              => $pagination,
+            'cashOverview'          => $cashOverview,
+            'purchaseSalesItem'     => $purchaseSalesPrice,
+            'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm'            => $data
         ));
     }
 
@@ -288,11 +287,11 @@ class ReportController extends Controller
         $entities = $em->getRepository('InventoryBundle:Sales')->reportSalesItemDetails($user,$data);
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Report:sales/salesItemDetails.html.twig', array(
-            'option'                    => $this->getUser()->getGlobalOption(),
-            'inventory' => $inventory,
-            'entities' => $pagination,
-            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
-            'searchForm' => $data,
+            'option'                => $this->getUser()->getGlobalOption(),
+            'inventory'             => $inventory,
+            'entities'              => $pagination,
+            'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm'            => $data,
         ));
     }
 

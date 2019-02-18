@@ -646,7 +646,7 @@ class AccountSalesRepository extends EntityRepository
         }else{
             $accountSales->setAmount(0);
         }
-        $accountSales->setProcessHead('advance');
+        $accountSales->setProcessHead('Advance');
         $accountSales->setApprovedBy($entity->getCreatedBy());
         if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());

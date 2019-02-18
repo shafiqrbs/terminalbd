@@ -255,7 +255,10 @@ class ReportController extends Controller
 
 	public function customerLedgerAction()
 	{
-		$em = $this->getDoctrine()->getManager();
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+        $em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$user = $this->getUser();
 		$customer ='';
@@ -263,7 +266,6 @@ class ReportController extends Controller
 		if(isset($data['mobile']) and !empty($data['mobile'])){
 			$customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['mobile']));
 			$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
-
 		}
 		$entities = $em->getRepository('AccountingBundle:AccountSales')->customerLedger($user,$data);
 		return $this->render('AccountingBundle:Report/Outstanding:customerLedger.html.twig', array(
@@ -273,8 +275,6 @@ class ReportController extends Controller
 			'searchForm' => $data,
 		));
 	}
-
-
 	/**
 	 * Lists all AccountSales entities.
 	 *
