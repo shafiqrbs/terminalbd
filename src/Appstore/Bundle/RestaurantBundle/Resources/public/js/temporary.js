@@ -35,24 +35,6 @@ $(document).on('click', '.addInvoice', function() {
     });
 
 });
-
-$(document).on("click", ".saveButtonxxx", function() {
-
-    var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
-    var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        data:formData,
-        success: function(response){
-
-        }
-    });
-
-});
-
 function formSubmit() {
 
     $("form#invoicePatientForm").on('click', '.addCustomer', function() {
@@ -208,7 +190,6 @@ function formSubmit() {
         }
     });
     });
-
     $(document).on('click', '#posButton', function() {
         $.ajax({
             url         : $('form#invoiceForm').attr( 'action' ),

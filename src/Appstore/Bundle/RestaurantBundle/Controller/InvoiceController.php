@@ -124,7 +124,7 @@ class InvoiceController extends Controller
         $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
         $due = !empty($entity->getDue()) ? $entity->getDue() : 0;
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
-        $totalDiscount = $entity->getTotalDiscount() > 0 ? $entity->getTotalDiscount() : 0;
+        $totalDiscount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
 
        $data = array(
            'subTotal'               => $subTotal,
@@ -413,7 +413,7 @@ class InvoiceController extends Controller
         $invoice            = $entity->getInvoice();
         $subTotal           = $entity->getSubTotal();
         $total              = $entity->getTotal();
-        $discount           = $entity->getTotalDiscount();
+        $discount           = $entity->getDiscount();
         $vat                = $entity->getVat();
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();
@@ -606,7 +606,7 @@ class InvoiceController extends Controller
         $invoice            = $entity->getInvoice();
         $subTotal           = $entity->getSubTotal();
         $total              = $entity->getTotal();
-        $discount           = $entity->getTotalDiscount();
+        $discount           = $entity->getDiscount();
         $vat                = $entity->getVat();
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();
