@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -17,14 +18,25 @@ class RestaurantTemporaryRepository extends EntityRepository
 
     public function getSubTotalAmount(User $user)
     {
-        $Restaurant = $user->getGlobalOption()->getRestaurantConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.subTotal) AS subTotal');
-        $qb->where('e.restaurantConfig = :Restaurant');
-        $qb->setParameter('Restaurant', $Restaurant);
+        $qb->where('e.restaurantConfig = :config');
+        $qb->setParameter('config', $config);
         $qb->andWhere("e.user =".$user->getId());
         $res = $qb->getQuery()->getOneOrNullResult();
         return $res['subTotal'];
+    }
+
+    public function generateVat(User $user,$total)
+    {
+        $config = $user->getGlobalOption()->getRestaurantConfig();
+        $vat = 0;
+        if($config->getVatEnable() == 1){
+            $vat = (($total * $config->getVatPercentage())/100);
+        }
+        return $vat;
+
     }
 
     public function insertInvoiceItems(User $user, $data)
@@ -38,7 +50,6 @@ class RestaurantTemporaryRepository extends EntityRepository
             $entity = $invoiceParticular;
             $entity->setQuantity($invoiceParticular->getQuantity() + $data['quantity']);
             $entity->setSubTotal($data['price'] * $entity->getQuantity());
-
         }else{
             $entity->setQuantity($data['quantity']);
             $entity->setSalesPrice($data['price']);
@@ -56,7 +67,7 @@ class RestaurantTemporaryRepository extends EntityRepository
 
     public function getSalesItems(User $user)
     {
-        $entities = $user->getrestaurantInvoiceTemporaryParticulars();
+        $entities = $user->getRestaurantTemps();
         $data = '';
         $i = 1;
         foreach ($entities as $entity) {

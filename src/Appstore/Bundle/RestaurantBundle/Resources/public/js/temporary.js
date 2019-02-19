@@ -24,6 +24,7 @@ $(document).on('click', '.addInvoice', function() {
                 async: true,
                 success: function (response) {
                     el.find('.dialogModal_content').html(response);
+
                     formSubmit();
                     $('.select2').select2();
                 }
@@ -35,7 +36,7 @@ $(document).on('click', '.addInvoice', function() {
 
 });
 
-$(document).on("click", ".saveButton", function() {
+$(document).on("click", ".saveButtonxxx", function() {
 
     var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
     var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
@@ -54,20 +55,18 @@ $(document).on("click", ".saveButton", function() {
 
 function formSubmit() {
 
-    $('#saveDiagnosticButton').attr("disabled", true);
-
     $("form#invoicePatientForm").on('click', '.addCustomer', function() {
         $( ".customer" ).slideToggle( "slow" );
     });
 
-    $(document).on('change', '#particular', function() {
-        var url = $(this).val();
-        if(url == ''){
-            alert('You have to add particulars from drop down and this not service item');
+    $(document).on('change', '.particular', function() {
+        var id = $(this).val();
+        if(id == ''){
+            alert('You have to add product from drop down and this not service item');
             return false;
         }
         $.ajax({
-            url: url,
+            url: Routing.generate('restaurant_temporary_particular_search',{'id':id}),
             type: 'GET',
             success: function (response) {
                 obj = JSON.parse(response);
@@ -99,46 +98,47 @@ function formSubmit() {
                 $('#invoiceParticulars').show();
                 $('.subTotal').html(obj['subTotal']);
                 $('.initialGrandTotal').html(obj['initialGrandTotal']);
+                $('.initialVat').html(obj['initialVat']);
+                $('.vat').val(obj['initialVat']);
+                $('.payment').val(obj['initialGrandTotal']);
                 $('#initialDue').val(obj['initialGrandTotal']);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
-                $('.msg-hidden').show();
-                $('#msg').html(obj['msg']);
                 $("#particular").select2().select2("val","").select2('open');
                 $('#price').val('');
                 $('#quantity').val('1');
                 $('#particularId').val('');
                 $('#addParticular').attr("disabled", true);
                 if(obj['initialGrandTotal'] > 0 ){
-                    $('#saveDiagnosticButton').attr("disabled", false);
+                    $('.receiveBtn').attr("disabled", false);
                 }else{
-                    $('#saveDiagnosticButton').attr("disabled", true);
+                    $('.receiveBtn').attr("disabled", true);
                 }
             }
         })
     });
 
-    $(document).on('change', '#discountType , #appstore_bundle_hospitalbundle_invoice_discountCalculation', function() {
+    $(document).on('change', '#restaurant_invoice_discountType , #restaurant_invoice_discountCalculation', function() {
 
-        var discountType = $('#discountType').val();
-        var discount = parseInt($('#appstore_bundle_hospitalbundle_invoice_discountCalculation').val());
+        var discountType = $('#restaurant_invoice_discountType').val();
+        var discount = parseInt($('#restaurant_invoice_discountCalculation').val());
         if(discount === "NaN"){
             return false;
         }
         $.ajax({
-            url: Routing.generate('hms_invoice_temporary_discount_update'),
+            url: Routing.generate('restaurant_temporary_discount_update'),
             type: 'POST',
             data:'discount=' + discount+'&discountType='+discountType,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('.subTotal').html(obj['subTotal']);
                 $('.initialGrandTotal').html(obj['initialGrandTotal']);
+                $('.initialVat').html(obj['initialVat']);
+                $('.vat').val(obj['initialVat']);
+                $('.payment').val(obj['initialGrandTotal']);
                 $('.initialDiscount').html(obj['initialDiscount']);
-                $('#initialDiscount').val(obj['initialDiscount']);
-                $('#appstore_bundle_hospitalbundle_invoice_discount').val(obj['initialDiscount']);
+                 $('#restaurant_invoice_discount').val(obj['initialDiscount']);
                 $('#initialDue').val(obj['initialGrandTotal']);
-
             }
-
         })
     });
 
@@ -155,17 +155,18 @@ function formSubmit() {
                     $('.subTotal').html(obj['subTotal']);
                     $('.initialGrandTotal').html(obj['initialGrandTotal']);
                     $('#initialDue').val(obj['initialGrandTotal']);
+                    $('.initialVat').html(obj['initialVat']);
+                    $('.vat').val(obj['initialVat']);
+                    $('.payment').val(obj['initialGrandTotal']);
                     $('.due').html(obj['due']);
                     $('.discountAmount').html(obj['discount']);
-                    $('.discount').val('').attr( "placeholder", obj['discount'] );
-                    $('#appstore_bundle_hospitalbundle_invoice_discount').val(obj['discount']);
+                    $('#restaurant_invoice_discount').val(obj['discount']);
                     $('.total'+id).html(obj['total']);
-                    $('#msg').html(obj['msg']);
                     $('#remove-'+id).hide();
                     if(obj['initialGrandTotal'] > 0 ){
-                        $('#saveDiagnosticButton').attr("disabled", false);
+                        $('.receiveBtn').attr("disabled", false);
                     }else{
-                        $('#saveDiagnosticButton').attr("disabled", true);
+                        $('.receiveBtn').attr("disabled", true);
                     }
                 });
             }
@@ -174,7 +175,7 @@ function formSubmit() {
 
     $(document).on('keyup', '.payment', function() {
 
-        var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
+        var payment  = parseInt($('#restaurant_invoice_payment').val()  != '' ? $('#restaurant_invoice_payment').val() : 0 );
         var due  = parseInt($('#initialDue').val()  != '' ? $('#initialDue').val() : 0 );
         var dueAmount = (due - payment);
         if(dueAmount > 0){
@@ -187,56 +188,99 @@ function formSubmit() {
         }
 
     });
-    var form = $("#invoicePatientForm").validate({
+    $(document).on('click', '#saveButton', function() {
 
-        rules: {
-
-            "appstore_bundle_hospitalbundle_invoice[customer][name]": {required: true},
-            "appstore_bundle_hospitalbundle_invoice[customer][mobile]": {required: true, digits: true},
-            "appstore_bundle_hospitalbundle_invoice[customer][age]": {required: true, digits: true},
-            "appstore_bundle_hospitalbundle_invoice[discountCalculation]": {required: false, digits: true},
-            "appstore_bundle_hospitalbundle_invoice[payment]": {required: false, digits: true},
-            "appstore_bundle_hospitalbundle_invoice[customer][address]": {required: false},
-            "appstore_bundle_hospitalbundle_invoice[customer][location]": {required: false},
-            "appstore_bundle_hospitalbundle_invoice[referredDoctor][name]": {required: false},
-            "appstore_bundle_hospitalbundle_invoice[referredDoctor][mobile]": {required: false},
-            "appstore_bundle_hospitalbundle_invoice[comment]": {required: false},
+        $.ajax({
+        url         : $('form#invoiceForm').attr( 'action' ),
+        type        : 'POST',
+        data        : new FormData($('form#invoiceForm')[0]),
+        processData : false,
+        contentType : false,
+        beforeSend  : function() {
+            $('#saveButton').html("Please Wait...").attr('disabled', 'disabled');
         },
-
-        messages: {
-            "appstore_bundle_hospitalbundle_invoice[customer][name]": "Enter patient name",
-            "appstore_bundle_hospitalbundle_invoice[customer][mobile]": "Enter patient mobile no",
-            "appstore_bundle_hospitalbundle_invoice[customer][age]": "Enter patient age",
-        },
-        tooltip_options: {
-            "appstore_bundle_hospitalbundle_invoice[customer][name]": {placement: 'top', html: true},
-            "appstore_bundle_hospitalbundle_invoice[customer][mobile]": {placement: 'top', html: true},
-            "appstore_bundle_hospitalbundle_invoice[customer][age]": {placement: 'top', html: true},
-        },
-        submitHandler: function (form) {
-            $.ajax({
-                url         : $('form#invoicePatientForm').attr( 'action' ),
-                type        : $('form#invoicePatientForm').attr( 'method' ),
-                data        : new FormData($('form#invoicePatientForm')[0]),
-                processData : false,
-                contentType : false,
-                beforeSend: function() {
-                    $('#saveDiagnosticButton').html("Please Wait...").attr('disabled', 'disabled');
-                },
-                success: function(response){
-                    $('form#invoicePatientForm')[0].reset();
-                    $('#saveDiagnosticButton').html("<i class='icon-save'></i> Save").attr('disabled', 'disabled');
-                    $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
-                    $('#invoiceParticulars').hide();
-                    $("#appstore_bundle_hospitalbundle_invoice_assignDoctor").select2().select2("val","");
-                    $("#referredId").select2().select2("val","");
-                    window.open('/hms/invoice/'+response+'/print', '_blank');
-                }
-            });
-
+        success     : function(response){
+            $('form#invoiceForm')[0].reset();
+            $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
+            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
+            $('#invoiceParticulars').hide();
         }
     });
+    });
+
+    $(document).on('click', '#posButton', function() {
+        $.ajax({
+            url         : $('form#invoiceForm').attr( 'action' ),
+            type        : $('form#invoiceForm').attr( 'method' ),
+            data        : new FormData($('form#invoiceForm')[0]),
+            processData : false,
+            contentType : false,
+            beforeSend  : function() {
+                $('#savePosButton').html("Please Wait...").attr('disabled', 'disabled');
+            },
+            success     : function(response){
+                $('form#invoiceForm')[0].reset();
+                $('#savePosButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
+                $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
+                $('#invoiceParticulars').hide();
+             //   jsPostPrint(response);
+
+            }
+        });
+    });
+
+    $(document).on( "click", ".btn-number", function(e){
+
+        e.preventDefault();
+        url = $(this).attr('data-url');
+        var productId = $(this).attr('data-text');
+        var price = $(this).attr('data-title');
+        fieldId = $(this).attr('data-id');
+        fieldName = $(this).attr('data-field');
+        type      = $(this).attr('data-type');
+        var input = $('#quantity-'+fieldId);
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if(type == 'minus') {
+                if(currentVal > input.attr('min')) {
+                    var existVal = (currentVal - 1);
+                    input.val(existVal).change();
+                }
+                if(parseInt(input.val()) == input.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+
+            } else if(type == 'plus') {
+
+                if(currentVal < input.attr('max')) {
+                    var existVal = (currentVal + 1);
+                    input.val(existVal).change();
+                }
+                if(parseInt(input.val()) == input.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+
+            }
+        } else {
+            input.val(1);
+        }
+    });
+
+    function jsPostPrint(data) {
+
+        if(typeof EasyPOSPrinter == 'undefined') {
+            alert("Printer library not found");
+            return;
+        }
+        EasyPOSPrinter.raw(data);
+        EasyPOSPrinter.cut();
+        EasyPOSPrinter.print(function(r, x){
+            console.log(r)
+        });
+    }
 }
+
+
 
 
 

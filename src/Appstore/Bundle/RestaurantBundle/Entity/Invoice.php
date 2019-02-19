@@ -184,9 +184,16 @@ class Invoice
     /**
      * @var int
      *
-     * @ORM\Column(name="discountCalculation", type="smallint", length=2,  nullable=true)
+     * @ORM\Column(name="discountCalculation", type="smallint", length = 2,  nullable=true)
      */
     private $discountCalculation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountCoupon", type="string", length = 20,  nullable = true)
+     */
+    private $discountCoupon;
 
     /**
      * @var string
@@ -955,6 +962,22 @@ class Invoice
     public function setRemark(string $remark)
     {
         $this->remark = $remark;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountCoupon()
+    {
+        return $this->discountCoupon;
+    }
+
+    /**
+     * @param string $discountCoupon
+     */
+    public function setDiscountCoupon(string $discountCoupon)
+    {
+        $this->discountCoupon = $discountCoupon;
     }
 
 

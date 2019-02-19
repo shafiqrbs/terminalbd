@@ -135,7 +135,7 @@
                                         <td class="numeric" >{{ entity.slipNo }} / {% if entity.tokenNo is not empty %}{{ entity.tokenNo.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
                                         <td class="numeric" >{{ entity.vat }}</td>
-                                        <td class="numeric" >{{ entity.totalDiscount }}</td>
+                                        <td class="numeric" >{{ entity.discount }}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>
@@ -161,7 +161,7 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination" >
+                            <div class="pagination pull-center"  >
                                 {{ knp_pagination_render(entities) }}
                             </div>
                         </div>
@@ -194,12 +194,10 @@
     {% javascripts
     '@RestaurantBundle/Resources/public/js/invoice.js'
     '@RestaurantBundle/Resources/public/js/posprint.js'
-
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
 {% endblock %}

@@ -8,11 +8,16 @@ restaurant_temporary_create:
     path:     /create
     defaults: { _controller: "RestaurantBundle:RestaurantTemporary:create" }
     methods:  POST
+    options:
+            expose: true
 
 
 restaurant_temporary_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "RestaurantBundle:RestaurantTemporary:particularSearch" }
+    methods:  GET
+    options:
+            expose: true
 
 
 restaurant_temporary_particular_add:

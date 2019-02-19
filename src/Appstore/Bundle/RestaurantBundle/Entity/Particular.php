@@ -175,6 +175,14 @@ class Particular
     /**
      * @var string
      *
+     * @ORM\Column(name="instruction", type="text", nullable=true)
+     */
+    private $instruction;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="price", type="decimal", nullable=true)
      */
     private $price;
@@ -943,6 +951,22 @@ class Particular
     public function setCategory($category)
     {
         $this->category = $category;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInstruction()
+    {
+        return $this->instruction;
+    }
+
+    /**
+     * @param string $instruction
+     */
+    public function setInstruction(string $instruction)
+    {
+        $this->instruction = $instruction;
     }
 
 

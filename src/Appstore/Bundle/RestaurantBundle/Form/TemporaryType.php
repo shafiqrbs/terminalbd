@@ -40,13 +40,13 @@ class TemporaryType extends AbstractType
         $builder
 
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 payment tooltips','placeholder'=>'Receive','data-original-title'=>'Add receive amount','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('slipNo','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','data-trigger' => 'hover','placeholder'=>'Add slip no','data-original-title'=>'Add slip no','autocomplete'=>'off')))
-            ->add('discount','hidden')
-            ->add('remark','text', array('attr'=>array('class'=>'tooltips span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('discount','hidden',array('attr'=>array('class'=>'')))
+            ->add('remark','text', array('attr'=>array('class'=>'tooltips remark span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
             ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discount','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
             ->add('discountType', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'choices'   => array('flat' => 'Flat', 'percentage' => 'Percentage'),
@@ -56,9 +56,6 @@ class TemporaryType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'empty_value' => '---Select Table no ---',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
