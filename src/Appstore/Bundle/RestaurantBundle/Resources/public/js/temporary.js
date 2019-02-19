@@ -204,6 +204,7 @@ function formSubmit() {
             $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
             $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
             $('#invoiceParticulars').hide();
+            jsPostPrint(response);
         }
     });
     });
