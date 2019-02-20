@@ -124,6 +124,30 @@ function formSubmit() {
         })
     });
 
+    $(document).on('change', '#restaurant_invoice_discountCoupon', function() {
+
+        var discount = $('#restaurant_invoice_discountCoupon').val();
+        if(discount === "NaN"){
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('restaurant_temporary_discount_coupon'),
+            type: 'POST',
+            data:'discount=' + discount,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('.subTotal').html(obj['subTotal']);
+                $('.initialGrandTotal').html(obj['initialGrandTotal']);
+                $('.initialVat').html(obj['initialVat']);
+                $('.vat').val(obj['initialVat']);
+                $('.payment').val(obj['initialGrandTotal']);
+                $('.initialDiscount').html(obj['initialDiscount']);
+                $('#restaurant_invoice_discount').val(obj['initialDiscount']);
+                $('#initialDue').val(obj['initialGrandTotal']);
+            }
+        })
+    });
+
     $(document).on("click", ".initialParticularDelete , .particularDelete", function() {
 
         var id = $(this).attr("data-id");
@@ -173,22 +197,22 @@ function formSubmit() {
     $(document).on('click', '#saveButton', function() {
 
         $.ajax({
-        url         : $('form#invoiceForm').attr( 'action' ),
-        type        : 'POST',
-        data        : new FormData($('form#invoiceForm')[0]),
-        processData : false,
-        contentType : false,
-        beforeSend  : function() {
-            $('#saveButton').html("Please Wait...").attr('disabled', 'disabled');
-        },
-        success     : function(response){
-            $('form#invoiceForm')[0].reset();
-            $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
-            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
-            $('#invoiceParticulars').hide();
-            jsPostPrint(response);
-        }
-    });
+            url         : $('form#invoiceForm').attr( 'action' ),
+            type        : 'POST',
+            data        : new FormData($('form#invoiceForm')[0]),
+            processData : false,
+            contentType : false,
+            beforeSend  : function() {
+                $('#saveButton').html("Please Wait...").attr('disabled', 'disabled');
+            },
+            success     : function(response){
+                $('form#invoiceForm')[0].reset();
+                $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
+                $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
+                $('#invoiceParticulars').hide();
+                jsPostPrint(response);
+            }
+        });
     });
     $(document).on('click', '#posButton', function() {
         $.ajax({

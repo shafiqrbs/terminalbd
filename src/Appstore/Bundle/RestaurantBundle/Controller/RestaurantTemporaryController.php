@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\RestaurantBundle\Controller;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
 use Appstore\Bundle\RestaurantBundle\Form\RestaurantTemporaryParticularType;
 use Appstore\Bundle\RestaurantBundle\Form\TemporaryType;
@@ -89,6 +90,7 @@ class RestaurantTemporaryController extends Controller
         $entity->setSubTotal($subTotal);
         $entity->setVat($data['vat']);
         $entity->setPayment($data['payment']);
+
         $entity->setTotal($subTotal - $entity->getDiscount() + $entity->getVat());
         if ($entity->getTotal() > 0) {
             $entity->setProcess('Done');
@@ -109,7 +111,7 @@ class RestaurantTemporaryController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
-    //    $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
+        $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
         $pos = $this->posPrint($entity);
         return new Response($pos);
         exit;
@@ -126,6 +128,32 @@ class RestaurantTemporaryController extends Controller
             $initialGrandTotal = ($subTotal  - $discount);
         }else{
             $discount = ($subTotal * $discount)/100;
+            $initialGrandTotal = ($subTotal  - $discount);
+        }
+        $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$initialGrandTotal);
+        $data = array(
+            'subTotal' => $subTotal,
+            'initialGrandTotal' => round($initialGrandTotal + $vat),
+            'initialDiscount' => $discount,
+            'initialVat' => $vat,
+            'success' => 'success'
+        );
+        return new Response(json_encode($data));
+        exit;
+
+    }
+
+    public function invoiceDiscountCouponAction(Request $request)
+    {
+        $user = $this->getUser();
+        /* @var $config RestaurantConfig */
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $discount = $request->request->get('discount');
+        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        if($config->getDiscountType() == 'flat' and !empty($discount)){
+            $initialGrandTotal = ($subTotal  - $config->getDiscountPercentage());
+        }elseif($config->getDiscountType() == 'percentage' and !empty($discount)){
+            $discount = ($subTotal * $config->getDiscountPercentage())/100;
             $initialGrandTotal = ($subTotal  - $discount);
         }
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$initialGrandTotal);
@@ -348,7 +376,7 @@ class RestaurantTemporaryController extends Controller
         $printer -> text($date . "\n");
         $response =  base64_encode($connector->getData());
         $printer -> close();
-        return $response;
+        return new Response($response);
     }
 
 }

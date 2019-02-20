@@ -14,10 +14,10 @@
                 <div class="span5">
                     <div class="btn-group" style="width: 100%!important;">
                         {% if ((app.user.granted("ROLE_DOMAIN_RESTAURANT")) or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a class="btn red big addPatient" style="width:44%" href="javascript:"> <i class="fa fa-notes"></i> INVOICE  </a>
+                            <a class="btn red big" style="width:44%" href="{{ path('restaurant_invoice') }}"> <i class="fa fa-notes"></i> INVOICE  </a>
                         {% endif %}
                         {% if ((app.user.granted("ROLE_DOMAIN_RESTAURANT")) or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="{{ path('restaurant_invoice') }}" style="width:43%" class="btn green big"><i class="fa fa-truck"></i> PURCHASE</a>
+                            <a href="{{ path('restaurant_purchase') }}" style="width:43%" class="btn green big"><i class="fa fa-truck"></i> PURCHASE</a>
                         {% endif %}
                     </div>
                 </div>

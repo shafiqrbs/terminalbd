@@ -69,7 +69,7 @@ class ConfigType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_particular';
+        return 'restaurant_config';
     }
 
 

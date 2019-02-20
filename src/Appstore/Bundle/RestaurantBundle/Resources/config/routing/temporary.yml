@@ -35,6 +35,13 @@ restaurant_temporary_discount_update:
     options:
             expose: true
 
+restaurant_temporary_discount_coupon:
+    path:     /dicount-coupon
+    defaults: { _controller: "RestaurantBundle:RestaurantTemporary:invoiceDiscountCoupon" }
+    methods:  POST
+    options:
+            expose: true
+
 restaurant_temporary_particular_delete:
     path:     /{id}/particular-delete
     defaults: { _controller: "RestaurantBundle:RestaurantTemporary:invoiceParticularDelete" }
