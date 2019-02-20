@@ -376,7 +376,7 @@ class RestaurantTemporaryController extends Controller
         $printer -> text($date . "\n");
         $response =  base64_encode($connector->getData());
         $printer -> close();
-        return new Response($response);
+        return $response;
     }
 
 }
