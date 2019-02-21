@@ -83,6 +83,7 @@ class RestaurantTemporaryController extends Controller
         $config = $user->getGlobalOption()->getRestaurantConfig();
         $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $data = $request->request->all()['restaurant_invoice'];
+        $btn = $request->request->get('buttonType');
         $form = $this->createTemporaryForm($entity);
         $form->handleRequest($request);
         $entity->setRestaurantConfig($config);
@@ -90,8 +91,8 @@ class RestaurantTemporaryController extends Controller
         $entity->setSubTotal($subTotal);
         $entity->setVat($data['vat']);
         $entity->setPayment($data['payment']);
-
-        $entity->setTotal($subTotal - $entity->getDiscount() + $entity->getVat());
+        $total = round($subTotal - $entity->getDiscount() + $entity->getVat());
+        $entity->setTotal($total);
         if ($entity->getTotal() > 0) {
             $entity->setProcess('Done');
         }
@@ -112,8 +113,14 @@ class RestaurantTemporaryController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
-        $pos = $this->posPrint($entity);
-        return new Response($pos);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
+        $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
+        $accountInvoice = $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
+        if($btn == "posBtn"){
+            $em->getRepository('AccountingBundle:Transaction')->restaurantSalesTransaction($entity, $accountInvoice);
+            $pos = $this->posPrint($entity,$invoiceParticulars);
+            return new Response($pos);
+        }
         exit;
 
     }
@@ -221,7 +228,7 @@ class RestaurantTemporaryController extends Controller
         exit;
     }
 
-    private function posPrint(Invoice $entity)
+    private function posPrint(Invoice $entity,$invoiceParticulars)
     {
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
@@ -318,8 +325,8 @@ class RestaurantTemporaryController extends Controller
         $printer -> setEmphasis(false);
         $printer -> feed();
         $i=1;
-        if(!empty($entity->getInvoiceParticulars())){
-            foreach ( $entity->getInvoiceParticulars() as $row){
+        if(!empty($invoiceParticulars)){
+            foreach ($invoiceParticulars as $row){
                 $printer -> setUnderline(Printer::UNDERLINE_NONE);
                 $printer -> text( new PosItemManager($i.'. '.$row->getParticular()->getName(),"",""));
                 $printer -> setUnderline(Printer::UNDERLINE_SINGLE);

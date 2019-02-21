@@ -310,8 +310,9 @@
                 <div class="btn-group span11">
                     <input type="hidden" class="initialGrandTotal" name="initialDue" id="initialDue" value="{{ temporarySubTotal }}">
                     <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
-                    <button type="button" class="btn red big span6 receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> Save</button>
-                    <button type="button" class="btn yellow big span6 receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="posButton"><i class="icon-print"></i> Print</button>
+                    <input type="hidden" name="buttonType" id="buttonType" value="">
+                    <button type="button" class="btn red big span6 receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
+                    <button type="button" class="btn yellow big span6 receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="posButton"><i class="icon-print"></i> POS PRINT</button>
                 </div>
             </div>
         </div>

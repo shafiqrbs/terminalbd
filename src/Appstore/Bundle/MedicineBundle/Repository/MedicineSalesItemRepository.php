@@ -48,8 +48,6 @@ class MedicineSalesItemRepository extends EntityRepository
         foreach ($entities as $item) {
 
 	        /* @var  $item MedicineSalesTemporary */
-
-
 	        	$entity = new MedicineSalesItem();
 		        $entity->setMedicineSales( $sales );
 		        $entity->setMedicineStock( $item->getMedicineStock() );
@@ -72,7 +70,6 @@ class MedicineSalesItemRepository extends EntityRepository
 	            }
 		        $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $item->getMedicineStock(), 'sales' );
             }
-
     }
 
     public function itemDiscountPrice(MedicineSales $sales,$price)
@@ -85,9 +82,7 @@ class MedicineSalesItemRepository extends EntityRepository
         return round($discountPrice,2);
     }
 
-
     public function insertInstantSalesItem(MedicineSales $sales,MedicinePurchaseItem $item,$data){
-
         $em = $this->_em;
         $entity = new MedicineSalesItem();
         $entity->setMedicineSales($sales);
