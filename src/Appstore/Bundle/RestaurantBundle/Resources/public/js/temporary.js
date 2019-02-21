@@ -68,7 +68,7 @@ function formSubmit() {
         var price = parseInt($('#price').val());
         var url = $('#temporaryParticular').attr('data-url');
         if(particularId == ''){
-            $("#particular").select2('open');
+            $("#restaurant_particular_particular").select2('open');
             return false;
         }
         $.ajax({
@@ -85,7 +85,7 @@ function formSubmit() {
                 $('.payment').val(obj['initialGrandTotal']);
                 $('#initialDue').val(obj['initialGrandTotal']);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
-                $("#particular").select2().select2("val","").select2('open');
+                $("#restaurant_particular_particular").select2().select2("val","").select2('open');
                 $('#price').val('');
                 $('#quantity').val('1');
                 $('#particularId').val('');
@@ -195,7 +195,7 @@ function formSubmit() {
 
     });
     $(document).on('click', '#saveButton', function() {
-
+        $('#buttonType').val('saveBtn');
         $.ajax({
             url         : $('form#invoiceForm').attr( 'action' ),
             type        : 'POST',
@@ -207,14 +207,16 @@ function formSubmit() {
             },
             success     : function(response){
                 $('form#invoiceForm')[0].reset();
+                $('#restaurant_invoice_vat').val(0);
+                $('#restaurant_invoice_payment').val(0);
                 $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
                 $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                 $('#invoiceParticulars').hide();
-                jsPostPrint(response);
             }
         });
     });
     $(document).on('click', '#posButton', function() {
+        $('#buttonType').val('posBtn');
         $.ajax({
             url         : $('form#invoiceForm').attr( 'action' ),
             type        : $('form#invoiceForm').attr( 'method' ),
@@ -222,15 +224,16 @@ function formSubmit() {
             processData : false,
             contentType : false,
             beforeSend  : function() {
-                $('#savePosButton').html("Please Wait...").attr('disabled', 'disabled');
+                $('#posButton').html("Please Wait...").attr('disabled', 'disabled');
             },
             success     : function(response){
                 $('form#invoiceForm')[0].reset();
-                $('#savePosButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
+                $('#restaurant_invoice_vat').val(0);
+                $('#restaurant_invoice_payment').val(0);
+                $('#posButton').html("<i class='icon-print'></i> POS Print").attr('disabled','disabled');
                 $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                 $('#invoiceParticulars').hide();
-             //   jsPostPrint(response);
-
+                jsPostPrint(response);
             }
         });
     });

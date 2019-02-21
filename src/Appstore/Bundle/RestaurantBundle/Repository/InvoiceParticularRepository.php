@@ -71,8 +71,22 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setParticular($temp->getParticular());
             $em->persist($entity);
             $em->flush();
+            $this->insertSalesAccessories($entity);
         }
 
+    }
+
+    public function insertSalesAccessories(InvoiceParticular $item)
+    {
+        $em = $this->_em;
+        /** @var Particular  $particular */
+        $particular = $item->getParticular();
+        if( $particular->getService()->getSlug() == 'stockable' ){
+            $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+            $particular->setSalesQuantity($qnt);
+            $em->persist($particular);
+            $em->flush();
+        }
     }
 
     public function insertInvoiceItems($invoice, $data)

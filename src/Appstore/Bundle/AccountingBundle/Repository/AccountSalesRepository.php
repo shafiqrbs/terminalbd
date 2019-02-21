@@ -709,6 +709,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
+        $this->updateCustomerBalance($accountSales);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
 

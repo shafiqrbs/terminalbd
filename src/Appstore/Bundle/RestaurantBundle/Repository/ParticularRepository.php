@@ -246,8 +246,6 @@ class ParticularRepository extends EntityRepository
     public function insertAccessories(Invoice  $invoice){
 
         $em = $this->_em;
-
-        $em = $this->_em;
         /** @var InvoiceParticular $item */
 
         if(!empty($invoice->getInvoiceParticulars())){
@@ -276,7 +274,6 @@ class ParticularRepository extends EntityRepository
 
             $particular = $item->getParticular();
             if( $particular->getService()->getId() == 4 ){
-
                 $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
                 $particular->setSalesQuantity($qnt);
                 $em->persist($particular);
