@@ -63,6 +63,7 @@ $(document).on("click", ".paymentReceive", function() {
 });
 
 
+
 function pageRedirect() {
     window.location.href = "/restaurant/invoice/new";
 }

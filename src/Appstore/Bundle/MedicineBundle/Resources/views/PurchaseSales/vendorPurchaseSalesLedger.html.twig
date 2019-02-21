@@ -120,7 +120,13 @@
                                                 <tr>
                                                     <td class="numeric" >{{ ledger.updated|date('d-m-Y') }}</td>
                                                     <td class="numeric" >{{ ledger.accountRefNo }}</td>
-                                                    <td class="numeric" >{{ ledger.processType }}</td>
+                                                    <td class="numeric" >
+                                                        {% if ledger.medicinePurchase is not empty %}
+                                                            {% for item in ledger.medicinePurchase.medicinePurchaseItems  %}
+                                                                <p>{{ loop.index }}. {{ item.medicineStock.name }}</p>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </td>
                                                     <td class="numeric" >{{ ledger.purchaseAmount|number_format }}</td>
                                                     <td class="numeric" >{{ ledger.payment|number_format }}</td>
                                                     <td class="numeric" >{{ ledger.balance|number_format }}</td>
@@ -128,7 +134,6 @@
                                             {% endfor %}
                                         {% endif %}
                                         </tbody>
-
                                     </table>
                                 </td>
                                 <td width="50%">
@@ -150,7 +155,11 @@
                                                 <tr>
                                                     <td class="numeric" >{{ ledger.updated|date('d-m-Y') }}</td>
                                                     <td class="numeric" >{{ ledger.accountRefNo }}</td>
-                                                    <td class="numeric" >{{ ledger.processType }}</td>
+                                                    <td class="numeric" > {% if ledger.medicineSales is not empty %}
+                                                            {% for item in ledger.medicineSales.medicineSalesItems  %}
+                                                                <p>{{ loop.index }}. {{ item.medicineStock.name }}</p>
+                                                            {% endfor %}
+                                                        {% endif %}</td>
                                                     <td class="numeric" >{{ ledger.totalAmount|number_format }}</td>
                                                     <td class="numeric" >{{ ledger.amount|number_format }}</td>
                                                     <td class="numeric" >{{ ledger.balance|number_format }}</td>

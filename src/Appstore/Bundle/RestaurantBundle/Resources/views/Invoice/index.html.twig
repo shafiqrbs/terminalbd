@@ -135,7 +135,7 @@
                                         <td class="numeric" >{{ entity.slipNo }} / {% if entity.tokenNo is not empty %}{{ entity.tokenNo.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
                                         <td class="numeric" >{{ entity.vat }}</td>
-                                        <td class="numeric" >{{ entity.totalDiscount }}</td>
+                                        <td class="numeric" >{{ entity.discount }}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>
@@ -148,9 +148,9 @@
                                                 {% if  entity.process in processIntArr %}
                                                     <a href="{{ path('restaurant_invoice_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i> Update </a>
                                                 {% endif %}
-                                                {% if entity.process == 'Kitchen' %}
+                                               {# {% if entity.process == 'Kitchen' %}#}
                                                     <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" data-id="{{ entity.id }}" class="btn purple mini paymentReceive" ><i class="icon-money"></i> Print </a>
-                                                {% endif %}
+                                                {#{% endif %}#}
                                                 <a href="{{ path('restaurant_invoice_show',{'id':entity.id}) }}"  class="btn blue mini" ><i class="icon-eye"></i> View </a>
                                                 {% if entity.process == 'Done' and app.user.granted("ROLE_DOMAIN") %}
                                                 <a href="{{ path('restaurant_invoice_reverse',{'invoice':entity.invoice}) }}"  class="btn purple mini" ><i class="icon-retweet"></i> Reverse </a>
@@ -161,7 +161,7 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination" >
+                            <div class="pagination pull-center"  >
                                 {{ knp_pagination_render(entities) }}
                             </div>
                         </div>
@@ -171,7 +171,6 @@
         </div>
     </div>
     <script>
-
         (function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
@@ -194,12 +193,10 @@
     {% javascripts
     '@RestaurantBundle/Resources/public/js/invoice.js'
     '@RestaurantBundle/Resources/public/js/posprint.js'
-
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
 {% endblock %}

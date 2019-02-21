@@ -100,6 +100,15 @@
                                 <div class="clearfix">&nbsp;</div>
                                 <div class="row-fluid">
                                     <div class="span2">
+                                        <div class="control-group">
+                                            <label class="control-label " for="vatPercentage">Pay For &nbsp;</label>
+                                            <div class="control">
+                                                {{ form_widget(form.payFor) }}
+                                                {{ form_errors(form.payFor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
@@ -112,7 +121,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span5">
+                                    <div class="span4">
                                         <div class="row-fluid">
                                             <div class="span6">
                                                 <div class="control-group">
@@ -134,23 +143,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span5">
+                                    <div class="span4">
                                         <div class="row-fluid">
                                             <div class="span6">
                                                 <div class="control-group">
                                                     <label class="control-label " for="vatPercentage">Discount Type</label>
                                                     <div class="control">
                                                         {{ form_widget(form.discountType) }}
-                                                        {{ form_errors(form.discountType) }}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="span6">
                                                 <div class="control-group">
-                                                    <label class="control-label " for="vatPercentage">Customer Discount &nbsp;(%)</label>
+                                                    <label class="control-label " for="vatPercentage">Coupon Discount</label>
                                                     <div class="control">
                                                         {{ form_widget(form.discountPercentage) }}
-                                                        {{ form_errors(form.discountPercentage) }}%
                                                     </div>
                                                 </div>
                                             </div>

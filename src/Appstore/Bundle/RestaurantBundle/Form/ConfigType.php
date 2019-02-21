@@ -38,6 +38,14 @@ class ConfigType extends AbstractType
                     'flat' => 'Flat',
                 ),
             ))
+            ->add('payFor', 'choice', array(
+                'required'    => true,
+                'attr'=>array('class'=>'m-wrap span12'),
+                'choices' => array(
+                    'pre-pay' => 'Pre-pay',
+                    'post-pay' => 'Post-pay',
+                ),
+            ))
             ->add('discountPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5')))
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
@@ -61,7 +69,7 @@ class ConfigType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_particular';
+        return 'restaurant_config';
     }
 
 

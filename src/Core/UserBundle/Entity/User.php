@@ -31,6 +31,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -749,6 +750,11 @@ class User extends BaseUser
 
 
 	/*=========================== Restaurant Bundle =========================================*/
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary", mappedBy="user" , cascade={"persist", "remove"})
+	 */
+	protected $restaurantTemps;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="createdBy" , cascade={"persist", "remove"})
@@ -1756,6 +1762,14 @@ class User extends BaseUser
     public function getHmsInvoiceReturnApprovedBy()
     {
         return $this->hmsInvoiceReturnApprovedBy;
+    }
+
+    /**
+     * @return RestaurantTemporary
+     */
+    public function getRestaurantTemps()
+    {
+        return $this->restaurantTemps;
     }
 
 

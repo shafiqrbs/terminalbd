@@ -108,6 +108,13 @@ class RestaurantConfig
      */
     private $vatRegNo;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="payFor", type="string",  nullable=true)
+     */
+    private $payFor;
+
     /**
      * @var boolean
      *
@@ -998,6 +1005,22 @@ class RestaurantConfig
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPayFor()
+    {
+        return $this->payFor;
+    }
+
+    /**
+     * @param string $payFor
+     */
+    public function setPayFor(string $payFor)
+    {
+        $this->payFor = $payFor;
     }
 
 

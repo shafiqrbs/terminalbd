@@ -650,7 +650,7 @@ class SalesRepository extends EntityRepository
         return $result = $res->getArrayResult();
     }
 
-    public  function reportSalesItem(User $user, $data=''){
+    public  function reportSalesItem(User $user , $data = ''){
 
         $userBranch = $user->getProfile()->getBranches();
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
@@ -658,7 +658,8 @@ class SalesRepository extends EntityRepository
         $qb->join('s.salesItems','si');
         $qb->join('si.item','item');
         $qb->leftJoin('si.purchaseItem','pi');
-        $qb->select('s.invoice AS invoice');
+        $qb->select('s.created AS created');
+        $qb->addSelect('s.invoice AS invoice');
         $qb->addSelect('si.quantity AS quantity');
         $qb->addSelect('si.purchasePrice');
         $qb->addSelect('si.salesPrice');
@@ -679,7 +680,6 @@ class SalesRepository extends EntityRepository
     }
 
     public  function reportSalesItemDetails(User $user, $data=''){
-
         $userBranch = $user->getProfile()->getBranches();
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
         $qb = $this->_em->createQueryBuilder();

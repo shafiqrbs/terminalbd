@@ -122,6 +122,7 @@
                             <thead class="flip-content ">
                             <tr class="head-blue">
                                 <th class="numeric" ><i class="icon-reorder"></i></th>
+                                <th class="numeric" >Created</th>
                                 <th class="numeric" >Invoice</th>
                                 <th class="numeric" >Barcode</th>
                                 <th class="numeric" >Name</th>
@@ -134,23 +135,22 @@
                             </tr>
                             </thead>
                             <tbody>
-
                             {%  set totalSales = 0 %}
-                            {% for entity in entities %}
-                                <tr>
-                                    <td>{{ loop.index }}</td>
-                                    <td class="numeric" >{{ entity.invoice }}</td>
-                                    <td class="numeric" >{{ entity.barcode }}</td>
-                                    <td class="numeric" >{{ entity.name }}</td>
-                                    <td class="numeric" >{{ entity.quantity }}</td>
-                                    <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
-                                    <td class="numeric" >{{ (entity.quantity * entity.salesPrice)|number_format }}</td>
-                                    <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
-                                    <td class="numeric" >{{ (entity.quantity * entity.purchasePrice)|number_format }}</td>
-                                    <td class="numeric" >{{ ((entity.quantity * entity.salesPrice) - (entity.quantity * entity.purchasePrice))|number_format }}</td>
-                                </tr>
-                            {% endfor %}
-
+                                {% for entity in entities %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{{ entity.barcode }}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{{ entity.quantity }}</td>
+                                        <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
+                                        <td class="numeric" >{{ (entity.quantity * entity.salesPrice)|number_format }}</td>
+                                        <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
+                                        <td class="numeric" >{{ (entity.quantity * entity.purchasePrice)|number_format }}</td>
+                                        <td class="numeric" >{{ ((entity.quantity * entity.salesPrice) - (entity.quantity * entity.purchasePrice))|number_format }}</td>
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                         <div class="pagination pull-center"  >

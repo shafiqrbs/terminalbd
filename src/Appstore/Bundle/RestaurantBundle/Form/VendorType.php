@@ -36,7 +36,7 @@ class VendorType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\RestaurantBundle\Entity\Vendor'
+            'data_class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor'
         ));
     }
 
@@ -45,6 +45,6 @@ class VendorType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_hms_vendor';
+        return 'account_vendor';
     }
 }

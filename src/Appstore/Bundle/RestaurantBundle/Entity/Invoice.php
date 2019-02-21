@@ -95,7 +95,7 @@ class Invoice
      *
      * @ORM\Column(name="paymentMethod", type="string", length=30, nullable=true)
      */
-    private $paymentMethod='Cash';
+    private $paymentMethod = 'Cash';
 
 
     /**
@@ -149,6 +149,13 @@ class Invoice
     /**
      * @var string
      *
+     * @ORM\Column(name="remark", type="text", length=255, nullable=true)
+     */
+    private $remark;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="process", type="string", length=50, nullable=true)
      */
     private $process ='Created';
@@ -163,7 +170,7 @@ class Invoice
     /**
      * @var string
      *
-     * @ORM\Column(name="invoice", type="string", length=50, nullable=true)
+     * @ORM\Column(name="invoice", type="string", length=20, nullable=true)
      */
     private $invoice;
 
@@ -174,6 +181,19 @@ class Invoice
      */
     private $code;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="discountCalculation", type="smallint", length = 2,  nullable=true)
+     */
+    private $discountCalculation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountCoupon", type="string", length = 20,  nullable = true)
+     */
+    private $discountCoupon;
 
     /**
      * @var string
@@ -185,18 +205,16 @@ class Invoice
     /**
      * @var string
      *
-     * @ORM\Column(name="slipNo", type="string", length=10, nullable=true)
+     * @ORM\Column(name="discountType", type="string", length=30, nullable=true)
      */
-    private $slipNo;
-
-
+    private $discountType;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cabinNo", type="string", length=50, nullable=true)
+     * @ORM\Column(name="slipNo", type="string", length=10, nullable=true)
      */
-    private $cabinNo;
+    private $slipNo;
 
 
     /**
@@ -206,20 +224,6 @@ class Invoice
      */
     private $subTotal;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="referredCommission", type="decimal", nullable=true)
-     */
-    private $referredCommission;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="totalDiscount", type="decimal", nullable=true)
-     */
-    private $totalDiscount;
 
     /**
      * @var string
@@ -251,33 +255,11 @@ class Invoice
     private $total;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="payment", type="decimal", nullable=true)
-     */
-    private $payment;
-
-    /**
      * @var float
      *
-     * @ORM\Column(name="estimateCommission", type="float" , nullable=true)
+     * @ORM\Column(name="payment", type="float", nullable=true)
      */
-    private $estimateCommission;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="commission", type="decimal", nullable=true)
-     */
-    private $commission;
-
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="commissionApproved", type="boolean" )
-     */
-    private $commissionApproved = false;
+    private $payment;
 
 
     /**
@@ -330,25 +312,6 @@ class Invoice
      */
     private $updated;
 
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="releaseDate", type="datetime", nullable=true)
-     */
-    private $releaseDate;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="deliveryDate", type="datetime", nullable=true)
-     */
-    private $deliveryDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="deliveryTime", type="string", length=20, nullable=true)
-     */
-    private $deliveryTime;
 
     /**
      * @var string
@@ -357,19 +320,6 @@ class Invoice
      */
     private $deliveryDateTime;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="printFor", type="string",  length=100, nullable=true)
-     */
-    private $printFor ='pathological';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="invoiceMode", type="string", length=50, nullable=true)
-     */
-    private $invoiceMode = 'pathological';
 
     /**
      * Get id
@@ -380,23 +330,6 @@ class Invoice
     {
         return $this->id;
     }
-
-    /**
-     * @return HospitalConfig
-     */
-    public function getHospitalConfig()
-    {
-        return $this->hospitalConfig;
-    }
-
-    /**
-     * @param HospitalConfig $hospitalConfig
-     */
-    public function setHospitalConfig($hospitalConfig)
-    {
-        $this->hospitalConfig = $hospitalConfig;
-    }
-
 
     /**
      * @return InvoiceParticular
@@ -635,24 +568,6 @@ class Invoice
         $this->invoice = $invoice;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getPayment()
-    {
-        return $this->payment;
-    }
-
-    /**
-     * @param string $payment
-     */
-    public function setPayment($payment)
-    {
-        $this->payment = $payment;
-    }
-
-
     /**
      * @return AccountSales
      */
@@ -862,70 +777,6 @@ class Invoice
     }
 
     /**
-     * @return Service
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    /**
-     * @param Service $service
-     */
-    public function setService($service)
-    {
-        $this->service = $service;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getReferredDoctor()
-    {
-        return $this->referredDoctor;
-    }
-
-    /**
-     * @param Particular $referredDoctor
-     */
-    public function setReferredDoctor($referredDoctor)
-    {
-        $this->referredDoctor = $referredDoctor;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getDeliveryDate()
-    {
-        return $this->deliveryDate;
-    }
-
-    /**
-     * @param DateTime $deliveryDate
-     */
-    public function setDeliveryDate($deliveryDate)
-    {
-        $this->deliveryDate = $deliveryDate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryTime()
-    {
-        return $this->deliveryTime;
-    }
-
-    /**
-     * @param string $deliveryTime
-     */
-    public function setDeliveryTime($deliveryTime)
-    {
-        $this->deliveryTime = $deliveryTime;
-    }
-
-    /**
      * @return int
      */
     public function getPercentage()
@@ -939,24 +790,6 @@ class Invoice
     public function setPercentage($percentage)
     {
         $this->percentage = $percentage;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getReferredCommission()
-    {
-        return $this->referredCommission;
-    }
-
-    /**
-     * @param string $referredCommission
-     */
-    public function setReferredCommission($referredCommission)
-    {
-        $this->referredCommission = $referredCommission;
     }
 
     /**
@@ -973,215 +806,6 @@ class Invoice
     public function setDeliveryDateTime($deliveryDateTime)
     {
         $this->deliveryDateTime = $deliveryDateTime;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrintFor()
-    {
-        return $this->printFor;
-    }
-
-    /**
-     * @param string $printFor
-     */
-    public function setPrintFor($printFor)
-    {
-        $this->printFor = $printFor;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getCabin()
-    {
-        return $this->cabin;
-    }
-
-    /**
-     * @param mixed $cabin
-     */
-    public function setCabin($cabin)
-    {
-        $this->cabin = $cabin;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInvoiceMode()
-    {
-        return $this->invoiceMode;
-    }
-
-    /**
-     * @param string $invoiceMode
-     */
-    public function setInvoiceMode($invoiceMode)
-    {
-        $this->invoiceMode = $invoiceMode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDisease()
-    {
-        return $this->disease;
-    }
-
-    /**
-     * @param string $disease
-     */
-    public function setDisease($disease)
-    {
-        $this->disease = $disease;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getDepartment()
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param Particular $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getAssignDoctor()
-    {
-        return $this->assignDoctor;
-    }
-
-    /**
-     * @param Particular $assignDoctor
-     */
-    public function setAssignDoctor($assignDoctor)
-    {
-        $this->assignDoctor = $assignDoctor;
-    }
-
-    /**
-     * @return InvoiceTransaction
-     */
-    public function getInvoiceTransactions()
-    {
-        return $this->invoiceTransactions;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCabinNo()
-    {
-        return $this->cabinNo;
-    }
-
-    /**
-     * @param string $cabinNo
-     */
-    public function setCabinNo($cabinNo)
-    {
-        $this->cabinNo = $cabinNo;
-    }
-
-
-    /**
-     * @return DoctorInvoice
-     */
-    public function getDoctorInvoices()
-    {
-        return $this->doctorInvoices;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCommission()
-    {
-        return $this->commission;
-    }
-
-    /**
-     * @param string $commission
-     */
-    public function setCommission($commission)
-    {
-        $this->commission = $commission;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getCommissionApproved()
-    {
-        return $this->commissionApproved;
-    }
-
-    /**
-     * @param bool $commissionApproved
-     */
-    public function setCommissionApproved($commissionApproved)
-    {
-        $this->commissionApproved = $commissionApproved;
-    }
-
-    /**
-     * @return User
-     */
-    public function getDeliveredBy()
-    {
-        return $this->deliveredBy;
-    }
-
-    /**
-     * @param User $deliveredBy
-     */
-    public function setDeliveredBy($deliveredBy)
-    {
-        $this->deliveredBy = $deliveredBy;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getRevised()
-    {
-        return $this->revised;
-    }
-
-    /**
-     * @param boolean $revised
-     */
-    public function setRevised($revised)
-    {
-        $this->revised = $revised;
-    }
-
-    /**
-     * @return float
-     */
-    public function getEstimateCommission()
-    {
-        return $this->estimateCommission;
-    }
-
-    /**
-     * @param float $estimateCommission
-     */
-    public function setEstimateCommission($estimateCommission)
-    {
-        $this->estimateCommission = $estimateCommission;
     }
 
 
@@ -1201,33 +825,6 @@ class Invoice
     {
         $this->approvedBy = $approvedBy;
     }
-
-    public function getDeliveryCount()
-    {
-        $count = 0;
-        foreach ($this->getInvoiceParticulars() as $data ){
-
-           /* @var $data InvoiceParticular */
-           if($data->getParticularDeliveredBy()){
-               $count++;
-           }
-        }
-        return $count;
-    }
-
-    public function getReportCount()
-    {
-        $count = 0;
-        foreach ($this->getInvoiceParticulars() as $data ){
-
-            /* @var $data InvoiceParticular */
-            if($data->getParticular()->getService()->getSlug() == 'diagnostic'){
-                $count++;
-            }
-        }
-        return $count;
-    }
-
 
 
     /**
@@ -1294,21 +891,6 @@ class Invoice
         $this->slipNo = $slipNo;
     }
 
-    /**
-     * @return string
-     */
-    public function getTotalDiscount()
-    {
-        return $this->totalDiscount;
-    }
-
-    /**
-     * @param string $totalDiscount
-     */
-    public function setTotalDiscount($totalDiscount)
-    {
-        $this->totalDiscount = $totalDiscount;
-    }
 
     /**
      * @return mixed
@@ -1316,6 +898,86 @@ class Invoice
     public function getReverse()
     {
         return $this->reverse;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDiscountCalculation()
+    {
+        return $this->discountCalculation;
+    }
+
+    /**
+     * @param int $discountCalculation
+     */
+    public function setDiscountCalculation(int $discountCalculation)
+    {
+        $this->discountCalculation = $discountCalculation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountType()
+    {
+        return $this->discountType;
+    }
+
+    /**
+     * @param string $discountType
+     */
+    public function setDiscountType(string $discountType)
+    {
+        $this->discountType = $discountType;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param float $payment
+     */
+    public function setPayment(float $payment)
+    {
+        $this->payment = $payment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemark()
+    {
+        return $this->remark;
+    }
+
+    /**
+     * @param string $remark
+     */
+    public function setRemark(string $remark)
+    {
+        $this->remark = $remark;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountCoupon()
+    {
+        return $this->discountCoupon;
+    }
+
+    /**
+     * @param string $discountCoupon
+     */
+    public function setDiscountCoupon(string $discountCoupon)
+    {
+        $this->discountCoupon = $discountCoupon;
     }
 
 

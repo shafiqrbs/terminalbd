@@ -36,6 +36,7 @@ class InvoiceController extends Controller
             $this->get('request')->query->get('page', 1)/*page number*/,
             25  /*limit per page*/
         );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
         return $pagination;
     }
 
@@ -104,7 +105,7 @@ class InvoiceController extends Controller
             'entity'                => $entity,
             'salesLists'            => $salesLists,
             'form'                  => $editForm->createView(),
-            'particularForm'           => $invoiceParticularForm->createView(),
+            'particularForm'        => $invoiceParticularForm->createView(),
         ));
 
     }
@@ -123,7 +124,7 @@ class InvoiceController extends Controller
         $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
         $due = !empty($entity->getDue()) ? $entity->getDue() : 0;
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
-        $totalDiscount = $entity->getTotalDiscount() > 0 ? $entity->getTotalDiscount() : 0;
+        $totalDiscount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
 
        $data = array(
            'subTotal'               => $subTotal,
@@ -218,7 +219,7 @@ class InvoiceController extends Controller
                 }
                 $entity->setCustomer($customer);
             }
-            $due = $entity->getTotal()- $entity->getPayment();
+            $due = $entity->getTotal() - $entity->getPayment();
             $entity->setDue($due);
             $em->flush();
             if ($entity->getTotal() > 0) {
@@ -412,7 +413,7 @@ class InvoiceController extends Controller
         $invoice            = $entity->getInvoice();
         $subTotal           = $entity->getSubTotal();
         $total              = $entity->getTotal();
-        $discount           = $entity->getTotalDiscount();
+        $discount           = $entity->getDiscount();
         $vat                = $entity->getVat();
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();
@@ -605,7 +606,7 @@ class InvoiceController extends Controller
         $invoice            = $entity->getInvoice();
         $subTotal           = $entity->getSubTotal();
         $total              = $entity->getTotal();
-        $discount           = $entity->getTotalDiscount();
+        $discount           = $entity->getDiscount();
         $vat                = $entity->getVat();
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();

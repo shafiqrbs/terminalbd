@@ -209,11 +209,16 @@ table.table-no-border {
 }
 
 
+.table-striped tbody>tr:nth-child(add)>td,
+.table-striped tbody>tr:nth-child(add)>th {
+    background-color: #313131;
+}
 .table-striped tbody>tr:nth-child(odd)>td,
 .table-striped tbody>tr:nth-child(odd)>th {
     background-color: #f9f9f9;
 }
-.head-black{
+
+.head-blue{
     background:#ddd!important;
     height: 30px;
     color: #000;

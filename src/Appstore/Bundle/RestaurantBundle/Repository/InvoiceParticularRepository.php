@@ -5,6 +5,7 @@ use Appstore\Bundle\RestaurantBundle\Controller\InvoiceController;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -19,44 +20,60 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class InvoiceParticularRepository extends EntityRepository
 {
 
-    public function handleDateRangeFind($qb,$data)
+    public function handleDateRangeFind($qb, $data)
     {
-        if(empty($data)){
+        if (empty($data)) {
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
             $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        }else{
-            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        } else {
+            $data['startDate'] = date('Y-m-d', strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d', strtotime($data['endDate']));
         }
 
-        if (!empty($data['startDate']) ) {
+        if (!empty($data['startDate'])) {
             $qb->andWhere("e.created >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+            $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
         }
         if (!empty($data['endDate'])) {
             $qb->andWhere("e.created <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+            $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
         }
     }
 
-    public function invoicePathologicalReportLists(User $user , $mode , $data)
+    public function invoicePathologicalReportLists(User $user, $mode, $data)
     {
         $hospital = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('ip');
-        $qb->join('ip.invoice','e');
-        $qb->join('ip.particular','p');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
-       // $this->handleSearchBetween($qb,$data);
+        $qb->join('ip.invoice', 'e');
+        $qb->join('ip.particular', 'p');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('p.service = :service')->setParameter('service', 1);
+        // $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
-        $qb->orderBy('e.created','DESC');
+        $qb->setParameter('process', array('Done', 'Paid', 'In-progress', 'Diagnostic', 'Admitted'));
+        $qb->orderBy('e.created', 'DESC');
         $qb->getQuery();
-        return  $qb;
+        return $qb;
     }
 
+    public function initialInvoiceItems(User $user, Invoice $invoice)
+    {
+        $em = $this->_em;
+        $entities = $user->getRestaurantTemps();
+        /* @var $temp RestaurantTemporary */
+        foreach ($entities as $temp) {
+            $entity = new InvoiceParticular();
+            $entity->setQuantity($temp->getQuantity());
+            $entity->setSalesPrice($temp->getSalesPrice());
+            $entity->setSubTotal($temp->getSubTotal());
+            $entity->setInvoice($invoice);
+            $entity->setParticular($temp->getParticular());
+            $em->persist($entity);
+            $em->flush();
+        }
 
+    }
 
     public function insertInvoiceItems($invoice, $data)
     {
@@ -86,31 +103,6 @@ class InvoiceParticularRepository extends EntityRepository
 
     }
 
-    public function insertInvoiceParticularMasterUpdate(AdmissionPatientParticular $patientParticular)
-    {
-        $em = $this->_em;
-        $invoice = $patientParticular->getInvoiceTransaction()->getHmsInvoice();
-        $entity = $this->findOneBy(array('invoice' => $invoice,'particular' => $patientParticular->getParticular()));
-        /* @var $entity InvoiceParticular */
-        if(empty($entity)){
-
-            $entity = new InvoiceParticular();
-            $entity->setSubTotal($patientParticular->getSubTotal());
-            $entity->setQuantity($patientParticular->getQuantity());
-            $entity->setInvoice($invoice);
-            $entity->setParticular($patientParticular->getParticular());
-            $entity->setSalesPrice($patientParticular->getSalesPrice());
-            $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
-
-        }else{
-
-            $entity->setSubTotal( $entity->getSubTotal() + $patientParticular->getSubTotal());
-            $entity->setQuantity( $entity->getQuantity() + $patientParticular->getQuantity());
-
-        }
-        $em->persist($entity);
-        $em->flush();
-    }
 
     public function getSalesItems(Invoice $sales)
     {
