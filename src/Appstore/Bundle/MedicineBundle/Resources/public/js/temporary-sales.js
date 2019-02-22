@@ -316,8 +316,8 @@ function jqueryTemporaryLoad() {
         }
     });
 
-    $(document).on("click", ".confirmTemporarySubmit", function() {
-
+    $(document).on("click", "#receiveBtn", function() {
+        $('#buttonType').val('receiveBtn');
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
@@ -330,11 +330,7 @@ function jqueryTemporaryLoad() {
                     processData : false,
                     contentType : false,
                     success: function(response){
-                        obj = JSON.parse(response);
                         $('#salesTemporaryForm')[0].reset();
-                        if( obj['process'] === 'print'){
-                            window.open("/medicine/sales/"+obj['sales']+"/print");
-                        }
                         $('#invoiceParticulars').html('');
                         $('#subTotal').html('');
                         $('#grandTotal').html('');
@@ -345,12 +341,60 @@ function jqueryTemporaryLoad() {
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
                         $('#receiveBtn').prop("disabled", false);
+
                    }
                 });
             }
         });
 
     });
+
+    $(document).on("click", "#posBtn", function() {
+        $('#buttonType').val('posBtn');
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $('#receiveBtn').prop("disabled", true);
+                $.ajax({
+                    url         : $('form#salesTemporaryForm').attr( 'action' ),
+                    type        : $('form#salesTemporaryForm').attr( 'method' ),
+                    data        : new FormData($('form#salesTemporaryForm')[0]),
+                    processData : false,
+                    contentType : false,
+                    success: function(response){
+                        $('#salesTemporaryForm')[0].reset();
+                        $('#invoiceParticulars').html('');
+                        $('#subTotal').html('');
+                        $('#grandTotal').html('');
+                        $('.discount').html('');
+                        $('.dueAmount').html('');
+                        $('#salesNetTotal').val('');
+                        $('#salesSubTotal').val('');
+                        $('#salesTemporary_discount').val('');
+                        $('#salesTemporary_due').val('');
+                        $('#posBtn').prop("disabled", false);
+                        jsPostPrint(response);
+                    }
+                });
+            }
+        });
+
+    });
+
+    function jsPostPrint(data) {
+
+        if(typeof EasyPOSPrinter == 'undefined') {
+            alert("Printer library not found");
+            return;
+        }
+        EasyPOSPrinter.raw(data);
+        EasyPOSPrinter.cut();
+        EasyPOSPrinter.print(function(r, x){
+            console.log(r);
+        });
+    }
+
     $(".select2StockMedicine").select2({
 
         placeholder: "Search vendor name",
@@ -557,26 +601,6 @@ function jqueryInstantTemporaryLoad(){
         });
 
     });
-
-/*    $( ".select2InstantMedicine" ).autocomplete({
-
-        source: function( request, response ) {
-            $.ajax( {
-                url: Routing.generate('medicine_search'),
-                data: {
-                    term: request.term
-                },
-                success: function( data ) {
-                    response( data );
-                }
-            } );
-        },
-        minLength: 2,
-        select: function( event, ui ) {
-            $("#medicineId").val(ui.item.id); // save selected id to hidden input
-
-        }
-    });*/
 
     $(".select2InstantMedicine").autocomplete({
 

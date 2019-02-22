@@ -25,7 +25,7 @@ class ConfigType extends AbstractType
             ->add('instantVendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8 ','maxlength'=> 4,'placeholder'=>'Instant vendor item percentage')))
             ->add('vendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8','maxlength'=> 4,'placeholder'=>'Vendor item percentage')))
             ->add('customPrint')
-            ->add('customPrint')
+            ->add('posPrint')
             ->add('invoicePrintLogo')
             ->add('isPrintHeader')
             ->add('isPrintFooter')

@@ -266,7 +266,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label" id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="text-align: left; width: 110px"  id="" >{{ entity.due }}</span></label>
+                        <label class="control-label" for="firstName"><span class="label" id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="text-align: left; width: 110px"  id="" >{{ result.subTotal }}</span></label>
                     </div>
                 </div>
                 <!--/span-->
@@ -288,7 +288,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label" id="balance">Is Hold</span> <span class="pull-right sales-right"  ><input type="checkbox" class="m-wrap checkbox" id="process" name="process" value="1"></span></label>
+                        <label class="control-label" for="firstName"><span class="label" id="balance">Is Hold</span> <span class="pull-right sales-right"  ><input type="checkbox" class="m-wrap checkbox" id="process" name="process" value="Hold"></span></label>
                     </div>
                 </div>
                 <!--/span-->
@@ -309,8 +309,10 @@
                         <input type="hidden" id="salesNetTotal" name="salesNetTotal" value="{{ result.subTotal }}">
                         <input type="hidden" id="salesSubTotal" name="salesSubTotal" value="{{ result.subTotal }}">
                         <input type="hidden" name="buttonType" id="buttonType" value="">
-                        <button type="button" class="btn red big span6 confirmTemporarySubmit" id="receiveBtn" {% if result.subTotal is empty %} disabled="disabled" {% endif %} ><i class="icon-save"></i> SAVE </button>
-                        <button type="button" class="btn yellow big span6 confirmTemporarySubmit" id="posBtn" {% if result.subTotal is empty %} disabled="disabled" {% endif %} ><i class="icon-print"></i> POS PRINT</button>
+                        <button type="button" class="btn red big {% if config.posPrint == 1 %} span6 {% else %} span12 {% endif %} " id="receiveBtn" {% if result.subTotal is empty %} disabled="disabled" {% endif %} ><i class="icon-save"></i> SAVE </button>
+                        {% if config.posPrint == 1 %}
+                        <button type="button" class="btn yellow big span6" id="posBtn" {% if result.subTotal is empty %} disabled="disabled" {% endif %} ><i class="icon-print"></i> POS PRINT</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>

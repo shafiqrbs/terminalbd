@@ -215,6 +215,7 @@ function formSubmit() {
             }
         });
     });
+
     $(document).on('click', '#posButton', function() {
         $('#buttonType').val('posBtn');
         $.ajax({

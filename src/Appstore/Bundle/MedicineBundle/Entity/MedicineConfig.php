@@ -109,6 +109,13 @@ class MedicineConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="posPrint", type="boolean",  nullable=true)
+     */
+    private $posPrint = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isPrintHeader", type="boolean",  nullable=true)
      */
     private $isPrintHeader = true;
@@ -549,6 +556,22 @@ class MedicineConfig
 	public function getMedicinePrepurchase() {
 		return $this->medicinePrepurchase;
 	}
+
+    /**
+     * @return bool
+     */
+    public function getPosPrint()
+    {
+        return $this->posPrint;
+    }
+
+    /**
+     * @param bool $posPrint
+     */
+    public function setPosPrint($posPrint)
+    {
+        $this->posPrint = $posPrint;
+    }
 
 }
 

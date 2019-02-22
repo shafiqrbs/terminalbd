@@ -48,7 +48,7 @@ class InvoiceType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid received amount','autocomplete'=>'off'),
+            ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
             ))
             ->add('discountCalculation','number', array('attr'=>array('class'=>'tooltips initialDiscount span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter valid discount amount','autocomplete'=>'off'),
             ))
@@ -68,7 +68,7 @@ class InvoiceType extends AbstractType
             ))
             ->add('discount','hidden')
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('printFor', 'choice', array(
+            /*->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'expanded'      =>false,
                 'multiple'      =>false,
@@ -76,7 +76,7 @@ class InvoiceType extends AbstractType
                     'diagnostic' => 'Diagnostic',
                     'visit' => 'Visit',
                 ),
-            ))
+            ))*/
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',

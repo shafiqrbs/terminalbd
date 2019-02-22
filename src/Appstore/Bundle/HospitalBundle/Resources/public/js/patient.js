@@ -54,7 +54,7 @@ $(document).on("click", ".saveButton", function() {
 
 function formSubmit() {
 
-    $('#saveDiagnosticButton').attr("disabled", true);
+  /*  $('#saveDiagnosticButton').attr("disabled", true);*/
 
     $("form#invoicePatientForm").on('click', '.addCustomer', function() {
         $( ".customer" ).slideToggle( "slow" );
@@ -195,7 +195,7 @@ function formSubmit() {
             "appstore_bundle_hospitalbundle_invoice[customer][mobile]": {required: true, digits: true},
             "appstore_bundle_hospitalbundle_invoice[customer][age]": {required: true, digits: true},
             "appstore_bundle_hospitalbundle_invoice[discountCalculation]": {required: false, digits: true},
-            "appstore_bundle_hospitalbundle_invoice[payment]": {required: false, digits: true},
+            "appstore_bundle_hospitalbundle_invoice[payment]": {required: true, digits: true},
             "appstore_bundle_hospitalbundle_invoice[customer][address]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[customer][location]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[referredDoctor][name]": {required: false},
@@ -207,11 +207,13 @@ function formSubmit() {
             "appstore_bundle_hospitalbundle_invoice[customer][name]": "Enter patient name",
             "appstore_bundle_hospitalbundle_invoice[customer][mobile]": "Enter patient mobile no",
             "appstore_bundle_hospitalbundle_invoice[customer][age]": "Enter patient age",
+            "appstore_bundle_hospitalbundle_invoice[payment]": "Enter payment amount, if payment are due input zero",
         },
         tooltip_options: {
             "appstore_bundle_hospitalbundle_invoice[customer][name]": {placement: 'top', html: true},
             "appstore_bundle_hospitalbundle_invoice[customer][mobile]": {placement: 'top', html: true},
             "appstore_bundle_hospitalbundle_invoice[customer][age]": {placement: 'top', html: true},
+            "appstore_bundle_hospitalbundle_invoice[payment]": {placement: 'top', html: true},
         },
         submitHandler: function (form) {
             $.ajax({

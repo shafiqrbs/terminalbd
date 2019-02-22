@@ -194,7 +194,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label-custom" id="balance">Due TK.</span> <span class="pull-right sales-right initialGrandTotal" style="text-align: left; width: 110px"  id="dueable" >{{ temporarySubTotal }}</span></label>
+                        <label class="control-label" for="firstName"><span class="label-custom" id="balance">Due TK.</span> <span class="pull-right sales-right initialGrandTotal" style="text-align:center; width: 120px; font-weight: bold; font-size:32px"  id="dueable" >{{ temporarySubTotal }}</span></label>
                     </div>
                 </div>
                 <!--/span-->
@@ -352,13 +352,13 @@
             {{ form_errors(form.comment) }}
         </div>
         <div class="span4">
-            <div class="input-append span7">
-                {{ form_widget(form.printFor) }}
-                {{ form_errors(form.printFor) }}
-                <div class="btn-group">
+            <div class="input-append span11">
+                {#{{ form_widget(form.printFor) }}
+                {{ form_errors(form.printFor) }}#}
+                <div class="btn-group span12">
                     <input type="hidden" class="initialGrandTotal" name="initialDue" id="initialDue" value="{{ temporarySubTotal }}">
                     <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
-                    <button type="submit" class="btn red" id="saveDiagnosticButton"><i class="icon-save"></i> Save</button>
+                    <button type="submit" class="btn red big span12" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %}  id="saveDiagnosticButton"><i class="icon-save"></i> Save</button>
                 </div>
             </div>
         </div>
@@ -386,6 +386,9 @@
         border: 3px solid red!important;
         height: 31px!important;
         font-size: 20px;
+    }
+    input[class*="span"]#appstore_bundle_hospitalbundle_invoice_comment{
+        height:54px!important;
     }
     .address{
         background: #ffffff!important;

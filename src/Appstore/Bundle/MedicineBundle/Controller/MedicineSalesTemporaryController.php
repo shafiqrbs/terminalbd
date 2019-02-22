@@ -2,16 +2,15 @@
 
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
+
+use Appstore\Bundle\MedicineBundle\Bundle\Service\PosItemManager;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
-use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\User;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Mike42\Escpos\Printer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,16 +26,18 @@ class MedicineSalesTemporaryController extends Controller
     {
 
         $user = $this->getUser();
+        $config = $user->getGlobalOption()->getMedicineConfig();
         $entity = new MedicineSales();
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
         $editForm = $this->createCreateForm($entity);
         $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
         $html = $this->renderView('MedicineBundle:Sales:temporary.html.twig', array(
-            'entity' => $entity,
-            'salesItem' => $salesItemForm->createView(),
-            'form' => $editForm->createView(),
-            'user'   => $user,
-            'result'   => $result,
+            'entity'        => $entity,
+            'salesItem'     => $salesItemForm->createView(),
+            'form'          => $editForm->createView(),
+            'user'          => $user,
+            'config'        => $config,
+            'result'        => $result,
         ));
         return New Response($html);
     }
@@ -96,7 +97,6 @@ class MedicineSalesTemporaryController extends Controller
         $editForm = $this->createCreateForm($entity);
         $editForm->handleRequest($request);
         $entity->setMedicineConfig($config);
-
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($user->getGlobalOption());
         $entity->setCustomer($customer);
         $globalOption = $this->getUser()->getGlobalOption();
@@ -122,7 +122,8 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setPaymentStatus('Due');
             $entity->setDue($entity->getNetTotal() - $entity->getReceived());
         }
-        if ($data['process'] == 'hold') {
+
+        if (isset($data['process']) and ($data['process'] == 'Hold')) {
             $entity->setProcess('Hold');
         } else {
             $entity->setApprovedBy($this->getUser());
@@ -136,12 +137,14 @@ class MedicineSalesTemporaryController extends Controller
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
         }
-        $data = array(
-            'sales' => $entity->getId(),
-            'process' => $data['process'],
-            'success' => 'success'
-        );
-        return new Response(json_encode($data));
+        $btn = $request->request->get('buttonType');
+        if($btn == "posBtn" and $entity->getProcess() == 'Done'){
+            $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->findBy(array('medicineSales' => $entity->getId()));
+            $pos = $this->posPrint($entity,$invoiceParticulars);
+            return new Response($pos);
+        }else{
+            return new Response('success');
+        }
         exit;
 
     }
@@ -220,7 +223,6 @@ class MedicineSalesTemporaryController extends Controller
         exit;
     }
 
-
     public function invoiceParticularDeleteAction(MedicineSalesTemporary $particular){
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -233,6 +235,155 @@ class MedicineSalesTemporaryController extends Controller
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
         exit;
+    }
+
+    private function posPrint(MedicineSales $entity,$invoiceParticulars)
+    {
+        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
+        $printer = new Printer($connector);
+        $printer -> initialize();
+
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+
+        $currentPayment = !empty($entity->getReceived()) ? $entity->getReceived() :0;
+
+        $address1       = $option->getContactPage()->getAddress1();
+        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
+        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
+        $address        = $address1.$thana.$district;
+
+        $vatRegNo       = $config->getVatRegNo();
+        $companyName    = $option->getName();
+        $mobile         = $option->getMobile();
+        $website        = $option->getDomain();
+
+
+        /** ===================Customer Information=================================== */
+
+        $invoice            = $entity->getInvoice();
+        $subTotal           = $entity->getSubTotal();
+        $total              = $entity->getTotal();
+        $discount           = $entity->getDiscount();
+        $vat                = $entity->getVat();
+        $due                = $entity->getDue();
+        $payment            = $entity->getPayment();
+        $transaction        = $entity->getTransactionMethod()->getName();
+        $salesBy            = $entity->getSalesBy();
+
+
+        /** ===================Invoice Sales Item Information========================= */
+
+
+        /* Date is kept the same for testing */
+        $date = date('l jS \of F Y h:i:s A');
+
+        /* Name of shop */
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($companyName."\n");
+        $printer -> selectPrintMode();
+        $printer -> text($address."\n");
+        /* $printer -> text($mobile."\n");*/
+        $printer -> feed();
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+      /*  if(!empty($vatRegNo)){
+            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
+            $printer -> setEmphasis(false);
+        }*/
+        $printer -> feed();
+        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
+        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+        $return         = new PosItemManager('Return: ','Tk.',number_format($currentPayment-$total));
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
+        $printer -> setEmphasis(false);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
+        $printer -> setEmphasis(false);
+        $printer -> feed();
+        $i=1;
+
+        if(!empty($invoiceParticulars)){
+            /* @var $row MedicineSalesItem */
+            foreach ($invoiceParticulars as $row){
+                $printer -> setUnderline(Printer::UNDERLINE_NONE);
+                $printer -> text( new PosItemManager($i.'. '.$row->getMedicineStock()->getName(),"",""));
+                $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+                $printer -> text(new PosItemManager($row->getMedicineStock()->getCode(),$row->getQuantity(),number_format($row->getSubTotal())));
+                $i++;
+            }
+        }
+        $printer -> feed();
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setEmphasis(true);
+        $printer -> text ( "\n" );
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($subTotal);
+        $printer -> setEmphasis(false);
+
+       /* if($vat){
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer->text($vat);
+            $printer->setEmphasis(false);
+        }*/
+
+        if($discount){
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text($discount);
+            $printer -> setEmphasis(false);
+            $printer -> text ( "\n" );
+        }
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($grandTotal);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer->text("\n");
+        $printer -> feed();
+        $printer->text($transaction);
+        $printer->selectPrintMode();
+        /* Barcode Print */
+        $printer->text ( "\n" );
+        $printer->selectPrintMode ();
+        $printer->setBarcodeHeight (30);
+        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
+        $printer -> feed();
+        foreach ( $hri as $position => $caption){
+            $printer->selectPrintMode ();
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text ($caption);
+            $printer->feed ();
+        }
+        $printer -> feed();
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("Served By: ".$salesBy."\n");
+        $printer -> text("Thanks for being here\n");
+        if($website){
+            $printer -> text("Please visit www.".$website."\n");
+        }
+        $printer -> text($date . "\n");
+        $response =  base64_encode($connector->getData());
+        $printer -> close();
+        return $response;
     }
 
 }
