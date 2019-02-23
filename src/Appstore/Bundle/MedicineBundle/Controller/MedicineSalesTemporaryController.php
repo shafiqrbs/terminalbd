@@ -10,10 +10,12 @@ use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\User;
-use Mike42\Escpos\Printer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+use Mike42\Escpos\Printer;
 
 /**
  * Invoice controller.
@@ -245,7 +247,7 @@ class MedicineSalesTemporaryController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
-        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 
         $currentPayment = !empty($entity->getReceived()) ? $entity->getReceived() :0;
 

@@ -265,13 +265,18 @@ class InvoiceParticularController extends Controller
                 }
             endforeach;
         }
-
-        return $this->render('HospitalBundle:InvoiceParticular:pathologicalReportPrint.html.twig', array(
-            'entity'      => $entity,
-            'printUser'      => $this->getUser(),
-            'barcodeInvoice'      => $barcodeInvoice,
-            'barcodeReport'      => $barcodeReport,
-            'report'      => $reportArr,
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        if($hospital->isCustomPrint() == 1){
+            $template = "Print/{$this->getUser()->getGlobalOption()->getId()}:pathological";
+        }else{
+            $template = "InvoiceParticular:pathologicalReportPrint";
+        }
+        return $this->render("HospitalBundle:{$template}.html.twig", array(
+            'entity'            => $entity,
+            'printUser'         => $this->getUser(),
+            'barcodeInvoice'    => $barcodeInvoice,
+            'barcodeReport'     => $barcodeReport,
+            'report'            => $reportArr,
         ));
     }
 

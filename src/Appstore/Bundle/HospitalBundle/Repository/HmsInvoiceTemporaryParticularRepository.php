@@ -69,18 +69,21 @@ class HmsInvoiceTemporaryParticularRepository extends EntityRepository
         $entities = $user->getHmsInvoiceTemporaryParticulars();
         $data = '';
         $i = 1;
+
+        /* @var $entity HmsInvoiceTemporaryParticular */
+
         foreach ($entities as $entity) {
             $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class=""><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
             $data .= '<td class="" >' . $i . '</td>';
             $data .= '<td class="" >' . $entity->getParticular()->getName() . '</td>';
             $data .= '<td class="" >' . $entity->getQuantity() . '</td>';
             $data .= '<td class="" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="" >' . $entity->getSubTotal() . '</td>';
-            $data .= '<td class="" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/hms/invoice-temporary/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
-            </td>';
+            $data .= '<td class="" ><a id="'.$entity->getId().'" data-id="'.$entity->getId().'" data-url="/hms/invoice-temporary/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>';
             $data .= '</tr>';
+            if ($entity->getParticular()->getService()->getSlug()  == "diagnostic" and (!empty($entity->getParticular()->getInstruction()))){
+                $data .= "<tr><td colspan='6'><strong>Instruction</strong>:{$entity->getParticular()->getInstruction()}</td></tr>";
+            }
             $i++;
         }
         return $data;

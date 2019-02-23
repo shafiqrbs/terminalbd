@@ -107,8 +107,7 @@
             <table class="table table-bordered table-striped table-condensed table-fixed">
                 <thead>
                 <tr>
-                    <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
-                    <th class="span1">Si/No</th>
+                    <th class="span2">&nbsp;&nbsp;<i class="icon-list"></i> Si/No</th>
                     <th class="span6">Particular</th>
                     <th class="span1">Qnt</th>
                     <th class="span1">Unit</th>
@@ -119,7 +118,6 @@
                 <tbody id="invoiceParticulars">
                 {% for item in user.hmsInvoiceTemporaryParticulars %}
                     <tr id="remove-{{ item.id }}">
-                        <td class=""><span class="badge badge-warning toggle badge-custom" id="{{ item.id  }}" ><span>[+]</span></span></td>
                         <td  class="">{{ loop.index }}</td>
                         <td class="">{{ item.particular.name }}</td>
                         <td class="">{% if item.particular.service.hasQuantity == 1 %}{{ item.quantity }}{% endif %}</td>
@@ -127,36 +125,27 @@
                         <td class="">{{ item.subTotal|number_format }}</td>
                         <td class=""><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_temporary_particular_delete',{'id': item.id }) }}" href="javascript:" class="btn red mini initialParticularDelete" ><i class="icon-trash"></i></a></td>
                     </tr>
-                    {% if item.particular.service.id == 1 %}
-                        <tr id="show-{{ item.id }}" class="showing-overview">
-                            <td colspan="7">
-                                <table class="table table-bordered table-striped table-condensed ">
-                                    <tr class="">
-                                        <th class="span3" >Instruction</th>
-                                        <td class="span9" >{{ item.particular.instruction }}</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
+                    {% if item.particular.service.id == 1 and item.particular.instruction is not empty %}
+                        <tr><td colspan="6"><strong>Instruction</strong>: {{ item.particular.instruction }}</td></tr>
                     {% endif %}
                 {% endfor %}
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td colspan="7" class="span12" style="border: 1px double #000"></td>
+                    <td colspan="6" class="span12" style="border: 1px double #000"></td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
+                    <td colspan="4" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
                     <td class="span2"><strong class="subTotal">{{ temporarySubTotal|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                    <td colspan="4" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                     <td class="span2"><strong class="initialDiscount">{{ initialDiscount|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
+                    <td colspan="4" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
                     <td class="span2"><strong class="initialGrandTotal">{{ temporarySubTotal|number_format }}</strong></td>
                     <td class="span1"></td>
                 </tr>
@@ -314,7 +303,7 @@
                     <div class="input-group">
                         <a href="javascript:" id="show" style="border: 0.18em solid #1e7b85!important" class="pull-left btn blue addCustomer"><i class="icon-medkit"></i></a>
                         <select id="referredId" name="referredId" class="select2 m-wrap" style="width: 87.6%!important;" >
-                            <option value="">Select Referred Doctor, Agent & Others</option>
+                            <option value="">Select Referred Doctor, Agent & PC</option>
                             {% for doctor in referredDoctors %}
                                 <option value="{{ doctor.id }}">{{ doctor.particularCode }} - {{ doctor.name }}</option>
                             {% endfor %}
@@ -407,5 +396,9 @@
     }
     .select2-container .select2-choice {
         height: 35px!important;
+    }
+    #instruction{
+        color: red;
+        line-height: 30px;
     }
 </style>

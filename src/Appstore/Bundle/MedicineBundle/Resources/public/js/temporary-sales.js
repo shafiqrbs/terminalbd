@@ -163,7 +163,8 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
                     $("#salesTemporaryItem_stockName").select2("val", "");
                     $('#salesTemporaryItemForm')[0].reset();
-                    $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", false);
+                    $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
+                    $('.salesBtn').prop("disabled", false);
                 }
             });
         }
@@ -244,6 +245,9 @@ function jqueryTemporaryLoad() {
                 $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
+                if(obj['initialDiscount'] > obj['subTotal']){
+                    $('.salesBtn').prop("disabled", true);
+                }
             }
 
         })
@@ -269,6 +273,9 @@ function jqueryTemporaryLoad() {
                 $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
+                if(obj['subTotal'] === 0){
+                    $('.salesBtn').prop("disabled", true);
+                }
             }
         })
     });
@@ -322,7 +329,7 @@ function jqueryTemporaryLoad() {
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $('#receiveBtn').prop("disabled", true);
+                $('.salesBtn').prop("disabled", true);
                 $.ajax({
                     url         : $('form#salesTemporaryForm').attr( 'action' ),
                     type        : $('form#salesTemporaryForm').attr( 'method' ),
@@ -340,9 +347,7 @@ function jqueryTemporaryLoad() {
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
-                        $('#receiveBtn').prop("disabled", false);
-
-                   }
+                    }
                 });
             }
         });
@@ -355,7 +360,7 @@ function jqueryTemporaryLoad() {
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $('#receiveBtn').prop("disabled", true);
+                $('.salesBtn').prop("disabled", true);
                 $.ajax({
                     url         : $('form#salesTemporaryForm').attr( 'action' ),
                     type        : $('form#salesTemporaryForm').attr( 'method' ),
@@ -373,7 +378,6 @@ function jqueryTemporaryLoad() {
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
-                        $('#posBtn').prop("disabled", false);
                         jsPostPrint(response);
                     }
                 });
