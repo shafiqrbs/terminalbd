@@ -6,8 +6,11 @@
                 <tr>
                     <td>
                         <div class="span4 title-center text-center">
-                       {# <p><img style="height: 100px" src="{{ asset('assets/logo/acd/acd-top.png') }}"></p>#}
-                        <p><img style="width: 300px" src="{{ asset('assets/logo/acd/acd-body.png') }}"></p>
+                        <div style="position: relative; left: 50%;
+transform: translateX(-50%);">
+                        <img style="width: 300px" src="{{ asset('assets/logo/acd/acd-body.png') }}">
+                        <img style="height: 50px;position: absolute" src="{{ asset('assets/logo/acd/acd-top.png') }}">
+                        </div>
                            {{ entity.hospitalConfig.address|raw }}
                         </div>
                     </td>
@@ -17,7 +20,9 @@
         <table class="table table-border" >
             <tr class="print-header">
                 <th colspan="2">
-                    <span class="title-center text-center">Invoice</span>
+                    <span class="barcode-left">{{ patientBarcode|raw }}</span>
+                    <strong class="title title-center" >INVOICE</strong>
+                    <span class="barcode-right">{{ invoiceBarcode|raw }}</span>
                 </th>
             </tr>
             <tr>

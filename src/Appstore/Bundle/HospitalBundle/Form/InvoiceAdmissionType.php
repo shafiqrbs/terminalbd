@@ -81,8 +81,11 @@ class InvoiceAdmissionType extends AbstractType
                   'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                   'query_builder' => function(EntityRepository $er){
                       return $er->createQueryBuilder('e')
+                          ->join("e.service",'s')
                           ->where("e.service = 6")
-                          ->andWhere("e.hospitalConfig = {$this->globalOption->getHospitalConfig()}")
+                          ->andWhere('s.slug IN (:services)')
+                          ->setParameter('services',array('doctor','referred'))
+                          ->andWhere("e.hospitalConfig = {$this->globalOption->getHospitalConfig()->getId()}")
                           ->orderBy("e.name","ASC");
                   }
 
@@ -181,7 +184,6 @@ class InvoiceAdmissionType extends AbstractType
                 }
             ))
         ;
-        $builder->add('referredDoctor', new InvoiceReferredDoctorType( $this->emCategory ,$this->globalOption,$this->location));
         $builder->add('customer', new CustomerForHospitalAdmissionType( $this->location ));
     }
     

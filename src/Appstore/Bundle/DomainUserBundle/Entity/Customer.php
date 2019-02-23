@@ -1114,7 +1114,7 @@ class Customer
 	/**
 	 * @return string
 	 */
-	public function getDiabetes(): string {
+	public function getDiabetes(){
 		return $this->diabetes;
 	}
 
@@ -1135,7 +1135,7 @@ class Customer
 	/**
 	 * @return string
 	 */
-	public function getFirstName(): string {
+	public function getFirstName() {
 		return $this->firstName;
 	}
 
@@ -1149,7 +1149,7 @@ class Customer
 	/**
 	 * @return string
 	 */
-	public function getLastName(): string {
+	public function getLastName(){
 		return $this->lastName;
 	}
 
@@ -1163,7 +1163,7 @@ class Customer
 	/**
 	 * @return string
 	 */
-	public function getPostalCode(): string {
+	public function getPostalCode() {
 		return $this->postalCode;
 	}
 
@@ -1177,7 +1177,7 @@ class Customer
 	/**
 	 * @return string
 	 */
-	public function getRemark(): string {
+	public function getRemark() {
 		return $this->remark;
 	}
 
@@ -1191,7 +1191,7 @@ class Customer
 	/**
 	 * @return array
 	 */
-	public function getNamePrefix(): array {
+	public function getNamePrefix() {
 		return $this->namePrefix;
 	}
 
