@@ -36,14 +36,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Referred Doctor</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('hms_referreddoctor_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('hms_referreddoctor') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('hms_referreddoctor_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Referred</a>
                             </div>
                         </div>
                     </div>
@@ -58,7 +51,7 @@
                                         <div class="span4">
                                             <div class="controls">
                                                 <select name="category" id="category" class="select2 span12">
-                                                    <option value="">---Select doctor---</option>
+                                                    <option value="">---Select Doctor---</option>
                                                     {% for cat in categories %}
                                                         <option value="{{ cat.id }}" {% if searchForm.category is defined and cat.id == searchForm.category %} selected="selected" {% endif %}>{{ cat.name }}</option>
                                                     {% endfor %}

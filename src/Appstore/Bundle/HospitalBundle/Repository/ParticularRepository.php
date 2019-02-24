@@ -111,6 +111,7 @@ class ParticularRepository extends EntityRepository
             ->andWhere('s.id IN(:service)')
             ->setParameter('service',array_values($services))
             ->orderBy('e.service','ASC')
+            ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;
     }

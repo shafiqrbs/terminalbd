@@ -248,8 +248,6 @@ class InvoiceController extends Controller
             }elseif(!empty($referredId)){
                 $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
                 $entity->setReferredDoctor($referred);
-            }else{
-                $entity->setReferredDoctor('null');
             }
             $deliveryDateTime = $request->request->get('deliveryDateTime');
             $datetime = (new \DateTime("tomorrow"))->format('d-m-Y 7:30');
@@ -548,7 +546,9 @@ class InvoiceController extends Controller
         $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
 
         foreach ($entity->getInvoiceParticulars() as $item) {
+
             /** @var InvoiceParticular $item */
+
             $serviceName = $item->getParticular()->getService()->getName();
             $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
 
