@@ -14,7 +14,7 @@
                         <div class="col">
                             <span>
                               {% if config.webPath is not empty %}
-                                  <img style="width:290px" src="{{ image(config.webPath).resize(290,220, 'white') }}">
+                                  <img  src="{{ image(config.webPath).resize(340,102, 'white') }}">
                               {% endif %}
                             </span>
                         </div>
@@ -29,7 +29,7 @@
                             <div class="text-gray-light">INVOICE TO:</div>
                             {% if entity.customer %}
                                 {% if  entity.customer.name is not empty  %}
-                                    <h2 class="to">{{ entity.customer.name }}</h2>
+                                    <h4 class="to">{{ entity.customer.name }}</h4>
                                 {% endif %}
                                 {% if  entity.customer.mobile is not empty %}
                                     <div class="address">{{ entity.customer.mobile }}</div>
