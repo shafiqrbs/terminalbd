@@ -29,12 +29,12 @@ class MedicineStockItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 autoComplete2Medicine','placeholder'=>'Enter medicine name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 stockInput autoComplete2Medicine','placeholder'=>'Enter medicine name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('accessoriesBrand', 'entity', [
+            ->add('accessoriesBrand', 'entity',array(
                 'required'    => false,
                 'group_by'  => 'particularType.name',
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
@@ -50,7 +50,7 @@ class MedicineStockItemType extends AbstractType
                         ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
                         ->andWhere('pt.modeFor = :brand')->setParameter('brand','brand');
                 },
-            ])
+            ))
             ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Qnt','autoComplete'=>'off')))
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span5 stockInput','placeholder'=>'Purchase price','autoComplete'=>'off')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))

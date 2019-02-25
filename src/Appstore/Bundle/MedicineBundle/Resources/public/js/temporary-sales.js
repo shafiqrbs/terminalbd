@@ -18,6 +18,8 @@ $(document).on('click', '#temporarySales', function() {
                 success: function (response) {
                     el.find('.dialogModal_content').html(response);
                     jqueryTemporaryLoad();
+                    $('#salesTemporaryItem_stockName').select2('open');
+                    $('#salesTemporary_received').val('');
                 }
             });
         },
@@ -68,6 +70,7 @@ $(document).on("click", ".removePopup", function() {
 
 function jqueryTemporaryLoad() {
 
+
     $(".addTemporaryCustomer").click(function(){
         $( ".customer" ).slideToggle( "slow" );
     }).toggle( function() {
@@ -104,11 +107,16 @@ function jqueryTemporaryLoad() {
             }
             switch (this.id) {
 
-                case 'salesTemporaryItem_quantity':
-                    $('#addTemporaryItem').focus();
+                case 'salesTemporaryItem_stockName':
+                    $('#salesTemporaryItem_barcode').focus();
                     break;
 
-                case 'addTemporaryItem':
+                case 'salesTemporaryItem_barcode':
+                    $('#salesTemporaryItem_quantity').focus();
+                    break;
+
+                case 'salesTemporaryItem_quantity':
+                    $('#addTemporaryItem').click();
                     $('#salesTemporaryItem_stockName').select2('open');
                     break;
             }

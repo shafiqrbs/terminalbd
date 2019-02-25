@@ -36,7 +36,7 @@
             <div class="caption"><i class="icon-reorder"></i>Medicine Purchase Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a href="javascript:" id="show"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
+                    <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
                     <a class="btn black" href="{{ path('medicine_purchase') }}"><i class="icon-th-list"></i> Purchase </a>
                 </div>
             </div>
@@ -127,12 +127,12 @@
                 <div class="span6">
                     <div class="input-append">
                         <div class="input-group">
-                             {{ form_widget(purchaseItem.expirationEndDate) }}
                              {{ form_widget(purchaseItem.quantity) }}
                              <button class="btn red" id="unit">Unit</button>
                              {{ form_widget(purchaseItem.purchasePrice) }}
                              {{ form_widget(purchaseItem.salesPrice) }}
-                             <button type="submit" class="btn blue" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                             {{ form_widget(purchaseItem.expirationEndDate) }}
+                            <button type="submit" class="btn blue" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
                              <input type="hidden" id="particularId" name="particularId" value="">
                         </div>
                     </div>

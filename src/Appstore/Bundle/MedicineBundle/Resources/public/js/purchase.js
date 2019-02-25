@@ -55,12 +55,18 @@ $(document).on('change', '#purchaseItem_stockName', function() {
 $('#purchaseItem_stockName').on("select2-selecting", function (e) {
     setTimeout(function () {
         $('#purchaseItem_stockName').focus();
-    }, 2000)
+    }, 500)
 });
 
 $('form#purchaseItemForm').on('keyup', '#purchaseItem_purchasePrice', function (e) {
     var mrp = $('#purchaseItem_purchasePrice').val();
     $('#purchaseItem_salesPrice').val(mrp);
+});
+
+$(document).on( "click", "#stockShow", function(e){
+    $('#hide').slideToggle(2000);
+    $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
+    $('#medicineStock_name').focus();
 });
 
 $('form#purchaseItemForm').on('keypress', '.input', function (e) {
@@ -75,10 +81,20 @@ $('form#purchaseItemForm').on('keypress', '.input', function (e) {
         }
         switch (this.id) {
 
-            case 'purchaseItem_quantity':
-                $('#addParticular').focus();
+            case 'purchaseItem_stockName':
+                $('#purchaseItem_quantity').focus();
                 break;
-            case 'addParticular':
+
+            case 'purchaseItem_quantity':
+                $('#purchaseItem_purchasePrice').focus();
+                break;
+
+            /*case 'purchaseItem_purchasePrice':
+                $('#purchaseItem_expirationEndDate').focus();
+                break;*/
+
+            case 'purchaseItem_purchasePrice':
+                $('#addPurchaseItem').click();
                 $('#purchaseItem_stockName').select2('open');
                 break;
         }
@@ -86,6 +102,7 @@ $('form#purchaseItemForm').on('keypress', '.input', function (e) {
     }
 });
 
+/*
 $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
 
     if (e.which === 13) {
@@ -98,23 +115,52 @@ $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
         }
         switch (this.id) {
 
-            case 'medicineStock_rackNo':
-                $('#medicineStock_purchaseQuantity').focus();
-                break;
-            case 'medicineStock_purchaseQuantity':
-                $('#medicineStock_purchasePrice').focus();
-                break;
-            case 'medicineStock_purchasePrice':
-                $('#medicineStock_unit').focus();
-                break;
-            case 'medicineStock_unit':
-                $('#stockItemCreate').focus();
-                break;
+
 
         }
         return false;
     }
 });
+*/
+
+$('form#medicineStock').on('keypress', '.stockInput', function (e) {
+
+    if (e.which === 13) {
+        var inputs = $(this).parents("form").eq(0).find("input,select");
+        var idx = inputs.index(this);
+
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        switch (this.id) {
+
+            case 'medicineStock_name':
+                $('#medicineStock_purchaseQuantity').focus();
+                break;
+
+            case 'medicineStock_purchaseQuantity':
+                $('#medicineStock_purchasePrice').focus();
+                break;
+
+/*            case 'medicineStock_purchasePrice':
+                $('#medicineStock_unit').focus();
+                break;
+
+            case 'medicineStock_unit':
+                $('#medicineStock_rackNo').focus();
+                break;*/
+
+            case 'medicineStock_purchasePrice':
+                $('#stockItemCreate').click();
+                $('#medicineStock_name').focus();
+                break;
+        }
+        return false;
+    }
+});
+
 
 $('form#medicineStock').on('keyup', '#medicineStock_purchasePrice', function (e) {
     var mrp = $('#medicineStock_purchasePrice').val();

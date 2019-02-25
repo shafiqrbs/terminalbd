@@ -134,7 +134,7 @@ class MedicineSalesTemporaryController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->temporarySalesInsert($user, $entity);
-      //  $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->removeSalesTemporary($this->getUser());
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->removeSalesTemporary($this->getUser());
         if ($entity->getProcess() == 'Done'){
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
@@ -249,7 +249,6 @@ class MedicineSalesTemporaryController extends Controller
         $option = $this->getUser()->getGlobalOption();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 
-        $currentPayment = !empty($entity->getReceived()) ? $entity->getReceived() :0;
         $address        = $config->getAddress();
 
         $vatRegNo       = $config->getVatRegNo();
@@ -302,7 +301,6 @@ class MedicineSalesTemporaryController extends Controller
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
-        $return         = new PosItemManager('Return: ','Tk.',number_format($currentPayment-$total));
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
