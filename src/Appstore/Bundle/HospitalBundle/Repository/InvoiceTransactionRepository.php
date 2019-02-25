@@ -18,14 +18,15 @@ use Doctrine\ORM\EntityRepository;
 class InvoiceTransactionRepository extends EntityRepository
 {
 
-    public function todaySalesOverview(User $user , $data , $previous ='', $modes =array())
+    public function todaySalesOverview(User $user , $data , $previous ='', $modes = array())
     {
 
         if (empty($data)) {
             $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
         }
+
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('it');
         $qb->join('it.hmsInvoice', 'e');
@@ -42,6 +43,7 @@ class InvoiceTransactionRepository extends EntityRepository
                 $qb->andWhere("it.updated >= :startDate");
                 $qb->setParameter('startDate', $startDate);
 
+
             }
             if (!empty($data['endDate'])) {
 
@@ -52,6 +54,7 @@ class InvoiceTransactionRepository extends EntityRepository
             }
 
         }elseif ($previous == 'false'){
+
             if (!empty($data['startDate'])) {
                 $compareTo = new \DateTime($data['startDate']);
                 $startDate =  $compareTo->format('Y-m-d 00:00:00');

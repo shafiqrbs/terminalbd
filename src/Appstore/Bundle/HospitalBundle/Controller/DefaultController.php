@@ -27,9 +27,9 @@ class DefaultController extends Controller
         $transactionMethods                 = array(1);
         $transactionCashOverview            = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
         $expenditureOverview                = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-        $salesTodayTransactionOverview           = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic','admission'));
-        $salesTodaySalesCommission           = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionSummary($user,$data);
+        $salesTodayTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic','admission'));
         $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic','admission'));
+        $salesTodaySalesCommission          = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionSummary($user,$data);
         $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->getInvoiceReturnAmount($user,$data);
 
         return $this->render('HospitalBundle:Default:dashboard.html.twig', array(

@@ -44,24 +44,28 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'diagnostic' , $data);
         $pagination = $this->paginate($entities);
-        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','diagnostic');
-        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','diagnostic');
-
+        $salesTodayTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic'));
+        $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic'));
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
+        $expenditureOverview                = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+        $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->getInvoiceReturnAmount($user,$data);
+        $salesTodaySalesCommission          = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionSummary($user,$data);
 
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(
-            'entities' => $pagination,
-            'salesTransactionOverview' => $salesTransactionOverview,
-            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
-            'assignDoctors' => $assignDoctors,
-            'referredDoctors' => $referredDoctors,
-            'searchForm' => $data,
+            'entities'                          => $pagination,
+            'salesTransactionOverview'          => $salesTodayTransactionOverview,
+            'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
+            'salesTodaySalesCommission'         => $salesTodaySalesCommission,
+            'invoiceReturn'                     => $invoiceReturn ,
+            'expenditureOverview'               => $expenditureOverview ,
+            'assignDoctors'                     => $assignDoctors,
+            'referredDoctors'                   => $referredDoctors,
+            'searchForm'                        => $data,
         ));
 
     }

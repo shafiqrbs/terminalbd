@@ -114,20 +114,24 @@
                                         </div>
                                     </div>
                                 </form>
-                                <table class="table table-bordered table-striped table-condensed flip-content ">
+                                {#<table class="table table-bordered table-striped table-condensed flip-content ">
                                     <thead class="flip-content">
                                     <tr class="head-red">
                                         <th class="numeric" ><strong>Total Sales Tk.</strong></th>
                                         <th class="numeric" ><strong>{{ salesTransactionOverview.total|number_format }}</strong></th>
                                         <th class="numeric" ><strong>Today Sales Receive Tk.</strong></th>
                                         <th class="numeric" ><strong>{{ salesTransactionOverview.receive|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>Commission Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ salesTodaySalesCommission|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>Return Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ invoiceReturn|number_format }}</strong></th>
                                         <th class="numeric" ><strong>Due Received Tk.</strong></th>
                                         <th class="numeric" ><strong>{{ previousSalesTransactionOverview.receive|number_format }}</strong></th>
                                         <th class="numeric" ><strong>Total Received Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ (previousSalesTransactionOverview.receive + salesTransactionOverview.receive)|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>{{ ((previousSalesTransactionOverview.receive + salesTransactionOverview.receive)-salesTodaySalesCommission)|number_format }}</strong></th>
                                     </tr>
                                     </thead>
-                                </table>
+                                </table>#}
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 

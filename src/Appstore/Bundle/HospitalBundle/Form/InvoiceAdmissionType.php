@@ -73,24 +73,6 @@ class InvoiceAdmissionType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('referredDoctor', 'entity', array(
-                  'required'    => true,
-                  'property' => 'referred',
-                  'empty_value' => '--- Select Referred Doctor/Agent ---',
-                  'attr'=>array('class'=>'m-wrap span12'),
-                  'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                  'query_builder' => function(EntityRepository $er){
-                      return $er->createQueryBuilder('e')
-                          ->join("e.service",'s')
-                          ->where("e.service = 6")
-                          ->andWhere('s.slug IN (:services)')
-                          ->setParameter('services',array('doctor','referred'))
-                          ->andWhere("e.hospitalConfig = {$this->globalOption->getHospitalConfig()->getId()}")
-                          ->orderBy("e.name","ASC");
-                  }
-
-            ))
-
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',

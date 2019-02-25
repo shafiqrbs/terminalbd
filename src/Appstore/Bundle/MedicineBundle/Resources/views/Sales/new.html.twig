@@ -399,7 +399,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@MedicineBundle/Resources/public/js/temporary-sales.js'
     '@MedicineBundle/Resources/public/js/sales.js'
     '@MedicineBundle/Resources/public/js/approveProcess.js'
     '@MedicineBundle/Resources/public/js/datetimepicker_css.js'
@@ -409,8 +408,6 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    jqueryTemporaryLoad();
-    jqueryInstantTemporaryLoad();
     $('#salesitem_stockName').focus();
  {% endblock %}
 
