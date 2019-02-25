@@ -125,9 +125,9 @@ var formStock = $("#medicineStock").validate({
     rules: {
         "medicineStock[name]": {required: true},
         "medicineStock[accessoriesBrand]": {required: false},
-        "medicineStock[rackNo]": {required: true},
+        "medicineStock[rackNo]": {required: false},
         "medicineStock[purchaseQuantity]": {required: true},
-        "medicineStock[unit]": {required: true},
+        "medicineStock[unit]": {required: false},
         "medicineStock[purchasePrice]": {required: true},
         "medicineStock[salesPrice]": {required: false}
     },
@@ -169,6 +169,8 @@ var formStock = $("#medicineStock").validate({
                 $('#discount').html(obj['discount']);
                 $('#msg').html(obj['msg']);
                 $("#medicineStock_name").select2("val", "");
+                $("#medicineStock_rackNo").select2("val", "");
+                $("#medicineStock_unit").select2("val", "");
                 $("#medicineId").val();
                 $('#medicineStock')[0].reset();
             }
