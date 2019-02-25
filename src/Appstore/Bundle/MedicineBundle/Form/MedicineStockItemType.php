@@ -41,7 +41,7 @@ class MedicineStockItemType extends AbstractType
                 'empty_value' => '---Select medicine & others brand ---',
                 'property' => 'name',
                 'choice_translation_domain' => true,
-                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'attr'=>array('class'=>'m-wrap span12 select2 inputs'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.particularType","pt")
@@ -63,11 +63,8 @@ class MedicineStockItemType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'empty_value' => '---Choose a unit ---',
-                'attr'=>array('class'=>'span12 stockInput'),
+                'attr'=>array('class'=>'span6 select2 stockInput'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -79,13 +76,13 @@ class MedicineStockItemType extends AbstractType
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
                 'empty_value' => '---Rack position ---',
                 'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 stockInput'),
+                'attr'=>array('class'=>'m-wrap span6 select2 stockInput'),
                 'constraints' =>array( new NotBlank(array('message'=>'Select rack position')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.particularType","pt")
                         ->where("e.status = 1")
-                        ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
+                        ->andWhere("e.medicineConfig =".$this->medicineConfig->getId())
                         ->andWhere("pt.slug = 'rack'");
                 },
             ))

@@ -31,6 +31,7 @@ class ConfigType extends AbstractType
             ->add('isPrintFooter')
              ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+            ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter vendor address')))
 
         ;
     }

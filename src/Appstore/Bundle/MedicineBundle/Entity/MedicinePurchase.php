@@ -184,7 +184,7 @@ class MedicinePurchase
      *
      * @ORM\Column(name="payment", type="float", nullable=true)
      */
-    private $payment = 0;
+    private $payment;
 
     /**
      * @var float

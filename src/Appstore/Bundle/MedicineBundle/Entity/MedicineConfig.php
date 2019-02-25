@@ -187,6 +187,14 @@ class MedicineConfig
     private $vatRegNo;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="text",  nullable=true)
+     */
+    private $address;
+
+
     /**
      * @var boolean
      *
@@ -571,6 +579,22 @@ class MedicineConfig
     public function setPosPrint($posPrint)
     {
         $this->posPrint = $posPrint;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
     }
 
 }

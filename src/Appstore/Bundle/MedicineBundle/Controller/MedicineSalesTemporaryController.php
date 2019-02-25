@@ -134,7 +134,7 @@ class MedicineSalesTemporaryController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->temporarySalesInsert($user, $entity);
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->removeSalesTemporary($this->getUser());
+      //  $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->removeSalesTemporary($this->getUser());
         if ($entity->getProcess() == 'Done'){
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
@@ -142,15 +142,15 @@ class MedicineSalesTemporaryController extends Controller
         $btn = $request->request->get('buttonType');
         if($btn == "posBtn" and $entity->getProcess() == 'Done'){
             $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->findBy(array('medicineSales' => $entity->getId()));
-            $pos = $this->posPrint($entity,$invoiceParticulars);
-            return new Response($pos);
-        }else{
-            return new Response('success');
+            if(!empty($invoiceParticulars)){
+                $pos = $this->posPrint($entity,$invoiceParticulars);
+                return new Response($pos);
+            }
         }
+        return new Response('success');
         exit;
 
     }
-
 
     public function invoiceDiscountUpdateAction(Request $request)
     {
@@ -239,7 +239,7 @@ class MedicineSalesTemporaryController extends Controller
         exit;
     }
 
-    private function posPrint(MedicineSales $entity,$invoiceParticulars)
+    private function posPrint(MedicineSales $entity,$invoiceParticulars = '')
     {
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
@@ -250,11 +250,7 @@ class MedicineSalesTemporaryController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 
         $currentPayment = !empty($entity->getReceived()) ? $entity->getReceived() :0;
-
-        $address1       = $option->getContactPage()->getAddress1();
-        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
-        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-        $address        = $address1.$thana.$district;
+        $address        = $config->getAddress();
 
         $vatRegNo       = $config->getVatRegNo();
         $companyName    = $option->getName();
@@ -270,9 +266,9 @@ class MedicineSalesTemporaryController extends Controller
         $discount           = $entity->getDiscount();
         $vat                = $entity->getVat();
         $due                = $entity->getDue();
-        $payment            = $entity->getPayment();
+        $payment            = $entity->getReceived();
         $transaction        = $entity->getTransactionMethod()->getName();
-        $salesBy            = $entity->getSalesBy();
+        $salesBy            = $entity->getSalesBy()->getProfile()->getName();
 
 
         /** ===================Invoice Sales Item Information========================= */
@@ -288,7 +284,7 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> text($companyName."\n");
         $printer -> selectPrintMode();
         $printer -> text($address."\n");
-        /* $printer -> text($mobile."\n");*/
+        $printer -> text($mobile."\n");
         $printer -> feed();
 
         /* Title of receipt */
@@ -301,7 +297,7 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> feed();
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
-        $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
+      //  $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
         $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
@@ -318,7 +314,7 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
@@ -328,10 +324,8 @@ class MedicineSalesTemporaryController extends Controller
         if(!empty($invoiceParticulars)){
             /* @var $row MedicineSalesItem */
             foreach ($invoiceParticulars as $row){
-                $printer -> setUnderline(Printer::UNDERLINE_NONE);
-                $printer -> text( new PosItemManager($i.'. '.$row->getMedicineStock()->getName(),"",""));
                 $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-                $printer -> text(new PosItemManager($row->getMedicineStock()->getCode(),$row->getQuantity(),number_format($row->getSubTotal())));
+                $printer -> text(new PosItemManager($i.'. '.$row->getMedicineStock()->getName(),$row->getQuantity(),number_format($row->getSubTotal())));
                 $i++;
             }
         }
@@ -358,6 +352,9 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($grandTotal);
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($due);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer->text("\n");
         $printer -> feed();
@@ -377,7 +374,7 @@ class MedicineSalesTemporaryController extends Controller
         }
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("Served By: ".$salesBy."\n");
+        $printer -> text("Sales By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
         if($website){
             $printer -> text("Please visit www.".$website."\n");
