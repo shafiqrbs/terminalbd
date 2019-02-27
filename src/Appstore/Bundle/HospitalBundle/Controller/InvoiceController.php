@@ -445,7 +445,7 @@ class InvoiceController extends Controller
         $entity->setPaymentStatus('Due');
         $entity->setDue($entity->getTotal());
         $entity->setPaymentInWord(null);
-        $entity->setCommission(null);
+        $entity->setCommission(0);
         $entity->setPayment(null);
         $em->flush();
         $template = $this->get('twig')->render('HospitalBundle:Reverse:reverse.html.twig',array(

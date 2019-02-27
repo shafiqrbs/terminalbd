@@ -20,8 +20,11 @@ class DefaultController extends Controller
     public function landingAction()
     {
 
-        $user = $this->getUser();
 
+        $user = $this->getUser();
+        if(empty($user)){
+            return $this->redirect($this->generateUrl('bindu_homepage'));
+        }
         $globalOption = $user->getGlobalOption();
         if( $user->getGlobalOption()){
             $enable =$globalOption->getStatus();
@@ -70,22 +73,6 @@ class DefaultController extends Controller
 	        return $this->redirect($this->generateUrl('website'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {
 	        return $this->redirect($this->generateUrl('domain'));
-		/*
-		 }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES') && $enable == 1) {
-            $inventory = $user->getGlobalOption()->getInventoryConfig();
-            $deliveryProcess = $inventory->getDeliveryProcess();
-            if (!empty($deliveryProcess)) {
-                if ('pos' == $deliveryProcess) {
-                    return $this->redirect($this->generateUrl('inventory_sales'));
-                } elseif ('general-sales' == $deliveryProcess) {
-                    return $this->redirect($this->generateUrl('inventory_salesonline'));
-                } elseif ('manual-sales' == $deliveryProcess) {
-                    return $this->redirect($this->generateUrl('inventory_salesmanual'));
-                }
-            }
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') && $enable == 1) {
-            return $this->redirect($this->generateUrl('purchase'));
-		*/
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_AGENT')) {
               return $this->redirect($this->generateUrl('agentclient'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER')) {

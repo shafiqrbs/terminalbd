@@ -3,7 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
-use Appstore\Bundle\MedicineBundle\Bundle\Service\PosItemManager;
+use Appstore\Bundle\RestaurantBundle\Service\PosItemManager;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
@@ -261,7 +261,7 @@ class MedicineSalesTemporaryController extends Controller
 
         $invoice            = $entity->getInvoice();
         $subTotal           = $entity->getSubTotal();
-        $total              = $entity->getTotal();
+        $total              = $entity->getNetTotal();
         $discount           = $entity->getDiscount();
         $vat                = $entity->getVat();
         $due                = $entity->getDue();
@@ -285,6 +285,7 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> text($address."\n");
         $printer -> text($mobile."\n");
         $printer -> feed();
+
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -317,6 +318,7 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
         $printer -> feed();
+
         $i=1;
 
         if(!empty($invoiceParticulars)){
@@ -382,6 +384,8 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> close();
         return $response;
     }
+
+
 
 }
 

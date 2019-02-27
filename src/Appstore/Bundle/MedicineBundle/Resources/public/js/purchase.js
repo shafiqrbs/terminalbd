@@ -356,6 +356,10 @@ $(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurch
 
 });
 
+$('#medicinepurchase_payment').click(function() {
+    $('#medicinepurchase_payment').attr('value', '');
+});
+
 
 $(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
 

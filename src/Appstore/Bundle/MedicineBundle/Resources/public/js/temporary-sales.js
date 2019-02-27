@@ -71,6 +71,11 @@ $(document).on("click", ".removePopup", function() {
 function jqueryTemporaryLoad() {
 
 
+    $('#salesTemporary_received').click(function() {
+        $('#salesTemporary_received').attr('value', '');
+    });
+
+
     $(".addTemporaryCustomer").click(function(){
         $( ".customer" ).slideToggle( "slow" );
     }).toggle( function() {
@@ -493,6 +498,7 @@ function jqueryTemporaryLoad() {
 
 function jqueryInstantTemporaryLoad(){
 
+    $('#vendor').focus();
     $(document).on('change', '#medicineName', function() {
 
         var medicine = $('#medicineName').val();
@@ -532,14 +538,18 @@ function jqueryInstantTemporaryLoad(){
             }
             switch (this.id) {
 
+                case 'vendor':
+                    $('#purchasesBy').select2('open');
+                    break;
+                case 'purchasesBy':
+                    $('#purchaseQuantity').focus();
+                    break;
                 case 'purchaseQuantity':
                     $('#salesPrice').focus();
                     break;
                 case 'salesPrice':
-                    $('#addInstantPurchase').focus();
-                    break;
-                case 'addInstantPurchase':
-                    $('#vendor').select2('open');
+                    $('#addInstantPurchase').click();
+                    $('#vendor').focus();
                     break;
             }
             return false;
@@ -551,8 +561,8 @@ function jqueryInstantTemporaryLoad(){
         var form = $("#instantPurchase").validate({
             rules: {
 
-                "medicineName": {required: true},
                 "vendor": {required: true},
+                "medicineName": {required: true},
                 "purchasesBy": {required: false},
                 "purchaseQuantity": {required: true},
                 "salesPrice": {required: true},

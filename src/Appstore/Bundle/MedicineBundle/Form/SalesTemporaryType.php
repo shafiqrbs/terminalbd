@@ -37,7 +37,7 @@ class SalesTemporaryType extends AbstractType
         $builder
 
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
+            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
             ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 initialDiscount','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
             ->add('discount','hidden')
             ->add('due','hidden')
