@@ -277,6 +277,21 @@ class InvoiceRepository extends EntityRepository
         return  $qb;
     }
 
+    public function invoiceDetailReporets(User $user , $mode , $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
+        $qb->andWhere('e.commissionApproved = 1');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+
+
     public function invoicePathologicalReportLists(User $user , $mode , $data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();

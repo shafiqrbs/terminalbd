@@ -29,10 +29,7 @@ class AccountBankType extends AbstractType
     {
         $builder
 
-            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add bank address'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add bank address details'))
-                )))
+            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add bank address')))
 
             ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add account no'),
                 'constraints' =>array(

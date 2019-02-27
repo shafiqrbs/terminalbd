@@ -10,7 +10,8 @@
         <div class="caption"><i class="icon-reorder"></i>Diagnostic Particulars</div>
         <div class="actions">
             <div class="btn-group">
-                <a class="btn red" href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i> Invoice</a>
+                <a target="_blank" class="btn red" href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i> Invoice</a>
+                <a target="_blank" class="btn yellow" href="{{ path('hms_invoice_report_process') }}"><i class="icon-th-list"></i> Delivery Report</a>
             </div>
         </div>
     </div>
@@ -173,7 +174,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label-custom" >Discount TK.</span> <span class="pull-right sales-right">{{ form_widget(form.discountCalculation) }}</span></label>
+                        <label class="control-label" id="discount-label" for="firstName"><span class="label-custom" >Discount TK.</span> <span class="pull-right sales-right">{{ form_widget(form.discountCalculation) }}</span></label>
                         {{ form_widget(form.discount) }}
                     </div>
                 </div>
@@ -192,7 +193,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label-custom" >Receivable TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span></label>
+                        <label class="control-label" id="receive-label" for="firstName"><span class="label-custom" >Receivable TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span></label>
                     </div>
                 </div>
                 <!--/span-->
@@ -371,6 +372,19 @@
         padding-right: 15px;
         color: #ffffff;
     }
+
+    #discount-label{
+        background: #ffe853;
+        height: 54px;
+        padding-top: 13px;
+    }
+
+    #receive-label{
+        background: red;
+        height: 54px;
+        padding-top: 13px;
+    }
+
     .sales-right input[class*="span"].payment{
         border: 3px solid red!important;
         height: 31px!important;

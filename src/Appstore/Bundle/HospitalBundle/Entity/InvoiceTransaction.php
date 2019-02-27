@@ -109,14 +109,14 @@ class InvoiceTransaction
      *
      * @ORM\Column(name="payment", type="decimal", nullable=true)
      */
-    private $payment;
+    private $payment= 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="total", type="decimal", nullable=true)
      */
-    private $total;
+    private $total= 0;
 
     /**
      * @var string

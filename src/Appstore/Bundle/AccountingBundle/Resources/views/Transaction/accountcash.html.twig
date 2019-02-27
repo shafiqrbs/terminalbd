@@ -115,7 +115,7 @@
                                         <td class="numeric" >{{ entity.processHead }}</td>
                                         <td class="numeric" >
                                             {% if entity.processHead == 'Expenditure' %}
-                                               Expense: {% if entity.expenditure.category is not empty %} {{ entity.expenditure.category.accountHead.name }}{% endif %}: {{ entity.accountRefNo }}
+                                               Expense: {% if entity.expenditure.category is defined and entity.expenditure.category is not empty %} {{ entity.expenditure.category.accountHead.name }}{% endif %}: {{ entity.accountRefNo }}
                                                {% if entity.expenditure.remark is not empty  %}
                                                 <br/> {{ entity.expenditure.remark }}
                                                {% endif %}

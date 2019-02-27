@@ -5,6 +5,7 @@ namespace Appstore\Bundle\HospitalBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
@@ -49,9 +50,15 @@ class DoctorInvoice
     private $hmsCommission;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="doctorInvoices", cascade={"persist", "remove"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular")
      **/
     private  $assignDoctor;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="doctorInvoice",cascade={"remove"} )
+     **/
+    private  $expenditure;
 
 
     /**
@@ -522,6 +529,14 @@ class DoctorInvoice
     public function setHmsDoctorInvoice($hmsDoctorInvoice)
     {
         $this->hmsDoctorInvoice = $hmsDoctorInvoice;
+    }
+
+    /**
+     * @return Expenditure
+     */
+    public function getExpenditure()
+    {
+        return $this->expenditure;
     }
 
 }

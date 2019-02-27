@@ -146,6 +146,7 @@ class ExpenditureRepository extends EntityRepository
         $em = $this->_em;
         $entity = new Expenditure();
         $entity->setGlobalOption($doctorInvoice->getHospitalConfig()->getGlobalOption());
+        $entity->setDoctorInvoice($doctorInvoice);
         $entity->setAmount($doctorInvoice->getPayment());
         $entity->setCreatedBy($doctorInvoice->getCreatedBy());
         $entity->setApprovedBy($doctorInvoice->getApprovedBy());

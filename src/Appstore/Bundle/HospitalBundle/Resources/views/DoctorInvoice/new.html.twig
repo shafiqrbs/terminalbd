@@ -229,7 +229,7 @@
                             <th class="numeric">Doctor/Referred</th>
                             <th class="numeric">Mobile</th>
                             <th class="numeric">Payment For</th>
-                            <th class="numeric">Payment Method</th>
+                            <th class="numeric">Method</th>
                             <th class="numeric">Created By</th>
                             <th class="numeric">Amount</th>
                             <th class="numeric">Paid</th>
@@ -238,7 +238,6 @@
                         <tbody id="invoiceTransaction">
                         {% set totalPayment = 0 %}
                         {% for transaction in invoice.doctorInvoices %}
-
                             {%  set totalPayment = totalPayment + transaction.payment  %}
                             <tr>
                                 <td  class="numeric">{{ loop.index }}</td>
@@ -251,8 +250,8 @@
                                 <td class="numeric">{{ transaction.payment }}</td>
                                 <td class="numeric">
                                     {% if transaction.process != 'Paid' %}
-                                     <a class="btn purple mini addPay" data-url="{{ path('hms_doctor_invoice_pay',{'id':transaction.id}) }}"><i class="icon-money"></i>&nbsp;Pay</a>
-                                     <a title="Are you sure went to delete ?" data-url="{{ path('hms_doctor_invoice_delete', { 'id': transaction.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                     <a class="btn blue mini addPay" data-url="{{ path('hms_doctor_invoice_pay',{'id':transaction.id}) }}"><i class="icon-money"></i>&nbsp;Approve</a>
+                                     <a data-url="{{ path('hms_doctor_invoice_delete', { 'id': transaction.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                     {% else %}
                                         <a class="btn green mini"><i class="icon-ok"></i></a>
                                     {% endif %}

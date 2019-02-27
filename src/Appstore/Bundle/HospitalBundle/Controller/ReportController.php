@@ -174,7 +174,7 @@ class ReportController extends Controller
             $datetime = new \DateTime("now");
             $data['created'] = $datetime->format('d-m-Y');
         }
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists($user, $mode = 'diagnostic', $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceDetailReporets($user, $mode = 'diagnostic', $data);
         $pagination = $entities->getQuery()->getResult();
         $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommissionSummary($hospital, $entities);
         $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommission($hospital, $entities);
@@ -202,7 +202,7 @@ class ReportController extends Controller
             $data['created'] = $datetime->format('Y-m-d');
         }
 
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists($user, $mode = 'diagnostic', $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceDetailReporets($user, $mode = 'diagnostic', $data);
         $pagination = $entities->getQuery()->getResult();
         $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommission($hospital, $entities);
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(6));

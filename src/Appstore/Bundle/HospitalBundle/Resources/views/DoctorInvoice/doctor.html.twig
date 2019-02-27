@@ -108,11 +108,13 @@
                                 <tr class="head-blue">
                                     <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
                                     <th class="numeric">Created</th>
+                                    <th class="numeric">Invoice</th>
                                     <th class="numeric">Doctor/Referred</th>
                                     <th class="numeric">Payment For</th>
                                     <th class="numeric">Payment Method</th>
                                     <th class="numeric">Created By</th>
-                                    <th class="numeric">Invoice</th>
+                                    <th class="numeric">Mode</th>
+                                    <th class="numeric">RefInvoice</th>
                                     <th class="numeric">Invoice Amount</th>
                                     <th class="numeric">Amount</th>
                                     <th class="numeric">Paid</th>
@@ -123,10 +125,12 @@
                                     <tr>
                                         <td  class="numeric">{{ loop.index }}</td>
                                         <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric">{{ transaction.assignDoctor.particularCode }}-{{ transaction.assignDoctor.name }}</td>
+                                        <td class="numeric">{{ transaction.hmsDoctorInvoice }}</td>
+                                        <td class="numeric">{{ transaction.assignDoctor.name }}</td>
                                         <td class="numeric">{{ transaction.hmsCommission.name }}</td>
                                         <td class="numeric">{{ transaction.transactionMethod.name }}</td>
                                         <td class="numeric">{{ transaction.createdBy }}</td>
+                                        <td class="numeric">{{ transaction.hmsInvoice.invoiceMode|capitalize }}</td>
                                         <td class="numeric">{{ transaction.hmsInvoice.invoice }}</td>
                                         <td class="numeric">{{ transaction.hmsInvoice.total }}</td>
                                         <td class="numeric">{{ transaction.payment }}</td>

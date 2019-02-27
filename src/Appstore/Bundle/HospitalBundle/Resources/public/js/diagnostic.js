@@ -54,7 +54,9 @@ $(document).on("click", ".saveButton", function() {
 
 function formSubmit() {
 
-    $('#appstore_bundle_hospitalbundle_invoice_customer_name').focus();
+    $('#appstore_bundle_hospitalbundle_invoice_customer_name').focus().keypress(function () {
+        $('#appstore_bundle_hospitalbundle_invoice_customer_name').css('textTransform', 'capitalize');
+    });
 
     $('form#invoicePatientForm').on('keypress', 'input,select,textarea', function (e) {
 

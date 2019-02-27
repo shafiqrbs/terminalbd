@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -59,9 +60,15 @@ class Expenditure
     private  $accountMobileBank;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="expenditure" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="expenditure" , cascade={"persist", "remove"})
      **/
     private  $accountCash;
+
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", inversedBy="expenditure" , cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $doctorInvoice;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="expendituries" )
@@ -583,6 +590,22 @@ class Expenditure
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    /**
+     * @return DoctorInvoice
+     */
+    public function getDoctorInvoice()
+    {
+        return $this->doctorInvoice;
+    }
+
+    /**
+     * @param DoctorInvoice $doctorInvoice
+     */
+    public function setDoctorInvoice($doctorInvoice)
+    {
+        $this->doctorInvoice = $doctorInvoice;
     }
 
 

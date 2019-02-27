@@ -48,21 +48,11 @@ class InvoiceController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'diagnostic' , $data);
         $pagination = $this->paginate($entities);
-        $salesTodayTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic'));
-        $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic'));
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
-        $expenditureOverview                = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-        $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->getInvoiceReturnAmount($user,$data);
-        $salesTodaySalesCommission          = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionSummary($user,$data);
 
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(
             'entities'                          => $pagination,
-            'salesTransactionOverview'          => $salesTodayTransactionOverview,
-            'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
-            'salesTodaySalesCommission'         => $salesTodaySalesCommission,
-            'invoiceReturn'                     => $invoiceReturn ,
-            'expenditureOverview'               => $expenditureOverview ,
             'assignDoctors'                     => $assignDoctors,
             'referredDoctors'                   => $referredDoctors,
             'searchForm'                        => $data,
@@ -446,6 +436,7 @@ class InvoiceController extends Controller
         $entity->setDue($entity->getTotal());
         $entity->setPaymentInWord(null);
         $entity->setCommission(0);
+        $entity->setCommissionApproved(0);
         $entity->setPayment(null);
         $em->flush();
         $template = $this->get('twig')->render('HospitalBundle:Reverse:reverse.html.twig',array(
