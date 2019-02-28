@@ -149,6 +149,14 @@ class MedicineConfig
     private $vatPercentage;
 
     /**
+     * @var smallint
+     *
+     * @ORM\Column(name="expiryDate", type = "smallint",  nullable=true)
+     */
+    private $expiryDate =1;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="instantVendorPercentage", type = "float",  nullable=true)
@@ -161,8 +169,6 @@ class MedicineConfig
      * @ORM\Column(name="vendorPercentage", type = "float",  nullable=true)
      */
     private $vendorPercentage = 8;
-
-
 
     /**
      * @var boolean
@@ -595,6 +601,22 @@ class MedicineConfig
     public function setAddress($address)
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getExpiryDate()
+    {
+        return $this->expiryDate;
+    }
+
+    /**
+     * @param smallint $expiryDate
+     */
+    public function setExpiryDate(smallint $expiryDate)
+    {
+        $this->expiryDate = $expiryDate;
     }
 
 }

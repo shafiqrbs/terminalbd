@@ -162,8 +162,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
 
 	public function expiryMedicineSearch($config,$data = array(),$instant = ''){
 
-		$startExpiryDate = isset($data['startExpiryDate'])? $data['startExpiryDate'] :'';
-		$endExpiryDate = isset($data['endExpiryDate'])? $data['endExpiryDate'] :'';
+		$startExpiryDate = isset($data['startExpiryDate']) ? $data['startExpiryDate'] :'';
+		$endExpiryDate = isset($data['endExpiryDate']) ? $data['endExpiryDate'] :'';
 
 		$qb = $this->createQueryBuilder('mpi');
         $qb->join('mpi.medicinePurchase','e');

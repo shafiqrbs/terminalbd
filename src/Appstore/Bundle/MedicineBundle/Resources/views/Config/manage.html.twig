@@ -14,7 +14,6 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-
                     <li><a href="#">Configuration </a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
@@ -44,7 +43,7 @@
                             <div class="row-fluid box green">
                                </div>
                             <div class="row-fluid">
-                                <div class="span3">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label " for="vatPercentage">Invoice Prefix</label>
                                         <div class="control">
@@ -53,8 +52,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3">
-                                    {{ form_widget(form.customPrint) }} Custom Print
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label " for="">Expiry Date  </label>
+                                        <div class="control">
+                                            {{ form_widget(form.expiryDate) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <label class="control-label " for="">&nbsp;</label>
+                                    {{ form_widget(form.customPrint) }} Custom Print <br/>
                                     {{ form_widget(form.posPrint) }} POS Print
                                 </div>
                                 <div class="span3">

@@ -3,7 +3,8 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
-use Appstore\Bundle\RestaurantBundle\Service\PosItemManager;
+
+use Appstore\Bundle\MedicineBundle\Bundle\Service\PosItemManager;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
@@ -249,11 +250,10 @@ class MedicineSalesTemporaryController extends Controller
         $option = $this->getUser()->getGlobalOption();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 
-        $address        = $config->getAddress();
-
         $vatRegNo       = $config->getVatRegNo();
         $companyName    = $option->getName();
-        $mobile         = $option->getMobile();
+        $mobile         = "Mobile -".$option->getMobile();
+        $address        = $config->getAddress();
         $website        = $option->getDomain();
 
 
@@ -274,7 +274,7 @@ class MedicineSalesTemporaryController extends Controller
 
 
         /* Date is kept the same for testing */
-        $date = date('l jS \of F Y h:i:s A');
+        $date = date('d-M-y h:i:s A');
 
         /* Name of shop */
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
@@ -285,16 +285,13 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> text($address."\n");
         $printer -> text($mobile."\n");
         $printer -> feed();
-
-
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-      /*  if(!empty($vatRegNo)){
+        /*if(!empty($vatRegNo)){
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }*/
-        $printer -> feed();
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
       //  $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
@@ -306,7 +303,7 @@ class MedicineSalesTemporaryController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n\n");
+        $printer -> text("SALES INVOICE. ".$entity->getInvoice().".\n");
         $printer -> feed();
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -314,68 +311,57 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(false);
-        $printer -> feed();
-
+        //$printer -> feed();
         $i=1;
-
         if(!empty($invoiceParticulars)){
             /* @var $row MedicineSalesItem */
             foreach ($invoiceParticulars as $row){
+                $qnt = sprintf("%s", str_pad($row->getQuantity(),2, '0', STR_PAD_LEFT));
                 $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-                $printer -> text(new PosItemManager($i.'. '.$row->getMedicineStock()->getName(),$row->getQuantity(),number_format($row->getSubTotal())));
+                $printer -> text(new PosItemManager($i.'. '.$row->getMedicineStock()->getName(),$qnt,number_format($row->getSubTotal())));
                 $i++;
             }
         }
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> feed();
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+   //     $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(true);
         $printer -> text ( "\n" );
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        //$printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
-
        /* if($vat){
             $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
             $printer->text($vat);
             $printer->setEmphasis(false);
         }*/
-
         if($discount){
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+         //   $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer->text($discount);
-            $printer -> setEmphasis(false);
+            $printer -> setEmphasis(true);
             $printer -> text ( "\n" );
         }
         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+      //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($grandTotal);
         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+      //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($payment);
-         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setEmphasis(true);
+    //    $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($due);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer->text("\n");
-        $printer -> feed();
-        $printer->text($transaction);
-        $printer->selectPrintMode();
+        //$printer -> feed();
+        //$printer->text($transaction);
+        //$printer->selectPrintMode();
         /* Barcode Print */
-        $printer->text ( "\n" );
-        $printer->selectPrintMode ();
-        $printer->setBarcodeHeight (30);
-        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
-        $printer -> feed();
-        foreach ( $hri as $position => $caption){
-            $printer->selectPrintMode ();
-            $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text ($caption);
-            $printer->feed ();
-        }
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");

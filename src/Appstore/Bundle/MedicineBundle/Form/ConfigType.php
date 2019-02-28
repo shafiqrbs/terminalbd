@@ -21,7 +21,7 @@ class ConfigType extends AbstractType
     {
         $builder
 
-            ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span5 ','maxlength'=> 4,'placeholder'=>'max 4 char')))
+            ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span8','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('instantVendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8 ','maxlength'=> 4,'placeholder'=>'Instant vendor item percentage')))
             ->add('vendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8','maxlength'=> 4,'placeholder'=>'Vendor item percentage')))
             ->add('customPrint')
@@ -29,10 +29,23 @@ class ConfigType extends AbstractType
             ->add('invoicePrintLogo')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
-             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+            ->add('expiryDate', 'choice', array(
+                'attr' => array(
+                    'class'=>'m-wrap span12'),
+                    'expanded'      =>false,
+                    'multiple'      =>false,
+                    'choices' => array(
+                        '1' => '1 Month',
+                        '2' => '2 Month',
+                        '3' => '3 Month',
+                        '4' => '4 Month',
+                        '5' => '5 Month',
+                        '6' => '6 Month',
+                    ),
+            ))
+            ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
-            ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter vendor address')))
-
+            ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','rows' => 4,'placeholder'=>'Enter vendor address')))
         ;
     }
     

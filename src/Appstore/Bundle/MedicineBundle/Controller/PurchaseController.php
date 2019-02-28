@@ -40,8 +40,6 @@ class PurchaseController extends Controller
 	/**
 	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
 	 */
-
-
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -58,7 +56,6 @@ class PurchaseController extends Controller
     /**
 	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
 	 */
-
     public function purchaseItemAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -105,12 +102,9 @@ class PurchaseController extends Controller
        
     }
 
-
 	/**
 	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
 	 */
-
-
     public function newAction()
     {
 
