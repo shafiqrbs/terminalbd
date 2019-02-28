@@ -269,7 +269,7 @@ class MedicineSalesTemporaryController extends Controller
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy()->getProfile()->getName();
         if($entity->getCustomer()->getName() != "Default"){
-        $customer           = "Customer: {$entity->getCustomer()->getName()} , Mobile : {$entity->getCustomer()->getMobile()}";
+        $customer           = "Customer: {$entity->getCustomer()->getName()},Mobile: {$entity->getCustomer()->getMobile()}\n";
         }
 
         /** ===================Invoice Sales Item Information========================= */
@@ -305,18 +305,17 @@ class MedicineSalesTemporaryController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("SALES INVOICE. ".$entity->getInvoice().".\n");
+        $printer -> text("SALES INVOICE- {$entity->getInvoice()}");
         $printer -> feed();
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         if(!empty($customer)){
-            $printer -> setEmphasis(true);
-            $printer -> text($customer.".\n");
+            $printer -> text($customer);
+            $printer -> feed();
         }
         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
@@ -334,9 +333,8 @@ class MedicineSalesTemporaryController extends Controller
             }
         }
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
     //    $printer -> feed();
-   //     $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(true);
         $printer -> text ( "\n" );
         //$printer -> setUnderline(Printer::UNDERLINE_DOUBLE);

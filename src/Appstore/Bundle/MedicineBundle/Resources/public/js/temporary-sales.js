@@ -356,6 +356,7 @@ function jqueryTemporaryLoad() {
                         $('#grandTotal').html('');
                         $('.discount').html('');
                         $('.dueAmount').html('');
+                        $('#profit').html('');
                         $('#salesNetTotal').val('');
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
@@ -387,6 +388,7 @@ function jqueryTemporaryLoad() {
                         $('#grandTotal').html('');
                         $('.discount').html('');
                         $('.dueAmount').html('');
+                        $('#profit').html('');
                         $('#salesNetTotal').val('');
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
