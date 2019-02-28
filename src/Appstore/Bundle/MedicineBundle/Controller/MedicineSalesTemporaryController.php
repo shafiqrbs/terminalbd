@@ -335,19 +335,20 @@ class MedicineSalesTemporaryController extends Controller
         }
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> feed();
+    //    $printer -> feed();
    //     $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(true);
         $printer -> text ( "\n" );
         //$printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
        /* if($vat){
             $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
             $printer->text($vat);
             $printer->setEmphasis(false);
         }*/
-        if($discount){
+        if(!empty($discount)){
          //   $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer->text($discount);
             $printer -> setEmphasis(true);
@@ -355,20 +356,23 @@ class MedicineSalesTemporaryController extends Controller
         }
         $printer -> setEmphasis(true);
       //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($grandTotal);
         $printer -> setEmphasis(true);
       //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($payment);
         $printer -> setEmphasis(true);
-    //    $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+      //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($due);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+      //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer->text("\n");
         //$printer -> feed();
         //$printer->text($transaction);
         //$printer->selectPrintMode();
         /* Barcode Print */
         $printer -> feed();
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
