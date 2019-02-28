@@ -300,13 +300,14 @@ class MedicineSalesTemporaryController extends Controller
       //  $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
         $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
-        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
+        $payment        = new PosItemManager('Paid: ','Tk.',number_format($payment));
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
+        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n\n");
+        $printer -> feed();
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
@@ -354,6 +355,9 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> text($grandTotal);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($payment);
+         $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($due);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer->text("\n");
