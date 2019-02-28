@@ -4,7 +4,7 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
 
-use Appstore\Bundle\MedicineBundle\Bundle\Service\PosItemManager;
+use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
@@ -255,7 +255,7 @@ class MedicineSalesTemporaryController extends Controller
         $mobile         = "Mobile -".$option->getMobile();
         $address        = $config->getAddress();
         $website        = $option->getDomain();
-
+        $customer       = '';
 
         /** ===================Customer Information=================================== */
 
@@ -268,7 +268,9 @@ class MedicineSalesTemporaryController extends Controller
         $payment            = $entity->getReceived();
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy()->getProfile()->getName();
-
+        if($entity->getCustomer()->getName() != "Default"){
+        $customer           = "Customer: {$entity->getCustomer()->getName()} , Mobile : {$entity->getCustomer()->getMobile()}";
+        }
 
         /** ===================Invoice Sales Item Information========================= */
 
@@ -309,6 +311,10 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        if(!empty($customer)){
+            $printer -> setEmphasis(true);
+            $printer -> text($customer.".\n");
+        }
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);

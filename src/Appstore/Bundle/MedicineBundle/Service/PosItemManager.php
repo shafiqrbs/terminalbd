@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\MedicineBundle\Bundle\Service;
+namespace Appstore\Bundle\MedicineBundle\Service;
 
 
 /**

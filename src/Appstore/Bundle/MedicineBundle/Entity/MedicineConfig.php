@@ -604,7 +604,7 @@ class MedicineConfig
     }
 
     /**
-     * @return smallint
+     * @return int
      */
     public function getExpiryDate()
     {
@@ -612,9 +612,9 @@ class MedicineConfig
     }
 
     /**
-     * @param smallint $expiryDate
+     * @param int $expiryDate
      */
-    public function setExpiryDate(smallint $expiryDate)
+    public function setExpiryDate(int $expiryDate)
     {
         $this->expiryDate = $expiryDate;
     }

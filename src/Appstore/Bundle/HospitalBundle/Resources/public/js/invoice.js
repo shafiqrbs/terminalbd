@@ -134,7 +134,6 @@ $(document).on('change', '#discountType , #hospitalInvoice_discountCalculation',
     var discount = parseInt($('#hospitalInvoice_discountCalculation').val());
     var invoice = parseInt($('#invoiceId').val());
     var discountType = $('#discountType').val();
-    alert(discount);
     if(discount === "NaN"){
         return false;
     }
