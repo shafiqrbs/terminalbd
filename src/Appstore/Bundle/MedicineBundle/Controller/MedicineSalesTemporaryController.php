@@ -303,10 +303,10 @@ class MedicineSalesTemporaryController extends Controller
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
 
         /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> feed();
         $printer -> setEmphasis(true);
-        $printer -> text("SALES INVOICE- {$entity->getInvoice()}");
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("SALES INVOICE- {$entity->getInvoice()}\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         if(!empty($customer)){
