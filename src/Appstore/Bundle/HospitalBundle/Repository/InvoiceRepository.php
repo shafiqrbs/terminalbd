@@ -34,6 +34,7 @@ class InvoiceRepository extends EntityRepository
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $created = isset($data['created'])? $data['created'] :'';
+        $posted = isset($data['posted'])? $data['posted'] :'';
         $deliveryDate = isset($data['deliveryDate'])? $data['deliveryDate'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $service = isset($data['service'])? $data['service'] :'';
@@ -57,6 +58,13 @@ class InvoiceRepository extends EntityRepository
             $created =  $compareTo->format('Y-m-d');
             $qb->andWhere("e.created LIKE :created");
             $qb->setParameter('created', $created.'%');
+        }
+
+        if (!empty($posted)) {
+            $compareTo = new \DateTime($created);
+            $posted =  $compareTo->format('Y-m-d');
+            $qb->andWhere("e.updated LIKE :posted");
+            $qb->setParameter('posted', $posted.'%');
         }
 
         if (!empty($deliveryDate)) {

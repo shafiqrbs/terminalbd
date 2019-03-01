@@ -31,14 +31,20 @@
         color: #fff;
         height: 40px;
     }
-
+    .table th{
+        line-height: 30px;
+        height: 30px;
+        font-weight: bold!important;
+    }
     .table th, .table td{
         border: 1px solid #e5e5e5;
         text-align: left;
-        padding-left: 20px;
-        height: 30px;
-        line-height: 30px;
-
+        padding-left: 5px;
+    }
+    .table td ul,  .table td ul li{
+        padding-left: 0;
+        margin-left: 0;
+        list-style: none;
     }
     h3 {
         font-size: 24px;
@@ -51,7 +57,6 @@
     .pull-center{
         background: #e5e5e5;
         text-align: center!important;
-
     }
     .pull-right{
         text-align: right!important;
@@ -63,14 +68,15 @@
   <table class="table">
       <thead>
       <tr><td class="pull-center" colspan="20">{{ globalOption.hospitalConfig.address|raw }}</td></tr>
-      <tr><th class="pull-center" colspan="20"><h3>DAILY SALES STATEMENT SHEET: {{ searchForm['created'] }}</h3></th></tr>
+      <tr><th class="pull-center" colspan="20"><h3>DAILY SALES STATEMENT SHEET: {{ searchForm['posted'] }}</h3></th></tr>
       <tr>
-          <th >Invoice No</th>
-          <th >Name</th>
-          <th >Particulars</th>
-          <th >Sub-Total</th>
-          <th >Discount</th>
-          <th >Total</th>
+          <th>Created</th>
+          <th>Invoice</th>
+          <th>Name</th>
+          <th>Particulars</th>
+          <th>Sub-Total</th>
+          <th>Discount</th>
+          <th>Total</th>
           {% for com in commissionSummary %}
               <th  colspan="2" >{{ com.commissionName }}</th>
           {% endfor %}
@@ -88,13 +94,20 @@
           {% set  grandTotal = grandTotal + entity.total %}
           {% set  grandDiscount = grandDiscount + entity.discount %}
           {% set  grandCommission = grandCommission + entity.commission %}
-          <tr id="delete-{{ entity.id }}">
-              <td  >{{ entity.invoice }}</td>
-              <td  >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-              <td  >{% for particular in entity.invoiceParticulars  %}{{ loop.index }}. {{ particular.particular.name }} {% if not loop.last %},{% endif %}  {% endfor %}</td>
-              <td  >{{ entity.subTotal }}</td>
-              <td  >{{ entity.discount }}</td>
-              <td  >{{ entity.total }}</td>
+          <tr>
+              <td>{{ entity.created|date('d-m-Y') }}</td>
+              <td>{{ entity.invoice }}</td>
+              <td>{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+              <td>
+                  <ul>
+                  {% for particular in entity.invoiceParticulars  %}
+                      <li>{{ loop.index }}. {{ particular.particular.name }}</li>
+                  {% endfor %}
+                  </ul>
+              </td>
+              <td>{{ entity.subTotal }}</td>
+              <td>{{ entity.discount }}</td>
+              <td>{{ entity.total }}</td>
               {% for com in commissionSummary %}
                   {% set commissionId = entity.id~'-'~com.comId %}
                   <td  >
@@ -102,7 +115,7 @@
                           {{ commissions[commissionId].referredName }}
                       {% endif %}
                   </td>
-                  <td  >
+                  <td>
                       {% if commissions[commissionId] is defined and commissions[commissionId] is not empty  %}
                           {{ commissions[commissionId].payment }}
                       {% endif %}
@@ -115,7 +128,7 @@
       </tbody>
       <tfoot>
       <tr>
-          <th colspan="3"><span class="pull-right">Grand Total</span></th>
+          <th colspan="4"><span class="pull-right">Grand Total</span></th>
           <td>{{ grandSubTotal }}</td>
           <td>{{ grandDiscount }}</td>
           <td>{{ grandTotal }}</td>

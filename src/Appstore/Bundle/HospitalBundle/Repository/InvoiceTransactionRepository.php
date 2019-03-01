@@ -81,7 +81,7 @@ class InvoiceTransactionRepository extends EntityRepository
         $total = !empty($result['total']) ? $result['total'] :0;
         $discount = !empty($result['discount']) ? $result['discount'] :0;
         $receive = !empty($result['payment']) ? $result['payment'] :0;
-        $data = array('total'=> ($total - $discount) ,'discount'=> $discount ,'receive'=> $receive);
+        $data = array('total'=> $total,'discount'=> $discount ,'receive'=> $receive);
         return $data;
     }
 
@@ -454,15 +454,13 @@ class InvoiceTransactionRepository extends EntityRepository
         $month = isset($data['month'])? $data['month'] :$month;
         $year = isset($data['year'])? $data['year'] :$year;
 
-        $sql = "SELECT DATE_FORMAT(transaction.updated,'%d-%m-%Y') as date ,SUM(transaction.total) as total,SUM(transaction.discount) as discount,SUM(transaction.payment) as receive, (SUM(transaction.total) - SUM(transaction.payment)- SUM(transaction.discount)) as due
-                FROM hms_invoice_transaction as transaction
-                INNER JOIN hms_invoice as invoice ON transaction.hmsInvoice_id = invoice.id
-                WHERE invoice.hospitalConfig_id = :hmsConfig AND transaction.process = :process AND MONTHNAME(transaction.updated) =:month AND YEAR(transaction.updated) =:year
+        $sql = "SELECT DATE_FORMAT(invoice.updated,'%d-%m-%Y') as date ,SUM(invoice.total) as total,SUM(invoice.discount) as discount,SUM(invoice.payment) as receive, SUM(invoice.due) as due
+                FROM hms_invoice as invoice
+                WHERE invoice.hospitalConfig_id = :hmsConfig AND MONTHNAME(invoice.updated) =:month AND YEAR(invoice.updated) =:year AND invoice.commissionApproved =:approved
                 GROUP BY date";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('hmsConfig', $config);
-        $stmt->bindValue('process', 'Done');
-        $stmt->bindValue('commissionApproved', 1);
+        $stmt->bindValue('approved', 1);
         $stmt->bindValue('month', $month);
         $stmt->bindValue('year', $year);
         $stmt->execute();

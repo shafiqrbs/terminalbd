@@ -147,6 +147,7 @@
                                     <th class="numeric" >Balance</th>
                                     <th class="numeric" >Status</th>
                                     <th class="numeric" >Report</th>
+                                    <th class="numeric" >Closed</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -174,6 +175,7 @@
                                                 {{ entity.process }}
                                             {% endif %}
                                         </td>
+                                        <td class="numeric" >{% if entity.commissionApproved == 1 %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}

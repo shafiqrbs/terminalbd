@@ -170,9 +170,9 @@ class ReportController extends Controller
 
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        if (empty($data['created'])) {
+        if (empty($data['posted'])) {
             $datetime = new \DateTime("now");
-            $data['created'] = $datetime->format('d-m-Y');
+            $data['posted'] = $datetime->format('d-m-Y');
         }
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceDetailReporets($user, $mode = 'diagnostic', $data);
         $pagination = $entities->getQuery()->getResult();
@@ -198,8 +198,8 @@ class ReportController extends Controller
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $datetime = new \DateTime("now");
-        if (empty($data['created'])) {
-            $data['created'] = $datetime->format('Y-m-d');
+        if (empty($data['posted'])) {
+            $data['posted'] = $datetime->format('Y-m-d');
         }
 
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceDetailReporets($user, $mode = 'diagnostic', $data);
