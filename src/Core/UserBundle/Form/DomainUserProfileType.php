@@ -55,9 +55,6 @@ class DomainUserProfileType extends AbstractType
                 )
             ))
             ->add('joiningDate', 'date', array(
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'widget' => 'single_text',
                 'placeholder' => array('mm' => 'mm', 'dd' => 'dd','YY' => 'YY'),
                 'format' => 'dd-MM-yyyy',

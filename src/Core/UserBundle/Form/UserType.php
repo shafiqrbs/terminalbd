@@ -18,7 +18,6 @@ use Syndicate\Bundle\ComponentBundle\Form\VendorType;
 class UserType extends BaseType
 {
 
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options

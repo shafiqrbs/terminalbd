@@ -304,17 +304,15 @@ class MedicineSalesTemporaryController extends Controller
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> feed();
         $printer -> setEmphasis(true);
         $printer -> text("SALES INVOICE- {$entity->getInvoice()}");
-        $printer -> feed();
         $printer -> setEmphasis(false);
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(true);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         if(!empty($customer)){
             $printer -> text($customer);
-            $printer -> feed();
         }
+        $printer -> feed();
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
@@ -346,14 +344,12 @@ class MedicineSalesTemporaryController extends Controller
             $printer->text($vat);
             $printer->setEmphasis(false);
         }*/
-        if(!empty($discount)){
-         //   $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->text($discount);
-            $printer -> setEmphasis(true);
-            $printer -> text ( "\n" );
-        }
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer->text($discount);
         $printer -> setEmphasis(true);
-      //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text ( "\n" );
+
+        $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($grandTotal);
         $printer -> setEmphasis(true);

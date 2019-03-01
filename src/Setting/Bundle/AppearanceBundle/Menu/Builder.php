@@ -913,10 +913,11 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'fa fa-hospital-o')
             ->setAttribute('dropdown', true);
 
-        $menu['Hospital & Diagnostic']->addChild('Manage Invoice')
-            ->setAttribute('icon', 'icon icon-medkit')
-            ->setAttribute('dropdown', true);
+
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
+            $menu['Hospital & Diagnostic']->addChild('Manage Invoice')
+                ->setAttribute('icon', 'icon icon-medkit')
+                ->setAttribute('dropdown', true);
             if (!empty($config) and in_array('diagnostic', $config)) {
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Report Delivery', array('route' => 'hms_invoice_particular'));
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'));
@@ -937,10 +938,7 @@ class Builder extends ContainerAware
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_LAB') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_DOCTOR')) {
-            $menu['Hospital & Diagnostic']->addChild('Pathological')
-                ->setAttribute('icon', 'fa fa-stethoscope')
-                ->setAttribute('dropdown', true);
-            $menu['Hospital & Diagnostic']['Pathological']->addChild('Collection & Process', array('route' => 'hms_invoice_report_process'))
+           $menu['Hospital & Diagnostic']->addChild('Pathological & Process', array('route' => 'hms_invoice_report_process'))
                 ->setAttribute('icon', 'fa fa-stethoscope');
         }
 
@@ -965,12 +963,13 @@ class Builder extends ContainerAware
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Commission', array('route' => 'hms_commission'))->setAttribute('icon', 'icon-tag');
                 /* $menu['Hospital & Diagnostic']['Master Data']->addChild('Category', array('route' => 'hms_category'))->setAttribute('icon', 'icon-tag');
                 */
+                if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_CONFIG')) {
+                    $menu['Hospital & Diagnostic']['Master Data']->addChild('Configuration', array('route' => 'hms_config_manage'))
+                        ->setAttribute('icon', 'icon-cog');
+                }
             }
 
-            if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_CONFIG')) {
-                $menu['Hospital & Diagnostic']['Master Data']->addChild('Configuration', array('route' => 'hms_config_manage'))
-                    ->setAttribute('icon', 'icon-cog');
-            }
+
             if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_STOCK')) {
                 $menu['Hospital & Diagnostic']->addChild('Manage Stock')
                     ->setAttribute('icon', 'icon icon-truck')
