@@ -314,8 +314,9 @@
                 <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">
-                <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120,50) }}" alt="{{ globalOption.name }}" />
-
+                {% set width = globalOption.templateCustomize.logoWidth is not empty ? globalOption.templateCustomize.logoWidth :'120' %}
+                {% set height = globalOption.templateCustomize.logoHeight is not empty ? globalOption.templateCustomize.logoHeight :'50' %}
+                <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(width,height) }}" alt="{{ globalOption.name }}" />
             </a>
         </div>
         <!-- End Header Navigation -->

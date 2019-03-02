@@ -306,7 +306,7 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> feed();
         $printer -> setEmphasis(true);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("SALES INVOICE- {$entity->getInvoice()}\n");
+        $printer -> text("Sales Memo No- {$entity->getInvoice()}\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         if(!empty($customer)){
@@ -370,10 +370,11 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
-        if($website){
+        /*if($website){
             $printer -> text("Please visit www.".$website."\n");
-        }
+        }*/
         $printer -> text($date . "\n");
+        $printer -> text("*Medicines once sold are not taken back*\n");
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return $response;
