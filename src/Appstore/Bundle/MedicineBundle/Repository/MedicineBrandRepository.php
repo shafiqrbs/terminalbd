@@ -121,9 +121,8 @@ class MedicineBrandRepository extends EntityRepository
         $query->join('e.medicineGeneric','g');
         $query->join('e.medicineCompany','c');
         $query->select('e.id as id');
-        $query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', g.name, \' \', e.strength, \' \', c.name) AS text');
+        $query->addSelect("CASE WHEN (e.strength IS NULL) THEN CONCAT(e.name, ' ', e.medicineForm,' ',c.name)  ELSE CONCAT(e.name, ' ', e.medicineForm,' ',e.strength,' ',c.name)  END as text");
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
-     //   $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
         return $query->getQuery()->getResult();
@@ -136,7 +135,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->join('e.medicineGeneric','g');
         $query->join('e.medicineCompany','c');
         $query->select('e.id as id');
-        $query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', e.strength, \' \', g.name, \' \', c.name) AS text');
+        $query->addSelect("CASE WHEN (e.strength IS NULL) THEN CONCAT(e.name, ' ', e.medicineForm,' ',c.name)  ELSE CONCAT(e.name, ' ', e.medicineForm,' ',e.strength,' ',c.name)  END as text");
         $query->where($query->expr()->like("g.name", "'$q%'"  ));
       //  $query->groupBy('g.name');
         $query->orderBy('e.name', 'ASC');
@@ -150,8 +149,9 @@ class MedicineBrandRepository extends EntityRepository
 		$query->join('e.medicineGeneric','g');
 		$query->join('e.medicineCompany','c');
 		$query->select('e.id as id');
-		$query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', g.name, \' \', e.strength, \' \', c.name) AS text');
-		$query->where($query->expr()->like("e.name", "'$q%'"  ));
+		//$query->addSelect('CONCAT(e.medicineForm, \' \', e.name, \' \', g.name, \' \', e.strength, \' \', c.name) AS text');
+        $query->addSelect("CASE WHEN (e.strength IS NULL) THEN CONCAT(e.medicineForm,' ', e.name,' ',g.name, ' ', c.name)  ELSE CONCAT(e.medicineForm,' ',e.name, ' ',e.strength,' ', g.name,' ',c.name)  END as text");
+        $query->where($query->expr()->like("e.name", "'$q%'"  ));
 		$query->orWhere($query->expr()->like("g.name", "'$q%'"  ));
 	//	$query->groupBy('e.name');
 		$query->orderBy('e.name', 'ASC');

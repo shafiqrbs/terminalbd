@@ -224,7 +224,6 @@ var formStock = $("#medicineStock").validate({
 
 var form = $("#purchaseItemForm").validate({
     rules: {
-
         "purchaseItem[stockName]": {required: true},
         "purchaseItem[purchasePrice]": {required: false},
         "purchaseItem[salesPrice]": {required: false},
