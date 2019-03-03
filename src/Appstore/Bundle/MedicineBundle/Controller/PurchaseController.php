@@ -304,15 +304,28 @@ class PurchaseController extends Controller
         $form->handleRequest($request);
         $entity->setMedicinePurchase($invoice);
         $stockItem = ($data['purchaseItem']['stockName']);
-        $entity->setMedicineStock($this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem));
+        $stockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
+        $entity->setMedicineStock($stockMedicine);
+        if(!empty($stockMedicine) and empty($entity->getPurchasePrice())){
 
-        $entity->setPurchaseSubTotal($entity->getPurchasePrice());
-        $entity->setRemainingQuantity($entity->getQuantity());
-        $unitPrice = round(($entity->getPurchasePrice()/$entity->getQuantity()),2);
-        $salesPrice = round(($entity->getSalesPrice()/$entity->getQuantity()),2);
-        $entity->setActualPurchasePrice($unitPrice);
-        $entity->setPurchasePrice($unitPrice);
-        $entity->setSalesPrice($salesPrice);
+            $entity->setActualPurchasePrice($stockMedicine->getSalesPrice());
+            $entity->setPurchasePrice($stockMedicine->getSalesPrice());
+            $entity->setSalesPrice($stockMedicine->getSalesPrice());
+            $entity->setPurchaseSubTotal(round($entity->getQuantity() * $stockMedicine->getSalesPrice()));
+            $entity->setRemainingQuantity($entity->getQuantity());
+
+        }else{
+
+            $entity->setPurchaseSubTotal($entity->getPurchasePrice());
+            $entity->setRemainingQuantity($entity->getQuantity());
+            $unitPrice = round(($entity->getPurchasePrice()/$entity->getQuantity()),2);
+            $salesPrice = round(($entity->getSalesPrice()/$entity->getQuantity()),2);
+            $entity->setActualPurchasePrice($unitPrice);
+            $entity->setPurchasePrice($unitPrice);
+            $entity->setSalesPrice($salesPrice);
+        }
+
+
         if(!empty($expirationStartDate)){
             $expirationStartDate = (new \DateTime($expirationStartDate));
             $entity->setExpirationStartDate($expirationStartDate);

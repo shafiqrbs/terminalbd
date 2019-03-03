@@ -122,9 +122,6 @@ class MedicineBrand
      */
     private $packSize;
 
-
-
-
     /**
      * Get id
      *
@@ -408,7 +405,7 @@ class MedicineBrand
 	/**
 	 * @param string $useFor
 	 */
-	public function setUseFor( string $useFor ) {
+	public function setUseFor($useFor ) {
 		$this->useFor = $useFor;
 	}
 

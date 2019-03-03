@@ -15,8 +15,6 @@ $(document).on("click", ".approve", function() {
     });
 });
 
-
-
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
@@ -228,7 +226,7 @@ var form = $("#purchaseItemForm").validate({
     rules: {
 
         "purchaseItem[stockName]": {required: true},
-        "purchaseItem[purchasePrice]": {required: true},
+        "purchaseItem[purchasePrice]": {required: false},
         "purchaseItem[salesPrice]": {required: false},
         "purchaseItem[quantity]": {required: true},
         "purchaseItem[expirationEndDate]": {required: false}
