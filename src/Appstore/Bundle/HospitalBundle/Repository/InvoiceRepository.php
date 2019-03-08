@@ -61,10 +61,12 @@ class InvoiceRepository extends EntityRepository
         }
 
         if (!empty($posted)) {
-            $compareTo = new \DateTime($created);
+            $compareTo = new \DateTime($posted);
             $posted =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.updated LIKE :posted");
-            $qb->setParameter('posted', $posted.'%');
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $posted.' 00:00:00');
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $posted.' 23:59:59');
         }
 
         if (!empty($deliveryDate)) {
