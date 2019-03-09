@@ -136,6 +136,7 @@ class InvoiceParticularRepository extends EntityRepository
         $qb->join('ip.particular','p');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
+        $qb->andWhere('e.commissionApproved != 1');
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','In-progress','Diagnostic','Admitted'));

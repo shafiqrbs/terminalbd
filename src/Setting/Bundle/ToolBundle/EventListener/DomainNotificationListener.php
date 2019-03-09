@@ -36,9 +36,9 @@ class DomainNotificationListener extends BaseSmsAwareListener
          * @var DomainNotification $event
          */
         if($event->getGlobalOption()->getStatus() == 2){
-            $msg = "Your Account has been Hold, Please Contact Active Your Account,Thank You Umar IT Limited";
+            $msg = "Your Account has been Hold, Please Contact Active Your Account,Thank You Terminalbd.com";
         }else{
-            $msg = "Your Account has been Suspended, Please Contact Active Your Account,Thank You Umar IT Limited";
+            $msg = "Your Account has been Suspended, Please Contact Active Your Account,Thank You Terminalbd.com";
         }
 
         $mobile = "88".$event->getGlobalOption()->getMobile();
