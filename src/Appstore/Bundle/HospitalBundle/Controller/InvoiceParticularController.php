@@ -68,7 +68,6 @@ class InvoiceParticularController extends Controller
         $pagination = $this->paginate($entities);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
-
         return $this->render('HospitalBundle:InvoiceParticular:diagnostic.html.twig', array(
             'entities' => $pagination,
             'assignDoctors' => $assignDoctors,
@@ -80,7 +79,6 @@ class InvoiceParticularController extends Controller
 
     public function showAction(Invoice $entity)
     {
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
@@ -142,10 +140,8 @@ class InvoiceParticularController extends Controller
         exit;
     }
 
-
     public function preparationAction(InvoiceParticular $entity)
     {
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
         }
@@ -163,7 +159,6 @@ class InvoiceParticularController extends Controller
                 }
             endforeach;
         }
-
         return $this->render('HospitalBundle:InvoiceParticular:new.html.twig', array(
             'entity' => $entity,
             'report' => $reportArr,
@@ -245,6 +240,16 @@ class InvoiceParticularController extends Controller
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hmsSalesFinal($invoice, $accountInvoice);
         }
         return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getHmsInvoice()->getId())));
+    }
+
+    public function reportReverseAction(InvoiceParticular $entity)
+    {
+        if (!empty($entity)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess('In-progress');
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('hms_invoice_particular_preparation',['id'=> $entity->getId()]));
     }
 
      public function pathologicalReportPrintAction(InvoiceParticular $entity)

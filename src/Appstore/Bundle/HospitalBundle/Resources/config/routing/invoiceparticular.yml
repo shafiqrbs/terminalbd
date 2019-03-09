@@ -39,6 +39,10 @@ hms_invoice_particular_report_print:
     path:     /{id}/pathological-report-print
     defaults: { _controller: "HospitalBundle:InvoiceParticular:pathologicalReportPrint" }
 
+hms_invoice_particular_report_reverse:
+    path:     /{id}/pathological-report-reverse
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:reportReverse" }
+
 
 hms_invoice_pathological_report_delete:
     path:     /{id}/pathological-report-delete

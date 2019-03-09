@@ -145,6 +145,9 @@
                                             {% if  entity.hmsinvoice.due > 0 %}
                                             <a target="_blank"  href="{{ path('hms_invoice_confirm',{'id':entity.hmsInvoice.id}) }}"  class="btn red mini" ><i class=" icon-plus"></i> Process</a>
                                             {% endif %}
+                                            {% if entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN") or entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")  %}
+                                                <a  class="btn mini black" href="{{ path('hms_invoice_particular_report_reverse', {'id': entity.id}) }}"><i class="icon-refresh"></i>&nbsp;Reverse </a>
+                                            {% endif %}
                                             </div>
                                         </td>
                                     </tr>
