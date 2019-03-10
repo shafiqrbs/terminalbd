@@ -25,7 +25,6 @@ class UserSignup extends Event
         $this->user = $user;
     }
 
-
     /**
      * @return ContactMessage
      */
