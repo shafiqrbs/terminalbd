@@ -63,7 +63,7 @@
                                     {%  if entity.granted("ROLE_DOMAIN") == false %}
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-                                        <td>{{ entity.profile.name }}</td>
+                                        <td>{% if entity.profile is not empty %}{{ entity.profile.name }}{% endif %}</td>
                                         <td>{% if entity.profile.designation is defined and entity.profile.designation is not empty %}{{ entity.profile.designation.name }}{% endif %}</td>
                                         <td>{{ entity.username }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.profile.mobile }}"> {{ entity.profile.mobile }}</a></td>

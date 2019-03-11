@@ -205,7 +205,7 @@ class PurchaseController extends Controller
 
     public function particularSearchAction(MedicineStock $particular)
     {
-        $unit = !empty($particular->getUnit()->getName())?$particular->getUnit()->getName():'Pack';
+        $unit = !empty($particular->getUnit()->getName()) ? $particular->getUnit()->getName():'Pack';
         return new Response(json_encode(array('purchasePrice'=> '', 'salesPrice'=> '','quantity'=> 1,'unit' => $unit)));
     }
 
@@ -244,6 +244,10 @@ class PurchaseController extends Controller
                 if($minQnt){
                     $entity->setMinQuantity($minQnt->getMinQuantity());
                 }
+            }
+            if(empty($entity->getUnit())){
+                $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
+                $entity->setUnit($unit);
             }
             $entity->setRemainingQuantity($entity->getPurchaseQuantity());
             $em->persist($entity);
@@ -363,7 +367,6 @@ class PurchaseController extends Controller
 
     public function invoiceDiscountUpdateAction(Request $request)
     {
-
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
         $discountCal = (float)$request->request->get('discount');

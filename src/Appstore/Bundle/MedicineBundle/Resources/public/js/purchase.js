@@ -40,7 +40,7 @@ $(document).on('change', '#purchaseItem_stockName', function() {
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#purchaseItem_expirationStartDate').focus();
+            $('#purchaseItem_quantity').focus();
             $('#purchaseItem_salesPrice').val(obj['salesPrice']);
             $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
             $('#unit').html(obj['unit']);
