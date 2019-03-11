@@ -46,9 +46,7 @@ $(document).on('change', '#purchaseItem_stockName', function() {
             $('#unit').html(obj['unit']);
         }
     })
-
 });
-
 
 $('#purchaseItem_stockName').on("select2-selecting", function (e) {
     setTimeout(function () {
