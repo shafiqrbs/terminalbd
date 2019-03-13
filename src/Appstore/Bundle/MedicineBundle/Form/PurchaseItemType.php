@@ -29,11 +29,11 @@ class PurchaseItemType extends AbstractType
     {
         $builder
 
-            ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')))
-            ->add('expirationEndDate','text', array('attr'=>array('class'=>'m-wrap span4 dateCalendar input','placeholder'=>'Expiry date','autoComplete'=>'off')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span2 input','placeholder'=>'MRP','autoComplete'=>'off')))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span2 input','placeholder'=>'PP')))
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span2 form-control input-number input','placeholder'=>'quantity')))
+            ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicinePurchase input','placeholder'=>'Enter stock medicine name')))
+            ->add('expirationEndDate','text', array('attr'=>array('class'=>'m-wrap span2 dateCalendar input','placeholder'=>'Expiry date','autoComplete'=>'off')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap purchase-input input','placeholder'=>'MRP','autoComplete'=>'off')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap purchase-input input','placeholder'=>'PP')))
+            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap purchase-input form-control input-number input','placeholder'=>'quantity')))
             ;
     }
     

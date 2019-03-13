@@ -78,8 +78,6 @@ class MedicinePurchaseRepository extends EntityRepository
         return  $qb;
     }
 
-
-
     public function updatePurchaseTotalPrice(MedicinePurchase $entity)
     {
         $em = $this->_em;
@@ -109,6 +107,17 @@ class MedicinePurchaseRepository extends EntityRepository
         $em->persist($entity);
         $em->flush();
         return $entity;
+    }
+
+    public function updateInvoiceMode(MedicinePurchase $entity)
+    {
+        $em = $this->_em;
+        $entity->setDue(0);
+        $entity->setDiscount(0);
+        $entity->setDiscountCalculation(0);
+        $entity->setNetTotal($entity->getSubTotal());
+        $em->persist($entity);
+        $em->flush();
     }
 
     public function checkInstantPurchaseToday(MedicineVendor $vendor)

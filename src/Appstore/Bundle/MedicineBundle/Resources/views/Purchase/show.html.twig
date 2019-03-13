@@ -131,7 +131,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="8" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
-                                            <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong> <span class="btn red mini">{{ entity.discountCalculation }}{% if entity.discountType != 'flat' %}%{% endif %}</span></td>
+                                            <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong> <span class="btn red mini">{{ entity.discountCalculation|number_format(2, '.', ',') }}{% if entity.discountType != 'flat' %}%{% endif %}</span></td>
                                         </tr>
                                         <tr>
                                             <td colspan="8" class="span9"><span class="pull-right"><strong>Payment TK.</strong> =</span></td>

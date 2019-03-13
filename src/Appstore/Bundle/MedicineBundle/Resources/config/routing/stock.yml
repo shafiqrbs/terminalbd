@@ -80,6 +80,12 @@ medicine_stock_search:
     options:
             expose: true
 
+medicine_stock_purchase_search:
+    path:     /purchase-search
+    defaults: { _controller: "MedicineBundle:MedicineStock:autoPurchaseStockSearch" }
+    options:
+            expose: true
+
 medicine_stock_name_search:
     path:     /search-name
     defaults: { _controller: "MedicineBundle:MedicineStock:autoNameSearch" }

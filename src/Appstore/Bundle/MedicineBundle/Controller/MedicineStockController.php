@@ -469,7 +469,7 @@ class MedicineStockController extends Controller
 
     public function autoSearchAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
             $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoComplete($item,$inventory);
@@ -477,9 +477,19 @@ class MedicineStockController extends Controller
         return new JsonResponse($item);
     }
 
+    public function autoPurchaseStockSearchAction(Request $request)
+    {
+        $item = trim($_REQUEST['q']);
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoPurchaseStock($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
     public function autoNameSearchAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
             $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchNameAutoComplete($item,$inventory);
@@ -496,7 +506,7 @@ class MedicineStockController extends Controller
     }
     public function autoSearchBrandAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
             $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoCompleteBrandName($item,$inventory);

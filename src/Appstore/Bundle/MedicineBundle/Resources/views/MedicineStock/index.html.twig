@@ -83,17 +83,19 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
-                                    <th class="numeric" >DAR</th>
+                                    {#<th class="numeric" >DAR</th>#}
                                     <th class="numeric" >Rack</th>
+                                    <th class="numeric" >Avg PP</th>
                                     <th class="numeric" >PP Tk.</th>
-                                    <th class="numeric" >MRP Tk.</th>
+                                    <th class="numeric" >Avg MRP</th>
+                                    <th class="numeric" >MRP</th>
                                    {# <th class="numeric" >Opening</th>#}
-                                    <th class="numeric" >Purchase Qnt</th>
+                                    <th class="numeric" >PP Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
-                                    <th class="numeric" >Stock Qnt</th>
-                                    <th class="numeric" >Min. Qnt</th>
+                                    <th class="numeric" >Stock</th>
+                                    <th class="numeric" >Pack</th>
+                                    <th class="numeric" >Min.</th>
                                     <th class="numeric" >Unit</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -101,27 +103,28 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr {% if entity.minQuantity > 0 and entity.remainingQuantity <= entity.minQuantity %} class="min" {% endif %}>
-                                        <td class="numeric" >{{ entity.sku }}</td>
                                         {% if entity.mode == 'medicine' %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% else %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% endif %}
-                                        <td>{% if entity.mode == 'medicine' and entity.medicineBrand is not empty %}{{ entity.medicineBrand.dar }}{% endif %}</td>
+                                       {# <td>{% if entity.mode == 'medicine' and entity.medicineBrand is not empty %}{{ entity.medicineBrand.dar }}{% endif %}</td>#}
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.rackNo is not empty %}{{ entity.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</a>
                                         </td>
+                                        <td class="numeric" >{{ entity.averagePurchasePrice|number_format }}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purchase price">{{ entity.purchasePrice }}</a>
                                             {% endif %}
                                         </td>
+                                        <td class="numeric" >{{ entity.averageSalesPrice|number_format }}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
                                             {% endif %}
                                         </td>
-                                    {#    <td class="numeric">
+                                        {# <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
                                             {% endif %}
@@ -129,11 +132,18 @@
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
+                                       <td class="numeric">
+                                            {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
+                                                <a  class="editable" data-name="pack" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change pack qnt">{{ entity.pack }}</a>
+                                            {% endif %}
+                                            {% if entity.pack > 1 and entity.remainingQuantity > entity.pack|default(1) %} => {{ entity.remainingQuantity/entity.pack|default(1) }}{% endif %}
+                                        </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                             {% endif %}
                                         </td>
+
                                         <td class="numeric" >{% if entity.unit is not empty %}{{ entity.unit.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}

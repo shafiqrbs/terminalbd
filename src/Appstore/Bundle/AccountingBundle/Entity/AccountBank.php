@@ -245,6 +245,13 @@ class AccountBank
      */
     private $branch;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="serviceCharge", type="float", nullable=true)
+     */
+    private $serviceCharge = 0;
+
 
     /**
      * @var string
@@ -668,6 +675,22 @@ class AccountBank
 	public function getToBalanceTransfer() {
 		return $this->toBalanceTransfer;
 	}
+
+    /**
+     * @return float
+     */
+    public function getServiceCharge()
+    {
+        return $this->serviceCharge;
+    }
+
+    /**
+     * @param float $serviceCharge
+     */
+    public function setServiceCharge(float $serviceCharge)
+    {
+        $this->serviceCharge = $serviceCharge;
+    }
 
 }
 

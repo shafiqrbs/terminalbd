@@ -53,18 +53,14 @@ class MedicineStockItemType extends AbstractType
             ))
             ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Qnt','autoComplete'=>'off')))
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span5 stockInput','placeholder'=>'Purchase price','autoComplete'=>'off')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
-            ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12 stockInput','placeholder'=>'Rack no','autoComplete'=>'off'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+            ->add('pack','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Pack qnt','autoComplete'=>'off')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span6 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
             ->add('unit', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
                 'empty_value' => '---Choose a unit ---',
-                'attr'=>array('class'=>'span6 select2 stockInput'),
+                'attr'=>array('class'=>'span12 select2 stockInput'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -74,9 +70,9 @@ class MedicineStockItemType extends AbstractType
             ->add('rackNo', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
-                'empty_value' => '---Rack position ---',
+                'empty_value' => '---Rack No ---',
                 'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span6 select2 stockInput'),
+                'attr'=>array('class'=>'m-wrap span12 select2 stockInput'),
                 'constraints' =>array( new NotBlank(array('message'=>'Select rack position')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')

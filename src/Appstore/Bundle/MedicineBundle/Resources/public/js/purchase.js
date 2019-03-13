@@ -41,11 +41,19 @@ $(document).on('change', '#purchaseItem_stockName', function() {
         success: function (response) {
             obj = JSON.parse(response);
             $('#purchaseItem_quantity').focus();
+            $('#pack').val(obj['pack']);
             $('#purchaseItem_salesPrice').val(obj['salesPrice']);
             $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
             $('#unit').html(obj['unit']);
         }
     })
+});
+
+$('form#purchaseItemForm').on('keyup', ' #pack , #purchaseItem_quantity', function (e) {
+    var pack = parseInt($('#pack').val());
+    var qnt = parseInt($('#purchaseItem_quantity').val());
+    var totalQnt = (pack * qnt);
+    $('#totalQnt').html(totalQnt);
 });
 
 $('#purchaseItem_stockName').on("select2-selecting", function (e) {
@@ -161,6 +169,13 @@ $('form#medicineStock').on('keypress', '.stockInput', function (e) {
 $('form#medicineStock').on('keyup', '#medicineStock_purchasePrice', function (e) {
     var mrp = $('#medicineStock_purchasePrice').val();
     $('#medicineStock_salesPrice').val(mrp);
+});
+
+$('form#medicineStock').on('keyup', ' #medicineStock_pack , #medicineStock_purchaseQuantity', function (e) {
+    var pack = parseInt($('#medicineStock_pack').val());
+    var qnt = parseInt($('#medicineStock_purchaseQuantity').val());
+    var totalQnt = (pack * qnt);
+    $('#stockTotalQnt').html(totalQnt);
 });
 
 var formStock = $("#medicineStock").validate({
@@ -355,9 +370,18 @@ $('#medicinepurchase_payment').click(function() {
     $('#medicinepurchase_payment').attr('value', '');
 });
 
+$('.invoice-mode').change(function() {
+    var mode = $(this).val();
+    if(mode === 'invoice'){
+        $('.invoiceMode').hide();
+        $('#due-input').toggle();
+    }else{
+        $(".invoiceMode").toggle();
+        $('#due-input').hide();
+    }
+});
 
 $(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount', function() {
-
     var payment     = parseInt($('#medicinepurchase_payment').val()  != '' ? $('#medicinepurchase_payment').val() : 0 );
     var due =  parseInt($('#paymentTotal').val());
     var dueAmount = (due-payment);

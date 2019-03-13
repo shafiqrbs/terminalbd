@@ -54,6 +54,7 @@
                                     <th class="numeric" >Service Name</th>
                                     <th class="numeric" >Authorised</th>
                                     <th class="numeric" >Account Type</th>
+                                    <th class="numeric" >Service Charge<span class="required">(%)</span></th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -65,6 +66,7 @@
                                         <td class="numeric" >{{ entity.serviceName }}</td>
                                         <td class="numeric" >{{ entity.authorised }}</td>
                                         <td class="numeric" >{{ entity.accountType }}</td>
+                                        <td class="numeric" >{{ entity.serviceCharge }}</td>
                                         <td class="numeric" >
                                             <a href="{{ path('accountmobilebank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>
                                             <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('accountmobilebank_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>

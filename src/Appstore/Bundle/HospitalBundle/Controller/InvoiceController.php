@@ -203,7 +203,7 @@ class InvoiceController extends Controller
             $discount = ($subTotal * $discountCalculation)/100;
             $total = ($subTotal  - $discount);
         }
-        if( $discount > 0 ){
+        if( $subTotal > $discount and $discount > 0 ){
               $entity->setDiscountType($discountType);
               $entity->setDiscountCalculation($discountCalculation);
               $entity->setDiscount($discount);

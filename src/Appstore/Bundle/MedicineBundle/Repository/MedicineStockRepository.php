@@ -169,7 +169,7 @@ class MedicineStockRepository extends EntityRepository
     public function findWithShortListSearch($config,$data)
     {
 
-        $item = isset($data['item'])? $data['item'] :'';
+        $name = isset($data['name'])? $data['name'] :'';
         $brand = isset($data['brandName'])? $data['brandName'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
         $minQnt = isset($data['minQnt'])? $data['minQnt'] :'';
@@ -186,9 +186,8 @@ class MedicineStockRepository extends EntityRepository
         if (!empty($brand)) {
             $qb->andWhere($qb->expr()->like("item.brandName", "'%$brand%'"  ));
         }
-        if (!empty($item)) {
-            $qb->andWhere("item.name = :name");
-            $qb->setParameter('name', $item);
+        if (!empty($name)) {
+             $qb->andWhere($qb->expr()->like("item.name", "'%$name%'"  ));
         }
         $qb->orderBy('item.name','ASC');
         $qb->getQuery();
@@ -244,7 +243,7 @@ class MedicineStockRepository extends EntityRepository
         }
     }
 
-    public function updateRemovePurchaseQuantity(MedicineStock $stock,$fieldName=''){
+    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName='', $pack = 1){
 
     	$em = $this->_em;
         if($fieldName == 'sales'){
@@ -261,6 +260,7 @@ class MedicineStockRepository extends EntityRepository
             $stock->setDamageQuantity($quantity);
         }else{
             $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseStockItemUpdate($stock);
+            $stock->setPack($pack);
             $stock->setPurchaseQuantity($qnt);
         }
         $em->persist($stock);
@@ -280,7 +280,10 @@ class MedicineStockRepository extends EntityRepository
     public function updatePurchasePrice(MedicineStock $stock,MedicinePurchaseItem $item)
     {
         $em = $this->_em;
+        $avg = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseSalesAvg($stock);
 	    $stock->setPurchasePrice($item->getPurchasePrice());
+        $stock->setAveragePurchasePrice($avg['purchase']);
+        $stock->setAverageSalesPrice($avg['sales']);
         $em->persist($stock);
         $em->flush();
     }
@@ -329,6 +332,24 @@ class MedicineStockRepository extends EntityRepository
         //$query->addSelect("CASE WHEN (e.strength IS NULL) THEN CONCAT(e.medicineForm,' ', e.name,' ',g.name, ' ', c.name)  ELSE CONCAT(e.medicineForm,' ',e.name, ' ',e.strength,' ', g.name,' ',c.name)  END as text");
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->orWhere($query->expr()->like("generic.name", "'%$q%'"  ));
+        $query->andWhere("ic.id = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchAutoPurchaseStock($q, MedicineConfig $config)
+    {
+
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->leftJoin('e.rackNo', 'rack');
+        $query->select('e.id as id');
+        $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN e.name  ELSE CONCAT(e.name,' => ', rack.name)  END as text");
+        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');

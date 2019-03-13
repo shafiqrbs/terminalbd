@@ -112,12 +112,19 @@ class MedicinePurchase
      */
     private $memo;
 
-    /**
+     /**
      * @var string
      *
      * @ORM\Column(name="mode", type="string", length=30, nullable=true)
      */
      private $mode ='general';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceMode", type="string", length = 20, nullable=true)
+     */
+     private $invoiceMode ='invoice';
 
     /**
      * @var string
@@ -815,6 +822,22 @@ class MedicinePurchase
 	public function setAccountVendor( $accountVendor ) {
 		$this->accountVendor = $accountVendor;
 	}
+
+    /**
+     * @return string
+     */
+    public function getInvoiceMode()
+    {
+        return $this->invoiceMode;
+    }
+
+    /**
+     * @param string $invoiceMode
+     */
+    public function setInvoiceMode(string $invoiceMode)
+    {
+        $this->invoiceMode = $invoiceMode;
+    }
 
 
 }

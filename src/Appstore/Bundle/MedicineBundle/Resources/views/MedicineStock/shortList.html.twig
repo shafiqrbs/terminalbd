@@ -48,7 +48,7 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span3">
-                                        <input type="text" id="name" name="name"  class="span12 m-wrap select2StockMedicine" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine & others name ">
+                                        <input type="text" id="name" name="name"  class="span12 m-wrap select2StockMedicineName" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine & others name ">
                                     </div>
                                     <div class="span3">
                                         <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap select2BrandName" value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
@@ -98,6 +98,7 @@
                                     <th class="numeric" >Receive Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
                                     <th class="numeric" >Stock Qnt</th>
+                                    <th class="numeric" >Pack</th>
                                     <th class="numeric" >Min. Qnt</th>
                                     <th class="numeric" >Unit</th>
                                 </tr>
@@ -118,6 +119,7 @@
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
+                                        <td class="numeric" >{% if entity.pack > 1 %}{{ entity.pack }} => {{ entity.minQuantity/entity.pack }}{% endif %}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>

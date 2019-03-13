@@ -151,7 +151,7 @@ class MedicineStock
      *
      * @ORM\Column(name="remainingQuantity", type="integer", nullable=true)
      */
-    private $remainingQuantity=0;
+    private $remainingQuantity = 0;
 
     /**
      * @var integer
@@ -172,14 +172,22 @@ class MedicineStock
      *
      * @ORM\Column(name="salesQuantity", type="integer", nullable=true)
      */
-    private $salesQuantity=0;
+    private $salesQuantity = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="salesReturnQuantity", type="integer", nullable=true)
      */
-    private $salesReturnQuantity=0;
+    private $salesReturnQuantity = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="pack", type="integer", nullable = true)
+     */
+    private $pack = 1;
+
 
     /**
      * @var integer
@@ -195,6 +203,13 @@ class MedicineStock
      */
     private $purchasePrice;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="averagePurchasePrice", type="float", nullable=true)
+     */
+    private $averagePurchasePrice;
+
 
     /**
      * @var float
@@ -202,6 +217,14 @@ class MedicineStock
      * @ORM\Column(name="salesPrice", type="float",  nullable=true)
      */
     private $salesPrice;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="averageSalesPrice", type="float", nullable=true)
+     */
+    private $averageSalesPrice;
+
 
     /**
      * @var boolean
@@ -659,6 +682,54 @@ class MedicineStock
     public function getMedicineSalesReturns()
     {
         return $this->medicineSalesReturns;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPack()
+    {
+        return $this->pack;
+    }
+
+    /**
+     * @param int $pack
+     */
+    public function setPack(int $pack)
+    {
+        $this->pack = $pack;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAverageSalesPrice()
+    {
+        return $this->averageSalesPrice;
+    }
+
+    /**
+     * @param float $averageSalesPrice
+     */
+    public function setAverageSalesPrice(float $averageSalesPrice)
+    {
+        $this->averageSalesPrice = $averageSalesPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAveragePurchasePrice()
+    {
+        return $this->averagePurchasePrice;
+    }
+
+    /**
+     * @param float $averagePurchasePrice
+     */
+    public function setAveragePurchasePrice(float $averagePurchasePrice)
+    {
+        $this->averagePurchasePrice = $averagePurchasePrice;
     }
 
 

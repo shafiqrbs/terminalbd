@@ -75,6 +75,14 @@ class AccountBkash
 
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="serviceCharge", type="float", nullable=true)
+     */
+    private $serviceCharge = 0;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
@@ -307,6 +315,22 @@ class AccountBkash
     public function setMobile($mobile)
     {
         $this->mobile = $mobile;
+    }
+
+    /**
+     * @return float
+     */
+    public function getServiceCharge()
+    {
+        return $this->serviceCharge;
+    }
+
+    /**
+     * @param float $serviceCharge
+     */
+    public function setServiceCharge(float $serviceCharge)
+    {
+        $this->serviceCharge = $serviceCharge;
     }
 
 

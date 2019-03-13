@@ -252,8 +252,7 @@ class MedicineBrandController extends Controller
 
     public function selectSearchMedicineAction(Request $request)
     {
-        $item = $_REQUEST['q'];
-        $items = array();
+        $item = trim($_REQUEST['q']);
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
         }
@@ -263,7 +262,7 @@ class MedicineBrandController extends Controller
 
     public function autoSearchGenericAction(Request $request)
     {
-        $item = $_REQUEST['term'];
+        $item = trim($_REQUEST['term']);
         $items = array();
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineAutoComplete($item);
@@ -285,7 +284,7 @@ class MedicineBrandController extends Controller
 
     public function searchBrandNameAutoCompleteAction(Request $request)
     {
-        $item = $_REQUEST['term'];
+        $item = trim($_REQUEST['term']);
         $items = array();
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchBrandNameAutoComplete($item);
@@ -298,7 +297,7 @@ class MedicineBrandController extends Controller
 
     public function searchCompanyNameAutoCompleteAction(Request $request)
     {
-        $item = $_REQUEST['term'];
+        $item = trim($_REQUEST['term']);
         $items = array();
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchCompanyNameAutoComplete($item);
@@ -311,7 +310,7 @@ class MedicineBrandController extends Controller
 
     public function searchGenericNameAutoCompleteAction(Request $request)
     {
-        $item = $_REQUEST['term'];
+        $item = trim($_REQUEST['term']);
         $items = array();
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchGenericNameAutoComplete($item);
@@ -324,7 +323,7 @@ class MedicineBrandController extends Controller
 
     public function searchMedicineGenericNameAutoCompleteAction(Request $request)
     {
-        $item = $_REQUEST['term'];
+        $item = trim($_REQUEST['term']);
         $items = array();
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchMedicineGenericAutoComplete($item);
@@ -339,7 +338,7 @@ class MedicineBrandController extends Controller
 
     public function searchPackSizeAutoCompleteAction(Request $request)
     {
-        $item = $_REQUEST['term'];
+        $item = trim($_REQUEST['term']);
         $items = array();
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchPackSizeAutoComplete($item);
@@ -352,7 +351,7 @@ class MedicineBrandController extends Controller
 
     public function searchStrengthAutoCompleteAction(Request $request)
     {
-        $item = $_REQUEST['term'];
+        $item = trim($_REQUEST['term']);
         $items = array();
         if ($item) {
             $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->searchStrengthAutoComplete($item);
