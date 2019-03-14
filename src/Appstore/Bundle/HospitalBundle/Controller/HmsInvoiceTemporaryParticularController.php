@@ -141,14 +141,15 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $discount = ($subTotal * $discount)/100;
             $initialGrandTotal = ($subTotal  - $discount);
         }
-
-        $data = array(
-            'subTotal' => $subTotal,
-            'initialGrandTotal' => $initialGrandTotal,
-            'initialDiscount' => $discount,
-            'success' => 'success'
-        );
-        return new Response(json_encode($data));
+        if($subTotal > $discount){
+            $data = array(
+                'subTotal' => $subTotal,
+                'initialGrandTotal' => $initialGrandTotal,
+                'initialDiscount' => $discount,
+                'success' => 'success'
+            );
+            return new Response(json_encode($data));
+        }
         exit;
 
     }
