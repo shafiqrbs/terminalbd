@@ -1,117 +1,78 @@
-{% extends ':bindu:base.html.twig' %}
+{% extends "login.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
 {% block body %}
-    <div id="tm-page-body">
-        <div id="tm-template-default-fullwidth" class="tm-container">
-            <div class="page-content">
-                <div class="page-content-inner tm-content">
+    <!-- BEGIN LOGO -->
+    <div class="logo">
+        <img src="../../assets/frontend/img/bdeducations.png" height="80" width="200" alt="" />
+    </div>
+    <!-- END LOGO -->
+    <!-- BEGIN LOGIN -->
+    <div class="content">
+        <!-- BEGIN LOGIN FORM -->
+        <form class="form-vertical login-form" action="{{ path("fos_user_security_check") }}" method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+        <h3 class="form-title">Login to your account</h3>
+        <div class="alert alert-error hide">
+            <button class="close" data-close="alert"></button>
+                <span>
+                {% if error %}
+                    {{ error.messageKey|trans(error.messageData) }}
+                {% else %}
+                    Enter any username and password.
+                {% endif %}
+                </span>
+        </div>
 
-                    <div class="tm-row" style="text-align:center;padding:50px 0 100px 0;background:#eee;">
-                        <div class="tm-wrap">
-                            <h1>Sign in   {{ app.user }}</h1>
-
-                        </div>
-                    </div>
-
-                    <div class="tm-row" style="margin:-50px 0 0 0">
-                        <div class="tm-wrap">
-                            <div class="one-third">
-                                <div style="padding-top:100px">
-
-                                </div>
-                            </div>
-                            <div class="one-third">
-                                <div id="container-form">
-                                    <div class="entry-container" style="padding-bottom: 25px">
-                                        <section id="tm-comment">
-                                            <section id="respond">
-
-                                                <!-- BEGIN FORM-->
-                                                <form class="form-vertical login-form" id="commentform" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
-                                                    {% if(error) %}
-                                                         <div class="tm-alert error">
-                                                            <strong>Error</strong> &ndash; {{ error }}
-                                                        </div>
-                                                    {% endif  %}
-                                                    {% for flashMessage in app.session.flashbag.get('success') %}
-                                                        <div class="tm-alert success">
-                                                            <strong>Success</strong> &ndash; {{ flashMessage }}
-                                                        </div>
-                                                    {% endfor %}
-                                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
-                                                    <div>
-                                                        <p><span class="fa-icon"><i class="fa  fa-mobile"></i></span>
-                                                            <input type="text" id="_username" name="_username" required="required" class="" placeholder="Enter your mobile no/user name">
-                                                        </p>
-                                                    </div>
-                                                    <div>
-                                                        <p><span class="fa-icon"><i class="fa  fa-lock"></i></span>
-                                                            <input type="password" id="_password" name="_password" required="required" class="" placeholder="Enter your password">
-                                                        </p>
-                                                    </div>
-                                                    <div>
-                                                        <div class="checkbox block">
-                                                            <input type="checkbox" id="remember" name="_remember_me" checked="checked" /><label style="width: auto; line-height: 32px; color: #ffffff">&nbsp;&nbsp;Remember me</label>
-                                                        </div>
-                                                        <p class="form-suphobmit" style="float: right">{#<span class="fa-icon"><i class="fa  fa-lock"></i></span>#}<input id="signup" class="tm-btn light small" type="submit" value="Login" name="submit"></p>
-                                                    </div>
-
-                                                </form>
-                                                <div class="clear"></div>
-                                                <blockquote class="tm-style2-overwrite">
-                                                    <div class="forget-password">
-                                                        <h4>Forgot your password ?</h4>
-                                                        <p>
-                                                            no worries, click <a href="{{ path('fos_user_resetting_request') }}"  id="forget-password1">here</a>
-                                                            to reset your password.
-                                                        </p>
-                                                    </div>
-                                                    <div class="create-account">
-                                                        <p>
-                                                            Don't have an account yet ?&nbsp;
-                                                            <a href="{{ path('bindu_homepage')  }}" id="register-btn1" >Create an account</a>
-                                                        </p>
-                                                    </div>
-                                                </blockquote>
-
-                                            </section>
-                                        </section>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="one-third last">
-                                <div style="padding-top:100px">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+        <div class="control-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="control-label visible-ie8 visible-ie9">Username</label>
+            <div class="controls">
+                <div class="input-icon left">
+                    <i class="icon-user"></i>
+                    <input class="m-wrap placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" id="username" name="_username" value="{{ last_username }}"/>
                 </div>
             </div>
-            <!--page-content-->
         </div>
-        <!--tm-container-->
+        <div class="control-group">
+            <label class="control-label visible-ie8 visible-ie9">Password</label>
+            <div class="controls">
+                <div class="input-icon left">
+                    <i class="icon-lock"></i>
+                    <input class="m-wrap placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" id="password" name="_password"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <label class="checkbox">
+                <input type="checkbox" id="remember" name="_remember_me" value="on"/> Remember me
+            </label>
+            <input type="submit" id="submit" name="_submit" value="{{ 'security.login.submit'|trans }}"
+                    class="btn blue pull-right">
+                    Login <i class="m-icon-swapright m-icon-white"></i>
+            </button>
+        </div>
+        <div class="forget-password">
+            <h4>Forgot your password ?</h4>
+            <p>
+                no worries, click <a href="{{ path('fos_user_resetting_request') }}"  id="forget-password1">here</a>
+                to reset your password.
+            </p>
+        </div>
+        <div class="create-account">
+            <p>
+                Don't have an account yet ?&nbsp;
+                <a href="/signup" id="register-btn1" >Create an account</a>
+            </p>
+        </div>
+    </form>
     </div>
-{% endblock %}
+    <!-- END LOGIN -->
+    <!-- BEGIN COPYRIGHT -->
+    <div class="copyright">
+        {{ "now"|date('Y') }} &copy; Business Booster Ltd.
+    </div>
 
-{% block documentready %}
-
-    $('#commentform').validate({
-
-            rules: {
-                _username: {
-                    required: true
-                },
-                _password: {
-                    required: true
-                },
-            },
-            messages:{
-
-            },
-            submitHandler: function(form) {
-                form.submit();
-            }
-
-        });
-{% endblock %}
+    <!-- END COPYRIGHT -->
+{% endblock body %}

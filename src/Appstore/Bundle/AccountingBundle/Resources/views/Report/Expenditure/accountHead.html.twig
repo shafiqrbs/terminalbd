@@ -31,8 +31,11 @@
                         <div class="spn5" id="message"></div>
                         <div class="actions">
                             <div class="btn-group">
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate :"now"|date('d-m-y') %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date('d-m-y') %}
                                 <a class="btn blue" href="{{ path('report_expenditure_category') }}"><i class="icon-th-list"></i>&nbsp;Category</a>
                                 <a class="btn black" href="{{ path('report_expenditure_details') }}"><i class="icon-th-list"></i>&nbsp;Details</a>
+                                <a class="btn red" href="{{ path('report_expenditure_summary',{'pdf':'pdf','startDate':startDate,'endDate':endDate}) }}"><i class="icon-download-alt"></i>&nbsp;Download PDF</a>
                             </div>
                         </div>
                     </div>
@@ -41,13 +44,8 @@
                             {% include('flash-message.html.twig') %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span4">
-
-                                    </div>
+                                    <div class="span6"></div>
                                     <div class="span3">
-                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin" value="{% if searchForm.toUser is defined and searchForm.toUser is not empty %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
-                                    </div>
-                                    <div class="span2">
                                         <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  date-picker" value="{% if searchForm.startDate is defined and searchForm.startDate is not empty %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">

@@ -19,11 +19,9 @@ class DefaultController extends Controller
 
     public function landingAction()
     {
-
-
         $user = $this->getUser();
         if(empty($user)){
-            return $this->redirect($this->generateUrl('bindu_homepage'));
+            return $this->redirect($this->generateUrl('fos_user_security_login'));
         }
         $globalOption = $user->getGlobalOption();
         if( $user->getGlobalOption()){

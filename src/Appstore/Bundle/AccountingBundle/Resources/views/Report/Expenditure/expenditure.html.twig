@@ -33,8 +33,16 @@
                         <div class="spn5" id="message"></div>
                         <div class="actions">
                             <div class="btn-group">
-                               <a class="btn yellow" href="{{ path('report_expenditure_summary') }}"><i class="icon-th-list"></i>&nbsp; Summary</a>
+                                {% set transactionMethod = searchForm.transactionMethod is defined ? searchForm.transactionMethod :'' %}
+                                {% set accountHead = searchForm.accountHead is defined ? searchForm.accountHead :"" %}
+                                {% set category = searchForm.category is defined ? searchForm.category :"" %}
+                                {% set toUser = searchForm.toUser is defined ? searchForm.toUser :"" %}
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate :"now"|date('d-m-y') %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date('d-m-y') %}
+                                <a class="btn yellow" href="{{ path('report_expenditure_summary') }}"><i class="icon-th-list"></i>&nbsp; Summary</a>
                                 <a class="btn blue" href="{{ path('report_expenditure_category') }}"><i class="icon-th-list"></i>&nbsp;Category</a>
+                                <a class="btn red" href="{{ path('report_expenditure_details',{'pdf':'pdf','transactionMethod':transactionMethod,'accountHead':accountHead,'category':category,'toUser':toUser,'startDate':startDate,'endDate':endDate}) }}"><i class="icon-download-alt"></i>&nbsp;Download PDF</a>
+
                             </div>
                         </div>
                     </div>

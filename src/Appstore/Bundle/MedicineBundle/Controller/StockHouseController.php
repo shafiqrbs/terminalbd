@@ -203,7 +203,6 @@ class StockHouseController extends Controller
         return $form;
     }
 
-
     /**
      * Finds and displays a Vendor entity.
      *
@@ -232,7 +231,8 @@ class StockHouseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-        if($config == $entity->getMedicineConfig()->getId()){
+        $remainingQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStockHouse')->getStockRemainingQnt($entity->getMedicineStock(),$entity->getWearHouse());
+        if($config == $entity->getMedicineConfig()->getId() and $remainingQnt >= $entity->getStockIn()){
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

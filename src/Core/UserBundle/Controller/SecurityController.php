@@ -21,6 +21,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class SecurityController extends Controller
 {
+
     public function loginAction(Request $request)
     {
 
@@ -65,13 +66,10 @@ class SecurityController extends Controller
         if ($error) {
             $error = $error->getMessage();
         }
-       // echo var_dump($error);
-       // exit;
 	    $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
 	    $apps =$this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1));
 	    $clients =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain();
 	    $testimonials =$this->getDoctrine()->getRepository('SettingContentBundle:Testimonial')->findBy(array('status'=>1));
-
 	    return $this->renderLogin(array(
             'last_username'         => $lastUsername,
             'error'                 => $error,
@@ -99,12 +97,13 @@ class SecurityController extends Controller
 		    $theme = 'Security/Mobile';
 		    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
 	    }else{
-		    $theme = 'Frontend/Desktop';
-		    return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
+		   // $theme = 'Frontend/Desktop';
+		   // return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
+            $theme = 'Security';
+            return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
 	    }
 
     }
-
 
     public function domainLoginAction($subdomain,Request $request)
     {
@@ -191,8 +190,6 @@ class SecurityController extends Controller
         return $this->render('FrontendBundle:'.$theme.':login.html.twig', $data);
     }
 
-
-
     public function checkAction()
     {
         throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
@@ -200,6 +197,10 @@ class SecurityController extends Controller
 
     public function logoutAction()
     {
+
         throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+       // return $this->render('FrontendBundle:'.$theme.':login.html.twig', $data);
+       // return $this->render('UserBundle:Security:login.html.twig', $data);
+
     }
 }

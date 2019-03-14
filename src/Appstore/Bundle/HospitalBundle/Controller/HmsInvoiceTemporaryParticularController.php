@@ -154,7 +154,6 @@ class HmsInvoiceTemporaryParticularController extends Controller
 
     }
 
-
     public function particularSearchAction(Particular $particular)
     {
         return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
