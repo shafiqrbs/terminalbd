@@ -35,6 +35,11 @@ class RestaurantConfig
     private $particulars;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary", mappedBy="restaurantConfig")
+     **/
+    private $restaurantTemp;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="restaurantConfig")
      **/
     private $invoices;

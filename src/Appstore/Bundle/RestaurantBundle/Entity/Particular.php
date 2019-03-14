@@ -56,6 +56,12 @@ class Particular
     private $invoiceParticulars;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary", mappedBy="particular" )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private $restaurantTemp;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem", mappedBy="particular" )
      **/
     private $purchaseItems;

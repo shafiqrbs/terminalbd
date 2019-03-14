@@ -85,11 +85,6 @@ class Particular
     private $department;
 
     /**
-     * @ORM\OneTomany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="assignDoctor")
-     **/
-    private $doctorInvoices;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="assignDoctor")
      **/
     private $assignDoctorInvoices;
