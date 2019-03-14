@@ -85,6 +85,11 @@ class MedicineStock
     private $rackNo;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStockHouse", mappedBy="medicineStock")
+     **/
+    private $stockHouses;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticular", inversedBy="accessoriesStockBrand")
      **/
     private $accessoriesBrand;

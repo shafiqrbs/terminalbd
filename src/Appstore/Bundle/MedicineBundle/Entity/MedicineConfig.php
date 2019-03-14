@@ -35,6 +35,11 @@ class MedicineConfig
     private $medicineStock;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStockHouse", mappedBy="medicineConfig")
+     **/
+    private $stockHouses;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineMinimumStock", mappedBy="medicineConfig")
      **/
     private $medicineMinimumStock;

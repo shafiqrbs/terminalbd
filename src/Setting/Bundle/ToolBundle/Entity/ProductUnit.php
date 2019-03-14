@@ -68,6 +68,11 @@ class ProductUnit
     private $medicineStocks;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStockHouse", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $stockHouses;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineMinimumStock", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $medicineMinimumStock;

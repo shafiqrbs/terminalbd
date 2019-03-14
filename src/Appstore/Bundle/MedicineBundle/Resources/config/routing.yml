@@ -42,6 +42,10 @@ medicine_medicine_prepurchase:
     resource: "@MedicineBundle/Resources/config/routing/prepurchase.yml"
     prefix:   /pre-purchase
 
+medicine_medicine_stockhouse:
+    resource: "@MedicineBundle/Resources/config/routing/stockhouse.yml"
+    prefix:   /stock-wear-house
+
 medicine_medicine_instantpurchase:
     resource: "@MedicineBundle/Resources/config/routing/instantpurchase.yml"
     prefix:   /instant-purchase

@@ -178,7 +178,7 @@ class MedicineSales
      *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
-    private $subTotal;
+    private $subTotal = 0;
 
 
     /**
@@ -186,7 +186,7 @@ class MedicineSales
      *
      * @ORM\Column(name="discount", type="float", nullable=true)
      */
-    private $discount;
+    private $discount = 0;
 
 
     /**
@@ -333,7 +333,7 @@ class MedicineSales
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getSubTotal()
     {
@@ -341,7 +341,7 @@ class MedicineSales
     }
 
     /**
-     * @param string $subTotal
+     * @param float $subTotal
      */
     public function setSubTotal($subTotal)
     {
@@ -349,7 +349,7 @@ class MedicineSales
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getDiscount()
     {
@@ -357,7 +357,7 @@ class MedicineSales
     }
 
     /**
-     * @param string $discount
+     * @param float $discount
      */
     public function setDiscount($discount)
     {
@@ -365,7 +365,7 @@ class MedicineSales
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getVat()
     {
@@ -373,7 +373,7 @@ class MedicineSales
     }
 
     /**
-     * @param string $vat
+     * @param float $vat
      */
     public function setVat($vat)
     {
@@ -381,7 +381,7 @@ class MedicineSales
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getTotal()
     {
@@ -389,7 +389,7 @@ class MedicineSales
     }
 
     /**
-     * @param string $total
+     * @param float $total
      */
     public function setTotal($total)
     {

@@ -192,7 +192,7 @@ class AccountBankController extends Controller
             $name = $entity->getBank()->getName().','.$entity->getBranch();
             $entity->setName($name);
             $em->flush();
-            return $this->redirect($this->generateUrl('accountbank_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('accountbank'));
         }
 
         return $this->render('AccountingBundle:AccountBank:new.html.twig', array(

@@ -856,6 +856,11 @@ class User extends BaseUser
 	 */
 	protected $medicinePurchasesReturnApprovedBy;
 
+    /**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStockHouse", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $stockHouses;
+
 
 	/*=========================== BUSINESS BUNDLE ====================================*/
 

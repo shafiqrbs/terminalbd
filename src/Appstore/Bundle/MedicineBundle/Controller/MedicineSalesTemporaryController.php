@@ -27,7 +27,6 @@ class MedicineSalesTemporaryController extends Controller
 
     public function newAction()
     {
-
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getMedicineConfig();
         $entity = new MedicineSales();
@@ -107,16 +106,28 @@ class MedicineSalesTemporaryController extends Controller
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
             $entity->setCustomer($customer);
-
         } elseif (!empty($data['mobile'])) {
-
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
             $entity->setCustomer($customer);
-
         }
         $entity->setSubTotal(round($data['salesSubTotal']));
         $entity->setNetTotal(round($data['salesNetTotal']));
+        if($entity->getTransactionMethod()->getSlug() == 'mobile' and !empty($entity->getAccountMobileBank()) and !empty($entity->getAccountMobileBank()->getServiceCharge())){
+            $serviceCharge = $entity->getAccountMobileBank()->getServiceCharge();
+            $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
+            $discount = ($entity -> getDiscount() + $totalServiceCharge);
+            $entity->setDiscount($discount);
+            $entity->setNetTotal($data['salesSubTotal'] - $discount);
+            $entity->setReceived($data['salesSubTotal'] - $discount);
+        }elseif($entity->getTransactionMethod()->getSlug() == 'bank' and !empty($entity->getAccountBank()) and !empty($entity->getAccountBank()->getServiceCharge())){
+            $serviceCharge = $entity->getAccountBank()->getServiceCharge();
+            $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
+            $discount = ($entity -> getDiscount() + $totalServiceCharge);
+            $entity->setDiscount($discount);
+            $entity->setNetTotal($data['salesSubTotal'] - $discount);
+            $entity->setReceived($data['salesSubTotal'] - $discount);
+        }
         if ($entity->getNetTotal() <= $entity->getReceived()) {
             $entity->setReceived($entity->getNetTotal());
             $entity->setPaymentStatus('Paid');
@@ -125,7 +136,6 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setPaymentStatus('Due');
             $entity->setDue($entity->getNetTotal() - $entity->getReceived());
         }
-
         if (isset($data['process']) and ($data['process'] == 'Hold')) {
             $entity->setProcess('Hold');
         } else {

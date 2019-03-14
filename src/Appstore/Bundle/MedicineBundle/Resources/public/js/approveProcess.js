@@ -473,6 +473,44 @@ $(".select2StockMedicinePurchase").select2({
 
 });
 
+$(".select2Stockout").select2({
+
+    placeholder: "Search stock medicine out name",
+    ajax: {
+        url: Routing.generate('medicine_stockhouse_search'),
+        dataType: 'json',
+        delay: 100,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
+    formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var id = $(element).val();
+        $.ajax(Routing.generate('medicine_stock_name', { stock : id}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+
+});
+
 $(".select2StockMedicineName").select2({
 
     placeholder: "Search stock medicine name",

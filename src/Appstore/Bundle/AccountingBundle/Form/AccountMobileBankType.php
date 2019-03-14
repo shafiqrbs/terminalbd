@@ -50,7 +50,9 @@ class AccountMobileBankType extends AbstractType
                     new NotBlank(array('message'=>'Please input required'))
                 ),
             ))
-            ->add('serviceCharge','number', array('attr'=>array('class'=>'m-wrap span12','maxLength' => 2 ,'placeholder'=>'Service charge')))
+            ->add('serviceCharge','text', array('attr'=>array('class'=>'m-wrap span12','maxLength' => 5 ,'placeholder'=>'Service charge')
+            ,'constraints' =>array(new NotBlank(array('message'=>'Please input required'))),
+            ))
             ->add('accountType', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'choices' => array(

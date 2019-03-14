@@ -186,11 +186,11 @@ function jqueryTemporaryLoad() {
     $(document).on('change', '.quantity , .salesPrice', function() {
 
         var id = $(this).attr('data-id');
-
         var quantity = parseFloat($('#quantity-'+id).val());
         var price = parseFloat($('#salesPrice-'+id).val());
         var subTotal  = (quantity * price);
         $("#subTotal-"+id).html(subTotal);
+
         $.ajax({
             url: Routing.generate('medicine_sales_temporary_item_update'),
             type: 'POST',
@@ -294,7 +294,7 @@ function jqueryTemporaryLoad() {
     });
 
 
-    $(document).on('change', '#salesTemporary_received', function() {
+    $(document).on('keyup', '#salesTemporary_received', function() {
 
         var payment     = parseInt($('#salesTemporary_received').val()  != '' ? $('#salesTemporary_received').val() : 0 );
         var discount     = parseInt($('#salesTemporary_discount').val()  != '' ? $('#salesTemporary_discount').val() : 0 );
@@ -315,19 +315,10 @@ function jqueryTemporaryLoad() {
     $('form#salesTemporaryForm').on('keypress', '.salesInput', function (e) {
 
         if (e.which === 13) {
-            var inputs = $(this).parents("form").eq(0).find("input,select");
-            var idx = inputs.index(this);
-            if (idx == inputs.length - 1) {
-                inputs[0].select()
-            } else {
-                inputs[idx + 1].focus(); //  handles submit buttons
-            }
             switch (this.id) {
-
                 case 'salesTemporary_discountCalculation':
                     $('#salesTemporary_received').focus();
                     break;
-
                 case 'salesTemporary_received':
                     $('#receiveBtn').focus();
                     break;
@@ -337,6 +328,7 @@ function jqueryTemporaryLoad() {
     });
 
     $(document).on("click", "#receiveBtn", function() {
+
         $('#buttonType').val('receiveBtn');
         $('#confirm-content').confirmModal({
             topOffset: 0,
@@ -369,6 +361,7 @@ function jqueryTemporaryLoad() {
     });
 
     $(document).on("click", "#posBtn", function() {
+
         $('#buttonType').val('posBtn');
         $('#confirm-content').confirmModal({
             topOffset: 0,

@@ -66,7 +66,7 @@ class InvoiceType extends AbstractType
                         ->orderBy("e.name","ASC");
                 }
             ))
-            ->add('discount','hidden')
+            ->add('discount','hidden',array('attr'=>array('class'=>'discount')))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             /*->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),

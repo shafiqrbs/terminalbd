@@ -157,7 +157,7 @@ class AccountMobileBankController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountMobileBankType($globalOption), $entity, array(
-            'action' => $this->generateUrl('accountmobilebank_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('accountmobilebank'),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -167,28 +167,21 @@ class AccountMobileBankController extends Controller
         return $form;
     }
 
-
     /**
      * Edits an existing AccountMobileBank entity.
      * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
 
-
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('AccountingBundle:AccountMobileBank')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountMobileBank entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
-
             $name = $entity->getMobile().','.$entity->getServiceName();
             $entity->setName($name);
             $em->flush();

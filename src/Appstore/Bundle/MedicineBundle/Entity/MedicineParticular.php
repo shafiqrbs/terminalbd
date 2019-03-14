@@ -31,18 +31,20 @@ class MedicineParticular
      */
     protected $particularType;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="rackNo")
      */
     protected $medicineStockRacks;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStockHouse", mappedBy="wearHouse")
+     */
+    protected $stockHouses;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="accessoriesBrand")
      */
     protected $accessoriesStockBrand;
-
 
     /**
      * @var string
