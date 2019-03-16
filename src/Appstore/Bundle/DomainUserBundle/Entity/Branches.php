@@ -5,7 +5,9 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
@@ -96,6 +98,16 @@ class Branches
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="branches" )
      **/
     private  $accountSales;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment", mappedBy="branches" )
+     **/
+    private  $accountSalesAdjustment;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="branches" )
+     **/
+    private  $accountPurchaseCommission;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="branches" )
@@ -466,6 +478,22 @@ class Branches
 	public function getBalanceTransfer() {
 		return $this->balanceTransfer;
 	}
+
+    /**
+     * @return AccountSalesAdjustment
+     */
+    public function getAccountSalesAdjustment()
+    {
+        return $this->accountSalesAdjustment;
+    }
+
+    /**
+     * @return AccountPurchaseCommission
+     */
+    public function getAccountPurchaseCommission()
+    {
+        return $this->accountPurchaseCommission;
+    }
 
 
 }

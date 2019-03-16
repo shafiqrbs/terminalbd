@@ -14,6 +14,14 @@ accounting_account_sales_restaurant:
     resource: "@AccountingBundle/Resources/config/routing/accountrestaurant.yml"
     prefix:   /restaurant
 
+accounting_account_sales_adjustment:
+    resource: "@AccountingBundle/Resources/config/routing/accountsalesadjustment.yml"
+    prefix:   /sales-adjustment
+
+accounting_account_purchase_commission:
+    resource: "@AccountingBundle/Resources/config/routing/purchasecommission.yml"
+    prefix:   /sales-adjustment
+
 accounting_account_business:
     resource: "@AccountingBundle/Resources/config/routing/accountbusiness.yml"
     prefix:   /business

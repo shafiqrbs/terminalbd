@@ -7,6 +7,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
@@ -576,7 +577,6 @@ class TransactionRepository extends EntityRepository
 	    $this->salesTransaction($entity,$accountSales);
     }
 
-
     private function insertSalesItem(Sales $entity , AccountSales $accountSales)
     {
         $amount =  $entity->getPurchasePrice();
@@ -742,6 +742,67 @@ class TransactionRepository extends EntityRepository
         $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(35));
         $transaction->setAmount('-'.$entity->getTotal());
         $transaction->setCredit($entity->getTotal());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+
+    }
+
+    public function salesAdjustmentTransaction(AccountSalesAdjustment $entity)
+    {
+        $this->insertSalesAdjustmentDebit($entity);
+        $this->insertSalesAdjustmentCredit($entity);
+    }
+
+    private function insertSalesAdjustmentDebit(AccountSalesAdjustment $entity)
+    {
+
+        $amount = $entity->getSales();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($entity->getGlobalOption());
+            if(!empty($entity->getBranches())){
+                $transaction->setBranches($entity->getBranches());
+            }
+            $transaction->setAccountRefNo($entity->getAccountRefNo());
+            $transaction->setProcessHead('SalesAdjustment');
+            $transaction->setUpdated($entity->getUpdated());
+
+            /* Cash - Cash various */
+            if($entity->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $transaction->setProcess('Current Assets');
+            }elseif($entity->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+                $transaction->setProcess('Cash');
+            }
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+
+    }
+
+    private function insertSalesAdjustmentCredit(AccountSalesAdjustment $entity)
+    {
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getBranches())){
+            $transaction->setBranches($entity->getBranches());
+        }
+        $transaction->setAccountRefNo($entity->getAccountRefNo());
+        $transaction->setProcessHead('SalesAdjustment');
+        $transaction->setProcess('Cash');
+        /* Cash - Sales Adjustment Payment Account */
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(61));
+        $transaction->setAmount('-'.$entity->getSales());
+        $transaction->setCredit($entity->getSales());
         $this->_em->persist($transaction);
         $this->_em->flush();
 

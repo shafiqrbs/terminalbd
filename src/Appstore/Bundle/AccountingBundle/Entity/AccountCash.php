@@ -98,6 +98,12 @@ class AccountCash
     protected $accountSales;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment", inversedBy="accountCash")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $accountSalesAdjustment;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", inversedBy="accountCash")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
@@ -708,6 +714,14 @@ class AccountCash
 	public function setToUser( $toUser ) {
 		$this->toUser = $toUser;
 	}
+
+    /**
+     * @return AccountSalesAdjustment
+     */
+    public function getAccountSalesAdjustment()
+    {
+        return $this->accountSalesAdjustment;
+    }
 
 
 }

@@ -3,6 +3,7 @@
 namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Branch;
@@ -424,6 +425,26 @@ class User extends BaseUser
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="approvedBy" , cascade={"persist", "remove"} )
 	 */
 	protected $salesApprove;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment", mappedBy="createdBy" , cascade={"persist", "remove"} )
+	 */
+	protected $salesAdjustment;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+	 */
+	protected $salesAdjustmentApprove;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="createdBy" , cascade={"persist", "remove"} )
+	 */
+	protected $purchaseCommission;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+	 */
+	protected $purchaseCommissionApprove;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", mappedBy="createdBy" , cascade={"persist", "remove"} )
@@ -1775,6 +1796,22 @@ class User extends BaseUser
     public function getRestaurantTemps()
     {
         return $this->restaurantTemps;
+    }
+
+    /**
+     * @return AccountSalesAdjustment
+     */
+    public function getSalesAdjustment()
+    {
+        return $this->salesAdjustment;
+    }
+
+    /**
+     * @return AccountSalesAdjustment
+     */
+    public function getSalesAdjustmentApprove()
+    {
+        return $this->salesAdjustmentApprove;
     }
 
 

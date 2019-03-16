@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
@@ -173,6 +174,31 @@ class AccountSalesRepository extends EntityRepository
         $result = $qb->getQuery();
         return $result;
 
+    }
+
+    public function insertSalesAdjustment(AccountSalesAdjustment $entity)
+    {
+        $accountSales = new AccountSales();
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setAccountBank($entity->getAccountBank());
+        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
+        $accountSales->setGlobalOption($entity->getGlobalOption());
+        $defaultCustomer = $this->_em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$entity->getGlobalOption(),'name'=>'Default'));
+        $accountSales->setCustomer($defaultCustomer);
+        $accountSales->setTransactionMethod($entity->getTransactionMethod());
+        $accountSales->setTotalAmount($entity->getSales());
+        $accountSales->setAmount($entity->getSales());
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setSourceInvoice($entity->getAccountRefNo());
+        $accountSales->setProcessHead('Sales-Adjustment');
+        $accountSales->setProcessType('Sales-Adjustment');
+        $accountSales->setProcess('approved');
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
     }
 
     public function customerSingleOutstanding($globalOption,$customer)

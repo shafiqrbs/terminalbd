@@ -238,7 +238,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->select('AVG(e.purchasePrice) AS purchase');
         $qb->addSelect('AVG(e.salesPrice) AS sales');
         $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $stockItem->getId());
-        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        //$qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
         $avg = $qb->getQuery()->getOneOrNullResult();
         return $avg;
     }

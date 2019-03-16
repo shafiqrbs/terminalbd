@@ -59,6 +59,11 @@ class AccountMobileBank
     private  $accountJournals;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment", mappedBy="accountMobileBank"  )
+     **/
+    private  $accountSalesAdjustment;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer", mappedBy="fromAccountMobileBank"  )
      **/
     private  $fromBalanceTransfer;
@@ -662,6 +667,14 @@ class AccountMobileBank
     public function setServiceCharge(float $serviceCharge)
     {
         $this->serviceCharge = $serviceCharge;
+    }
+
+    /**
+     * @return AccountSalesAdjustment
+     */
+    public function getAccountSalesAdjustment()
+    {
+        return $this->accountSalesAdjustment;
     }
 
 

@@ -5,7 +5,9 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\AccountingBundle\Entity\Vendor;
@@ -195,6 +197,16 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountingConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $accountingConfig;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountSalesAdjustment;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountPurchaseCommission;
 
    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -1962,6 +1974,22 @@ class GlobalOption
     public function setMainApp($mainApp)
     {
         $this->mainApp = $mainApp;
+    }
+
+    /**
+     * @return AccountSalesAdjustment
+     */
+    public function getAccountSalesAdjustment()
+    {
+        return $this->accountSalesAdjustment;
+    }
+
+    /**
+     * @return AccountPurchaseCommission
+     */
+    public function getAccountPurchaseCommission()
+    {
+        return $this->accountPurchaseCommission;
     }
 
 

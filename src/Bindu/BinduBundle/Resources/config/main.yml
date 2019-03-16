@@ -2,6 +2,10 @@ home:
     path:     /
     defaults: { _controller: BinduBundle:Bindu:index }
 
+bindu_login:
+    path:     /login
+    defaults: { _controller: "UserBundle:Security:login" }
+
 bindu_homepage:
     path:     /main
     defaults: { _controller: BinduBundle:Bindu:home }

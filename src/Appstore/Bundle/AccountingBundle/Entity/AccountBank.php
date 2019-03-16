@@ -96,6 +96,11 @@ class AccountBank
     private  $accountSales;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment", mappedBy="accountBank"  )
+     **/
+    private  $accountSalesAdjustment;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="accountBank" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -690,6 +695,14 @@ class AccountBank
     public function setServiceCharge(float $serviceCharge)
     {
         $this->serviceCharge = $serviceCharge;
+    }
+
+    /**
+     * @return AccountSalesAdjustment
+     */
+    public function getAccountSalesAdjustment()
+    {
+        return $this->accountSalesAdjustment;
     }
 
 }
