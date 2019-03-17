@@ -547,10 +547,10 @@ class SalesRepository extends EntityRepository
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
-        $qb->join('s.salesItems','si');
+      //  $qb->join('s.salesItems','si');
         $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, count(s.totalItem) as totalItem, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
-        $qb->addSelect('SUM(si.quantity * si.purchasePrice) as purchasePrice');
-        $qb->addSelect('SUM(si.quantity) as quantity');
+       // $qb->addSelect('SUM(si.quantity * si.purchasePrice) as purchasePrice');
+       // $qb->addSelect('SUM(si.quantity) as quantity');
         $qb->where('s.inventoryConfig = :inventory');
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
