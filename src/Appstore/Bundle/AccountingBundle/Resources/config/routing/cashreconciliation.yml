@@ -1,0 +1,38 @@
+account_cashreconciliation:
+    path:     /
+    defaults: { _controller: "AccountingBundle:CashReconciliation:index" }
+
+account_cashreconciliation_new:
+    path:     /new
+    defaults: { _controller: "AccountingBundle:CashReconciliation:new" }
+
+account_cashreconciliation_create:
+    path:     /create
+    defaults: { _controller: "AccountingBundle:CashReconciliation:create" }
+    methods:  POST
+
+account_cashreconciliation_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "AccountingBundle:CashReconciliation:journalReverse" }
+
+account_cashreconciliation_approve:
+    path:     /{id}/payment-approve
+    defaults: { _controller: "AccountingBundle:CashReconciliation:approve" }
+    options:
+           expose: true
+
+account_cashreconciliation_inline:
+    path:     /inline-update
+    defaults: { _controller: "AccountingBundle:CashReconciliation:inlineUpdate" }
+
+account_cashreconciliation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AccountingBundle:CashReconciliation:delete" }
+    options:
+           expose: true
+
+account_cashreconciliation_approve_delete:
+    path:     /{id}/approve-delete
+    defaults: { _controller: "AccountingBundle:CashReconciliation:approveDelete" }
+    options:
+           expose: true

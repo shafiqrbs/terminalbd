@@ -22,6 +22,10 @@ accounting_account_purchase_commission:
     resource: "@AccountingBundle/Resources/config/routing/purchasecommission.yml"
     prefix:   /purchase-commission
 
+accounting_cash_reconciliation:
+    resource: "@AccountingBundle/Resources/config/routing/cashreconciliation.yml"
+    prefix:   /cash-reconciliation
+
 accounting_account_business:
     resource: "@AccountingBundle/Resources/config/routing/accountbusiness.yml"
     prefix:   /business

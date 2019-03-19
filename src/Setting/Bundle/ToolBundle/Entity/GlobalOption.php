@@ -208,6 +208,11 @@ class GlobalOption
      */
     protected $accountPurchaseCommission;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\CashReconciliation", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $cashReconciliation;
+
    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="globalOption" , cascade={"persist", "remove"})
      */

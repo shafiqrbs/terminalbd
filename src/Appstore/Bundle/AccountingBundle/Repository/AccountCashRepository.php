@@ -129,7 +129,7 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function transactionWiseOverview(User $user,$data)
+    public function transactionWiseOverview(User $user,$data = array())
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->from('SettingToolBundle:TransactionMethod','e');
