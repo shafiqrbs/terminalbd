@@ -99,7 +99,9 @@
                                     <td class="numeric" >
                                         {% if entity.businessInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'business' %}
                                             {% for item in entity.businessInvoice.businessInvoiceParticulars  %}
-                                               <p>{{ loop.index }}. {{ item.businessParticular.name }}</p>
+                                               <p>{{ loop.index }}. {{ item.particular }}  {% if item.height is not empty and item.width is not empty %}
+                                                       {{ item.height }} x {{ item.width }} = {{ item.subQuantity }} x {{ item.quantity }}
+                                                   {% endif %} => {{ item.totalQuantity }} {{ item.unit }}</p>
                                             {% endfor %}
                                         {% elseif entity.sales is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'inventory' %}
                                             {% for item in entity.sales.salesItems  %}

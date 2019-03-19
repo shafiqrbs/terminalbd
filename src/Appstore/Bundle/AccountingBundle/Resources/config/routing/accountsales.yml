@@ -10,10 +10,6 @@ account_sales_return:
     path:     /return
     defaults: { _controller: "AccountingBundle:AccountSales:salesReturn" }
 
-account_sales_show:
-    path:     /{id}/show
-    defaults: { _controller: "AccountingBundle:AccountSales:show" }
-
 account_sales_new:
     path:     /new
     defaults: { _controller: "AccountingBundle:AccountSales:new" }
@@ -30,6 +26,10 @@ account_sales_edit:
 account_sales_due:
     path:     /{sales}/due-payment
     defaults: { _controller: "AccountingBundle:AccountSales:duePayment" }
+
+account_sales_print:
+    path:     /{id}/print-payment
+    defaults: { _controller: "AccountingBundle:AccountSales:print" }
 
 account_sales_update:
     path:     /{id}/update

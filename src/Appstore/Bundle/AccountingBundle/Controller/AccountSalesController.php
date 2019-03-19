@@ -190,16 +190,17 @@ class AccountSalesController extends Controller
      * Finds and displays a AccountSales entity.
      *
      */
-    public function showAction($id)
+    public function printAction(AccountSales $entity)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AccountingBundle:AccountSales')->find($id);
-        if (!$entity) {
+        if (!$entity and $entity->getGlobalOption()->getId() != $this->getUser()->getGlobalOption()->getId() ) {
             throw $this->createNotFoundException('Unable to find AccountSales entity.');
         }
-        return $this->render('AccountingBundle:AccountSales:show.html.twig', array(
-            'entity'      => $entity,
+        $amountInWord = $this->get('settong.toolManageRepo')->intToWords($entity->getAmount());
+        return $this->render('AccountingBundle:AccountSales:print.html.twig', array(
+            'entity'           => $entity,
+            'amountInWord'     => $amountInWord,
         ));
     }
 
@@ -213,7 +214,7 @@ class AccountSalesController extends Controller
 
         $entity = $em->getRepository('AccountingBundle:AccountSales')->find($id);
 
-        if (!$entity) {
+        if (!$entity and $entity->getGlobalOption()->getId() != $this->getUser()->getGlobalOption()->getId() ) {
             throw $this->createNotFoundException('Unable to find AccountSales entity.');
         }
 

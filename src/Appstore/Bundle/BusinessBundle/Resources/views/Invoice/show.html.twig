@@ -106,7 +106,7 @@
                                             <td class="">{{ item.particular }}</td>
                                             {% if entity.businessConfig.businessModel == 'sign' %}
                                             <td>
-                                            {% if item.subQuantity is not empty %}
+                                            {% if item.height is not empty and item.width is not empty %}
                                                 {{ item.height }} x {{ item.width }} = {{ item.subQuantity }}
                                             {% endif %}
                                             </td>
