@@ -4,6 +4,7 @@ namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
@@ -116,6 +117,11 @@ class TransactionMethod
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */
     protected $accountPurchases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="transactionMethod" , cascade={"persist", "remove"})
+     */
+    protected $accountPurchaseCommissions;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -554,5 +560,13 @@ class TransactionMethod
 	public function getHotelPurchase() {
 		return $this->hotelPurchase;
 	}
+
+    /**
+     * @return AccountPurchaseCommission
+     */
+    public function getAccountPurchaseCommissions()
+    {
+        return $this->accountPurchaseCommissions;
+    }
 }
 

@@ -242,7 +242,6 @@ class CustomerRepository extends EntityRepository
         if($entity){
             return $entity;
         }else{
-
             $entity = new Customer();
             $entity->setMobile($mobile);
             $entity->setName($name);
@@ -457,7 +456,7 @@ class CustomerRepository extends EntityRepository
         $query->andWhere("e.globalOption = :globalOption");
         $query->setParameter('globalOption', $globalOption->getId());
         $query->orderBy('e.mobile', 'ASC');
-        $query->groupBy('e.mobile');
+        $query->groupBy('e.mobile,e.name');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
 
@@ -473,7 +472,7 @@ class CustomerRepository extends EntityRepository
         $query->andWhere("e.globalOption = :globalOption");
         $query->setParameter('globalOption', $globalOption->getId());
         $query->orderBy('e.name', 'ASC');
-        $query->groupBy('e.mobile');
+        $query->groupBy('e.mobile,e.name');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
 

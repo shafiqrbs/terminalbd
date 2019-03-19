@@ -46,6 +46,11 @@ class MedicineVendor
     protected $accountPurchases;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="medicineVendor")
+     */
+    protected $accountPurchaseCommissions;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="medicineVendor")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      */

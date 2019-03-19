@@ -35,6 +35,11 @@ class AccountVendor
      */
     protected $accountPurchases;
 
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="accountVendor")
+     */
+    protected $accountPurchaseCommissions;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="accountVendor")
      */

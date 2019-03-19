@@ -59,6 +59,11 @@ class Vendor implements CodeAwareEntity
      */
     protected $accountPurchaseReturns;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="vendor")
+     */
+    protected $accountPurchaseCommissions;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="vendors")

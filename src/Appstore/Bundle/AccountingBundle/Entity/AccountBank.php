@@ -91,6 +91,11 @@ class AccountBank
     private  $accountPurchases;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="accountBank"  )
+     **/
+    private  $accountPurchaseCommissions;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="accountBank"  )
      **/
     private  $accountSales;
@@ -703,6 +708,14 @@ class AccountBank
     public function getAccountSalesAdjustment()
     {
         return $this->accountSalesAdjustment;
+    }
+
+    /**
+     * @return AccountPurchaseCommission
+     */
+    public function getAccountPurchaseCommissions()
+    {
+        return $this->accountPurchaseCommissions;
     }
 
 }

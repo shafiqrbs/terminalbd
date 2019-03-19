@@ -20,7 +20,7 @@ accounting_account_sales_adjustment:
 
 accounting_account_purchase_commission:
     resource: "@AccountingBundle/Resources/config/routing/purchasecommission.yml"
-    prefix:   /sales-adjustment
+    prefix:   /purchase-commission
 
 accounting_account_business:
     resource: "@AccountingBundle/Resources/config/routing/accountbusiness.yml"

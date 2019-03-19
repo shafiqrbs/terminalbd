@@ -9,7 +9,9 @@ use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
+use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -20,7 +22,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
  * accountPurchaseCommission
  *
  * @ORM\Table(name="account_purchase_commission")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\accountPurchaseCommissionRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountPurchaseCommissionRepository")
  */
 class AccountPurchaseCommission
 {
@@ -37,7 +39,37 @@ class AccountPurchaseCommission
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountPurchaseCommission")
      **/
     protected $globalOption;
-    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="accountPurchaseCommissions" , cascade={"detach","merge"} )
+     **/
+    private  $vendor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="accountPurchaseCommissions" , cascade={"detach","merge"} )
+     **/
+    private  $accountVendor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="accountPurchaseCommissions" )
+     **/
+    private  $medicineVendor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountPurchaseCommissions" )
+     **/
+    private  $accountBank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountPurchaseCommissions" )
+     **/
+    private  $accountMobileBank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountPurchaseCommissions" )
+     **/
+    private  $transactionMethod;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountPurchaseCommission" )
      **/
@@ -60,6 +92,13 @@ class AccountPurchaseCommission
      * @ORM\Column(name="amount", type="float", nullable=true)
      */
     private $amount = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="companyName", type="string", nullable=true)
+     */
+    private $companyName;
 
     /**
      * @var string
@@ -289,6 +328,118 @@ class AccountPurchaseCommission
     public function setAmount(float $amount)
     {
         $this->amount = $amount;
+    }
+
+    /**
+     * @return Vendor
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @param Vendor $vendor
+     */
+    public function setVendor($vendor)
+    {
+        $this->vendor = $vendor;
+    }
+
+    /**
+     * @return AccountVendor
+     */
+    public function getAccountVendor()
+    {
+        return $this->accountVendor;
+    }
+
+    /**
+     * @param AccountVendor $accountVendor
+     */
+    public function setAccountVendor($accountVendor)
+    {
+        $this->accountVendor = $accountVendor;
+    }
+
+    /**
+     * @return MedicineVendor
+     */
+    public function getMedicineVendor()
+    {
+        return $this->medicineVendor;
+    }
+
+    /**
+     * @param MedicineVendor $medicineVendor
+     */
+    public function setMedicineVendor($medicineVendor)
+    {
+        $this->medicineVendor = $medicineVendor;
+    }
+
+    /**
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyName(): string
+    {
+        return $this->companyName;
+    }
+
+    /**
+     * @param string $companyName
+     */
+    public function setCompanyName(string $companyName)
+    {
+        $this->companyName = $companyName;
     }
 
 }
