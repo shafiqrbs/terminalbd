@@ -2,8 +2,10 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\CashReconciliation;
+use Appstore\Bundle\AccountingBundle\Entity\CashReconciliationMeta;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * CashReconciliationRepository
@@ -26,17 +28,60 @@ class CashReconciliationRepository extends EntityRepository
 
     }
 
+    public function checkExist(GlobalOption $option)
+    {
+        $date = new \DateTime('now');
+        $created = $date->format('Y-m-d');
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $option->getId());
+        $qb->andWhere($qb->expr()->like("e.created", "'%$created%'"  ));
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
     public function initialUpdate(User $user , CashReconciliation $entity)
     {
-        $open = 0;
+
         $transactionCashOverview = $this->_em->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview($user);
         foreach ($transactionCashOverview['result'] as $mod):
-            echo $open =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
-            echo $open =  $transactionCashOverview['openingBalance'][$mod['debit']];
-        endforeach;
-        exit;
 
+            if($mod['transactionName'] == 'Cash'){
+                $open =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
+                $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
+                $cash =  (($open + $debit)-$credit);
+                $entity->setCash($cash);
+            }elseif($mod['transactionName'] == 'Bank'){
+                $open =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
+                $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
+                $cash =  (($open + $debit)-$credit);
+                $entity->setBank($cash);
+            }elseif($mod['transactionName'] == 'Mobile'){
+                $open =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
+                $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
+                $cash =  (($open + $debit)-$credit);
+                $entity->setMobile($cash);
+            }
+            endforeach;
+            $this->_em->flush($entity);
     }
+
+    public function notesReconciliationInsert(CashReconciliation $reconciliation)
+    {
+       $arrs = ['1000 Taka','500 Taka','100 Taka','100 Taka','50 Taka','20 Taka','10 Taka','5 Taka','2 Taka','1 Taka'];
+        foreach ($arrs as $arr){
+            $entity = new CashReconciliationMeta();
+            $entity->setCashReconciliation($reconciliation);
+            $entity->setMetaKey($arr);
+            $entity->setAmount(0);
+            $this->_em->persist($entity);
+            $this->_em->flush();
+        }
+    }
+
 
     public function accountCashOverview($globalOption,$data)
     {

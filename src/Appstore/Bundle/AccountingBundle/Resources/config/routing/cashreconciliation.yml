@@ -11,6 +11,10 @@ account_cashreconciliation_create:
     defaults: { _controller: "AccountingBundle:CashReconciliation:create" }
     methods:  POST
 
+account_cashreconciliation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AccountingBundle:CashReconciliation:edit" }
+
 account_cashreconciliation_reverse:
     path:     /{id}/reverse
     defaults: { _controller: "AccountingBundle:CashReconciliation:journalReverse" }

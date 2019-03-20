@@ -75,7 +75,7 @@ class CashReconciliationController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_purchasecommission'));
+            return $this->redirect($this->generateUrl('account_cashreconciliation'));
         }
 
         return $this->render('AccountingBundle:CashReconciliation:new.html.twig', array(
@@ -95,7 +95,7 @@ class CashReconciliationController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new CashReconciliationType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_purchasecommission_create'),
+            'action' => $this->generateUrl('account_cashreconciliation_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -114,20 +114,38 @@ class CashReconciliationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $global = $this->getUser()->getGlobalOption();
         $date = new \DateTime('now');
-        $created = $date->format('Y-m-d');
         $entity = new CashReconciliation();
-        $exist = $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->findOneBy(['globalOption'=>$global,'created'=>$date]);
+        $exist = $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->checkExist($global);
         if(!$exist){
             $entity->setGlobalOption($global);
             $entity->setCreated($date);
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->initialUpdate($this->getUser(),$entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->notesReconciliationInsert($entity);
+            return $this->redirect($this->generateUrl('account_cashreconciliation_edit',array('id' => $entity->getId())));
         }else{
             $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->initialUpdate($this->getUser(),$exist);
+            return $this->redirect($this->generateUrl('account_cashreconciliation_edit',array('id' => $exist->getId())));
         }
-        exit;
+    }
+    
+    public function editAction($id){
 
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $entity = $em->getRepository('AccountingBundle:CashReconciliation')->findOneBy(['globalOption'=>$option,'id'=>$id]);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
+        }
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser());
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser());
+        return $this->render('AccountingBundle:CashReconciliation:new.html.twig', [
+            'entity' => $entity,
+            'transactionBankCashOverviews'          => $transactionBankCashOverviews,
+            'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
+
+        ]);
     }
 
 
@@ -160,8 +178,8 @@ class CashReconciliationController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertpurchasecommission($entity);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->purchasecommissionTransaction($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertcashreconciliation($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->cashreconciliationTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -216,7 +234,7 @@ class CashReconciliationController extends Controller
 		$entity->setApprovedBy(null);
 		$entity->setAmount(0);
 		$em->flush();
-		return $this->redirect($this->generateUrl('account_purchasecommission'));
+		return $this->redirect($this->generateUrl('account_cashreconciliation'));
 
 	}
 

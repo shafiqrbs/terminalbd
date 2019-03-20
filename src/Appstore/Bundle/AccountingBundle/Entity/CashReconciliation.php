@@ -218,5 +218,13 @@ class CashReconciliation
         $this->globalOption = $globalOption;
     }
 
+    /**
+     * @return CashReconciliationMeta
+     */
+    public function getCashReconciliationMetas()
+    {
+        return $this->cashReconciliationMetas;
+    }
+
 }
 
