@@ -577,7 +577,6 @@ class InvoiceController extends Controller
                     'print' => 'print',
                 )
             );
-
         }
 
     }
