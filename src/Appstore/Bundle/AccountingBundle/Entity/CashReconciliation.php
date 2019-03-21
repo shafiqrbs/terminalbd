@@ -65,6 +65,13 @@ class CashReconciliation
      */
     private $withdraw = 0;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="total", type="float", nullable=true)
+     */
+    private $total = 0;
+
 
     /**
      * @var boolean
@@ -224,6 +231,22 @@ class CashReconciliation
     public function getCashReconciliationMetas()
     {
         return $this->cashReconciliationMetas;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param float $total
+     */
+    public function setTotal(float $total)
+    {
+        $this->total = $total;
     }
 
 }

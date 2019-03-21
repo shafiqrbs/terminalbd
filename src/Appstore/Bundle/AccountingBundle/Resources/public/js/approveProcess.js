@@ -417,7 +417,18 @@ $('.trash').on("click", ".remove", function() {
     })
 });
 
+$('.amount').on('click', function(event) {
+    $(this).val('');
+});
 
+
+$(document).on('keyup', ".amount", function() {
+    var sum = 0;
+    $(".amount").each(function(){
+        sum += +parseFloat($(this).val());
+    });
+    $("#total").html(sum);
+});
 
 
 
