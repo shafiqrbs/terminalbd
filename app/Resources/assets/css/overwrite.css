@@ -642,9 +642,10 @@ ul.ui-autocomplete li a{
     display: inline-block;
     width:99%!important;
 }
-ul.ui-autocomplete li a:hover{
+ul.ui-autocomplete li:hover , ul.ui-autocomplete li a:hover{
     background:#4b8df8!important;
     color: #ffffff!important;
+    cursor: default;
 }
 
 /*.ui-autocomplete-input{

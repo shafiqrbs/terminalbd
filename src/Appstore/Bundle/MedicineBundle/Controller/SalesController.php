@@ -159,12 +159,12 @@ class SalesController extends Controller
                     $expirationEndDate = $item->getExpirationEndDate()->format('d-m-y');
                     $expiration = $expirationEndDate;
                 }else{
-                    $expiration='Expiry empty';
+                    $expiration='Expiry Empty';
                 }
                 $purchaseItems .= '<option value="' . $item->getId() . '">' . $item->getBarcode() . ' - ' . $expiration . '[' . $item->getRemainingQuantity() . '] - PP Tk.'.$item->getPurchasePrice().'</option>';
             }
         }
-        return new Response(json_encode(array('purchaseItems' => $purchaseItems,'salesPrice'=> round($stock->getSalesPrice()))));
+        return new Response(json_encode(array('purchaseItems' => $purchaseItems , 'salesPrice' => $stock->getSalesPrice())));
     }
 
     public function returnResultData(MedicineSales $entity,$msg=''){
