@@ -1,5 +1,4 @@
 {% extends '::base.html.twig' %}
-
 {% block body %}
     <div class="container-fluid">
         <!-- BEGIN category HEADER-->
@@ -384,8 +383,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName"><span class="label">Payable TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}
-                                        </span>
+                                                <label class="control-label" for="firstName"><span class="label">Payable TK.</span> <span class="pull-right sales-right"><button class="btn red mini" id="discountPercentage">%</button>{{ form_widget(form.payment) }}</span>
                                                 </label>
                                                 <div class="controls">
                                                     {{ form_errors(form.payment) }}
@@ -399,7 +397,7 @@
                                         <div class="span12">
                                             <div class="control-group">
                                                 <label class="control-label" for="firstName"><span class="label">Due Payable TK.</span>
-                                                    <span class="pull-right sales-right"><input type="text" id="invoiceDue" name="invoiceDue" class="numeric span12 inputs m-wrap" placeholder="Due payable amount" value="{{ entity.due }}"></span>
+                                                    <span class="pull-right sales-right"><input type="text" id="invoiceDue" name="invoiceDue" class="numeric span8 inputs m-wrap remove-value" placeholder="Due payable amount" value="{{ entity.due }}"></span>
                                                 </label>
                                             </div>
                                         </div>

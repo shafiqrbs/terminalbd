@@ -366,8 +366,9 @@ $(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurch
 
 });
 
-$('#medicinepurchase_payment').click(function() {
-    $('#medicinepurchase_payment').attr('value', '');
+
+$('.remove-value').click(function() {
+    $(this).attr('value', '');
 });
 
 $('.invoice-mode').change(function() {
@@ -395,7 +396,15 @@ $(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount
     }
 });
 
+$(document).on('change', '#medicinepurchase_payment , #invoiceDue', function() {
+    var payment     = parseInt($('#medicinepurchase_payment').val()  != '' ? $('#medicinepurchase_payment').val() : 0 );
+    var invoiceDue     = parseInt($('#invoiceDue').val()  != '' ? $('#invoiceDue').val() : 0 );
+    var paymentTotal     = parseInt($('#paymentTotal').val()  != '' ? $('#paymentTotal').val() : 0 );
+    var discount = (paymentTotal - (payment + invoiceDue));
+    var percentage = ((discount * 100)/paymentTotal).toFixed(2);
+    $('#discountPercentage').html(percentage+'%');
 
+});
 
 $('form#purchaseForm').on('keypress', '.inputs', function (e) {
 
