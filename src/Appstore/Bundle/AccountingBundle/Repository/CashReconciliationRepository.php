@@ -21,7 +21,7 @@ class CashReconciliationRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        $this->handleSearchBetween($qb,$data);
+      //  $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
         return $result;
@@ -47,166 +47,83 @@ class CashReconciliationRepository extends EntityRepository
         foreach ($transactionCashOverview['result'] as $mod):
 
             if($mod['transactionName'] == 'Cash'){
-                $open =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
-                $debit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
+                $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit  =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
                 $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
-                $cash =  (($open + $debit)-$credit);
+                $cash   =  (($open + $debit)-$credit);
                 $entity->setCash($cash);
             }elseif($mod['transactionName'] == 'Bank'){
-                $open =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
-                $debit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
+                $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit  =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
                 $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
-                $cash =  (($open + $debit)-$credit);
+                $cash   =  (($open + $debit)-$credit);
                 $entity->setBank($cash);
             }elseif($mod['transactionName'] == 'Mobile'){
-                $open =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
-                $debit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
+                $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit  =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
                 $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
-                $cash =  (($open + $debit)-$credit);
+                $cash   =  (($open + $debit)-$credit);
                 $entity->setMobile($cash);
             }
             endforeach;
             $this->_em->flush($entity);
     }
 
-    public function notesReconciliationInsert(CashReconciliation $reconciliation)
+    public function notesReconciliationInsert(CashReconciliation $reconciliation,$bankCash,$mobileCash)
     {
        $arrs = ['1000 Taka','500 Taka','100 Taka','100 Taka','50 Taka','20 Taka','10 Taka','5 Taka','2 Taka','1 Taka'];
         foreach ($arrs as $arr){
             $entity = new CashReconciliationMeta();
             $entity->setCashReconciliation($reconciliation);
+            $entity->setTransactionMethod('Cash');
             $entity->setMetaKey($arr);
             $entity->setAmount(0);
             $this->_em->persist($entity);
             $this->_em->flush();
         }
+        $closing = 0;
+        var_dump($bankCash);
+        exit;
+        foreach ($bankCash as $bank ){
+           // echo $bankId = $bank['accountId'];
+
+            exit;
+            $closing = ($bank['openingBalance'][$bankId] + $bank['debit'] - $bank['credit']);
+            $entity = new CashReconciliationMeta();
+            $entity->setCashReconciliation($reconciliation);
+            $entity->setTransactionMethod('Bank');
+            $entity->setMetaKey($bank['bankName']);
+            $entity->setAmount($closing);
+            $this->_em->persist($entity);
+            $this->_em->flush();
+        }
+
+        foreach ($mobileCash as $mobile ){
+
+            $closing = ($mobile['openingBalance'][$mobile['accountId']] + $mobile['debit'] - $mobile['credit']);
+            $entity = new CashReconciliationMeta();
+            $entity->setCashReconciliation($reconciliation);
+            $entity->setTransactionMethod('Mobile');
+            $entity->setMetaKey($bank['mobileBankName']);
+            $entity->setAmount($closing);
+            $this->_em->persist($entity);
+            $this->_em->flush();
+        }
+        exit;
+
     }
 
-
-    public function accountCashOverview($globalOption,$data)
+    public function update(CashReconciliation $cash)
     {
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.purchase) AS purchase, SUM(e.sales) AS sales, SUM(e.profit) AS profit');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getOneOrNullResult();
+        $qb = $this->createQueryBuilder();
+        $qb->from('AccountingBundle:CashReconciliationMeta','e');
+        $qb->join('e.cashReconciliation','t');
+        $qb->select('e.transactionMethod, SUM(e.amount) AS amount');
+        $qb->where("t.id = :reconciliation");
+        $qb->setParameter('reconciliation', $cash->getId());
+        $qb->groupBy('e.transactionMethod');
+        $result = $qb->getQuery()->getArrayResult();
         return $result;
-
     }
 
-    /**
-     * @param $qb
-     * @param $data
-     */
-
-    protected function handleSearchBetween($qb,$data)
-    {
-        if(empty($data))
-        {
-                $datetime = new \DateTime("now");
-                $startDate = $datetime->format('Y-m-d 00:00:00');
-                $endDate = $datetime->format('Y-m-d 23:59:59');
-
-                /*
-                $qb->andWhere("e.updated >= :startDate");
-                $qb->setParameter('startDate', $startDate);
-                $qb->andWhere("e.updated <= :endDate");
-                $qb->setParameter('endDate', $endDate);
-                */
-
-        }else{
-
-                $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-                $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-                $process =    isset($data['process'])? $data['process'] :'';
-                $bankBranch =    isset($data['bankBranch'])? $data['bankBranch'] :'';
-
-                if (!empty($data['startDate']) and !empty($data['endDate']) ) {
-
-                    $qb->andWhere("e.updated >= :startDate");
-                    $qb->setParameter('startDate', $startDate.' 00:00:00');
-                }
-                if (!empty($data['endDate']) and !empty($data['startDate'])) {
-
-                    $qb->andWhere("e.updated <= :endDate");
-                    $qb->setParameter('endDate', $endDate.' 00:00:00');
-                }
-                if (!empty($process)) {
-
-                    $qb->andWhere("e.processHead = :process");
-                    $qb->setParameter('process', $process);
-                }
-                if (!empty($bankBranch)) {
-
-                    $qb->andWhere("e.bankBranch = :bankBranch");
-                    $qb->setParameter('bankBranch', $bankBranch);
-                }
-        }
-
-    }
-
-    public function lastInsertCash($entity)
-    {
-        $em = $this->_em;
-        $entity = $em->getRepository('AccountingBundle:AccountBankCash')->findOneBy(
-            array(
-                'globalOption' => $entity->getGlobalOption(),
-                'bankBranch' => $entity->getBankBranch()
-            ),
-            array('id' => 'DESC')
-        );
-
-        if (empty($entity)) {
-            return 0;
-        }
-        return $entity->getBalance();
-    }
-
-
-
-    public function insertJournalBank(AccountJournal $journal)
-    {
-
-        $balance = $this->lastInsertCash($journal);
-        $em = $this->_em;
-        $cash = new AccountBankCash();
-        $cash->setGlobalOption($journal->getGlobalOption());
-        $cash->setBankBranch($journal->getBankBranch());
-        $cash->setProcessHead('Journal');
-        $cash->setAccountRefNo($journal->getAccountRefNo());
-        $cash->setUpdated($journal->getUpdated());
-        if($journal->getTransactionType()  == 'Debit' ){
-            $cash->setAccountHead($journal->getAccountHeadDebit());
-            $cash->setDebit($journal->getAmount());
-            $cash->setBalance($balance + $journal->getAmount());
-        }else{
-            $cash->setAccountHead($journal->getAccountHeadCredit());
-            $cash->setBalance($balance - $journal->getAmount() );
-            $cash->setCredit($journal->getAmount());
-        }
-        $em->persist($cash);
-        $em->flush();
-
-    }
-
-    public function insertPurchaseBank(AccountPurchase $entity)
-    {
-
-        $balance = $this->lastInsertCash($entity);
-        $em = $this->_em;
-        $cash = new AccountBankCash();
-        $cash->setGlobalOption($entity->getGlobalOption());
-        $cash->setBankBranch($entity->getBankBranch());
-        $cash->setProcessHead('Purchase');
-        $cash->setAccountRefNo($entity->getAccountRefNo());
-        $cash->setUpdated($entity->getUpdated());
-        $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(32));
-        $cash->setBalance($balance - $entity->getPayment() );
-        $cash->setCredit($entity->getPayment());
-        $em->persist($cash);
-        $em->flush();
-
-    }
-    
 }

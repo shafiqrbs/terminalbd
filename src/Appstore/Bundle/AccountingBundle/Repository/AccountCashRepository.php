@@ -182,11 +182,12 @@ class AccountCashRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->from('AccountingBundle:AccountBank','accountBank');
         $qb->leftJoin('accountBank.accountCashes','e');
+       // $qb->select('accountBank.id AS accountId ,accountBank.name AS bankName ');
         $qb->select('accountBank.id AS accountId ,accountBank.name AS bankName , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        $qb->andWhere("e.transactionMethod = :transactionMethod");
-        $qb->setParameter('transactionMethod',2);
+        $qb->where("accountBank.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.accountBank IN (:banks)");
+        $qb->setParameter('banks',array(18,19));
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
@@ -219,7 +220,7 @@ class AccountCashRepository extends EntityRepository
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
-       // $this->handleSearchBetween($qb,$data);
+        $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
         $openingBalances = array();
         foreach($result as $row) {

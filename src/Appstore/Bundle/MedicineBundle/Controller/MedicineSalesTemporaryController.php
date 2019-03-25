@@ -330,7 +330,7 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(false);
         //$printer -> feed();
-        $i=1;
+        $i = 1;
         if(!empty($invoiceParticulars)){
             /* @var $row MedicineSalesItem */
             foreach ($invoiceParticulars as $row){

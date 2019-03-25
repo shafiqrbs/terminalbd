@@ -141,7 +141,7 @@ class CashReconciliationMeta
     /**
      * @return string
      */
-    public function getTransactionMethod(): string
+    public function getTransactionMethod()
     {
         return $this->transactionMethod;
     }

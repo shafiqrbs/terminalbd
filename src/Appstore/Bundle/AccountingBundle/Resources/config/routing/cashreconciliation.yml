@@ -11,6 +11,13 @@ account_cashreconciliation_create:
     defaults: { _controller: "AccountingBundle:CashReconciliation:create" }
     methods:  POST
 
+account_cashreconciliation_add:
+    path:     /{id}/add
+    defaults: { _controller: "AccountingBundle:CashReconciliation:add" }
+    methods:  GET
+    options:
+           expose: true
+
 account_cashreconciliation_edit:
     path:     /{id}/edit
     defaults: { _controller: "AccountingBundle:CashReconciliation:edit" }
@@ -32,6 +39,12 @@ account_cashreconciliation_inline:
 account_cashreconciliation_delete:
     path:     /{id}/delete
     defaults: { _controller: "AccountingBundle:CashReconciliation:delete" }
+    options:
+           expose: true
+
+account_purchasecommission_meta_delete:
+    path:     /{id}/meta-delete
+    defaults: { _controller: "AccountingBundle:CashReconciliation:metaDelete" }
     options:
            expose: true
 

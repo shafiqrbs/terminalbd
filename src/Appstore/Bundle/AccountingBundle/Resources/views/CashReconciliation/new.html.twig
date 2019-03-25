@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
-        <!-- BEGIN account_purchasecommission HEADER-->
+        <!-- BEGIN account_cashreconciliation HEADER-->
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="account-title">
@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_purchasecommission') }}">Purchase Commission</a>
+                        <a href="{{ path('account_cashreconciliation') }}">Cash Reconciliation</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Purchase Commission Entry</a></li>
+                    <li><a href="#">Cash Reconciliation</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -25,23 +25,49 @@
                 </ul>
             </div>
         </div>
-        <!-- END account_purchasecommission HEADER-->
-        <!-- BEGIN account_purchasecommission CONTENT-->
+        <!-- END account_cashreconciliation HEADER-->
+        <!-- BEGIN account_cashreconciliation CONTENT-->
         <div class="row-fluid">
             <div class="span12">
 
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Commission Entry Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Cash Reconciliation Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('account_purchasecommission') }}"><i class="icon-th-list"></i>&nbsp;Cash Reconciliation</a>
+                                <a class="btn red" href="{{ path('account_cashreconciliation') }}"><i class="icon-th-list"></i>&nbsp;Cash Reconciliation</a>
                             </div>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
+                        {% set methods = ['Cash','Bank','Mobile'] %}
+                        <form name="cashForm" id="cashForm">
+                            <div class="row-fluid">
+                                <div class="span7">
+                                    <div class="control-group">
+                                        <input type="text" name="particular" id="particular" required="required" class="m-wrap span12" placeholder="Loan particulars" value="">
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <select name="method" id="method" class="m-wrap span12">
+                                            {% for method in methods %}
+                                                <option value="{{ method }}">{{ method }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <input type="number" name="amount" required="required" id="amount" class="m-wrap span8" placeholder="Amount Tk" value="">
+                                            <button type="button" class="btn green" id="cash-reconciliation" data-url="{{ path('account_cashreconciliation_add',{'id':entity.id}) }}"><i class="icon-sign-plus"></i> Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <!-- BEGIN FORM-->
                         {% if transactionBankCashOverviews.result is not empty %}
                             <table class="table table-bordered tatransactionCashOverviewsble-striped table-condensed flip-content ">
@@ -61,6 +87,27 @@
                                         <th class="numeric" >{{ closing|number_format }}</th>
                                     </tr>
                                 {% endfor %}
+                                {% for note in entity.cashReconciliationMetas %}
+                                {% if note.TransactionMethod == 'Bank' %}
+                                <tr>
+                                    <th >{{ note.metaKey }}</th>
+                                    <th class="numeric" >
+                                        <div class="span12">
+                                            <div class="actions">
+                                                <div class="btn-group">
+                                                    <input type="hidden" id="metaId" name="metaId[]" class="" value="{{ note.id }}">
+                                                    <input type="number" class="m-wrap span10 custom-field amount" value="{{ note.amount }}">
+                                                    {% if note.isCustom ==  1 %}
+                                                        <a class="btn red mini delete" href="javascript:"  data-url="{{ path('account_cashreconciliation_meta_delete',{'id':note.id}) }}"><i class="icon-trash"></i></a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+
                                 </tbody>
                                 <tr>
                                     <th class="numeric"><span class="pull-right">Grand Total</span></th>
@@ -86,6 +133,26 @@
                                         <th class="numeric" >{{ closing|number_format }}</th>
                                     </tr>
                                 {% endfor %}
+                                {% for note in entity.cashReconciliationMetas %}
+                                    {% if note.TransactionMethod == 'Mobile' %}
+                                        <tr>
+                                            <th >{{ note.metaKey }}</th>
+                                            <th class="numeric" >
+                                                <div class="span12">
+                                                    <div class="actions">
+                                                        <div class="btn-group">
+                                                            <input type="hidden" id="metaId" name="metaId[]" class="" value="{{ note.id }}">
+                                                            <input type="number" class="m-wrap span10 custom-field amount" value="{{ note.amount }}">
+                                                            {% if note.isCustom ==  1 %}
+                                                                <a class="btn red delete mini" href="javascript:"  data-url="{{ path('account_cashreconciliation_meta_delete',{'id':note.id}) }}"><i class="icon-trash"></i></a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
                                 </tbody>
                                 <tr>
                                     <th class="numeric"><span class="pull-right">Grand Total</span></th>
@@ -93,7 +160,6 @@
                                 </tr>
                             </table>
                         {% endif %}
-
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Notes Reconciliation</div>
@@ -106,6 +172,7 @@
                         </div>
                         <div class="clearfix"><br/></div>
                         {% for note in entity.cashReconciliationMetas %}
+                            {% if note.TransactionMethod == 'Cash' %}
                             <div class="row-fluid">
                                 <div class="span10">
                                     <div class="control-group">
@@ -115,99 +182,30 @@
                                     </div>
                                 </div>
                                 <div class="span2">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <input type="hidden" id="metaId" name="metaId[]" class="" value="{{ note.id }}">
-                                            <input type="number" class="m-wrap span12 custom-field amount" value="{{ note.amount }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        <div class="row-fluid">
-                            <div class="span10">
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <strong>Total Notes Amount</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span2">
-                                <div class="control-group">
-                                    <div class="controls">
-                                       <strong id="total">4556,4534534</strong>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix"><br/></div>
-                        <div class="form-actions portlet box red">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="icon-reorder"></i>Manage Loans </div>
                                     <div class="actions">
                                         <div class="btn-group">
-                                            <button class="btn purple addmore" > <i class="icon-sign-plus"></i> Add Loan</button>
+                                            <input type="hidden" id="metaId" name="metaId[]" class="" value="{{ note.id }}">
+                                            <input type="number" class="m-wrap span10 custom-field amount" value="{{ note.amount }}">
+                                            {% if note.isCustom ==  1 %}
+                                            <a class="btn red mini delete" href="javascript:"  data-url="{{ path('account_cashreconciliation_meta_delete',{'id':note.id}) }}"><i class="icon-trash"></i></a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        <div class="clearfix">&nbsp;</div>
-                        {% set methods = ['Cash','Bank','Mobile'] %}
-                        <div class="row-fluid clone-block" id="clone-block">
-                            <div class="clone">
-                                <div class="span6">
-                                    <div class="control-group">
-                                        <input type="hidden" name="metaId[]" value="" >
-                                        <input type="text" name="metaKey[]" class="m-wrap span12" placeholder="Loan particulars" value="">
-                                    </div>
-                                </div>
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <select name="method" id="method" class="m-wrap span12">
-                                            {% for method in methods %}
-                                            <option value="method">{{ method }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <input type="text" name="amount[]" class="m-wrap span12" placeholder="Amount Tk" value="">
-                                    </div>
-                                </div>
-                                <div class="span1">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <a href="javascript:"  class="btn red  remove hidden"><i class="icon-trash"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% for meta in entity.cashReconciliationMetas %}
-                                {% if meta.isCustom == 1 %}
-                                    <div class="row-fluid trash" id="remove-{{ meta.id }}"  >
-                                    <div class="span3 ">
-                                        <div class="control-group">
-                                            <input type="hidden" name="metaId[]" value="{{ meta.id }}" >
-                                            <input type="text" name="metaKey[]" class="m-wrap span12" placeholder="Label name" value="{{ meta.metaKey }}">
-                                        </div>
-                                    </div>
-                                    <div class="span8">
-                                        <div class="control-group">
-                                            <input type="text" name="metaValue[]" class="m-wrap span12" placeholder="Label value" value="{{ meta.amount }}">
-                                        </div>
-                                    </div>
-                                    <div class="span1">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <a href="javascript:" id="{{ meta.id }}"  data-url="{{ path('page_meta_delete',{'id':meta.id}) }}" class="btn red remove"><i class="icon-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endif %}
+                            {% endif %}
                         {% endfor %}
+                        <div class="clearfix"><br/></div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-money"></i>Total Notes Amount </div>
+                                    <div class="actions">
+                                        <div class="btn-group">
+                                            <button class="btn purple addmore" > <strong id="total">32423423</strong></button>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
                         <div class="clearfix">&nbsp;</div>
                     </div>
                         <!-- END FORM-->
@@ -228,7 +226,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    '@AccountingBundle/Resources/public/js/reconciliation.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
