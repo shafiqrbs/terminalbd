@@ -337,7 +337,7 @@ class MedicineSalesTemporaryController extends Controller
                 $qnt = sprintf("%s", str_pad($row->getQuantity(),2, '0', STR_PAD_LEFT));
                 $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
                 if($row->getMedicineStock()->getMedicineBrand()){
-                    $printer -> text(new PosItemManager($i.'. '.$row->getMedicineStock()->getMedicineBrand->getName(),$qnt,number_format($row->getSubTotal())));
+                    $printer -> text(new PosItemManager($i.'. '.$row->getMedicineStock()->getMedicineBrand()->getName(),$qnt,number_format($row->getSubTotal())));
                 }else{
                     $printer -> text(new PosItemManager($i.'. '.$row->getMedicineStock()->getName(),$qnt,number_format($row->getSubTotal())));
                 }
