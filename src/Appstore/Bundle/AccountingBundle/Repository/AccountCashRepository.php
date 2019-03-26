@@ -182,12 +182,9 @@ class AccountCashRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->from('AccountingBundle:AccountBank','accountBank');
         $qb->leftJoin('accountBank.accountCashes','e');
-       // $qb->select('accountBank.id AS accountId ,accountBank.name AS bankName ');
         $qb->select('accountBank.id AS accountId ,accountBank.name AS bankName , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
         $qb->where("accountBank.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption->getId());
-        $qb->andWhere("e.accountBank IN (:banks)");
-        $qb->setParameter('banks',array(18,19));
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
@@ -339,13 +336,11 @@ class AccountCashRepository extends EntityRepository
         $qb->setParameter('endDate', $end);
 
         if (!empty($accountBank)) {
-
             $qb->andWhere("e.accountBank = :accountBank");
             $qb->setParameter('accountBank', $accountBank);
         }
 
         if (!empty($accountMobileBank)) {
-
             $qb->andWhere("e.accountMobileBank = :accountMobileBank");
             $qb->setParameter('accountMobileBank', $accountMobileBank);
         }
