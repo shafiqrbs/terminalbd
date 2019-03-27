@@ -111,9 +111,9 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.total }}</td>
-                                        <td class="numeric" >{{ entity.received }}</td>
-                                        <td class="numeric" >{{ entity.due }}</td>
+                                        <td class="numeric" >{% if entity.hotelInvoiceTransactionSummary is not empty %}{{ entity.hotelInvoiceTransactionSummary.total }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.hotelInvoiceTransactionSummary is not empty %}{{ entity.hotelInvoiceTransactionSummary.received }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.hotelInvoiceTransactionSummary is not empty %}{{ entity.hotelInvoiceTransactionSummary.due }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% set processDone = ['booked','check-in'] %}
                                             {% if entity.process in  processDone %}
