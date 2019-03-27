@@ -123,21 +123,6 @@ function jqueryTemporaryLoad() {
 
     });
 
-/*
-
-    $(".toggle").click(function(){
-        var url = $(this).attr('data-url');
-        var id = $(this).attr('data-id');
-        $("#show-"+id).slideToggle(100);
-    }).toggle( function() {
-        $(this).children("span").text("[-]");
-    }, function() {
-        $(this).children("span").text("[+]");
-    });
-
-*/
-
-
     $(".booking-roomx").click(function(){
         var id = $(this).attr('data-id');
         $('#room-'+id).html(data).slideToggle( "slow" );
@@ -175,6 +160,40 @@ function jqueryTemporaryLoad() {
         e.preventDefault();
     });
 
+
+    $('form#stockInvoice').on('keypress', 'input,select,textarea', function (e) {
+
+        if (e.which == 13) {
+
+            e.preventDefault();
+            switch (this.id) {
+
+                case 'tempReservation':
+                    $('#particular').focus();
+                    break;
+
+                case 'particular':
+                    $('#guestName').focus();
+                    break;
+
+                case 'guestName':
+                    $('#guestMobile').focus();
+                    break;
+
+                case 'guestMobile':
+                    $('#adult').focus();
+                    break;
+
+                case 'adult':
+                    $('#child').focus();
+                    break;
+                case 'child':
+                    $('#addRoom').trigger('click');
+                    break;
+
+            }
+        }
+    });
 
     $(document).on('click', '.booking-submit', function(e) {
 

@@ -51,6 +51,13 @@
                                 {% endif %}
                             {% endif %}
                         </div>
+                        <div class="col invoice-details" style="text-align: left">
+                            <h4>Event Details:</h4>
+                            <div><strong><i class="icon-th-list"></i>&nbsp;</strong> {{ entity.eventType }}</div>
+                            <div><strong><i class="icon-calendar"></i>&nbsp;Start </strong>{{ entity.startDate }}</div>
+                            <div><strong><i class="icon-calendar"></i>&nbsp;End </strong>{{ entity.endDate }}</div>
+
+                        </div>
                         <div class="col invoice-details">
                             <h5 class="invoice-id">INVOICE {{ entity.invoice }}</h5>
                             <div class="date">Date of Invoice: {{ entity.created|date('d-m-Y') }}</div>

@@ -822,7 +822,5 @@ class InvoiceController extends Controller
 
 	}
 
-
-
 }
 
