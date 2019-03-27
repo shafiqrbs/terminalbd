@@ -87,7 +87,7 @@
                                         <thead class="flip-content ">
                                         <tr class="table-header" style="">
                                             <th class="numeric"><strong>S/N</strong></th>
-                                            <th class="numeric" ><strong>Description</strong></th>
+                                            <th class="numeric" style="" ><strong>Description</strong></th>
                                             {% if entity.businessConfig.businessModel == 'sign' %}
                                                 <th class="numeric" >Size</th>
                                                 <th class="numeric" >S.ft</th>
@@ -123,13 +123,15 @@
                                         <tfoot>
                                         <tr>
                                             <td colspan="3"  style="width: 33%; border-right:1px solid #999999">
-                                                <table style="width: 100%;">
-                                                    <tr><td>Previous Due</td><td>{% if balance > 0 %}{{ (balance - entity.due)|number_format }}{% endif %}</td></tr>
-                                                    <tr><th>Sales Amount</th><td>{{ entity.total|number_format() }}</td></tr>
-                                                    <tr><td>Current Due</td><td>{{ entity.due|number_format() }}</td></tr>
-                                                    <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                                    <tr><th>Out Standing</th><td>{% if balance > 0 %} {{ balance|number_format }}{% else %}{{ entity.due|number_format() }}{% endif %}</td></tr>
-                                                </table>
+                                                {% if entity.process != "Quotation" %}
+                                                    <table style="width: 100%;">
+                                                        <tr><td>Previous Due</td><td>{% if balance > 0 %}{{ (balance - entity.due)|number_format }}{% endif %}</td></tr>
+                                                        <tr><th>Sales Amount</th><td>{{ entity.total|number_format() }}</td></tr>
+                                                        <tr><td>Current Due</td><td>{{ entity.due|number_format() }}</td></tr>
+                                                        <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
+                                                        <tr><th>Out Standing</th><td>{% if balance > 0 %} {{ balance|number_format }}{% else %}{{ entity.due|number_format() }}{% endif %}</td></tr>
+                                                    </table>
+                                                {% endif %}
                                             </td>
                                             <td colspan="2" style="width: 33%;"></td>
                                             <td colspan="3" style="width: 33%; border-left: 1px solid #999999">
@@ -182,7 +184,6 @@
                                     </table>
                                 {% endif %}
                             {% endif %}
-
                         </div>
                         <div class="clearfix">&nbsp;</div>
                         {% if config.isPrintFooter == 1 %}
@@ -192,25 +193,23 @@
                                         <td style="width:25%">
                                             <div class="span4">
                                                 <div style="height:50px"></div>
-                                                <h5><strong>Delivery By</strong></h5>
+                                                <h5><strong>Received By</strong></h5>
                                             </div>
                                         </td>
                                         <td style="width:25%">
                                             <div class="span4">
                                                 <div style="height:50px"></div>
-                                                <h5><strong>Checked By</strong></h5>
                                             </div>
                                         </td>
                                         <td style="width:25%">
                                             <div class="span4 text-center">
                                                 <div style="height:50px"></div>
-                                                <h5><strong>Approved By</strong></h5>
                                             </div>
                                         </td>
                                         <td style="width:25%">
                                             <div class="span4 text-right">
                                                 <div style="height:50px"></div>
-                                                <h5><strong>Received By</strong></h5>
+                                                <h5><strong>Signature</strong></h5>
                                             </div>
                                         </td>
                                     </tr>
