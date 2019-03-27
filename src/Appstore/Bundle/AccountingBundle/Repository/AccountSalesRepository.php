@@ -280,7 +280,7 @@ class AccountSalesRepository extends EntityRepository
     public function customerOutstanding($globalOption, $data = array())
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,COALESCE((SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as customerBalance ');
+        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as customerBalance ');
         $qb->join('e.customer','customer');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");

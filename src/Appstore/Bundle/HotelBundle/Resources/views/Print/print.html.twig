@@ -69,7 +69,7 @@
                             <div class="clearfix"><br/></div>
                             <div class="row-fluid box green">
                                 {% if entity.hotelInvoiceParticulars is defined and  entity.hotelInvoiceParticulars is not empty  %}
-                                    <table style="border: 1px solid #333!important;" class="table table-bordered table-striped table-condensed table-fixed">
+                                    <table style="border: 2px solid #333!important;" class="table table-bordered table-striped table-condensed table-fixed">
                                         <thead class="table-header">
                                         <tr>
                                             <th class="">Si/No</th>
@@ -169,8 +169,9 @@
     </div>
  <style>
      .table-header{
-         background: #99979c!important;
+         background: #100f10 !important;
          height: 40px!important;
+         color: #FFFFff!important;
      }
      .table-header th{
          line-height: 35px;
@@ -188,5 +189,5 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-{#    window.print();#}
+    window.print();
 {% endblock %}

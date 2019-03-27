@@ -730,37 +730,6 @@ class InvoiceController extends Controller
 
 	}
 
-	public function invoiceChalanAction(HotelInvoice $entity)
-	{
-
-		$em = $this->getDoctrine()->getManager();
-
-		/* @var $config HotelConfig */
-
-		$config = $this->getUser()->getGlobalOption()->getHotelConfig();
-		if ($config->getId() == $entity->getHotelConfig()->getId()) {
-
-			if($config->isCustomInvoicePrint() == 1){
-				$template = $config->getGlobalOption()->getSlug();
-			}else{
-				$template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
-			}
-			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($config->getGlobalOption(), $data = array('mobile'=>$entity->getCustomer()->getMobile()));
-			$balance = empty($result) ? 0 :$result[0]['customerBalance'];
-			return  $this->render("HotelBundle:Print:{$template}.html.twig",
-				array(
-					'config' => $config,
-					'entity' => $entity,
-					'balance' => $balance,
-					'print' => 'chalan',
-				)
-			);
-
-		}
-
-	}
-
-
 	public function processSelectAction()
 	{
 		$items = array();
