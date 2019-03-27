@@ -31,21 +31,14 @@
                         <div class="caption"><i class="icon-reorder"></i>Income Statement</div>
                          <div class="actions">
                             <div class="btn-group">
-                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
-                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
-                                <a class="btn purple" target="_blank" href="{{ path('report_income_pdf',{'startDate':startDate,'endDate':endDate,}) }}" >
-                                    <i class=" icon-download"></i>&nbsp;PDF
+                                {% set currentMonth = "now"|date("m") %}
+                                {% set currentYear = "now"|date("Y") %}
+                                {% set startMonth = searchForm.startMonth is defined ? searchForm.startMonth :"now"|date("m") %}
+                                {% set endMonth = searchForm.endMonth is defined ? searchForm.endMonth :"now"|date("m") %}
+                                {% set year = searchForm.year is defined ? searchForm.year :"now"|date("Y") %}
+                                <a class="btn purple" target="_blank" href="{{ path('account_medicine_income_monthly',{'pdf':'pdf','startMonth':startMonth,'endMonth':endMonth,'year':year}) }}" >
+                                    <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
-                                <a class="btn blue"  href="{{ path('report_income_print',{'startDate':startDate,'endDate':endDate,}) }}" >
-                                    <i class=" icon-print"></i>&nbsp;Print
-                                </a>
-                                <a class="btn" href="#" >
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('report_income_pdf') }}"><i class="icon-plus-sign"></i>&nbsp; Balance Sheet</a></li>
-                                </ul>
                             </div>
                         </div>
                     </div>
@@ -55,29 +48,27 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span4">
+                                        {% set months = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':'August','09':'September','10':'October','11':'November','12':'December'} %}
                                         <select class="span12 m-wrap" name="startMonth" id='startMonth'>
-                                            {% set months = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':'August','09':'September','10':'October','11':'November','12':'December'} %}
-                                            <option value=''>--Select Start Month--</option>
                                             {% for key,month in months %}
-                                                <option value='{{ key }}' {% if searchForm.startMonth is defined and searchForm.startMonth == key %} selected="selected" {% endif %} >{{ month }}</option>
+                                                <option value='{{ key }}' {% if (searchForm.startMonth is defined and searchForm.startMonth == key) or (key == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="span4">
                                         <select class="span12 m-wrap" name="endMonth" id='endMonth'>
-                                            <option value=''>--Select End Month--</option>
                                             {% for key,month in months %}
-                                                <option value='{{ key }}' {% if searchForm.endMonth is defined and searchForm.endMonth == key %} selected="selected" {% endif %} >{{ month }}</option>
+                                                <option value='{{ key }}' {% if (searchForm.endMonth is defined and searchForm.endMonth == key) or (key == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="span4">
                                         <div class="controls">
+                                            {% set years = [2018,2019,2020,2021,2022,2023,2024,2025] %}
                                             <div class="input-append span11">
                                                 <select class="span11 m-wrap" name="year" id='year'>
-                                                    {% set years = [2017,2018,2019,2020,2021,2022,2023,2024,2025] %}
                                                     {% for year in years %}
-                                                        <option value='{{ year }}' {% if searchForm.year is defined and searchForm.year ==  year %} selected="selected" {% endif %} >{{ year }}</option>
+                                                        <option value='{{ year }}' {% if (searchForm.year is defined and searchForm.year == year) or (year == currentYear) %} selected="selected" {% endif %} >{{ year }}</option>
                                                     {% endfor %}
                                                 </select>
                                                 <div class="btn-group">
@@ -93,7 +84,7 @@
 
                                 <thead>
                                 <tr>
-                                    <th class="pull-center" colspan="3"><h3>INCOME STATEMENT SHEET</h3></th>
+                                    <th class="pull-center" colspan="3"><h3>MONTHLY INCOME STATEMENT SHEET</h3></th>
                                 </tr>
                                 <tr>
                                     {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
@@ -115,7 +106,17 @@
                                 {% set totalDebit = 0 %}
                                 <tr><td>Sales</td><td class="numeric" ></td><td>{{ overview.sales|number_format }}</td></tr>
                                 <tr><td>Purchase </td><td class="numeric" >({{ overview.purchase|number_format }})</td><td></td></tr>
-                                <tr><th colspan="2" ><span class="pull-right">Gross Profit</span></th><th class="numeric" >{{ (overview.sales - overview.purchase)|number_format }}</th></tr>
+                                <tr><th colspan="3">Sales Adjustment</th></tr>
+                                <tr><td>Sales</td><td class="numeric" ></td><td>{{ overview.salesAdjustment.sales|number_format }}</td></tr>
+                                <tr><td>Purchase</td><td class="numeric" >({{ overview.salesAdjustment.purchase|number_format }})</td><td></td></tr>
+                                <tr><th colspan="2" ><span class="pull-right">Gross Profit</span></th><th class="numeric" >{{ (overview.sales + overview.salesAdjustment.profit - overview.purchase)|number_format }}</th></tr>
+                                <tr><th colspan="3">Operating Revenue</th></tr>
+                                {% set totalRevenue = 0 %}
+                                {% for revenue in overview.operatingRevenue %}
+                                    {% set totalRevenue = totalRevenue + revenue.credit  %}
+                                    <tr><td>{{ revenue.name }}</td><td></td><td class="numeric" >{{ revenue.credit|number_format }}</td></tr>
+                                {% endfor %}
+                                <tr><th>Grand Total Revenue</th><td></td><th class="numeric" >{{ totalRevenue|number_format }}</th></tr>
                                 <tr><th colspan="3">Operating Expense</th></tr>
                                 {% set totalExpense = 0 %}
                                 {% for expense in overview.expenditures %}
@@ -123,7 +124,7 @@
                                     <tr><td>{{ expense.name }}</td><td class="numeric" >{{ expense.amount|number_format }}</td><td></td></tr>
                                 {% endfor %}
                                 <tr><th>Grand Total Expense</th><th class="numeric" >({{ totalExpense|number_format }})</th><td></td></tr>
-                                {% set grandTotal = overview.sales - ( totalExpense + overview.purchase) %}
+                                {% set grandTotal = ((overview.sales + totalRevenue) - ( totalExpense + overview.purchase)) %}
                                 <tr><th colspan="2"><span class="pull-right">Grand Profit/Loss</span></th><th class="numeric" >{{ grandTotal|number_format }}</th></tr>
                                 </tbody>
                             </table>

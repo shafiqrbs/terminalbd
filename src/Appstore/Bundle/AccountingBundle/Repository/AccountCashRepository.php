@@ -7,6 +7,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
@@ -133,7 +134,7 @@ class AccountCashRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->from('SettingToolBundle:TransactionMethod','e');
-        $qb->addSelect('e.name AS transactionName');
+        $qb->select('e.name AS transactionName');
         $qb->addSelect('e.id AS transactionId');
         $result = $qb->getQuery()->getArrayResult();
         $openingBalances = array();
@@ -153,7 +154,7 @@ class AccountCashRepository extends EntityRepository
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.transactionMethod = :transactionMethod");
@@ -168,64 +169,74 @@ class AccountCashRepository extends EntityRepository
             $qb->setParameter('transactionMethod',$method);
         }
         $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getArrayResult();
+        $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
 
     }
 
     public function transactionBankCashOverview(User $user, $data = '')
     {
-
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
-
         $qb = $this->_em->createQueryBuilder();
         $qb->from('AccountingBundle:AccountBank','accountBank');
-        $qb->leftJoin('accountBank.accountCashes','e');
-        $qb->select('accountBank.id AS accountId ,accountBank.name AS bankName , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->select('accountBank.id AS accountId , accountBank.name AS bankName');
         $qb->where("accountBank.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption->getId());
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
-        $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
-        $openingBalances = array();
+        $transactionBankCash = [];
+        $openingBalances = [];
         foreach($result as $row) {
-            $openingBalances[$row['accountId']] = $this->openingBalance($user,array(2),array('accountBank'=> $row['accountId']));
+            $transactionBankCash[$row['accountId']]     = $this->transactionBankCash($row['accountId'],$data);
+            $openingBalances[$row['accountId']]         = $this->openingBalance($user,[2],['accountBank'=> $row['accountId']]);
         }
-        $data =  array('openingBalance' => $openingBalances , 'result'=> $result);
-        return $data;
+        $arrs = ['result' => $result,'openingBalance' => $openingBalances , 'transactionBankCash' => $transactionBankCash];
+        return $arrs;
+    }
+
+    public function transactionBankCash($bank,$data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.accountBank','a');
+      //  $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
+        $qb->where("a.id = :bank");
+        $qb->setParameter('bank', $bank);
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+
     }
 
     public function transactionMobileBankCashOverview(User $user ,$data = '')
     {
 
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
-
         $qb = $this->_em->createQueryBuilder();
         $qb->from('AccountingBundle:AccountMobileBank','accountMobileBank');
-        $qb->leftJoin('accountMobileBank.accountCashes','e');
-        $qb->select('accountMobileBank.id AS accountId , accountMobileBank.name AS mobileBankName , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
-        $qb->where("e.globalOption = :globalOption");
+        $qb->select('accountMobileBank.id AS accountId , accountMobileBank.name AS mobileBankName');
+        $qb->where("accountMobileBank.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        $qb->andWhere("e.transactionMethod = :transactionMethod");
-        $qb->setParameter('transactionMethod',3);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
-        $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
-        $openingBalances = array();
+        $transactionMobileCash = [];
+        $openingBalances = [];
         foreach($result as $row) {
+            $transactionMobileCash[$row['accountId']]     = $this->transactionMobileCash($row['accountId'],$data);
             $openingBalances[$row['accountId']] = $this->openingBalance($user,array(3),array('accountMobileBank'=> $row['accountId']));
         }
-        $data =  array('openingBalance' => $openingBalances , 'result'=> $result);
-        return $data;
+        $arrs = ['result' => $result,'openingBalance' => $openingBalances , 'transactionMobileCash' => $transactionMobileCash];
+        return $arrs;
+    }
 
+    public function transactionMobileCash($mobile,$data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.accountMobileBank','a');
+        $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
+        $qb->where("a.id = :mobile");
+        $qb->setParameter('mobile', $mobile);
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
     }
 
     public function transactionAccountHeadCashOverview(User $user,$data = '')
@@ -235,7 +246,7 @@ class AccountCashRepository extends EntityRepository
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.processHead as name , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->select('e.processHead as name , COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
@@ -449,6 +460,29 @@ class AccountCashRepository extends EntityRepository
 		if(!empty($entity->getToTransactionMethod()) and $entity->getToTransactionMethod()->getId() == 2 ){
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
 		}elseif(!empty($entity->getToTransactionMethod()) and $entity->getToTransactionMethod()->getId() == 3 ){
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+		}else{
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+		}
+		$cash->setDebit($entity->getAmount());
+		$em->persist($cash);
+		$em->flush();
+
+	}
+
+    public function insertPurchaseCommission(AccountPurchaseCommission $entity){
+
+		$em = $this->_em;
+		$cash = new AccountCash();
+		$cash->setGlobalOption($entity->getGlobalOption());
+		$cash->setTransactionMethod($entity->getTransactionMethod());
+		$cash->setAccountBank($entity->getAccountBank());
+		$cash->setAccountMobileBank($entity->getAccountMobileBank());
+        $cash->setProcessHead('Purchase-Commission');
+		$cash->setAccountRefNo($entity->getAccountRefNo());
+		if(!empty($entity->getTransactionMethod()) and $entity->getTransactionMethod()->getId() == 2 ){
+			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+		}elseif(!empty($entity->getTransactionMethod()) and $entity->getTransactionMethod()->getId() == 3 ){
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
 		}else{
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));

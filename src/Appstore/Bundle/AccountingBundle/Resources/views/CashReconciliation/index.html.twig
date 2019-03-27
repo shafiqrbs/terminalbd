@@ -69,7 +69,15 @@
                                         <td class="numeric" >{{ entity.withdraw }}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="" >
-                                                <a href="javascript:" id="delete-{{ entity.id }}" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_cashreconciliation_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                            <div class="actions">
+                                                <div class="btn-group">
+                                                    {% if entity.created|date('Y-m-d') == "now"|date('Y-m-d') %}
+                                                    <a href="javascript:" id="delete-{{ entity.id }}" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_cashreconciliation_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                                    <a  class="btn blue mini" href="{{ path('account_cashreconciliation_edit',{'id':entity.id}) }}"><i class="icon-pencil"></i></a>
+                                                    {% endif %}
+                                                    <a  class="btn green mini"  href="{{ path('account_cashreconciliation_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i></a>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}

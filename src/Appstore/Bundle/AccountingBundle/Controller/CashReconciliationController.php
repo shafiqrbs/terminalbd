@@ -150,24 +150,39 @@ class CashReconciliationController extends Controller
         ]);
     }
 
+    public function showAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $entity = $em->getRepository('AccountingBundle:CashReconciliation')->findOneBy(['globalOption' => $option,'id' => $id]);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
+        }
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser());
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser());
+        return $this->render('AccountingBundle:CashReconciliation:show.html.twig', [
+            'entity' => $entity,
+            'transactionBankCashOverviews'          => $transactionBankCashOverviews,
+            'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
+
+        ]);
+    }
+
     /**
      * Displays a form to edit an existing CashReconciliation entity.
      *
      */
-    public function inlineUpdateAction(Request $request)
+    public function metaUpdateAction(CashReconciliationMeta $entity)
     {
-        $data = $request->request->all();
+        $amount = $_REQUEST['amount'];
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('AccountingBundle:CashReconciliation')->find($data['pk']);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
         }
-        $entity->setSales($data['value']);
-        $profit = (($entity->getSales() * $entity->getProfitPercentage())/100);
-        $entity->setProfit($profit);
-        $purchase = ($entity->getSales() - $profit);
-        $entity->setPurchase($purchase);
+        $entity->setAmount($amount);
         $em->flush();
+        $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->update($entity->getCashReconciliation(),$entity->getTransactionMethod());
+        return new Response('success');
         exit;
     }
 
@@ -186,7 +201,7 @@ class CashReconciliationController extends Controller
         $entity->setIsCustom(1);
         $em->persist($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->initialUpdate($this->getUser(),$entity);
+        $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->update($reconciliation,$entity->getTransactionMethod());
         return new Response('success');
     }
 
@@ -213,13 +228,14 @@ class CashReconciliationController extends Controller
     public function metaDeleteAction(CashReconciliationMeta $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $recon =$entity->getCashReconciliation();
+        $recon = $entity->getCashReconciliation();
+        $method = $entity->getTransactionMethod();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
         }
         $em->remove($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->Update($this->getUser(),$recon);
+        $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->update($recon,$method);
         return new Response('success');
         exit;
     }

@@ -61,6 +61,27 @@ class CashReconciliation
     /**
      * @var float
      *
+     * @ORM\Column(name="systemCash", type="float", nullable=true)
+     */
+    private $systemCash = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="systemBank", type="float", nullable=true)
+     */
+    private $systemBank = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="systemMobile", type="float", nullable=true)
+     */
+    private $systemMobile = 0;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="withdraw", type="float", nullable=true)
      */
     private $withdraw = 0;
@@ -247,6 +268,54 @@ class CashReconciliation
     public function setTotal(float $total)
     {
         $this->total = $total;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSystemCash()
+    {
+        return $this->systemCash;
+    }
+
+    /**
+     * @param float $systemCash
+     */
+    public function setSystemCash(float $systemCash)
+    {
+        $this->systemCash = $systemCash;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSystemBank()
+    {
+        return $this->systemBank;
+    }
+
+    /**
+     * @param float $systemBank
+     */
+    public function setSystemBank(float $systemBank)
+    {
+        $this->systemBank = $systemBank;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSystemMobile()
+    {
+        return $this->systemMobile;
+    }
+
+    /**
+     * @param float $systemMobile
+     */
+    public function setSystemMobile(float $systemMobile)
+    {
+        $this->systemMobile = $systemMobile;
     }
 
 }

@@ -63,11 +63,11 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric">Cash Account</th>
-                                    <th class="numeric" >Opening Balance</th>
-                                    <th class="numeric" >Receive</th>
-                                    <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Closing Balance</th>
+                                    <th class="numeric span6">Cash Account</th>
+                                    <th class="numeric span2" >Opening Balance</th>
+                                    <th class="numeric span1" >Receive</th>
+                                    <th class="numeric span1" >Payment</th>
+                                    <th class="numeric span2" >Closing Balance</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -77,8 +77,8 @@
                                 {% set totalCredit = 0 %}
                                 {% for mode in transactionCashOverviews.result %}
                                     {% set open = transactionCashOverviews.openingBalance[mode.transactionId]|default(0) %}
-                                    {% set debit = transactionCashOverviews.transactionBalances[mode.transactionId][0].debit|default(0)  %}
-                                    {% set credit = transactionCashOverviews.transactionBalances[mode.transactionId][0].credit|default(0)  %}
+                                    {% set debit = transactionCashOverviews.transactionBalances[mode.transactionId].debit|default(0)  %}
+                                    {% set credit = transactionCashOverviews.transactionBalances[mode.transactionId].credit|default(0)  %}
                                     {% set totalOpen = totalOpen + open %}
                                     {% set totalDebit = totalDebit + debit %}
                                     {% set totalCredit = totalCredit + credit %}
@@ -104,23 +104,23 @@
                             <table class="table table-bordered tatransactionCashOverviewsble-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-green">
-                                    <th class="numeric">Bank Account</th>
-                                    <th class="numeric" >Opening Balance</th>
-                                    <th class="numeric" >Receive</th>
-                                    <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Closing Balance</th>
+                                    <th class="numeric span6">Bank Account</th>
+                                    <th class="numeric span2" >Opening Balance</th>
+                                    <th class="numeric span1" >Receive</th>
+                                    <th class="numeric span1" >Payment</th>
+                                    <th class="numeric span2" >Closing Balance</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% set sumBank = 0 %}
-                                {% for row in transactionBankCashOverviews.result %}
+                                {% for key,row in transactionBankCashOverviews.result %}
                                     <tr>
-                                        {% set closing = (transactionBankCashOverviews.openingBalance[row.accountId]|default + row.debit - row.credit) %}
+                                        {% set closing = (transactionBankCashOverviews.openingBalance[row.accountId]|default + transactionBankCashOverviews.transactionBankCash[row.accountId]['debit'] - transactionBankCashOverviews.transactionBankCash[row.accountId]['credit']) %}
                                         {% set sumBank = sumBank + closing %}
                                         <th >{{ row.bankName }}</th>
                                         <th class="numeric">{{ transactionBankCashOverviews.openingBalance[row.accountId]|default|number_format }}</th>
-                                        <td class="numeric" >{{ row.debit|number_format }}</td>
-                                        <td class="numeric" >{{ row.credit|number_format }}</td>
+                                        <td class="numeric" >{{ transactionBankCashOverviews.transactionBankCash[row.accountId].debit|number_format }}</td>
+                                        <td class="numeric" >{{ transactionBankCashOverviews.transactionBankCash[row.accountId].credit|number_format }}</td>
                                         <th class="numeric" >{{ closing|number_format }}</th>
                                     </tr>
                                 {% endfor %}
@@ -135,23 +135,23 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th>Mobile Account</th>
-                                    <th class="numeric" >Opening Balance</th>
-                                    <th class="" >Receive</th>
-                                    <th class="" >Payment</th>
-                                    <th class="" >Closing Balance</th>
+                                    <th class="numeric span6">Mobile Account</th>
+                                    <th class="numeric span2" >Opening Balance</th>
+                                    <th class="numeric span1" >Receive</th>
+                                    <th class="numeric span1" >Payment</th>
+                                    <th class="numeric span2" >Closing Balance</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% set sumTotal = 0 %}
                                 {% for row in transactionMobileBankCashOverviews.result %}
                                     <tr>
-                                        {% set closing = (transactionMobileBankCashOverviews.openingBalance[row.accountId]|default + row.debit - row.credit) %}
+                                        {% set closing = (transactionMobileBankCashOverviews.openingBalance[row.accountId]|default + transactionMobileBankCashOverviews.transactionMobileCash[row.accountId]['debit'] - transactionMobileBankCashOverviews.transactionMobileCash[row.accountId]['credit']) %}
                                         {% set sumTotal = sumTotal + closing %}
                                         <th  >{{ row.mobileBankName }}</th>
                                         <th class="numeric">{{ transactionMobileBankCashOverviews.openingBalance[row.accountId]|default|number_format }}</th>
-                                        <td class="numeric" >{{ row.debit|number_format }}</td>
-                                        <td class="numeric" >{{ row.credit|number_format }}</td>
+                                        <td class="numeric" >{{ transactionMobileBankCashOverviews.transactionMobileCash[row.accountId].debit|number_format }}</td>
+                                        <td class="numeric" >{{ transactionMobileBankCashOverviews.transactionMobileCash[row.accountId].credit|number_format }}</td>
                                         <th class="numeric" >{{ closing|number_format }}</th>
                                     </tr>
                                 {% endfor %}
@@ -165,10 +165,10 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-yellow">
-                                    <th>Account Head</th>
-                                    <th class="numeric"  >Receive</th>
-                                    <th class="numeric"  >Payment</th>
-                                    <th class="numeric"  >Balance</th>
+                                    <th class="numeric span6">Account Head</th>
+                                    <th class="numeric span1"  >Receive</th>
+                                    <th class="numeric span1"  >Payment</th>
+                                    <th class="numeric span2"  >Balance</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -185,7 +185,7 @@
                                 </tbody>
                                 <tr>
                                     <th class="numeric" colspan="3"><span class="pull-right">Grand Total</span></th>
-                                    <td class="numeric" ><strong>{{ sumCash|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{#{{ sumCash|number_format }}#}</strong></td>
                                 </tr>
                             </table>
                         </div>

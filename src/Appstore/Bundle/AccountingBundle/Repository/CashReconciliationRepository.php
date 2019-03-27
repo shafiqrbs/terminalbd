@@ -48,22 +48,25 @@ class CashReconciliationRepository extends EntityRepository
 
             if($mod['transactionName'] == 'Cash'){
                 $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
-                $debit  =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
-                $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
-                $cash   =  (($open + $debit)-$credit);
+                $debit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['debit'];
+                $credit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['credit'];
+                $cash   =  (($open + $debit) - $credit);
                 $entity->setCash($cash);
+                $entity->setSystemCash($cash);
             }elseif($mod['transactionName'] == 'Bank'){
                 $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
-                $debit  =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
-                $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
-                $cash   =  (($open + $debit)-$credit);
+                $debit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['debit'];
+                $credit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['credit'];
+                $cash   =  (($open + $debit) - $credit);
                 $entity->setBank($cash);
+                $entity->setSystemBank($cash);
             }elseif($mod['transactionName'] == 'Mobile'){
                 $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
-                $debit  =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['debit']] : 0;
-                $credit =  !empty($transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']]) ? $transactionCashOverview['transactionBalances'][$mod['transactionId'][0]['credit']] : 0;
-                $cash   =  (($open + $debit)-$credit);
+                $debit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['debit'];
+                $credit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['credit'];
+                $cash   =  (($open + $debit) - $credit);
                 $entity->setMobile($cash);
+                $entity->setSystemMobile($cash);
             }
             endforeach;
             $this->_em->flush($entity);
@@ -82,13 +85,10 @@ class CashReconciliationRepository extends EntityRepository
             $this->_em->flush();
         }
         $closing = 0;
-        var_dump($bankCash);
-        exit;
-        foreach ($bankCash as $bank ){
-           // echo $bankId = $bank['accountId'];
 
-            exit;
-            $closing = ($bank['openingBalance'][$bankId] + $bank['debit'] - $bank['credit']);
+        foreach ($bankCash['result'] as $bank ){
+            $bankId = $bank['accountId'];
+            $closing = ($bankCash['openingBalance'][$bankId] + $bankCash['transactionBankCash'][$bankId]['debit'] - $bankCash['transactionBankCash'][$bankId]['credit'] );
             $entity = new CashReconciliationMeta();
             $entity->setCashReconciliation($reconciliation);
             $entity->setTransactionMethod('Bank');
@@ -98,32 +98,39 @@ class CashReconciliationRepository extends EntityRepository
             $this->_em->flush();
         }
 
-        foreach ($mobileCash as $mobile ){
+        foreach ($mobileCash['result'] as $mobile ){
 
-            $closing = ($mobile['openingBalance'][$mobile['accountId']] + $mobile['debit'] - $mobile['credit']);
+            $bankId = $mobile['accountId'];
+            $closing = ($mobileCash['openingBalance'][$bankId] + $mobileCash['transactionMobileCash'][$bankId]['debit'] - $mobileCash['transactionMobileCash'][$bankId]['credit'] );
             $entity = new CashReconciliationMeta();
             $entity->setCashReconciliation($reconciliation);
             $entity->setTransactionMethod('Mobile');
-            $entity->setMetaKey($bank['mobileBankName']);
+            $entity->setMetaKey($mobile['mobileBankName']);
             $entity->setAmount($closing);
             $this->_em->persist($entity);
             $this->_em->flush();
         }
-        exit;
-
     }
 
-    public function update(CashReconciliation $cash)
+    public function update(CashReconciliation $cash, $method)
     {
-        $qb = $this->createQueryBuilder();
+        $qb = $this->_em->createQueryBuilder();
         $qb->from('AccountingBundle:CashReconciliationMeta','e');
         $qb->join('e.cashReconciliation','t');
-        $qb->select('e.transactionMethod, SUM(e.amount) AS amount');
+        $qb->select('COALESCE(SUM(e.amount),0) AS amount');
         $qb->where("t.id = :reconciliation");
         $qb->setParameter('reconciliation', $cash->getId());
-        $qb->groupBy('e.transactionMethod');
-        $result = $qb->getQuery()->getArrayResult();
-        return $result;
+        $qb->andWhere("e.transactionMethod = :method");
+        $qb->setParameter('method', $method);
+        $result = $qb->getQuery()->getOneOrNullResult()['amount'];
+        if($method == 'Cash'){
+            $cash->setCash($result);
+        }elseif($method == 'Bank'){
+            $cash->setBank($result);
+        }elseif($method == 'Mobile'){
+            $cash->setMobile($result);
+        }
+        $this->_em->flush($cash);
     }
 
 }

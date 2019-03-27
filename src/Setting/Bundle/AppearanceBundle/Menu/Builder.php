@@ -426,6 +426,7 @@ class Builder extends ContainerAware
 	                       ->setAttribute('dropdown', true);
 	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
 		    $menu['Accounting']['Manage Sales']->addChild('Sales', array('route' => 'account_sales'));
+		    $menu['Accounting']['Manage Sales']->addChild('Sales Adjustment', array('route' => 'account_salesadjustment'));
 		    $menu['Accounting']['Manage Sales']->addChild('Receive', array('route' => 'account_sales_new'));
             $menu['Accounting']['Manage Sales']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
 		    $menu['Accounting']['Manage Sales']['Reports']->addChild('Outstanding', array('route' => 'report_customer_outstanding'));
@@ -437,10 +438,10 @@ class Builder extends ContainerAware
 	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
 		    $menu['Accounting']['Manage Purchase']->addChild('Purchase', array('route' => 'account_purchase'));
 		    $menu['Accounting']['Manage Purchase']->addChild('Payment', array('route' => 'account_purchase_new'));
+            $menu['Accounting']['Manage Purchase']->addChild('Commission', array('route' => 'account_purchasecommission'));
             $menu['Accounting']['Manage Purchase']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
             $menu['Accounting']['Manage Purchase']['Reports']->addChild('Outstanding', array('route' => 'report_vendor_outstanding'));
             $menu['Accounting']['Manage Purchase']['Reports']->addChild('Ledger', array('route' => 'report_vendor_ledger'));
-
 	    }
 	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE')){
 		    $menu['Accounting']->addChild('Expenditure', array('route' => 'account_expenditure'))
@@ -461,6 +462,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-money')
                 ->setAttribute('dropdown', true);
             $menu['Accounting']['Cash']->addChild('Cash Overview', array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Cash']->addChild('Cash Reconciliation', array('route' => 'account_cashreconciliation'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Cash']->addChild('All Cash Flow', array('route' => 'account_transaction_accountcash'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Cash']->addChild('Cash Transaction', array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Cash']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
@@ -570,14 +572,13 @@ class Builder extends ContainerAware
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'hms_report_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'hms_report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',array('route' => 'hms_report_monthly_income'))->setAttribute('icon', 'icon-th-list');
             }
             $accounting = array('miss');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'account_medicine_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'account_medicine_income_monthly'))->setAttribute('icon', 'icon-th-list');
-
+                $menu['Accounting']['Transaction & Report']->addChild('Monthly Income', array('route' => 'account_medicine_income_monthly'))->setAttribute('icon', 'icon-th-list');
             }
             $accounting = array('business');
             $result = array_intersect($arrSlugs, $accounting);

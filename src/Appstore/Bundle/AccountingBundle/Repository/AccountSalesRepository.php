@@ -114,7 +114,7 @@ class AccountSalesRepository extends EntityRepository
 		$branch = $user->getProfile()->getBranches();
 		$qb = $this->createQueryBuilder('e');
 		$qb->leftJoin('e.transactionMethod','t');
-		$qb->select('e.processHead, SUM(e.totalAmount) AS total, SUM(e.amount) AS receive, count(e.id) AS totalCount');
+		$qb->select('e.processHead, COALESCE(SUM(e.totalAmount),0) AS total,COALESCE(SUM(e.amount),0) AS receive, count(e.id) AS totalCount');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
 		if (!empty($branch)){
@@ -134,7 +134,7 @@ class AccountSalesRepository extends EntityRepository
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount, SUM(e.amount) AS returnAmount ');
+        $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE((e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if(!empty($process)){
@@ -204,7 +204,7 @@ class AccountSalesRepository extends EntityRepository
     public function customerSingleOutstanding($globalOption,$customer)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('(SUM(e.totalAmount) - SUM(e.amount)) as customerBalance ');
+        $qb->select('(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as customerBalance ');
         $qb->join("e.customer" ,'c');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
@@ -263,7 +263,7 @@ class AccountSalesRepository extends EntityRepository
 
         $customer = $accountSales->getCustomer()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount, SUM(e.amount) AS returnAmount ');
+        $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE(SUM(e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $accountSales->getGlobalOption()->getId());
         $qb->andWhere("e.process = 'approved'");
@@ -280,7 +280,7 @@ class AccountSalesRepository extends EntityRepository
     public function customerOutstanding($globalOption, $data = array())
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,(SUM(e.totalAmount) - SUM(e.amount)) as customerBalance ');
+        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,COALESCE((SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as customerBalance ');
         $qb->join('e.customer','customer');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");
@@ -449,9 +449,11 @@ class AccountSalesRepository extends EntityRepository
 		}
 
 		$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-		$purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
+        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
 		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
-		$data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+		$operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+		$data =  ['sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue, 'expenditures' => $expenditures];
 		return $data;
 
 	}
@@ -468,9 +470,10 @@ class AccountSalesRepository extends EntityRepository
 			$data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
 		}
 		$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-		$purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
+        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
 		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-		$data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+		$data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
 		return $data;
 
 	}
@@ -487,9 +490,10 @@ class AccountSalesRepository extends EntityRepository
             $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
         }
         $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
         $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
-        $data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+        $data =  ['sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures];
         return $data;
 
     }

@@ -28,9 +28,11 @@ class AccountSalesAdjustmentRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.purchase) AS purchase, SUM(e.sales) AS sales, SUM(e.profit) AS profit');
+        $qb->select('COALESCE(SUM(e.purchase),0) AS purchase, COALESCE(SUM(e.sales),0) AS sales, COALESCE(SUM(e.profit),0) AS profit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = :process");
+        $qb->setParameter('process', 'approved');
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
@@ -58,97 +60,26 @@ class AccountSalesAdjustmentRepository extends EntityRepository
                 */
 
         }else{
-
-                $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-                $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $process =    isset($data['process'])? $data['process'] :'';
-                $bankBranch =    isset($data['bankBranch'])? $data['bankBranch'] :'';
-
                 if (!empty($data['startDate']) and !empty($data['endDate']) ) {
-
+                    $datetime = new \DateTime($data['startDate']);
+                    $startDate = $datetime->format('Y-m-d 00:00:00');
                     $qb->andWhere("e.updated >= :startDate");
-                    $qb->setParameter('startDate', $startDate.' 00:00:00');
+                    $qb->setParameter('startDate',$startDate);
                 }
                 if (!empty($data['endDate']) and !empty($data['startDate'])) {
-
+                    $datetime = new \DateTime($data['endDate']);
+                    $endDate = $datetime->format('Y-m-d 23:59:59');
                     $qb->andWhere("e.updated <= :endDate");
-                    $qb->setParameter('endDate', $endDate.' 00:00:00');
+                    $qb->setParameter('endDate', $endDate);
                 }
                 if (!empty($process)) {
-
                     $qb->andWhere("e.processHead = :process");
                     $qb->setParameter('process', $process);
                 }
-                if (!empty($bankBranch)) {
 
-                    $qb->andWhere("e.bankBranch = :bankBranch");
-                    $qb->setParameter('bankBranch', $bankBranch);
-                }
         }
 
     }
 
-    public function lastInsertCash($entity)
-    {
-        $em = $this->_em;
-        $entity = $em->getRepository('AccountingBundle:AccountBankCash')->findOneBy(
-            array(
-                'globalOption' => $entity->getGlobalOption(),
-                'bankBranch' => $entity->getBankBranch()
-            ),
-            array('id' => 'DESC')
-        );
-
-        if (empty($entity)) {
-            return 0;
-        }
-        return $entity->getBalance();
-    }
-
-
-
-    public function insertJournalBank(AccountJournal $journal)
-    {
-
-        $balance = $this->lastInsertCash($journal);
-        $em = $this->_em;
-        $cash = new AccountBankCash();
-        $cash->setGlobalOption($journal->getGlobalOption());
-        $cash->setBankBranch($journal->getBankBranch());
-        $cash->setProcessHead('Journal');
-        $cash->setAccountRefNo($journal->getAccountRefNo());
-        $cash->setUpdated($journal->getUpdated());
-        if($journal->getTransactionType()  == 'Debit' ){
-            $cash->setAccountHead($journal->getAccountHeadDebit());
-            $cash->setDebit($journal->getAmount());
-            $cash->setBalance($balance + $journal->getAmount());
-        }else{
-            $cash->setAccountHead($journal->getAccountHeadCredit());
-            $cash->setBalance($balance - $journal->getAmount() );
-            $cash->setCredit($journal->getAmount());
-        }
-        $em->persist($cash);
-        $em->flush();
-
-    }
-
-    public function insertPurchaseBank(AccountPurchase $entity)
-    {
-
-        $balance = $this->lastInsertCash($entity);
-        $em = $this->_em;
-        $cash = new AccountBankCash();
-        $cash->setGlobalOption($entity->getGlobalOption());
-        $cash->setBankBranch($entity->getBankBranch());
-        $cash->setProcessHead('Purchase');
-        $cash->setAccountRefNo($entity->getAccountRefNo());
-        $cash->setUpdated($entity->getUpdated());
-        $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(32));
-        $cash->setBalance($balance - $entity->getPayment() );
-        $cash->setCredit($entity->getPayment());
-        $em->persist($cash);
-        $em->flush();
-
-    }
-    
 }

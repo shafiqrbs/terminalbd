@@ -5,6 +5,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
@@ -1926,6 +1927,55 @@ class TransactionRepository extends EntityRepository
 		/* Cash - Long Term Liabilities	 */
 		$transaction->setAmount('-'.$damage->getSubTotal());
 		$transaction->setCredit($damage->getSubTotal());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+
+	}
+
+
+    public function purchaseCommissionTransaction($global,AccountPurchaseCommission $commission)
+	{
+		$this->purchaseCommissionTransactionDebit($global,$commission);
+		$this->purchaseCommissionTransactionCredit($global,$commission);
+
+	}
+
+	public function purchaseCommissionTransactionDebit($globalOption, AccountPurchaseCommission $commission)
+	{
+		$transaction = new Transaction();
+		$transaction->setGlobalOption($globalOption);
+		$transaction->setProcessHead('Purchase Commission');
+		/* Cash - Cash various */
+        if($commission->getTransactionMethod()->getId() == 2 ){
+            /* Current Asset Bank Cash Credit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+            $transaction->setProcess('Current Assets');
+        }elseif($commission->getTransactionMethod()->getId() == 3 ){
+            /* Current Asset Mobile Account Credit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+            $transaction->setProcess('Current Assets');
+        }else{
+            /* Cash - Purchase Goods Payment Account */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+            $transaction->setProcess('Cash');
+        }
+		$transaction->setAmount($commission->getAmount());
+		$transaction->setDebit($commission->getAmount());
+		$this->_em->persist($transaction);
+		$this->_em->flush();
+	}
+
+	public function purchaseCommissionTransactionCredit($globalOption,AccountPurchaseCommission $commission)
+	{
+		$transaction = new Transaction();
+		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(61);
+		$transaction->setGlobalOption($globalOption);
+		$transaction->setAccountHead($accountHead);
+		$transaction->setProcessHead('Purchase Commission');
+		$transaction->setProcess('Operating Revenue');
+		/* Cash - Long Term Liabilities	 */
+		$transaction->setAmount('-'.$commission->getAmount());
+		$transaction->setCredit($commission->getAmount());
 		$this->_em->persist($transaction);
 		$this->_em->flush();
 

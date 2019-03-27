@@ -137,14 +137,14 @@
                             </thead>
                             <tbody>
                             {% set sumBank = 0 %}
-                            {% for row in transactionBankCashOverviews.result %}
+                            {% for key,row in transactionBankCashOverviews.result %}
                                 <tr>
-                                    {% set closing = (transactionBankCashOverviews.openingBalance[row.accountId]|default + row.debit - row.credit) %}
+                                    {% set closing = (transactionBankCashOverviews.openingBalance[row.accountId]|default + transactionBankCashOverviews.transactionBankCash[row.accountId]['debit'] - transactionBankCashOverviews.transactionBankCash[row.accountId]['credit']) %}
                                     {% set sumBank = sumBank + closing %}
                                     <th >{{ row.bankName }}</th>
                                     <th class="numeric">{{ transactionBankCashOverviews.openingBalance[row.accountId]|default|number_format }}</th>
-                                    <td class="numeric" >{{ row.debit|number_format }}</td>
-                                    <td class="numeric" >{{ row.credit|number_format }}</td>
+                                    <td class="numeric" >{{ transactionBankCashOverviews.transactionBankCash[row.accountId].debit|number_format }}</td>
+                                    <td class="numeric" >{{ transactionBankCashOverviews.transactionBankCash[row.accountId].credit|number_format }}</td>
                                     <th class="numeric" >{{ closing|number_format }}</th>
                                 </tr>
                             {% endfor %}
@@ -174,12 +174,12 @@
                             {% set sumTotal = 0 %}
                             {% for row in transactionMobileBankCashOverviews.result %}
                                 <tr>
-                                    {% set closing = (transactionMobileBankCashOverviews.openingBalance[row.accountId]|default + row.debit - row.credit) %}
+                                    {% set closing = (transactionMobileBankCashOverviews.openingBalance[row.accountId]|default + transactionMobileBankCashOverviews.transactionMobileCash[row.accountId]['debit'] - transactionMobileBankCashOverviews.transactionMobileCash[row.accountId]['credit']) %}
                                     {% set sumTotal = sumTotal + closing %}
                                     <th  >{{ row.mobileBankName }}</th>
                                     <th class="numeric">{{ transactionMobileBankCashOverviews.openingBalance[row.accountId]|default|number_format }}</th>
-                                    <td class="numeric" >{{ row.debit|number_format }}</td>
-                                    <td class="numeric" >{{ row.credit|number_format }}</td>
+                                    <td class="numeric" >{{ transactionMobileBankCashOverviews.transactionMobileCash[row.accountId].debit|number_format }}</td>
+                                    <td class="numeric" >{{ transactionMobileBankCashOverviews.transactionMobileCash[row.accountId].credit|number_format }}</td>
                                     <th class="numeric" >{{ closing|number_format }}</th>
                                 </tr>
                             {% endfor %}
@@ -211,7 +211,7 @@
                                     {% set sumCash = sumCash + (row.debit-row.credit) %}
                                     <th >{{ row.name }}</th>
                                     <td class="numeric"  >{{ row.debit|number_format }}</td>
-                                    <td cclass="numeric"  >{{ row.credit|number_format }}</td>
+                                    <td class="numeric"  >{{ row.credit|number_format }}</td>
                                     <td class="numeric"  >{{ (row.debit-row.credit)|number_format }}</td>
                                 </tr>
                             {% endfor %}

@@ -150,8 +150,8 @@ class AccountPurchaseCommissionController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertpurchasecommission($entity);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->purchasecommissionTransaction($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCommission($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->purchaseCommissionTransaction($this->getUser()->getGlobalOption(),$entity);
             return new Response('success');
         } else {
             return new Response('failed');
