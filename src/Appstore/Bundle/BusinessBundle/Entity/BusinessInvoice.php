@@ -255,6 +255,26 @@ class BusinessInvoice
     private $isReversed;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="eventType", type="string", length=50, nullable=true)
+     */
+    private $eventType;
+
+    /**
+     * @var string
+     * @ORM\Column(name="startDate", type="string", length=50, nullable=true)
+     */
+    private $startDate;
+
+    /**
+     * @var string
+     * @ORM\Column(name="endDate", type="string", length=50, nullable=true)
+     */
+    private $endDate;
+
+
+    /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created", type="datetime")
@@ -842,6 +862,54 @@ class BusinessInvoice
 	public function setIsReversed( bool $isReversed ) {
 		$this->isReversed = $isReversed;
 	}
+
+    /**
+     * @return string
+     */
+    public function getEventType()
+    {
+        return $this->eventType;
+    }
+
+    /**
+     * @param string $eventType
+     */
+    public function setEventType(string $eventType)
+    {
+        $this->eventType = $eventType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param string $startDate
+     */
+    public function setStartDate(string $startDate)
+    {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * @param string $endDate
+     */
+    public function setEndDate(string $endDate)
+    {
+        $this->endDate = $endDate;
+    }
 
 }
 

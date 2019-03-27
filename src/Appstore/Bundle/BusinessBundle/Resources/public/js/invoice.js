@@ -31,6 +31,22 @@ $("[id^=startPicker]").each(function() {
     bindDatePicker(this);
 });
 
+$('#startDate, #endDate').datepicker({
+    showOn: "both",
+    beforeShow: customRange,
+    dateFormat: "dd M yy",
+});
+function customRange(input) {
+    if (input.id == 'endDate') {
+        var minDate = new Date($('#startDate').val());
+        minDate.setDate(minDate.getDate() + 1)
+        return {
+            minDate: minDate
+        };
+    }
+    return {}
+}
+
 $(document).on("click", ".sms-confirm", function() {
     var url = $(this).attr('data-url');
     $('#confirm-content').confirmModal({
@@ -406,4 +422,17 @@ $(document).on("click", "#receiveBtn", function() {
             $('form#invoiceForm').submit();
         }
     });
+});
+
+$(document).on("change", ".eventProcess", function(e) {
+    var formData = new FormData($('form#eventForm')[0]); // Create an arbitrary FormData instance
+    var url = $('form#eventForm').attr('action'); // Create an arbitrary FormData instance
+    $.ajax(url,{
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        data: formData,
+        success: function (response){}
+    });
+
 });

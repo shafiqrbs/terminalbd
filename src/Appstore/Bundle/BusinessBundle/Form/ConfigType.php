@@ -42,17 +42,18 @@ class ConfigType extends AbstractType
 			        'sign' => 'Digital-Sign',
 			        'electrical' => 'Electrical',
 			        'stationary' => 'Stationary',
+			        'event' => 'Event',
 			        'bricks' => 'Bricks',
 			        'sawmill' => 'Sawmill',
 		        ),
 	        ))
-	        ->add('invoiceType', 'choice', array(
+	        /*->add('invoiceType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
                 'choices' => array(
                 	'' => '-- Select invoice type --',
 	                'print' => 'General',
 	                'banner-print' => 'Banner-Print'),
-            ))
+            ))*/
 	        ->add('stockFormat',
 		        'choice', array(
 			        'attr'=>array('class'=>'m-wrap  span12'),

@@ -34,6 +34,13 @@ business_item_unit_search:
             expose: true
 
 
+business_invoice_event:
+    path:     /{id}/event
+    defaults: { _controller: "BusinessBundle:Invoice:addEvent" }
+    methods:  POST
+    options:
+            expose: true
+
 business_invoice_particular_add:
     path:     /{invoice}/particular-add
     defaults: { _controller: "BusinessBundle:Invoice:addParticular" }

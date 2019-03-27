@@ -49,16 +49,13 @@ class InvoiceController extends Controller
         $user = $this->getUser();
         $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $user,$data);
         $pagination = $this->paginate($entities);
-
         return $this->render('BusinessBundle:Invoice:index.html.twig', array(
             'entities' => $pagination,
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
             'searchForm' => $data,
         ));
-
     }
-
 
     public function newAction()
     {
@@ -314,6 +311,25 @@ class InvoiceController extends Controller
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
+
+    public function addEventAction(Request $request, BusinessInvoice $invoice)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $data = $request->request->all();
+        $invoice->setEventType($data['eventType']);
+        $invoice->setStartDate($data['startDate']);
+        $invoice->setEndDate($data['endDate']);
+        if(!empty($data['customerName']) and !empty($data['customerMobile'])){
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
+            $invoice->setCustomer($customer);
+        }
+        $em->flush();
+        exit;
+
+    }
 
     public function addParticularAction(Request $request, BusinessInvoice $invoice)
     {

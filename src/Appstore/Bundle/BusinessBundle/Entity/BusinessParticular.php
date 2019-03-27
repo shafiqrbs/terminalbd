@@ -204,7 +204,7 @@ class BusinessParticular
      *
      * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
-    private $purchasePrice;
+    private $purchasePrice = 0;
 
 
 	/**
@@ -229,7 +229,7 @@ class BusinessParticular
      *
      * @ORM\Column(name="salesPrice", type="float", nullable=true)
      */
-    private $salesPrice;
+    private $salesPrice = 0;
 
     /**
      * @var string
@@ -250,8 +250,7 @@ class BusinessParticular
      *
      * @ORM\Column(name="minimumPrice", type="decimal", nullable=true)
      */
-    private $minimumPrice;
-
+    private $minimumPrice = 0;
 
     /**
      * @var string

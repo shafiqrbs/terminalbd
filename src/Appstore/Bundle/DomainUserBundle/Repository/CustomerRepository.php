@@ -76,12 +76,24 @@ class CustomerRepository extends EntityRepository
         $address = $data['customerAddress'];
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
         if($entity){
+            $entity->setAddress($address);
+            if(isset($data['customerEmail']) and !empty($data['customerEmail'])){
+                $entity->setEmail($data['customerEmail']);
+            }
+            if(!empty($data['location'])){
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
+                $entity->setLocation($location);
+            }
+            $em->flush($entity);
             return $entity;
         }else{
             $entity = new Customer();
             $entity->setMobile($mobile);
             $entity->setName($name);
             $entity->setAddress($address);
+            if(isset($data['customerEmail']) and !empty($data['customerEmail'])){
+                $entity->setEmail($data['customerEmail']);
+            }
             $entity->setGlobalOption($globalOption);
             if(!empty($data['location'])){
                 $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);

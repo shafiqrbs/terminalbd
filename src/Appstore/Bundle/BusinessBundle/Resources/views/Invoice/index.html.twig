@@ -73,7 +73,7 @@
                                                 <div class="input-append span12">
                                                     <select name="process" id="process" class="m-wrap span5">
                                                         <option value="" >--Process--</option>
-                                                        {% set processes =['Created','Hold','Delivered','Done','Canceled'] %}
+                                                        {% set processes =['Created','Hold','Delivered','Done','Quotation','Canceled'] %}
                                                         {% for pro in processes %}
                                                             <option value="{{ pro }}" {% if searchForm.process is defined and searchForm.process == pro %} selected="selected" {% endif %} >{{ pro }}</option>
                                                         {% endfor %}
@@ -124,12 +124,10 @@
                                         </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% set processIntArr = ['Hold','Created','Revised'] %}
-                                                {% set processDone = ['Done','Delivered','Chalan'] %}
+                                                {% set processIntArr = ['Hold','Created','Revised','Quotation'] %}
+                                                {% set processDone = ['Done','Delivered','Chalan','Quotation'] %}
                                                 {% if entity.process in  processIntArr %}
                                                 <a href="{{ path('business_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Edit</a>
-                                                {% endif %}
-                                                {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
                                                 <a  data-id="{{ entity.id }}" data-url="{{ path('business_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
                                                 {% if entity.process in  processDone %}
