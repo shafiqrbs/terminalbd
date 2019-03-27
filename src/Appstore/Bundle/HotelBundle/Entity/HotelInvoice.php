@@ -193,8 +193,7 @@ class HotelInvoice
      *
      * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
      */
-    private $discountCalculation;
-
+    private $discountCalculation = 0;
 
     /**
      * @var float
@@ -203,13 +202,12 @@ class HotelInvoice
      */
     private $subTotal;
 
-
     /**
      * @var float
      *
      * @ORM\Column(name="discount", type="float", nullable=true)
      */
-    private $discount;
+    private $discount = 0;
 
     /**
      * @var float

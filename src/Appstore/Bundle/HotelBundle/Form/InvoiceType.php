@@ -35,7 +35,7 @@ class InvoiceType extends AbstractType
     {
         $builder
 
-            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','maxlength' => 4,'autocomplete'=>'off')))
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput remove-value','placeholder'=>'Discount Flat/Percentage','data-original-title'=>'Add payment discount','maxlength' => 4,'autocomplete'=>'off')))
             ->add('discountType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap discount-type span12'),
                 'expanded'      =>false,
@@ -46,7 +46,7 @@ class InvoiceType extends AbstractType
                 ),
             ))
            /* ->add('discount','hidden')*/
-            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Payment amount')))
+            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12 remove-value','placeholder'=>'Receive amount')))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
                 'expanded'      =>false,

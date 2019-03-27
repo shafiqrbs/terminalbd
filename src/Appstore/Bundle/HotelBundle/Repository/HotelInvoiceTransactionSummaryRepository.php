@@ -44,7 +44,7 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 		$res = $em->createQueryBuilder()
 		          ->from('HotelBundle:HotelInvoiceTransaction','si')
 		          ->join('si.hotelInvoice','e')
-		          ->select('sum(si.discount) as discount , sum(si.vat) as vat, sum(si.serviceCharge) as serviceCharge , sum(si.subTotal) as subTotal , sum(si.total) as total, sum(si.received) as received')
+		          ->select('COALESCE(SUM(si.discount),0) as discount , COALESCE(SUM(si.vat),0) as vat, COALESCE(SUM(si.serviceCharge),0) as serviceCharge , COALESCE(SUM(si.subTotal),0) as subTotal , COALESCE(sum(si.total),0) as total, COALESCE(sum(si.received),0) as received')
 		          ->where('si.referenceInvoice = :invoice')
 		          ->setParameter('invoice', $invoice->getId())
 		          ->andWhere('e.hotelConfig = :config')
@@ -53,19 +53,19 @@ class HotelInvoiceTransactionSummaryRepository extends EntityRepository
 		          ->setParameter('process', 'Done')
 		          ->getQuery()->getOneOrNullResult();
 
-		$discount = !empty($res['discount']) ? $res['discount'] : 0 ;
-		$vat = !empty($res['vat']) ? $res['vat'] : 0 ;
-		$charge = !empty($res['serviceCharge']) ? $res['serviceCharge'] : 0 ;
-		$subTotal = !empty($res['subTotal']) ? $res['subTotal'] : 0 ;
-		$total = !empty($res['total']) ? $res['total'] : 0 ;
-		$received = !empty($res['received']) ? $res['received'] : 0 ;
-		$due = ($total - ($received + $discount));
-
-		$entity->setDiscount($discount);
+		$discount   = $res['discount'];
+		$vat        = $res['vat'];
+		$charge     = $res['serviceCharge'];
+		$subTotal   = $res['subTotal'];
+		$total      = $res['total'];
+		$received   = $res['received'];
+        $grandTotal = (($total + $vat + $charge) - $discount);
+        $due = ($grandTotal - $received);
+        $entity->setDiscount($discount);
 		$entity->setVat(floatval($vat));
 		$entity->setServiceCharge(floatval($charge));
 		$entity->setSubTotal($subTotal);
-		$entity->setTotal($total - $discount);
+		$entity->setTotal($grandTotal);
 		$entity->setReceived($received);
 		$entity->setDue($due);
 		$em->flush();

@@ -518,15 +518,15 @@ class HotelInvoiceRepository extends EntityRepository
 		$res = $em->createQueryBuilder()
 		          ->from('HotelBundle:HotelInvoiceTransaction','si')
 		          ->join('si.hotelInvoice','e')
-		          ->select('sum(si.total) as total, sum(si.received) as received, sum(si.discount) as discount')
-		          ->where('si.referenceInvoice = :invoice')
+		          ->select('COALESCE(SUM(si.discount),0) as discount , COALESCE(SUM(si.vat),0) as vat, COALESCE(SUM(si.serviceCharge),0) as serviceCharge , COALESCE(SUM(si.subTotal),0) as subTotal , COALESCE(sum(si.total),0) as total, COALESCE(sum(si.received),0) as received')
+                  ->where('si.referenceInvoice = :invoice')
 		          ->setParameter('invoice', $transaction->getReferenceInvoice())
 		          ->andWhere('e.hotelConfig = :config')
 		          ->setParameter('config', $transaction->getHotelInvoice()->getHotelConfig()->getId())
 		          ->andWhere('si.process = :process')
 		          ->setParameter('process', 'done')
 		          ->getQuery()->getOneOrNullResult();
-		$due = ($res['total'] - ($res['received'] + $res['discount']));
+		$due = (($res['total'] + $res['vat'] + $res['serviceCharge'])  - ($res['received'] + $res['discount']));
 		$transaction->setDue($due);
 		$em->persist($transaction);
 		$em->flush();

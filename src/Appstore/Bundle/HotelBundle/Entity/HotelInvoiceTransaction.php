@@ -167,7 +167,7 @@ class HotelInvoiceTransaction
      *
      * @ORM\Column(name="discountCalculation", type="float" , nullable=true)
      */
-    private $discountCalculation;
+    private $discountCalculation = 0;
 
 
     /**
@@ -175,49 +175,49 @@ class HotelInvoiceTransaction
      *
      * @ORM\Column(name="discount", type="float", nullable=true)
      */
-    private $discount;
+    private $discount = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="vat", type="float", nullable=true)
      */
-    private $vat;
+    private $vat = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="serviceCharge", type="float", nullable=true)
      */
-    private $serviceCharge;
+    private $serviceCharge = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
-    private $subTotal;
+    private $subTotal = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="total", type="float", nullable=true)
      */
-    private $total;
+    private $total = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="payment", type="float", nullable=true)
      */
-    private $payment;
+    private $payment = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="received", type="float", nullable=true)
      */
-    private $received;
+    private $received = 0;
 
 
 	/**
@@ -225,7 +225,7 @@ class HotelInvoiceTransaction
 	 *
 	 * @ORM\Column(name="due", type="float", nullable=true)
 	 */
-	private $due;
+	private $due = 0;
 
     /**
      * @var string

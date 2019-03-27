@@ -133,6 +133,10 @@ $(document).on('change', '#particular', function() {
 });
 
 
+$('.remove-value').click(function() {
+    $(this).attr('value', '');
+});
+
 var form = $("#stockInvoice").validate({
 
     rules: {

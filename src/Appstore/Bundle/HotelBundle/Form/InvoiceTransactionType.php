@@ -30,8 +30,8 @@ class InvoiceTransactionType extends AbstractType
     {
         $builder
 
-            ->add('discount','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','maxlength' => 4,'autocomplete'=>'off')))
-            ->add('received','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
+            ->add('discount','number', array('attr'=>array('class'=>'m-wrap span12 salesInput remove-value','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','maxlength' => 4,'autocomplete'=>'off')))
+            ->add('received','number', array('attr'=>array('class'=>'m-wrap span12 salesInput remove-value','placeholder'=>'Add payment received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
             ->add('discountType','hidden', array('attr'=>array('value'=>'flat')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))

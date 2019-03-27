@@ -90,7 +90,7 @@ class AccountCashRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
-        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
@@ -113,7 +113,7 @@ class AccountCashRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
-        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){

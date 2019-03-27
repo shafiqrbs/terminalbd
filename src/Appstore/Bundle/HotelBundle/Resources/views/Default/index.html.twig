@@ -8,28 +8,20 @@
                     {% if globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ globalOption.templateCustomize.webPath('logo') }}">{% endif %}
                 </div>
                 <div class="span3">
-                    <a href="javascript:" data-title="{{ "now"|date("d-F-Y") }} Booking Overview" id="booking"  class="btn blue big"><i class="icon-building"></i> Booking Now</a>
+                    <a href="javascript:" data-title="{{ "now"|date("d-F-Y") }} Booking Overview" id="booking"  class="btn blue big"><i class="icon-building"></i> BOOKING NOW!</a>
                 </div>
-                <div class="span2">
+                <div class="span4">
                     {% if (app.user.granted("ROLE_HOTEL_INVOICE"))  %}
-                        <a href="{{ path('hotel_invoice_new') }}"  class="btn green big"><i class="icon-plus-sign"></i> Add Room </a>
+                        <a href="{{ path('hotel_invoice_new') }}"  class="btn green big" style="width: 40%"><i class="icon-plus-sign"></i> ADD ROOM </a>
+                        <a href="{{ path('hotel_invoice') }}"  class="btn black big" style="width: 40%"><i class="icon-th-list"></i> INVOICE </a>
                     {% endif %}
                 </div>
-                <div class="span2">
+                <div class="span3">
                     {% if (app.user.granted("ROLE_HOTEL_INVOICE_RESTAURANT"))  %}
-                        <a href="{{ path('hotel_restaurantinvoice_new') }}" class="btn yellow big"><i class="icon-plus-sign"></i> Restaurant</a>
+                        <a href="{{ path('hotel_restaurantinvoice_new') }}" class="btn yellow big"><i class="icon-plus-sign"></i> RESTAURANT</a>
                     {% endif %}
                 </div>
-                <div class="span2">
-                    {% if ( app.user.granted("ROLE_HOTEL_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
-                        <a href="{{ path('hotel_purchase_new') }}" class="btn blue big"><i class="icon-plus-sign"></i> Add Purchase</a>
-                    {% endif %}
-                </div>
-                <div class="span2">
-                    {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE"))  %}
-                        <a href="{{ path('account_purchase_hotel_new') }}" class="btn yellow big"><i class="icon-money"></i> Payment</a>
-                    {% endif %}
-                </div>
+
             </div>
         </div>
         <div class="clearfix"><br/></div>

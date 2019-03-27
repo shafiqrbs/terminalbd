@@ -352,16 +352,16 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName"><span id="balance" class="label">Due TK.</span> <span class="pull-right sales-right due" style="text-align:left;width:110px"  id="due" >{{ entity.due }}</span></label>
+                                            <label class="control-label" for="firstName"><span id="balance" class="label">Due TK.</span> <span class="pull-right sales-right due" style="text-align:left;width:110px; font-size: 20px"  id="due" >{{ entity.due }}</span></label>
                                         </div>
                                     </div>
                                     <!--/span-->
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="row-fluid">
+                                <div class="row-fluid" style="background: red;height: 54px;padding-top: 13px;">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName"><span class="label">Receive TK.</span> <span class="pull-right sales-right">{{ form_widget(form.received) }}</span></label>
+                                            <label class="control-label" for="firstName" style="padding-bottom: 15px"><span class="label">Receive TK.</span> <span class="pull-right sales-right">{{ form_widget(form.received) }}</span></label>
                                     </div>
                                     <!--/span-->
                                 </div>
@@ -456,7 +456,13 @@
         </div>
     </div>
     </div>
-
+<style>
+    .sales-right input[class*="span"].m-wrap {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: right;
+    }
+</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
