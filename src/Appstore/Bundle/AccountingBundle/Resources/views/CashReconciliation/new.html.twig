@@ -93,13 +93,16 @@
                                 {% for note in entity.cashReconciliationMetas %}
                                 {% if note.TransactionMethod == 'Bank' %}
                                 <tr>
-                                    <th >{{ note.metaKey }}</th>
+                                    {% if note.isCustom == 1 %}
+                                        <th> <input type="text" name="metaKey" id="metaKey-{{ note.id }}" data-id="{{ note.id }}"  class="m-wrap span12" value="{{ note.metaKey }}"></th>
+                                    {% else %}
+                                        <th>{{ note.metaKey }}</th>
+                                    {% endif %}
                                     <th class="numeric" >
                                         <div class="span12">
                                             <div class="actions">
                                                 <div class="btn-group">
-                                                    <input type="hidden" id="metaId" name="metaId[]" class="" value="{{ note.id }}">
-                                                    <input type="number" class="m-wrap span10 custom-field bankAmount updateAmount" data-url="{{ path('account_cashreconciliation_meta_update',{'id':note.id}) }}" data-id="{{ note.id }}" value="{{ note.amount }}">
+                                                    <input type="number" class="m-wrap span10 custom-field bankAmount updateAmount" data-id="{{ note.id }}" data-url="{{ path('account_cashreconciliation_meta_update',{'id':note.id}) }}"  value="{{ note.amount }}">
                                                     {% if note.isCustom ==  1 %}
                                                         <a class="btn red mini delete" href="javascript:"  data-url="{{ path('account_cashreconciliation_meta_delete',{'id':note.id}) }}"><i class="icon-trash"></i></a>
                                                     {% endif %}
@@ -143,13 +146,17 @@
                                 {% for note in entity.cashReconciliationMetas %}
                                     {% if note.TransactionMethod == 'Mobile' %}
                                         <tr>
-                                            <th >{{ note.metaKey }}</th>
+                                            {% if note.isCustom == 1 %}
+                                                <th> <input type="text" name="metaKey" id="metaKey-{{ note.id }}" data-id="{{ note.id }}"  class="m-wrap span12" value="{{ note.metaKey }}"></th>
+                                            {% else %}
+                                                <th>{{ note.metaKey }}</th>
+                                            {% endif %}
                                             <th class="numeric" >
                                                 <div class="span12">
                                                     <div class="actions">
                                                         <div class="btn-group">
                                                             <input type="hidden" id="metaId" name="metaId[]" class="" value="{{ note.id }}">
-                                                            <input type="number" class="m-wrap span10 custom-field mobileAmount updateAmount" data-url="{{ path('account_cashreconciliation_meta_update',{'id':note.id}) }}" value="{{ note.amount }}">
+                                                            <input type="number" class="m-wrap span10 custom-field mobileAmount updateAmount" data-id="{{ note.id }}" data-url="{{ path('account_cashreconciliation_meta_update',{'id':note.id}) }}" value="{{ note.amount }}">
                                                             {% if note.isCustom ==  1 %}
                                                                 <a class="btn red delete mini" href="javascript:"  data-url="{{ path('account_cashreconciliation_meta_delete',{'id':note.id}) }}"><i class="icon-trash"></i></a>
                                                             {% endif %}
@@ -181,7 +188,8 @@
                         <table class="table table-bordered table-striped table-condensed flip-content ">
                                     <thead class="flip-content ">
                                     <tr class="head-grey">
-                                        <th class="span10">Note/Particular</th>
+                                        <th class="span9">Note/Particular</th>
+                                        <th class="span1" >Note</th>
                                         <th class="span2" >Amount</th>
                                     </tr>
                                     </thead>
@@ -191,16 +199,26 @@
                                         {% if note.TransactionMethod == 'Cash' %}
                                             <tr>
                                                 {% if note.isCustom == 1 %}
-                                                <th><input type="number" class="m-wrap span12" value="{{ note.metaKey }}"></th>
+                                                <th> <input type="text" name="metaKey" id="metaKey-{{ note.id }}" data-id="{{ note.id }}"  class="m-wrap span12" value="{{ note.metaKey }}"></th>
                                                 {% else %}
                                                 <th>{{ note.metaKey }}</th>
                                                 {% endif %}
                                                 <th class="numeric" >
+                                                    {% if note.isCustom != 1 %}
+                                                        <div class="span12">
+                                                            <div class="actions">
+                                                                <div class="btn-group">
+                                                                    <input type="number" class="m-wrap span10 custom-field updateNoteAmount" data-url="{{ path('account_cashreconciliation_meta_update',{'id':note.id}) }}" data-content="{{ note.id }}" data-id="{{ note.noteType }}"  value="{{ note.noteNo }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                </th>
+                                                <th class="numeric" >
                                                     <div class="span12">
                                                         <div class="actions">
                                                             <div class="btn-group">
-                                                                <input type="hidden" id="metaId" name="metaId[]" class="" value="{{ note.id }}">
-                                                                <input type="number" class="m-wrap span10 custom-field amount updateAmount" data-url="{{ path('account_cashreconciliation_meta_update',{'id':note.id}) }}" value="{{ note.amount }}">
+                                                                <input type="number" class="m-wrap span10 custom-field amount" data-id="{{ note.id }}" id="update-amount-{{ note.id }}"  value="{{ note.amount }}">
                                                                 {% if note.isCustom ==  1 %}
                                                                     <a class="btn red delete mini" href="javascript:"  data-url="{{ path('account_cashreconciliation_meta_delete',{'id':note.id}) }}"><i class="icon-trash"></i></a>
                                                                 {% endif %}
@@ -213,7 +231,7 @@
                                     {% endfor %}
                                     </tbody>
                                     <tr>
-                                        <th class="numeric"><span class="pull-right">Grand Total</span></th>
+                                        <th class="numeric" colspan="2"><span class="pull-right">Grand Total</span></th>
                                         <td class="numeric" ><strong id="total">{{ entity.cash|number_format }}</strong></td>
                                     </tr>
                                 </table>

@@ -127,7 +127,7 @@ class CashReconciliationController extends Controller
             $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->notesReconciliationInsert($entity,$bankCash,$mobileCash);
             return $this->redirect($this->generateUrl('account_cashreconciliation_edit',array('id' => $entity->getId())));
         }else{
-            $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->initialUpdate($this->getUser(),$exist);
+            $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->systemCashUpdate($this->getUser(),$exist);
             return $this->redirect($this->generateUrl('account_cashreconciliation_edit',array('id' => $exist->getId())));
         }
     }
@@ -142,6 +142,7 @@ class CashReconciliationController extends Controller
         }
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser());
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser());
+        $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->systemCashUpdate($this->getUser(),$entity);
         return $this->render('AccountingBundle:CashReconciliation:new.html.twig', [
             'entity' => $entity,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,
@@ -175,11 +176,17 @@ class CashReconciliationController extends Controller
     public function metaUpdateAction(CashReconciliationMeta $entity)
     {
         $amount = $_REQUEST['amount'];
+        $note = $_REQUEST['note'];
+        $meta = $_REQUEST['metaKey'];
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
         }
         $entity->setAmount($amount);
+        $entity->setNoteNo($note);
+        if(!empty($meta)){
+            $entity->setMetaKey($meta);
+        }
         $em->flush();
         $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->update($entity->getCashReconciliation(),$entity->getTransactionMethod());
         return new Response('success');

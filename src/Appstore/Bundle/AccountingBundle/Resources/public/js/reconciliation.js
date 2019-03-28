@@ -37,7 +37,7 @@ $(document).on("click", "#cash-reconciliation", function() {
 });
 
 
-$('.amount').on('click', function(event) {
+$('.amount,.updateNoteAmount').on('click', function(event) {
     $(this).val('');
 });
 
@@ -65,8 +65,29 @@ $(document).on('keyup', ".mobileAmount", function() {
 
 $(document).on("change", ".updateAmount", function() {
     var amount = $(this).val();
+    var id = $(this).attr("data-id");
+    var metaKey = $('#metaKey-'+id).val();
     var url = $(this).attr("data-url");
-    $.get(url,{amount:amount});
+    $.get(url,{amount:amount,note:0,metaKey:metaKey});
 });
+$(document).on("change", ".updateNoteAmount", function() {
+    var note = $(this).val();
+    var id = $(this).attr("data-content");
+    var noteType = $(this).attr("data-id");
+    var amount = (note * noteType);
+    $('#update-amount-'+ id).val(amount);
+    var url = $(this).attr("data-url");
+    $.get(url,{amount:amount,note:note,metaKey:''});
+    setTimeout(pageReload, 1000);
+});
+function pageReload() {
+    var sum = 0;
+    $(".amount").each(function(){
+        sum += +parseFloat($(this).val());
+    });
+    $("#total").html(sum);
+}
+
+
 
 

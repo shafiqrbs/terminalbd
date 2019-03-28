@@ -56,6 +56,55 @@ class CashReconciliationMeta
     private $amount = 0;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="noteType", type="float", nullable=true)
+     */
+    private $noteType = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="noteNo", type="float", nullable=true)
+     */
+    private $noteNo = 0;
+
+
+
+    /**
+     * @return float
+     */
+    public function getNoteType()
+    {
+        return $this->noteType;
+    }
+
+    /**
+     * @param float $noteType
+     */
+    public function setNoteType(float $noteType)
+    {
+        $this->noteType = $noteType;
+    }
+
+    /**
+     * @return float
+     */
+    public function getNoteNo()
+    {
+        return $this->noteNo;
+    }
+
+    /**
+     * @param float $noteNo
+     */
+    public function setNoteNo(float $noteNo)
+    {
+        $this->noteNo = $noteNo;
+    }
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="isCustom", type="boolean")

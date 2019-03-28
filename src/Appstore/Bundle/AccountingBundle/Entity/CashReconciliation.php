@@ -94,6 +94,7 @@ class CashReconciliation
     private $total = 0;
 
 
+
     /**
      * @var boolean
      *
@@ -317,6 +318,7 @@ class CashReconciliation
     {
         $this->systemMobile = $systemMobile;
     }
+
 
 }
 

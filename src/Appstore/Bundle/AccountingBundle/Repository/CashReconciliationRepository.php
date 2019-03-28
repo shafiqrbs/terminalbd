@@ -72,14 +72,44 @@ class CashReconciliationRepository extends EntityRepository
             $this->_em->flush($entity);
     }
 
+    public function systemCashUpdate(User $user , CashReconciliation $entity)
+    {
+
+        $transactionCashOverview = $this->_em->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview($user);
+        foreach ($transactionCashOverview['result'] as $mod):
+
+            if($mod['transactionName'] == 'Cash'){
+                $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['debit'];
+                $credit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['credit'];
+                $cash   =  (($open + $debit) - $credit);
+                $entity->setSystemCash($cash);
+            }elseif($mod['transactionName'] == 'Bank'){
+                $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['debit'];
+                $credit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['credit'];
+                $cash   =  (($open + $debit) - $credit);
+                $entity->setSystemBank($cash);
+            }elseif($mod['transactionName'] == 'Mobile'){
+                $open   =  $transactionCashOverview['openingBalance'][$mod['transactionId']];
+                $debit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['debit'];
+                $credit  =  $transactionCashOverview['transactionBalances'][$mod['transactionId']]['credit'];
+                $cash   =  (($open + $debit) - $credit);
+                $entity->setSystemMobile($cash);
+            }
+        endforeach;
+        $this->_em->flush($entity);
+    }
+
     public function notesReconciliationInsert(CashReconciliation $reconciliation,$bankCash,$mobileCash)
     {
-       $arrs = ['1000 Taka','500 Taka','100 Taka','100 Taka','50 Taka','20 Taka','10 Taka','5 Taka','2 Taka','1 Taka'];
-        foreach ($arrs as $arr){
+       $arrs = [1000 =>'1000 Taka', 500 => '500 Taka', 100 => '100 Taka',50 => '50 Taka', 20 => '20 Taka',10 => '10 Taka',5 => '5 Taka',2 => '2 Taka',1 => '1 Taka'];
+        foreach ($arrs as $key => $value){
             $entity = new CashReconciliationMeta();
             $entity->setCashReconciliation($reconciliation);
             $entity->setTransactionMethod('Cash');
-            $entity->setMetaKey($arr);
+            $entity->setMetaKey($value);
+            $entity->setNoteType($key);
             $entity->setAmount(0);
             $this->_em->persist($entity);
             $this->_em->flush();
