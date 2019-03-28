@@ -3,6 +3,10 @@ $("[id^=startPicker]").each(function() {
     bindDatePicker(this);
 });
 
+$('.remove-value').click(function() {
+    $(this).attr('value', '');
+});
+
 $( "#mobile" ).autocomplete({
 
     source: function( request, response ) {

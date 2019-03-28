@@ -339,7 +339,7 @@
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="row-fluid">
+                                <div class="row-fluid" style="border-top: 2px solid #000101">
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName"><span id="balance" class="label">Total TK.</span> <span class="pull-right sales-right" style="text-align:left;width:110px">{{ entity.hotelInvoiceTransactionSummary.total }}</span></label>
@@ -371,6 +371,7 @@
                                         </div>
                                         <!--/span-->
                                     </div>
+                                </div>
                                 <div class="clearfix"></div>
                                 <div class="row-fluid">
                                     <div class="span12 input-append-border">
@@ -453,8 +454,10 @@
         </div>
     </div>
 <style>
-    .sales-right input[class*="span"].m-wrap{
-        text-align: right!important;
+    .sales-right input[class*="span"].m-wrap {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: right;
     }
 </style>
 {% endblock %}

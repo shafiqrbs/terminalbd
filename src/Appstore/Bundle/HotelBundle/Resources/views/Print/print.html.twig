@@ -1,5 +1,12 @@
 {% extends '::base.html.twig' %}
 {% block body %}
+    <script type="text/javascript">
+        window.print();
+        setTimeout(function () {
+            window.open('', '_self', '');
+            window.close();
+        }, 2000);
+    </script>
     <div class="container-fluid">
         <!-- BEGIN purchase_order HEADER-->
         {% if config.isPrintHeader == 1 %}
@@ -169,7 +176,7 @@
     </div>
  <style>
      .table-header{
-         background: #100f10 !important;
+         background: #cccce4 !important;
          height: 40px!important;
          color: #FFFFff!important;
      }
