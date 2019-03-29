@@ -228,24 +228,53 @@ class TransactionController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $globalOption = $user->getGlobalOption();
-        $transactionMethods = array(3);
+        $transactionMethods = [3];
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
-        $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
-        $accountMobileBanks = $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->findBy(array('globalOption' => $globalOption,'status'=>1));
-        return $this->render('AccountingBundle:Transaction:mobilebank.html.twig', array(
-            'entities' => $pagination,
-            'overview' => $overview,
-            'processHeads' => $processHeads,
-            'accountMobileBanks' => $accountMobileBanks,
-            'searchForm' => $data,
-        ));
+        $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(['status'=>1]);
+        $accountMobileBanks = $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->findBy(['globalOption' => $globalOption,'status' => 1]);
+        return $this->render('AccountingBundle:Transaction:mobilebank.html.twig',[
+            'entities'              => $pagination,
+            'overview'              => $overview,
+            'processHeads'          => $processHeads,
+            'accountMobileBanks'    => $accountMobileBanks,
+            'searchForm'            => $data,
+        ]);
 
     }
 
+    public function monthlyAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        if(empty($data)){
+            $compare = new \DateTime();
+            $end =  $compare->format('j');
+        }
+        $openingBalance = [];
+        for ($i = 1; $end >= $i ; $i++ ){
+            $start =  $compare->format("Y-m-{$i}");
+            $day =  $compare->format("{$i}-m-Y");
+            $data['startDate'] = $start;
+            $openingBalance[$day] = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->openingBalance($user,'',$data);
+        }
+        $sales = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Sales',$data);
+        $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Purchase',$data);
+        $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Purchase-Commission',$data);
+        $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Expenditure',$data);
+        $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Journal',$data);
 
-
-
+        return $this->render('AccountingBundle:Transaction/Report:monthly.html.twig',[
+            'openingBalanceTrans'                => $openingBalance,
+            'salesTrans'                    => $sales,
+            'purchaseTrans'                 => $purchase,
+            'purchaseCommissionTrans'       => $purchaseCommission,
+            'expenditureTrans'              => $expenditure,
+            'journalTrans'                  => $journal,
+            'searchForm'                    => $data,
+        ]);
+    }
 
 }

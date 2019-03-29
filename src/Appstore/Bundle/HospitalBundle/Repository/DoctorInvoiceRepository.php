@@ -147,7 +147,7 @@ class DoctorInvoiceRepository extends EntityRepository
         $qb->andWhere("e.process = :process")->setParameter('process','Paid');
         $qb->groupBy('particular.id,i.id,referred.id');
         $result = $qb->getQuery()->getArrayResult();
-        $resDatas = array();
+        $resDatas = [];
         foreach ($result as $row){
             $uniqueId = $row['invoiceId'].'-'.$row['commissionId'];
             $resDatas[$uniqueId]= $row;

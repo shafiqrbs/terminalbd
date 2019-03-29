@@ -32,7 +32,7 @@ use Doctrine\ORM\EntityRepository;
 class AccountCashRepository extends EntityRepository
 {
 
-    public function openingBalance(User $user,$transactionMethods = array(), $data = array()){
+    public function openingBalance(User $user,$transactionMethods = [], $data =[]){
 
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
@@ -48,7 +48,7 @@ class AccountCashRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
-        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->select('COALESCE(SUM(e.debit)) AS debit, COALESCE(SUM(e.credit)) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
@@ -824,6 +824,67 @@ class AccountCashRepository extends EntityRepository
         }
         return $entity->getBalance();
     }
+
+
+    public function monthlyCash(User $user , $data =array())
+    {
+        $option = $user->getGlobalOption()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(invoice.updated,'%d-%m-%Y') as date, invoice.processHead as process ,SUM(invoice.debit) as debit,SUM(invoice.credit) as credit
+                FROM AccountCash as invoice
+                WHERE invoice.globalOption_id = :option AND MONTHNAME(invoice.updated) =:month AND YEAR(invoice.updated) =:year AND invoice.processHead =:process 
+                GROUP BY date";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('option', $option);
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('process', 'Purchase');
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = [];
+        foreach ($results as $result){
+            $arrays[$result['date']] = $result;
+        }
+        return $arrays;
+    }
+
+    public function groupByProcessHead(User $user,$head = '' , $data = []){
+
+        $emConfig = $this->getEntityManager()->getConfiguration();
+        $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
+        $emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
+        $emConfig->addCustomDatetimeFunction('DAY', 'DoctrineExtensions\Query\Mysql\Day');
+        $option = $user->getGlobalOption()->getId();
+        $compare = new \DateTime();
+        $start =  $compare->format('Y-m-01 00:00:01');
+        $end =  $compare->format('Y-m-t 00:00:01');
+        $month =  $compare->format('m');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('DAY(e.updated) AS day, COALESCE(SUM(e.debit),0) as debit, COALESCE(SUM(e.credit),0) as credit');
+        $qb->where("e.globalOption = :option")->setParameter('option', $option);
+        $qb->andWhere("e.updated >= :startDate")->setParameter('startDate', $start);
+        $qb->andWhere("e.updated <= :endDate")->setParameter('endDate', $end);
+        $qb->andWhere("e.processHead =:head")->setParameter('head', $head);
+      //  $qb->andWhere('YEAR(e.updated) = :year')->setParameter('year', $year);
+       // $qb->andWhere('MONTH(e.updated) = :month')->setParameter('month', $month);
+        $qb->groupBy('day');
+        $results = $qb->getQuery()->getArrayResult();
+        $arrays = [];
+        foreach ($results as $result){
+            $date = "{$result['day']}-{$month}-{$year}";
+            $arrays[$date] = $result;
+        }
+        return $arrays;
+    }
+
 
 
 }

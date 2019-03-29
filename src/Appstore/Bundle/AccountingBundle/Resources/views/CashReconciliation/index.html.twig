@@ -51,10 +51,13 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i> Created</td>
+                                    <th class="numeric" >Cash System</th>
                                     <th class="numeric" >Cash</th>
+                                    <th class="numeric" >Bank System</th>
                                     <th class="numeric" >Bank</th>
+                                    <th class="numeric" >Mobile System</th>
                                     <th class="numeric" >Mobile</th>
-                                    <th class="numeric" >Withdraw</th>
+                                    <th class="numeric" >Total System</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -63,11 +66,14 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.systemCash }}</td>
                                         <td class="numeric" >{{ entity.cash }}</td>
+                                        <td class="numeric" >{{ entity.systemBank }}</td>
                                         <td class="numeric" >{{ entity.bank }}</td>
+                                        <td class="numeric" >{{ entity.systemMobile }}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
-                                        <td class="numeric" >{{ entity.withdraw }}</td>
-                                        <td class="numeric" >{{ entity.total }}</td>
+                                        <td class="numeric" >{{ (entity.systemCash + entity.systemBank + entity.systemMobile)|number_format }}</td>
+                                        <td class="numeric" >{{ (entity.cash + entity.bank + entity.mobile)|number_format }}</td>
                                         <td class="" >
                                             <div class="actions">
                                                 <div class="btn-group">

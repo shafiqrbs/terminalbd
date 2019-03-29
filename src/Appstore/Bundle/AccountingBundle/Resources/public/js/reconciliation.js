@@ -68,7 +68,9 @@ $(document).on("change", ".updateAmount", function() {
     var id = $(this).attr("data-id");
     var metaKey = $('#metaKey-'+id).val();
     var url = $(this).attr("data-url");
-    $.get(url,{amount:amount,note:0,metaKey:metaKey});
+    $.get(url,{amount:amount,note:0,metaKey:metaKey}).done(function( data ) {
+        location.reload();
+    });
 });
 $(document).on("change", ".updateNoteAmount", function() {
     var note = $(this).val();
@@ -77,8 +79,11 @@ $(document).on("change", ".updateNoteAmount", function() {
     var amount = (note * noteType);
     $('#update-amount-'+ id).val(amount);
     var url = $(this).attr("data-url");
-    $.get(url,{amount:amount,note:note,metaKey:''});
-    setTimeout(pageReload, 1000);
+    $.get(url,{amount:amount,note:note,metaKey:''}).done(function( data ) {
+        setTimeout(pageReload, 1000);
+        location.reload();
+    });
+
 });
 function pageReload() {
     var sum = 0;

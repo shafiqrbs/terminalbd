@@ -42,6 +42,49 @@
                         {% include('flash-message.html.twig')  %}
                         {% set methods = ['Cash','Bank','Mobile'] %}
                         <!-- BEGIN FORM-->
+                        <div class="form-actions portlet box red">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Reconciliation Summary</div>
+                            </div>
+                        </div>
+                        <div class="clearfix"><br/></div>
+                        <table class="table table-bordered tatransactionCashOverviewsble-striped table-condensed flip-content ">
+                            <thead class="flip-content ">
+                            <tr class="head-yellow">
+                                <th class="span3">Name of Transaction</th>
+                                <th class="span3">System</th>
+                                <th class="span3">Reconciliation</th>
+                                <th class="span3" >Less/More</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Bank</td>
+                                <td>{{ entity.systemBank|number_format }}</td>
+                                <td>{{ entity.bank|number_format }}</td>
+                                <td>{{ (entity.systemBank - entity.bank)|number_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Mobile</td>
+                                <td>{{ entity.systemMobile|number_format }}</td>
+                                <td>{{ entity.mobile|number_format }}</td>
+                                <td>{{ (entity.systemMobile - entity.mobile)|number_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Cash</td>
+                                <td>{{ entity.systemCash|number_format }}</td>
+                                <td>{{ entity.cash|number_format }}</td>
+                                <td>{{ (entity.systemCash - entity.cash)|number_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Grand Total</td>
+                                <td>{{ (entity.systemBank + entity.systemMobile + entity.systemCash)|number_format }}</td>
+                                <td>{{ (entity.bank + entity.mobile + entity.cash)|number_format }}</td>
+                                <td>{{ ((entity.systemBank + entity.systemMobile + entity.systemCash) - (entity.bank + entity.mobile + entity.cash))|number_format }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Bank Account Reconciliation</div>
@@ -57,7 +100,7 @@
                         {% if transactionBankCashOverviews.result is not empty %}
                             <table class="table table-bordered tatransactionCashOverviewsble-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
-                                <tr class="head-yellow">
+                                <tr class="head-black">
                                     <th class="span10">Bank Account Name</th>
                                     <th class="span2" >Amount</th>
                                 </tr>
