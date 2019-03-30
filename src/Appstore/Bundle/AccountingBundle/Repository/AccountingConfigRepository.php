@@ -57,10 +57,10 @@ class AccountingConfigRepository extends EntityRepository
         $Reconciliation = $em->createQuery('DELETE AccountingBundle:CashReconciliation e WHERE e.globalOption = '.$option);
         $Reconciliation->execute();
 
-        $Commission = $em->createQuery('DELETE AccountingBundle:PurchaseCommission e WHERE e.globalOption = '.$option);
+        $Commission = $em->createQuery('DELETE AccountingBundle:AccountPurchaseCommission e WHERE e.globalOption = '.$option);
         $Commission->execute();
 
-        $Adjustment = $em->createQuery('DELETE AccountingBundle:SalesAdjustment e WHERE e.globalOption = '.$option);
+        $Adjustment = $em->createQuery('DELETE AccountingBundle:AccountSalesAdjustment e WHERE e.globalOption = '.$option);
         $Adjustment->execute();
 
 
