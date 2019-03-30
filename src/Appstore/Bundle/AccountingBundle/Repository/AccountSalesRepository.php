@@ -129,12 +129,12 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-	public function salesOverview(User $user,$data, $process = array())
+	public function salesOverview(User $user,$data, $process = [])
     {
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE((e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
+        $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE(SUM(e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if(!empty($process)){
