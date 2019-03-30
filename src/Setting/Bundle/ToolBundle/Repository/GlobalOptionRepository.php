@@ -892,10 +892,8 @@ class GlobalOptionRepository extends EntityRepository
                 if (!empty($mod->getModuleClass())) {
                     $menuName[] = $mod->getModuleClass();
                 }
-
             }
         }
-
         return $menuName;
     }
 

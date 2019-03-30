@@ -29,9 +29,29 @@ class MedicineConfigRepository extends EntityRepository
         $purchase = $em->createQuery('DELETE MedicineBundle:MedicinePurchase e WHERE e.medicineConfig = '.$config);
         $purchase->execute();
 
+        $house = $em->createQuery('DELETE MedicineBundle:MedicineStockHouse e WHERE e.medicineConfig = '.$config);
+        $house->execute();
+
         $stock = $em->createQuery('DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = '.$config);
-        $stock->execute();
+       // $stock->execute();
 
-
+        $qb = $this->_em->createQueryBuilder();
+        $q = $qb->update('MedicineBundle:MedicineStock', 's')
+            ->set('s.remainingQuantity', '?1')
+            ->set('s.purchaseQuantity', '?2')
+            ->set('s.purchaseReturnQuantity', '?3')
+            ->set('s.salesQuantity', '?4')
+            ->set('s.salesReturnQuantity', '?5')
+            ->set('s.damageQuantity', '?6')
+            ->where('s.medicineConfig = ?7')
+            ->setParameter(1, 0)
+            ->setParameter(2, 0)
+            ->setParameter(3, 0)
+            ->setParameter(4, 0)
+            ->setParameter(5, 0)
+            ->setParameter(6, 0)
+            ->setParameter(7, $config)
+            ->getQuery();
+        $p = $q->execute();
     }
 }
