@@ -34,4 +34,8 @@ account_transaction_monthly:
     path:     /transaction-monthly
     defaults: { _controller: "AccountingBundle:Transaction:monthly" }
 
+account_transaction_yearly:
+    path:     /transaction-yearly
+    defaults: { _controller: "AccountingBundle:Transaction:yearly" }
+
 

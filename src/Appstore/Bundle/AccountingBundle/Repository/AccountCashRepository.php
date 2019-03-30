@@ -87,22 +87,18 @@ class AccountCashRepository extends EntityRepository
         }
         $date->add(\DateInterval::createFromDateString('yesterday'));
         $tillDate = $date->format('Y-m-d 23:59:59');
-
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
-        $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
+        $qb->select('(COALESCE(SUM(e.debit),0) - COALESCE(SUM(e.credit),0)) AS balance');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
-        $qb->andWhere("t.id IN(:transactionMethod)");
-        $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $qb->andWhere("e.updated <= :updated");
         $qb->setParameter('updated', $tillDate);
-        $result = $qb->getQuery()->getOneOrNullResult();
-        $openingBalance = ( $result['debit'] - $result['credit']);
+        $openingBalance = $qb->getQuery()->getOneOrNullResult()['balance'];
         return $openingBalance;
     }
 
@@ -852,20 +848,18 @@ class AccountCashRepository extends EntityRepository
         return $arrays;
     }
 
-    public function groupByProcessHead(User $user,$head = '' , $data = []){
+    public function dailyProcessHead(User $user,$head = '' , $data = []){
 
         $emConfig = $this->getEntityManager()->getConfiguration();
         $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
         $emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
         $emConfig->addCustomDatetimeFunction('DAY', 'DoctrineExtensions\Query\Mysql\Day');
         $option = $user->getGlobalOption()->getId();
-        $compare = new \DateTime();
+        $compare = new \DateTime($data['monthYear']);
         $start =  $compare->format('Y-m-01 00:00:01');
-        $end =  $compare->format('Y-m-t 00:00:01');
+        $end =  $compare->format('Y-m-t 23:59:59');
         $month =  $compare->format('m');
         $year =  $compare->format('Y');
-        $month = isset($data['month'])? $data['month'] :$month;
-        $year = isset($data['year'])? $data['year'] :$year;
 
         $qb = $this->createQueryBuilder('e');
         $qb->select('DAY(e.updated) AS day, COALESCE(SUM(e.debit),0) as debit, COALESCE(SUM(e.credit),0) as credit');
@@ -880,6 +874,29 @@ class AccountCashRepository extends EntityRepository
         $arrays = [];
         foreach ($results as $result){
             $date = "{$result['day']}-{$month}-{$year}";
+            $arrays[$date] = $result;
+        }
+        return $arrays;
+    }
+    public function monthlyProcessHead(User $user,$head = '' , $data = []){
+
+        $emConfig = $this->getEntityManager()->getConfiguration();
+        $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
+        $emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
+        $emConfig->addCustomDatetimeFunction('DAY', 'DoctrineExtensions\Query\Mysql\Day');
+        $option = $user->getGlobalOption()->getId();
+        $year =  $data['year'];
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('MONTH(e.updated) AS month, COALESCE(SUM(e.debit),0) as debit, COALESCE(SUM(e.credit),0) as credit');
+        $qb->where("e.globalOption = :option")->setParameter('option', $option);
+        $qb->andWhere("e.processHead =:head")->setParameter('head', $head);
+        $qb->andWhere('YEAR(e.updated) = :year')->setParameter('year', $year);
+        $qb->groupBy('month');
+        $results = $qb->getQuery()->getArrayResult();
+        $arrays = [];
+        foreach ($results as $result){
+            $date = "{$result['month']}";
             $arrays[$date] = $result;
         }
         return $arrays;

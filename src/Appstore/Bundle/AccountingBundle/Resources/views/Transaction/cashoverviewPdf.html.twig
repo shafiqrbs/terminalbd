@@ -73,6 +73,9 @@
             <div class="portlet box green">
                 <div class="portlet-body form">
                     <div class="report-title-box">
+                        <div class="pull-left report-title"><h2>{{ globalOption.name }}</h2></div>
+                    </div>
+                    <div class="report-title-box">
                         <div class="pull-left report-title">Cash Overview: {{ searchForm.startDate is defined ? searchForm.startDate :'' }} To {{ searchForm.startDate is defined ? searchForm.startDate :'' }}</div><div class="pull-right">Print:{{ ("now")|date('d-F-Y') }}</div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
@@ -201,7 +204,6 @@
                                 <th>Account Head</th>
                                 <th class="numeric"  >Receive</th>
                                 <th class="numeric"  >Payment</th>
-                                <th class="numeric"  >Balance</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -212,14 +214,9 @@
                                     <th >{{ row.name }}</th>
                                     <td class="numeric"  >{{ row.debit|number_format }}</td>
                                     <td class="numeric"  >{{ row.credit|number_format }}</td>
-                                    <td class="numeric"  >{{ (row.debit-row.credit)|number_format }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
-                            <tr>
-                                <th class="numeric" colspan="3"><span class="pull-right">Grand Total</span></th>
-                                <td class="numeric" ><strong>{{ sumCash|number_format }}</strong></td>
-                            </tr>
                         </table>
                         <div class="clearfix">&nbsp;</div>
                     </div>

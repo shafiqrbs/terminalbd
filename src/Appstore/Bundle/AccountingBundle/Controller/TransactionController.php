@@ -148,7 +148,8 @@ class TransactionController extends Controller
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
         $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
         $html = $this->renderView('AccountingBundle:Transaction:cashoverviewPdf.html.twig', array(
-            'transactionCashOverviews'               => $transactionCashOverview,
+            'globalOption'                          => $this->getUser()->getGlobalOption(),
+            'transactionCashOverviews'              => $transactionCashOverview,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,
             'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
             'transactionAccountHeadCashOverviews'   => $transactionAccountHeadCashOverviews,
@@ -252,29 +253,124 @@ class TransactionController extends Controller
         if(empty($data)){
             $compare = new \DateTime();
             $end =  $compare->format('j');
+            $data['monthYear'] = $compare->format('Y-m-d');
+        }else{
+            $month = $data['month'];
+            $year = $data['year'];
+            $compare = new \DateTime("{$year}-{$month}-01");
+            $end =  $compare->format('t');
+            $data['monthYear'] = $compare->format('Y-m-d');
         }
         $openingBalance = [];
         for ($i = 1; $end >= $i ; $i++ ){
             $start =  $compare->format("Y-m-{$i}");
             $day =  $compare->format("{$i}-m-Y");
             $data['startDate'] = $start;
-            $openingBalance[$day] = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->openingBalance($user,'',$data);
+            $openingBalance[$day] = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->openingBalanceGroup($user,'',$data);
         }
-        $sales = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Sales',$data);
-        $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Purchase',$data);
-        $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Purchase-Commission',$data);
-        $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Expenditure',$data);
-        $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->groupByProcessHead($user,'Journal',$data);
+        $sales = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Sales',$data);
+        $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase',$data);
+        $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase-Commission',$data);
+        $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Expenditure',$data);
+        $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Journal',$data);
 
-        return $this->render('AccountingBundle:Transaction/Report:monthly.html.twig',[
-            'openingBalanceTrans'                => $openingBalance,
-            'salesTrans'                    => $sales,
-            'purchaseTrans'                 => $purchase,
-            'purchaseCommissionTrans'       => $purchaseCommission,
-            'expenditureTrans'              => $expenditure,
-            'journalTrans'                  => $journal,
-            'searchForm'                    => $data,
-        ]);
+        if(empty($data['pdf'])){
+
+            return $this->render('AccountingBundle:Transaction/Report:monthly.html.twig',[
+                'globalOption'                  => $this->getUser()->getGlobalOption(),
+                'openingBalanceTrans'           => $openingBalance,
+                'salesTrans'                    => $sales,
+                'purchaseTrans'                 => $purchase,
+                'purchaseCommissionTrans'       => $purchaseCommission,
+                'expenditureTrans'              => $expenditure,
+                'journalTrans'                  => $journal,
+                'searchForm'                    => $data,
+            ]);
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:Transaction/Report:monthlyPdf.html.twig', array(
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'openingBalanceTrans'           => $openingBalance,
+                    'salesTrans'                    => $sales,
+                    'purchaseTrans'                 => $purchase,
+                    'purchaseCommissionTrans'       => $purchaseCommission,
+                    'expenditureTrans'              => $expenditure,
+                    'journalTrans'                  => $journal,
+                    'searchForm'                    => $data,
+                )
+            );
+            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+        }
+
+    }
+
+    public function yearlyAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        if(empty($data)){
+            $compare = new \DateTime();
+            $year =  $compare->format('Y');
+            $data['year'] = $year;
+        }else{
+            $year = $data['year'];
+        }
+        $months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        $openingBalance = [];
+        $i = 1;
+        foreach ($months as $month){
+            $compare = new \DateTime("{$year}-{$month}-01");
+            $start =  $compare->format("Y-m-01");
+            $data['startDate'] = $start;
+            $openingBalance[$i] = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->openingBalanceGroup($user,'',$data);
+            $i++;
+        }
+        $sales = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Sales',$data);
+        $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Purchase',$data);
+        $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Purchase-Commission',$data);
+        $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Expenditure',$data);
+        $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Journal',$data);
+
+        if(empty($data['pdf'])){
+
+            return $this->render('AccountingBundle:Transaction/Report:yearly.html.twig',[
+                'globalOption'                  => $this->getUser()->getGlobalOption(),
+                'openingBalanceTrans'           => $openingBalance,
+                'salesTrans'                    => $sales,
+                'purchaseTrans'                 => $purchase,
+                'purchaseCommissionTrans'       => $purchaseCommission,
+                'expenditureTrans'              => $expenditure,
+                'journalTrans'                  => $journal,
+                'searchForm'                    => $data,
+            ]);
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:Transaction/Report:yearlyPdf.html.twig', array(
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'openingBalanceTrans'           => $openingBalance,
+                    'salesTrans'                    => $sales,
+                    'purchaseTrans'                 => $purchase,
+                    'purchaseCommissionTrans'       => $purchaseCommission,
+                    'expenditureTrans'              => $expenditure,
+                    'journalTrans'                  => $journal,
+                    'searchForm'                    => $data,
+                )
+            );
+            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+        }
+
+    }
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename='{$fileName}'");
+        echo $pdf;
+        return new Response('');
     }
 
 }

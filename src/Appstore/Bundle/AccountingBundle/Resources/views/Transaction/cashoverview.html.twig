@@ -168,7 +168,6 @@
                                     <th class="numeric span6">Account Head</th>
                                     <th class="numeric span1"  >Receive</th>
                                     <th class="numeric span1"  >Payment</th>
-                                    <th class="numeric span2"  >Balance</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -178,15 +177,11 @@
                                         {% set sumCash = sumCash + (row.debit-row.credit) %}
                                         <th >{{ row.name }}</th>
                                         <td class="numeric"  >{{ row.debit|number_format }}</td>
-                                        <td cclass="numeric"  >{{ row.credit|number_format }}</td>
-                                        <td class="numeric"  >{{ (row.debit-row.credit)|number_format }}</td>
+                                        <td class="numeric"  >{{ row.credit|number_format }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
-                                <tr>
-                                    <th class="numeric" colspan="3"><span class="pull-right">Grand Total</span></th>
-                                    <td class="numeric" ><strong>{#{{ sumCash|number_format }}#}</strong></td>
-                                </tr>
+
                             </table>
                         </div>
                     </div>

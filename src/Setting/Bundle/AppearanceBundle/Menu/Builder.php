@@ -467,6 +467,9 @@ class Builder extends ContainerAware
             $menu['Accounting']['Cash']->addChild('Cash Transaction', array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Cash']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Cash']->addChild('Mobile Transaction', array('route' => 'account_transaction_mobilebank'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Cash']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
+            $menu['Accounting']['Cash']['Reports']->addChild('Monthly Cash',array('route' => 'account_transaction_monthly'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Cash']['Reports']->addChild('Yearly Cash',array('route' => 'account_transaction_yearly'))->setAttribute('icon', 'icon-th-list');
         }
 
         /*$menu['Finance']->addChild('Petty Cash & Expense', array('route' => 'account_pettycash'))

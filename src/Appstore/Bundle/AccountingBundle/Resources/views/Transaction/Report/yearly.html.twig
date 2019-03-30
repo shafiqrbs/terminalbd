@@ -30,9 +30,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Monthly Statement Sheet</div>
                         <div class="actions">
                             <div class="btn-group">
-                                {% set month = searchForm.month is defined ? searchForm.month :"now"|date("F") %}
                                 {% set year = searchForm.year is defined ? searchForm.year :"now"|date("Y") %}
-                                <a class="btn purple" target="_blank" href="{{ path('account_transaction_monthly',{'pdf':'pdf','month':month,year:year}) }}" >
+                                <a class="btn purple" target="_blank" href="{{ path('account_transaction_yearly',{'pdf':'pdf',year:year}) }}" >
                                     <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
                             </div>
@@ -44,15 +43,7 @@
                             <div class="portlet search-portlet">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span6"></div>
-                                        <div class="span3">
-                                            {%  set months = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
-                                            <select class="span12 m-wrap" name="month" id='month'>
-                                                {% for mon in months %}
-                                                    <option value='{{ mon }}' {% if (month == mon) %} selected="selected" {% endif %} >{{ mon }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                        <div class="span9"></div>
                                         <div class="span3">
                                             <div class="controls">
                                                 {% set years = [2018,2019,2020,2021,2022,2023,2024,2025] %}
@@ -74,10 +65,10 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr>
-                                    <th class="pull-center" colspan="9"><h3><strong>MONTH STATEMENT SHEET: {{ month|capitalize }} , {{ year }}</strong></h3></th>
+                                    <th class="pull-center" colspan="9"><h3><strong>MONTH STATEMENT SHEET: {{ year }}</strong></h3></th>
                                 </tr>
                                 <tr class="head-green">
-                                    <th>Date</th>
+                                    <th>Month</th>
                                     <th>Opening</th>
                                     <th>Sales</th>
                                     <th>Purchase</th>
@@ -89,9 +80,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% set fullDate =  date(year~'-'~month~'-1')|date('Y-m-d') %}
-                                {% set month =  date(year~'-'~month~'-1')|date('Y-m-') %}
-                                {% set max =  fullDate|date("t") %}
                                 {% set sales = 0 %}
                                 {% set purchase = 0 %}
                                 {% set purchaseCommission = 0 %}
@@ -100,8 +88,8 @@
                                 {% set opening = app.session.get('opening') %}
                                 {% set balance = 0 %}
                                 {% set closing = 0 %}
-                                {% for i in 1..max %}
-                                    {% set blackO               = date(month~i)|date('j-m-Y') %}
+                                {% for i in 1..12 %}
+                                    {% set blackO               = i %}
                                     {% set openingBalance       = openingBalanceTrans[blackO] is defined and openingBalanceTrans[blackO] is not empty ? openingBalanceTrans[blackO] : 0  %}
                                     {% set sales                = salesTrans[blackO] is defined and salesTrans[blackO] is not empty ? salesTrans[blackO].debit : 0  %}
                                     {% set purchase             = purchaseTrans[blackO] is defined and purchaseTrans[blackO] is not empty ? purchaseTrans[blackO].credit : 0  %}
@@ -111,7 +99,7 @@
                                     {% set journalCredit        = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].credit : 0  %}
                                     {% set closing              = ((openingBalance + sales + commission + journalDebit) - (purchase + expenditure + journalCredit))|default(0)|number_format  %}
                                     <tr>
-                                        <td>{{ blackO }}</td>
+                                        <td> {{ date(year~'-'~blackO)|date('F')  }}</td>
                                         <td>{{ openingBalance }}</td>
                                         <td>{{ sales }}</td>
                                         <td>{{ purchase }}</td>
