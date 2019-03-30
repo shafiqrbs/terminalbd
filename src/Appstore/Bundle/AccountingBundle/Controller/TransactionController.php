@@ -254,6 +254,8 @@ class TransactionController extends Controller
             $compare = new \DateTime();
             $end =  $compare->format('j');
             $data['monthYear'] = $compare->format('Y-m-d');
+            $data['month'] =  $compare->format('F');
+            $data['year'] = $compare->format('Y');
         }else{
             $month = $data['month'];
             $year = $data['year'];

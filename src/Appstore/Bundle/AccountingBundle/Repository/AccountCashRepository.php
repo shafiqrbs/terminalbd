@@ -822,7 +822,7 @@ class AccountCashRepository extends EntityRepository
     }
 
 
-    public function monthlyCash(User $user , $data =array())
+    public function dailyProcessHead(User $user , $head = '', $data = [])
     {
         $option = $user->getGlobalOption()->getId();
         $compare = new \DateTime();
@@ -830,7 +830,7 @@ class AccountCashRepository extends EntityRepository
         $year =  $compare->format('Y');
         $month = isset($data['month'])? $data['month'] :$month;
         $year = isset($data['year'])? $data['year'] :$year;
-        $sql = "SELECT DATE_FORMAT(invoice.updated,'%d-%m-%Y') as date, invoice.processHead as process ,SUM(invoice.debit) as debit,SUM(invoice.credit) as credit
+        $sql = "SELECT DATE_FORMAT(invoice.updated,'%d-%m-%Y') as date ,COALESCE(SUM(invoice.debit),0) as debit,COALESCE(SUM(invoice.credit),0) as credit
                 FROM AccountCash as invoice
                 WHERE invoice.globalOption_id = :option AND MONTHNAME(invoice.updated) =:month AND YEAR(invoice.updated) =:year AND invoice.processHead =:process 
                 GROUP BY date";
@@ -838,7 +838,7 @@ class AccountCashRepository extends EntityRepository
         $stmt->bindValue('option', $option);
         $stmt->bindValue('month', $month);
         $stmt->bindValue('year', $year);
-        $stmt->bindValue('process', 'Purchase');
+        $stmt->bindValue('process', $head);
         $stmt->execute();
         $results =  $stmt->fetchAll();
         $arrays = [];
@@ -848,7 +848,31 @@ class AccountCashRepository extends EntityRepository
         return $arrays;
     }
 
-    public function dailyProcessHead(User $user,$head = '' , $data = []){
+    public function monthlyProcessHead(User $user , $head = '', $data = [])
+    {
+        $option = $user->getGlobalOption()->getId();
+        $compare = new \DateTime();
+        $year =  $compare->format('Y');
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT MONTH(invoice.updated) as month ,COALESCE(SUM(invoice.debit),0) as debit,COALESCE(SUM(invoice.credit),0) as credit
+                FROM AccountCash as invoice
+                WHERE invoice.globalOption_id = :option AND YEAR(invoice.updated) =:year AND invoice.processHead =:process 
+                GROUP BY month";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('option', $option);
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('process', $head);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = [];
+        foreach ($results as $result){
+            $arrays[$result['month']] = $result;
+        }
+        return $arrays;
+    }
+
+
+ /*   public function dailyProcessHead1(User $user,$head = '' , $data = []){
 
         $emConfig = $this->getEntityManager()->getConfiguration();
         $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
@@ -878,7 +902,7 @@ class AccountCashRepository extends EntityRepository
         }
         return $arrays;
     }
-    public function monthlyProcessHead(User $user,$head = '' , $data = []){
+    public function monthlyProcessHead1(User $user,$head = '' , $data = []){
 
         $emConfig = $this->getEntityManager()->getConfiguration();
         $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
@@ -900,7 +924,7 @@ class AccountCashRepository extends EntityRepository
             $arrays[$date] = $result;
         }
         return $arrays;
-    }
+    }*/
 
 
 
