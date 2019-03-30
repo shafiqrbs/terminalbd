@@ -27,11 +27,11 @@ class CashReconciliationMeta
      */
     private $id;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\CashReconciliation", inversedBy="cashReconciliationMetas")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\CashReconciliation", inversedBy="cashReconciliationMetas" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(name="cashReconciliation_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
-    protected $cashReconciliation;
+    private  $cashReconciliation;
 
 
     /**
