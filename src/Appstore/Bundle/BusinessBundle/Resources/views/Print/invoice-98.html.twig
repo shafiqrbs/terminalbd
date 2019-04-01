@@ -140,7 +140,7 @@
                                                     <tr><td ><span class="pull-right" >DISCOUNT</span></td><td><strong  class="pull-right">{{ entity.discount|number_format() }}</strong></td></tr>
                                                     <tr><td ><strong class="pull-right" >GRAND TOTAL</strong></td><td ><strong class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
                                                     <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                                    <tr><td ><strong>In words: {{ entity.paymentInWord }} </strong><strong class="pull-right" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
+                                                    <tr><td ><strong>In words: {% if entity.process == "Quotation" %}{{ amountInWords }}{% else %}{{ entity.paymentInWord }}{% endif %} </strong><strong class="pull-right" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
 
                                                 </table>
                                             </td>

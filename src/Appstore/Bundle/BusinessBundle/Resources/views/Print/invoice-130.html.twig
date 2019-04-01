@@ -1,12 +1,12 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
-    <script type="text/javascript">
-        window.print();
-        setTimeout(function () {
-            window.open('', '_self', '');
-            window.close();
-        }, 2000);
-    </script>
+        <script type="text/javascript">
+            window.print();
+            setTimeout(function () {
+                window.open('', '_self', '');
+                window.close();
+            }, 2000);
+        </script>
     <div id="invoice">
         <div class="invoice overflow-auto" style="margin-top:{{ config.printTopMargin }}px!important;">
             <div style="min-width: 600px">
@@ -94,7 +94,7 @@
                         <tr>
                             <td colspan="2" style="width:50%;">
                                 <table style="width: 100%;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
-                                    <tr><td style="text-align: left!important;"><strong>In words: {{ entity.paymentInWord }} </strong></td></tr>
+                                    <tr><td style="text-align: left!important;"><strong>In words: {% if entity.process == "Quotation" %}{{ amountInWords }}{% else %}{{ entity.paymentInWord }}{% endif %} </strong></td></tr>
                                 </table>
                             </td>
                             <td colspan="3" style="width:50%; border-left: 2px solid #999999;vertical-align: top!important; ">
@@ -117,16 +117,20 @@
                         <div class="notice">{{ entity.comment }}</div>
                     </div>
                 </main>
-               {# <footer>
-                    <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
-                    <span class="right">Developed by: {{ portal_design_development }}</span>
-                </footer>#}
+                {# <footer>
+                     <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
+                     <span class="right">Developed by: {{ portal_design_development }}</span>
+                 </footer>#}
             </div>
             <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
             <div></div>
         </div>
     </div>
     <style>
+        body{
+            font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+            font-size: 18px;
+        }
         .caption{
             text-align: center;
             width: 100%;
@@ -159,9 +163,8 @@
         }
         .invoice table td h3 {
             margin: 0;
-            font-weight: 400;
-            color: #c49f47;
-            font-size: 1.2em
+            font-weight: bold;
+            color: #000101;
         }
         .invoice table .no {
             background: #c49f47
@@ -169,7 +172,7 @@
         .invoice table .total {
             background: #c49f47;
         }
-   </style>
+    </style>
 {% endblock %}
 
 

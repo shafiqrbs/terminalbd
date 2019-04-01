@@ -583,6 +583,9 @@ class InvoiceController extends Controller
 	        }else{
                 $template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
             }
+            if($entity->getProcess() == "Quotation"){
+                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+            }
             $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($this->getUser()->getGlobalOption(),$entity->getCustomer());
             $balance = empty($result) ? 0 : $result;
             return  $this->render("BusinessBundle:Print:{$template}.html.twig",
@@ -590,6 +593,7 @@ class InvoiceController extends Controller
                     'config' => $config,
                     'entity' => $entity,
                     'balance' => $balance,
+                    'amountInWords' => $amountInWords,
                     'print' => 'print',
                 )
             );
