@@ -117,10 +117,10 @@
                         <div class="notice">{{ entity.comment }}</div>
                     </div>
                 </main>
-                <footer>
+               {# <footer>
                     <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
                     <span class="right">Developed by: {{ portal_design_development }}</span>
-                </footer>
+                </footer>#}
             </div>
             <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
             <div></div>
@@ -131,6 +131,7 @@
             text-align: center;
             width: 100%;
             height: 45px;
+            font-size: 24px;
         }
         .invoice table.main-table th{
             background-color: #313131;
@@ -144,7 +145,31 @@
             padding: 5px;
             border: none!important;
         }
-    </style>
+        .invoice header {
+            border-bottom: 1px solid #c49f47;
+        }
+        .invoice .company-details .name {
+            color: #c49f47;
+        }
+        .invoice .invoice-details .invoice-id {
+            color: #c49f47
+        }
+        .invoice main .notices {
+            border-left: 6px solid #c49f47
+        }
+        .invoice table td h3 {
+            margin: 0;
+            font-weight: 400;
+            color: #c49f47;
+            font-size: 1.2em
+        }
+        .invoice table .no {
+            background: #c49f47
+        }
+        .invoice table .total {
+            background: #c49f47;
+        }
+   </style>
 {% endblock %}
 
 
