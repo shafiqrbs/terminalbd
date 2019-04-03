@@ -5,6 +5,7 @@ namespace Appstore\Bundle\AccountingBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Form\VendorType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
@@ -211,6 +212,68 @@ class VendorController extends Controller
         $em->flush();
         return new Response('success');
         exit;
+    }
+
+    /**
+     * Status a Page entity.
+     *
+     */
+    public function statusAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find District entity.');
+        }
+
+        $status = $entity->isStatus();
+        if($status == 1){
+            $entity->setStatus(false);
+        } else{
+            $entity->setStatus(true);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Status has been changed successfully"
+        );
+        exit;
+
+    }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $global = $this->getUser()->getGlobalOption();
+            $item = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->searchAutoComplete($item,$global);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchVendorNameAction($name)
+    {
+        return new JsonResponse(array(
+            'id' => $name,
+            'text' => $name
+        ));
+    }
+
+    public function ledgerAction()
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $type = $_REQUEST['type'];
+        $vendor = $_REQUEST['vendor'];
+        $balance = 0;
+        if(!empty($vendor)){
+            $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorSingleOutstanding($globalOption,$type,$vendor);
+            $balance = empty($result) ? 0 : $result;
+        }
+        $taka = number_format($balance).' Taka';
+        return new Response($taka);
+        exit;
+
     }
 
 }

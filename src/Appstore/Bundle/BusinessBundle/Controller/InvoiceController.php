@@ -583,6 +583,7 @@ class InvoiceController extends Controller
 	        }else{
                 $template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
             }
+            $amountInWords = '';
             if($entity->getProcess() == "Quotation"){
                 $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             }

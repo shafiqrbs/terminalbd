@@ -23,7 +23,6 @@
             </div>
         {% endif %}
         <!-- END purchase_order HEADER-->
-
         <!-- BEGIN purchase_order CONTENT-->
         <div class="row-fluid">
             <div class="span12">
@@ -81,20 +80,17 @@
                         </div>
                         <div class="clearfix"><br/></div>
                         <div class="row-fluid box green">
-                            {% if print == 'print' %}
                                 {% if entity.businessInvoiceParticulars is defined and  entity.businessInvoiceParticulars is not empty  %}
                                     <table class="table table-bordered table-striped table-condensed flip-content" style="border: 1px solid #999999!important;">
                                         <thead class="flip-content ">
                                         <tr class="table-header" style="">
                                             <th class="numeric"><strong>S/N</strong></th>
                                             <th class="numeric" style="" ><strong>Description</strong></th>
-                                            {% if entity.businessConfig.businessModel == 'sign' %}
-                                                <th class="numeric" >Size</th>
-                                                <th class="numeric" >S.ft</th>
-                                            {% endif %}
-                                            <th class="numeric" >Qnt</th>
-                                            <th class="numeric" >Unit</th>
-                                            <th class="numeric" >Rate</th>
+                                            <th class="numeric small-width" >Size</th>
+                                            <th class="numeric small-width" >S.ft</th>
+                                            <th class="numeric small-width" >Qnt</th>
+                                            <th class="numeric small-width" >Unit</th>
+                                            <th class="numeric small-width" >Rate</th>
                                             <th class="pull-right"  ><strong>Amount</strong></th>
                                         </tr>
                                         </thead>
@@ -102,15 +98,13 @@
                                         {% for index,item in entity.businessInvoiceParticulars %}
                                             <tr>
                                                 <td>{{ loop.index }}.</td>
-                                                <td class="numeric" >{{ item.particular }}</td>
-                                                {% if entity.businessConfig.businessModel == 'sign' %}
-                                                    <td class="numeric" >
-                                                        {% if item.subQuantity is not empty %}
-                                                            {{ item.height }}x{{ item.width }}
-                                                        {% endif %}
-                                                    </td>
-                                                    <td>{% if item.subQuantity is not empty %}={{ item.subQuantity }}{% endif %}</td>
-                                                {% endif %}
+                                                <td class="numeric" >{{ item.particular|capitalize }}</td>
+                                                <td class="numeric" >
+                                                    {% if item.subQuantity is not empty %}
+                                                        {{ item.height }}x{{ item.width }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{% if item.subQuantity is not empty %}={{ item.subQuantity }}{% endif %}</td>
                                                 <td class="numeric" >{% if item.quantity > 0  %}{{ item.quantity|number_format() }}{% endif %}</td>
                                                 <td class="numeric" >{% if item.unit is not empty %}{{ item.unit }}{% endif %}</td>
                                                 <td class="numeric" >{{ item.price|number_format() }}</td>
@@ -120,7 +114,7 @@
                                         <tr> <td colspan="8" style="border-top:1px solid #999999"><strong>Narration: </strong> : {{ entity.comment|raw }}</td></tr>
                                         <tr> <td colspan="8" style="border: 1px solid #999999"></td></tr>
                                         </tbody>
-                                        <tfoot>
+                                        <tr>
                                         <tr>
                                             <td colspan="3"  style="width: 33%; border-right:1px solid #999999">
                                                 {% if entity.process != "Quotation" %}
@@ -136,78 +130,40 @@
                                             <td colspan="2" style="width: 33%;"></td>
                                             <td colspan="3" style="width: 33%; border-left: 1px solid #999999">
                                                 <table style="width: 100%">
-                                                    <tr><td ><span class="pull-right" >SUB TOTAL</span></td><td><strong  class="pull-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
-                                                    <tr><td ><span class="pull-right" >DISCOUNT</span></td><td><strong  class="pull-right">{{ entity.discount|number_format() }}</strong></td></tr>
-                                                    <tr><td ><strong class="pull-right" >GRAND TOTAL</strong></td><td ><strong class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
+                                                    <tr><td ><span class="pull-left" >SUB TOTAL</span></td><td><strong  class="pull-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
+                                                    <tr><td ><span class="pull-left" >DISCOUNT</span></td><td><strong  class="pull-right">{{ entity.discount|number_format() }}</strong></td></tr>
+                                                    <tr><td ><strong class="pull-left" >GRAND TOTAL</strong></td><td ><strong class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
                                                     <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                                    <tr><td ><strong>In words: {% if entity.process == "Quotation" %}{{ amountInWords }}{% else %}{{ entity.paymentInWord }}{% endif %} </strong><strong class="pull-right" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
+                                                    <tr><td ><strong class="pull-left" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
 
                                                 </table>
                                             </td>
                                         </tr>
+                                        <tr><td colspan="8" style="border-top:2px solid #999999"><strong>In words: {% if entity.process == "Quotation" %}{{ amountInWords }}{% else %}{{ entity.paymentInWord }}{% endif %} </strong></td></tr>
                                         </tfoot>
                                     </table>
                                 {% endif %}
-                            {% else %}
-                                {% if entity.businessInvoiceParticulars is defined and  entity.businessInvoiceParticulars is not empty  %}
-                                    <table class="table table-bordered table-striped table-condensed flip-content" style="border: 1px solid #999999!important;">
-                                        <thead class="flip-content ">
-                                        <tr class="table-header" style="">
-                                            <th class="numeric"><strong>S/N</strong></th>
-                                            <th class="numeric" ><strong>Product Description</strong></th>
-                                            {% if config.invoiceType == 'banner-print' %}
-                                                <th class="numeric" >Size</th>
-                                                <th class="numeric" >S.ft</th>
-                                            {% endif %}
-                                            <th class="numeric" >Qnt</th>
-                                            <th class="numeric" >Unit</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for index,item in entity.businessInvoiceParticulars %}
-                                            <tr>
-                                                <td>{{ loop.index }}.</td>
-                                                <td class="numeric" >{{ item.particular }}</td>
-                                                {% if config.invoiceType == 'banner-print' %}
-                                                    <td class="numeric" >
-                                                        {% if item.subQuantity is not empty %}
-                                                            {{ item.height }}x{{ item.width }}
-                                                        {% endif %}
-                                                    </td>
-                                                    <td>{% if item.subQuantity is not empty %}={{ item.subQuantity }}{% endif %}</td>
-                                                {% endif %}
-                                                <td class="numeric" >{% if item.quantity > 0  %}{{ item.quantity|number_format() }}{% endif %}</td>
-                                                <td class="numeric" >{% if item.unit is not empty %}{{ item.unit }}{% endif %}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                {% endif %}
-                            {% endif %}
+
                         </div>
                         <div class="clearfix">&nbsp;</div>
                         {% if config.isPrintFooter == 1 %}
                             <div class="row-fluid">
-                                <table class="table">
+                                <table class="" style="width: 100%">
                                     <tr>
-                                        <td style="width:25%">
+                                        <td style="width:33%">
                                             <div class="span4">
                                                 <div style="height:50px"></div>
                                                 <h5><strong>Received By</strong></h5>
                                             </div>
                                         </td>
-                                        <td style="width:25%">
-                                            <div class="span4">
-                                                <div style="height:50px"></div>
-                                            </div>
-                                        </td>
-                                        <td style="width:25%">
+
+                                        <td style="width:33%">
                                             <div class="span4 text-center">
                                                 <div style="height:50px"></div>
                                             </div>
                                         </td>
-                                        <td style="width:25%">
-                                            <div class="span4 text-right">
+                                        <td style="width:33%">
+                                            <div class="text-right">
                                                 <div style="height:50px"></div>
                                                 <h5><strong>Signature</strong></h5>
                                             </div>
@@ -230,6 +186,7 @@
         </div>
     </div>
     <style>
+
         .table-header{
             background: #d0dde4!important;
             height: 40px!important;
@@ -238,6 +195,9 @@
             line-height: 35px;
             color:#000101;
             font-size:15px!important;
+        }
+        .table-header th.small-width{
+            width: 50px!important;
         }
     </style>
 {% endblock %}

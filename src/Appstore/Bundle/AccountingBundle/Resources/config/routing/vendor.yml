@@ -33,3 +33,15 @@ account_vendor_status:
 account_vendor_delete:
     path:     /{id}/delete
     defaults: { _controller: "AccountingBundle:Vendor:delete" }
+
+account_vendor_search:
+    path:     /search
+    defaults: { _controller: "AccountingBundle:Vendor:autoSearch" }
+    options:
+            expose: true
+
+account_vendor_name:
+    path:      /{name}/vendor-name
+    defaults: { _controller: "AccountingBundle:Vendor:searchVendorName" }
+    options:
+            expose: true
