@@ -10,6 +10,10 @@ account_expense_purchase_edit:
     path:     /{id}/edit
     defaults: { _controller: "AccountingBundle:Purchase:edit" }
 
+account_expense_purchase_show:
+    path:     /{id}/show
+    defaults: { _controller: "AccountingBundle:Purchase:show" }
+
 account_expense_purchase_update:
     path:     /{id}/update
     defaults: { _controller: "AccountingBundle:Purchase:update" }

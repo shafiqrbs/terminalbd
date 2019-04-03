@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Form;
 
+use Appstore\Bundle\AccountingBundle\Repository\AccountHeadRepository;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -15,11 +16,16 @@ class PurchaseType extends AbstractType
     /** @var  HospitalConfig */
     public  $option;
 
-    public function __construct(GlobalOption $option)
+    /** @var  AccountHeadRepository */
+    private $accountHead;
+
+    public function __construct(GlobalOption $option, AccountHeadRepository $accountHead)
     {
         $this->option = $option;
+        $this->accountHead = $accountHead;
 
     }
+
 
     /**
      * @param FormBuilderInterface $builder
@@ -29,7 +35,7 @@ class PurchaseType extends AbstractType
     {
         $builder
 
-            ->add('vendor', 'entity', array(
+            ->add('accountVendor', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor ---',
@@ -42,6 +48,28 @@ class PurchaseType extends AbstractType
                         ->andWhere("e.globalOption =".$this->option->getId());
                 },
             ))
+            ->add('accountHead', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
+                'empty_value' => '---Choose a account head---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'choices'=> $this->ExpenseAccountChoiceList()
+            ))
+            ->add('process', 'choice', array(
+                'attr'=>array('class'=>'span6 m-wrap'),
+                'expanded'      =>false,
+                'required'    => true,
+                'multiple'      =>false,
+                'choices' => array(
+                    'Done' => 'Done',
+                    'Approved' => 'Approved',
+                ),
+            ))
+
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
@@ -103,4 +131,15 @@ class PurchaseType extends AbstractType
     {
         return 'purchase';
     }
+
+
+    /**
+     * @return mixed
+     */
+    protected function ExpenseAccountChoiceList()
+    {
+        return $this->accountHead->getAccountHeadTrees();
+
+    }
+
 }

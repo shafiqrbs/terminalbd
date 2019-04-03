@@ -30,7 +30,7 @@ class AccountPurchaseRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
+        $qb->setParameter('globalOption', $globalOption->getId());
         $this->handleSearchBetween($qb,$globalOption,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
@@ -325,19 +325,21 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                 $startDate = $datetime->format('Y-m-d 00:00:00');
                 $endDate = $datetime->format('Y-m-d 23:59:59');
         }else{
+
                 $grn = isset($data['grn'])  ? $data['grn'] : '';
                 $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $vendor =    isset($data['vendor'])? $data['vendor'] :'';
                 $processHead =    isset($data['processHead'])? $data['processHead'] :'';
 	            $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
+
                 $globalOption->getMainApp()->getSlug();
                 if($globalOption->getMainApp()->getSlug() == 'miss'){
-                    $qb->join('e.medicineVendor','v');
+                    $qb->leftJoin('e.medicineVendor','v');
                 }elseif($globalOption->getMainApp()->getSlug() == 'inventory'){
-                    $qb->join('e.vendor','v');
+                    $qb->leftJoin('e.vendor','v');
                 }else{
-                    $qb->join('e.accountVendor','v');
+                    $qb->leftJoin('e.accountVendor','v');
                 }
                 if(!empty($vendor)){
                     $qb->andWhere("v.companyName = :vendor");
@@ -360,8 +362,8 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                     $qb->setParameter('grn', $grn);
                 }
                 if (!empty($processHead)) {
-                    $qb->andWhere("e.processHead = :process");
-                    $qb->setParameter('process', $processHead);
+                   $qb->andWhere("e.processHead = :process");
+                   $qb->setParameter('process', $processHead);
                 }
 
 	            if (!empty($transactionMethod)) {

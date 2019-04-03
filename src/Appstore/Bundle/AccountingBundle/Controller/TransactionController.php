@@ -265,8 +265,9 @@ class TransactionController extends Controller
         }
         $openingBalance = [];
         for ($i = 1; $end >= $i ; $i++ ){
-            $start =  $compare->format("Y-m-{$i}");
-            $day =  $compare->format("{$i}-m-Y");
+            $no = sprintf("%s", str_pad($i,2, '0', STR_PAD_LEFT));
+            $start =  $compare->format("Y-m-{$no}");
+            $day =  $compare->format("{$no}-m-Y");
             $data['startDate'] = $start;
             $openingBalance[$day] = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->openingBalanceGroup($user,'',$data);
         }
@@ -274,6 +275,7 @@ class TransactionController extends Controller
         $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase',$data);
         $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase-Commission',$data);
         $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Expenditure',$data);
+        $purchaseExpenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase-Expenditure',$data);
         $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Journal',$data);
 
         if(empty($data['pdf'])){
@@ -285,6 +287,7 @@ class TransactionController extends Controller
                 'purchaseTrans'                 => $purchase,
                 'purchaseCommissionTrans'       => $purchaseCommission,
                 'expenditureTrans'              => $expenditure,
+                'purchaseExpenditureTrans'      => $purchaseExpenditure,
                 'journalTrans'                  => $journal,
                 'searchForm'                    => $data,
             ]);
@@ -297,6 +300,7 @@ class TransactionController extends Controller
                     'purchaseTrans'                 => $purchase,
                     'purchaseCommissionTrans'       => $purchaseCommission,
                     'expenditureTrans'              => $expenditure,
+                    'purchaseExpenditureTrans'      => $purchaseExpenditure,
                     'journalTrans'                  => $journal,
                     'searchForm'                    => $data,
                 )
@@ -332,8 +336,8 @@ class TransactionController extends Controller
         $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Purchase',$data);
         $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Purchase-Commission',$data);
         $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Expenditure',$data);
+        $purchaseExpenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Purchase-Expenditure',$data);
         $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Journal',$data);
-
         if(empty($data['pdf'])){
 
             return $this->render('AccountingBundle:Transaction/Report:yearly.html.twig',[
@@ -343,6 +347,7 @@ class TransactionController extends Controller
                 'purchaseTrans'                 => $purchase,
                 'purchaseCommissionTrans'       => $purchaseCommission,
                 'expenditureTrans'              => $expenditure,
+                'purchaseExpenditureTrans'      => $purchaseExpenditure,
                 'journalTrans'                  => $journal,
                 'searchForm'                    => $data,
             ]);
@@ -355,6 +360,7 @@ class TransactionController extends Controller
                     'purchaseTrans'                 => $purchase,
                     'purchaseCommissionTrans'       => $purchaseCommission,
                     'expenditureTrans'              => $expenditure,
+                    'purchaseExpenditureTrans'      => $purchaseExpenditure,
                     'journalTrans'                  => $journal,
                     'searchForm'                    => $data,
                 )

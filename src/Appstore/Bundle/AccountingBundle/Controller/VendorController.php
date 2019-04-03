@@ -186,15 +186,13 @@ class VendorController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $name = $entity->getBank()->getName().','.$entity->getBranch();
-            $entity->setName($name);
             $em->flush();
-            return $this->redirect($this->generateUrl('AccountVendor'));
+            return $this->redirect($this->generateUrl('account_vendor'));
         }
 
         return $this->render('AccountingBundle:AccountVendor:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
 

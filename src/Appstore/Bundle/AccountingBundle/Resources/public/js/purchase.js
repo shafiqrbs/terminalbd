@@ -29,6 +29,28 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
+$('form#purchaseItem').on('keypress', 'input', function (e) {
+
+    if (e.which == 13) {
+        e.preventDefault();
+
+        switch (this.id) {
+
+            case 'particular':
+                $('#price').focus();
+                break;
+
+            case 'price':
+                $('#quantity').focus();
+                break;
+
+            case 'quantity':
+                $('#addParticular').submit();
+                break;
+        }
+    }
+});
+
 
 var form = $("#purchaseItem").validate({
 
@@ -114,13 +136,30 @@ $('form#purchase').on('keypress', 'input', function (e) {
 
         switch (this.id) {
 
-            case 'purchase_discountCalculation':
-                $('#purchase_payment').focus();
-                break;
-
             case 'purchase_payment':
-                $('#receiveBtn').focus();
-                break;
+                $('#receiveBtn').click();
+
+
         }
     }
 });
+
+$(document).on('click', '#purchase_payment', function() {
+    $(this).val('');
+});
+
+$(document).on("click", "#receiveBtn", function() {
+
+    $(this).removeClass('approve');
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('#purchase').submit();
+        }
+    });
+
+});
+

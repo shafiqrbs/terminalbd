@@ -42,6 +42,12 @@ class AccountHead
     private  $expendituries;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountHead" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $accountPurchases;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory", mappedBy="accountHead" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -259,7 +265,7 @@ class AccountHead
     }
 
     /**
-     * @return mixed
+     * @return AccountPurchase
      */
     public function getAccountPurchases()
     {

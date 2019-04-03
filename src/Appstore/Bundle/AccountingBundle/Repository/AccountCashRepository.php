@@ -521,6 +521,36 @@ class AccountCashRepository extends EntityRepository
 
     }
 
+    public function insertPurchaseExpenditureCash(AccountPurchase $entity)
+    {
+
+        $balance = $this->lastInsertCash($entity,'Purchase-Expenditure');
+        $em = $this->_em;
+        $cash = new AccountCash();
+
+        $cash->setGlobalOption($entity->getGlobalOption());
+        $cash->setAccountPurchase($entity);
+        $cash->setTransactionMethod($entity->getTransactionMethod());
+        $cash->setAccountMobileBank($entity->getAccountMobileBank());
+        $cash->setAccountBank($entity->getAccountBank());
+        $cash->setProcessHead('Purchase-Expenditure');
+        $cash->setAccountRefNo($entity->getAccountRefNo());
+        $cash->setUpdated($entity->getUpdated());
+        /* Cash - Cash various */
+        if($entity->getTransactionMethod()->getId() == 1 ){
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        }elseif($entity->getTransactionMethod()->getId() == 2 ){
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+        }if($entity->getTransactionMethod()->getId() == 3 ){
+        $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+        }
+        $cash->setBalance($balance - $entity->getPayment() );
+        $cash->setCredit($entity->getPayment());
+        $em->persist($cash);
+        $em->flush();
+
+    }
+
     public function insertSalesCash(AccountSales $entity)
     {
 

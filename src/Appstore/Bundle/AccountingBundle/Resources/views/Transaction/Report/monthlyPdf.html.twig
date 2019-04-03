@@ -74,6 +74,7 @@
         <th>Purchase</th>
         <th>Purchase Comm.</th>
         <th>Expenditure</th>
+        <th>Purchase Expenditure</th>
         <th>Journal Debit</th>
         <th>Journal Credit</th>
         <th>Closing</th>
@@ -92,15 +93,16 @@
     {% set balance = 0 %}
     {% set closing = 0 %}
     {% for i in 1..max %}
-        {% set blackO               = date(month~i)|date('j-m-Y') %}
+        {% set blackO               = date(month~i)|date('d-m-Y') %}
         {% set openingBalance       = openingBalanceTrans[blackO] is defined and openingBalanceTrans[blackO] is not empty ? openingBalanceTrans[blackO] : 0  %}
         {% set sales                = salesTrans[blackO] is defined and salesTrans[blackO] is not empty ? salesTrans[blackO].debit : 0  %}
         {% set purchase             = purchaseTrans[blackO] is defined and purchaseTrans[blackO] is not empty ? purchaseTrans[blackO].credit : 0  %}
         {% set commission           = purchaseCommissionTrans[blackO] is defined and purchaseCommissionTrans[blackO] is not empty ? purchaseCommissionTrans[blackO].debit : 0  %}
         {% set expenditure          = expenditureTrans[blackO] is defined and expenditureTrans[blackO] is not empty ? expenditureTrans[blackO].credit : 0  %}
+        {% set purchaseExpenditure  = purchaseExpenditureTrans[blackO] is defined and purchaseExpenditureTrans[blackO] is not empty ? purchaseExpenditureTrans[blackO].credit : 0  %}
         {% set journalDebit         = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].debit : 0  %}
         {% set journalCredit        = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].credit : 0  %}
-        {% set closing              = ((openingBalance + sales + commission + journalDebit) - (purchase + expenditure + journalCredit))|default(0)|number_format  %}
+        {% set closing              = ((openingBalance + sales + commission + journalDebit) - (purchase + expenditure + purchaseExpenditure + journalCredit))|default(0)|number_format  %}
         <tr>
             <td>{{ blackO }}</td>
             <td>{{ openingBalance }}</td>
@@ -108,6 +110,7 @@
             <td>{{ purchase }}</td>
             <td>{{ commission }}</td>
             <td>{{ expenditure }}</td>
+            <td>{{ purchaseExpenditure }}</td>
             <td>{{ journalDebit }}</td>
             <td>{{ journalCredit }}</td>
             <td>{{ closing }}</td>

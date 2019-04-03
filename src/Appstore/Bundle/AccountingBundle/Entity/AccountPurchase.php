@@ -40,6 +40,12 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         protected $globalOption;
 
         /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="accountPurchases" )
+         **/
+        private  $accountHead;
+
+
+        /**
          * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem", mappedBy="purchase"  )
          **/
         private  $expenditureItems;
@@ -166,7 +172,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          *
          * @ORM\Column(name="payment", type="float", nullable=true)
          */
-        private $payment;
+        private $payment = 0;
 
         /**
          * @var float
@@ -921,6 +927,22 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function getExpenditureItems()
         {
             return $this->expenditureItems;
+        }
+
+        /**
+         * @return AccountHead
+         */
+        public function getAccountHead()
+        {
+            return $this->accountHead;
+        }
+
+        /**
+         * @param AccountHead $accountHead
+         */
+        public function setAccountHead($accountHead)
+        {
+            $this->accountHead = $accountHead;
         }
 
     }

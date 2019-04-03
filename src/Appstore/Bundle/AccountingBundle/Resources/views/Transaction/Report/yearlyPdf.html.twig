@@ -72,6 +72,7 @@
         <th>Purchase</th>
         <th>Purchase Comm.</th>
         <th>Expenditure</th>
+        <th>Purchase Expenditure</th>
         <th>Journal Debit</th>
         <th>Journal Credit</th>
         <th>Closing</th>
@@ -82,6 +83,7 @@
     {% set purchase = 0 %}
     {% set purchaseCommission = 0 %}
     {% set expenditure = 0 %}
+    {% set purchaseExpenditure = 0 %}
     {% set journal = 0 %}
     {% set opening = app.session.get('opening') %}
     {% set balance = 0 %}
@@ -93,9 +95,10 @@
         {% set purchase             = purchaseTrans[blackO] is defined and purchaseTrans[blackO] is not empty ? purchaseTrans[blackO].credit : 0  %}
         {% set commission           = purchaseCommissionTrans[blackO] is defined and purchaseCommissionTrans[blackO] is not empty ? purchaseCommissionTrans[blackO].debit : 0  %}
         {% set expenditure          = expenditureTrans[blackO] is defined and expenditureTrans[blackO] is not empty ? expenditureTrans[blackO].credit : 0  %}
+        {% set purchaseExpenditure  = purchaseExpenditureTrans[blackO] is defined and purchaseExpenditureTrans[blackO] is not empty ? purchaseExpenditureTrans[blackO].credit : 0  %}
         {% set journalDebit         = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].debit : 0  %}
         {% set journalCredit        = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].credit : 0  %}
-        {% set closing              = ((openingBalance + sales + commission + journalDebit) - (purchase + expenditure + journalCredit))|default(0)|number_format  %}
+        {% set closing              = ((openingBalance + sales + commission + journalDebit) - (purchase + expenditure + purchaseExpenditure + journalCredit))|default(0)|number_format  %}
         <tr>
             <td>{{ date(year~'-'~blackO)|date('F')  }}</td>
             <td>{{ openingBalance }}</td>
@@ -103,6 +106,7 @@
             <td>{{ purchase }}</td>
             <td>{{ commission }}</td>
             <td>{{ expenditure }}</td>
+            <td>{{ purchaseExpenditure }}</td>
             <td>{{ journalDebit }}</td>
             <td>{{ journalCredit }}</td>
             <td>{{ closing }}</td>

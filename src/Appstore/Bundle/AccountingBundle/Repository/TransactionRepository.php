@@ -1218,6 +1218,54 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    public function insertPurchaseExpenditureTransaction($entity)
+    {
+        $this->insertPurchaseExpenditureDebitTransaction($entity);
+        $this->insertPurchaseExpenditureCreditTransaction($entity);
+    }
+
+    public function insertPurchaseExpenditureDebitTransaction(AccountPurchase $entity)
+    {
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountRefNo($entity->getAccountRefNo());
+        $transaction->setProcessHead('PurchaseExpenditure');
+        $transaction->setProcess('Operating Expense');
+        /* Cash - Cash credit */
+        $transaction->setAccountHead($entity->getAccountHead());
+        $transaction->setAmount($entity->getPayment());
+        $transaction->setDebit($entity->getPayment());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+
+    }
+
+    public function insertPurchaseExpenditureCreditTransaction(AccountPurchase $entity)
+    {
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountRefNo($entity->getAccountRefNo());
+        $transaction->setProcessHead('PurchaseExpenditure');
+
+        /* Cash - Cash various */
+        if($entity->getTransactionMethod()->getId() == 1 ){
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+            $transaction->setProcess('Cash');
+        }elseif($entity->getTransactionMethod()->getId() == 2 ){
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+            $transaction->setProcess('Current Assets');
+        }elseif($entity->getTransactionMethod()->getId() == 3 ){
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+            $transaction->setProcess('Current Assets');
+        }
+
+        $transaction->setAmount('-'.$entity->getPayment());
+        $transaction->setCredit($entity->getPayment());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+
+    }
+
     public function insertSalaryTransaction(PaymentSalary $paymentSalary)
     {
             $this->insertSalaryDebitCashTransaction($paymentSalary);

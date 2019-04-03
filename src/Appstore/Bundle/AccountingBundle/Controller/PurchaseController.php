@@ -44,7 +44,7 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption();
 	    $data = $_REQUEST;
-        $data['processHead']='Expense';
+        $data['processHead'] = 'Expense';
 	    $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:Purchase:index.html.twig', array(
@@ -97,7 +97,8 @@ class PurchaseController extends Controller
     private function createEditForm(AccountPurchase $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new PurchaseType($globalOption), $entity, array(
+        $emHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead');
+        $form = $this->createForm(new PurchaseType($globalOption,$emHead), $entity, array(
             'action' => $this->generateUrl('account_expense_purchase_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -167,7 +168,28 @@ class PurchaseController extends Controller
 
     public function updateAction(Request $request, AccountPurchase $entity)
     {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountVendor entity.');
+        }
 
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+            $em->flush();
+            return $this->redirect($this->generateUrl('account_expense_purchase_show',['id'=>$entity->getId()]));
+        }
+
+        if($entity->getProcess() == 'Approved'){
+           $this->approvedAction($entity->getId());
+        }
+        return $this->render("AccountingBundle:Purchase:new.html.twig",[
+            'entity' => $entity,
+            'id' => 'purchase',
+            'form' => $editForm->createView(),
+        ]);
     }
 
 
@@ -179,10 +201,8 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-	    $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-	    $entity = $em->getRepository('AccountingBundle:BusinessPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
-
-
+	    $config = $this->getUser()->getGlobalOption();
+	    $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
 	    if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
@@ -194,26 +214,19 @@ class PurchaseController extends Controller
     public function approvedAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-	    $purchase = $em->getRepository('AccountingBundle:BusinessPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+		$config = $this->getUser()->getGlobalOption();
+	    $purchase = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
 	    if (!empty($purchase) and empty($purchase->getApprovedBy())) {
             $em = $this->getDoctrine()->getManager();
-            $purchase->setProcess('Approved');
+            $purchase->setProcess('approved');
             $purchase->setApprovedBy($this->getUser());
             if($purchase->getPayment() === 0 ){
 	            $purchase->setTransactionMethod(NULL);
 	            $purchase->setAsInvestment(false);
             }
 		    $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchaseItem')->updatePurchaseItemPrice($purchase);
-            $this->getDoctrine()->getRepository('AccountingBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);
-		    if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
-			    $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountBusinessPurchaseJournal($purchase);
-			    $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
-			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
-		    }
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($purchase);
-            $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseExpenditureCash($purchase);
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseExpenditureTransaction($purchase);
             return new Response('success');
         } else {
             return new Response('failed');
