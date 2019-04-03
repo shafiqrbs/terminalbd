@@ -40,7 +40,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         protected $globalOption;
 
         /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem", mappedBy="accountPurchases"  )
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem", mappedBy="purchase"  )
          **/
         private  $expenditureItems;
 
@@ -914,6 +914,14 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 	    public function setGrn( string $grn ) {
 		    $this->grn = $grn;
 	    }
+
+        /**
+         * @return ExpenditureItem
+         */
+        public function getExpenditureItems()
+        {
+            return $this->expenditureItems;
+        }
 
     }
 

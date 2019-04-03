@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * ExpenditureItem
  *
  * @ORM\Table("expenditure_item")
- * @ORM\Entity(repositoryClass="")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\ExpenditureItemRepository")
  */
 class ExpenditureItem
 {
@@ -43,9 +43,23 @@ class ExpenditureItem
     /**
      * @var float
      *
-     * @ORM\Column(name="amount", type="float")
+     * @ORM\Column(name="price", type="float")
      */
-    private $amount;
+    private $price;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="quantity", type="integer" , nullable=true)
+     */
+    private $quantity = 1;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float")
+     */
+    private $subTotal;
 
     /**
      * @var string
@@ -66,29 +80,6 @@ class ExpenditureItem
     }
 
 
-    /**
-     * Set amount
-     *
-     * @param float $amount
-     *
-     * @return Expenditure
-     */
-    public function setAmount($amount)
-    {
-        $this->amount = $amount;
-
-        return $this;
-    }
-
-    /**
-     * Get amount
-     *
-     * @return float
-     */
-    public function getAmount()
-    {
-        return $this->amount;
-    }
 
     /**
      * @return string
@@ -120,6 +111,70 @@ class ExpenditureItem
     public function setExpenditure($expenditure)
     {
         $this->expenditure = $expenditure;
+    }
+
+    /**
+     * @return AccountPurchase
+     */
+    public function getPurchase()
+    {
+        return $this->purchase;
+    }
+
+    /**
+     * @param AccountPurchase $purchase
+     */
+    public function setPurchase($purchase)
+    {
+        $this->purchase = $purchase;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @param float $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return float
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param float $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
     }
 
 }

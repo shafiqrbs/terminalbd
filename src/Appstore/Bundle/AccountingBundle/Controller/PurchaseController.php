@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\BusinessParticular;
 use Appstore\Bundle\AccountingBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\BusinessPurchaseItem;
+use Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem;
 use Appstore\Bundle\AccountingBundle\Form\PurchaseType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -73,13 +74,13 @@ class PurchaseController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entity = $em->getRepository('AccountingBundle:BusinessPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+        $config = $this->getUser()->getGlobalOption();
+        $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render("AccountingBundle:Purchase:new.html.twig", [
+        return $this->render("AccountingBundle:Purchase:new.html.twig",[
             'entity' => $entity,
             'id' => 'purchase',
             'form' => $editForm->createView(),
@@ -93,7 +94,7 @@ class PurchaseController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(BusinessPurchase $entity)
+    private function createEditForm(AccountPurchase $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseType($globalOption), $entity, array(
@@ -108,18 +109,14 @@ class PurchaseController extends Controller
         return $form;
     }
 
-    public function returnResultData(BusinessPurchase $invoice,$msg=''){
+    public function returnResultData(AccountPurchase $invoice,$msg=''){
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchaseItem')->getPurchaseItems($invoice);
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $netTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
-        $due = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        $discount = $invoice->getDiscount() > 0 ? $invoice->getDiscount() : 0;
+        $invoiceParticulars = $this->getDoctrine()->getRepository('AccountingBundle:ExpenditureItem')->getPurchaseItems($invoice);
+        $subTotal = $invoice->getTotalAmount() > 0 ? $invoice->getTotalAmount() : 0;
+        $payment = $invoice->getPayment() > 0 ? $invoice->getPayment() : 0;
         $data = array(
             'subTotal' => $subTotal,
-            'netTotal' => $netTotal,
-            'due' => $due,
-            'discount' => $discount,
+            'payment' => $payment,
             'invoiceParticulars' => $invoiceParticulars ,
             'msg' => $msg ,
             'success' => 'success'
@@ -129,55 +126,24 @@ class PurchaseController extends Controller
 
     }
 
-    public function particularSearchAction(BusinessParticular $particular)
-    {
-	    $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
-	    return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getSalesPrice(), 'purchasePrice'=> $particular->getPurchasePrice(), 'quantity'=> 1 , 'unit'=> $unit)));
-    }
 
-    public function addParticularAction(Request $request, BusinessPurchase $invoice)
+    public function addParticularAction(Request $request, AccountPurchase $invoice)
     {
         $em = $this->getDoctrine()->getManager();
-        $particularId = $request->request->get('particularId');
+        $particular = $request->request->get('particular');
         $quantity = $request->request->get('quantity');
-        $price = $request->request->get('purchasePrice');
-        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
-        $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
+        $price = $request->request->get('price');
+        $invoiceItems = array('particular' => $particular , 'quantity' => $quantity,'price' => $price);
+        $this->getDoctrine()->getRepository('AccountingBundle:ExpenditureItem')->insertPurchaseItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('AccountingBundle:ExpenditureItem')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
         exit;
+
     }
 
-    public function sawmillParticularAction(Request $request, BusinessPurchase $invoice)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $particularId = $request->request->get('particularId');
-        $width = $request->request->get('width');
-        $height = $request->request->get('height');
-        $length = $request->request->get('length');
-        $particularType = $request->request->get('particularType');
-        $price = $request->request->get('purchasePrice');
-        $invoiceItems = array('particularId' => $particularId ,'particularType' => $particularType, 'width' => $width,'height' => $height,'length' => $length,'price' => $price);
-        $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchaseItem')->insertSawmillPurchaseItems($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
-        $result = $this->returnResultData($invoice);
-        return new Response(json_encode($result));
-        exit;
-    }
 
-    public function signParticularAction(Request $request, BusinessPurchase $invoice)
-    {
-        $em = $this->getDoctrine()->getManager();
-	    $invoiceItems = $request->request->all();
-        $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchaseItem')->insertSignPurchaseItems($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
-        $result = $this->returnResultData($invoice);
-        return new Response(json_encode($result));
-        exit;
-    }
-
-    public function invoiceParticularDeleteAction(BusinessPurchase $invoice, BusinessPurchaseItem $particular){
+    public function invoiceParticularDeleteAction(AccountPurchase $invoice, ExpenditureItem $particular){
 
         $em = $this->getDoctrine()->getManager();
         if (!$particular) {
@@ -185,7 +151,7 @@ class PurchaseController extends Controller
         }
         $em->remove($particular);
         $em->flush();
-        $invoice = $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
+        $invoice = $this->getDoctrine()->getRepository('AccountingBundle:ExpenditureItem')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
         exit;
@@ -196,67 +162,12 @@ class PurchaseController extends Controller
      */
     public function invoiceDiscountUpdateAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $discountType = $request->request->get('discountType');
-        $discountCal = (float)$request->request->get('discount');
-        $invoice = $request->request->get('invoice');
 
-        /* @var $entity BusinessPurchase */
-
-        $entity = $em->getRepository('AccountingBundle:BusinessPurchase')->find($invoice);
-        $subTotal = $entity->getSubTotal();
-        if($discountType == 'flat'){
-            $total = ($subTotal  - $discountCal);
-            $discount = $discountCal;
-        }else{
-            $discount = ($subTotal * $discountCal)/100;
-            $total = ($subTotal  - $discount);
-        }
-        $vat = 0;
-        if($total > $discount ){
-            $entity->setDiscountType($discountType);
-            $entity->setDiscountCalculation($discountCal);
-	        $entity->setDiscount(round($discount));
-	        $entity->setNetTotal(round($total + $vat));
-	        $entity->setDue(round($entity->getNetTotal()));
-        }else{
-			$entity->setDiscountType('flat');
-			$entity->setDiscountCalculation(0);
-			$entity->setDiscount(round($discount));
-			$entity->setNetTotal(round($total + $vat));
-			$entity->setDue(round($entity->getNetTotal()));
-		}
-	    $em->flush();
-    //    $entity = $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchase')->updatePurchaseTotalPrice($entity);
-        $msg = 'Discount successfully';
-        $result = $this->returnResultData($entity,$msg);
-        return new Response(json_encode($result));
-        exit;
     }
 
-    public function updateAction(Request $request, BusinessPurchase $entity)
+    public function updateAction(Request $request, AccountPurchase $entity)
     {
-        $em = $this->getDoctrine()->getManager();
-	    $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-        if ($editForm->isValid()) {
-            $data = $request->request->all();
-            $entity->setProcess('Done');
-            $entity->setDue($entity->getNetTotal() - $entity->getPayment());
-            $em->flush();
-            return $this->redirect($this->generateUrl('account_expense_purchase_show', array('id' => $entity->getId())));
-        }
-        $particulars = $em->getRepository('AccountingBundle:BusinessParticular')->getFindWithParticular($entity->getBusinessConfig(),$type = array('consumable','stock'));
-	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
-	    return $this->render("AccountingBundle:Purchase:{$view}.html.twig", array(
-            'entity' => $entity,
-            'particulars' => $particulars,
-            'form' => $editForm->createView(),
-        ));
+
     }
 
 
