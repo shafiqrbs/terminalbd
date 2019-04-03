@@ -28,47 +28,20 @@ class AccountingConfig
 
     private $globalOption;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="autoPurchase", type="boolean",  nullable=true)
-     */
-    private $autoPurchase = true;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="autoPurchaseReturn", type="boolean",  nullable=true)
+     * @ORM\Column(name="accountClose", type="boolean",  nullable=true)
      */
-    private $autoPurchaseReturn = true;
+    private $accountClose = true;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="autoSales", type="boolean",  nullable=true)
+     * @ORM\Column(name="purchase", type="boolean",  nullable=true)
      */
-    private $autoSales = true;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="autoSalesReturn", type="boolean",  nullable=true)
-     */
-    private $autoSalesReturn = true;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="autoDamage", type="boolean",  nullable=true)
-     */
-    private $autoDamage = true;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="autoOnlineOrder", type="boolean",  nullable=true)
-     */
-    private $autoOnlineOrder = true;
+    private $purchase = false;
 
 
     /**
@@ -103,99 +76,35 @@ class AccountingConfig
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getAutoPurchase()
+    public function isPurchase()
     {
-        return $this->autoPurchase;
+        return $this->purchase;
     }
 
     /**
-     * @param boolean $autoPurchase
+     * @param bool $purchase
      */
-    public function setAutoPurchase($autoPurchase)
+    public function setPurchase(bool $purchase)
     {
-        $this->autoPurchase = $autoPurchase;
+        $this->purchase = $purchase;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getAutoPurchaseReturn()
+    public function isAccountClose()
     {
-        return $this->autoPurchaseReturn;
+        return $this->accountClose;
     }
 
     /**
-     * @param boolean $autoPurchaseReturn
+     * @param bool $accountClose
      */
-    public function setAutoPurchaseReturn($autoPurchaseReturn)
+    public function setAccountClose(bool $accountClose)
     {
-        $this->autoPurchaseReturn = $autoPurchaseReturn;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getAutoSales()
-    {
-        return $this->autoSales;
-    }
-
-    /**
-     * @param boolean $autoSales
-     */
-    public function setAutoSales($autoSales)
-    {
-        $this->autoSales = $autoSales;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getAutoSalesReturn()
-    {
-        return $this->autoSalesReturn;
-    }
-
-    /**
-     * @param boolean $autoSalesReturn
-     */
-    public function setAutoSalesReturn($autoSalesReturn)
-    {
-        $this->autoSalesReturn = $autoSalesReturn;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getAutoDamage()
-    {
-        return $this->autoDamage;
-    }
-
-    /**
-     * @param boolean $autoDamage
-     */
-    public function setAutoDamage($autoDamage)
-    {
-        $this->autoDamage = $autoDamage;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getAutoOnlineOrder()
-    {
-        return $this->autoOnlineOrder;
-    }
-
-    /**
-     * @param boolean $autoOnlineOrder
-     */
-    public function setAutoOnlineOrder($autoOnlineOrder)
-    {
-        $this->autoOnlineOrder = $autoOnlineOrder;
+        $this->accountClose = $accountClose;
     }
 
 

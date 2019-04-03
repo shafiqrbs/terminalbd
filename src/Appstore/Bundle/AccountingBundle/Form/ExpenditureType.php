@@ -42,6 +42,18 @@ class ExpenditureType extends AbstractType
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
                 )))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Remark...')))
+            ->add('customer', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Customer',
+                'empty_value' => '---Choose a customer---',
+                'property' => 'nameMobile',
+                'attr'=>array('class'=>'span12 select2 customer-ledger'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.globalOption =".$this->globalOption->getId())
+                        ->andWhere("e.customerType ='account'");
+                },
+            ))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
@@ -94,7 +106,7 @@ class ExpenditureType extends AbstractType
                 'choices'=> $this->ExpenseCategoryChoiceList()
             ))
 
-            ->add('toUser', 'entity', array(
+            /*->add('toUser', 'entity', array(
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'empty_value' => '---Choose a user---',
@@ -109,7 +121,7 @@ class ExpenditureType extends AbstractType
 	                          ->andWhere("u.globalOption =".$this->globalOption->getId())
 	                          ->orderBy("u.username", "ASC");
                 },
-            ))
+            ))*/
             ->add('file');
         ;
     }

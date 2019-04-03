@@ -39,6 +39,10 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          **/
         protected $globalOption;
 
+        /**
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem", mappedBy="accountPurchases"  )
+         **/
+        private  $expenditureItems;
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="accountPurchases" , cascade={"detach","merge"} )

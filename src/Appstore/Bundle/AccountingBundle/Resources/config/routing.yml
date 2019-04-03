@@ -14,6 +14,10 @@ accounting_account_sales_restaurant:
     resource: "@AccountingBundle/Resources/config/routing/accountrestaurant.yml"
     prefix:   /restaurant
 
+accounting_customer:
+    resource: "@AccountingBundle/Resources/config/routing/accountcustomer.yml"
+    prefix:   /account-customer
+
 accounting_account_sales_adjustment:
     resource: "@AccountingBundle/Resources/config/routing/accountsalesadjustment.yml"
     prefix:   /sales-adjustment
@@ -40,11 +44,11 @@ accounting_hms_report:
 
 accounting_expensecategory:
     resource: "@AccountingBundle/Resources/config/routing/expensecategory.yml"
-    prefix:   /expensecategory
+    prefix:   /expense-category
 
 accounting_paymentsalary:
     resource: "@AccountingBundle/Resources/config/routing/paymentsalary.yml"
-    prefix:   /paymentsalary
+    prefix:   /payment-salary
 
 accounting_salarysetting:
     resource: "@AccountingBundle/Resources/config/routing/salarysetting.yml"
@@ -98,6 +102,13 @@ accounting_account_online_order:
     resource: "@AccountingBundle/Resources/config/routing/accountonlineorder.yml"
     prefix:   /online-order
 
+accounting_account_config:
+    resource: "@AccountingBundle/Resources/config/routing/config.yml"
+    prefix:   /manage-config
+
+accounting_expense_purchase:
+    resource: "@AccountingBundle/Resources/config/routing/expensepurchase.yml"
+    prefix:   /expense-purchase
 
 accounting_account_report:
     resource: "@AccountingBundle/Resources/config/routing/report.yml"

@@ -334,6 +334,7 @@ class CustomerRepository extends EntityRepository
             $customer =    isset($data['name'])? $data['name'] :'';
             $location =    isset($data['location'])? $data['location'] :'';
             $customerId =    isset($data['customerId'])? $data['customerId'] :'';
+            $customerType =    isset($data['type'])? $data['type'] :'';
 
             if (!empty($mobile)) {
                 $qb->andWhere("customer.mobile = :mobile");
@@ -352,6 +353,10 @@ class CustomerRepository extends EntityRepository
             if (!empty($customerId)) {
                 $qb->andWhere("customer.customerId LIKE :customerId");
                 $qb->setParameter('customerId','%'. $customerId.'%');
+            }
+            if (!empty($customerType)) {
+                $qb->andWhere("customer.customerType = :type");
+                $qb->setParameter('type',$customerType);
             }
         }
 

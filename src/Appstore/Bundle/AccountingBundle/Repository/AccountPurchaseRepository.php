@@ -329,6 +329,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                 $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $vendor =    isset($data['vendor'])? $data['vendor'] :'';
+                $processHead =    isset($data['processHead'])? $data['processHead'] :'';
 	            $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
                 $globalOption->getMainApp()->getSlug();
                 if($globalOption->getMainApp()->getSlug() == 'miss'){
@@ -357,6 +358,10 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                 if (!empty($grn)) {
                     $qb->andWhere("e.grn = :grn");
                     $qb->setParameter('grn', $grn);
+                }
+                if (!empty($processHead)) {
+                    $qb->andWhere("e.processHead = :process");
+                    $qb->setParameter('process', $processHead);
                 }
 
 	            if (!empty($transactionMethod)) {

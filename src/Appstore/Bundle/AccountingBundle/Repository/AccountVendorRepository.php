@@ -13,6 +13,43 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class AccountVendorRepository extends EntityRepository
 {
+
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        if(!empty($data))
+        {
+            $mobile =    isset($data['mobile'])? $data['mobile'] :'';
+            $name =    isset($data['name'])? $data['name'] :'';
+            $companyName =    isset($data['companyName'])? $data['companyName'] :'';
+            if (!empty($mobile)) {
+                $qb->andWhere($qb->expr()->like("s.mobile", "'%$$mobile%'"  ));
+            }
+            if (!empty($name)) {
+                $qb->andWhere($qb->expr()->like("s.name", "'%$$name%'"  ));
+            }
+            if (!empty($companyName)) {
+                $qb->andWhere($qb->expr()->like("s.companyName", "'%$companyName%'"  ));
+            }
+        }
+
+    }
+
+    public function findWithSearch(GlobalOption $globalOption, $data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.globalOption = :config')->setParameter('config', $globalOption->getId()) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.companyName','ASC');
+        $result = $qb->getQuery();
+        return  $result;
+    }
+
     public function getLastId(GlobalOption $global)
     {
         $qb = $this->_em->createQueryBuilder();

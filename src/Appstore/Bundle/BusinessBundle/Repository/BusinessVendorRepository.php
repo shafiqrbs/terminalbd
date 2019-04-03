@@ -16,7 +16,7 @@ class BusinessVendorRepository extends EntityRepository
     public function searchAutoComplete($q, BusinessConfig $config)
     {
         $query = $this->createQueryBuilder('e');
-        $query->join('e.hospitalConfig', 'ic');
+        $query->join('e.businessConfig', 'ic');
         $query->select('e.companyName as id');
         $query->addSelect('e.companyName as text');
         $query->where($query->expr()->like("e.companyName", "'$q%'"  ));

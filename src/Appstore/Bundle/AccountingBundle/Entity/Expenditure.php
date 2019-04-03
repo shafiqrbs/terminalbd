@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -75,6 +76,15 @@ class Expenditure
      **/
     private  $transactionMethod;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem", mappedBy="expenditure" , cascade={"persist", "remove"})
+     **/
+    private  $expenditureItems;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="expendituries" ,cascade={"persist"} )
+     **/
+    private  $customer;
 
 
     /**
@@ -608,6 +618,28 @@ class Expenditure
         $this->doctorInvoice = $doctorInvoice;
     }
 
+    /**
+     * @return ExpenditureItem
+     */
+    public function getExpenditureItems()
+    {
+        return $this->expenditureItems;
+    }
 
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer $customer
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+    }
 }
 

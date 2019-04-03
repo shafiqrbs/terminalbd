@@ -407,7 +407,7 @@ class Builder extends ContainerAware
         $globalOption = $securityContext->getGlobalOption();
 
         $modules = $globalOption->getSiteSetting()->getAppModules();
-        $arrSlugs = array();
+        $arrSlugs = [];
         if (!empty($globalOption->getSiteSetting()) and !empty($modules)) {
             foreach ($globalOption->getSiteSetting()->getAppModules() as $mod) {
                 if (!empty($mod->getModuleClass())) {
@@ -444,11 +444,13 @@ class Builder extends ContainerAware
             $menu['Accounting']['Manage Purchase']['Reports']->addChild('Ledger', array('route' => 'report_vendor_ledger'));
 	    }
 	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE')){
-		    $menu['Accounting']->addChild('Expenditure', array('route' => 'account_expenditure'))
+		    $menu['Accounting']->addChild('Expenditure', array('route' => ''))
 		                       ->setAttribute('icon', 'fa  icon-table')
 		                       ->setAttribute('dropdown', true);
 		    $menu['Accounting']['Expenditure']->addChild('Expense', array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
-		    $menu['Accounting']['Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Expenditure']->addChild('Purchase', array('route' => 'account_expense_purchase'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Expenditure']->addChild('Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
             $menu['Accounting']['Expenditure']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
             $menu['Accounting']['Expenditure']['Reports']->addChild('Summary',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Expenditure']['Reports']->addChild('Category',        array('route' => 'report_expenditure_category'))->setAttribute('icon', 'icon-th-list');
@@ -549,6 +551,7 @@ class Builder extends ContainerAware
                 $menu['Accounting']->addChild('Payment', array('route' => 'account_purchase_restaurant_new'))->setAttribute('icon', 'icon-th-list');
             }
         }*/
+
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
             $menu['Accounting']->addChild('Balance Transfer', array('route' => 'account_balancetransfer'))->setAttribute('icon', 'icon-retweet');
             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');
@@ -600,12 +603,12 @@ class Builder extends ContainerAware
         }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_CONFIG')) {
-
             $menu['Accounting']->addChild('Master Data', array('route' => ''))
-                ->setAttribute('icon', 'fa fa-building-o')
+                ->setAttribute('icon', 'fa fa-cog')
                 ->setAttribute('dropdown', true);
             $menu['Accounting']['Master Data']->addChild('Bank Account', array('route' => 'accountbank'));
             $menu['Accounting']['Master Data']->addChild('Mobile Account', array('route' => 'accountmobilebank'));
+            $menu['Accounting']['Master Data']->addChild('Configuration', array('route' => 'account_config_manage'));
             $menu['Accounting']['Master Data']->addChild('Account Head', array('route' => 'accounthead'));
 
         }

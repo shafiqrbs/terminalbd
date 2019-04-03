@@ -89,7 +89,6 @@ class AccountPurchaseController extends Controller
 
     /**
      * Creates a new AccountPurchase entity.
-     *
      */
 
     public function createAction(Request $request)
@@ -100,7 +99,6 @@ class AccountPurchaseController extends Controller
 
         /* @var $global GlobalOption */
 	    $global = $this->getUser()->getGlobalOption();
-
 	    if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($global);

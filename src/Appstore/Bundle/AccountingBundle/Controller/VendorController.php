@@ -2,14 +2,13 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
-use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Appstore\Bundle\AccountingBundle\Form\VendorType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Symfony\Component\HttpFoundation\Response;
-
 
 /**
  * AccountVendor controller.
@@ -18,101 +17,202 @@ use Symfony\Component\HttpFoundation\Response;
 class VendorController extends Controller
 {
 
-
-    /**
-     * Deletes a AccountVendor entity.
-     *
-     */
-    public function deleteAction(AccountVendor $entity)
+    public function paginate($entities)
     {
 
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
+     */
+
+
+    public function indexAction()
+    {
         $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('AccountingBundle:AccountVendor')->findWithSearch($globalOption,$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('AccountingBundle:AccountVendor:index.html.twig', array(
+            'entities' => $pagination,
+            'searchForm' => $data,
+            // 'overview' => $overview,
+        ));
+    }
+
+    /**
+     * Creates a new AccountVendor entity.
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
+     */
+
+    public function createAction(Request $request)
+    {
+        $entity = new AccountVendor();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($this->getUser()->getGlobalOption());
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('account_vendor'));
+        }
+
+        return $this->render('AccountingBundle:AccountVendor:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to create a AccountVendor entity.
+     *
+     * @param AccountVendor $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(AccountVendor $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new VendorType($globalOption), $entity, array(
+            'action' => $this->generateUrl('account_vendor_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * Displays a form to create a new AccountVendor entity.
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
+     */
+
+    public function newAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = new AccountVendor();
+        $form   = $this->createCreateForm($entity);
+        return $this->render('AccountingBundle:AccountVendor:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    /**
+     * Finds and displays a AccountVendor entity.
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
+     */
+
+    public function showAction($id)
+    {
+    }
+
+    /**
+     * Displays a form to edit an existing AccountVendor entity.
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
+     */
+
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountVendor entity.');
+        }
+        $editForm = $this->createEditForm($entity);
+        return $this->render('AccountingBundle:AccountVendor:new.html.twig',[
+            'entity'      => $entity,
+            'form'   => $editForm->createView(),
+        ]);
+    }
+
+
+    /**
+     * Creates a form to edit a AccountVendor entity.
+     *
+     * @param AccountVendor $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(AccountVendor $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new AccountVendorType($globalOption), $entity, array(
+            'action' => $this->generateUrl('account_vendor_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form purchase',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
+    /**
+     * Edits an existing AccountVendor entity.
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
+     */
+
+
+    public function updateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountVendor entity.');
         }
 
-        try {
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
 
-            $em->remove($entity);
+        if ($editForm->isValid()) {
+            $name = $entity->getBank()->getName().','.$entity->getBranch();
+            $entity->setName($name);
             $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'error',"Data has been deleted successfully"
-            );
-
-        } catch (ForeignKeyConstraintViolationException $e) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',"Data has been relation another Table"
-            );
-        }catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add(
-                'notice', 'Please contact system administrator further notification.'
-            );
+            return $this->redirect($this->generateUrl('AccountVendor'));
         }
 
-        return $this->redirect($this->generateUrl('inventory_vendor'));
-    }
-
-
-    /**
-     * Status a Page entity.
-     *
-     */
-    public function statusAction(Request $request, $id)
-    {
-
-	    $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find District entity.');
-        }
-
-        $status = $entity->isStatus();
-        if($status == 1){
-            $entity->setStatus(false);
-        } else{
-            $entity->setStatus(true);
-        }
-        $em->flush();
-        $this->get('session')->getFlashBag()->add(
-            'success',"Status has been changed successfully"
-        );
-        exit;
-
-    }
-
-    public function autoSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-	        $global = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->searchAutoComplete($item,$global);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchVendorNameAction($name)
-    {
-        return new JsonResponse(array(
-            'id' => $name,
-            'text' => $name
+        return $this->render('AccountingBundle:AccountVendor:new.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
         ));
     }
 
-    public function ledgerAction()
-    {
-	    $globalOption = $this->getUser()->getGlobalOption();
-		$type = $_REQUEST['type'];
-		$vendor = $_REQUEST['vendor'];
-	    $balance = 0;
-	    if(!empty($vendor)){
-		    $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorSingleOutstanding($globalOption,$type,$vendor);
-		    $balance = empty($result) ? 0 : $result;
-	    }
-	    $taka = number_format($balance).' Taka';
-	    return new Response($taka);
-	    exit;
+    /**
+     * Deletes a Expenditure entity.
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
+     */
 
+    public function deleteAction(AccountVendor $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        return new Response('success');
+        exit;
     }
 
 }
