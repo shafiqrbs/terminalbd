@@ -55,7 +55,7 @@ class PurchaseType extends AbstractType
                 'property' => 'name',
                 'attr'=>array('class'=>'span12  m-wrap'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
+                    new NotBlank(array('message'=>'Please select account head'))
                 ),
                 'choices'=> $this->ExpenseAccountChoiceList()
             ))

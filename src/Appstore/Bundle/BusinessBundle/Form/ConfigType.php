@@ -32,7 +32,7 @@ class ConfigType extends AbstractType
             ))
             ->add('productionType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
-                'choices' => array('' => '-- Select Production --', 'pre-production' => 'Pre Production',  'post-production' => 'Post Production'),
+                'choices' => array('' => '-- Select Production --', 'pre-production' => 'Pre Production','post-production' => 'Post Production','vendor-stock' => 'Vendor Stock'),
             ))
 	        ->add('businessModel', 'choice', array(
 		        'attr'=>array('class'=>'m-wrap span12'),
@@ -42,18 +42,12 @@ class ConfigType extends AbstractType
 			        'sign' => 'Digital-Sign',
 			        'electrical' => 'Electrical',
 			        'stationary' => 'Stationary',
+			        'commission' => 'Commission',
 			        'event' => 'Event',
 			        'bricks' => 'Bricks',
 			        'sawmill' => 'Sawmill',
 		        ),
 	        ))
-	        /*->add('invoiceType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
-                'choices' => array(
-                	'' => '-- Select invoice type --',
-	                'print' => 'General',
-	                'banner-print' => 'Banner-Print'),
-            ))*/
 	        ->add('stockFormat',
 		        'choice', array(
 			        'attr'=>array('class'=>'m-wrap  span12'),

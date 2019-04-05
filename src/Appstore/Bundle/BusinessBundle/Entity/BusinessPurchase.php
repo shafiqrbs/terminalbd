@@ -210,6 +210,14 @@ class BusinessPurchase
 
 
 	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="commissionInvoice", type="boolean")
+	 */
+	private $commissionInvoice = false;
+
+
+	/**
      * @var string
      *
      * @ORM\Column(name="process", type="string", nullable=true)
@@ -756,6 +764,22 @@ class BusinessPurchase
 	public function setIsReversed( bool $isReversed ) {
 		$this->isReversed = $isReversed;
 	}
+
+    /**
+     * @return bool
+     */
+    public function isCommissionInvoice()
+    {
+        return $this->commissionInvoice;
+    }
+
+    /**
+     * @param bool $commissionInvoice
+     */
+    public function setCommissionInvoice($commissionInvoice)
+    {
+        $this->commissionInvoice = $commissionInvoice;
+    }
 
 
 }

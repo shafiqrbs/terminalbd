@@ -256,6 +256,7 @@ class UserRepository extends EntityRepository
 
         $array['Customer'] = array(
             'ROLE_CRM'                  => 'Customer',
+            'ROLE_CUSTOMER_REHAB'       => 'Rehab Patient',
             'ROLE_CRM_MANAGER'          => 'Manage Customer ',
         );
 

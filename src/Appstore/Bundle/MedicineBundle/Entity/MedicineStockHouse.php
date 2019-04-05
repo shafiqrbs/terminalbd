@@ -58,7 +58,6 @@ class MedicineStockHouse
     private $stockName;
 
 
-
     /**
      * @var integer
      *

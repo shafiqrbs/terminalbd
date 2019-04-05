@@ -110,7 +110,7 @@
                                         <td class="numeric" >{{ entity.process }}</td>
                                         <td class="numeric" >{% if entity.isReversed == 1 %}<a href="{{ path('business_reverse_show',{'id':entity.businessReverse.id}) }}">Reversed</a>{% endif %}</td>
                                         <td class="numeric" >
-                                            {% set process = ['Created','Done'] %}
+                                            {% set process = ['Created','Done','Commission'] %}
                                             {% if  entity.process in process %}
                                                 <a href="{{ path('business_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
                                                 <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('business_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>

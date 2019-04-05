@@ -130,6 +130,25 @@ class CustomerController extends Controller
     }
 
     /**
+     * Finds and displays a Customer entity.
+     *
+     */
+    public function rehabAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Customer entity.');
+        }
+
+        return $this->render('DomainUserBundle:Customer:rehab.html.twig', array(
+            'entity'      => $entity,
+        ));
+    }
+
+    /**
      * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
      */
     public function editAction($id)

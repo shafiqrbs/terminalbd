@@ -69,6 +69,7 @@ business_invoice_banner_sign:
     options:
             expose: true
 
+
 business_invoice_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "BusinessBundle:Invoice:approve" }

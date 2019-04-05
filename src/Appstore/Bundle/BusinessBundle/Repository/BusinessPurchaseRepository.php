@@ -1,7 +1,11 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStock;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -226,6 +230,43 @@ class BusinessPurchaseRepository extends EntityRepository
 		return $result = $res->getArrayResult();
 
 	}
+
+	public function insertCommissionPurchase(BusinessInvoice $invoice , $vendor)
+    {
+
+        $em = $this->_em;
+        $entity = new BusinessPurchase();
+        $entity->setBusinessConfig($invoice->getBusinessConfig());
+        $vendor = $this->_em->getRepository('AccountingBundle:AccountVendor')->find($vendor);
+        $entity->setVendor($vendor);
+        $entity->setSubTotal($invoice->getSubTotal());
+        $entity->setNetTotal($invoice->getTotal());
+        $entity->setCreatedBy($invoice->getCreatedBy());
+        $entity->setReceiveDate($invoice->getUpdated());
+        $entity->setProcess('Commission');
+        $entity->setCommissionInvoice(true);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $em->persist($entity);
+        $em->flush();
+
+        /* @var $rows BusinessInvoiceParticular */
+        foreach ($invoice->getBusinessInvoiceParticulars() as $rows){
+
+            $particularId   = $rows->getBusinessParticular()->getId();
+            $price          = $rows->getBusinessParticular()->getPurchasePrice();
+            $quantity       = $rows->getTotalQuantity();
+            if($invoice->getBusinessConfig()->getBusinessModel() == 'commission'){
+                $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
+                $em->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($entity,$invoiceItems);
+            }
+            $em->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($entity);
+
+        }
+
+
+
+    }
 
 
 }

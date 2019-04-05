@@ -28,6 +28,7 @@ class WearHouse
      **/
     private  $businessConfig;
 
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", mappedBy="wearHouse")
      * @ORM\OrderBy({"sorting" = "ASC"})

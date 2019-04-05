@@ -18,6 +18,10 @@ domain_customer_show:
     path:     /{id}/show
     defaults: { _controller: "DomainUserBundle:Customer:show" }
 
+domain_customer_rehab_show:
+    path:     /{id}/rehab-show
+    defaults: { _controller: "DomainUserBundle:Customer:rehab" }
+
 domain_customer_new:
     path:     /new
     defaults: { _controller: "DomainUserBundle:Customer:new" }

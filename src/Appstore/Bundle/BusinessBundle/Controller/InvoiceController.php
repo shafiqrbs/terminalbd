@@ -121,8 +121,10 @@ class InvoiceController extends Controller
         }
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
 	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
 	    return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
+            'vendors' => $vendors,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
@@ -170,9 +172,15 @@ class InvoiceController extends Controller
             $done = array('Done','Delivered');
             if (in_array($entity->getProcess(), $done)) {
 	          //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($invoiceItem,'sales');
-	            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+                if($entity->getBusinessConfig()->getBusinessModel() == 'commission' and isset($data ['vendor']) and !empty($data ['vendor'])){
+                    $vendor = $data ['vendor'];
+                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity,$vendor);
+
+                }
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+
             }
             $inProgress = array('Hold', 'Created');
             if (in_array($entity->getProcess(), $inProgress)) {
@@ -185,11 +193,15 @@ class InvoiceController extends Controller
         $config = $entity->getBusinessConfig();
 	    $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual'));
 	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+        $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
+
         return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
+            'vendors' => $vendors,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
+
     }
 
 	/**

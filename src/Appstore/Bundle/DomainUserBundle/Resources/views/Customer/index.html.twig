@@ -88,6 +88,9 @@
                                                 <a class="btn mini green" href="{{ path('domain_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                                                 <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_customer_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
                                              {% endif %}
+                                            {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CUSTOMER_REHAB"))  %}
+                                             <a class="btn mini  blue" href="{{ path('domain_customer_rehab_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-user"></i> Patient </a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

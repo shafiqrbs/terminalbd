@@ -40,6 +40,7 @@ class CustomerType extends AbstractType
                     ))
             )
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Email address')))
+            ->add('age','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Customer age')))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows'=>8,'placeholder'=>'Enter customer address'),
              'constraints' =>array( new NotBlank(array('message'=>'Please customer address')))
                 )

@@ -24,3 +24,8 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.business.vendor.stock.event.listener:
+        class: Appstore\Bundle\BusinessBundle\EventListener\BusinessVendorStockListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+

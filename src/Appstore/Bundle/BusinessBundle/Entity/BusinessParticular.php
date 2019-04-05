@@ -97,6 +97,12 @@ class BusinessParticular
     private $businessDamages;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem", mappedBy="businessParticular" )
+     **/
+    private $businessVendorStockItems;
+
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="businessParticulars" )
      **/
@@ -153,6 +159,14 @@ class BusinessParticular
      * @ORM\Column(name="transferQuantity", type="integer", nullable=true)
      */
     private $transferQuantity;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="stockIn", type="integer", nullable=true)
+     */
+    private $stockIn = 0;
 
 
     /**
@@ -232,23 +246,30 @@ class BusinessParticular
     private $salesPrice = 0;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="price", type="decimal", nullable=true)
+     * @ORM\Column(name="price", type="float", nullable=true)
      */
     private $price;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="discountPrice", type="decimal", nullable=true)
+     * @ORM\Column(name="discountPrice", type="float", nullable=true)
      */
     private $discountPrice;
 
     /**
-     * @var \string
+     * @var float
      *
-     * @ORM\Column(name="minimumPrice", type="decimal", nullable=true)
+     * @ORM\Column(name="commission", type="float", nullable=true)
+     */
+    private $commission = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="minimumPrice", type="float", nullable=true)
      */
     private $minimumPrice = 0;
 
@@ -577,21 +598,7 @@ class BusinessParticular
     }
 
 
-    /**
-     * @return string
-     */
-    public function getPurchaseAverage()
-    {
-        return $this->purchaseAverage;
-    }
 
-    /**
-     * @param string $purchaseAverage
-     */
-    public function setPurchaseAverage($purchaseAverage)
-    {
-        $this->purchaseAverage = $purchaseAverage;
-    }
 
     /**
      * @return \DateTime
@@ -689,70 +696,7 @@ class BusinessParticular
         $this->discountPrice = $discountPrice;
     }
 
-    /**
-     * @return float
-     */
-    public function getOverHead()
-    {
-        return $this->overHead;
-    }
 
-    /**
-     * @param float $overHead
-     */
-    public function setOverHead($overHead)
-    {
-        $this->overHead = $overHead;
-    }
-
-
-    /**
-     * @return float
-     */
-    public function getUtility()
-    {
-        return $this->utility;
-    }
-
-    /**
-     * @param float $utility
-     */
-    public function setUtility($utility)
-    {
-        $this->utility = $utility;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPackaging()
-    {
-        return $this->packaging;
-    }
-
-    /**
-     * @param float $packaging
-     */
-    public function setPackaging($packaging)
-    {
-        $this->packaging = $packaging;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMarketing()
-    {
-        return $this->marketing;
-    }
-
-    /**
-     * @param float $marketing
-     */
-    public function setMarketing($marketing)
-    {
-        $this->marketing = $marketing;
-    }
 
     public function getCodeName()
     {
@@ -1045,6 +989,46 @@ class BusinessParticular
 	public function getBusinessProductions() {
 		return $this->businessProductions;
 	}
+
+    /**
+     * @return int
+     */
+    public function getStockIn()
+    {
+        return $this->stockIn;
+    }
+
+    /**
+     * @param int $stockIn
+     */
+    public function setStockIn($stockIn)
+    {
+        $this->stockIn = $stockIn;
+    }
+
+    /**
+     * @return BusinessVendorStockItem
+     */
+    public function getBusinessVendorStockItems()
+    {
+        return $this->businessVendorStockItems;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCommission()
+    {
+        return $this->commission;
+    }
+
+    /**
+     * @param float $commission
+     */
+    public function setCommission($commission)
+    {
+        $this->commission = $commission;
+    }
 
 }
 

@@ -42,11 +42,18 @@ class BusinessConfig
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStock", mappedBy="businessConfig")
+     **/
+    private $businessVendorStocks;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Category", mappedBy="businessConfig")
      **/
     private $categories;
 
-     /**
+
+      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse", mappedBy="businessConfig")
      **/
     private $wearHouses;
@@ -1182,6 +1189,14 @@ class BusinessConfig
 	public function setBusinessModel( string $businessModel ) {
 		$this->businessModel = $businessModel;
 	}
+
+    /**
+     * @return BusinessVendorStock
+     */
+    public function getBusinessVendorStocks()
+    {
+        return $this->businessVendorStocks;
+    }
 
 
 }

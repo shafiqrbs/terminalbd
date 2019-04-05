@@ -77,11 +77,39 @@ class BusinessPurchaseItemRepository extends EntityRepository
 		return  $qb;
 	}
 
+	public function getPurchaseStockItem($pagination,$data = array())
+    {
+
+        $ids = [];
+        foreach ($pagination as $entity){
+            $ids[] =$entity['id'];
+        }
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.businessParticular','p');
+        $qb->join('pi.businessPurchase','e');
+        $qb->select('p.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
+        $qb->where('e.commissionInvoice =1');
+        $qb->andWhere('p.id IN (:ids)')->setParameter('ids', $ids) ;
+        $qb->groupBy('p.id');
+        //  $qb->where($qb->expr()->in("pi.id", $ids ));
+        $this->handleSearchBetween($qb,$data);
+        $result =  $qb->getQuery()->getArrayResult();
+        $arrs = [];
+
+        if(!empty($result)){
+            foreach ($result as $row){
+                $arrs[$row['id']] = $row;
+            }
+        }
+        return $arrs;
+
+    }
 
 	public function getPurchaseAveragePrice(BusinessParticular $particular)
     {
 
-        $qb = $this->_em->createQueryBuilder();
+       /* $qb = $this->_em->createQueryBuilder();
         $qb->from('BusinessBundle:BusinessPurchaseItem','e');
         $qb->select('AVG(e.purchasePrice) AS avgPurchasePrice');
         $qb->where('e.businessParticular = :particular')->setParameter('particular', $particular) ;
@@ -90,7 +118,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
             $particular->setPurchaseAverage($res['avgPurchasePrice']);
             $this->_em->persist($particular);
             $this->_em->flush($particular);
-        }
+        }*/
     }
 
     public function insertPurchaseItems($invoice, $data)

@@ -65,6 +65,12 @@ class AccountVendor
      */
     protected $businessPurchases;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStock", mappedBy="vendor")
+     **/
+    private $businessVendorStocks;
+
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn", mappedBy="vendor")
