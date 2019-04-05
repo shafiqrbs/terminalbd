@@ -253,7 +253,11 @@ class Builder extends ContainerAware
 	    }
 
         if ($securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
-	        $menu['Business Management']->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
+
+            $menu['Business Management']->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
+            if($config->getBusinessModel() == 'commission') {
+                $menu['Business Management']->addChild('Vendor Stock Item', array('route' => 'business_vendor_stock_item'))->setAttribute('icon', 'icon-th-list');
+            }
 	        if($config->getProductionType() == 'pre-production') {
 		        $menu['Business Management']->addChild( 'Pre-production', array( 'route' => 'business_production' ) )->setAttribute( 'icon', 'icon-th-list' );
 	        }

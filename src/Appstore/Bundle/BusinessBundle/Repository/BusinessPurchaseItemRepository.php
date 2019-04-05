@@ -86,12 +86,12 @@ class BusinessPurchaseItemRepository extends EntityRepository
         }
 
         $qb = $this->createQueryBuilder('pi');
-        $qb->join('pi.businessParticular','p');
+        $qb->join('pi.businessParticular','ms');
         $qb->join('pi.businessPurchase','e');
-        $qb->select('p.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
+        $qb->select('ms.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
         $qb->where('e.commissionInvoice =1');
-        $qb->andWhere('p.id IN (:ids)')->setParameter('ids', $ids) ;
-        $qb->groupBy('p.id');
+        $qb->andWhere('ms.id IN (:ids)')->setParameter('ids', $ids) ;
+        $qb->groupBy('ms.id');
         //  $qb->where($qb->expr()->in("pi.id", $ids ));
         $this->handleSearchBetween($qb,$data);
         $result =  $qb->getQuery()->getArrayResult();

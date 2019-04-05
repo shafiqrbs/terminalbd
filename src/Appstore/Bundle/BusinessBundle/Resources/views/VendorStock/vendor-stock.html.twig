@@ -51,10 +51,10 @@
                                     <div class="span4">
                                         <div class="controls">
                                             <div class="input-append span12">
-                                                <select name="type" id="type" class="m-wrap span10">
+                                                <select name="vendorId" id="vendorId" class="m-wrap span10">
                                                     <option value="" >--Select Vendor--</option>
                                                     {% for vendor in vendors %}
-                                                        <option value="{{ vendor.id }}" {% if searchForm.vendor is defined and searchForm.vendor == vendor.id %} selected="selected" {% endif %} >{{ vendor.companyName }}</option>
+                                                        <option value="{{ vendor.id }}" {% if searchForm.vendorId is defined and searchForm.vendorId == vendor.id %} selected="selected" {% endif %} >{{ vendor.companyName }}</option>
                                                     {% endfor %}
                                                 </select>
                                                 <div class="btn-group">

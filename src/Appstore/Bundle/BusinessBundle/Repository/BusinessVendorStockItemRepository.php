@@ -20,34 +20,22 @@ class BusinessVendorStockItemRepository extends EntityRepository
 
     protected function handleSearchBetween($qb,$data)
     {
-        $vendor = isset($data['vendor'])? $data['vendor'] :'';
-        $startDate = isset($data['startDate'])? $data['startDate'] :'';
-        $endDate = isset($data['endDate'])? $data['endDate'] :'';
-
+        $vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
+        $name = isset($data['name'])? $data['name'] :'';
 
         if(!empty($vendorId)){
             $qb->join('e.vendor','v');
             $qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
         }
-        if (!empty($startDate) ) {
-            $datetime = new \DateTime($data['startDate']);
-            $start = $datetime->format('Y-m-d 00:00:00');
-            $qb->andWhere("e.receiveDate >= :startDate");
-            $qb->setParameter('startDate', $start);
+        if(!empty($name)){
+            $qb->andWhere($qb->expr()->like("p.name", "'%$name%'"  ));
         }
 
-        if (!empty($endDate)) {
-            $datetime = new \DateTime($data['endDate']);
-            $end = $datetime->format('Y-m-d 23:59:59');
-            $qb->andWhere("e.receiveDate <= :endDate");
-            $qb->setParameter('endDate', $end);
-        }
     }
 
     public function findWithSearch(User $user, $data)
     {
         $config = $user->getGlobalOption()->getBusinessConfig()->getId();
-
         $qb = $this->createQueryBuilder('pi');
         $qb->join('pi.particular','p');
         $qb->join('pi.businessVendorStock','e');
@@ -56,7 +44,7 @@ class BusinessVendorStockItemRepository extends EntityRepository
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('p.name');
         $qb->orderBy('p.name','ASC');
-        $result =  $qb->getQuery();
+        $result =  $qb->getQuery()->getArrayResult();
         return  $result;
     }
 
