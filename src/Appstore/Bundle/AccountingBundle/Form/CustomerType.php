@@ -60,7 +60,7 @@ class CustomerType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\DomainUserBundle\Entity\Customer'
+            'data_class' => 'Core\UserBundle\Entity\Profile'
         ));
     }
 
@@ -69,7 +69,7 @@ class CustomerType extends AbstractType
      */
     public function getName()
     {
-        return 'customer';
+        return 'profile';
     }
 
     protected function LocationChoiceList()

@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Purchase GRN # {{ entity.accountRefNo }}
+                    Expense Purchase GRN # {{ entity.accountRefNo }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_expense_purchase') }}">Purchase</a>
+                        <a href="{{ path('account_expense_purchase') }}">Expense Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Purchase</a></li>
+                    <li><a href="#">Manage Expense Purchase</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -34,12 +34,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Expense Purchase Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('account_expense_purchase_new') }}"><i class="icon-plus-sign"></i> Add purchase</a>
-                                <a class="btn black" href="{{ path('account_expense_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
+                                <a class="btn red" href="{{ path('account_expense_purchase_new') }}"><i class="icon-plus-sign"></i> Add Expense Purchase</a>
+                                <a class="btn black" href="{{ path('account_expense_purchase') }}"><i class="icon-th-list"></i> Expense Purchase</a>
                             </div>
                         </div>
 

@@ -58,3 +58,15 @@ report_expenditure_details:
     path:     /expenditure
     defaults: { _controller: "AccountingBundle:Report:expenditureDetails" }
 
+report_purchase_expenditure_summary:
+    path:     /expenditure-purchase-head-summary
+    defaults: { _controller: "AccountingBundle:Report:expenditurePurchaseSummary" }
+
+report_purchase_expenditure_head:
+    path:     /expenditure-purchase-head
+    defaults: { _controller: "AccountingBundle:Report:expenditurePurchaseHead" }
+
+report_purchase_expenditure_details:
+    path:     /expenditure-purchase
+    defaults: { _controller: "AccountingBundle:Report:expenditurePurchaseDetails" }
+

@@ -275,7 +275,89 @@ class ReportController extends Controller
         }
     }
 
-	/**
+    public function expenditurePurchaseHeadAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+        $parent = array(23,37);
+        $expenditureHead = $em->getRepository('AccountingBundle:Transaction')->parentsAccountHead($user->getGlobalOption(),$parent,$data);
+        if(empty($data['pdf'])){
+            return $this->render('AccountingBundle:Report/Expenditure:accountHead.html.twig', array(
+                'overview' => $overview,
+                'expenditureHead' => $expenditureHead,
+                'searchForm' => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:Report/Expenditure:accountHeadPdf.html.twig', array(
+                    'overview' => $overview,
+                    'globalOption' => $user->getGlobalOption(),
+                    'expenditureHead' => $expenditureHead,
+                    'searchForm' => $data,
+                )
+            );
+            $datetime = new \DateTime("now");
+            $date = $datetime->format('d-m-y');
+            $date = "{$date}-expenditure-summary.pdf";
+            $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+            $snappy = new Pdf($wkhtmltopdfPath);
+            $pdf = $snappy->getOutputFromHtml($html);
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="' . $date . '"');
+            echo $pdf;
+            return new Response('');
+        }
+
+    }
+
+    public function expenditurePurchaseDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $option = $this->getUser()->getGlobalOption();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview( $this->getUser(),$data);
+        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch( $this->getUser(),$data);
+        $pagination = $this->paginate($entities);
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $categories = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption'=> $option, 'status'=>1),array('name'=>'asc'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getExpenseAccountHead();
+        if(empty($data['pdf'])) {
+
+            return $this->render('AccountingBundle:Report/Expenditure:expenditure.html.twig', array(
+                'overview' => $overview,
+                'entities' => $pagination,
+                'transactionMethods' => $transactionMethods,
+                'heads' => $heads,
+                'categories' => $categories,
+                'searchForm' => $data,
+            ));
+        }else {
+            $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch( $this->getUser(),$data);
+            $pagination = $entities->getResult();
+            $html = $this->renderView(
+                'AccountingBundle:Report/Expenditure:expenditurePdf.html.twig', array(
+                    'globalOption' => $option,
+                    'entities' => $pagination,
+                    'searchForm' => $data,
+                )
+            );
+            $datetime = new \DateTime("now");
+            $date = $datetime->format('d-m-y');
+            $date = "{$date}-expenditure-details.pdf";
+            $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+            $snappy = new Pdf($wkhtmltopdfPath);
+            $pdf = $snappy->getOutputFromHtml($html);
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="' . $date . '"');
+            echo $pdf;
+            return new Response('');
+        }
+    }
+
+
+    /**
 	 * Lists all AccountSales entities.
 	 *
 	 */

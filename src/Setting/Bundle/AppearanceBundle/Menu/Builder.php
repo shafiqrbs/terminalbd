@@ -452,13 +452,25 @@ class Builder extends ContainerAware
 		                       ->setAttribute('icon', 'fa  icon-table')
 		                       ->setAttribute('dropdown', true);
 		    $menu['Accounting']['Expenditure']->addChild('Expense', array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Expenditure']->addChild('Purchase', array('route' => 'account_expense_purchase'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Expenditure']->addChild('Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
+            $menu['Accounting']['Expenditure']->addChild('Expense Purchase', array('route' => 'account_expense_purchase'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
             $menu['Accounting']['Expenditure']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
             $menu['Accounting']['Expenditure']['Reports']->addChild('Summary',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Expenditure']['Reports']->addChild('Category',        array('route' => 'report_expenditure_category'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Expenditure']['Reports']->addChild('Details',        array('route' => 'report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
+
+        }
+
+        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE')){
+		    $menu['Accounting']->addChild('Expenditure Purchase', array('route' => ''))
+		                       ->setAttribute('icon', 'fa  icon-table')
+		                       ->setAttribute('dropdown', true);
+		    $menu['Accounting']['Expenditure Purchase']->addChild('Expense Purchase', array('route' => 'account_expense_purchase'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Expenditure Purchase']->addChild('Account Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
+            $menu['Accounting']['Expenditure Purchase']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
+            $menu['Accounting']['Expenditure Purchase']['Reports']->addChild('Account Head',        array('route' => 'report_purchase_expenditure_head'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Expenditure Purchase']['Reports']->addChild('Details',        array('route' => 'report_purchase_expenditure_details'))->setAttribute('icon', 'icon-th-list');
 
         }
 
@@ -555,7 +567,7 @@ class Builder extends ContainerAware
                 $menu['Accounting']->addChild('Payment', array('route' => 'account_purchase_restaurant_new'))->setAttribute('icon', 'icon-th-list');
             }
         }*/
-
+        $menu['Accounting']->addChild('Account User', array('route' => 'account_customer'))->setAttribute('icon', 'icon-user');
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
             $menu['Accounting']->addChild('Balance Transfer', array('route' => 'account_balancetransfer'))->setAttribute('icon', 'icon-retweet');
             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');
@@ -1248,11 +1260,16 @@ class Builder extends ContainerAware
                 $menu['Medicine']['Manage Stock']->addChild('Medicine Short List', array('route' => 'medicine_stock_short_item'))
                     ->setAttribute('icon', 'icon-th-list');
 	            if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
+                    $menu['Medicine']['Manage Stock']->addChild( 'Medicine Transfer', array( 'route' => 'medicine_transfer' ) )
+                        ->setAttribute( 'icon', 'icon-th-list' );
+                }
+	            if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
 		            $menu['Medicine']['Manage Stock']->addChild( 'Stock House', array( 'route' => 'medicine_stockhouse' ) )
 		                                             ->setAttribute( 'icon', 'icon-th-list' );
 	                $menu['Medicine']['Manage Stock']->addChild( 'Damage', array( 'route' => 'medicine_damage' ) )
 		                                             ->setAttribute( 'icon', 'icon-th-list' );
 	            }
+
 
         }
         if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {

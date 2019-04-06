@@ -42,16 +42,20 @@ class ExpenditureType extends AbstractType
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
                 )))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Remark...')))
-            ->add('customer', 'entity', array(
+            ->add('toUser', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Customer',
-                'empty_value' => '---Choose a customer---',
-                'property' => 'nameMobile',
-                'attr'=>array('class'=>'span12 select2 customer-ledger'),
+                'class' => 'Core\UserBundle\Entity\User',
+                'empty_value' => '---Choose a account user---',
+                'property' => 'userFullName',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'constraints' =>array(new NotBlank(array('message'=>'Please select to user name'))),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->globalOption->getId())
-                        ->andWhere("e.customerType ='account'");
+                    return $er->createQueryBuilder('u')
+                        ->where("u.isDelete != 1")
+                        ->andWhere("u.enabled = 1")
+                        ->andWhere("u.domainOwner = 2")
+                        ->andWhere("u.globalOption =".$this->globalOption->getId())
+                        ->orderBy("u.username", "ASC");
                 },
             ))
             ->add('transactionMethod', 'entity', array(

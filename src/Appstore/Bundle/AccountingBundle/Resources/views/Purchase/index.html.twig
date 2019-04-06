@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_expense_purchase') }}"> Manage Purchase</a>
+                        <a href="{{ path('account_expense_purchase') }}"> Manage Expense Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -33,93 +33,89 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Purchase</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Expense Purchase</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('account_expense_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
+                                <a class="btn red" href="{{ path('account_expense_purchase_new') }}"><i class="icon-plus-sign"></i> Add Expense Purchase</a>
                              </div>
                         </div>
                     </div>
-
-                    <div class="portlet-body">
-
-                        <div class="portlet-body flip-scroll">
-                            {% include('flash-message.html.twig')  %}
-                            <div class="row-fluid">
-                                <form class="search-form" action="" method="get" name="itemSearch">
-                                    <div class="row-fluid" >
-                                        <form class="search-form" action="" method="get" name="itemSearch">
-                                            <div class="row-fluid" style="margin-bottom: 10px">
-                                                <div class="span3">
-                                                    <input class="m-wrap span12 select2VendorCompany search-input" name="vendor" id="vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Vendor company name">
+                    <<div class="portlet-body flip-scroll">
+                        {% include('flash-message.html.twig')  %}
+                        <div class="row-fluid">
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid" >
+                                    <form class="search-form" action="" method="get" name="itemSearch">
+                                        <div class="row-fluid" style="margin-bottom: 10px">
+                                            <div class="span3">
+                                                <input class="m-wrap span12 select2VendorCompany search-input" name="vendor" id="vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Vendor company name">
+                                            </div>
+                                            <div class="span3">
+                                                <div class="input-icon left">
+                                                    <i class="icon-calendar"></i>
+                                                    <input class="m-wrap span12 search-input dateCalendar" name="startDate" id="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %}" >
                                                 </div>
-                                                <div class="span3">
-                                                    <div class="input-icon left">
-                                                        <i class="icon-calendar"></i>
-                                                        <input class="m-wrap span12 search-input dateCalendar" name="startDate" id="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %}" >
-                                                    </div>
-                                                </div>
+                                            </div>
 
-                                                <div class="span3">
-                                                    <div class="input-icon left">
-                                                        <i class="icon-calendar"></i>
-                                                        <input class="m-wrap span12 search-input dateCalendar" name="endDate" id="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}">
-                                                    </div>
+                                            <div class="span3">
+                                                <div class="input-icon left">
+                                                    <i class="icon-calendar"></i>
+                                                    <input class="m-wrap span12 search-input dateCalendar" name="endDate" id="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}">
                                                 </div>
-                                                <div class="span3">
-                                                    <div class="controls">
-                                                        <div class="input-append span11">
-                                                            <input type="text" id="grn" name="grn"  class="span11 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="Enter grn no ">
-                                                            <div class="btn-group">
-                                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
-                                                            </div>
+                                            </div>
+                                            <div class="span3">
+                                                <div class="controls">
+                                                    <div class="input-append span11">
+                                                        <input type="text" id="grn" name="grn"  class="span11 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="Enter grn no ">
+                                                        <div class="btn-group">
+                                                            <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="clearfix"></div>
-                                        </form>
-                                    </div>
-                                </form>
-                            </div>
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </form>
+                                </div>
+                            </form>
+                        </div>
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
 
-                                <thead class="flip-content ">
-                                <tr class="head-blue">
-                                    <th class="numeric" >Created</th>
-                                    <th class="numeric" >Invoice</th>
-                                    <th class="numeric" >Vendor Name</th>
-                                    <th class="numeric" >Total</th>
-                                    <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Due</th>
-                                    <th class="numeric" >Process</th>
-                                    <th class="numeric" >Action</th>
+                            <thead class="flip-content ">
+                            <tr class="head-blue">
+                                <th class="numeric" >Created</th>
+                                <th class="numeric" >Invoice</th>
+                                <th class="numeric" >Vendor Name</th>
+                                <th class="numeric" >Total</th>
+                                <th class="numeric" >Payment</th>
+                                <th class="numeric" >Due</th>
+                                <th class="numeric" >Process</th>
+                                <th class="numeric" >Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for entity in entities %}
+                                <tr id="delete-{{ entity.id }}">
+                                    <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
+                                    <td class="numeric" >{{ entity.accountRefNo }}</td>
+                                    <td class="numeric" >{{ entity.companyName }}</td>
+                                    <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
+                                    <td class="numeric" >{{ entity.payment|number_format }}</td>
+                                    <td class="numeric" >{{ (entity.totalAmount-entity.payment)|number_format }}</td>
+                                    <td class="numeric" >{{ entity.process }}</td>
+                                    <td class="numeric" >
+                                        {% if entity.process is empty %}
+                                            <a href="{{ path('account_expense_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
+                                            <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('account_expense_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                        {% endif %}
+                                        <a href="{{ path('account_expense_purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                    </td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                {% for entity in entities %}
-                                    <tr id="delete-{{ entity.id }}">
-                                        <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.accountRefNo }}</td>
-                                        <td class="numeric" >{{ entity.companyName }}</td>
-                                        <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
-                                        <td class="numeric" >{{ entity.payment|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.totalAmount-entity.payment)|number_format }}</td>
-                                        <td class="numeric" >{{ entity.process }}</td>
-                                        <td class="numeric" >
-                                            {% if entity.process is empty %}
-                                                <a href="{{ path('account_expense_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>
-                                                <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('account_expense_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                                            {% endif %}
-                                            <a href="{{ path('account_expense_purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <div class="pagination pull-center" >
-                                {{ knp_pagination_render(entities) }}
-                            </div>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="pagination pull-center" >
+                            {{ knp_pagination_render(entities) }}
                         </div>
                     </div>
                 </div>

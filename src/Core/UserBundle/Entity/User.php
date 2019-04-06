@@ -81,6 +81,13 @@ class User extends BaseUser
 	private $domainOwner = 0;
 
 	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="userGroup", type="string", length = 30, nullable=true)
+	 */
+	private $userGroup;
+
+	/**
 	 * @var boolean
 	 *
 	 * @ORM\Column(name="agent", type="boolean", nullable=true)
@@ -1002,7 +1009,7 @@ class User extends BaseUser
 
 	public function userFullName(){
 
-		return $this->profile->getName().' ('. $this->username .')';
+		return $this->profile->getName();
 	}
 
 	public function userDoctor(){
@@ -1812,6 +1819,22 @@ class User extends BaseUser
     public function getSalesAdjustmentApprove()
     {
         return $this->salesAdjustmentApprove;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserGroup()
+    {
+        return $this->userGroup;
+    }
+
+    /**
+     * @param string $userGroup
+     */
+    public function setUserGroup($userGroup)
+    {
+        $this->userGroup = $userGroup;
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace Core\UserBundle\Entity\Repository;
 
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -101,6 +102,7 @@ class UserRepository extends EntityRepository
                 'ROLE_ACCOUNTING'                           => 'Accounting',
                 'ROLE_DOMAIN_ACCOUNTING_EXPENDITURE'        => 'Accounting Expenditure',
                 'ROLE_DOMAIN_ACCOUNTING_PURCHASE'           => 'Accounting Purchase',
+                'ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE'           => 'Accounting Expenditure Purchase',
                 'ROLE_DOMAIN_ACCOUNTING_SALES'              => 'Accounting Sales',
                 'ROLE_DOMAIN_ACCOUNTING_ECOMMERCE'          => 'Accounting Online Sales',
                 'ROLE_DOMAIN_ACCOUNTING_PETTY_CASH'         => 'Accounting Petty Cash',
@@ -282,7 +284,7 @@ class UserRepository extends EntityRepository
         return $array;
     }
 
-    public function getEmployees(GlobalOption $option)
+    public function getEmployees(GlobalOption $option, $data = [])
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.profile','p');
@@ -292,6 +294,29 @@ class UserRepository extends EntityRepository
         $qb->orderBy("p.name","ASC");
         $result = $qb->getQuery()->getResult();
         return $result;
+    }
+
+    public function insertAccountUser(GlobalOption $option,$mobile,$data)
+    {
+        $user = new User();
+        $em = $this->_em;
+        if(empty($data['profile']['email'])){
+            $email = $mobile."@gmail.com";
+        }else{
+            $email = $data['profile']['email'];
+        }
+        $email = $mobile."@gmail.com";
+        $user->setUsername($mobile);
+        $user->setEmail($email);
+        $user->setPassword('*4848#');
+        $user->setUserGroup('account');
+        $user->setGlobalOption($option);
+        $user->setDomainOwner(2);
+        $em->persist($user);
+        $em->flush();
+        return $user;
+
+
     }
 
 

@@ -62,6 +62,10 @@ medicine_medicine_purchase_return:
     resource: "@MedicineBundle/Resources/config/routing/purchasereturn.yml"
     prefix:   /purchase-return
 
+medicine_medicine_transfer:
+    resource: "@MedicineBundle/Resources/config/routing/medicinetransfer.yml"
+    prefix:   /medicine-transfer
+
 medicine_medicine_sales_return:
     resource: "@MedicineBundle/Resources/config/routing/salesreturn.yml"
     prefix:   /sales-return

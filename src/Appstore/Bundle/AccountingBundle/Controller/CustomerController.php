@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Form\CustomerType;
+use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,9 +43,9 @@ class CustomerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $data['type'] = 'account';
+        $data['userGroup'] = 'account';
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
+        $entities = $em->getRepository('UserBundle:User')->getEmployees($globalOption,$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:Customer:index.html.twig', array(
             'entities' => $pagination,
@@ -84,17 +85,17 @@ class CustomerController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Customer();
+        $entity = new Profile();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        $data = $request->request->all();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $globalOption = $this->getUser()->getGlobalOption();
-            $entity->setGlobalOption($globalOption);
-	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
-	        $entity->setCustomerType('account');
+	        $user = $this->getDoctrine()->getRepository('UserBundle:User')->insertAccountUser($globalOption,$mobile,$data);
+	        $entity->setUser($user);
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('account_customer'));
@@ -113,7 +114,7 @@ class CustomerController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Customer $entity)
+    private function createCreateForm(Profile $entity)
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new CustomerType($location), $entity, array(
@@ -131,9 +132,8 @@ class CustomerController extends Controller
      */
     public function newAction()
     {
-        $entity = new Customer();
+        $entity = new Profile();
         $form   = $this->createCreateForm($entity);
-
         return $this->render('AccountingBundle:Customer:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -148,7 +148,7 @@ class CustomerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+        $entity = $em->getRepository('UserBundle:Profile')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
@@ -166,7 +166,7 @@ class CustomerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+        $entity = $em->getRepository('UserBundle:Profile')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
@@ -186,7 +186,7 @@ class CustomerController extends Controller
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Customer $entity)
+    private function createEditForm(Profile $entity)
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new CustomerType($location), $entity, array(
@@ -207,7 +207,7 @@ class CustomerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
+        $entity = $em->getRepository('UserBundle:Profile')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
@@ -236,7 +236,7 @@ class CustomerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'id' => $id));
+        $entity = $em->getRepository('UserBundle:Profile')->findOneBy(array('globalOption'=>$globalOption,'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
@@ -253,8 +253,6 @@ class CustomerController extends Controller
                 'notice',"Data has been relation another Table"
             );
         }
-        exit;
-
         return $this->redirect($this->generateUrl('account_customer'));
     }
 

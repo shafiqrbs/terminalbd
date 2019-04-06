@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage Purchase Return
+                    Manage Medicine Transfer
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="{{ path('medicine_purchase_return') }}">Manage Purchase Return</a></li>
+                    <li><a href="{{ path('medicine_transfer') }}">Manage Medicine Transfer</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,10 +28,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Return Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Medicine Transfer Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="{{ path('medicine_purchase_return') }}"><i class="icon-th-list"></i> Purchase Return</a>
+                                <a class="btn" href="{{ path('medicine_transfer') }}"><i class="icon-th-list"></i> Medicine Transfer</a>
                             </div>
                         </div>
                     </div>
@@ -47,8 +47,8 @@
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Select Vendor</label>
                                         <div class="controls">
-                                            {{ form_widget(form.medicineVendor) }}
-                                            {{ form_errors(form.medicineVendor) }}
+                                            {{ form_widget(form.customer) }}
+                                            {{ form_errors(form.customer) }}
                                         </div>
                                     </div>
                                 </div>
@@ -71,13 +71,6 @@
         </div>
     </div>
 {% endblock %}
-{% block javascriptBlock %}
-    {{ parent() }}
-    {% javascripts
-    '@MedicineBundle/Resources/public/js/damage.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock  %}
+
 
 

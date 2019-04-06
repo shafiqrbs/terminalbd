@@ -241,8 +241,8 @@ class PurchaseController extends Controller
     public function deleteAction($id)
     {
 
-    	$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-	    $entity = $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+    	$config = $this->getUser()->getGlobalOption();
+	    $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
 
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -253,18 +253,7 @@ class PurchaseController extends Controller
         return $this->redirect($this->generateUrl('account_expense_purchase'));
     }
 
-	public function itemApproveAction($id)
-    {
 
-    	$config = $this->getUser()->getGlobalOption()->getBusinessConfig()->getId();
-	    $entity = $this->getDoctrine()->getRepository('AccountingBundle:BusinessPurchaseItem')->findOneBy(array('id' => $id));
-        $em = $this->getDoctrine()->getManager();
-        if ($entity->getBusinessPurchase()->getBusinessConfig()->getId() == $config ) {
-	        $entity->setStatus(true);
-	        $em->flush();
-        }
-        exit;
-    }
 
 	public function reverseAction($id)
 	{
