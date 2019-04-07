@@ -16,6 +16,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class VendorController extends Controller
 {
 
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
     /**
      * Lists all Vendor entities.
      *
@@ -26,9 +38,10 @@ class VendorController extends Controller
         $entity = new MedicineVendor();
         $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findWithSearch($this->getUser());
+        $pagination = $this->paginate($entities);
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -41,7 +54,8 @@ class VendorController extends Controller
     {
         $entity = new MedicineVendor();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findWithSearch($this->getUser());
+        $pagination = $this->paginate($entities);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
@@ -67,7 +81,7 @@ class VendorController extends Controller
 		    'success',"User mobile no already exist,Please try again."
 	    );
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -101,7 +115,8 @@ class VendorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findWithSearch($this->getUser());
+        $pagination = $this->paginate($entities);
         $entity = $em->getRepository('MedicineBundle:MedicineVendor')->find($id);
 
         if (!$entity) {
@@ -109,7 +124,7 @@ class VendorController extends Controller
         }
         $editForm = $this->createEditForm($entity);
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
-            'entities'      => $entities,
+            'entities'      => $pagination,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -143,7 +158,8 @@ class VendorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $global = $this->getUser()->getGlobalOption();
         $config = $global->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig' => $config),array('companyName'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findWithSearch($this->getUser());
+        $pagination = $this->paginate($entities);
 
         $entity = $em->getRepository('MedicineBundle:MedicineVendor')->find($id);
 
@@ -167,7 +183,7 @@ class VendorController extends Controller
         }
 
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
-            'entities'      => $entities,
+            'entities'      => $pagination,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
