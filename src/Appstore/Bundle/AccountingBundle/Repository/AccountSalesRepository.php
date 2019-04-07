@@ -261,7 +261,7 @@ class AccountSalesRepository extends EntityRepository
     }
 
     public function updateCustomerBalance(AccountSales $accountSales){
-
+        $em = $this->_em;
         $customer = $accountSales->getCustomer()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE(SUM(e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
@@ -273,7 +273,9 @@ class AccountSalesRepository extends EntityRepository
         $result = $qb->getQuery()->getSingleResult();
         $balance = ($result['totalAmount'] -  $result['receiveAmount']);
         $accountSales->setBalance($balance);
-        $this->_em->flush();
+        $accountSales->setUpdated($accountSales->getCreated());
+        $em->persist($accountSales);
+        $em->flush();
         return $accountSales;
 
     }
@@ -579,11 +581,11 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
-        $accountSalesClose = $this->updateCustomerBalance($accountSales);
+        $sales = $this->updateCustomerBalance($accountSales);
         if($accountSales->getAmount() > 0 ){
 	        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         }
-        return $accountSalesClose;
+        return $sales;
 
     }
 
@@ -774,9 +776,12 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessHead('medicine');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
+        $accountSales->setCreated($entity->getCreated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
+        $accountSales->getAmount();
         if($accountSales->getAmount() > 0){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         }

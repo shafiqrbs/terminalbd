@@ -109,6 +109,7 @@ class AccountSalesController extends Controller
 		        $entity->setAmount(0);
 		        $entity->setTransactionMethod(null);
 	        }
+
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -306,6 +307,12 @@ class AccountSalesController extends Controller
 			    $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 			    $entity->setTransactionMethod($method);
 		    }
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:59:59");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }
 		    $em->flush();
 		    if(!empty($entity->getSales()) and $entity->getProcessHead() == 'Due'){
 		    	$this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesPaymentReceive($entity);

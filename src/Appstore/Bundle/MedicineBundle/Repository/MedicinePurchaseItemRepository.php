@@ -52,7 +52,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
         }
         if(!empty($vendor)){
-            $qb->andWhere("e.medicineVendor = :vendor")->setParameter('vendor', $vendor);
+            $qb->join("e.medicineVendor",'vendor');
+            $qb->andWhere($qb->expr()->like("vendor.companyName", "'%$vendor%'"  ));
         }
 	    if (!empty($data['startDate']) ) {
 		    $datetime = new \DateTime($startDate);
@@ -107,9 +108,10 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->join('mpi.medicineStock','s');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
         $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
-        $qb->andWhere('mpi.remainingQuantity > 0');
+       // $qb->andWhere('mpi.remainingQuantity > 0');
         $this->handleSearchBetween($qb,$data);
-	    if (!empty($startExpiryDate) ) {
+
+        if (!empty($startExpiryDate) ) {
 		    $datetime = new \DateTime($startExpiryDate);
 		    $start = $datetime->format('Y-m-d 00:00:00');
 		    $qb->andWhere("mpi.expirationEndDate >= :startDate");

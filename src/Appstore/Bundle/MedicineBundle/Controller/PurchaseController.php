@@ -427,6 +427,7 @@ class PurchaseController extends Controller
             }else{
                 $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             }
+
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
             return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
@@ -473,6 +474,12 @@ class PurchaseController extends Controller
             if($purchase->getPayment() == 0){
                 $purchase->setAsInvestment(false);
 	            $purchase->setTransactionMethod(NULL);
+            }
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday");
+                $purchase->setCreated($datetime);
+                $purchase->setUpdated($datetime);
             }
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);

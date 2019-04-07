@@ -344,6 +344,12 @@ class SalesController extends Controller
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getNetTotal() - $entity->getReceived());
             }
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }
             $em->flush();
             if($entity->getProcess() == 'Done'){
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);

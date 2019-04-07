@@ -330,7 +330,7 @@ class AccountCashRepository extends EntityRepository
         if (!empty($startDate) ) {
         $compareStart = new \DateTime($startDate);
         }
-        $start =  $compareStart->format('Y-m-d 00:00:01');
+        $start =  $compareStart->format('Y-m-d 00:00:00');
         $qb->andWhere("e.updated >= :startDate");
         $qb->setParameter('startDate', $start);
 
@@ -403,6 +403,8 @@ class AccountCashRepository extends EntityRepository
             $cash->setBalance($balance - $entity->getAmount() );
             $cash->setCredit($entity->getAmount());
         }
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 
@@ -435,6 +437,8 @@ class AccountCashRepository extends EntityRepository
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
 		}
 		$cash->setCredit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
 		$em->persist($cash);
 		$em->flush();
 
@@ -461,6 +465,8 @@ class AccountCashRepository extends EntityRepository
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
 		}
 		$cash->setDebit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
 		$em->persist($cash);
 		$em->flush();
 
@@ -484,6 +490,8 @@ class AccountCashRepository extends EntityRepository
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
 		}
 		$cash->setDebit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
 		$em->persist($cash);
 		$em->flush();
 
@@ -516,6 +524,8 @@ class AccountCashRepository extends EntityRepository
 
         $cash->setBalance($balance - $entity->getPayment() );
         $cash->setCredit($entity->getPayment());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 
@@ -546,6 +556,8 @@ class AccountCashRepository extends EntityRepository
         }
         $cash->setBalance($balance - $entity->getPayment() );
         $cash->setCredit($entity->getPayment());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 
@@ -588,6 +600,8 @@ class AccountCashRepository extends EntityRepository
         $cash->setUpdated($entity->getUpdated());
         $cash->setBalance($balance + $entity->getAmount() );
         $cash->setDebit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getCreated());
         $em->persist($cash);
         $em->flush();
     }
@@ -643,6 +657,8 @@ class AccountCashRepository extends EntityRepository
         $cash->setUpdated($entity->getUpdated());
         $cash->setBalance($balance - $entity->getAmount() );
         $cash->setCredit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 
@@ -671,9 +687,10 @@ class AccountCashRepository extends EntityRepository
         $cash->setProcessHead('Online');
         $cash->setAccountRefNo($entity->getAccountRefNo());
         $cash->setUpdated($entity->getUpdated());
-
         $cash->setBalance($balance + $entity->getAmount() );
         $cash->setDebit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 
@@ -695,6 +712,8 @@ class AccountCashRepository extends EntityRepository
         $cash->setUpdated($entity->getUpdated());
         $cash->setBalance($balance + $entity->getAmount() );
         $cash->setDebit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 
@@ -727,6 +746,8 @@ class AccountCashRepository extends EntityRepository
         $cash->setUpdated($entity->getUpdated());
         $cash->setBalance($balance - $entity->getAmount() );
         $cash->setCredit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 
@@ -750,6 +771,8 @@ class AccountCashRepository extends EntityRepository
         $cash->setUpdated($entity->getUpdated());
         $cash->setBalance($balance - $entity->getAmount() );
         $cash->setCredit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 
@@ -830,6 +853,8 @@ class AccountCashRepository extends EntityRepository
         $cash->setUpdated($entity->getUpdated());
         $cash->setBalance($balance + $entity->getPayment() );
         $cash->setDebit($entity->getPayment());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
 

@@ -98,7 +98,7 @@ class BusinessParticular
 
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem", mappedBy="businessParticular" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem", mappedBy="particular" )
      **/
     private $businessVendorStockItems;
 

@@ -11,6 +11,7 @@ use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\User;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,7 +96,12 @@ class MedicineSalesTemporaryController extends Controller
         }
         $entity = New MedicineSales();
         $user = $this->getUser();
-        $config = $user->getGlobalOption()->getMedicineConfig();
+
+        /* @var $global GlobalOption */
+
+        $global = $user->getGlobalOption();
+        $config = $global->getMedicineConfig();
+
         $editForm = $this->createCreateForm($entity);
         $editForm->handleRequest($request);
         $entity->setMedicineConfig($config);
@@ -141,6 +147,13 @@ class MedicineSalesTemporaryController extends Controller
         } else {
             $entity->setApprovedBy($this->getUser());
             $entity->setProcess('Done');
+        }
+
+        $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+        if($accountConfig == 1){
+            $datetime = new \DateTime("yesterday 23:59:59");
+            $entity->setCreated($datetime);
+            $entity->setUpdated($datetime);
         }
         $em->persist($entity);
         $em->flush();

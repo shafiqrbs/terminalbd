@@ -321,6 +321,12 @@ class AccountPurchaseController extends Controller
 		        $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 		        $entity->setTransactionMethod($method);
 	        }
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:59:59");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($entity);
 	        if($entity->getProcessType() == 'Outstanding'){

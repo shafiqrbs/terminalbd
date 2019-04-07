@@ -81,10 +81,6 @@ class Expenditure
      **/
     private  $expenditureItems;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="expendituries" ,cascade={"persist"} )
-     **/
-    private  $customer;
 
 
     /**

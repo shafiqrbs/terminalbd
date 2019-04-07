@@ -273,6 +273,12 @@ class ExpenditureController extends Controller
             $em = $this->getDoctrine()->getManager();
             $expenditure->setProcess('approved');
             $expenditure->setApprovedBy($this->getUser());
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:59:59");
+                $expenditure->setCreated($datetime);
+                $expenditure->setUpdated($datetime);
+            }
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($expenditure);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($expenditure);

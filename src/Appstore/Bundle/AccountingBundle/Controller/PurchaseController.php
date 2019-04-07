@@ -224,6 +224,12 @@ class PurchaseController extends Controller
 	            $purchase->setTransactionMethod(NULL);
 	            $purchase->setAsInvestment(false);
             }
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:59:59");
+                $purchase->setCreated($datetime);
+                $purchase->setUpdated($datetime);
+            }
 		    $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseExpenditureCash($purchase);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseExpenditureTransaction($purchase);
