@@ -195,6 +195,12 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessHead('Sales-Adjustment');
         $accountSales->setProcessType('Sales-Adjustment');
         $accountSales->setProcess('approved');
+        $accountConfig = $entity->getGlobalOption()->getAccountingConfig()->isAccountClose();
+        if($accountConfig == 1){
+            $datetime = new \DateTime("yesterday 23:59:59");
+            $accountSales->setCreated($datetime);
+            $accountSales->setUpdated($datetime);
+        }
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);

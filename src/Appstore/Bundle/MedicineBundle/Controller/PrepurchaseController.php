@@ -355,6 +355,7 @@ class PrepurchaseController extends Controller
 	    $purchase = $em->getRepository('MedicineBundle:MedicinePrepurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
 	    if (!empty($purchase) and $purchase->getProcess() == "Complete" ) {
             $purchase->setProcess('Approved');
+            $em->flush();
             return new Response('success');
         } else {
             return new Response('failed');

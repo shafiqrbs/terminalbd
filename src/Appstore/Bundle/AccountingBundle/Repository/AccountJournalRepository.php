@@ -280,6 +280,8 @@ class AccountJournalRepository extends EntityRepository
         $entity->setJournalSource($journalSource);
         $entity->setRemark("Medicine purchase as investment,Ref GRN no.{$purchase->getGrn()}");
         $entity->setProcess('approved');
+        $entity->setCreated($purchase->getCreated());
+        $entity->setUpdated($purchase->getUpdated());
         $this->_em->persist($entity);
         $this->_em->flush();
         return $entity;

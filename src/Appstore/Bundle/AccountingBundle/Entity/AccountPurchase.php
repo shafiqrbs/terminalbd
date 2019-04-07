@@ -240,10 +240,10 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
         /**
          * @var \DateTime
-         * @Gedmo\Timestampable(on="update")
-         * @ORM\Column(name="updated", type="datetime")
+         * @ORM\Column(name="updated", type="datetime", nullable = true)
          */
         private $updated;
+
 
         /**
          * @var string

@@ -512,7 +512,6 @@ class AccountCashRepository extends EntityRepository
         $cash->setAccountBank($entity->getAccountBank());
         $cash->setProcessHead('Purchase');
         $cash->setAccountRefNo($entity->getAccountRefNo());
-        $cash->setUpdated($entity->getUpdated());
         /* Cash - Cash various */
         if($entity->getTransactionMethod()->getId() == 1 ){
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
@@ -546,7 +545,9 @@ class AccountCashRepository extends EntityRepository
         $cash->setProcessHead('Purchase');
         $cash->setAccountRefNo($entity->getAccountRefNo());
         $cash->setUpdated($entity->getUpdated());
+
         /* Cash - Cash various */
+
         if($entity->getTransactionMethod()->getId() == 1 ){
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
         }elseif($entity->getTransactionMethod()->getId() == 2 ){
@@ -611,7 +612,7 @@ class AccountCashRepository extends EntityRepository
     {
 
 	    $exist = $this->findOneBy(array('processHead'=>'Sales','accountSales'=> $entity));
-	    if($exist) {
+	    if($exist){
 		    $balance = $this->lastInsertCash( $entity, 'Sales' );
 		    $em      = $this->_em;
 		    $cash    = $exist;
@@ -928,7 +929,7 @@ class AccountCashRepository extends EntityRepository
     }
 
 
- /*   public function dailyProcessHead1(User $user,$head = '' , $data = []){
+    /*   public function dailyProcessHead1(User $user,$head = '' , $data = []){
 
         $emConfig = $this->getEntityManager()->getConfiguration();
         $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');

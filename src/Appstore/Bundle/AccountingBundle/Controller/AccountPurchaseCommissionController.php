@@ -149,6 +149,12 @@ class AccountPurchaseCommissionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:59:59");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCommission($entity);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->purchaseCommissionTransaction($this->getUser()->getGlobalOption(),$entity);
