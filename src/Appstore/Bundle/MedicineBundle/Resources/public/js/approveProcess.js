@@ -47,6 +47,7 @@ $(document).on("click", ".confirm", function() {
         }
     });
 });
+
 $(document).on("click", "#vendorPaymentBtn", function() {
     var id      = $(this).attr("data-id");
     var url     = $(this).attr("data-url");

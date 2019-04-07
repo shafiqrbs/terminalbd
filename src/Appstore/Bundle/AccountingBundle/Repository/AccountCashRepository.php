@@ -524,7 +524,7 @@ class AccountCashRepository extends EntityRepository
     public function insertPurchaseExpenditureCash(AccountPurchase $entity)
     {
 
-        $balance = $this->lastInsertCash($entity,'Purchase-Expenditure');
+        $balance = $this->lastInsertCash($entity,'Purchase');
         $em = $this->_em;
         $cash = new AccountCash();
 
@@ -533,7 +533,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setTransactionMethod($entity->getTransactionMethod());
         $cash->setAccountMobileBank($entity->getAccountMobileBank());
         $cash->setAccountBank($entity->getAccountBank());
-        $cash->setProcessHead('Purchase-Expenditure');
+        $cash->setProcessHead('Purchase');
         $cash->setAccountRefNo($entity->getAccountRefNo());
         $cash->setUpdated($entity->getUpdated());
         /* Cash - Cash various */
@@ -551,10 +551,10 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function insertSalesCash(AccountSales $entity)
+    public function insertSalesCash(AccountSales $entity , $processHead ='Sales')
     {
 
-        $balance = $this->lastInsertCash($entity,'Sales');
+        $balance = $this->lastInsertCash($entity,$processHead);
         $em = $this->_em;
         $cash = new AccountCash();
 
@@ -583,7 +583,7 @@ class AccountCashRepository extends EntityRepository
 	        $method = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 	        $cash->setTransactionMethod($method);
         }
-        $cash->setProcessHead('Sales');
+        $cash->setProcessHead($processHead);
         $cash->setAccountRefNo($entity->getAccountRefNo());
         $cash->setUpdated($entity->getUpdated());
         $cash->setBalance($balance + $entity->getAmount() );
@@ -591,6 +591,7 @@ class AccountCashRepository extends EntityRepository
         $em->persist($cash);
         $em->flush();
     }
+
 
     public function resetSalesCash(AccountSales $entity)
     {

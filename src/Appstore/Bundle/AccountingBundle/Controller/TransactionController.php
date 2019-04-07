@@ -275,7 +275,6 @@ class TransactionController extends Controller
         $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase',$data);
         $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase-Commission',$data);
         $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Expenditure',$data);
-        $purchaseExpenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase-Expenditure',$data);
         $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Journal',$data);
 
         if(empty($data['pdf'])){
@@ -287,7 +286,6 @@ class TransactionController extends Controller
                 'purchaseTrans'                 => $purchase,
                 'purchaseCommissionTrans'       => $purchaseCommission,
                 'expenditureTrans'              => $expenditure,
-                'purchaseExpenditureTrans'      => $purchaseExpenditure,
                 'journalTrans'                  => $journal,
                 'searchForm'                    => $data,
             ]);
@@ -300,7 +298,6 @@ class TransactionController extends Controller
                     'purchaseTrans'                 => $purchase,
                     'purchaseCommissionTrans'       => $purchaseCommission,
                     'expenditureTrans'              => $expenditure,
-                    'purchaseExpenditureTrans'      => $purchaseExpenditure,
                     'journalTrans'                  => $journal,
                     'searchForm'                    => $data,
                 )
@@ -336,7 +333,6 @@ class TransactionController extends Controller
         $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Purchase',$data);
         $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Purchase-Commission',$data);
         $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Expenditure',$data);
-        $purchaseExpenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Purchase-Expenditure',$data);
         $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->monthlyProcessHead($user,'Journal',$data);
         if(empty($data['pdf'])){
 
@@ -347,7 +343,6 @@ class TransactionController extends Controller
                 'purchaseTrans'                 => $purchase,
                 'purchaseCommissionTrans'       => $purchaseCommission,
                 'expenditureTrans'              => $expenditure,
-                'purchaseExpenditureTrans'      => $purchaseExpenditure,
                 'journalTrans'                  => $journal,
                 'searchForm'                    => $data,
             ]);
@@ -360,7 +355,6 @@ class TransactionController extends Controller
                     'purchaseTrans'                 => $purchase,
                     'purchaseCommissionTrans'       => $purchaseCommission,
                     'expenditureTrans'              => $expenditure,
-                    'purchaseExpenditureTrans'      => $purchaseExpenditure,
                     'journalTrans'                  => $journal,
                     'searchForm'                    => $data,
                 )

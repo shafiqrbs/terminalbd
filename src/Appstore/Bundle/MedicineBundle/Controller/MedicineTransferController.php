@@ -313,13 +313,16 @@ class MedicineTransferController extends Controller
     public function approveAction(MedicineTransfer $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($entity)) {
+        if (!empty($entity) and $entity->getProcess() == 'created') {
+            $payment = $_REQUEST['payment'];
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
+            $entity->setPayment($payment);
+            $entity->setDue($entity->getTotal() - $entity->getPayment());
             $em->flush();
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountMedicineTransfer($entity);
-            $em->getRepository('AccountingBundle:Transaction')->MedicineTransferGlobalTransaction($accountPurchase);
+            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountTransferInvoice($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             return new Response('success');
         } else {
             return new Response('failed');

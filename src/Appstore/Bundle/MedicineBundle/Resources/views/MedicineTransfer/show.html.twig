@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage Vendor : {{ entity.medicineVendor.companyName }}
+                    Manage Vendor : {{ entity.customer.name }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="{{ path('medicine_purchase_return') }}">Manage Medicine Purchase Return</a></li>
+                    <li><a href="{{ path('medicine_transfer') }}">Manage Medicine Transfer</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,10 +29,10 @@
                 <div class="portlet box green">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Medicine Purchase Return Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Medicine Transfer Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="{{ path('medicine_purchase_return') }}"><i class="icon-th-list"></i> Purchase Return</a>
+                                <a class="btn" href="{{ path('medicine_transfer') }}"><i class="icon-th-list"></i> Transfer</a>
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for item in entity.medicinePurchaseReturnItems %}
+                                {% for item in entity.medicineTransferItems %}
                                     <tr>
                                         <td class="numeric" >{{ item.medicineStock.name }}</td>
                                         <td class="numeric" >{{ item.quantity }}</td>
@@ -59,7 +59,7 @@
                                         <td class="numeric" >{{ item.subTotal }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'created' %}
-                                                <a title="Are you sure went to delete ?" href="{{ path('medicine_purchase_return_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                                <a title="Are you sure went to delete ?" href="{{ path('medicine_transfer_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -76,9 +76,7 @@
                         <!--/span-->
                         <div class="form-actions portlet box grey">
                             <div class="pull-right">
-                                {% if entity.process != 'approved' %}
-                                    <a href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('medicine_purchase_return_approve',{'id':entity.id}) }}" class="btn blue confirm"><i class="icon-ok"></i> Approve</a>
-                                {% else %}
+                                {% if entity.process == 'approved' %}
                                     <a href="javascript:"  class="btn green"><i class="icon-ok"></i> Approved</a>
                                 {% endif %}
                             </div>

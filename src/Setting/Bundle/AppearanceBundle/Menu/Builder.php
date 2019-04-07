@@ -7,6 +7,7 @@
  */
 
 namespace Setting\Bundle\AppearanceBundle\Menu;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
@@ -200,6 +201,8 @@ class Builder extends ContainerAware
 
         $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
 
+        /* @var $config BusinessConfig */
+
         $config = $securityContext->getGlobalOption()->getBusinessConfig();
 
         $menu
@@ -231,7 +234,8 @@ class Builder extends ContainerAware
 		    $menu['Business Management']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
 		    $menu['Business Management']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
         }
-	    if ($securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
+
+	    if($config->isShowStock() == 1 and $securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
 
 		    $menu['Business Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
 		    $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'))
@@ -252,7 +256,7 @@ class Builder extends ContainerAware
 		    }
 	    }
 
-        if ($securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
+        if ($config->isShowStock() == 1 and $securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
 
             $menu['Business Management']->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
             if($config->getBusinessModel() == 'commission') {
@@ -270,10 +274,14 @@ class Builder extends ContainerAware
 		    $menu['Business Management']->addChild('Master Data')
 		                                ->setAttribute('icon', 'icon icon-cog')
 		                                ->setAttribute('dropdown', true);
-		    $menu['Business Management']['Master Data']->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
-		    $menu['Business Management']['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
+		    if($config->isShowStock() == 1){
+                $menu['Business Management']['Master Data']->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
+                $menu['Business Management']['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
+
+            }
 		    $menu['Business Management']['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'))->setAttribute('icon', 'icon-cog');
 	    }
+
 	    if ($securityContext->isGranted('ROLE_BUSINESS_REPORT')) {
 		    $menu['Business Management']->addChild( 'Reports' )
 		                                ->setAttribute( 'icon', 'icon icon-bar-chart' )

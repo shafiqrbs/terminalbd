@@ -11,6 +11,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineTransfer;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -670,9 +671,9 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setHmsInvoices($entity->getHmsInvoice());
 	    $accountSales->setSourceInvoice( $entity->getHmsInvoice()->getInvoice() );
 	    $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
-        $accountSales->setTransactionMethod($entity->getTransactionMethod());
         if ($entity->getPayment() > 0){
             $accountSales->setAmount($entity->getPayment());
+            $accountSales->setTransactionMethod($entity->getTransactionMethod());
         }else{
             $accountSales->setAmount(0);
         }
@@ -686,7 +687,9 @@ class AccountSalesRepository extends EntityRepository
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        if ($entity->getPayment() > 0) {
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        }
         return $accountSales;
 
     }
@@ -740,7 +743,9 @@ class AccountSalesRepository extends EntityRepository
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        if($accountSales->getAmount() > 0){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        }
         return $accountSales;
 
     }
@@ -756,9 +761,9 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setGlobalOption($entity->getMedicineConfig()->getGlobalOption());
         $accountSales->setCustomer($entity->getCustomer());
-        $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getNetTotal());
         if ($entity->getReceived() > 0){
+            $accountSales->setTransactionMethod($entity->getTransactionMethod());
             $accountSales->setAmount($entity->getReceived());
         }else{
             $accountSales->setAmount(0);
@@ -772,7 +777,39 @@ class AccountSalesRepository extends EntityRepository
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        if($accountSales->getAmount() > 0){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        }
+
+        return $accountSales;
+
+    }
+
+    public function insertMedicineAccountTransferInvoice(MedicineTransfer $entity)
+    {
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setGlobalOption($entity->getMedicineConfig()->getGlobalOption());
+        $accountSales->setCustomer($entity->getCustomer());
+        $transaction = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $accountSales->setTotalAmount($entity->getTotal());
+        if ($entity->getPayment() > 0){
+            $accountSales->setTransactionMethod($transaction);
+            $accountSales->setAmount($entity->getPayment());
+        }else{
+            $accountSales->setAmount(0);
+        }
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setSourceInvoice($entity->getInvoice());
+        $accountSales->setProcessHead('Medicine-Transfer');
+        $accountSales->setProcessType('Sales');
+        $accountSales->setProcess('approved');
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
+        if($accountSales->getAmount() > 0){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        }
         return $accountSales;
 
     }
@@ -831,9 +868,9 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setGlobalOption($entity->getBusinessConfig()->getGlobalOption());
         $accountSales->setCustomer($entity->getCustomer());
-        $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getTotal());
         if ($entity->getReceived() > 0){
+            $accountSales->setTransactionMethod($entity->getTransactionMethod());
             $accountSales->setAmount($entity->getReceived());
         }else{
             $accountSales->setAmount(0);
@@ -846,8 +883,10 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
-	    $sales = $this->updateCustomerBalance($accountSales);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+	    $this->updateCustomerBalance($accountSales);
+        if($accountSales->getAmount() > 0){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        }
         return $accountSales;
     }
 

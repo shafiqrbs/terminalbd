@@ -126,14 +126,30 @@ class MedicineTransfer
      *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
-    private $subTotal;
+    private $subTotal = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="total", type="float", nullable=true)
      */
-    private $total;
+    private $total = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="payment", type="float", nullable=true)
+     */
+    private $payment = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="due", type="float", nullable=true)
+     */
+    private $due = 0;
+
+
 
     /**
      * @var string
@@ -397,6 +413,38 @@ class MedicineTransfer
     public function getMedicineTransferItems()
     {
         return $this->medicineTransferItems;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param float $payment
+     */
+    public function setPayment($payment)
+    {
+        $this->payment = $payment;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDue()
+    {
+        return $this->due;
+    }
+
+    /**
+     * @param float $due
+     */
+    public function setDue($due)
+    {
+        $this->due = $due;
     }
 
 
