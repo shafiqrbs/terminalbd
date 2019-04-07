@@ -60,8 +60,6 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption();
         $entity->setGlobalOption($config);
         $entity->setCreatedBy($this->getUser());
-        $receiveDate = new \DateTime('now');
-        $entity->setReceiveDate($receiveDate);
         $entity->setProcessHead('Expense');
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
@@ -215,14 +213,16 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption();
-	    $purchase = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
+
+		/* @var $purchase AccountPurchase */
+
+		$purchase = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
 	    if (!empty($purchase) and empty($purchase->getApprovedBy())) {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('approved');
             $purchase->setApprovedBy($this->getUser());
             if($purchase->getPayment() === 0 ){
 	            $purchase->setTransactionMethod(NULL);
-	            $purchase->setAsInvestment(false);
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){

@@ -40,7 +40,7 @@
                              </div>
                         </div>
                     </div>
-                    <<div class="portlet-body flip-scroll">
+                    <div class="portlet-body flip-scroll">
                         {% include('flash-message.html.twig')  %}
                         <div class="row-fluid">
                             <form class="search-form" action="" method="get" name="itemSearch">
@@ -82,21 +82,21 @@
                         <table class="table table-bordered table-striped table-condensed flip-content ">
 
                             <thead class="flip-content ">
-                            <tr class="head-blue">
-                                <th class="numeric" >Created</th>
-                                <th class="numeric" >Invoice</th>
-                                <th class="numeric" >Vendor Name</th>
-                                <th class="numeric" >Total</th>
-                                <th class="numeric" >Payment</th>
-                                <th class="numeric" >Due</th>
-                                <th class="numeric" >Process</th>
-                                <th class="numeric" >Action</th>
-                            </tr>
+                                <tr class="head-blue">
+                                    <th class="numeric" >Created</th>
+                                    <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Vendor Name</th>
+                                    <th class="numeric" >Total</th>
+                                    <th class="numeric" >Payment</th>
+                                    <th class="numeric" >Due</th>
+                                    <th class="numeric" >Process</th>
+                                    <th class="numeric" >Action</th>
+                                </tr>
                             </thead>
                             <tbody>
                             {% for entity in entities %}
                                 <tr id="delete-{{ entity.id }}">
-                                    <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
+                                    <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ entity.accountRefNo }}</td>
                                     <td class="numeric" >{{ entity.companyName }}</td>
                                     <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
