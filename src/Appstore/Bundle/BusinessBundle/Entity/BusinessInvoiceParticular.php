@@ -3,12 +3,8 @@
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * BusinessInvoiceParticular
