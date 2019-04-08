@@ -1,6 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
@@ -231,16 +233,48 @@ class BusinessPurchaseRepository extends EntityRepository
 
 	}
 
-	public function insertCommissionPurchase(BusinessInvoice $invoice , $vendor)
+	public function insertCommissionPurchase(BusinessInvoice $invoice)
     {
 
         $em = $this->_em;
+        $config = $invoice->getBusinessConfig();
+
+        /* @var $rows BusinessInvoiceParticular */
+
+        foreach ($invoice->getBusinessInvoiceParticulars() as $rows){
+
+            $exist = $this->checkInstantPurchaseToday($rows->getVendor());
+            if($exist['status'] == 'valid'){
+                $purchase = $em->getRepository('BusinessBundle:BusinessPurchase')->find($exist['purchase']);
+            }else{
+                $purchase = $this->purchaseCommissionInvoiceGenerate($invoice,$rows->getVendor());
+            }
+
+            $particularId   = $rows->getBusinessParticular()->getId();
+            if($config->getUnitCommission() > 0 ){
+                $price          = $rows->getPurchasePrice();
+            }else{
+                $price          = $rows->getBusinessParticular()->getPurchasePrice();
+            }
+            $quantity       = $rows->getTotalQuantity();
+            if($invoice->getBusinessConfig()->getBusinessModel() == 'commission'){
+                $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
+                $em->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($purchase,$invoiceItems);
+                $em->getRepository('BusinessBundle:BusinessVendorStockItem')->insertStockSalesItems($rows);
+            }
+            $em->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($purchase);
+
+        }
+
+    }
+
+    public function purchaseCommissionInvoiceGenerate(BusinessInvoice $invoice  , AccountVendor $vendor)
+    {
+        $em = $this->_em;
         $entity = new BusinessPurchase();
         $entity->setBusinessConfig($invoice->getBusinessConfig());
-        $vendor = $this->_em->getRepository('AccountingBundle:AccountVendor')->find($vendor);
+      //  $vendor = $this->_em->getRepository('AccountingBundle:AccountVendor')->find($vendor);
         $entity->setVendor($vendor);
-        $entity->setSubTotal($invoice->getSubTotal());
-        $entity->setNetTotal($invoice->getTotal());
         $entity->setCreatedBy($invoice->getCreatedBy());
         $entity->setReceiveDate($invoice->getUpdated());
         $entity->setProcess('Commission');
@@ -249,24 +283,31 @@ class BusinessPurchaseRepository extends EntityRepository
         $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
+        return $entity;
+    }
 
-        /* @var $rows BusinessInvoiceParticular */
-        foreach ($invoice->getBusinessInvoiceParticulars() as $rows){
+    public function checkInstantPurchaseToday(AccountVendor $vendor)
+    {
 
-            $particularId   = $rows->getBusinessParticular()->getId();
-            $price          = $rows->getBusinessParticular()->getPurchasePrice();
-            $quantity       = $rows->getTotalQuantity();
-            if($invoice->getBusinessConfig()->getBusinessModel() == 'commission'){
-                $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
-                $em->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($entity,$invoiceItems);
-            }
-            $em->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($entity);
-
+        $compare = new \DateTime();
+        $today =  $compare->format('Y-m-d');
+        $sql = "SELECT id
+                FROM business_purchase as purchase
+                WHERE purchase.vendor_id = :vendor AND purchase.process = :process  AND DATE (purchase.created) =:receive";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('vendor', $vendor->getId());
+        $stmt->bindValue('process', 'Commission');
+        $stmt->bindValue('receive', $today);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        if(!empty($result['id'])){
+            return $data = array('purchase' => $result['id'],'status'=>'valid');
+        }else{
+            return $data = array('status'=>'in-valid');
         }
 
-
-
     }
+
 
 
 }

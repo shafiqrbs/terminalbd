@@ -136,6 +136,14 @@ class BusinessConfig
     private $businessModel='general';
 
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="unitCommission", type="float",  nullable=true)
+     */
+     private $unitCommission = 0;
+
+
     /**
      * @var boolean
      *
@@ -1196,6 +1204,22 @@ class BusinessConfig
     public function getBusinessVendorStocks()
     {
         return $this->businessVendorStocks;
+    }
+
+    /**
+     * @return float
+     */
+    public function getUnitCommission()
+    {
+        return $this->unitCommission;
+    }
+
+    /**
+     * @param float $unitCommission
+     */
+    public function setUnitCommission($unitCommission)
+    {
+        $this->unitCommission = $unitCommission;
     }
 
 

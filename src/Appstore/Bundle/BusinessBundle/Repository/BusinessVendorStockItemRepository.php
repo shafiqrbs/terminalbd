@@ -1,6 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStock;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem;
@@ -120,6 +123,49 @@ class BusinessVendorStockItemRepository extends EntityRepository
         $em->persist($stock);
         $em->flush();
 
+    }
+
+
+    public function insertStockSalesItems(BusinessInvoiceParticular $invoiceParticular ){
+
+        $em = $this->_em;
+
+        /* @var $vendorStock BusinessVendorStockItem */
+
+        $vendorStock = $this->find($invoiceParticular->getVendorStockItem());
+        $current = $vendorStock->getSalesQuantity();
+        $totalQnt = $current + $invoiceParticular->getTotalQuantity();
+        $vendorStock->setSalesQuantity($totalQnt);
+        $em->persist($vendorStock);
+        $em->flush();
+
+    }
+
+    public function getDropdownList($vendor, $particular)
+    {
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.particular','p');
+        $qb->join('pi.businessVendorStock','e');
+        $qb->select('pi.id as id , e.grn as grn , ( COALESCE(SUM(pi.quantity),0) - COALESCE(SUM(pi.salesQuantity),0)) as quantity');
+        $qb->where('e.vendor = :vendor')->setParameter('vendor', $vendor) ;
+        $qb->andWhere('pi.particular = :particular')->setParameter('particular', $particular) ;
+        $qb->groupBy('p.name');
+        $qb->orderBy('p.name','ASC');
+        $result =  $qb->getQuery()->getArrayResult();
+
+        /* @var  $item BusinessVendorStockItem  */
+
+        $purchaseItems = '';
+        $purchaseItems .='<option value="">--Select Stock Quantity--</option>';
+        if(!empty($result)){
+            foreach ($result as $item){
+                if($item['quantity'] > 0) {
+                    $purchaseItems .= "<option value='{$item["id"]}'>GRN {$item['grn']} - [ {$item['quantity']} ]</option>";
+                }
+            }
+        }
+        return $purchaseItems;
     }
 
 

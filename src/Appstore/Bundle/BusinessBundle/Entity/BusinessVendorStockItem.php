@@ -45,6 +45,14 @@ class BusinessVendorStockItem
 
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesQuantity", type="integer", nullable=true)
+     */
+    private $salesQuantity = 0;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="price", type="float", nullable=true)
@@ -150,6 +158,22 @@ class BusinessVendorStockItem
     public function setBusinessVendorStock($businessVendorStock)
     {
         $this->businessVendorStock = $businessVendorStock;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesQuantity()
+    {
+        return $this->salesQuantity;
+    }
+
+    /**
+     * @param int $salesQuantity
+     */
+    public function setSalesQuantity($salesQuantity)
+    {
+        $this->salesQuantity = $salesQuantity;
     }
 
 

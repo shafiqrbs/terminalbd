@@ -43,6 +43,13 @@ business_vendor_stock_particular_add:
     options:
             expose: true
 
+business_vendor_stock_search:
+    path:     /{vendor}/vendor-grn
+    defaults: { _controller: "BusinessBundle:VendorStock:selectGrn" }
+    methods:  get
+    options:
+            expose: true
+
 
 business_vendor_stock_approved:
     path:     /{id}/invoice-approved

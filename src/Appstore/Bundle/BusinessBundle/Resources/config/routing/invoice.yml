@@ -62,6 +62,13 @@ business_invoice_accessories_add:
     options:
             expose: true
 
+business_invoice_commission_add:
+    path:     /{invoice}/sales-commission
+    defaults: { _controller: "BusinessBundle:Invoice:addParticularCommission" }
+    methods:  POST
+    options:
+            expose: true
+
 business_invoice_banner_sign:
     path:     /{invoice}/stock-banner-sign
     defaults: { _controller: "BusinessBundle:Invoice:bannerSign" }

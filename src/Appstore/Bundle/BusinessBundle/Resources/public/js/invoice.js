@@ -183,7 +183,7 @@ $(document).on('click', '.itemUpdate', function() {
     $.ajax({
         url: Routing.generate('business_invoice_item_update'),
         type: 'POST',
-        data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
+        data:'itemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
         success: function(response) {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
@@ -434,5 +434,19 @@ $(document).on("change", ".eventProcess", function(e) {
         data: formData,
         success: function (response){}
     });
+
+});
+
+$(document).on('change', '#vendor', function() {
+
+    var vendor = $(this).val();
+    var particular = $('#particular').val();
+    $.ajax({
+        url: Routing.generate('business_vendor_stock_search',{'vendor':vendor,'particular':particular}),
+        type: 'GET',
+        success: function (response) {
+            $('#stockGrn').html(response);
+        }
+    })
 
 });

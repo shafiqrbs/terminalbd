@@ -103,7 +103,7 @@
                                     <th class="numeric" >Vendor Name</th>
                                     <th class="numeric" >Qnt</th>
                                     <th class="numeric" >Rmin. Qnt</th>
-                                    <th class="numeric" >SS</th>
+                                    <th class="numeric" >SP</th>
                                     <th class="numeric" >PP</th>
                                     <th class="numeric" >SubTotal</th>
                                     <th class="numeric" >Action</th>
@@ -122,7 +122,7 @@
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                         <td class="numeric" >{{ entity.salesPrice }}</td>
-                                        <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
+                                        <td class="numeric" >{{ entity.purchasePrice }}</td>
                                         <td class="numeric" >{{ entity.purchaseSubTotal|number_format }}</td>
                                         <td class="numeric" >
                                             {% if entity.medicinePurchase.process == 'In-progress' %}

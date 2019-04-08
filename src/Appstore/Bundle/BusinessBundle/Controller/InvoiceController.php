@@ -164,7 +164,7 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
-            if(!empty($entity->getReceived())){
+            if($entity->getReceived()){
 	            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
 	            $entity->setPaymentInWord($amountInWords);
             }
@@ -172,10 +172,8 @@ class InvoiceController extends Controller
             $done = array('Done','Delivered');
             if (in_array($entity->getProcess(), $done)) {
 	          //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($invoiceItem,'sales');
-                if($entity->getBusinessConfig()->getBusinessModel() == 'commission' and isset($data ['vendor']) and !empty($data ['vendor'])){
-                    $vendor = $data ['vendor'];
-                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity,$vendor);
-
+                if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
+                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
@@ -343,6 +341,11 @@ class InvoiceController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+
+
     public function addParticularAction(Request $request, BusinessInvoice $invoice)
     {
 
@@ -360,6 +363,8 @@ class InvoiceController extends Controller
         exit;
 
     }
+
+
 
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
@@ -529,6 +534,30 @@ class InvoiceController extends Controller
             $result = $this->returnResultData($invoice,$msg);
             return new Response(json_encode($result));
         }
+        exit;
+
+    }
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+
+
+    public function addParticularCommissionAction(Request $request, BusinessInvoice $invoice)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $particular = $request->request->get('particular');
+        $quantity = $request->request->get('quantity');
+        $price = $request->request->get('salesPrice');
+        $vendor = $request->request->get('vendor');
+        $stockGrn = $request->request->get('stockGrn');
+        $invoiceItems = array('particular' => $particular, 'quantity' => $quantity,'price' => $price,'vendor' => $vendor,'stockGrn' => $stockGrn);
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertCommissionInvoiceParticular($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($invoice,$msg);
+        return new Response(json_encode($result));
         exit;
 
     }

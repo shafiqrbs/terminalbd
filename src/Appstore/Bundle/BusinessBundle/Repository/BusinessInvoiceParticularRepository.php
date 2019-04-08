@@ -70,6 +70,39 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function insertCommissionInvoiceParticular(BusinessInvoice $invoice, $data)
+    {
+        $quantity = (isset($data['quantity']) and !empty($data['quantity'])) ? $data['quantity'] : 1;
+        $commission = $invoice->getBusinessConfig()->getUnitCommission();
+        $em = $this->_em;
+        $entity = new BusinessInvoiceParticular();
+        $entity->setBusinessInvoice($invoice);
+        $entity->setParticular($data['particular']);
+        $entity->setPrice($data['price']);
+        if($commission > 0){
+            $pp = $data['price'] - $commission;
+            $entity->setPurchasePrice($pp);
+        }
+        $entity->setQuantity($quantity);
+        $entity->setSubQuantity(0);
+        $entity->setTotalQuantity($quantity);
+        $entity->setSubTotal($data['price'] * $quantity);
+        $stock = $em->getRepository('BusinessBundle:BusinessParticular')->find($data['particular']);
+        $entity->setParticular($stock->getName());
+        $entity->setBusinessParticular($stock);
+        if($data['vendor']) {
+            $vendor = $this->_em->getRepository('AccountingBundle:AccountVendor')->find($data['vendor']);
+            $entity->setVendor($vendor);
+        }
+        if($data['stockGrn']) {
+            $stockGrn = $this->_em->getRepository('BusinessBundle:BusinessVendorStockItem')->find($data['stockGrn']);
+            $entity->setVendorStockItem($stockGrn);
+        }
+        $em->persist($entity);
+        $em->flush();
+
+    }
+
     public function insertStockItem(BusinessInvoice $invoice, $data)
     {
 
@@ -323,11 +356,13 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $em = $this->_em;
         $invoiceParticular = $this->find($data['itemId']);
         if(!empty($invoiceParticular)) {
-	        /* @var $entity BusinessInvoiceParticular */
+
+            /* @var $entity BusinessInvoiceParticular */
+
 	        $entity = $invoiceParticular;
 	        $entity->setQuantity( $data['quantity'] );
 	        $entity->setPrice( $data['salesPrice'] );
-	        if (!empty($entity->getSubQuantity())) {
+	        if ($entity->getSubQuantity() > 0) {
 		        $entity->setTotalQuantity($data['quantity'] * $entity->getSubQuantity() );
 		        $entity->setSubTotal( $entity->getPrice() * $entity->getTotalQuantity() );
 	        }else{

@@ -71,6 +71,7 @@ class ConfigType extends AbstractType
             ->add('isPrintFooter')
             ->add('removeImage')
             ->add('file')
+            ->add('unitCommission','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))

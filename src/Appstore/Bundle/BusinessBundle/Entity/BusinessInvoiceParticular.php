@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -41,9 +42,20 @@ class BusinessInvoiceParticular
     private $businessParticular;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="businessInvoiceParticulars", cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $vendor;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense", mappedBy="businessInvoiceParticular", cascade={"persist"} )
      **/
     private $businessProductionExpense;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem", inversedBy="businessInvoiceParticular", cascade={"persist"} )
+     **/
+    private $vendorStockItem;
 
     /**
      * @var string
@@ -78,7 +90,7 @@ class BusinessInvoiceParticular
      *
      * @ORM\Column(name="height", type="float", nullable=true)
      */
-    private $height;
+    private $height = 0;
 
 
     /**
@@ -86,21 +98,21 @@ class BusinessInvoiceParticular
      *
      * @ORM\Column(name="width", type="float", nullable=true)
      */
-    private $width;
+    private $width = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="subQuantity", type="float", nullable=true)
      */
-    private $subQuantity;
+    private $subQuantity = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="totalQuantity", type="float", nullable=true)
      */
-    private $totalQuantity;
+    private $totalQuantity = 0;
 
 
     /**
@@ -108,7 +120,7 @@ class BusinessInvoiceParticular
      *
      * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
-    private $purchasePrice;
+    private $purchasePrice = 0;
 
 
     /**
@@ -116,7 +128,7 @@ class BusinessInvoiceParticular
      *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
-    private $subTotal;
+    private $subTotal = 0;
 
 
     /**
@@ -328,6 +340,38 @@ class BusinessInvoiceParticular
     public function setTotalQuantity(float $totalQuantity)
     {
         $this->totalQuantity = $totalQuantity;
+    }
+
+    /**
+     * @return AccountVendor
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @param AccountVendor $vendor
+     */
+    public function setVendor($vendor)
+    {
+        $this->vendor = $vendor;
+    }
+
+    /**
+     * @return BusinessVendorStockItem
+     */
+    public function getVendorStockItem()
+    {
+        return $this->vendorStockItem;
+    }
+
+    /**
+     * @param BusinessVendorStockItem $vendorStockItem
+     */
+    public function setVendorStockItem($vendorStockItem)
+    {
+        $this->vendorStockItem = $vendorStockItem;
     }
 
 

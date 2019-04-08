@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStock;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem;
@@ -193,8 +194,12 @@ class VendorStockController extends Controller
         exit;
     }
 
-    public function invoiceDiscountUpdateAction()
+    public function selectGrnAction($vendor)
     {
+
+        $particular = $_REQUEST['particular'];
+        $purchaseItems = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendorStockItem')->getDropdownList($vendor,$particular);
+        return new Response($purchaseItems);
 
     }
 
