@@ -403,13 +403,10 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        if($entity->getDeliveryCount() ==  0){
-            $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsEditInvoiceTransaction($entity);
-            $em->remove($entity);
-            $em->flush();
-            return new Response(json_encode(array('success' => 'success')));
-        }
-        return new Response(json_encode(array('success' => 'failed')));
+        $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsEditInvoiceTransaction($entity);
+        $em->remove($entity);
+        $em->flush();
+        return new Response(json_encode(array('success' => 'success')));
         exit;
     }
 
