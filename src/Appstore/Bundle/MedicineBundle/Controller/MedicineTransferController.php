@@ -309,9 +309,8 @@ class MedicineTransferController extends Controller
     public function approveAction(MedicineTransfer $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($entity) and $entity->getProcess() == 'created') {
+        if (!empty($entity) and $entity->getProcess() != 'approved') {
             $payment = $_REQUEST['payment'];
-            $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $entity->setPayment($payment);

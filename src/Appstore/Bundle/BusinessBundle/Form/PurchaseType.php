@@ -92,13 +92,11 @@ class PurchaseType extends AbstractType
                     'flat' => 'Flat',
                 ),
             ))
-            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add  memo no'))
-                )))
+            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12','required' => true ,'label' => 'form.name','placeholder'=>'Memo no')))
             ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
             ->add('asInvestment')
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Payment amount','autocomplete'=>'off')
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Payment amount','autocomplete'=>'off')))
+            ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 5,'placeholder'=>'Enter narration','autocomplete'=>'off')
             ));
     }
     

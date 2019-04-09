@@ -433,4 +433,18 @@ class PurchaseController extends Controller
 
     }
 
+    public function printAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entity = $em->getRepository('BusinessBundle:BusinessPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Vendor entity.');
+        }
+        return $this->render('BusinessBundle:Purchase:print.html.twig', array(
+            'entity'      => $entity,
+        ));
+    }
+
 }

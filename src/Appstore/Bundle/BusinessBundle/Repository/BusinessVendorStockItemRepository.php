@@ -44,6 +44,7 @@ class BusinessVendorStockItemRepository extends EntityRepository
         $qb->join('pi.businessVendorStock','e');
         $qb->select('p.name as name ,p.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'approved');
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('p.name');
         $qb->orderBy('p.name','ASC');

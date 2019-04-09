@@ -89,7 +89,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
         $qb->join('pi.businessParticular','ms');
         $qb->join('pi.businessPurchase','e');
         $qb->select('ms.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
-        $qb->where('e.commissionInvoice =1');
+        $qb->where('e.commissionInvoice = 1');
         $qb->andWhere('ms.id IN (:ids)')->setParameter('ids', $ids) ;
         $qb->groupBy('ms.id');
         //  $qb->where($qb->expr()->in("pi.id", $ids ));

@@ -78,4 +78,4 @@ business_purchase_particular_delete:
 
 business_purchase_print_invoice:
     path:     /{id}/print
-    defaults: { _controller: "BusinessBundle:Purchase:invoicePrint" }
+    defaults: { _controller: "BusinessBundle:Purchase:print" }
