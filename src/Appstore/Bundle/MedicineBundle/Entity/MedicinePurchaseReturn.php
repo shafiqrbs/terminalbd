@@ -83,7 +83,7 @@ class MedicinePurchaseReturn
 	 *
 	 * @ORM\Column(name="adjusted", type="boolean", nullable=true)
 	 */
-	private $adjusted=false;
+	private $adjusted = false;
 
 
 	/**

@@ -20,6 +20,13 @@ $(document).on('change', '#discountCalculation , #discountType', function() {
 });
 
 
+$(document).on("click", "#discountCalculation", function() {
+   $(this).val('');
+});
+$(document).on("click", "#payment", function() {
+   $(this).val('');
+});
+
 $(document).on("click", ".approve", function() {
     var url = $(this).attr('data-url');
     var id = $(this).attr('data-id');
@@ -36,6 +43,7 @@ $(document).on("click", ".approve", function() {
         }
     });
 });
+
 
 $(document).on('change', '#payment , #discount', function() {
     var payment     = parseInt($('#payment').val()  != '' ? $('#payment').val() : 0 );

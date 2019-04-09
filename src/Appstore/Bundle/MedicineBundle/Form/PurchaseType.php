@@ -53,7 +53,7 @@ class PurchaseType extends AbstractType
                     return $er->createQueryBuilder('wt')
                         ->where("wt.medicineConfig =".$this->option->getMedicineConfig()->getId())
                         ->andWhere("wt.process ='approved'")
-                        ->andWhere("wt.adjusted is NULL");
+                        ->andWhere("wt.adjusted != 1");
                 },
             ))
             ->add('transactionMethod', 'entity', array(

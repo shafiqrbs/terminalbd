@@ -103,6 +103,8 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_ACCOUNTING_EXPENDITURE'        => 'Accounting Expenditure',
                 'ROLE_DOMAIN_ACCOUNTING_PURCHASE'           => 'Accounting Purchase',
                 'ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE'           => 'Accounting Expenditure Purchase',
+                'ROLE_DOMAIN_ACCOUNTING_SALES_ADJUSTMENT'           => 'Accounting Cash Adjustment',
+                'ROLE_DOMAIN_ACCOUNTING_RECONCILIATION'           => 'Accounting Cash Reconciliation',
                 'ROLE_DOMAIN_ACCOUNTING_SALES'              => 'Accounting Sales',
                 'ROLE_DOMAIN_ACCOUNTING_ECOMMERCE'          => 'Accounting Online Sales',
                 'ROLE_DOMAIN_ACCOUNTING_PETTY_CASH'         => 'Accounting Petty Cash',

@@ -214,19 +214,15 @@ class MedicineTransferController extends Controller
 
 		/* @var $particular MedicineTransferItem */
 
-		if(!empty($invoice->getMedicineTransferItems())){
+		if($invoice->getMedicineTransferItems()){
 
 			foreach ($invoice->getMedicineTransferItems() as $particular){
 
-				//$item = $particular->getMedicinePurchaseItem();
 				$stock = $particular->getMedicineStock();
-				//$this->get('session')->set('item', $item);
 				$this->get('session')->set('stock', $stock);
 				$em->remove($particular);
 				$em->flush();
-				//$item = $this->get('session')->get('item');
 				$stock = $this->get('session')->get('stock');
-				//$this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'purchase_return');
 				$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'purchase-return');
 
 			}

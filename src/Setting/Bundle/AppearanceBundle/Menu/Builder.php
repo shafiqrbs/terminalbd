@@ -438,7 +438,9 @@ class Builder extends ContainerAware
 	                       ->setAttribute('dropdown', true);
 	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
 		    $menu['Accounting']['Manage Sales']->addChild('Sales', array('route' => 'account_sales'));
-		    $menu['Accounting']['Manage Sales']->addChild('Sales Adjustment', array('route' => 'account_salesadjustment'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES_ADJUSTMENT')) {
+                $menu['Accounting']['Manage Sales']->addChild('Sales Adjustment', array('route' => 'account_salesadjustment'));
+            }
 		    $menu['Accounting']['Manage Sales']->addChild('Receive', array('route' => 'account_sales_new'));
             $menu['Accounting']['Manage Sales']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
 		    $menu['Accounting']['Manage Sales']['Reports']->addChild('Outstanding', array('route' => 'report_customer_outstanding'));
@@ -488,7 +490,9 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-money')
                 ->setAttribute('dropdown', true);
             $menu['Accounting']['Cash']->addChild('Cash Overview', array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Cash']->addChild('Cash Reconciliation', array('route' => 'account_cashreconciliation'))->setAttribute('icon', 'icon-th-list');
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_RECONCILIATION')) {
+                $menu['Accounting']['Cash']->addChild('Cash Reconciliation', array('route' => 'account_cashreconciliation'))->setAttribute('icon', 'icon-th-list');
+            }
             $menu['Accounting']['Cash']->addChild('All Cash Flow', array('route' => 'account_transaction_accountcash'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Cash']->addChild('Cash Transaction', array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Cash']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
