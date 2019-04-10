@@ -115,7 +115,8 @@ class AccountSalesController extends Controller
                 $entity->setCreated($datetime);
                 $entity->setUpdated($datetime);
             }else{
-                $entity->setUpdated($entity->getCreated());
+                $datetime = new \DateTime("now");
+                $entity->setUpdated($datetime);
             }
 
             $em->persist($entity);
