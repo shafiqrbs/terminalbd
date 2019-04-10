@@ -155,7 +155,7 @@ class VendorController extends Controller
     private function createEditForm(AccountVendor $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new AccountVendorType($globalOption), $entity, array(
+        $form = $this->createForm(new VendorType($globalOption), $entity, array(
             'action' => $this->generateUrl('account_vendor_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

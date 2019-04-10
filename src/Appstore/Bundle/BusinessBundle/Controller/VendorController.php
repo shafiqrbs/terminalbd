@@ -27,7 +27,7 @@ class VendorController extends Controller
         $form = $this->createCreateForm($entity);
         $global = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $global),array('companyName'=>'ASC'));
-        return $this->render('AccountingBundle:Vendor:index.html.twig', array(
+        return $this->render('BusinessBundle:Vendor:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -57,7 +57,7 @@ class VendorController extends Controller
             return $this->redirect($this->generateUrl('business_vendor', array('id' => $entity->getId())));
         }
 
-        return $this->render('AccountingBundle:Vendor:index.html.twig', array(
+        return $this->render('BusinessBundle:Vendor:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -154,7 +154,7 @@ class VendorController extends Controller
             return $this->redirect($this->generateUrl('business_vendor'));
         }
 
-        return $this->render('AccountingBundle:Vendor:index.html.twig', array(
+        return $this->render('BusinessBundle:Vendor:index.html.twig', array(
             'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
