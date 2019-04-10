@@ -105,12 +105,11 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/editable.js'
+    '@DomainUserBundle/Resources/public/js/comment-mod.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
 {% endblock %}

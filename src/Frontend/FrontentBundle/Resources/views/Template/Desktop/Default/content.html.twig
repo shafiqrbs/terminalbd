@@ -108,7 +108,7 @@
                     {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'top' %}
                         {% if page.webPath is not empty %}
                             <a href="{{ image(page.webPath) }}" class="swipebox" title="{{ page.name }}">
-                                <img style="margin-bottom: 30px!important;" src="{{ image(page.webPath).forceResize(220,220) }}" alt="{{ page.name }}">
+                                <img style="margin-bottom: 30px!important; width: 25%!important;" src="{{ image(page.webPath).forceResize(220,220) }}" alt="{{ page.name }}">
                             </a>
                         {% endif %}
                         {% for slide in page.photoGallery.galleryImages %}
