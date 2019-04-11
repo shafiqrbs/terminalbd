@@ -26,6 +26,7 @@ class BusinessVendorStockItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStock", inversedBy="businessVendorStockItems")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $businessVendorStock;
 

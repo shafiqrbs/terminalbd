@@ -200,10 +200,10 @@ class DomainController extends Controller
         if($option->getRestaurantConfig()) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->reset($option);
         }
-        if(!empty($option->getMedicineConfig()) and $option->getMedicineConfig()) {
+        if($option->getMedicineConfig()) {
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineConfig')->medicineReset($option);
         }
-        if(!empty($option->getBusinessConfig()) and $option->getBusinessConfig()) {
+        if($option->getBusinessConfig()) {
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessConfig')->businessReset($option);
         }
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";

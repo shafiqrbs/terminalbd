@@ -37,7 +37,7 @@ class BusinessVendorStock
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem", mappedBy="businessVendorStock")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem", mappedBy="businessVendorStock", cascade={"remove"}))
      **/
     private $businessVendorStockItems;
 

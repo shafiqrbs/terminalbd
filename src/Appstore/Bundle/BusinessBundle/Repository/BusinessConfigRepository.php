@@ -30,6 +30,9 @@ class BusinessConfigRepository extends EntityRepository
 	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = '.$config);
 	    $purchase->execute();
 
+	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessVendorStock e WHERE e.businessConfig = '.$config);
+	    $purchase->execute();
+
 	 //   $stock = $em->createQuery('DELETE BusinessBundle:BusinessParticular e WHERE e.businessConfig = '.$config);
 	  //  $stock->execute();
 
