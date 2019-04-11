@@ -73,16 +73,12 @@ class BusinessInvoiceParticularRepository extends EntityRepository
     public function insertCommissionInvoiceParticular(BusinessInvoice $invoice, $data)
     {
         $quantity = (isset($data['quantity']) and !empty($data['quantity'])) ? $data['quantity'] : 1;
-        $commission = $invoice->getBusinessConfig()->getUnitCommission();
         $em = $this->_em;
         $entity = new BusinessInvoiceParticular();
         $entity->setBusinessInvoice($invoice);
         $entity->setParticular($data['particular']);
         $entity->setPrice($data['price']);
-        if($commission > 0){
-            $pp = $data['price'] - $commission;
-            $entity->setPurchasePrice($pp);
-        }
+        $entity->setPurchasePrice($data['price']);
         $entity->setQuantity($quantity);
         $entity->setSubQuantity(0);
         $entity->setTotalQuantity($quantity);

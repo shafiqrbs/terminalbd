@@ -251,11 +251,7 @@ class BusinessPurchaseRepository extends EntityRepository
             }
 
             $particularId   = $rows->getBusinessParticular()->getId();
-            if($config->getUnitCommission() > 0 ){
-                $price          = $rows->getPurchasePrice();
-            }else{
-                $price          = $rows->getBusinessParticular()->getPurchasePrice();
-            }
+            $price          = $rows->getPurchasePrice();
             $quantity       = $rows->getTotalQuantity();
             if($invoice->getBusinessConfig()->getBusinessModel() == 'commission'){
                 $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
