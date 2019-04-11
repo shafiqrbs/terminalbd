@@ -43,6 +43,11 @@
             font-size: {{ globalOption.templateCustomize.breadcrumbFontSize }} !important;
         {% endif %}
     }
+    .simple-breadcrumb-left, .simple-breadcrumb-right, .pageheader p{
+        {% if globalOption.templateCustomize.breadcrumbFontSize is not empty %}
+            font-size: {{ globalOption.templateCustomize.breadcrumbFontSize }} !important;
+        {% endif %}
+    }
     .ultra-breadcrumb li.active a{
     {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
         color: {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
