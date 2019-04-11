@@ -113,7 +113,7 @@
                         {% endif %}
                         {% for slide in page.photoGallery.galleryImages %}
                             <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)) }}" class="swipebox" title="{{ slide.caption }}">
-                                <img style="margin-bottom: 30px!important;" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="{{ slide.caption }}">
+                                <img style="margin-bottom: 30px!important;width: 25%!important;" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="{{ slide.caption }}">
                             </a>
                         {% endfor %}
                         <hr><br/></hr>
