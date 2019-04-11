@@ -58,14 +58,14 @@ class BusinessPurchaseRepository extends EntityRepository
 		if (!empty($startDate) ) {
 			$datetime = new \DateTime($data['startDate']);
 			$start = $datetime->format('Y-m-d 00:00:00');
-			$qb->andWhere("e.receiveDate >= :startDate");
+			$qb->andWhere("e.updated >= :startDate");
 			$qb->setParameter('startDate', $start);
 		}
 
 		if (!empty($endDate)) {
 			$datetime = new \DateTime($data['endDate']);
 			$end = $datetime->format('Y-m-d 23:59:59');
-			$qb->andWhere("e.receiveDate <= :endDate");
+			$qb->andWhere("e.updated <= :endDate");
 			$qb->setParameter('endDate', $end);
 		}
 	}
@@ -77,7 +77,7 @@ class BusinessPurchaseRepository extends EntityRepository
 		$qb = $this->createQueryBuilder('e');
 		$qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
 		$this->handleSearchBetween($qb,$data);
-		$qb->orderBy('e.receiveDate','DESC');
+		$qb->orderBy('e.updated','DESC');
 		$qb->getQuery();
 		return  $qb;
 	}

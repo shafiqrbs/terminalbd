@@ -1,0 +1,5 @@
+api_setup:
+    path:     /setup
+    defaults: { _controller: BinduBundle:Api:setup }
+
+

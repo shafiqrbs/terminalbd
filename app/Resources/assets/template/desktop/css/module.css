@@ -4349,6 +4349,10 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     transition: bottom 0.40s linear 0s ;
 }
 
+address{
+    text-align: left;
+}
+
 @media only screen and (max-width: 990px) {
     .box-sidebar-portfolio{ margin-bottom:20px; }
 }
