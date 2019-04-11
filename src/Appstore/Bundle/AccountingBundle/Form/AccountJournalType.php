@@ -118,13 +118,12 @@ class AccountJournalType extends AbstractType
             ->add('toUser', 'entity', array(
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
-                'empty_value' => '--- Select a user name ---',
+                'empty_value' => '--- Select a account user name ---',
                 'property' => 'userFullName',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
 	                return $er->createQueryBuilder('u')
 	                          ->where("u.isDelete != 1")
-	                          ->andWhere("u.enabled = 1")
 	                          ->andWhere("u.domainOwner = 2")
 	                          ->andWhere("u.globalOption =".$this->globalOption->getId())
 	                          ->orderBy("u.username", "ASC");

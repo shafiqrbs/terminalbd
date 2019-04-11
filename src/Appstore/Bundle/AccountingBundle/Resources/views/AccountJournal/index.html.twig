@@ -146,7 +146,7 @@
                                     <tr id="remove-{{ entity.id }}">
                                         <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" ><a href="javascript:" class="tooltips" data-title="{% if entity.toUser is not empty %}{{ entity.toUser.profile.name }}{% endif %}" data-trigger="hover">{{ entity.toUser }}</a></td>
+                                        <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser.profile.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{% if entity.accountHeadDebit is not empty %}{{ entity.accountHeadDebit.name }}{% endif %}</td>

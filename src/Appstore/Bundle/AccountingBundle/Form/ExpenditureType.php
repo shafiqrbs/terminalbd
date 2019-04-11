@@ -52,7 +52,6 @@ class ExpenditureType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
                         ->where("u.isDelete != 1")
-                        ->andWhere("u.enabled = 1")
                         ->andWhere("u.domainOwner = 2")
                         ->andWhere("u.globalOption =".$this->globalOption->getId())
                         ->orderBy("u.username", "ASC");
