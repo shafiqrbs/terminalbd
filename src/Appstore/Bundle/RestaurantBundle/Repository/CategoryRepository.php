@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
 
+use Appstore\Bundle\RestaurantBundle\Entity\Category;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
@@ -9,6 +10,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -31,6 +33,34 @@ class CategoryRepository extends EntityRepository
             $em->flush();
             $i++;
         }
+    }
+
+    public function getApiCategory(GlobalOption $option)
+    {
+
+        $config = $option->getRestaurantConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('s.status = :status')->setParameter('status',1) ;
+        $qb->orderBy('e.sorting','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        $result = $qb->getQuery()->getResult();
+
+        $data = array();
+
+        /* @var $row Category */
+
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']      = (int) $option->getId();
+            $data[$key]['category_id']      = (int) $row->getId();
+            $data[$key]['name']             = $row->getName();
+            $data[$key]['slug']             = $row->getSlug();
+
+        }
+
+        return $data;
     }
 
 }

@@ -42,13 +42,15 @@ class PageType extends AbstractType
             ))
             ->add('galleryPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
+                'required'    => false,
                 'empty_value' => '---Select Gallery Position---',
                 'choices' => array('top' => 'Top','bottom' => 'Bottom')
             ))
             ->add('galleryType', 'choice', array(
                 'attr'=>array('class'=>'span12'),
+                'required'    => false,
                 'empty_value' => '---Select Gallery Type---',
-                'choices' => array('thumb' => 'Thumb','slider' => 'slider','thumbSlider' => 'Thumb Slider'),
+                'choices' => array('thumb' => 'Thumb','carousel' => 'Carousel','thumbSlider' => 'Thumb Slider'),
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows'=>15)))

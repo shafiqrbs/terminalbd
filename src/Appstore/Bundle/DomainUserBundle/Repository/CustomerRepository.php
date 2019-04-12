@@ -609,4 +609,30 @@ class CustomerRepository extends EntityRepository
 
     }
 
+
+    public function getApiCustomer(GlobalOption $option)
+    {
+        $qb = $this->createQueryBuilder('customer');
+        $qb->where("customer.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $option->getId());
+        $qb->orderBy('customer.name','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        $data = array();
+
+        /* @var $row Customer */
+
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']            = (int) $option->getId();
+            $data[$key]['customer_id']          = (int) $row->getId();
+            $data[$key]['name']                 = $row->getName();
+            $data[$key]['mobile']               = $row->getMobile();
+
+        }
+
+        return $data;
+
+    }
+
 }

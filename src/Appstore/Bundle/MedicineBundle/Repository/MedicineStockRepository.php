@@ -12,6 +12,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -393,6 +394,49 @@ class MedicineStockRepository extends EntityRepository
         $query->setMaxResults( '30' );
         return $query->getQuery()->getResult();
 
+    }
+
+    public function getApiStock(GlobalOption $option)
+    {
+        $config = $option->getMedicineConfig();
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
+        $qb->orderBy('e.sku','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        $data = array();
+
+        /* @var $row MedicineStock */
+
+        foreach($result as $key => $row) {
+
+
+            $data[$key]['global_id']            = (int) $option->getId();
+            $data[$key]['item_id']              = (int) $row->getId();
+            if ($row->getMode() != ""){
+                $category = $this->_em->getRepository('MedicineBundle:MedicineParticularType')->findOneBy(array('slug' => $row->getMode()));
+                $data[$key]['category_id']      = $category->getId();
+                $data[$key]['categoryName']     = $category->getName();
+            }else{
+                $data[$key]['category_id']      = 0;
+                $data[$key]['categoryName']     = '';
+            }
+            if ($row->getUnit()){
+                $unit = $this->_em->getRepository('SettingToolBundle:ProductUnit')->find($row->getUnit());
+                $data[$key]['unit_id']          = $unit->getId();
+                $data[$key]['unit']             = $unit->getName();
+            }else{
+                $data[$key]['unit_id']          = 0;
+                $data[$key]['unit']             = '';
+            }
+            $data[$key]['name']                 = $row->getName();
+            $data[$key]['quantity']             = $row->getRemainingQuantity();
+            $data[$key]['salesPrice']           = $row->getSalesPrice();
+            $data[$key]['purchasePrice']        = $row->getPurchasePrice();
+
+        }
+
+        return $data;
     }
 
 }

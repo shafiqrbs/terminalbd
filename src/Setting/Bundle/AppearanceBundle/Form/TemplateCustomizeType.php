@@ -36,7 +36,12 @@ class TemplateCustomizeType extends AbstractType
             ->add('topBarContent','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>2,'placeholder'=>'Enter top bar text or button')))
             ->add('sidebarPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
-                'choices' => array('' => '---Select One---','left' => 'left',  'right' => 'right'),
+                'choices' => array('' => '---Select One---','left' => 'Left',  'right' => 'Right'),
+            ))
+
+             ->add('siteLanguage', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array('english' => 'English',  'bangoli' => 'Bangoli'),
             ))
 
             ->add('socialIconType', 'choice', array(
@@ -132,10 +137,22 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
+
             ->add('siteFontSize', 'choice', array(
-                'attr'=>array('class'=>'span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'attr'=>array('class'=>' span12'),
+                'choices' => array('' => 'Font Size', '10px' => '10px',  '11px' => '11px','12px' => '12px','13px' => '13px','14px' => '14px','15px' => '15px', '16px' => '16px', '17px' => '17px','18px' => '18px',  '20px' => '20px', '22px' => '22px','24px' => '24px'),
             ))
+
+            ->add('contentFontSize', 'choice', array(
+                'attr'=>array('class'=>' span8'),
+                'choices' => array('' => 'Font Size', '10px' => '10px',  '11px' => '11px','12px' => '12px','13px' => '13px','14px' => '14px','15px' => '15px', '16px' => '16px', '17px' => '17px','18px' => '18px',  '20px' => '20px', '22px' => '22px','24px' => '24px','28px' => '28px','30px' => '30px'),
+            ))
+
+            ->add('contentLineHeight', 'choice', array(
+                'attr'=>array('class'=>' span8'),
+                'choices' => array('' => 'Font Size', '15px' => '15px', '16px' => '16px', '17px' => '17px','18px' => '18px',  '20px' => '20px', '22px' => '22px','24px' => '24px', '26px' => '26px',  '28px' => '28px','30px' => '39px','32px' => '32px','34px' => '34px','36px' => '36px', '38px' => '38px', '40px' => '40px','42px' => '42px',  '44px' => '44px', '46px' => '46px','48px' => '48px'),
+            ))
+
             ->add('pagination', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('bootstrap' => 'Bootstrap',  'nextPrev' => 'Next Previous', 'nextPrevDropDown' => 'Next Previous with drop down'),
@@ -311,6 +328,15 @@ class TemplateCustomizeType extends AbstractType
                 'attr'=>array('class'=>'span10 m-wrap'),
                 'choices' => array('uppercase' => 'Uppercase',  'capitalize' => 'Capitalize', 'lowercase' => 'Lowercase'),
             ))
+            ->add('boxShadow', 'choice', array(
+                'attr'=>array('class'=>'span10 m-wrap'),
+                'choices' => array('' => '-Select Box Shadow-','shadow-box-1' => 'Shadow-Box-1','shadow-box-2' => 'Shadow-Box-2','shadow-box-3' => 'Shadow-Box-3','shadow-box-4' => 'Shadow-Box-4','shadow-box-5' => 'Shadow-Box-5','shadow-box-6' => 'Shadow-Box-6'),
+            ))
+            ->add('boxShadowColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
             ->add('menuPosition', 'choice', array(
                 'attr'=>array('class'=>'span10 m-wrap'),
                 'choices' => array('' => 'Navbar-Default','navbar-right' => 'Navbar-Right','navbar-center' => 'Navbar-Center',  'brand-center' => 'Logo-Center','navbar-brand-top' => 'Logo-Center-Top',  'brand-center center-side' => 'Logo-Center Menu-Side'),

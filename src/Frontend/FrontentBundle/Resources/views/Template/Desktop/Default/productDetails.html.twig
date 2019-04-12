@@ -7,6 +7,7 @@
         {% if globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'flat'  %}
             <div class="pageheader">
                 <div class="container">
+                    <div class="row">
                     <div class="col-md-6">
                         <h2 class="title">{{ page.name }}</h2>
                     </div>
@@ -14,8 +15,9 @@
                         <ul class="simple-breadcrumb">
                             <li class="active">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</li>
                             <li class=""><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
-                            <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
+                            <li class=""><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} হোম {% else %}Home{% endif %}</a></li>
                         </ul>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -23,20 +25,24 @@
 
             <div class="pageheader">
                 <div class="container">
+                    <div class="row">
                     <div class="col-md-12 text-center">
                         <h2 class="title">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</h2>
                         <p><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></p>
-                        <p><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> <i class="fa fa-long-arrow-right "></i> {{ menu.menu }}</p>
+                        <p><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} হোম {% else %}Home{% endif %}</a> <i class="fa fa-long-arrow-right "></i> {{ menu.menu }}</p>
+                    </div>
                     </div>
                 </div>
             </div>
         {% elseif globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'left'  %}
             <div class="pageheader">
                 <div class="container">
+                    <div class="row">
                     <div class="col-md-12 text-left">
                         <h2 class="title">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</h2>
                         <p><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></p>
-                        <p><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> <i class="fa fa-long-arrow-right "></i> {{ menu.menu }}</p>
+                        <p><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} হোম {% else %}Home{% endif %}</a> <i class="fa fa-long-arrow-right "></i> {{ menu.menu }}</p>
+                    </div>
                     </div>
                 </div>
             </div>

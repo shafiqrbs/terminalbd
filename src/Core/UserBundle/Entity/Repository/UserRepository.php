@@ -318,8 +318,32 @@ class UserRepository extends EntityRepository
         $em->flush();
         return $user;
 
+    }
+
+    public function getCustomers(GlobalOption $option){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.profile','p');
+        $qb->andWhere("e.globalOption =".$option->getId());
+        $qb->andWhere('e.domainOwner = 2');
+        $qb->andWhere('e.enabled = 1');
+        $qb->andWhere('e.isDelete != 1');
+        $qb->orderBy("p.name","ASC");
+        $result = $qb->getQuery()->getResult();
+
+        /* @var $row User */
+
+        foreach($result as $key => $row){
+
+            $data[$key]['user_id'] = (int) $row->getId();
+            $data[$key]['username'] = $row->getUsername();
+            $data[$key]['email'] = $row->getEmail();
+
+        }
+        return $data;
 
     }
+
 
 
 

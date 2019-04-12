@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Repository;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 
 /**
  * ProductUnitRepository
@@ -22,6 +23,25 @@ class ProductUnitRepository extends EntityRepository
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
 
+    }
+
+    public function getApiUnit(){
+
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.id as id , e.name as name');
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $result =  $query->getQuery()->getResult();
+        $data = array();
+
+        /* @var $row ProductUnit */
+
+        foreach($result as $key => $row) {
+
+            $data[$key]['unit_id']          = (int) $row['id'];
+            $data[$key]['name']             = $row['name'];
+        }
+        return $data;
     }
 
 

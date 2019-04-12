@@ -2,9 +2,11 @@
 
 namespace  Appstore\Bundle\AccountingBundle\Repository;
 
+use Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Util\Debug;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ExpenseCategoryRepository
@@ -190,6 +192,32 @@ class ExpenseCategoryRepository extends MaterializedPathRepository
 
     public function reportHmsExpenditure(User $user,$data)
     {
+
+    }
+
+    public function getApiCategory(GlobalOption $option)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $option->getId());
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        $data = array();
+
+        /* @var $row ExpenseCategory */
+
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']            = (int) $option->getId();
+            $data[$key]['category_id']          = (int) $row->getId();
+            $data[$key]['name']                 = $row->getName();
+            $data[$key]['slug']                 = $row->getSlug();
+
+        }
+
+        return $data;
 
     }
 

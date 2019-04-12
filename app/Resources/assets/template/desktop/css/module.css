@@ -43,9 +43,16 @@ a:hover , a:visited, a:focus{
     display: none;
 }
 
+.content-area p , .content-area div{
+    font-size:13px;
+    line-height:20px;
+}
+
 .comment{
     padding:15px;
 }
+
+
 .searchBtn{
     background-color: #fff;
     height: 37px;
@@ -268,7 +275,7 @@ ul.sign-list > li.total {
     list-style: none;
     line-height: 80px;
     height: 80px;
-    padding-left: 15px;
+    padding-left: 0!important;
 }
 .simple-breadcrumb-left li{
     list-style: square;
@@ -801,6 +808,7 @@ ul.sign-list > li.total {
     font-size: 18px;
     padding-top: 15px;
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 .page-title:before {
@@ -1574,7 +1582,8 @@ ul.sign-list > li.total {
     background: #555;
     color: #FFFFff;
     text-align: justify;
-    margin-top:30px
+    margin-top:30px;
+    padding-top: 30px;
 }
 .footer-menu h4{
     text-transform: uppercase;

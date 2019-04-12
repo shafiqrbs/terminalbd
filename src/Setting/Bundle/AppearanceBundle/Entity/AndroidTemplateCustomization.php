@@ -9,10 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * TemplateCustomize
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Setting\Bundle\AppearanceBundle\Repository\TemplateCustomizeRepository")
+ * @ORM\Table("android_template_customization")
+ * @ORM\Entity(repositoryClass="Setting\Bundle\AppearanceBundle\Repository\AndroidTemplateCustomizationRepository")
  */
-class TemplateCustomize
+class AndroidTemplateCustomization
 {
 
     /**
@@ -167,7 +167,7 @@ class TemplateCustomize
      */
     private $logoDisplayWebsite=true;
 
-	/**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="showNewsLetter", type="boolean")
@@ -228,53 +228,53 @@ class TemplateCustomize
      *
      * @ORM\Column(name="breadcrumbActiveBg", type="string", length=20, nullable=true)
      */
-     private $breadcrumbActiveBg;
+    private $breadcrumbActiveBg;
 
     /**
      * @var string
      *
      * @ORM\Column(name="breadcrumbColor", type="string", length=20, nullable=true)
      */
-     private $breadcrumbColor;
+    private $breadcrumbColor;
 
     /**
      * @var string
      *
      * @ORM\Column(name="breadcrumbFontSize", type="string", length=10, nullable=true)
      */
-     private $breadcrumbFontSize;
+    private $breadcrumbFontSize;
 
     /**
      * @var string
      *
      * @ORM\Column(name="breadcrumbBorderColor",type="string", length=20, nullable=true)
      */
-     private $breadcrumbBorderColor;
+    private $breadcrumbBorderColor;
 
-	/**
+    /**
      * @var int
      *
      * @ORM\Column(name="breadcrumbHeight",type="smallint", length=3, nullable=true)
      */
-     private $breadcrumbHeight;
+    private $breadcrumbHeight;
 
 
-      /**
+    /**
      * @var string
      *
      * @ORM\Column(name="siteTitleSize", type="string", length=20, nullable=true)
      */
     private $siteTitleSize;
 
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="topBarContent", type="text" , nullable=true)
-	 */
-	private $topBarContent;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="topBarContent", type="text" , nullable=true)
+     */
+    private $topBarContent;
 
 
-	/**
+    /**
      * @var string
      *
      * @ORM\Column(name="siteSlogan", type="text" , nullable=true)
@@ -352,13 +352,6 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="siteLanguage", type="string", length=25, nullable=true)
-     */
-    private $siteLanguage ='english';
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="sliderPosition", type="string", length=20, nullable=true)
      */
     private $sliderPosition='top-right';
@@ -369,22 +362,6 @@ class TemplateCustomize
      * @ORM\Column(name="menuLetter", type="string", length=20, nullable=true)
      */
     private $menuLetter = 'uppercase';
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="boxShadow", type="string", length=20, nullable=true)
-     */
-     private $boxShadow;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="boxShadowColor", type="string", length=20, nullable=true)
-     */
-     private $boxShadowColor;
 
 
     /**
@@ -440,7 +417,7 @@ class TemplateCustomize
      */
     private $sliderLeftRightPosition;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="carouselHeight", type="string", length=10, nullable=true)
@@ -463,25 +440,11 @@ class TemplateCustomize
     private $siteFontFamily;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="siteFontSize", type="string", length = 5, nullable=true)
+     * @ORM\Column(name="siteFontSize", type="smallint", nullable=true)
      */
     private $siteFontSize;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="contentFontSize", type="string", length = 5, nullable=true)
-     */
-    private $contentFontSize;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="contentLineHeight", type="string", length = 5, nullable=true)
-     */
-    private $contentLineHeight;
 
     /**
      * @var string
@@ -609,7 +572,7 @@ class TemplateCustomize
      */
     private $dividerAfterColor;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="socialIconPosition", type="string", length=20, nullable=true)
@@ -724,7 +687,7 @@ class TemplateCustomize
      */
     private $menuBgColorHover;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="subMenuBgColor", type="string", length=20, nullable=true)
@@ -819,7 +782,7 @@ class TemplateCustomize
     private $bodyColor;
 
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="sidebarColor", type="string", length=50, nullable=true)
@@ -855,7 +818,7 @@ class TemplateCustomize
      */
     private $footerTextColor;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="footerAnchorColor", type="string", length=15, nullable=true)
@@ -956,7 +919,7 @@ class TemplateCustomize
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getSiteFontSize()
     {
@@ -964,7 +927,7 @@ class TemplateCustomize
     }
 
     /**
-     * @param string $siteFontSize
+     * @param int $siteFontSize
      */
     public function setSiteFontSize($siteFontSize)
     {
@@ -1299,8 +1262,8 @@ class TemplateCustomize
     {
 
         $path = null === $this->faviconFile
-        ? null
-        : $this->getUploadRootDir().'/'.$this->faviconFile;
+            ? null
+            : $this->getUploadRootDir().'/'.$this->faviconFile;
 
         if ($file = $path) {
             unlink($file);
@@ -2641,138 +2604,138 @@ class TemplateCustomize
         $this->mobileHomeShowLogo = $mobileHomeShowLogo;
     }
 
-	/**
-	 * @return bool
-	 */
-	public function isShowNewsLetter(){
-		return $this->showNewsLetter;
-	}
+    /**
+     * @return bool
+     */
+    public function isShowNewsLetter(){
+        return $this->showNewsLetter;
+    }
 
-	/**
-	 * @param bool $showNewsLetter
-	 */
-	public function setShowNewsLetter( bool $showNewsLetter ) {
-		$this->showNewsLetter = $showNewsLetter;
-	}
+    /**
+     * @param bool $showNewsLetter
+     */
+    public function setShowNewsLetter( bool $showNewsLetter ) {
+        $this->showNewsLetter = $showNewsLetter;
+    }
 
-	/**
-	 * @return SocialIcon
-	 */
-	public function getSocialIcons() {
-		return $this->socialIcons;
-	}
+    /**
+     * @return SocialIcon
+     */
+    public function getSocialIcons() {
+        return $this->socialIcons;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getSocialIconType(){
-		return $this->socialIconType;
-	}
+    /**
+     * @return string
+     */
+    public function getSocialIconType(){
+        return $this->socialIconType;
+    }
 
-	/**
-	 * @param string $socialIconType
-	 */
-	public function setSocialIconType( string $socialIconType ) {
-		$this->socialIconType = $socialIconType;
-	}
+    /**
+     * @param string $socialIconType
+     */
+    public function setSocialIconType( string $socialIconType ) {
+        $this->socialIconType = $socialIconType;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getSocialIconPosition(){
-		return $this->socialIconPosition;
-	}
+    /**
+     * @return string
+     */
+    public function getSocialIconPosition(){
+        return $this->socialIconPosition;
+    }
 
-	/**
-	 * @param string $socialIconPosition
-	 */
-	public function setSocialIconPosition( string $socialIconPosition ) {
-		$this->socialIconPosition = $socialIconPosition;
-	}
+    /**
+     * @param string $socialIconPosition
+     */
+    public function setSocialIconPosition( string $socialIconPosition ) {
+        $this->socialIconPosition = $socialIconPosition;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getTopBarContent(){
-		return $this->topBarContent;
-	}
+    /**
+     * @return string
+     */
+    public function getTopBarContent(){
+        return $this->topBarContent;
+    }
 
-	/**
-	 * @param string $topBarContent
-	 */
-	public function setTopBarContent( string $topBarContent ) {
-		$this->topBarContent = $topBarContent;
-	}
+    /**
+     * @param string $topBarContent
+     */
+    public function setTopBarContent( string $topBarContent ) {
+        $this->topBarContent = $topBarContent;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getTopTextPosition(){
-		return $this->topTextPosition;
-	}
+    /**
+     * @return string
+     */
+    public function getTopTextPosition(){
+        return $this->topTextPosition;
+    }
 
-	/**
-	 * @param string $topTextPosition
-	 */
-	public function setTopTextPosition( string $topTextPosition ) {
-		$this->topTextPosition = $topTextPosition;
-	}
+    /**
+     * @param string $topTextPosition
+     */
+    public function setTopTextPosition( string $topTextPosition ) {
+        $this->topTextPosition = $topTextPosition;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getTopIconPosition(){
-		return $this->topIconPosition;
-	}
+    /**
+     * @return string
+     */
+    public function getTopIconPosition(){
+        return $this->topIconPosition;
+    }
 
-	/**
-	 * @param string $topIconPosition
-	 */
-	public function setTopIconPosition( string $topIconPosition ) {
-		$this->topIconPosition = $topIconPosition;
-	}
+    /**
+     * @param string $topIconPosition
+     */
+    public function setTopIconPosition( string $topIconPosition ) {
+        $this->topIconPosition = $topIconPosition;
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isShowLogin(){
-		return $this->showLogin;
-	}
+    /**
+     * @return bool
+     */
+    public function isShowLogin(){
+        return $this->showLogin;
+    }
 
-	/**
-	 * @param bool $showLogin
-	 */
-	public function setShowLogin( bool $showLogin ) {
-		$this->showLogin = $showLogin;
-	}
+    /**
+     * @param bool $showLogin
+     */
+    public function setShowLogin( bool $showLogin ) {
+        $this->showLogin = $showLogin;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getBreadcrumbPosition(){
-		return $this->breadcrumbPosition;
-	}
+    /**
+     * @return string
+     */
+    public function getBreadcrumbPosition(){
+        return $this->breadcrumbPosition;
+    }
 
-	/**
-	 * @param string $breadcrumbPosition
-	 */
-	public function setBreadcrumbPosition( string $breadcrumbPosition ) {
-		$this->breadcrumbPosition = $breadcrumbPosition;
-	}
+    /**
+     * @param string $breadcrumbPosition
+     */
+    public function setBreadcrumbPosition( string $breadcrumbPosition ) {
+        $this->breadcrumbPosition = $breadcrumbPosition;
+    }
 
-	/**
-	 * @return int
-	 */
-	public function getBreadcrumbHeight(){
-		return $this->breadcrumbHeight;
-	}
+    /**
+     * @return int
+     */
+    public function getBreadcrumbHeight(){
+        return $this->breadcrumbHeight;
+    }
 
-	/**
-	 * @param int $breadcrumbHeight
-	 */
-	public function setBreadcrumbHeight( int $breadcrumbHeight ) {
-		$this->breadcrumbHeight = $breadcrumbHeight;
-	}
+    /**
+     * @param int $breadcrumbHeight
+     */
+    public function setBreadcrumbHeight( int $breadcrumbHeight ) {
+        $this->breadcrumbHeight = $breadcrumbHeight;
+    }
 
     /**
      * @return string
@@ -2788,86 +2751,6 @@ class TemplateCustomize
     public function setSiteTitleColor(string $siteTitleColor)
     {
         $this->siteTitleColor = $siteTitleColor;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSiteLanguage()
-    {
-        return $this->siteLanguage;
-    }
-
-    /**
-     * @param string $siteLanguage
-     */
-    public function setSiteLanguage($siteLanguage)
-    {
-        $this->siteLanguage = $siteLanguage;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentFontSize()
-    {
-        return $this->contentFontSize;
-    }
-
-    /**
-     * @param string $contentFontSize
-     */
-    public function setContentFontSize($contentFontSize)
-    {
-        $this->contentFontSize = $contentFontSize;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentLineHeight()
-    {
-        return $this->contentLineHeight;
-    }
-
-    /**
-     * @param string $contentLineHeight
-     */
-    public function setContentLineHeight($contentLineHeight)
-    {
-        $this->contentLineHeight = $contentLineHeight;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBoxShadow()
-    {
-        return $this->boxShadow;
-    }
-
-    /**
-     * @param string $boxShadow
-     */
-    public function setBoxShadow($boxShadow)
-    {
-        $this->boxShadow = $boxShadow;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBoxShadowColor()
-    {
-        return $this->boxShadowColor;
-    }
-
-    /**
-     * @param string $boxShadowColor
-     */
-    public function setBoxShadowColor($boxShadowColor)
-    {
-        $this->boxShadowColor = $boxShadowColor;
     }
 
 

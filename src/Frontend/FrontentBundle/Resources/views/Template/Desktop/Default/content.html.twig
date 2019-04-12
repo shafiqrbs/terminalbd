@@ -4,28 +4,32 @@
     {% if globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'flat-left'  %}
         <div class="pageheader">
             <div class="container">
-                <div class="col-md-6">
-                    <ul class="simple-breadcrumb-left">
-                        <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
-                        <li class="active">{{ menu.menu }}</li>
-                    </ul>
-                </div>
-                <div class="col-md-6 text-right">
-                    <h2 class="title">{{ page.name }}</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="simple-breadcrumb-left">
+                            <li class=""><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} হোম {% else %}Home{% endif %}</a></li>
+                            <li class="active">{{ menu.menu }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <h2 class="title">{{ page.name }}</h2>
+                    </div>
                 </div>
             </div>
         </div>
     {% elseif globalOption.templateCustomize.breadcrumb == 1 and globalOption.templateCustomize.breadcrumbPosition == 'flat-right'  %}
         <div class="pageheader">
             <div class="container">
-                <div class="col-md-6">
-                    <h2 class="title">{{ page.name }}</h2>
-                </div>
-                <div class="col-md-6">
-                    <ul class="simple-breadcrumb-right">
-                        <li class="active">{{ menu.menu }}</li>
-                        <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
-                    </ul>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="title">{{ page.name }}</h2>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="simple-breadcrumb-right">
+                            <li class="active">{{ menu.menu }}</li>
+                            <li class=""><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} হোম {% else %}Home{% endif %}</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,7 +39,7 @@
             <div class="container">
                 <div class="col-md-12 text-center">
                     <h2 class="title">{{ page.name }}</h2>
-                    <p><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i> &nbsp;&nbsp; {{ menu.menu }}</p>
+                    <p><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} হোম {% else %}Home{% endif %}</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i> &nbsp;&nbsp;{{ menu.menu }}</p>
                 </div>
             </div>
         </div>
@@ -44,7 +48,7 @@
             <div class="container">
                 <div class="col-md-12 text-left">
                     <h2 class="title">{{ page.name }}</h2>
-                    <p><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i> &nbsp;&nbsp; {{ menu.menu }}</p>
+                    <p><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} হোম {% else %}Home{% endif %}</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i> &nbsp;&nbsp; {{ menu.menu }}</p>
                 </div>
             </div>
         </div>
@@ -72,30 +76,40 @@
                     </div>
                 {% endif %}
                 <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true'  %} col-md-9 {% else %} col-md-12 {% endif %}"  >
-
                     {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
                         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-top'}) %}
                     {% endif %}
                     <div class="clearfix"></div>
-                    {% if page.photoGallery is not empty and page.galleryType == 'slider' and page.galleryPosition == 'top' %}
+                    {% if page.photoGallery is not empty and page.galleryType == 'carousel' and page.galleryPosition == 'top' %}
+
                         <div class="carousel-container">
                             <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
                                 <div class="carousel-inner">
                                 {% if page.webPath is not empty %}
                                     <div class="carousel-item item active" data-slide-no="0">
-                                        <img class="img-responsive"   src="{{ image(page.webPath).scaleResize(1024,512) }}" alt="{{ page.name }}" />
+                                        <div class="shadow-box {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}">
+                                            <a href="{{ image(page.webPath) }}" title="{{ page.name }}">
+                                                <img  src="{{ image(page.webPath).forceResize(1024,512) }}" alt="{{ page.name }}">
+                                            </a>
+                                        </div>
                                         <div class="carousel-caption " >
                                             <h4>{{ page.name }}</h4>
                                         </div>
                                     </div>
                                 {% endif %}
+
                                 {% for slide in page.photoGallery.galleryImages %}
                                     <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
-                                        <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512) }}" alt="...">
+                                        <div class="shadow-box {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}">
+                                            <a href="{{ image(page.webPath) }}" title="{{ page.name }}">
+                                                <img  src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(1024,512,'#fff') }}" alt="{{ page.name }}">
+                                            </a>
+                                        </div>
                                         <div class="carousel-caption " >
                                             {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
                                             {% if slide.description is not empty %}<p>{{ slide.description|raw }}</p>{% endif %}
                                         </div>
+
                                     </div>
                                 {% endfor %}
                             </div>
@@ -106,23 +120,42 @@
                         </div>
                         <hr><br/></hr>
                     {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'top' %}
-                        {% if page.webPath is not empty %}
-                            <a href="{{ image(page.webPath) }}" class="swipebox" title="{{ page.name }}">
-                                <img style="margin-bottom: 30px!important; width: 23%!important;" src="{{ image(page.webPath).forceResize(220,220) }}" alt="{{ page.name }}">
-                            </a>
-                        {% endif %}
-                        {% for slide in page.photoGallery.galleryImages %}
-                            <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)) }}" class="swipebox" title="{{ slide.caption }}">
-                                <img style="margin-bottom: 30px!important;width: 23%!important;" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="{{ slide.caption }}">
-                            </a>
-                        {% endfor %}
+                        <div class="row row-flex">
+                            <div class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
+                                <div class="thumbnail {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}" data-match-height="grid-list" >
+                                    <a href="{{ image(page.webPath) }}" class="swipebox" title="{{ page.name }}">
+                                        <img class="group list-group-image" style="max-height: 250px; min-height: 250px" src="{{ image(page.webPath).forceResize(220,220) }}" alt="{{ page.name }}">
+                                    </a>
+                                    <div class="caption">
+                                        <p class="group inner list-group-item-text">{{ page.name }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for slide in page.photoGallery.galleryImages %}
+                                <div class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
+                                    <div class="thumbnail {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}" data-match-height="grid-list" >
+                                        <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)) }}" class="swipebox" title="{{ slide.caption }}">
+                                            <img class="group list-group-image" style="max-height: 250px; min-height: 250px" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="{{ slide.caption }}">
+                                        </a>
+                                        <div class="caption">
+                                            <p class="group inner list-group-item-text">The Pathology and Laboratory Medicine (P&LMS) National Program Office has as one of its primary responsibilities</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                         <hr><br/></hr>
                     {% elseif page.webPath is not empty %}
-                        <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#fff') }}" alt="{{ page.name }}" />
+                        <div class="shadow-box {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}">
+                            <a href="{{ image(page.webPath) }}" title="{{ page.name }}">
+                                <img  src="{{ image(page.webPath).forceResize(1024,512) }}" alt="{{ page.name }}">
+                            </a>
+                            <div class="caption">{{ page.name }}</div>
+                        </div>
                         <hr><br/></hr>
                     {% endif %}
-                    <div class="clearfix"></div>
-                    <p>{{ page.content|raw }}</p>
+                    <div class="clearfix"><br/></div>
+                    <div class="content-area"><div>{{ page.content|raw }}</div></div>
                     <div class="clearfix"><br/></div>
                     {% if globalOption.templateCustomize.showSocialIcon == 1 %}
                     <ul class="mbm_social">
@@ -154,41 +187,70 @@
                     </ul>
                     {% endif %}
                     <div class="clearfix"><br/></div>
-                    {% if page.photoGallery is not empty and page.galleryType == 'slider' and page.galleryPosition == 'bottom' %}
-                        <hr><br/></hr>
+                    {% if page.photoGallery is not empty and page.galleryType == 'carousel' and page.galleryPosition == 'bottom' %}
                         <div class="carousel-container">
-                        <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
-                            <div class="carousel-inner">
-                                {% if page.webPath is not empty %}
-                                    <div class="carousel-item item active" data-slide-no="0">
-                                        <img class="img-responsive"   src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
-                                        <div class="carousel-caption " >
-                                            <h4>{{ page.name }}</h4>
+                            <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
+                                <div class="carousel-inner">
+                                    {% if page.webPath is not empty %}
+                                        <div class="carousel-item item active" data-slide-no="0">
+                                            <div class="shadow-box {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}">
+                                                <a href="{{ image(page.webPath) }}" title="{{ page.name }}">
+                                                    <img  src="{{ image(page.webPath).forceResize(1024,512) }}" alt="{{ page.name }}">
+                                                </a>
+                                            </div>
+                                            <div class="carousel-caption " >
+                                                <h4>{{ page.name }}</h4>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endif %}
-                                {% for slide in page.photoGallery.galleryImages %}
-                                    <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
-                                        <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512,'#fff') }}" alt="...">
-                                        <div class="carousel-caption " >
-                                            {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
-                                            {% if slide.description is not empty %}<p>{{ slide.description|raw }}</p>{% endif %}
+                                    {% endif %}
+
+                                    {% for slide in page.photoGallery.galleryImages %}
+                                        <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
+                                            <div class="shadow-box {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}">
+                                                <a href="{{ image(page.webPath) }}" title="{{ page.name }}">
+                                                    <img  src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(1024,512,'#fff') }}" alt="{{ page.name }}">
+                                                </a>
+                                            </div>
+                                            <div class="carousel-caption " >
+                                                {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
+                                                {% if slide.description is not empty %}<p>{{ slide.description|raw }}</p>{% endif %}
+                                            </div>
+
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
+                                <!-- Navigation -->
+                                <a class="carousel-post-control left" href="#carousel" data-slide="prev">‹</a>
+                                <a class="carousel-post-control right" href="#carousel" data-slide="next">›</a>
                             </div>
-                            <!-- Navigation -->
-                            <a class="carousel-post-control left" href="#carousel" data-slide="prev">‹</a>
-                            <a class="carousel-post-control right" href="#carousel" data-slide="next">›</a>
                         </div>
-                    </div>
-                    {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'bottom' %}
                         <hr><br/></hr>
-                        {% for slide in page.photoGallery.galleryImages %}
-                            <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512,'#fff') }}" class="swipebox" title="My Caption">
-                                <img style="margin-bottom: 30px!important;" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="image">
-                            </a>
-                        {% endfor %}
+                    {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'bottom' %}
+                        <div class="row row-flex">
+                            <div class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
+                                <div class="thumbnail {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}" data-match-height="grid-list" >
+                                    <a href="{{ image(page.webPath) }}" class="swipebox" title="{{ page.name }}">
+                                        <img class="group list-group-image" style="max-height: 250px; min-height: 250px" src="{{ image(page.webPath).forceResize(220,220) }}" alt="{{ page.name }}">
+                                    </a>
+                                    <div class="caption">
+                                        <p class="group inner list-group-item-text">{{ page.name }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for slide in page.photoGallery.galleryImages %}
+                                <div class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
+                                    <div class="thumbnail {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}" data-match-height="grid-list" >
+                                        <a href="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)) }}" class="swipebox" title="{{ slide.caption }}">
+                                            <img class="group list-group-image" style="max-height: 250px; min-height: 250px" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).forceResize(220,220,'#fff') }}" alt="{{ slide.caption }}">
+                                        </a>
+                                        <div class="caption">
+                                            <p class="group inner list-group-item-text">The Pathology and Laboratory Medicine (P&LMS) National Program Office has as one of its primary responsibilities</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <hr><br/></hr>
                     {% endif %}
                     <div class="clearfix"><br/></div>
                     {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}

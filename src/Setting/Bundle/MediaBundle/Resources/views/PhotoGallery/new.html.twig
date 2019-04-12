@@ -36,17 +36,8 @@
                     <div class="caption"><i class="icon-reorder"></i>Add Photo Gallery Information</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <i class="icon-cogs"></i>&nbsp;Tools
-                                <i class="icon-tasks"></i>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="{{ path('gallery_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                {% if entity.id > 0  %}
-                                    <li><a  href="{{ path('gallery_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;View</a></li>
-                                {% endif %}
-                                <li><a href="{{ path('gallery') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                            </ul>
+                            <a class="btn black" href="{{ path('gallery') }}"><i class="icon-th-list"></i>&nbsp Gallery</a>
+                            <a class="btn blue"  href="{{ path('gallery_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;View</a>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,18 @@
 <style>
 
+    {% if globalOption.templateCustomize.siteFontSize is not empty %}
+        p , div{
+            font-size:{{ globalOption.templateCustomize.siteFontSize }};
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.contentFontSize is not empty %}
+        .content-area p , .content-area div{
+            font-size:{{ globalOption.templateCustomize.contentFontSize }};
+            line-height:{{ globalOption.templateCustomize.contentLineHeight }};
+        }
+    {% endif %}
+
     {% if globalOption.templateCustomize.anchorColor is not empty %}
         a{
             color: {{ globalOption.templateCustomize.anchorColor }} !important;
@@ -7,11 +20,21 @@
     {% endif %}
 
     {% if globalOption.templateCustomize.anchorHoverColor is not empty %}
-    a:hover, a:focus{
-        color: {{ globalOption.templateCustomize.anchorHoverColor }} !important;
-        cursor: pointer;
-    }
+        a:hover, a:focus{
+            color: {{ globalOption.templateCustomize.anchorHoverColor }} !important;
+            cursor: pointer;
+        }
     {% endif %}
+
+
+    {% if globalOption.templateCustomize.anchorHoverColor is not empty %}
+        a:hover, a:focus{
+            color: {{ globalOption.templateCustomize.anchorHoverColor }} !important;
+            cursor: pointer;
+        }
+    {% endif %}
+
+
 
     {% if globalOption.templateCustomize.breadcrumbBg is not empty %}
     .pageheader{

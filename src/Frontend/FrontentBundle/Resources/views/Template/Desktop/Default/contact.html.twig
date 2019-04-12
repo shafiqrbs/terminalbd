@@ -6,12 +6,12 @@
             <div class="container">
                 <div class="col-md-6">
                     <ul class="simple-breadcrumb-left">
-                        <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
+                        <li class=""><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} হোম {% else %}Home{% endif %}</a></li>
                         <li class="active">{{ menu.menu }}</li>
                     </ul>
                 </div>
                 <div class="col-md-6 text-right">
-                    <h2 class="title">CONTACT US</h2>
+                    <h2 class="title"> {% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} যোগাযোগ {% else %}CONTACT US{% endif %}</h2>
                 </div>
 
             </div>
@@ -20,12 +20,12 @@
         <div class="pageheader">
             <div class="container">
                 <div class="col-md-6">
-                    <h2 class="title">CONTACT US</h2>
+                    <h2 class="title">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} যোগাযোগ {% else %}CONTACT US{% endif %}</h2>
                 </div>
                 <div class="col-md-6">
                     <ul class="simple-breadcrumb-right">
                         <li class="active">{{ menu.menu }}</li>
-                        <li class=""><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
+                        <li class=""><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
                     </ul>
                 </div>
             </div>
@@ -35,8 +35,8 @@
         <div class="pageheader">
             <div class="container">
                 <div class="col-md-12 text-center">
-                    <h2 class="title">CONTACT US</h2>
-                    <p><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i> &nbsp;&nbsp; {{ menu.menu }}</p>
+                    <h2 class="title">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} যোগাযোগ {% else %}CONTACT US{% endif %}</h2>
+                    <p><span class="glyphicon glyphicon-home"></span>&nbsp;<a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i> &nbsp;&nbsp; {{ menu.menu }}</p>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
         <div class="pageheader">
             <div class="container">
                 <div class="col-md-12 text-left">
-                    <h2 class="title">CONTACT US</h2>
+                    <h2 class="title">{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} যোগাযোগ {% else %}CONTACT US{% endif %}</h2>
                     <p><a class="home" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span> Home</a> &nbsp;&nbsp;<i class="fa fa-angle-right"></i> &nbsp;&nbsp; {{ menu.menu }}</p>
                 </div>
             </div>
@@ -77,9 +77,9 @@
                     </div>
                 {% endif %}
                 <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true'  %} col-md-9 {% else %} col-md-12 {% endif %}"  >
-                    <div class="page-title-bar row">
+                    <div class="page-title-bar">
                         <div class="col-md-12">
-                            <div class="page-title"><span class="glyphicon glyphicon-home"></span>&nbsp;Contact Us
+                            <div class="page-title"><span class="glyphicon glyphicon-home"></span>&nbsp;{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} যোগাযোগ {% else %}CONTACT US{% endif %}
                                 <div class="pull-right">
                                     {% if globalOption.templateCustomize.showSocialIcon == 1 %}
                                     <ul class="mbm_social">
@@ -118,7 +118,7 @@
                     <div class="col-md-4">
                         <div class="row">
                             <div class="col-md-12">
-                                <strong><i class="fa fa-home"></i>&nbsp;Office</strong><br>
+                                <strong><i class="fa fa-home"></i>&nbsp;{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} অফিস ঠিকানা  {% else %}Office{% endif %}</strong><br>
                                 {{ page.address1|raw }}
                                 {% if page.location is defined and page.location %}
                                     ,{{ page.location.name }}
@@ -131,7 +131,7 @@
                         <hr>
                         <div class="row">
                             <div class="col-md-12">
-                                <strong><i class="fa fa-hand-o-right"></i>&nbsp;Communication</strong><br>
+                                <strong><i class="fa fa-hand-o-right"></i>&nbsp;{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} যোগাযোগ {% else %}Communication{% endif %}</strong><br>
                                     {% if page.startHour %}
                                         <strong><i class="fa fa-clock-o"></i></strong>&nbsp;{{ page.startHour }} To {{ page.endHour }}
                                     {% endif %}
@@ -139,27 +139,27 @@
                                         <br/>
                                         <strong><i class="fa fa-power-off"></i></strong>&nbsp;{% for day in page.weeklyOffDay %}{{ day }}{{ loop.last ? '' : ', ' }}{% endfor %}<br>
                                     {% endif %}
-                                    <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:{{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a></br>
-                                    <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ globalOption.email }}" class="contact-email">{{ globalOption.email }}</a></br>
-                                    <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a></br>{% endif %}
-                                {% if(page.additionalPhone) %}<strong><i class="fa fa-phone"></i></strong>&nbsp;<a href="javascript:" >{{ page.additionalPhone|raw }}</a></br>{% endif %}
+                                    <br/>
+                                {% if(page.additionalPhone) %}<strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="javascript:" >{{ page.additionalPhone|raw }}</a></br>{% endif %}
                                 {% if(page.additionalEmail) %}<strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="javascript:" >{{ page.additionalEmail|raw }}</a></br>{% endif %}
+                                <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a></br>{% endif %}
                             </div>
                          </div>
                         <hr>
-                        {% if page.address2 is not empty %}
-                        {{ page.address2|raw }}
-                        {% endif %}
                         {% if(page.contactPerson is not empty) %}
                         <div class="row">
                             <div class="col-md-12">
-                                <strong><i class="fa fa-user"></i>&nbsp;Contact Information</strong><br>
+                                <strong><i class="fa fa-user"></i>&nbsp;{% if globalOption.templateCustomize.siteLanguage == 'bangoli' %} যোগাযোগের তথ্য {% else %}Contact Information{% endif %}</strong><br>
                                 <em>{{ page.contactPerson|raw }}</em><br/>
                                 {% if page.designation %}{{ page.designation }}{% endif %} </br>
                                 {% if(page.contactMobile) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ page.contactMobile|raw }}</a></br>{% endif %}
                                 {% if(page.contactEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.contactEmail|raw }}</a></br>{% endif %}
                             </div>
                         </div>
+                        {% endif %}
+                        <hr>
+                        {% if page.address2 is not empty %}
+                            {{ page.address2|raw }}
                         {% endif %}
                         {% if(page.isContactForm == 1) %}
                             <div class="row">

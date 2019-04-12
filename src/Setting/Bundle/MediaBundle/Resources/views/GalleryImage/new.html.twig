@@ -75,7 +75,7 @@
                         </div>
                         <div class="form-actions portlet box grey">
                             <div class="pull-center">
-                                <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                                <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
                                 <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
                             </div>
                         </div>
@@ -97,7 +97,7 @@
         // General settings
         runtimes : 'gears,browserplus,html5',
         url :'{{ path('galleryimage_upload',{'id':entity.id}) }}',
-        max_file_size : '10mb',
+        max_file_size : '20mb',
         chunk_size : '2mb',
         unique_names : true,
         sortable: true,
@@ -105,7 +105,7 @@
         resize : {width :1024, height : 1024, quality : 90},
         // Specify what files to browse for
         filters : [
-        {title : "Image files", extensions : "jpg,gif,png"},
+        {title : "Image files", extensions : "jpg,gif,png,jpeg"},
         {title : "Zip files", extensions : "zip"}
         ],
 
