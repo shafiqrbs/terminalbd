@@ -28,6 +28,13 @@ class AccountingConfig
 
     private $globalOption;
 
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="address", type="text", length=255, nullable=true)
+     */
+    private $address;
+
 
     /**
      * @var boolean
@@ -372,6 +379,22 @@ class AccountingConfig
     public function setPrintLeftMargin($printLeftMargin)
     {
         $this->printLeftMargin = $printLeftMargin;
+    }
+
+    /**
+     * @return text
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param text $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
     }
 
 

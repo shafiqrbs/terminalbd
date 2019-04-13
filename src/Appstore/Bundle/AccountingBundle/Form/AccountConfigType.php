@@ -30,6 +30,7 @@ class AccountConfigType extends AbstractType
                 'choices' => array('' => 'Font Size','10px' => '10px',  '11px' => '11px','12px' => '12px','13px' => '13px','14px' => '14px', '15px' => '15px', '16px' => '16px', '17px' => '17px','18px' => '18px',  '20px' => '20px', '22px' => '22px','24px' => '24px', '26px' => '26px',  '28px' => '28px','30px' => '39px','32px' => '32px','34px' => '34px','36px' => '36px', '38px' => '38px', '40px' => '40px','42px' => '42px',  '44px' => '44px', '46px' => '46px','48px' => '48px'),
             ))
             ->add('borderWidth','text',array('attr'=>array('class'=>'m-wrap numeric span8','maxLength'=>2)))
+            ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','row'=>5)))
             ->add('isPowered')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
