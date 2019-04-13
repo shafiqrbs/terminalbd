@@ -8,6 +8,7 @@
             font-size: 14px;
             color: #0A0302;
             position: relative;
+            padding: 5px;
         }
         #print-container{
             margin-top:{{ config.printTopMargin }}cm!important;
@@ -114,6 +115,7 @@
             background: #DDDDDD !important;
             width: 80px!important;
             border-right:none;
+            padding-right: 10px;
         }
 
         .table h4{
@@ -158,9 +160,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="width:50%">
+                    <td style="width:75%">
                         <div class="span4 span">
-                            <h4>Bill To:</h4>
+                            <h4>Bill To</h4>
                             <ul class="unstyled">
                                 {% if entity.customer %}
                                     {% if  entity.customer.name is not empty  %}
@@ -176,17 +178,14 @@
                             </ul>
                         </div>
                     </td>
-                    <td style="width:20%"></td>
-                    <td style="width:30%">
-                        <div class="span4 invoice-payment">
-                            <h4>Transaction:</h4>
-                            <ul class="unstyled">
-                                <li><strong><i class="icon-file"></i>&nbsp;</strong>{{ entity.invoice }}</li>
-                                <li><strong><i class="icon-calendar"></i>&nbsp;</strong>{{ entity.created|date('d-m-Y') }}</li>
-                                <li><strong><i class="icon-user"></i>&nbsp;</strong>{{ entity.salesBy }}</li>
-                                <li></li>
-                            </ul>
-                        </div>
+                    <td style="display: inline-block">
+                        <h4>Transaction</h4>
+                        <ul class="unstyled">
+                            <li><strong><i class="icon-file"></i>&nbsp;</strong>{{ entity.invoice }}</li>
+                            <li><strong><i class="icon-calendar"></i>&nbsp;</strong>{{ entity.created|date('d-m-Y') }}</li>
+                            <li><strong><i class="icon-user"></i>&nbsp;</strong>{{ entity.salesBy }}</li>
+                            <li></li>
+                        </ul>
                     </td>
                 </tr>
             </table>
