@@ -119,7 +119,6 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content">
                                 <tr class="head-red">
-                                    <th class="numeric" ><strong>Total Quantity</strong></th>
                                     <th class="numeric" ><strong>Sales Amount</strong></th>
                                     <th class="numeric" ><strong>Purchase Amount</strong></th>
                                     <th class="numeric" ><strong>Profit/Loss</strong></th>
@@ -127,10 +126,9 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class="numeric" ><strong>{{ cashOverview.quantity }}</strong></td>
                                     <td class="numeric" ><strong>{{ cashOverview.total|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ cashOverview.purchasePrice|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + cashOverview.purchasePrice))|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ purchaseSalesPrice.purchasePrice|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + purchaseSalesPrice.purchasePrice))|number_format }}</strong></td>
                                 </tr>
                                 </tbody>
                             </table>

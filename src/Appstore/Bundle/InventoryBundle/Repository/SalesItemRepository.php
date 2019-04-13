@@ -41,6 +41,62 @@ class SalesItemRepository extends EntityRepository
 
     }
 
+    public function inventorySalesDaily(User $user , $data =array())
+    {
+
+        $config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(sales.created,'%d-%m-%Y') as date , DATE (sales.created) as dateId , SUM(SalesItem.quantity * SalesItem.purchasePrice) as purchasePrice 
+                FROM SalesItem
+                INNER JOIN Sales as sales ON SalesItem.sales_id = sales.id
+                WHERE sales.inventoryConfig_id = :config AND sales.process = :process AND MONTHNAME(sales.created) =:month  AND YEAR(sales.created) =:year
+                GROUP BY date ORDER BY dateId ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+            $arrays[$result['date']] = $result;
+        }
+        return $arrays;
+    }
+
+    public function inventorySalesMonthly(User $user , $data =array())
+    {
+
+        $config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $compare = new \DateTime();
+        $year =  $compare->format('Y');
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(sales.created,'%M') as month , MONTH (sales.created) as monthId, SUM(si.quantity * si.purchasePrice) as purchasePrice 
+                FROM SalesItem as si
+                 JOIN  Sales as sales on si.sales_id = sales.id
+                WHERE sales.inventoryConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year
+                GROUP BY month ORDER BY monthId ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+            $arrays[$result['month']] = $result;
+        }
+        return $arrays;
+
+
+    }
+
+
     public function getItemPurchasePrice(Sales $sales)
     {
 	    $qb = $this->createQueryBuilder('si');

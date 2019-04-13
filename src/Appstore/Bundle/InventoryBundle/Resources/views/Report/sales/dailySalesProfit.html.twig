@@ -101,7 +101,7 @@
                                 {% set blackO           = date(month~i)|date('d-m-Y') %}
                                 {% set salesPrice       = monthlySales[blackO] is defined and monthlySales[blackO] is not empty ? monthlySales[blackO].total : 0  %}
                                 {% set receive       = monthlySales[blackO] is defined and monthlySales[blackO] is not empty ? monthlySales[blackO].receive : 0  %}
-                                {% set purchasePrice    = monthlySales[blackO] is defined and monthlySales[blackO] is not empty ? monthlySales[blackO].purchasePrice : 0  %}
+                                {% set purchasePrice    = monthlySalesPurchase[blackO] is defined and monthlySalesPurchase[blackO] is not empty ? monthlySalesPurchase[blackO].purchasePrice : 0  %}
                                 {% set expenditure      = expenses[blackO] is defined and expenses[blackO] is not empty ? expenses[blackO].payment : 0  %}
                                 {% set profit           = (salesPrice - expenditure - purchasePrice)|default(0)|number_format  %}
                                 {% set salesTotal       = (salesTotal + salesPrice)  %}
@@ -113,7 +113,7 @@
                                 <td>{{ blackO }}</td>
                                 <td>{{ monthlySales[blackO] is defined and monthlySales[blackO] is not empty ? monthlySales[blackO].subTotal|number_format : '' }}</td>
                                 <td>{{ monthlySales[blackO] is defined and monthlySales[blackO] is not empty ? monthlySales[blackO].total|number_format : '' }}</td>
-                                <td>{{ monthlySales[blackO] is defined and monthlySales[blackO] is not empty ? monthlySales[blackO].purchasePrice|number_format : '' }}</td>
+                                <td>{{ monthlySalesPurchase[blackO] is defined and monthlySalesPurchase[blackO] is not empty ? monthlySalesPurchase[blackO].purchasePrice|number_format : '' }}</td>
                                 <td>{{ monthlySales[blackO] is defined and monthlySales[blackO] is not empty ? monthlySales[blackO].receive|number_format : '' }}</td>
                                 <td>{{ expenses[blackO] is defined and expenses[blackO] is not empty ? expenses[blackO].payment|number_format : '' }}</td>
                                 <td>{{ profit }}</td>

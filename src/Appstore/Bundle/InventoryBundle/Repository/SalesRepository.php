@@ -300,9 +300,8 @@ class SalesRepository extends EntityRepository
 		$year =  $compare->format('Y');
 		$year = isset($data['year'])? $data['year'] :$year;
 		$sql = "SELECT DATE_FORMAT(sales.created,'%M') as month , MONTH (sales.created) as monthId ,SUM(sales.total) AS total,SUM(sales.subTotal) AS subTotal,
-                SUM(sales.discount) AS discount,SUM(sales.vat) AS vat,SUM(sales.payment) AS receive,SUM(sales.due) AS due, SUM(SalesItem.quantity * SalesItem.purchasePrice) as purchasePrice 
+                SUM(sales.discount) AS discount,SUM(sales.vat) AS vat,SUM(sales.payment) AS receive,SUM(sales.due) AS due
                 FROM Sales as sales
-                 JOIN  SalesItem on sales.id = SalesItem.sales_id
                 WHERE sales.inventoryConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year
                 GROUP BY month ORDER BY monthId ASC";
 		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
@@ -310,8 +309,13 @@ class SalesRepository extends EntityRepository
 		$stmt->bindValue('process', 'Done');
 		$stmt->bindValue('year', $year);
 		$stmt->execute();
-		$result =  $stmt->fetchAll();
-		return $result;
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+            $arrays[$result['month']] = $result;
+        }
+        return $arrays;
+
 
 
 	}
@@ -326,9 +330,8 @@ class SalesRepository extends EntityRepository
         $month = isset($data['month'])? $data['month'] :$month;
         $year = isset($data['year'])? $data['year'] :$year;
         $sql = "SELECT DATE_FORMAT(sales.created,'%d-%m-%Y') as date , DATE (sales.created) as dateId ,SUM(sales.total) AS total,SUM(sales.subTotal) AS subTotal,
-                SUM(sales.discount) AS discount,SUM(sales.vat) AS vat,SUM(sales.payment) AS receive,SUM(sales.due) AS due , SUM(SalesItem.quantity * SalesItem.purchasePrice) as purchasePrice 
+                SUM(sales.discount) AS discount,SUM(sales.vat) AS vat,SUM(sales.payment) AS receive,SUM(sales.due) AS due
                 FROM Sales as sales
-                JOIN  SalesItem on sales.id = SalesItem.sales_id
                 WHERE sales.inventoryConfig_id = :config AND sales.process = :process AND MONTHNAME(sales.created) =:month  AND YEAR(sales.created) =:year
                 GROUP BY date ORDER BY dateId ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
@@ -337,8 +340,12 @@ class SalesRepository extends EntityRepository
         $stmt->bindValue('year', $year);
         $stmt->bindValue('month', $month);
         $stmt->execute();
-        $result =  $stmt->fetchAll();
-        return $result;
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+            $arrays[$result['date']] = $result;
+        }
+        return $arrays;
     }
 
     public function monthlySales(User $user , $data =array())

@@ -244,13 +244,15 @@ class ReportController extends Controller
         $entities = $em->getRepository('InventoryBundle:Sales')->salesReport($user,$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-     //   $purchaseSalesPrice = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
+        $purchaseSalesPrice = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
         $cashOverview = $em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
+
         return $this->render('InventoryBundle:Report:sales/sales.html.twig', array(
             'option'                    => $this->getUser()->getGlobalOption(),
             'inventory'             => $inventory ,
             'entities'              => $pagination ,
             'cashOverview'          => $cashOverview,
+            'purchaseSalesPrice'    => $purchaseSalesPrice,
             'transactionMethods'    => $transactionMethods ,
             'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
             'searchForm'            => $data,
@@ -301,16 +303,14 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $inventory = $user->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->inventorySalesDaily($user,$data);
-        $sales = array();
-        foreach ($entities as $entity){
-            $sales[$entity['date']] = $entity;
-        }
+        $sales = $em->getRepository('InventoryBundle:Sales')->inventorySalesDaily($user,$data);
+        $salesPurchase = $em->getRepository('InventoryBundle:SalesItem')->inventorySalesDaily($user,$data);
         $expenses = $em->getRepository('AccountingBundle:Expenditure')->monthlyExpenditure($user,$data);
         if(empty($data['download'])){
             return $this->render('InventoryBundle:Report:sales/dailySalesProfit.html.twig', array(
                 'option'                    => $this->getUser()->getGlobalOption(),
                 'monthlySales'              => $sales,
+                'monthlySalesPurchase'      => $salesPurchase,
                 'expenses'                  => $expenses,
                 'searchForm'                => $data,
             ));
@@ -319,6 +319,7 @@ class ReportController extends Controller
                 'InventoryBundle:Report:sales/dailySalesProfitPdf.html.twig', array(
                     'globalOption'              => $this->getUser()->getGlobalOption(),
                     'monthlySales'              => $sales,
+                    'monthlySalesPurchase'      => $salesPurchase,
                     'expenses'                  => $expenses,
                     'searchForm'                => $data,
                 )
@@ -339,16 +340,14 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entities = $em->getRepository('InventoryBundle:Sales')->inventorySalesMonthly($user,$data);
-        $sales = array();
-        foreach ($entities as $entity){
-            $sales[$entity['month']] = $entity;
-        }
+        $sales = $em->getRepository('InventoryBundle:Sales')->inventorySalesMonthly($user,$data);
+        $purchaseEntities = $em->getRepository('InventoryBundle:SalesItem')->inventorySalesMonthly($user,$data);
         $expenses = $em->getRepository('AccountingBundle:Expenditure')->yearlyExpenditure($user,$data);
         if(empty($data['download'])){
             return $this->render('InventoryBundle:Report:sales/monthlySalesProfit.html.twig', array(
                 'option'                    => $this->getUser()->getGlobalOption(),
                 'monthlySales'              => $sales,
+                'monthlySalesPurchase'      => $purchaseEntities,
                 'expenses'                  => $expenses,
                 'searchForm'                => $data,
             ));
@@ -357,6 +356,7 @@ class ReportController extends Controller
                 'InventoryBundle:Report:sales/monthlySalesProfitPdf.html.twig', array(
                     'globalOption'              => $this->getUser()->getGlobalOption(),
                     'monthlySales'              => $sales,
+                    'monthlySalesPurchase'      => $purchaseEntities,
                     'expenses'                  => $expenses,
                     'searchForm'                => $data,
                 )
