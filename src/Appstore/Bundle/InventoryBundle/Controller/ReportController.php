@@ -368,6 +368,7 @@ class ReportController extends Controller
             header('Content-Disposition: attachment; filename="monthlySalesProfitPdf.pdf"');
             echo $pdf;
             return new Response('');
+
         }
 
     }
