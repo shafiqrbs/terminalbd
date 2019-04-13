@@ -46,6 +46,7 @@ a:hover , a:visited, a:focus{
 .content-area p , .content-area div{
     font-size:13px;
     line-height:20px;
+    text-align: justify;
 }
 
 .comment{

@@ -43,6 +43,97 @@ class AccountingConfig
      */
     private $purchase = false;
 
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="invoiceWidth", type="smallint",  nullable=true)
+     */
+    private $invoiceWidth = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="invoiceHeight", type="integer", nullable = true)
+     */
+    private $invoiceHeight = 0;
+
+
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printMarginTop", type="smallint",  nullable=true)
+     */
+    private $printTopMargin = 0;
+
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printMarginBottom", type="smallint",  nullable=true)
+     */
+    private $printMarginBottom = 0;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPrintHeader", type="boolean",  nullable=true)
+     */
+    private $isPrintHeader = true;
+
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPrintFooter", type="boolean",  nullable=true)
+     */
+    private $isPrintFooter = true;
+
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printLeftMargin", type="smallint", nullable = true)
+     */
+    private $printLeftMargin = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="borderWidth", type="smallint", length=2, nullable = true)
+     */
+    private $borderWidth = 0;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="borderColor", type="string", length=25,nullable = true)
+     */
+    private $borderColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bodyFontSize", type="string", length=10,nullable = true)
+     */
+    private $bodyFontSize;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPowered", type="boolean",  nullable=true)
+     */
+    private $isPowered = false;
+
+
+
+
+
+
 
     /**
      * Get id
@@ -105,6 +196,182 @@ class AccountingConfig
     public function setAccountClose(bool $accountClose)
     {
         $this->accountClose = $accountClose;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getInvoiceWidth()
+    {
+        return $this->invoiceWidth;
+    }
+
+    /**
+     * @param smallint $invoiceWidth
+     */
+    public function setInvoiceWidth($invoiceWidth)
+    {
+        $this->invoiceWidth = $invoiceWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInvoiceHeight()
+    {
+        return $this->invoiceHeight;
+    }
+
+    /**
+     * @param int $invoiceHeight
+     */
+    public function setInvoiceHeight($invoiceHeight)
+    {
+        $this->invoiceHeight = $invoiceHeight;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintTopMargin()
+    {
+        return $this->printTopMargin;
+    }
+
+    /**
+     * @param smallint $printTopMargin
+     */
+    public function setPrintTopMargin($printTopMargin)
+    {
+        $this->printTopMargin = $printTopMargin;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintMarginBottom()
+    {
+        return $this->printMarginBottom;
+    }
+
+    /**
+     * @param smallint $printMarginBottom
+     */
+    public function setPrintMarginBottom($printMarginBottom)
+    {
+        $this->printMarginBottom = $printMarginBottom;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintHeader()
+    {
+        return $this->isPrintHeader;
+    }
+
+    /**
+     * @param bool $isPrintHeader
+     */
+    public function setIsPrintHeader($isPrintHeader)
+    {
+        $this->isPrintHeader = $isPrintHeader;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintFooter()
+    {
+        return $this->isPrintFooter;
+    }
+
+    /**
+     * @param bool $isPrintFooter
+     */
+    public function setIsPrintFooter($isPrintFooter)
+    {
+        $this->isPrintFooter = $isPrintFooter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBorderWidth()
+    {
+        return $this->borderWidth;
+    }
+
+    /**
+     * @param string $borderWidth
+     */
+    public function setBorderWidth($borderWidth)
+    {
+        $this->borderWidth = $borderWidth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBorderColor()
+    {
+        return $this->borderColor;
+    }
+
+    /**
+     * @param string $borderColor
+     */
+    public function setBorderColor($borderColor)
+    {
+        $this->borderColor = $borderColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBodyFontSize()
+    {
+        return $this->bodyFontSize;
+    }
+
+    /**
+     * @param string $bodyFontSize
+     */
+    public function setBodyFontSize($bodyFontSize)
+    {
+        $this->bodyFontSize = $bodyFontSize;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPowered()
+    {
+        return $this->isPowered;
+    }
+
+    /**
+     * @param bool $isPowered
+     */
+    public function setIsPowered($isPowered)
+    {
+        $this->isPowered = $isPowered;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintLeftMargin()
+    {
+        return $this->printLeftMargin;
+    }
+
+    /**
+     * @param smallint $printLeftMargin
+     */
+    public function setPrintLeftMargin($printLeftMargin)
+    {
+        $this->printLeftMargin = $printLeftMargin;
     }
 
 

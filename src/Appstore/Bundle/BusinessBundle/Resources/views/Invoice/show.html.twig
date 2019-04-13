@@ -162,8 +162,8 @@
                                 {% if (("now"|date("d-m-y") == entity.updated|date('d-m-y')) and  entity.process in processes and app.user.granted("ROLE_DOMAIN")) or ( ("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process in processes and app.user.granted("ROLE_BUSINESS_REVERSE_SALES"))  %}
                                     <a  href="{{ path('business_sales_reverse',{'id':entity.id}) }}"  data-url="" class="btn blue"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                 {% endif %}
-                                <a class="btn yellow" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id}) }}"><i class="icon-print"></i> Print Invoice</a>
-                                <a class="btn black" target="_blank" href="{{ path('business_invoice_chalan',{'id':entity.id}) }}"><i class="icon-print"></i> Print Chalan</a>
+                                <a class="btn yellow" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id,'print':'print'}) }}"><i class="icon-print"></i> Print Invoice</a>
+                                <a class="btn black" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id,'print':'chalan'}) }}"><i class="icon-print"></i> Print Chalan</a>
                                 <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                             </div>
                         </div>

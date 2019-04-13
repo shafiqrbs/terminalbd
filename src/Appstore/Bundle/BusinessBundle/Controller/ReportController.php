@@ -62,16 +62,37 @@ class ReportController extends Controller
 		$purchaseSalesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 		$transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
 		$cashOverview = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
-		return $this->render('BusinessBundle:Report:sales/sales.html.twig', array(
-			'option'                => $user->getGlobalOption() ,
-			'entities'              => $pagination ,
-			'purchasePrice'         => $salesPurchasePrice ,
-			'cashOverview'          => $cashOverview,
-			'purchaseSalesPrice'    => $purchaseSalesPrice,
-			'transactionMethods'    => $transactionMethods ,
-			'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
-			'searchForm'            => $data,
-		));
+
+
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/sales.html.twig', array(
+                'option'                => $user->getGlobalOption() ,
+                'entities'              => $pagination ,
+                'purchasePrice'         => $salesPurchasePrice ,
+                'cashOverview'          => $cashOverview,
+                'purchaseSalesPrice'    => $purchaseSalesPrice,
+                'transactionMethods'    => $transactionMethods ,
+                'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
+                'searchForm'            => $data,
+            ));
+
+        }else{
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/salesPdf.html.twig', array(
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'option'                => $user->getGlobalOption() ,
+                    'entities'              => $pagination ,
+                    'purchasePrice'         => $salesPurchasePrice ,
+                    'cashOverview'          => $cashOverview,
+                    'purchaseSalesPrice'    => $purchaseSalesPrice,
+                    'transactionMethods'    => $transactionMethods ,
+                    'branches'              => $this->getUser()->getGlobalOption()->getBranches(),
+                    'searchForm'            => $data,
+                )
+            );
+            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+        }
 	}
 
 	public function salesStockItemAction()
@@ -302,5 +323,20 @@ class ReportController extends Controller
 			'searchForm'            => $data,
 		));
 	}
+
+
+
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
+    }
+
 
 }

@@ -32,15 +32,10 @@
                         <div class="caption"><i class="icon-reorder"></i>Account Cash</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('account_transaction_cash') }}"><i class="icon-plus-sign"></i>&nbsp;Account of Cash</a></li>
-                                    <li><a href="{{ path('account_transaction_bank') }}"><i class="icon-th-list"></i>&nbsp;Account of Bank</a></li>
-                                    <li><a href="{{ path('account_transaction_mobilebank') }}"><i class="icon-th-list"></i>&nbsp;Account of Mobile</a></li>
-                                </ul>
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate :"now"|date("d-m-Y") %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
+                                <a target="_blank" href="{{ path('account_transaction_cash',{'pdf':'pdf','startDate':startDate,'endDate':endDate}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
+
                             </div>
                         </div>
                     </div>

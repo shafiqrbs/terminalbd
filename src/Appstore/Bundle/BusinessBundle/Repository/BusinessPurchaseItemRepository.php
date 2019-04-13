@@ -182,6 +182,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
 		    $entity->setWidth($data['width']);
 		    $quantity = round((($entity->getHeight() * $entity->getWidth()) * $data['quantity']),2);
 		    $entity->setQuantity($quantity);
+		    $entity->setSubQuantity($data['quantity']);
 	    }else{
 		    $entity->setQuantity($data['quantity']);
 	    }

@@ -154,6 +154,14 @@ class BusinessConfig
     /**
      * @var smallint
      *
+     * @ORM\Column(name="invoiceWidth", type="smallint",  nullable=true)
+     */
+    private $invoiceWidth = 0;
+
+
+    /**
+     * @var smallint
+     *
      * @ORM\Column(name="printMarginTop", type="smallint",  nullable=true)
      */
     private $printTopMargin = 0;
@@ -251,6 +259,22 @@ class BusinessConfig
      * @ORM\Column(name="invoiceType", type="string", length=30,nullable = true)
      */
     private $invoiceType;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="borderWidth", type="smallint", length=2, nullable = true)
+     */
+    private $borderWidth = 0;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="borderColor", type="string", length=25,nullable = true)
+     */
+    private $borderColor;
 
 
     /**
@@ -1220,6 +1244,54 @@ class BusinessConfig
     public function setUnitCommission($unitCommission)
     {
         $this->unitCommission = $unitCommission;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getInvoiceWidth()
+    {
+        return $this->invoiceWidth;
+    }
+
+    /**
+     * @param smallint $invoiceWidth
+     */
+    public function setInvoiceWidth($invoiceWidth)
+    {
+        $this->invoiceWidth = $invoiceWidth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBorderWidth()
+    {
+        return $this->borderWidth;
+    }
+
+    /**
+     * @param string $borderWidth
+     */
+    public function setBorderWidth($borderWidth)
+    {
+        $this->borderWidth = $borderWidth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBorderColor()
+    {
+        return $this->borderColor;
+    }
+
+    /**
+     * @param string $borderColor
+     */
+    public function setBorderColor($borderColor)
+    {
+        $this->borderColor = $borderColor;
     }
 
 

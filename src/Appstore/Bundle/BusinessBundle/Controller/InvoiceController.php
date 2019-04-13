@@ -616,6 +616,8 @@ class InvoiceController extends Controller
 
         /* @var $config BusinessConfig */
 
+        $print = (isset($_REQUEST['print']) and !empty($_REQUEST['print'])) ?  $_REQUEST['print'] : 'print';
+
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         if ($config->getId() == $entity->getBusinessConfig()->getId()) {
 
@@ -636,7 +638,7 @@ class InvoiceController extends Controller
                     'entity' => $entity,
                     'balance' => $balance,
                     'amountInWords' => $amountInWords,
-                    'print' => 'print',
+                    'print' => $print,
                 )
             );
         }

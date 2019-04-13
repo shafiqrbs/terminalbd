@@ -121,6 +121,7 @@
                         <hr><br/></hr>
                     {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'top' %}
                         <div class="row row-flex">
+                            {% if page.webPath is not empty %}
                             <div class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
                                 <div class="thumbnail {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}" data-match-height="grid-list" >
                                     <a href="{{ image(page.webPath) }}" class="swipebox" title="{{ page.name }}">
@@ -131,6 +132,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                             {% for slide in page.photoGallery.galleryImages %}
                                 <div class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
                                     <div class="thumbnail {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}" data-match-height="grid-list" >
@@ -227,6 +229,7 @@
                         <hr><br/></hr>
                     {% elseif page.photoGallery is not empty and page.galleryType == 'thumb' and page.galleryPosition == 'bottom' %}
                         <div class="row row-flex">
+                            {% if page.webPath is not empty %}
                             <div class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
                                 <div class="thumbnail {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}" data-match-height="grid-list" >
                                     <a href="{{ image(page.webPath) }}" class="swipebox" title="{{ page.name }}">
@@ -237,6 +240,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                             {% for slide in page.photoGallery.galleryImages %}
                                 <div class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
                                     <div class="thumbnail {% if globalOption.templateCustomize.boxShadow is not empty  %} {{ globalOption.templateCustomize.boxShadow }} {% endif %}" data-match-height="grid-list" >

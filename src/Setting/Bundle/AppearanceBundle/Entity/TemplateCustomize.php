@@ -479,6 +479,13 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="contentAlign", type="string", length = 20, nullable=true)
+     */
+    private $contentAlign;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="contentLineHeight", type="string", length = 5, nullable=true)
      */
     private $contentLineHeight;
@@ -2868,6 +2875,22 @@ class TemplateCustomize
     public function setBoxShadowColor($boxShadowColor)
     {
         $this->boxShadowColor = $boxShadowColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentAlign()
+    {
+        return $this->contentAlign;
+    }
+
+    /**
+     * @param string $contentAlign
+     */
+    public function setContentAlign($contentAlign)
+    {
+        $this->contentAlign = $contentAlign;
     }
 
 

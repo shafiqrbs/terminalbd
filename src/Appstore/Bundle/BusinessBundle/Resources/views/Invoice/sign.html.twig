@@ -174,18 +174,20 @@
                                                         {% endif %}
                                                     </td>
                                                     <td class="">
-                                                        <input type="hidden" name="subQuantity-{{ item.id }}" id="subQuantity-{{ item.id }}" value="{% if item.subQuantity is not empty %}{{ item.subQuantity }}{% else %}1{% endif %}" >
+                                                        <input type="hidden" name="subQuantity-{{ item.id }}" id="subQuantity-{{ item.id }}" value="{% if item.subQuantity > 0 %}{{ item.subQuantity }}{% else %}1{% endif %}" >
                                                         <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
-                                                        <input type="text" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.price }}" >
+                                                        <input type="text" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" data-id="{{ item.id }}" name="salesPrice" value="{{ item.price }}" >
                                                     </td>
                                                     <td class="">
                                                         <input type="text" class=" numeric td-inline-input-qnt quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
                                                     </td>
                                                     <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
                                                     <td class="">
-                                                        <div class="input-group">
-                                                        <a data-id="{{ item.id }}" title="" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
-                                                        <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+                                                        <div class="action">
+                                                            <div class="input-group">
+                                                            <a data-id="{{ item.id }}" title="" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
+                                                            <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                 </tr>

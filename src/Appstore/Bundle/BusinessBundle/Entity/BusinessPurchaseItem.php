@@ -580,7 +580,7 @@ class BusinessPurchaseItem
 	/**
 	 * @return float
 	 */
-	public function getSubQuantity(): float {
+	public function getSubQuantity(){
 		return $this->subQuantity;
 	}
 
@@ -594,7 +594,7 @@ class BusinessPurchaseItem
 	/**
 	 * @return float
 	 */
-	public function getTotalQuantity(): float {
+	public function getTotalQuantity(){
 		return $this->totalQuantity;
 	}
 

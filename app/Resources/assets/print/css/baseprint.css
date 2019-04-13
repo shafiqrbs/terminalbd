@@ -1,3 +1,9 @@
+ul , ul li{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+}
 #invoice{
   padding: 30px;
 }
@@ -154,6 +160,10 @@
     float: right;
 }
 
+.span{
+    margin-left: 15px;
+}
+
 .span12{
     width: 100%
 }
@@ -178,7 +188,6 @@
 .span1{
     width: 8.33333333%
 }
-
 
 
 @media print {

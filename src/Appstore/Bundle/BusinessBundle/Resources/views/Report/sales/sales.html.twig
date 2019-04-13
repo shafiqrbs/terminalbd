@@ -33,6 +33,14 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('business_report_sales_summary') }}"><i class="icon-bar-chart"></i>&nbsp;Sales Overview</a>
+                                {% set process = searchForm.process is defined ? searchForm.process :'' %}
+                                {% set customer = searchForm.customer is defined ? searchForm.customer :'' %}
+                                {% set toUser = searchForm.toUser is defined ? searchForm.toUser :'' %}
+                                {% set transactionMethod = searchForm.transactionMethod is defined ? searchForm.transactionMethod :'' %}
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate : "now"|date("d-m-Y") %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
+                                <a target="_blank" href="{{ path('business_report_sales_details',{'pdf':'pdf','startDate':startDate,'endDate':endDate,'process':process,'customer':customer,'transactionMethod':transactionMethod,'toUser':toUser}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
+
                             </div>
                         </div>
                     </div>
@@ -40,11 +48,8 @@
                         <div class="row-fluid">
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span3">
-                                        <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
-                                    </div>
-                                    <div class="span3">
-                                        <input type="text" id="customer" name="customer"  class="span12 m-wrap select2CustomerName" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer name ">
+                                    <div class="span6">
+                                        <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer name/mobile no ">
                                     </div>
                                     <div class="span3">
                                         <select name="paymentStatus" id="paymentStatus" class="span12 m-wrap">

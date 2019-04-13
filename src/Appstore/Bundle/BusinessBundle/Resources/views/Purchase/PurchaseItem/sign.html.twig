@@ -93,10 +93,10 @@
                                     <th class="">Height</th>
                                     <th class="">Width</th>
                                     <th class="">Qnt</th>
+                                    <th class="">Total Qnt</th>
                                     <th class="">Unit</th>
-                                    <th class="">Purchase Price</th>
+                                    <th class="">PP</th>
                                     <th class="">Sub-Total</th>
-                                    <th class="">Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -109,17 +109,11 @@
                                         <td class="">{{ item.businessPurchase.grn }}</td>
                                         <td class="">{{ item.height }}</td>
                                         <td class="">{{ item.width }}</td>
+                                        <td class="">{{ item.subQuantity }}</td>
                                         <td class="">{{ item.quantity }}</td>
                                         <td class="">{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
                                         <td class="">{{ item.purchasePrice }}</td>
                                         <td class="">{{ item.purchaseSubTotal|number_format }}</td>
-                                        <td class="">
-                                            {% if item.businessPurchase.process == 'Approved' and item.status == 0 %}
-                                                <a  id="{{ item.id }}" data-url="{{ path('business_purchase_item_approve', { 'id': item.id }) }}" href="javascript:" class="btn green mini approve tooltips" data-trigger = "hover" data-original-title ="Approve" ><i class="icon-refresh"></i> In-progress</a>
-                                            {% else %}
-                                                <a  href="javascript:" class="btn blue mini" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-ok"></i> Done</a>
-                                            {% endif %}
-                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

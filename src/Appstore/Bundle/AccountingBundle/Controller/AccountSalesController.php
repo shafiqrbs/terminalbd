@@ -210,6 +210,7 @@ class AccountSalesController extends Controller
         $amountInWord = $this->get('settong.toolManageRepo')->intToWords($entity->getAmount());
         return $this->render('AccountingBundle:AccountSales:print.html.twig', array(
             'entity'           => $entity,
+            'config'           => $entity->getGlobalOption()->getAccountingConfig(),
             'amountInWord'     => $amountInWord,
         ));
     }

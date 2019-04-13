@@ -1,7 +1,38 @@
 {% extends '::print.html.twig' %}
 {% block body %}
-    <div style="width: 850px; margin:0 auto;">
-        <table class="table" >
+    <style>
+        #print-container{
+            width: 100%;
+            margin: 0 auto;
+            display: block;
+            font-size: 14px;
+            color: #0A0302;
+            position: relative;
+        }
+        #print-container{
+            margin-top:{{ config.printTopMargin }}cm!important;
+        {% if config.invoiceWidth > 0  %}
+            width:{{ config.invoiceWidth }}cm!important;
+        {% endif %}
+        {% if config.invoiceHeight > 0  %}
+            height:{{ config.invoiceHeight }}cm!important;
+        {% endif %}
+        {% if config.bodyFontSize is not empty  %}
+            font-size:{{ config.bodyFontSize }}!important;
+        {% endif %}
+        {% if config.borderColor is not empty  %}
+            border-color:{{ config.borderColor }}!important;
+        {% endif %}
+        {% if config.borderWidth is not empty  %}
+            border-width:{{ config.borderWidth }}!important;
+            border: solid;
+        {% endif %}
+        }
+
+    </style>
+    <div id="print-container">
+        {% if config.isPrintHeader == 1 %}
+            <table class="table" >
             <tr>
                 <td>
                     <div class="span4  pull-left invoice-logo-space">
@@ -21,6 +52,7 @@
                 </td>
             </tr>
         </table>
+        {% endif %}
         <table class="table table-border" >
             <tr class="print-header">
                 <th colspan="3">

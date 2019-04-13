@@ -63,32 +63,39 @@ class TransactionController extends Controller
 	 */
 	public function accountCashAction()
 	{
-		$em = $this->getDoctrine()->getManager();
+
+
+	    $em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$user = $this->getUser();
 		$transactionMethods = array(1,2,3,4);
 		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
 		$pagination = $this->paginate($entities);
-	//	$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
-	//	$processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
-
 		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
 		$globalOption = $this->getUser()->getGlobalOption();
 		$globalOption->getId();
-	//	$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->finalTransaction($globalOption);
-	//	$accountPurchase = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Purchase');
-	//	$accountSales = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Sales');
-	//	$accountExpenditure = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption,'Expenditure');
 
-		return $this->render('AccountingBundle:Transaction:accountcash.html.twig', array(
-			'entities' => $pagination,
-			'overview' => $overview,
-		//	'purchases' => $accountPurchase,
-		//	'sales' => $accountSales,
-		//	'expenditures' => $accountExpenditure,
-			'searchForm' => $data,
-		));
-	}
+        if(empty($data['pdf'])){
+
+            return $this->render('AccountingBundle:Transaction:accountcash.html.twig', array(
+                'entities' => $pagination,
+                'overview' => $overview,
+                'searchForm' => $data,
+            ));
+
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:Transaction/Report:monthlyPdf.html.twig', array(
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'entities'                      => $pagination,
+                    'overview'                      => $overview,
+                    'searchForm'                    => $data,
+                )
+            );
+            $this->downloadPdf($html,'dailyCashPdf.pdf');
+        }
+
+    }
    
     /**
      * Finds and displays a Transaction entity.
@@ -182,12 +189,28 @@ class TransactionController extends Controller
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
         $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
-        return $this->render('AccountingBundle:Transaction:cash.html.twig', array(
-            'entities' => $pagination,
-            'overview' => $overview,
-            'processHeads' => $processHeads,
-            'searchForm' => $data,
-        ));
+
+        if(empty($data['pdf'])){
+
+            return $this->render('AccountingBundle:Transaction:cash.html.twig', array(
+                'entities' => $pagination,
+                'overview' => $overview,
+                'processHeads' => $processHeads,
+                'searchForm' => $data,
+            ));
+
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:Transaction/Report:cashDetailsPdf.html.twig', array(
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'entities' => $entities->getResult(),
+                    'overview' => $overview,
+                    'processHeads' => $processHeads,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'dailyCashPdf.pdf');
+        }
 
     }
 
@@ -370,7 +393,7 @@ class TransactionController extends Controller
         $snappy          = new Pdf($wkhtmltopdfPath);
         $pdf             = $snappy->getOutputFromHtml($html);
         header('Content-Type: application/pdf');
-        header("Content-Disposition: attachment; filename='{$fileName}'");
+        header("Content-Disposition: attachment; filename={$fileName}");
         echo $pdf;
         return new Response('');
     }
