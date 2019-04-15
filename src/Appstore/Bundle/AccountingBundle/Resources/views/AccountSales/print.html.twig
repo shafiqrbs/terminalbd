@@ -61,7 +61,7 @@
                 </th>
             </tr>
             <tr>
-                <td colspan="2" class="bottom-border"><strong class="strong3">Customer Name</strong>: {{ entity.customer.name }}</td>
+                <td colspan="2" class="bottom-border"><strong class="strong3">Customer</strong>: {{ entity.customer.name }}</td>
                 <td class="bottom-border"><strong>Mobile</strong>: {{ entity.customer.mobile }}</td>
             </tr>
             <tr>
@@ -69,6 +69,9 @@
             </tr>
             <tr>
                 <td colspan="3" class="bottom-border"><strong class="strong3">In words</strong>: {{ amountInWord }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="bottom-border"><strong class="strong3">Remarks</strong>: {{ entity.remark }}</td>
             </tr>
             <tr><td colspan="3">&nbsp;</td></tr>
             <tr><td colspan="3">&nbsp;</td></tr>
@@ -79,13 +82,7 @@
                         <li>Amount Tk. <label class="label-box">{{ entity.amount|number_format }}</label></li>
                     </ul>
                 </td>
-                <td class="span6 text-center">
-                    {% if entity.remark is not empty  %}
-                        <ul class="unstyled">
-                            <li>Remark. <span class="label-box">{{ entity.remark }}</span></li>
-                        </ul>
-                    {% endif %}
-                </td>
+                <td class="span6 text-center"></td>
                 <td class="span3 pull-right">
                     <ul class="unstyled">
                         <li style="border-top:2px solid #000; text-align: center">Signature</li>
@@ -94,14 +91,12 @@
             </tr>
             <tr><td colspan="3">&nbsp;</td></tr>
         </table>
-        <table class="table table-border">
 
-        </table>
     </div>
     <style>
         .strong3{
             display: inline-block;
-            width: 110px;
+            width: 70px;
         }
         .table td{
             font-size:13px;
