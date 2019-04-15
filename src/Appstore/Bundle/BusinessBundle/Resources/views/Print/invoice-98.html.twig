@@ -1,15 +1,7 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
     <style>
-        #print-container{
-            width: 100%;
-            margin: 0 auto;
-            display: block;
-            font-size: 14px;
-            color: #0A0302;
-            position: relative;
-            padding: 5px;
-        }
+
         #print-container{
             margin-top:{{ config.printTopMargin }}cm!important;
             {% if config.invoiceWidth > 0  %}
@@ -30,103 +22,7 @@
             {% endif %}
         }
 
-        .table{
-            margin-bottom: 0!important;
-            border: none!important;
-        }
 
-        .table th, .table td{
-            border-top: none;
-        }
-
-
-        .table-head{
-            height: 35px!important;
-            line-height: 35px;
-        }
-
-        .table, .table tbody , .table tr, .table thead tr , .table tbody tr {
-            width: 100%;
-            display: table;
-         }
-         .table tbody{
-             width: 100%;
-         }
-        .table td, .table th{
-            padding:3px;
-        }
-
-        thead.table-head th, tbody.table-body td, tbody.table-body th{
-            padding:3px;
-            border-right: 1px solid silver;
-            border-bottom: 1px silver solid;
-        }
-
-        thead.table-head tr th:nth-child(1),
-        thead.table-head tr th:nth-child(2),
-        thead.table-head tr th:nth-child(3),
-        thead.table-head tr th:nth-child(4),
-        thead.table-head tr th:nth-child(5),
-        thead.table-head tr th:nth-child(6),
-        thead.table-head tr th:nth-child(7),
-        thead.table-head tr th:nth-child(8)
-        {
-            background: #777575 !important;
-            height: 25px!important;
-            line-height: 25px!important;
-        }
-
-
-        thead.table-head tr th:nth-child(1) , tbody.table-body tr td:nth-child(1){
-            width: 35px!important;
-            text-align: center;
-            background: #b3b3b3 !important;
-        }
-
-        .table-body thead th:nth-child(2), tbody.table-body td:nth-child(2){
-
-         }
-
-
-        thead.table-head tr th:nth-child(3) , tbody.table-body tr td:nth-child(3){
-            width: 60px!important;
-        }
-
-
-        thead.table-head tr th:nth-child(4) , tbody.table-body tr td:nth-child(4){
-            width: 60px!important;
-        }
-
-
-         thead.table-head tr th:nth-child(5) , tbody.table-body tr td:nth-child(5){
-            width: 70px!important;
-        }
-
-
-        thead.table-head tr th:nth-child(6) , tbody.table-body tr td:nth-child(6){
-            width: 60px!important;
-        }
-
-        thead.table-head tr th:nth-child(7) , tbody.table-body tr td:nth-child(7){
-            width: 60px!important;
-        }
-
-        thead.table-head tr th:nth-child(8) , tbody.table-body tr td:nth-child(8){
-            background: #DDDDDD !important;
-            width: 80px!important;
-            border-right:none;
-            padding-right: 10px;
-        }
-
-        .table h4{
-            text-decoration: underline!important;
-            font-weight: bold;
-        }
-        .caption strong{
-            padding: 15px; border: 5px solid #000000;
-            display: inline-block;
-            margin-top: 30px;
-        }
     </style>
     <div  id="print-container">
         {% if config.isPrintHeader == 1 %}
@@ -223,10 +119,8 @@
                                 <td ><strong class="pull-right" >{{ item.subTotal|number_format() }}</strong></td>
                             </tr>
                         {% endfor %}
-                        <tr> <td colspan="8" style="border-top:1px solid #999999; text-align: left!important; background: #FFFFFF!important;"><strong>Narration: </strong> : {{ entity.comment|raw }}</td></tr>
-                        <tr> <td colspan="8" style="border: 1px solid #999999"></td></tr>
+                        <tr> <td colspan="8" style="border-top:1px solid #999999; text-align: left!important; background: #FFFFFF!important;border-bottom: 3px solid #000000"><strong>Narration: </strong> : {{ entity.comment|raw }}</td></tr>
                         </tbody>
-                        <tfoot>
                         <tr>
                             <td colspan="3"  style="width: 33%; border-right:1px solid #999999">
                                 <table style="width: 100%;">
@@ -243,12 +137,13 @@
                                     <tr><td ><span class="pull-left" >SUB TOTAL</span></td><td><strong  class="pull-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
                                     <tr><td ><span class="pull-left" >DISCOUNT</span></td><td><strong  class="pull-right">{{ entity.discount|number_format() }}</strong></td></tr>
                                     <tr><td ><strong class="pull-left" >GRAND TOTAL</strong></td><td ><strong class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
-                                    <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                    <tr><td ><strong>In words: {{ entity.paymentInWord }} </strong><strong class="pull-right" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
+                                    <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 2px; "></td></tr>
+                                    <tr><td><strong class="pull-left" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
 
                                 </table>
                             </td>
                         </tr>
+                        <tr><td colspan="3" style="border-top:1px solid #999999;padding-left: 5px!important;"><strong>In words: {{ entity.paymentInWord }} </strong></td></tr>
                         </tfoot>
                     </table>
                 {% endif %}
@@ -294,6 +189,14 @@
         }, 2000);
     </script>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@BusinessBundle/Resources/public/css/print.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+
 
 
 

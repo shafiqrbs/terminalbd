@@ -17,6 +17,9 @@ parameters:
     sms_username:       ~
     sms_password:       ~
 
+    x-api-key:          ~
+    x-api-value:        ~
+
     location_level_labels:
       - Division
       - District
