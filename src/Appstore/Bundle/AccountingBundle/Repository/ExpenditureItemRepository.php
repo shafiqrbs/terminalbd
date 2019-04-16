@@ -76,8 +76,10 @@ class ExpenditureItemRepository extends EntityRepository
         if($total['total'] > 0){
             $subTotal = $total['total'];
             $entity->setTotalAmount($subTotal);
+            $entity->setPurchaseAmount($subTotal);
         }else{
             $entity->setTotalAmount(0);
+            $entity->setPurchaseAmount(0);
         }
 
         $em->persist($entity);
@@ -126,32 +128,6 @@ class ExpenditureItemRepository extends EntityRepository
 
         }
         return $data;
-    }
-
-    public function purchaseStockItemUpdate(BusinessParticular $stockItem)
-    {
-        $qb = $this->createQueryBuilder('e');
-        $qb->join('e.businessPurchase', 'mp');
-        $qb->select('SUM(e.quantity) AS quantity');
-        $qb->where('e.businessParticular = :particular')->setParameter('particular', $stockItem->getId());
-        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
-        $qnt = $qb->getQuery()->getOneOrNullResult();
-        return $qnt['quantity'];
-    }
-
-    public function updatePurchaseItemPrice(BusinessPurchase $purchase)
-    {
-        /* @var BusinessPurchaseItem $item */
-
-        foreach ($purchase->getBusinessPurchaseItems() as $item){
-
-            $em = $this->_em;
-            $percentage = $purchase->getDiscountCalculation();
-            $purchasePrice = $this->stockPurchaseItemPrice($percentage,$item->getActualPurchasePrice());
-            $item->setPurchasePrice($purchasePrice);
-            $em->persist($item);
-            $em->flush();
-        }
     }
 
     public function stockPurchaseItemPrice($percentage,$price)
