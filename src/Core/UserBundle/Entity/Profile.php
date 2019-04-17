@@ -217,6 +217,15 @@ class Profile
     public $temp;
 
     /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+    /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
@@ -737,6 +746,9 @@ class Profile
     {
         $this->facebookId = $facebookId;
     }
+
+
+
 
 
 }

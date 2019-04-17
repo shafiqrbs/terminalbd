@@ -162,11 +162,11 @@ class CustomerController extends Controller
     /**
      * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
      */
-    public function editAction($id)
+    public function editAction(User $user)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('UserBundle:Profile')->find($id);
+        $entity = $user->getProfile();
+     //   $entity = $em->getRepository('UserBundle:Profile')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');

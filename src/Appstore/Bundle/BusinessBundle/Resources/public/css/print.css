@@ -52,8 +52,8 @@ thead.table-head tr th:nth-child(8)
     background: #777575 !important;
     height: 25px!important;
     line-height: 25px!important;
-    border-top: #000000 solid 3px;
-    border-bottom: #000000 solid 3px;
+    border-top: #000000 solid 1px;
+    border-bottom: #000000 solid 1px;
 }
 
 
@@ -103,7 +103,6 @@ thead.table-head tr th:nth-child(8) , tbody.table-body tr td:nth-child(8){
     font-weight: bold;
 }
 .caption strong{
-    padding: 15px; border: 5px solid #000000;
     display: inline-block;
     margin-top: 30px;
 }

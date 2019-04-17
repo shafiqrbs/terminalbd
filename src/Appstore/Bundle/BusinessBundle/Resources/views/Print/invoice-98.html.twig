@@ -42,19 +42,9 @@
         {% endif %}
         <div>
             <table class="table">
-                <tr><td colspan="3" style="text-align: center!important;">
-                        {% if entity.process == 'Chalan' %}
-                            <div class="caption"><strong>CHALAN</strong></div>
-                        {% elseif entity.process == 'Quotation' %}
-                            <div class="caption"><strong>QUOTATION</strong></div>
-                        {% else %}
-                            <div class="caption"><strong>INVOICE/BILL</strong></div>
-                        {% endif %}
-                    </td>
-                </tr>
                 <tr>
-                    <td style="width:75%">
-                        <div class="span4 span">
+                    <td style="width:40%">
+                        <div class="">
                             <h4>Bill To</h4>
                             <ul class="unstyled">
                                 {% if entity.customer %}
@@ -71,7 +61,16 @@
                             </ul>
                         </div>
                     </td>
-                    <td style="display: inline-block">
+                    <th valign="top" style="text-align: center!important; width: 20%">
+                        {% if entity.process == 'Chalan' %}
+                            <div class=""><strong>CHALAN</strong></div>
+                        {% elseif entity.process == 'Quotation' %}
+                            <div class=""><strong>QUOTATION</strong></div>
+                        {% else %}
+                            <div class=""><strong>INVOICE/BILL</strong></div>
+                        {% endif %}
+                    </th>
+                    <td style="display: inline-block; width: 40%; float: right">
                         <h4>Transaction</h4>
                         <ul class="unstyled">
                             <li><strong><i class="icon-file"></i>&nbsp;</strong>{{ entity.invoice }}</li>
@@ -116,7 +115,7 @@
                                 <td ><strong class="pull-right" >{{ item.subTotal|number_format() }}</strong></td>
                             </tr>
                         {% endfor %}
-                        <tr> <td colspan="8" style="border-top:1px solid #999999; text-align: left!important; background: #FFFFFF!important;border-bottom: 3px solid #000000"><strong>Narration: </strong> : {{ entity.comment|raw }}</td></tr>
+                        <tr> <td colspan="8" style="border-top:1px solid #999999; text-align: left!important; background: #FFFFFF!important;border-bottom: 1px solid #000000"><strong>Narration: </strong> : {{ entity.comment|raw }}</td></tr>
                         </tbody>
                         <tr>
                             <td colspan="3"  style="width: 33%; border-right:1px solid #999999">
@@ -178,13 +177,13 @@
             {% endif %}
         </div>
     </div>
-    <script>
+{#    <script>
         window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
         }, 2000);
-    </script>
+    </script>#}
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
