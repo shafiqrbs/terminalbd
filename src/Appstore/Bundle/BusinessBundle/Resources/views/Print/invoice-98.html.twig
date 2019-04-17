@@ -70,7 +70,7 @@
                             <div class=""><strong>INVOICE/BILL</strong></div>
                         {% endif %}
                     </th>
-                    <td style="display: inline-block; width: 40%; float: right">
+                    <td style="width: 40%; float: right">
                         <h4>Transaction</h4>
                         <ul class="unstyled">
                             <li><strong><i class="icon-file"></i>&nbsp;</strong>{{ entity.invoice }}</li>
@@ -179,13 +179,13 @@
             {% endif %}
         </div>
     </div>
-{#    <script>
+    <script>
         window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
         }, 2000);
-    </script>#}
+    </script>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
