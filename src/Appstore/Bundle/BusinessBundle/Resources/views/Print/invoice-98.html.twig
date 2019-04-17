@@ -117,6 +117,7 @@
                         {% endfor %}
                         <tr> <td colspan="8" style="border-top:1px solid #999999; text-align: left!important; background: #FFFFFF!important;border-bottom: 1px solid #000000"><strong>Narration: </strong> : {{ entity.comment|raw }}</td></tr>
                         </tbody>
+                        {% if entity.process != 'Quotation' %}
                         <tr>
                             <td colspan="3"  style="width: 33%; border-right:1px solid #999999">
                                 <table style="width: 100%;">
@@ -140,6 +141,7 @@
                             </td>
                         </tr>
                         <tr><td colspan="3" style="border-top:1px solid #999999;padding-left: 5px!important;"><strong>In words: {{ entity.paymentInWord }} </strong></td></tr>
+                            {% endif %}
                         </tfoot>
                     </table>
                 {% endif %}
