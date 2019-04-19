@@ -77,8 +77,8 @@
                                         <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                                         <th class="span3">Name</th>
                                         <th class="span1">Price</th>
-                                        <th class="span1">Qnt</th>
-                                        <th class="span1">Sales Qnt</th>
+                                        <th class="numeric" >Stock in</th>
+                                        <th class="numeric" >Stock out</th>
                                         <th class="span1">Remaining</th>
                                         <th class="span1">Unit</th>
                                         <th class="span1">Sub Total</th>
@@ -107,6 +107,9 @@
                                     <tr>
                                         <td colspan="7" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                         <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8" class="span12"><span class="pull-left"><strong>Narration</strong>{{ entity.remark|raw }}</span></td>
                                     </tr>
 
                                     </tfoot>

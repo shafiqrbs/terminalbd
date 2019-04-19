@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Purchase
+                   Manage Purchase Item
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_purchase') }}"> Manage Purchase</a>
+                        <a href="{{ path('business_purchase') }}"> Manage Purchase Item</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -33,11 +33,17 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Purchase</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Purchase Item</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('business_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
-                             </div>
+                                <a class="btn black" href="{{ path('business_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
+                                {% set grn = searchForm.grn is defined ? searchForm.grn :'' %}
+                                {% set vendor = searchForm.vendor is defined ? searchForm.vendor :'' %}
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate : "now"|date("d-m-Y") %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
+                                <a target="_blank" href="{{ path('business_purchase_item',{'pdf':'pdf','startDate':startDate,'endDate':endDate,'vendor':vendor,'grn':grn}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
+
+                            </div>
                         </div>
                     </div>
 

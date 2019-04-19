@@ -1,0 +1,115 @@
+<link rel="stylesheet" href="{{ asset('assets/css/print.css') }}"/>
+<style>
+    .table{
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        font-family:tahoma, geneva, sans-serif;
+    }
+    .table tr.head th, .table tr.head td{
+        font-size: 15px;
+        background: #333;
+        color: #fff;
+        height: 40px;
+    }
+
+    .table tr.sub-head th, .table tr.sub-head td{
+        font-size: 15px;
+        background: #666;
+        color: #fff;
+        height: 40px;
+    }
+
+    .table th, .table td{
+        border: 1px solid #e5e5e5;
+        text-align: left;
+        padding-left: 20px;
+        height: 30px;
+        line-height: 30px;
+
+    }
+    h2 {
+        font-size: 24px;
+        display: block;
+        padding: 0;
+        margin: 0;
+        line-height: 45px;
+        height: 45px;
+    }
+    h3 {
+        font-size: 20px;
+        display: block;
+        padding: 0;
+        margin: 0;
+        line-height: 45px;
+        height: 45px;
+    }
+    .pull-center{
+        background: #e5e5e5;
+        text-align: center!important;
+
+    }
+    .pull-left{
+        text-align: left!important;
+        display: block;
+        padding-right: 20px;
+    }
+    .pull-right{
+        text-align: right!important;
+        display: block;
+        padding-right: 20px;
+    }
+
+    .numeric{
+        width: 80%;
+    }
+
+</style>
+{% set startDate = searchForm.month is defined ? searchForm.month :"now"|date("d-m-Y") %}
+{% set endDate = searchForm.year is defined ? searchForm.year :"now"|date("d-m-Y") %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <td class="pull-center"><h2>{{ globalOption.name }}</h2></td>
+    </tr>
+    <tr>
+        <th class="pull-center"><h3><strong>DATE RANGE SALES SUMMARY STATEMENT: {{ startDate }} To {{ endDate }}</strong></h3></th>
+    </tr>
+    </thead>
+</table>
+<table class="table">
+    <tr>
+        <td colspan="2" class="pull-left"><h3><strong>Sales  Overview</strong></h3></td>
+    </tr>
+    <tr>
+        <th class="numeric" >Net Total</th>
+        <td class="" >{{ cashOverview.totalAmount|number_format }}</td>
+    </tr>
+    <tr>
+        <th class="numeric" >Payment</th>
+        <td class="" >{{ cashOverview.receiveAmount|number_format }}</td>
+    </tr>
+    <tr>
+        <th class="numeric" >Due</th>
+        <td class="" >{{ (cashOverview.totalAmount - cashOverview.receiveAmount)|number_format }}</td>
+    </tr>
+</table>
+<table class="table table-bordered table-striped table-condensed flip-content ">
+
+    <tr>
+        <td colspan="2" class="pull-left"><h3><strong>Sales Profit/Loss</strong></h3></td>
+    </tr>
+    <tr>
+        <th class="numeric" >Sales Price</th>
+        <td class="" >{{ salesPrice.total|number_format }}</td>
+    </tr>
+    <tr>
+        <th class="numeric" >Purchase Price</th>
+        <td class="" >{{ purchasePrice.totalPurchase|number_format }}</td>
+    </tr>
+    <tr>
+        <th class="numeric" >Profit/Loss</th>
+        <td class="numeric" >{{ (salesPrice.total - purchasePrice.totalPurchase)|number_format }}</td>
+    </tr>
+</table>

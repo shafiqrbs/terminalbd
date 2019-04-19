@@ -8,6 +8,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Form\PurchaseType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,11 +63,37 @@ class PurchaseController extends Controller
         $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->findWithSearch($this->getUser(),$data);
         $pagination = $this->paginate($entities);
 	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'index';
-	    return $this->render("BusinessBundle:Purchase/PurchaseItem:{$view}.html.twig", array(
-		    'entities' => $pagination,
-		    'searchForm' => $data,
-        ));
+        if(empty($data['pdf'])){
+            return $this->render("BusinessBundle:Purchase/PurchaseItem:{$view}.html.twig", array(
+                'entities' => $pagination,
+                'searchForm' => $data,
+            ));
+
+        }else{
+            $html = $this->renderView(
+                'BusinessBundle:Purchase/PurchaseItem:signPdf.html.twig', array(
+                    'globalOption'          => $this->getUser()->getGlobalOption(),
+                    'entities' => $pagination,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'purchase-item.pdf');
+        }
     }
+
+
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
+    }
+
 
 
     /**

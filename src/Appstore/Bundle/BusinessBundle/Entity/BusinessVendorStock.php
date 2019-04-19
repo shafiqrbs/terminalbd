@@ -48,6 +48,20 @@ class BusinessVendorStock
      */
     private $subTotal;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="stockIn", type="float", nullable=true)
+     */
+    private $stockIn;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="stockOut", type="float", nullable=true)
+     */
+    private $stockOut;
+
     /**
      * @var string
      *
@@ -261,6 +275,38 @@ class BusinessVendorStock
     public function setCode($code)
     {
         $this->code = $code;
+    }
+
+    /**
+     * @return float
+     */
+    public function getStockOut()
+    {
+        return $this->stockOut;
+    }
+
+    /**
+     * @param float $stockOut
+     */
+    public function setStockOut($stockOut)
+    {
+        $this->stockOut = $stockOut;
+    }
+
+    /**
+     * @return float
+     */
+    public function getStockIn()
+    {
+        return $this->stockIn;
+    }
+
+    /**
+     * @param float $stockIn
+     */
+    public function setStockIn($stockIn)
+    {
+        $this->stockIn = $stockIn;
     }
 
 }

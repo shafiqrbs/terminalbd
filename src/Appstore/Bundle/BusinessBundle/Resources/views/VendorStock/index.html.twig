@@ -86,7 +86,9 @@
                                 <th class="numeric" >Created</th>
                                 <th class="numeric" >GRN</th>
                                 <th class="numeric" >Vendor Name</th>
-                                <th class="numeric" >Total</th>
+                                <th class="numeric" >Stock in</th>
+                                <th class="numeric" >Stock out</th>
+                                <th class="span1">Remaining</th>
                                 <th class="numeric" >Process</th>
                                 <th class="numeric" >Action</th>
                             </tr>
@@ -98,7 +100,9 @@
                                     <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ entity.grn }}</td>
                                     <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</td>
-                                    <td class="numeric" >{{ entity.subTotal|number_format }}</td>
+                                    <td class="numeric" >{{ entity.stockIn|number_format }}</td>
+                                    <td class="numeric" >{{ entity.stockOut|number_format }}</td>
+                                    <td class="numeric" >{{ entity.stockIn - entity.stockOut|number_format }}</td>
                                     <td class="numeric" >{{ entity.process }}</td>
                                     <td class="numeric" >
                                         {% set process = ['Created','Done'] %}

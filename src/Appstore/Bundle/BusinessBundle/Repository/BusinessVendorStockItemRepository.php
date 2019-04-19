@@ -126,6 +126,24 @@ class BusinessVendorStockItemRepository extends EntityRepository
 
     }
 
+    private function updateStockInOut(BusinessVendorStock $vendorStock){
+
+
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.businessVendorStock', 'mp');
+        $qb->select('SUM(e.quantity) AS quantity, SUM(e.salesQuantity) as salesQnt');
+        $qb->where('e.businessVendorStock = :vendorStock')->setParameter('vendorStock', $vendorStock->getId());
+        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        $vendorStock->setStockIn($qnt['quantity']);
+        $vendorStock->setStockOut($qnt['salesQnt']);
+        $em->persist($vendorStock);
+        $em->flush();
+
+    }
+
+
 
     public function insertStockSalesItems(BusinessInvoiceParticular $invoiceParticular ){
 
@@ -139,6 +157,7 @@ class BusinessVendorStockItemRepository extends EntityRepository
         $vendorStock->setSalesQuantity($totalQnt);
         $em->persist($vendorStock);
         $em->flush();
+        $this->updateStockInOut($vendorStock->getBusinessVendorStock());
 
     }
 

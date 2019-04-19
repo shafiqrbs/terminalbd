@@ -40,14 +40,34 @@ class ReportController extends Controller
 
 		$salesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
 		$purchasePrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
-		return $this->render('BusinessBundle:Report:sales/salesOverview.html.twig', array(
-			'option'                    => $user->getGlobalOption() ,
-			'cashOverview'              => $cashOverview ,
-			'salesPrice'                => $salesPrice ,
-			'purchasePrice'             => $purchasePrice ,
-			'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
-			'searchForm'                => $data ,
-		));
+
+
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/salesSummary.html.twig', array(
+                'option'                    => $user->getGlobalOption() ,
+                'cashOverview'              => $cashOverview ,
+                'salesPrice'                => $salesPrice ,
+                'purchasePrice'             => $purchasePrice ,
+                'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
+                'searchForm'                => $data ,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/salesSummaryPdf.html.twig', array(
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'option'                    => $user->getGlobalOption() ,
+                    'cashOverview'              => $cashOverview ,
+                    'salesPrice'                => $salesPrice ,
+                    'purchasePrice'             => $purchasePrice ,
+                    'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
+                    'searchForm'                => $data ,
+                )
+            );
+            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+        }
 
 	}
 

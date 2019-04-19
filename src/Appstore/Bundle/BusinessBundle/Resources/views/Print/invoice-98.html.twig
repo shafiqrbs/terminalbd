@@ -44,22 +44,20 @@
             <table class="table">
                 <tr>
                     <td style="width:40%">
-                        <div class="">
-                            <h4>Bill To</h4>
-                            <ul class="unstyled">
-                                {% if entity.customer %}
-                                    {% if  entity.customer.name is not empty  %}
-                                        <li><strong><i class="icon-user"></i>&nbsp;</strong>&nbsp;{{ entity.customer.name }}</li>
-                                    {% endif %}
-                                    {% if  entity.customer.mobile is not empty %}
-                                        <li><strong><i class="icon-phone"></i>&nbsp;</strong>&nbsp;{{ entity.customer.mobile }}</li>
-                                    {% endif %}
-                                    {% if  entity.customer.address is not empty  %}
-                                        <li><strong><i class=" icon-map-marker"></i>&nbsp;</strong>&nbsp;{{ entity.customer.address|raw }}</li>
-                                    {% endif %}
+                        <h4>Bill To</h4>
+                        <ul class="unstyled">
+                            {% if entity.customer %}
+                                {% if  entity.customer.name is not empty  %}
+                                    <li><strong><i class="icon-user"></i>&nbsp;</strong>&nbsp;{{ entity.customer.name }}</li>
                                 {% endif %}
-                            </ul>
-                        </div>
+                                {% if  entity.customer.mobile is not empty %}
+                                    <li><strong><i class="icon-phone"></i>&nbsp;</strong>&nbsp;{{ entity.customer.mobile }}</li>
+                                {% endif %}
+                                {% if  entity.customer.address is not empty  %}
+                                    <li><strong><i class=" icon-map-marker"></i>&nbsp;</strong>&nbsp;{{ entity.customer.address|raw }}</li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
                     </td>
                     <th valign="top" style="text-align: center!important; width: 20%">
                         {% if entity.process == 'Chalan' %}
