@@ -46,7 +46,7 @@ class CommitteeMemberType extends AbstractType
 
 	        ->add('designation', 'entity', array(
 		        'required'    => true,
-		        'class' => 'EducationParticular.php',
+		        'class' => 'ElectionBundle:ElectionParticular',
 		        'property' => 'name',
 		        'empty_value' => 'Choose a member designation',
 		        'attr'=>array('class'=>'m-wrap span9 inputs'),

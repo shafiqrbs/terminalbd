@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Account Sales Ledger
+                    Account Sales Customer Ledger
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -27,13 +27,14 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Account Sales Ledger</div>
+                        <div class="caption"><i class="icon-reorder"></i>Account Sales Customer Ledger</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('report_customer_outstanding') }}"><i class="icon-th-list"></i>&nbsp; Customer Outstanding</a>
-                                <a class="btn red"  href="javascript:" id="printLedger"   >
-                                    <i class=" icon-print"></i>&nbsp;Print
-                                </a>
+                                {% set mobile = searchForm.mobile is defined ? searchForm.mobile :'' %}
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate : "now"|date("d-m-Y") %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
+                                <a target="_blank" href="{{ path('report_customer_ledger',{'pdf':'pdf','startDate':startDate,'endDate':endDate,'mobile':mobile}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
                             </div>
                         </div>
                     </div>

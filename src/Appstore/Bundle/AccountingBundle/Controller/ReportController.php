@@ -415,12 +415,30 @@ class ReportController extends Controller
 			$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
 		}
 		$entities = $em->getRepository('AccountingBundle:AccountSales')->customerLedger($user,$data);
-		return $this->render('AccountingBundle:Report/Outstanding:customerLedger.html.twig', array(
-			'entities' => $entities->getResult(),
-			'overview' => $overview,
-			'customer' => $customer,
-			'searchForm' => $data,
-		));
+
+        if(empty($data['pdf'])) {
+
+            return $this->render('AccountingBundle:Report/Outstanding:customerLedger.html.twig', array(
+                'entities' => $entities->getResult(),
+                'overview' => $overview,
+                'customer' => $customer,
+                'searchForm' => $data,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'AccountingBundle:Report/Outstanding:customerLedgerPdf.html.twig', array(
+                    'globalOption' => $this->getUser()->getGlobalOption(),
+                    'entities' => $entities->getResult(),
+                    'overview' => $overview,
+                    'customer' => $customer,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'customerLedgerPdf.pdf');
+
+        }
 	}
 	/**
 	 * Lists all AccountSales entities.
@@ -495,5 +513,18 @@ class ReportController extends Controller
 			'searchForm' => $data,
 		));
 	}
+
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
+    }
+
 
 }

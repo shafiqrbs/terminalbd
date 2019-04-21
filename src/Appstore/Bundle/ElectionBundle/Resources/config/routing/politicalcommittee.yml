@@ -1,0 +1,67 @@
+committee_political:
+    path:     /
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:index" }
+
+committee_political_new:
+    path:     /new
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:new" }
+
+committee_political_show:
+    path:     /{id}/show
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:show" }
+    options:
+            expose: true
+
+committee_political_search:
+    path:     /search
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:autoSearch" }
+    options:
+            expose: true
+
+committee_political_name:
+    path:      /{particular}/particular-name
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:searchCommitteeName" }
+    options:
+            expose: true
+
+committee_political_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:edit" }
+
+committee_political_update:
+    path:     /{id}/update
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:update" }
+    methods:  [POST, PUT]
+
+committee_political_status:
+    path:     /{id}/status
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:status" }
+
+committee_political_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:delete" }
+
+committee_political_member_new:
+    path:     /{id}/member-new
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:newMember" }
+    options:
+            expose: true
+
+committee_political_member_create:
+    path:     /{id}/member-create
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:createMember" }
+    methods:  POST
+    options:
+            expose: true
+
+committee_political_member_delete:
+    path:     /{id}/member-delete
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:memberDelete" }
+
+committee_political_print:
+    path:     /{id}/print
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:print" }
+
+committee_political_list_print:
+    path:     /list-print
+    defaults: { _controller: "ElectionBundle:PoliticalCommittee:listPrint" }

@@ -41,7 +41,7 @@ class CandidateType extends AbstractType
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span10'),
 		        'constraints' =>array( new NotBlank(array('message'=>'Choose marka')) ),
-		        'class' => 'EducationParticular.php',
+		        'class' => 'ElectionBundle:ElectionParticular',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")
@@ -56,7 +56,7 @@ class CandidateType extends AbstractType
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span10'),
 		        'constraints' =>array( new NotBlank(array('message'=>'Choose a political party')) ),
-		        'class' => 'EducationParticular.php',
+		        'class' => 'ElectionBundle:ElectionParticular',
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->join("e.particularType","p")

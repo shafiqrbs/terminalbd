@@ -160,7 +160,7 @@ class ReportController extends Controller
 			$unionVoters    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionVoteCenter')->getUnionWiseVoter($config,$data);
 			$twig = 'Report/Print:member-group.html.twig';
 		}else{
-			$groups = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->findBy(array( 'particularType' =>11));
+			$groups = $this->getDoctrine()->getRepository( 'ElectionBundle:ElectionParticular' )->findBy(array( 'particularType' =>11));
 			$twig = 'Report:member-group.html.twig';
 		}
 		return $this->render("ElectionBundle:{$twig}", array(

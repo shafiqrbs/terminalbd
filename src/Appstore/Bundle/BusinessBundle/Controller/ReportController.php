@@ -66,7 +66,7 @@ class ReportController extends Controller
                     'searchForm'                => $data ,
                 )
             );
-            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+            $this->downloadPdf($html,'salesSummaryPdf.pdf');
         }
 
 	}
@@ -111,7 +111,7 @@ class ReportController extends Controller
                     'searchForm'            => $data,
                 )
             );
-            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+            $this->downloadPdf($html,'salesPdf.pdf');
         }
 	}
 

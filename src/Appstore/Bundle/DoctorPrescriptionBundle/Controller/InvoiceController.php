@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\DoctorPrescriptionBundle\Controller;
 use Appstore\Bundle\DoctorPrescriptionBundle\Form\InvoiceCustomerType;
 use Appstore\Bundle\DoctorPrescriptionBundle\Form\InvoiceTransactionType;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\DomainUserBundle\Form\CustomerForDmsType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
@@ -65,11 +67,14 @@ class InvoiceController extends Controller
 
     public function newAction()
     {
-        $entity = new DpsInvoice();
-        $em = $this->getDoctrine()->getManager();
+        $entity = new Customer();
+        $user = $this->getUser();
         $form = $this->createInvoiceCustomerForm($entity);
+        $dpsConfig = $user->getGlobalOption()->getDpsConfig();
+        $assignDoctors = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsParticular')->getFindDentalServiceParticular($dpsConfig,array('doctor'));
         $html = $this->renderView('DoctorPrescriptionBundle:Invoice:patient.html.twig', array(
             'form'   => $form->createView(),
+            'assignDoctors'   => $assignDoctors,
         ));
         return New Response($html);
     }
@@ -95,11 +100,6 @@ class InvoiceController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            if (!empty($data['customer']['name'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-                $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile, $data);
-            }
-
             if($dpsConfig->getIsDefaultMedicine() == 1 ){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->defaultDpsBeforeMedicine($entity,$lastObject);
             }
@@ -116,15 +116,15 @@ class InvoiceController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createInvoiceCustomerForm(DpsInvoice $entity)
+    private function createInvoiceCustomerForm(Customer $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new InvoiceCustomerType($globalOption,$location), $entity, array(
+        $form = $this->createForm(new CustomerForDmsType($location), $entity, array(
             'action' => $this->generateUrl('dps_invoice_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal-form',
                 'id' => 'invoicePatientForm',
                 'novalidate' => 'novalidate',
                 'enctype' => 'multipart/form-data',

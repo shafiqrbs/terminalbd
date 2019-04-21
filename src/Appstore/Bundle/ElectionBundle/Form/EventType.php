@@ -76,7 +76,7 @@ class EventType extends AbstractType
 	        ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 inputs','rows' => 8,'autocomplete'=>'off','placeholder'=>'Enter campaign content')))
 	        ->add('eventType', 'entity', array(
 		        'required'    => true,
-		        'class' => 'EducationParticular.php',
+		        'class' => 'ElectionBundle:ElectionParticular',
 		        'empty_value' => '---Choose a event type ---',
 		        'property' => 'name',
 		        'attr'=>array('class'=>'m-wrap span12 inputs'),

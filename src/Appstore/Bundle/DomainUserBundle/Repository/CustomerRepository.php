@@ -240,10 +240,9 @@ class CustomerRepository extends EntityRepository
         }
 
     }
-    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$data)
+    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$customer)
     {
         $em = $this->_em;
-        $customer = $data['customer'];
 		$name = $customer['name'];
         $gender = $customer['gender'];
         $ageGroup = isset($customer['ageGroup']) ? $customer['ageGroup']:'';

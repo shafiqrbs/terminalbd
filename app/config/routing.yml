@@ -10,6 +10,10 @@ election:
     resource: "@ElectionBundle/Resources/config/routing.yml"
     prefix:   /election
 
+organization_committee:
+    resource: "@ElectionBundle/Resources/config/routingcommittee.yml"
+    prefix:   /organization-committe
+
 hotel:
     resource: "@HotelBundle/Resources/config/routing.yml"
     prefix:   /hotel-restaurant

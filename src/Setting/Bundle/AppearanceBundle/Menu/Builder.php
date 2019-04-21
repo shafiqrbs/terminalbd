@@ -141,6 +141,7 @@ class Builder extends ContainerAware
 		    if (!empty($result)) {
 			    if ($securityContext->isGranted('ROLE_ELECTION')){
 				    $menu = $this->ElectionMenu($menu);
+				    $menu = $this->CommitteeMenu($menu);
 			    }
 		    }
 
@@ -1499,57 +1500,104 @@ class Builder extends ContainerAware
 		$securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
 
 		$menu
-			->addChild('Election & Committee')
+			->addChild('Election')
 			->setAttribute('icon', 'icon-briefcase')
 			->setAttribute('dropdown', true);
-		$menu['Election & Committee']->addChild('Manage Election')
+		$menu['Election']->addChild('Manage Election')
 		                           ->setAttribute('icon', 'icon-th-list')
 		                           ->setAttribute('dropdown', true);
 		if ($securityContext->isGranted('ROLE_ELECTION_OPERATOR')) {
-			$menu['Election & Committee']['Manage Election']->addChild( 'Election Setup', array( 'route' => 'election_setup' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']['Manage Election']->addChild( 'Candidate', array( 'route' => 'election_candidate' ) )->setAttribute( 'icon', 'icon-user' );
-			$menu['Election & Committee']['Manage Election']->addChild( 'Committee', array( 'route' => 'election_committee' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']['Manage Election']->addChild( 'Vote Center', array( 'route' => 'election_votecenter' ) )->setAttribute( 'icon', 'icon-th-list' );
-			/*		$menu['Election & Committee']->addChild('Organization')
+			$menu['Election']['Manage Election']->addChild( 'Election Setup', array( 'route' => 'election_setup' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']['Manage Election']->addChild( 'Candidate', array( 'route' => 'election_candidate' ) )->setAttribute( 'icon', 'icon-user' );
+			$menu['Election']['Manage Election']->addChild( 'Committee', array( 'route' => 'election_committee' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']['Manage Election']->addChild( 'Vote Center', array( 'route' => 'election_votecenter' ) )->setAttribute( 'icon', 'icon-th-list' );
+			/*		$menu['Election']->addChild('Organization')
 												 ->setAttribute('icon', 'icon-th-list')
 												 ->setAttribute('dropdown', true);
-					$menu['Election & Committee']['Committee']->addChild('Committee Setup', array('route' => 'election_organizationcommittee'))->setAttribute('icon', 'icon-th-list');*/
-			$menu['Election & Committee']->addChild( 'Members', array( 'route' => 'election_member' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']->addChild( 'Voters', array( 'route' => 'election_voter' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']->addChild( 'Campaign', array( 'route' => 'election_event' ) )->setAttribute( 'icon', 'icon-calendar' );
-			$menu['Election & Committee']->addChild( 'Campaign Analysis', array( 'route' => 'election_campaign' ) )->setAttribute( 'icon', 'icon-refresh' );
+					$menu['Election']['Committee']->addChild('Committee Setup', array('route' => 'election_organizationcommittee'))->setAttribute('icon', 'icon-th-list');*/
+			$menu['Election']->addChild( 'Members', array( 'route' => 'election_member' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']->addChild( 'Voters', array( 'route' => 'election_voter' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']->addChild( 'Campaign', array( 'route' => 'election_event' ) )->setAttribute( 'icon', 'icon-calendar' );
+			$menu['Election']->addChild( 'Campaign Analysis', array( 'route' => 'election_campaign' ) )->setAttribute( 'icon', 'icon-refresh' );
 		}
 		if ($securityContext->isGranted('ROLE_ELECTION_MANAGER')) {
-			$menu['Election & Committee']->addChild( 'Manage SMS', array( 'route' => 'election_sms' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']->addChild( 'Manage SMS', array( 'route' => 'election_sms' ) )->setAttribute( 'icon', 'icon-th-list' );
 		}
 		if ($securityContext->isGranted('ROLE_ELECTION_ADMIN')) {
-			$menu['Election & Committee']->addChild( 'Master Data' )
+			$menu['Election']->addChild( 'Master Data' )
 			                             ->setAttribute( 'icon', 'icon icon-cog' )
 			                             ->setAttribute( 'dropdown', true );
-			$menu['Election & Committee']['Master Data']->addChild( 'Setting Option', array( 'route' => 'election_particular' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']['Master Data']->addChild( 'Setting Location', array( 'route' => 'election_location' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']['Master Data']->addChild( 'Member Import', array( 'route' => 'election_member_import' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']['Master Data']->addChild( 'Configuration', array( 'route' => 'election_config_manage' ) )->setAttribute( 'icon', 'icon-cog' );
+			$menu['Election']['Master Data']->addChild( 'Setting Option', array( 'route' => 'election_particular' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']['Master Data']->addChild( 'Setting Location', array( 'route' => 'election_location' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']['Master Data']->addChild( 'Member Import', array( 'route' => 'election_member_import' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']['Master Data']->addChild( 'Configuration', array( 'route' => 'election_config_manage' ) )->setAttribute( 'icon', 'icon-cog' );
 		}
 		if ($securityContext->isGranted('ROLE_ELECTION_REPORT')) {
-			$menu['Election & Committee']->addChild( 'Report' )
+			$menu['Election']->addChild( 'Report' )
 			                             ->setAttribute( 'dropdown', true );
-			$menu['Election & Committee']['Report']->addChild( 'Vote Center', array( 'route' => 'election_report_vote_center' ) );
-			$menu['Election & Committee']['Report']->addChild( 'Union Base Center', array( 'route' => 'election_report_union_base_vote_center' ) );
-			$menu['Election & Committee']['Report']->addChild( 'Vote Center Details', array( 'route' => 'election_report_voter_cenetr_details' ));
-			$menu['Election & Committee']['Report']->addChild( 'Member List', array( 'route' => 'election_report_member_list' ));
+			$menu['Election']['Report']->addChild( 'Vote Center', array( 'route' => 'election_report_vote_center' ) );
+			$menu['Election']['Report']->addChild( 'Union Base Center', array( 'route' => 'election_report_union_base_vote_center' ) );
+			$menu['Election']['Report']->addChild( 'Vote Center Details', array( 'route' => 'election_report_voter_cenetr_details' ));
+			$menu['Election']['Report']->addChild( 'Member List', array( 'route' => 'election_report_member_list' ));
 		}
 		if ($securityContext->isGranted('ROLE_ELECTION_ADMIN')) {
-			$menu['Election & Committee']->addChild( 'Accounting' )
+			$menu['Election']->addChild( 'Accounting' )
 			                             ->setAttribute( 'icon', 'icon icon-cog' )
 			                             ->setAttribute( 'dropdown', true );
-			$menu['Election & Committee']['Accounting']->addChild( 'Expense', array( 'route' => 'election_account_expenditure' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']['Accounting']->addChild( 'Expense Category', array( 'route' => 'election_expensecategory' ) )->setAttribute( 'icon', 'icon-th-list' );
-			$menu['Election & Committee']['Accounting']->addChild( 'Expense Report', array( 'route' => 'election_account_expenditure_report' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']['Accounting']->addChild( 'Expense', array( 'route' => 'election_account_expenditure' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']['Accounting']->addChild( 'Expense Category', array( 'route' => 'election_expensecategory' ) )->setAttribute( 'icon', 'icon-th-list' );
+			$menu['Election']['Accounting']->addChild( 'Expense Report', array( 'route' => 'election_account_expenditure_report' ) )->setAttribute( 'icon', 'icon-th-list' );
 		}
 		return $menu;
 
 	}
+
+    public function CommitteeMenu($menu)
+    {
+
+        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+
+        $menu
+            ->addChild('Committee')
+            ->setAttribute('icon', 'icon-briefcase')
+            ->setAttribute('dropdown', true);
+        if ($securityContext->isGranted('ROLE_ELECTION_OPERATOR')) {
+              $menu['Committee']->addChild( 'Committee', array( 'route' => 'committee_political' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu['Committee']->addChild( 'Members', array( 'route' => 'election_member' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu['Committee']->addChild( 'Campaign', array( 'route' => 'election_event' ) )->setAttribute( 'icon', 'icon-calendar' );
+            $menu['Committee']->addChild( 'Campaign Analysis', array( 'route' => 'election_campaign' ) )->setAttribute( 'icon', 'icon-refresh' );
+        }
+        if ($securityContext->isGranted('ROLE_ELECTION_MANAGER')) {
+            $menu['Committee']->addChild( 'Manage SMS', array( 'route' => 'election_sms' ) )->setAttribute( 'icon', 'icon-th-list' );
+        }
+        if ($securityContext->isGranted('ROLE_ELECTION_ADMIN')) {
+            $menu['Committee']->addChild( 'Master Data' )
+                ->setAttribute( 'icon', 'icon icon-cog' )
+                ->setAttribute( 'dropdown', true );
+            $menu['Committee']['Master Data']->addChild( 'Setting Option', array( 'route' => 'election_particular' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu['Committee']['Master Data']->addChild( 'Setting Location', array( 'route' => 'election_location' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu['Committee']['Master Data']->addChild( 'Member Import', array( 'route' => 'election_member_import' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu['Committee']['Master Data']->addChild( 'Configuration', array( 'route' => 'election_config_manage' ) )->setAttribute( 'icon', 'icon-cog' );
+        }
+        if ($securityContext->isGranted('ROLE_ELECTION_REPORT')) {
+            $menu['Committee']->addChild( 'Report' )
+                ->setAttribute( 'dropdown', true );
+            $menu['Committee']['Report']->addChild( 'Vote Center', array( 'route' => 'election_report_vote_center' ) );
+            $menu['Committee']['Report']->addChild( 'Union Base Center', array( 'route' => 'election_report_union_base_vote_center' ) );
+            $menu['Committee']['Report']->addChild( 'Vote Center Details', array( 'route' => 'election_report_voter_cenetr_details' ));
+            $menu['Committee']['Report']->addChild( 'Member List', array( 'route' => 'election_report_member_list' ));
+        }
+        if ($securityContext->isGranted('ROLE_ELECTION_ADMIN')) {
+            $menu['Committee']->addChild( 'Accounting' )
+                ->setAttribute( 'icon', 'icon icon-cog' )
+                ->setAttribute( 'dropdown', true );
+            $menu['Committee']['Accounting']->addChild( 'Expense', array( 'route' => 'election_account_expenditure' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu['Committee']['Accounting']->addChild( 'Expense Category', array( 'route' => 'election_expensecategory' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu['Committee']['Accounting']->addChild( 'Expense Report', array( 'route' => 'election_account_expenditure_report' ) )->setAttribute( 'icon', 'icon-th-list' );
+        }
+        return $menu;
+
+    }
 
     public function InstituteSystemMenu($menu)
     {

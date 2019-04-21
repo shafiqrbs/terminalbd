@@ -1,0 +1,173 @@
+<link rel="stylesheet" href="{{ asset('assets/css/print.css') }}"/>
+<style>
+    h1 , h2 , h3 , h4 , h5 , h6,p{
+        display: block;
+        padding: 0;
+        margin: 0;
+    }
+    h3 {
+        font-size: 18px;
+        line-height: 36px;
+        height: 36px;
+    }
+
+    h4 {
+        font-size: 16px;
+        line-height: 32px;
+        height: 32px;
+    }
+
+    .table{
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        font-family:tahoma, geneva, sans-serif;
+    }
+    .table tr.head th, .table tr.head td{
+        font-size: 15px;
+        background: #333;
+        color: #fff;
+        height: 40px;
+    }
+
+    .table tr.sub-head th, .table tr.sub-head td{
+        font-size: 15px;
+        background: #666;
+        color: #fff;
+        height: 40px;
+    }
+
+    .table th, .table td{
+        border: 1px solid #e5e5e5;
+        text-align: left;
+        padding-left: 20px;
+        height: 30px;
+        line-height: 30px;
+
+    }
+    h3 {
+        font-size: 24px;
+        display: block;
+        padding: 0;
+        margin: 0;
+        line-height: 45px;
+        height: 45px;
+    }
+    .pull-center{
+        background: #e5e5e5;
+        text-align: center!important;
+
+    }
+    .pull-right{
+        text-align: right!important;
+        display: block;
+        padding-right: 20px;
+    }
+
+    .unstyled li{
+        margin: 0;
+        padding: 0;
+        list-style: none!important;
+        margin-left: -15px!important;
+    }
+
+</style>
+{% set startDate = searchForm.month is defined ? searchForm.month :"now"|date("d-m-Y") %}
+{% set endDate = searchForm.year is defined ? searchForm.year :"now"|date("d-m-Y") %}
+
+<table class="table">
+    <thead>
+    <tr><td class="pull-center" colspan="8"><h3>{{ globalOption.name }}</h3></td></tr>
+    <tr>
+        <th class="pull-center" colspan="8"><h4><strong>VENDOR OUTSTANDING</strong></h4></th>
+    </tr>
+    <tr>
+        <th class="pull-left"  colspan="8">
+            <ul class="unstyled">
+                <li><strong>Customer #:</strong> {% if customer is not empty %}{{ customer.name }}{% endif %},<strong> Mobile #:</strong>&nbsp;{% if customer is not empty %}{{ customer.mobile }}{% endif %}</li>
+                {% if customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ customer.address }}</li>{% endif %}
+                {% if customer is not empty and customer.location is not empty %}<li><strong>Location #:</strong>&nbsp;{{ customer.location.name }}, {{ customer.location.parent.name }}</li>{% endif %}
+            </ul>
+        </th>
+    </tr>
+    <tr>
+        <th class="pull-left"  colspan="5">Printed Date: {{ "now"|date("d-m-Y") }}, Date Period:  {{ startDate }} To {{ endDate }}</th>
+    </tr>
+    <tr class="head-blue">
+        <th class="numeric" >S/N</th>
+        <th class="numeric" style="width:100px!important;" >Created</th>
+        <th class="numeric" >Invoice</th>
+        <th class="numeric" >Items</th>
+        <th class="numeric" >Method</th>
+        <th class="numeric" >Total</th>
+        <th class="numeric" >Received</th>
+        <th class="numeric" >Due</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr id="remove-{{ entity.id }}">
+            <td class="numeric" >{{ loop.index }}.</td>
+            <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+            <td class="numeric" >
+                {{ entity.sourceInvoice }}
+            </td>
+            <td class="numeric" >
+                {% if entity.businessInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'business' %}
+                    {% for item in entity.businessInvoice.businessInvoiceParticulars  %}
+                        <p>{{ loop.index }}. {{ item.particular }}  {% if item.height is not empty and item.width is not empty %}
+                                {{ item.height }} x {{ item.width }} = {{ item.subQuantity }} x {{ item.quantity }}
+                            {% endif %} => {{ item.totalQuantity }} {{ item.unit }}, Price TK. {{ item.subTotal }}</p>
+                    {% endfor %}
+                {% elseif entity.sales is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'inventory' %}
+                    {% for item in entity.sales.salesItems  %}
+                        <p>{{ loop.index }}. {{ item.item.name }}</p>
+                    {% endfor %}
+                {% elseif entity.hmsInvoices is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'hms' %}
+                    {% for item in entity.hmsInvoices.invoiceParticulars  %}
+                        <p>{{ loop.index }}. {{ item.particular.name }}</p>
+                    {% endfor %}
+                {% elseif entity.dmsInvoices is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'dms' %}
+                    {% for item in entity.dmsInvoices.invoiceParticulars  %}
+                        <p>{{ loop.index }}. {{ item.particular.name }}</p>
+                    {% endfor %}
+                {% elseif entity.restaurantInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'restaurant' %}
+                    {% for item in entity.restaurantInvoice.invoiceParticulars  %}
+                        <p>{{ loop.index }}. {{ item.particular.name }}</p>
+                    {% endfor %}
+                {% elseif entity.medicineSales is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'miss' %}
+                    {% for item in entity.medicineSales.medicineSalesItems  %}
+                        <p>{{ loop.index }}. {{ item.medicineStock.name }}</p>
+                    {% endfor %}
+                {% elseif entity.hotelInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'hotel' %}
+                    {% for item in entity.hotelInvoice.hotelInvoiceParticulars  %}
+                        <p>{{ loop.index }}. {{ item.hotelParticular.name }}</p>
+                    {% endfor %}
+                {% endif %}
+            </td>
+            <td class="numeric" >
+                {% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}
+            </td>
+            <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
+            <td class="numeric" >
+                {% if entity.process == 'approved'  %}
+                    {{ entity.amount|number_format }}
+                {% else %}
+                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
+                {% endif %}
+            </td>
+            <td class="numeric" >{{ entity.balance|number_format }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    {% if searchForm['mobile'] is defined and searchForm['mobile'] is not empty  %}
+        <tfoot>
+        <tr>
+            <td class="numeric" colspan="5" ></td>
+            <td class="numeric" ><strong>{{ overview.totalAmount|number_format }}</strong></td>
+            <td class="numeric" ><strong>{{ overview.receiveAmount|number_format }}</strong></td>
+            <td class="numeric" ><strong>{{ (overview.totalAmount - overview.receiveAmount)|number_format }}</strong></td>
+        </tr>
+        </tfoot>
+    {% endif %}
+</table>

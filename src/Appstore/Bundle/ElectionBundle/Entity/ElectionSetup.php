@@ -35,7 +35,7 @@ class ElectionSetup
 	private  $dashboard;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="electionSetup")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="electionSetup")
 	 **/
 	protected $location;
 
@@ -619,7 +619,6 @@ class ElectionSetup
 	public function getCampaigns() {
 		return $this->campaigns;
 	}
-
 
 
 }

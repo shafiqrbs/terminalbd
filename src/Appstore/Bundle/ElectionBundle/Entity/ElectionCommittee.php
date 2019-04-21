@@ -5,6 +5,7 @@ namespace Appstore\Bundle\ElectionBundle\Entity;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\LocationBundle\Entity\Location;
 
 /**
  * ElectionCommittee
@@ -35,6 +36,11 @@ class ElectionCommittee
 	protected $location;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="committees")
+	 **/
+	protected $geoLocation;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="committee")
 	 **/
 	protected $members;
@@ -51,7 +57,27 @@ class ElectionCommittee
 	 **/
 	protected $electionSetup;
 
-	/**
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="committeeType")
+     **/
+    protected $type;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="politicalWings" , cascade={"detach","merge"} )
+     **/
+    private  $wing;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length = 50, nullable = true)
+     */
+    private $mode = 'election';
+
+
+
+    /**
 	 * @Gedmo\Blameable(on="create")
 	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="committeeCreatedBy" )
 	 **/
@@ -416,6 +442,70 @@ class ElectionCommittee
 	public function setElectionSetup( $electionSetup ) {
 		$this->electionSetup = $electionSetup;
 	}
+
+    /**
+     * @return Location
+     */
+    public function getGeoLocation()
+    {
+        return $this->geoLocation;
+    }
+
+    /**
+     * @param Location $geoLocation
+     */
+    public function setGeoLocation($geoLocation)
+    {
+        $this->geoLocation = $geoLocation;
+    }
+
+    /**
+     * @return ElectionParticular
+     */
+    public function getWing()
+    {
+        return $this->wing;
+    }
+
+    /**
+     * @param ElectionParticular $wing
+     */
+    public function setWing($wing)
+    {
+        $this->wing = $wing;
+    }
+
+    /**
+     * @return ElectionParticular
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param ElectionParticular $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
 
 
 }

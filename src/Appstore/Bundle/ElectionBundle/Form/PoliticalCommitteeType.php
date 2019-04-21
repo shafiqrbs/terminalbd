@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CommitteeType extends AbstractType
+class PoliticalCommitteeType extends AbstractType
 {
 
 	/** @var  ElectionConfig */
@@ -36,17 +36,35 @@ class CommitteeType extends AbstractType
     {
         $builder
 
-	        ->add('electionSetup', 'entity', array(
-		        'required'    => true,
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionSetup',
-		        'empty_value' => '--- Choose the election name ---',
-		        'property' => 'electionName',
-		        'attr'=>array('class'=>'m-wrap span6 inputs'),
-		        'constraints' =>array( new NotBlank(array('message'=>'Choose the election name')) ),
-		        'query_builder' => function(EntityRepository $er){
-			        return $er->createQueryBuilder('e')->where("e.status = 1");
-		        },
-	        ))
+            ->add('wing', 'entity', array(
+                'required'    => true,
+                'class' => 'ElectionBundle:ElectionParticular',
+                'empty_value' => '--- Choose the type of election ---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'constraints' =>array( new NotBlank(array('message'=>'Choose the type of election')) ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.particularType","p")
+                        ->where("e.status = 1")
+                        ->andWhere("p.slug = 'political-wings'");
+                },
+            ))
+
+            ->add('type', 'entity', array(
+                'required'    => true,
+                'class' => 'ElectionBundle:ElectionParticular',
+                'empty_value' => '--- Choose the type of election ---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'constraints' =>array( new NotBlank(array('message'=>'Choose the type of committee')) ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.particularType","p")
+                        ->where("e.status = 1")
+                        ->andWhere("p.slug = 'committee-type'");
+                },
+            ))
 
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span6 inputs','autocomplete'=>'off','placeholder'=>'Enter committee name'),
                 'constraints' =>array(
@@ -55,7 +73,6 @@ class CommitteeType extends AbstractType
             ))
 
 	        ->add('location', 'entity', array(
-
 		        'required'    => true,
 		        'attr'=>array('class'=>'category m-wrap span6 select2'),
 		        'constraints' =>array( new NotBlank(array('message'=>'Choose location for committee')) ),

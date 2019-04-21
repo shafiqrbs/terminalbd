@@ -27,7 +27,7 @@ class LocationController extends Controller
         $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getElectionConfig();
         $entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation')->findBy(array('electionConfig' => $config),array('locationType'=>'ASC'));
-        $locationTypes = $this->getDoctrine()->getRepository( 'EducationParticular.php' )->getListOfParticular($config,'location');
+        $locationTypes = $this->getDoctrine()->getRepository( 'ElectionBundle:ElectionParticular' )->getListOfParticular($config,'location');
         return $this->render('ElectionBundle:Location:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
