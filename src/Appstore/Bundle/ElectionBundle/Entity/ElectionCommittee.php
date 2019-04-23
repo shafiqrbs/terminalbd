@@ -58,15 +58,21 @@ class ElectionCommittee
 	protected $electionSetup;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="committeeType")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="locationTypes")
      **/
-    protected $type;
+    protected $locationType;
+
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="committeeTypes")
+     **/
+    protected $committeeType;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="politicalWings" , cascade={"detach","merge"} )
      **/
-    private  $wing;
+    private  $politicalWing;
 
     /**
      * @var string
@@ -105,9 +111,9 @@ class ElectionCommittee
 
 
      /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="timeDuration", type="string", length=100, nullable=true)
+     * @ORM\Column(name="timeDuration", type="smallint", nullable=true)
      */
     private $timeDuration;
 
@@ -282,19 +288,6 @@ class ElectionCommittee
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public function getTimeDuration(): string {
-		return $this->timeDuration;
-	}
-
-	/**
-	 * @param string $timeDuration
-	 */
-	public function setTimeDuration( string $timeDuration ) {
-		$this->timeDuration = $timeDuration;
-	}
 
 	/**
 	 * @return \DateTime
@@ -459,37 +452,7 @@ class ElectionCommittee
         $this->geoLocation = $geoLocation;
     }
 
-    /**
-     * @return ElectionParticular
-     */
-    public function getWing()
-    {
-        return $this->wing;
-    }
 
-    /**
-     * @param ElectionParticular $wing
-     */
-    public function setWing($wing)
-    {
-        $this->wing = $wing;
-    }
-
-    /**
-     * @return ElectionParticular
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param ElectionParticular $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
 
     /**
      * @return string
@@ -505,6 +468,70 @@ class ElectionCommittee
     public function setMode($mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @return ElectionParticular
+     */
+    public function getPoliticalWing()
+    {
+        return $this->politicalWing;
+    }
+
+    /**
+     * @param ElectionParticular $politicalWing
+     */
+    public function setPoliticalWing($politicalWing)
+    {
+        $this->politicalWing = $politicalWing;
+    }
+
+    /**
+     * @return ElectionParticular
+     */
+    public function getCommitteeType()
+    {
+        return $this->committeeType;
+    }
+
+    /**
+     * @param ElectionParticular $committeeType
+     */
+    public function setCommitteeType($committeeType)
+    {
+        $this->committeeType = $committeeType;
+    }
+
+    /**
+     * @return ElectionParticular
+     */
+    public function getLocationType()
+    {
+        return $this->locationType;
+    }
+
+    /**
+     * @param ElectionParticular $locationType
+     */
+    public function setLocationType($locationType)
+    {
+        $this->locationType = $locationType;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeDuration()
+    {
+        return $this->timeDuration;
+    }
+
+    /**
+     * @param int $timeDuration
+     */
+    public function setTimeDuration($timeDuration)
+    {
+        $this->timeDuration = $timeDuration;
     }
 
 

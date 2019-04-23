@@ -44,7 +44,9 @@ class ParticularType extends AbstractType
 		        'constraints' =>array( new NotBlank(array('message'=>'Select setting type')) ),
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('wt')
-			                  ->where("wt.status = 1");
+			                  ->where("wt.status = 1")
+                                ->orderBy('wt.name','ASC')
+                        ;
 		        },
 	        ))
             ;

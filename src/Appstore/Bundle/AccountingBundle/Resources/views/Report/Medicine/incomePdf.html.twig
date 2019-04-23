@@ -85,7 +85,7 @@
         <tr><td>{{ expense.name }}</td><td class="numeric" >{{ expense.amount|number_format }}</td><td></td></tr>
     {% endfor %}
     <tr><th>Grand Total Expense</th><th class="numeric" >({{ totalExpense|number_format }})</th><td></td></tr>
-    {% set grandTotal = overview.sales - ( totalExpense + overview.purchase) %}
+    {% set grandTotal = (overview.sales + overview.salesAdjustment.profit) - ( totalExpense + overview.purchase) %}
     <tr><th colspan="2"><span class="pull-right">Grand Profit/Loss</span></th><th class="numeric" >{{ grandTotal|number_format }}</th></tr>
 
     </tbody>

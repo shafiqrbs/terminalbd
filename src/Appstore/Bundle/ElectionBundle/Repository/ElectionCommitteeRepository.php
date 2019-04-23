@@ -61,9 +61,10 @@ class ElectionCommitteeRepository extends EntityRepository
 	{
 
 		$qb = $this->createQueryBuilder('e');
-		$qb->join('e.location','l');
+		$qb->leftJoin('e.location','l');
 		$qb->where("e.electionConfig = :config");
 		$qb->setParameter('config', $config->getId());
+		$qb->andWhere("e.mode = :mode")->setParameter('mode', $data['mode']);
 		$this->handleSearchBetween($qb,$data);
 		$qb->orderBy('e.created','ASC');
 		$qb->getQuery();

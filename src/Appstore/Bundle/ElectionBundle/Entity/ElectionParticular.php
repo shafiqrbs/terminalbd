@@ -114,6 +114,25 @@ class ElectionParticular
      **/
     private $event;
 
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="locationType")
+     **/
+    private $locationTypes;
+
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="committeeType")
+     **/
+    private $committeeTypes;
+
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="politicalWing")
+     **/
+    private $politicalWings;
+
+
 	/**
      * @var string
      *

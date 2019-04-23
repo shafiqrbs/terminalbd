@@ -44,6 +44,7 @@ class CommitteeController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$entity = new ElectionCommittee();
 		$data = $_REQUEST;
+        $data['mode'] = 'political';
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findWithSearch($config,$data);
 		$pagination = $this->paginate($entities);

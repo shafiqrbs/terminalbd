@@ -147,7 +147,6 @@ class PurchaseController extends Controller
         return $this->render('MedicineBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
             'purchaseItem' => $purchaseItemForm->createView(),
-            'purchaseItem' => $purchaseItemForm->createView(),
             'stockItemForm' => $stockItemForm->createView(),
             'form' => $editForm->createView(),
         ));
@@ -208,7 +207,7 @@ class PurchaseController extends Controller
     public function particularSearchAction(MedicineStock $particular)
     {
         $unit = !empty($particular->getUnit()) ? $particular->getUnit()->getName():'Unit';
-        $pack = empty( $particular->getPack()) ? 1 : $particular->getPack();
+        $pack = $particular->getPack() > 0  ?  $particular->getPack() : 1;
         return new Response(json_encode(array('purchasePrice'=> '', 'pack'=> $pack, 'salesPrice'=> '','quantity'=> 1,'unit' => $unit)));
     }
 
@@ -254,6 +253,7 @@ class PurchaseController extends Controller
             }
             $pack = !empty($data['medicineStock']['pack']) ? $data['medicineStock']['pack'] : 1;
             $quantity = ($pack * $entity->getPurchaseQuantity());
+            $entity->setPack($pack);
             $entity->setPurchaseQuantity($quantity);
             $entity->setAveragePurchasePrice($entity->getPurchasePrice());
             $entity->setAverageSalesPrice($entity->getSalesPrice());
@@ -338,6 +338,7 @@ class PurchaseController extends Controller
             $expirationEndDate = (new \DateTime($expirationEndDate));
             $entity->setExpirationEndDate($expirationEndDate);
         }
+        $entity->setPack($pack);
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock(),'',$pack);

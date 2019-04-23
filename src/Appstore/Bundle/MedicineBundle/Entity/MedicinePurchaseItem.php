@@ -85,6 +85,13 @@ class MedicinePurchaseItem
     /**
      * @var integer
      *
+     * @ORM\Column(name="pack", type="integer",nullable=true)
+     */
+    private $pack;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="salesQuantity", type="integer",nullable=true)
      */
     private $salesQuantity;
@@ -576,6 +583,22 @@ class MedicinePurchaseItem
     public function getMedicinePurchaseReturnItems()
     {
         return $this->medicinePurchaseReturnItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPack()
+    {
+        return $this->pack;
+    }
+
+    /**
+     * @param int $pack
+     */
+    public function setPack($pack)
+    {
+        $this->pack = $pack;
     }
 
 }

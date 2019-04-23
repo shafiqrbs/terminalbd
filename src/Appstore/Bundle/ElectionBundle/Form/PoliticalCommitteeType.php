@@ -18,11 +18,11 @@ class PoliticalCommitteeType extends AbstractType
 
 	private $config;
 
-	/** @var  ElectionLocationRepository */
+	/** @var  LocationRepository */
 
 	private $location;
 
-	function __construct(ElectionConfig $config, ElectionLocationRepository $location)
+	function __construct(ElectionConfig $config, LocationRepository $location)
 	{
 		$this->config         = $config;
 		$this->location       = $location;
@@ -36,7 +36,7 @@ class PoliticalCommitteeType extends AbstractType
     {
         $builder
 
-            ->add('wing', 'entity', array(
+            ->add('politicalWing', 'entity', array(
                 'required'    => true,
                 'class' => 'ElectionBundle:ElectionParticular',
                 'empty_value' => '--- Choose the type of election ---',
@@ -51,10 +51,10 @@ class PoliticalCommitteeType extends AbstractType
                 },
             ))
 
-            ->add('type', 'entity', array(
+            ->add('committeeType', 'entity', array(
                 'required'    => true,
                 'class' => 'ElectionBundle:ElectionParticular',
-                'empty_value' => '--- Choose the type of election ---',
+                'empty_value' => '--- Choose the type of committee ---',
                 'property' => 'name',
                 'attr'=>array('class'=>'m-wrap span12 inputs'),
                 'constraints' =>array( new NotBlank(array('message'=>'Choose the type of committee')) ),
@@ -62,21 +62,43 @@ class PoliticalCommitteeType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->join("e.particularType","p")
                         ->where("e.status = 1")
-                        ->andWhere("p.slug = 'committee-type'");
+                        ->andWhere("p.slug = 'committee'");
                 },
             ))
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span6 inputs','autocomplete'=>'off','placeholder'=>'Enter committee name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter committee name')),
-                )
+            /*->add('locationType', 'entity', array(
+                'required'    => true,
+                'class' => 'ElectionBundle:ElectionParticular',
+                'empty_value' => '--- Choose the type of election ---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'constraints' =>array( new NotBlank(array('message'=>'Choose the type of location')) ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.particularType","p")
+                        ->where("e.status = 1")
+                        ->andWhere("p.slug = 'location-type'");
+                },
+            ))*/
+
+            ->add('timeDuration', 'choice', array(
+                'empty_value' => '--- Choose number of years ---',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choices' => array(
+                    '1' => '1 Year',
+                    '2' => '2 Year',
+                    '3' => '3 Year',
+                    '4' => '4 Year',
+                    '5' => '5 Year',
+
+                ),
             ))
 
-	        ->add('location', 'entity', array(
+	        ->add('geoLocation', 'entity', array(
 		        'required'    => true,
-		        'attr'=>array('class'=>'category m-wrap span6 select2'),
+		        'attr'=>array('class'=>'category m-wrap span12 select2'),
 		        'constraints' =>array( new NotBlank(array('message'=>'Choose location for committee')) ),
-		        'class' => 'Appstore\Bundle\ElectionBundle\Entity\ElectionLocation',
+		        'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
 		        'property' => 'nestedLabel',
 		        'choices'=> $this->locationChoiceList()
 
@@ -108,7 +130,7 @@ class PoliticalCommitteeType extends AbstractType
 	protected function locationChoiceList()
 	{
 		return $categoryTree = $this->location->getFlatLocationTree();
-		//return $categoryTree = $this->location->getLocationGroupByTree($this->config->getId());
+    	//return $categoryTree = $this->location->getLocationGroupByTree($this->config->getId());
 
 	}
 

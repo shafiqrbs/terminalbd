@@ -1562,7 +1562,7 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-briefcase')
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_ELECTION_OPERATOR')) {
-              $menu['Committee']->addChild( 'Committee', array( 'route' => 'committee_political' ) )->setAttribute( 'icon', 'icon-th-list' );
+              $menu['Committee']->addChild( 'Committee', array( 'route' => 'political_committee' ) )->setAttribute( 'icon', 'icon-th-list' );
             $menu['Committee']->addChild( 'Members', array( 'route' => 'election_member' ) )->setAttribute( 'icon', 'icon-th-list' );
             $menu['Committee']->addChild( 'Campaign', array( 'route' => 'election_event' ) )->setAttribute( 'icon', 'icon-calendar' );
             $menu['Committee']->addChild( 'Campaign Analysis', array( 'route' => 'election_campaign' ) )->setAttribute( 'icon', 'icon-refresh' );

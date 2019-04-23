@@ -6,6 +6,8 @@ use Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee;
 use Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember;
 use Appstore\Bundle\ElectionBundle\Form\CommitteeMemberType;
 use Appstore\Bundle\ElectionBundle\Form\CommitteeType;
+use Appstore\Bundle\ElectionBundle\Form\PoliticalCommitteeType;
+use Core\UserBundle\Doctrine\DQL\Date;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,22 +36,23 @@ class PoliticalCommitteeController extends Controller
 	}
 
 
-
 	/**
 	 * Lists all Committee entities.
 	 *
 	 */
+	
 	public function indexAction()
 	{
 		$em = $this->getDoctrine()->getManager();
 		$entity = new ElectionCommittee();
 		$data = $_REQUEST;
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
+		$data['mode'] = 'political';
 		$entities = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCommittee')->findWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
 
 		$locationTypes = $this->getDoctrine()->getRepository( 'ElectionBundle:ElectionParticular' )->getListOfParticular($config,'location');
-		return $this->render('ElectionBundle:Committee:index.html.twig', array(
+		return $this->render('ElectionBundle:PoliticalCommittee:index.html.twig', array(
 			'entities' => $pagination,
 			'locationTypes' => $locationTypes,
 			'entity' => $entity,
@@ -68,9 +71,10 @@ class PoliticalCommitteeController extends Controller
 		$entity = new ElectionCommittee();
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 		$entity->setElectionConfig($config);
+		$entity->setMode('political');
 		$em->persist($entity);
 		$em->flush();
-		return $this->redirect($this->generateUrl('election_committee_edit', array('id' => $entity->getId())));
+		return $this->redirect($this->generateUrl('political_committee_edit', array('id' => $entity->getId())));
 
 	}
 
@@ -86,7 +90,7 @@ class PoliticalCommitteeController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find ElectionMember entity.');
 		}
-		$html = $this->renderView('ElectionBundle:Committee:show.html.twig',
+		$html = $this->renderView('ElectionBundle:PoliticalCommittee:show.html.twig',
 			array('entity' => $entity)
 		);
 		return New Response($html);
@@ -110,7 +114,7 @@ class PoliticalCommitteeController extends Controller
 			throw $this->createNotFoundException('Unable to find Committee entity.');
 		}
 		$editForm = $this->createEditForm($entity);
-		return $this->render('ElectionBundle:Committee:new.html.twig', array(
+		return $this->render('ElectionBundle:PoliticalCommittee:new.html.twig', array(
 			'entity'      => $entity,
 			'form'   => $editForm->createView(),
 		));
@@ -126,10 +130,10 @@ class PoliticalCommitteeController extends Controller
 	private function createEditForm(ElectionCommittee $entity)
 	{
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
-		$location = $this->getDoctrine()->getRepository('ElectionBundle:ElectionLocation');
+		$location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
 
-		$form = $this->createForm(new CommitteeType($config,$location), $entity, array(
-			'action' => $this->generateUrl('election_committee_update', array('id' => $entity->getId())),
+		$form = $this->createForm(new PoliticalCommitteeType($config,$location), $entity, array(
+			'action' => $this->generateUrl('political_committee_update', array('id' => $entity->getId())),
 			'method' => 'PUT',
 			'attr' => array(
 				'class' => 'form-horizontal',
@@ -155,15 +159,21 @@ class PoliticalCommitteeController extends Controller
 		$editForm = $this->createEditForm($entity);
 		$editForm->handleRequest($request);
 		$data = $request->request->all();
-		if ($editForm->isValid()) {
+		if ($editForm->isValid()){
+
+            $entity->setStartDate(new \DateTime($data['startDate']));
+            $dt = new \DateTime($data['startDate']);
+            $duration = "+{$entity->getTimeDuration()} year";
+            $endDate = $dt->modify($duration);
+		    $entity->setEndDate($endDate);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been changed successfully"
 			);
-			return $this->redirect($this->generateUrl('election_committee'));
+			return $this->redirect($this->generateUrl('political_committee'));
 		}
 
-		return $this->render('ElectionBundle:Committee:index.html.twig', array(
+		return $this->render('ElectionBundle:PoliticalCommittee:index.html.twig', array(
 			'entity'      => $entity,
 			'form'   => $editForm->createView(),
 		));
@@ -202,7 +212,7 @@ class PoliticalCommitteeController extends Controller
 			);
 		}
 
-		return $this->redirect($this->generateUrl('election_committee'));
+		return $this->redirect($this->generateUrl('political_committee'));
 	}
 
 
@@ -230,7 +240,7 @@ class PoliticalCommitteeController extends Controller
 		$this->get('session')->getFlashBag()->add(
 			'success',"Status has been changed successfully"
 		);
-		return $this->redirect($this->generateUrl('election_committee'));
+		return $this->redirect($this->generateUrl('political_committee'));
 	}
 
 	public function autoSearchAction(Request $request)
@@ -263,7 +273,7 @@ class PoliticalCommitteeController extends Controller
 		$config = $this->getUser()->getGlobalOption()->getElectionConfig();
 		$memberRep = $this->getDoctrine()->getRepository('ElectionBundle:ElectionMember');
 		$form = $this->createForm(new CommitteeMemberType($config,$committee,$memberRep), $entity, array(
-			'action' => $this->generateUrl('election_committee_member_create',array('id' => $committee->getId())),
+			'action' => $this->generateUrl('political_committee_member_create',array('id' => $committee->getId())),
 			'method' => 'POST',
 			'attr' => array(
 				'class' => 'horizontal-form',
@@ -283,7 +293,7 @@ class PoliticalCommitteeController extends Controller
 			throw $this->createNotFoundException('Unable to find Committee entity.');
 		}
 		$committeeForm = $this->createCommitteeForm($entity, New ElectionCommitteeMember());
-		return $this->render('ElectionBundle:Committee:member.html.twig', array(
+		return $this->render('ElectionBundle:PoliticalCommittee:member.html.twig', array(
 			'entity'      => $entity,
 			'form'   => $committeeForm->createView(),
 		));

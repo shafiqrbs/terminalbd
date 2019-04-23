@@ -359,6 +359,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $entity->setPurchasePrice($unitPrice);
         $entity->setActualPurchasePrice($unitPrice);
         $entity->setQuantity($item->getPurchaseQuantity());
+        $entity->setPack($item->getPack());
         $entity->setRemainingQuantity($item->getPurchaseQuantity());
         $em->persist($entity);
         $item->setPurchasePrice($unitPrice);
@@ -492,13 +493,14 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $data .= "<td class='span1' >";
             $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
             $data .= "</td>";
+            $data .= "<td class='span1'>{$entity->getPack()}</td>";
             $data .= "<td class='span1' >";
             $data .= "<input type='hidden' id='purchaseQuantity-{$entity->getId()}'  value='{$entity->getQuantity()}' >";
             $data .= "<input type='hidden' id='salesQuantity-{$entity->getId()}'  value='{$entity->getSalesQuantity()}' >";
             $data .= "<input type='text' class='numeric td-inline-input quantity' data-id='{$entity->getid()}' autocomplete='off' id='quantity-{$entity->getId()}' name='quantity' value='{$entity->getQuantity()}'>";
             $data .= "</td>";
             $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$entity->getPurchaseSubTotal()}</td>";
-            $data .= '<td class="span1" >' . $entity->getSalesQuantity(). '</td>';
+            $data .= "<td class='span1' >{$entity->getSalesQuantity()}</td>";
             $data .= '<td class="span1" >
                      <a id="'.$entity->getId(). '" data-url="/medicine/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';

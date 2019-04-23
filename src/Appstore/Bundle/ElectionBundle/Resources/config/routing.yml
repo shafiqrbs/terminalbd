@@ -1,4 +1,4 @@
-committee_particular:
+political_committee:
     resource: "@ElectionBundle/Resources/config/routing/politicalcommittee.yml"
     prefix:   /political-committee
 

@@ -244,7 +244,7 @@ class MedicineStockRepository extends EntityRepository
         }
     }
 
-    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName='', $pack = 1){
+    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName = '', $pack = 1){
 
     	$em = $this->_em;
         if($fieldName == 'sales'){

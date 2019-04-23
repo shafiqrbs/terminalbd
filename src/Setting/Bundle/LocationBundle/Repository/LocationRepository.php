@@ -63,7 +63,7 @@ class LocationRepository extends MaterializedPathRepository{
 
     private function formatLabel($level, $value) {
         $level = $level - 1;
-        return str_repeat("-", $level * 3) . str_repeat(">", $level) . "$value";
+        return str_repeat("-", $level * 5) . str_repeat(">", $level) . "$value";
     }
 
 

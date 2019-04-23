@@ -360,8 +360,6 @@ class CategoryRepository extends MaterializedPathRepository
                     }
                     $value .= '</li>';
                 }
-
-
             }
 
         }
