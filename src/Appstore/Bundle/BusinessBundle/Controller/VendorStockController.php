@@ -259,7 +259,6 @@ class VendorStockController extends Controller
             $vendorStock->setProcess('Approved');
             $em->flush();
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendorStockItem')->vendorStockItemUpdate($vendorStock);
-            exit;
             return new Response('success');
         } else {
             return new Response('failed');
