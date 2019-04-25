@@ -105,47 +105,47 @@ class CustomerRepository extends EntityRepository
         }
     }
 
-	public function newExistingCustomerForHotel($globalOption,$mobile,$data)
-	{
-		$em = $this->_em;
-		$namePrefix = isset($data['namePrefix']) ? $data['namePrefix']:array();
-		$email = $data['email'];
-		$firstName = $data['firstName'];
-		$lastName = $data['lastName'];
-		$address = $data['address'];
-		$profession = $data['profession'];
-		$organization = $data['organization'];
-		$postalCode = $data['postalCode'];
-		$remark = $data['remark'];
-		$entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
-		if($entity){
-			return $entity;
-		}else{
-			$entity = new Customer();
-			$entity->setNamePrefix($namePrefix);
-			$entity->setMobile($mobile);
-			$entity->setEmail($email);
-			$entity->setFirstName($firstName);
-			$entity->setLastName($lastName);
-			$entity->setAddress($address);
-			$entity->setProfession($profession);
-			$entity->setCompany($organization);
-			$entity->setPostalCode($postalCode);
-			$entity->setRemark($remark);
-			$entity->setName($entity->getFirstName().' '.$entity->getLastName());
-			$entity->setGlobalOption($globalOption);
-			if(!empty($data['location'])){
-				$location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
-				$entity->setLocation($location);
-			}
-			$em->persist($entity);
-			$em->flush($entity);
-			return $entity;
-		}
-	}
+    public function newExistingCustomerForHotel($globalOption,$mobile,$data)
+    {
+        $em = $this->_em;
+        $namePrefix = isset($data['namePrefix']) ? $data['namePrefix']:array();
+        $email = $data['email'];
+        $firstName = $data['firstName'];
+        $lastName = $data['lastName'];
+        $address = $data['address'];
+        $profession = $data['profession'];
+        $organization = $data['organization'];
+        $postalCode = $data['postalCode'];
+        $remark = $data['remark'];
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
+        if($entity){
+            return $entity;
+        }else{
+            $entity = new Customer();
+            $entity->setNamePrefix($namePrefix);
+            $entity->setMobile($mobile);
+            $entity->setEmail($email);
+            $entity->setFirstName($firstName);
+            $entity->setLastName($lastName);
+            $entity->setAddress($address);
+            $entity->setProfession($profession);
+            $entity->setCompany($organization);
+            $entity->setPostalCode($postalCode);
+            $entity->setRemark($remark);
+            $entity->setName($entity->getFirstName().' '.$entity->getLastName());
+            $entity->setGlobalOption($globalOption);
+            if(!empty($data['location'])){
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
+                $entity->setLocation($location);
+            }
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+    }
 
 
-	public function newExistingRestaurantCustomer($globalOption,$mobile,$name)
+    public function newExistingRestaurantCustomer($globalOption,$mobile,$name)
     {
         $em = $this->_em;
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
@@ -240,10 +240,11 @@ class CustomerRepository extends EntityRepository
         }
 
     }
-    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$customer)
+    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$data)
     {
         $em = $this->_em;
-		$name = $customer['name'];
+        $customer = $data['customer'];
+        $name = $customer['name'];
         $gender = $customer['gender'];
         $ageGroup = isset($customer['ageGroup']) ? $customer['ageGroup']:'';
         $age = $customer['age'];
@@ -269,54 +270,54 @@ class CustomerRepository extends EntityRepository
 
     }
 
-	public function updateExistingCustomer(GlobalOption $globalOption,Customer $entity, $mobile,$data)
-	{
-		$em = $this->_em;
-		$name       = isset($data['name'])? $data['name']:'';
-		$gender     = isset($data['gender'])? $data['gender']:'';
-		$ageGroup   = isset($data['ageGroup'])? $data['ageGroup']:'';
-		$age        = isset($data['age'])? $data['age']:'';
-		$ageType    = isset($data['ageType'])? $data['ageType']:'';
-		$location   = isset($data['location'])? $data['location']:'';
-		$address       = isset($data['address'])? $data['address']:'';
-		if(!empty($location)){
-			$location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-			$entity->setLocation($location);
-		}
-		$entity->setMobile($mobile);
-		if(!empty($name)){
-			$entity->setName($name);
-		}
-		if(!empty($gender)){
-			$entity->setGender($gender);
-		}
-		if(!empty($age)){
-			$entity->setAge($age);
-		}
-		if(!empty($ageGroup)){
-			$entity->setAgeGroup($ageGroup);
-		}
-		if(!empty($ageType)){
-			$entity->setAgeType($ageType);
-		}
-		if(!empty($address)){
-			$entity->setAddress($address);
-		}
-		$em->persist($entity);
-		$em->flush($entity);
-		return $entity;
+    public function updateExistingCustomer(GlobalOption $globalOption,Customer $entity, $mobile,$data)
+    {
+        $em = $this->_em;
+        $name       = isset($data['name'])? $data['name']:'';
+        $gender     = isset($data['gender'])? $data['gender']:'';
+        $ageGroup   = isset($data['ageGroup'])? $data['ageGroup']:'';
+        $age        = isset($data['age'])? $data['age']:'';
+        $ageType    = isset($data['ageType'])? $data['ageType']:'';
+        $location   = isset($data['location'])? $data['location']:'';
+        $address       = isset($data['address'])? $data['address']:'';
+        if(!empty($location)){
+            $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+            $entity->setLocation($location);
+        }
+        $entity->setMobile($mobile);
+        if(!empty($name)){
+            $entity->setName($name);
+        }
+        if(!empty($gender)){
+            $entity->setGender($gender);
+        }
+        if(!empty($age)){
+            $entity->setAge($age);
+        }
+        if(!empty($ageGroup)){
+            $entity->setAgeGroup($ageGroup);
+        }
+        if(!empty($ageType)){
+            $entity->setAgeType($ageType);
+        }
+        if(!empty($address)){
+            $entity->setAddress($address);
+        }
+        $em->persist($entity);
+        $em->flush($entity);
+        return $entity;
 
-	}
+    }
 
 
-	public function findWithSearch($globalOption,$data)
+    public function findWithSearch($globalOption,$data)
     {
 
         $qb = $this->createQueryBuilder('customer');
         $qb->where("customer.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-/*        $qb->andWhere("customer.name != :name");
-        $qb->setParameter('name', 'Default');*/
+        /*        $qb->andWhere("customer.name != :name");
+                $qb->setParameter('name', 'Default');*/
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('customer.created','DESC');
         $qb->getQuery();
@@ -461,7 +462,7 @@ class CustomerRepository extends EntityRepository
 
     }
 
-     public function searchMobileAutoComplete(GlobalOption $globalOption, $q, $type = 'NULL')
+    public function searchMobileAutoComplete(GlobalOption $globalOption, $q, $type = 'NULL')
     {
         $query = $this->createQueryBuilder('e');
 
