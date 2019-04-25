@@ -229,4 +229,14 @@ class ExpenditureRepository extends EntityRepository
         return $arrays;
     }
 
+    public function accountReverse(Expenditure $entity)
+    {
+        $em = $this->_em;
+        $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Expenditure'");
+        $transaction->execute();
+        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.expenditure =".$entity->getId()." AND e.processHead = 'Expenditure'");
+        $accountCash->execute();
+    }
+
+
 }

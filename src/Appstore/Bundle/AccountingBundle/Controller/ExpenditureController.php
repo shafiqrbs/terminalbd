@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -308,4 +309,22 @@ class ExpenditureController extends Controller
         return new Response('success');
         exit;
     }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNT_REVERSE,ROLE_DOMAIN")
+     */
+
+    public function expenditureReverseAction(Expenditure $entity){
+
+        $em = $this->getDoctrine()->getManager();
+        $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->accountReverse($entity);
+        $entity->setProcess(null);
+        $entity->setApprovedBy(null);
+        $entity->setAmount(0);
+        $entity->setBalance(0);
+        $em->flush();
+        return $this->redirect($this->generateUrl('account_expenditure'));
+
+    }
+
 }

@@ -34,7 +34,7 @@ class VendorStockType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')

@@ -442,8 +442,8 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 		$em = $this->_em;
 		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Purchase'");
 		$transaction->execute();
-		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Purchase'");
-		$accountCash->execute();
+        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountRefNo ={$entity->getAccountRefNo()} AND e.accountPurchase ={$entity->getId()} AND e.processHead = 'Purchase'");
+        $accountCash->execute();
 	}
 
 	public function insertAccountPurchase(Purchase $entity)

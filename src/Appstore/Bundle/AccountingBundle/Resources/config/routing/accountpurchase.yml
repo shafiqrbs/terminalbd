@@ -27,6 +27,11 @@ account_purchase_edit:
     path:     /{id}/edit
     defaults: { _controller: "AccountingBundle:AccountPurchase:edit" }
 
+account_purchase_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "AccountingBundle:AccountPurchase:purchaseReverse" }
+
+
 account_purchase_update:
     path:     /{id}/update
     defaults: { _controller: "AccountingBundle:AccountPurchase:update" }

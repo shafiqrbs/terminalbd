@@ -13,6 +13,7 @@ web/images/*
 web/js/*
 web/assets
 web/fonts/*
+web/nano.save
 
 bin/*
 !bin/build.sh

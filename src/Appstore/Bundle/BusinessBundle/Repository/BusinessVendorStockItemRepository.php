@@ -170,7 +170,7 @@ class BusinessVendorStockItemRepository extends EntityRepository
         $qb->select('pi.id as id , e.grn as grn , ( COALESCE(SUM(pi.quantity),0) - COALESCE(SUM(pi.salesQuantity),0)) as quantity');
         $qb->where('e.vendor = :vendor')->setParameter('vendor', $vendor) ;
         $qb->andWhere('pi.particular = :particular')->setParameter('particular', $particular) ;
-        $qb->groupBy('p.name');
+        $qb->groupBy('e.grn');
         $qb->orderBy('p.name','ASC');
         $result =  $qb->getQuery()->getArrayResult();
 

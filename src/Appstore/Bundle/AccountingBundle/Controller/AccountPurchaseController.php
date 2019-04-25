@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -386,5 +387,24 @@ class AccountPurchaseController extends Controller
 			'text' => $vendor
 		));
 	}
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNT_REVERSE,ROLE_DOMAIN")
+     */
+
+    public function purchaseReverseAction(AccountPurchase $entity){
+
+        $em = $this->getDoctrine()->getManager();
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountReverse($entity);
+        $entity->setProcess(null);
+        $entity->setApprovedBy(null);
+        $entity->setPayment(0);
+        $entity->setPurchaseAmount(0);
+        $entity->setTotalAmount(0);
+        $entity->setBalance(0);
+        $em->flush();
+        return $this->redirect($this->generateUrl('account_purchase'));
+
+    }
 
 }

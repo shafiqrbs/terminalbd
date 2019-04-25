@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesInvoiceType;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -361,6 +362,26 @@ class AccountSalesController extends Controller
         exit;
     }
 
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNT_REVERSE,ROLE_DOMAIN")
+     */
+
+    public function salesReverseAction(AccountSales $entity){
+
+        $em = $this->getDoctrine()->getManager();
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountReverse($entity);
+        $entity->setProcess(null);
+        $entity->setApprovedBy(null);
+        $entity->setTotalAmount(0);
+        $entity->setAmount(0);
+        $entity->setBalance(0);
+        $em->flush();
+        return $this->redirect($this->generateUrl('account_sales'));
+
+    }
+
+
     public function salesPrint(AccountSales $sales)
     {
     	$em = $this->getDoctrine()->getManager();
@@ -411,6 +432,9 @@ class AccountSalesController extends Controller
         exit;
 
     }
+
+
+
 
 
 

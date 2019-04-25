@@ -38,7 +38,7 @@ class ConfigType extends AbstractType
 			        'sign' => 'Digital-Sign',
 			        'electrical' => 'Electrical',
 			        'stationary' => 'Stationary',
-			        'commission' => 'Commission',
+			        'commission' => 'Agent Commission',
 			        'event' => 'Event',
 			        'bricks' => 'Bricks',
 			        'sawmill' => 'Sawmill',

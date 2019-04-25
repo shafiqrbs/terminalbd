@@ -35,3 +35,7 @@ account_expenditure_delete:
     defaults: { _controller: "AccountingBundle:Expenditure:delete" }
     options:
            expose: true
+
+account_expenditure_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "AccountingBundle:Expenditure:expenditureReverse" }

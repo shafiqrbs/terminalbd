@@ -159,7 +159,7 @@
                                                 <a href="javascript:" id="" data-id="" class="btn blue mini "><i class="icon-check"></i>&nbsp;Approved</a>
                                             {% endif %}
                                             {% if entity.process == 'approved' and entity.amount > 0 %}
-                                            <a target="_blank" href="{{ path('account_sales_print',{'id':entity.id}) }}" class="btn mini yellow"><i class="icon-print"></i></a>
+                                                <a target="_blank" href="{{ path('account_sales_print',{'id':entity.id}) }}" class="btn mini yellow"><i class="icon-print"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
