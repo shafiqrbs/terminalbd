@@ -97,6 +97,7 @@
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Name</th>
                             <th class="span1">Rack no</th>
                             <th class="span1">MRP</th>
+                            <th class="span1">Pack</th>
                             <th class="span1">Qnt</th>
                             <th class="span1">Total</th>
                             <th class=""><i class="icon-trash"></i></th>
@@ -111,6 +112,7 @@
                                     <td class="span1">
                                        <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.purchasePrice }}" >
                                     </td>
+                                    <td class="span1">{{ item.medicineStock.pack }}</td>
                                     <td class="span1">
                                         <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                     </td>
@@ -122,10 +124,10 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="6" class="span12" style="border: 1px double #000"></td>
+                            <td colspan="7" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                            <td colspan="5" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                             <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>

@@ -133,6 +133,14 @@ class TemplateCustomize
     /**
      * @var boolean
      *
+     * @ORM\Column(name="contactForm", type="boolean", nullable=true)
+     */
+    private $contactForm = true;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="mobileShowLogo", type="boolean", nullable=true)
      */
     private $mobileShowLogo = false;
@@ -2891,6 +2899,22 @@ class TemplateCustomize
     public function setContentAlign($contentAlign)
     {
         $this->contentAlign = $contentAlign;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isContactForm()
+    {
+        return $this->contactForm;
+    }
+
+    /**
+     * @param bool $contactForm
+     */
+    public function setContactForm($contactForm)
+    {
+        $this->contactForm = $contactForm;
     }
 
 

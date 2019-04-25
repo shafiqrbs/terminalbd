@@ -38,7 +38,7 @@
                                 <a class="btn yellow" href="{{ path('business_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
                                 <a class="btn red" href="{{ path('business_invoice_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
                                 {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
-                                    <a href="{{ path('account_sales_business_new') }}" class="btn blue"><i class="icon-money"></i> Due Receive</a>
+                                    <a href="{{ path('account_sales_new') }}" class="btn blue"><i class="icon-money"></i> Due Receive</a>
                                     <a href="{{ path('report_customer_outstanding') }}" class="btn purple"><i class="icon-th-list"></i> Outstanding</a>
                                 {% endif %}
                             </div>

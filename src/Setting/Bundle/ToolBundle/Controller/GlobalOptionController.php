@@ -77,7 +77,8 @@ class GlobalOptionController extends Controller
 
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
-            return $this->redirect($this->generateUrl('tools_domain_agent'));
+          //  return $this->redirect($this->generateUrl('tools_domain_agent'));
+            return $this->redirect($this->generateUrl('globaloption_edit', array('id' => $entity->getId())));
         }
 
         return $this->render('SettingToolBundle:GlobalOption:signup.html.twig', array(

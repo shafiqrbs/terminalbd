@@ -64,13 +64,13 @@ class InvoiceController extends Controller
         $option = $this->getUser()->getGlobalOption();
         $config = $option->getBusinessConfig();
         $entity->setCreatedBy($this->getUser());
+        $entity->setSalesBy($this->getUser());
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($this->getUser()->getGlobalOption());
         $entity->setCustomer($customer);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $entity->setBusinessConfig($config);
         $entity->setPaymentStatus('Pending');
-        $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('business_invoice_edit', array('id' => $entity->getId())));
@@ -146,21 +146,22 @@ class InvoiceController extends Controller
         $editForm->handleRequest($request);
         $data = $request->request->all();
         if ($editForm->isValid()) {
-            if (!empty($data['customerMobile'])) {
+            if (!empty($data['customerMobile'])){
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
                 $entity->setCustomer($customer);
 
-            } elseif (!empty($data['mobile'])) {
+            }elseif (!empty($data['mobile'])){
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
-            if ($entity->getTotal() <= $entity->getReceived()) {
-                $entity->setReceived($entity->getTotal());
+
+            if($entity->getTotal() <= $entity->getReceived()){
+                $entity->setReceived(round($entity->getTotal()));
                 $entity->setDue(0);
                 $entity->setPaymentStatus('Paid');
-            } else {
+            }else{
                 $entity->setPaymentStatus('Due');
                 $entity->setDue($entity->getTotal() - $entity->getReceived());
             }
@@ -168,10 +169,11 @@ class InvoiceController extends Controller
 	            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
 	            $entity->setPaymentInWord($amountInWords);
             }
+
 	        $em->flush();
             $done = array('Done','Delivered');
             if (in_array($entity->getProcess(), $done)) {
-	          //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($invoiceItem,'sales');
+	            //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($invoiceItem,'sales');
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
