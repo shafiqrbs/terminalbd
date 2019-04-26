@@ -67,8 +67,10 @@ class DefaultController extends Controller
         	return $this->redirect($this->generateUrl('election_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 && in_array('inventory',$apps)) {
         	return $this->redirect($this->generateUrl('inventory_homepage'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ECOMMERCE') && $enable == 1 && in_array('e-commerce',$apps)) {
+	        return $this->redirect($this->generateUrl('ecommerce_dashboard'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1 && in_array('website',$apps)) {
-	        return $this->redirect($this->generateUrl('website'));
+            return $this->redirect($this->generateUrl('website'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {
 	        return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_AGENT')) {

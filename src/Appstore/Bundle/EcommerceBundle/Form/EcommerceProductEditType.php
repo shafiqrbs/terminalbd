@@ -36,7 +36,7 @@ class EcommerceProductEditType extends AbstractType
 	{
 		$builder
 
-			->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Web product name')))
+			->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Product name')))
 			->add('category', 'entity', array(
 				'required'    => true,
 				'empty_value' => '---Select product category---',
@@ -65,13 +65,12 @@ class EcommerceProductEditType extends AbstractType
 
 			->add('size', 'entity', array(
 				'required'    => true,
-				'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
+				'class' => 'Setting\Bundle\ToolBundle\Entity\ProductSize',
 				'empty_value' => '-Choose a size-',
 				'property' => 'name',
 				'attr'=>array('class'=>'span12'),
 				'query_builder' => function(EntityRepository $er){
 					return $er->createQueryBuilder('p')
-					          ->join('p.sizeGroup','sg')
 					          ->where("p.status = 1")
 					          ->andWhere("p.isValid = 1")
 					         ->orderBy("p.name","ASC");
@@ -114,12 +113,8 @@ class EcommerceProductEditType extends AbstractType
 			                                 'constraints' =>array(
 				                                 new NotBlank(array('message'=>'Please add sales price'))
 			                                 )))
-			->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
+			->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 8)))
 			->add('file')
-			/*->add('file','file', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
-				'constraints' =>array(
-					new NotBlank(array('message'=>'Please product feature image'))
-			)))*/
 			->add('tag', 'entity', array(
 				'required'    => true,
 				'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
@@ -142,7 +137,7 @@ class EcommerceProductEditType extends AbstractType
 				'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
 				'empty_value' => '-Choose a promotion-',
 				'property' => 'name',
-				'attr'=>array('class'=>'span12 select2'),
+				'attr'=>array('class'=>'span12 m-wrap'),
 				'query_builder' => function(EntityRepository $er){
 					$qb = $er->createQueryBuilder('p');
 					$qb->where("p.ecommerceConfig ={$this->config->getId()}");
@@ -158,7 +153,7 @@ class EcommerceProductEditType extends AbstractType
 				'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Discount',
 				'empty_value' => '-Choose a Discount-',
 				'property' => 'nameDetails',
-				'attr'=>array('class'=>'span12 select2'),
+				'attr'=>array('class'=>'span12 m-wrap'),
 				'query_builder' => function(EntityRepository $er){
 					$qb = $er->createQueryBuilder('p');
 					$qb->where("p.ecommerceConfig ={$this->config->getId()}");
@@ -167,10 +162,21 @@ class EcommerceProductEditType extends AbstractType
 					return $qb;
 				},
 			))
-			->add('warningText','text', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('itemAssurance', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ItemAssurance',
+                'empty_value' => '--Choose a item assurance--',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->orderBy("p.name","ASC");
+                },
+            ))
 			->add('warningLabel', 'choice', array(
 				'required'    => false,
-				'attr'=>array('class'=>'span12'),
+				'attr'=>array('class'=>'span12 m-wrap'),
 				'empty_value' => '---Choose a warning label---',
 				'choices' => array(
 					'Warranty' => 'Warranty',
@@ -180,7 +186,7 @@ class EcommerceProductEditType extends AbstractType
 
 			->add('itemColors', 'entity', array(
 				'required'    => true,
-				'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',
+				'class' => 'Setting\Bundle\ToolBundle\Entity\ProductColor',
 				'empty_value' => '-Choose a color-',
 				'property' => 'name',
 				'multiple' => 'multiple',

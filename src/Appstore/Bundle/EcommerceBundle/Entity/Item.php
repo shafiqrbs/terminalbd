@@ -6,6 +6,9 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\ItemAssurance;
+use Setting\Bundle\ToolBundle\Entity\ProductColor;
+use Setting\Bundle\ToolBundle\Entity\ProductSize;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -78,13 +81,13 @@ class Item
     protected $brand;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="items" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor", inversedBy="items" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $itemColors;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="items" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize", inversedBy="items" )
      **/
     private  $size;
 
@@ -99,7 +102,7 @@ class Item
     private  $tag;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="items" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="itemPromotions" )
      **/
     private  $promotion;
 
@@ -107,6 +110,11 @@ class Item
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="item" )
      **/
     private  $productUnit;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ItemAssurance", inversedBy="item" )
+     **/
+    private  $itemAssurance;
 
     /**
      * @var string
@@ -122,6 +130,7 @@ class Item
      * @ORM\Column(name="webName", type="string", length=255, nullable = true)
      */
     private $webName;
+
 
     /**
      * @Gedmo\Slug(handlers={
@@ -758,7 +767,7 @@ class Item
 
 
     /**
-     * @return mixed
+     * @return ProductSize
      */
     public function getSize()
     {
@@ -766,7 +775,7 @@ class Item
     }
 
     /**
-     * @param mixed $size
+     * @param ProductSize $size
      */
     public function setSize($size)
     {
@@ -810,7 +819,7 @@ class Item
     }
 
     /**
-     * @return mixed
+     * @return ProductColor
      */
     public function getItemColors()
     {
@@ -818,7 +827,7 @@ class Item
     }
 
     /**
-     * @param mixed $itemColors
+     * @param ProductColor $itemColors
      */
     public function setItemColors($itemColors)
     {
@@ -1090,6 +1099,22 @@ class Item
 	public function setWebPrice( string $webPrice ) {
 		$this->webPrice = $webPrice;
 	}
+
+    /**
+     * @return ItemAssurance
+     */
+    public function getItemAssurance()
+    {
+        return $this->itemAssurance;
+    }
+
+    /**
+     * @param ItemAssurance $itemAssurance
+     */
+    public function setItemAssurance($itemAssurance)
+    {
+        $this->itemAssurance = $itemAssurance;
+    }
 
 
 }

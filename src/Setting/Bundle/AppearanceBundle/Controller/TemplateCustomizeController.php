@@ -117,7 +117,7 @@ class TemplateCustomizeController extends Controller
             throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
         }
 
-        $editForm = $this->createEcommerceForm($entity);
+        $editForm = $this->createEditForm($entity);
         return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),

@@ -159,7 +159,7 @@ class AccountSalesRepository extends EntityRepository
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
 
-	    $sort = isset($data['sort'])? $data['sort'] :'e.updated';
+	    $sort = isset($data['sort'])? $data['sort'] :'e.id';
 	    $direction = isset($data['direction'])? $data['direction'] :'DESC';
 
         $qb = $this->createQueryBuilder('e');
@@ -247,7 +247,7 @@ class AccountSalesRepository extends EntityRepository
 			$qb->andWhere("e.updated <= :endDate");
 			$qb->setParameter('endDate',$end);
 		}
-		$qb->orderBy('e.updated','ASC');
+		$qb->orderBy('e.id','ASC');
 		$result = $qb->getQuery();
 		return $result;
 
@@ -270,14 +270,14 @@ class AccountSalesRepository extends EntityRepository
         $em = $this->_em;
         $customer = $accountSales->getCustomer()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE(SUM(e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
+        $qb->select('(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) AS balance, COALESCE(SUM(e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $accountSales->getGlobalOption()->getId());
         $qb->andWhere("e.process = 'approved'");
         $qb->andWhere("e.customer = :customer");
         $qb->setParameter('customer', $customer);
         $result = $qb->getQuery()->getSingleResult();
-        $balance = ($result['totalAmount'] -  $result['receiveAmount']);
+        $balance = $result['balance'];
         $accountSales->setBalance($balance);
         $accountSales->setUpdated($accountSales->getCreated());
         $em->persist($accountSales);
@@ -719,7 +719,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setSourceInvoice( $entity->getInvoice() );
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTotalAmount($entity->getTotal());
-        $accountSales->setProcessHead('diagnostic');
+        $accountSales->setProcessHead('Diagnostic');
         $accountSales->setApprovedBy($entity->getCreatedBy());
         if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());

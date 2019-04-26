@@ -5,6 +5,8 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\ProductColor;
+use Setting\Bundle\ToolBundle\Entity\ProductSize;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 
 /**
@@ -36,12 +38,12 @@ class ItemSub
     private  $orderItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="goodsItems")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize", inversedBy="goodsItems")
      */
     protected $size;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="goodsItem")
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor", inversedBy="goodsItem")
      */
     protected $colors;
 
@@ -112,7 +114,7 @@ class ItemSub
     }
 
     /**
-     * @return mixed
+     * @return ProductSize
      */
     public function getSize()
     {
@@ -120,7 +122,7 @@ class ItemSub
     }
 
     /**
-     * @param mixed $size
+     * @param ProductSize $size
      */
     public function setSize($size)
     {
@@ -217,7 +219,7 @@ class ItemSub
     }
 
     /**
-     * @return Color
+     * @return ProductColor
      */
     public function getColors()
     {
@@ -225,7 +227,7 @@ class ItemSub
     }
 
     /**
-     * @param Color $colors
+     * @param ProductColor $colors
      */
     public function setColors($colors)
     {

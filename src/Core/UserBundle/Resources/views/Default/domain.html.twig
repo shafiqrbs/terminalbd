@@ -182,7 +182,6 @@
             {% endif %}
             {% if 'hms' in apps %}
                 <div class="row-fluid pull-center" >
-
                     {% set invoiceProcess = globalOption.hospitalConfig.invoiceProcess %}
                     {% if 'diagnostic' in  invoiceProcess  %}
                         {% if is_granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") %}

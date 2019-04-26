@@ -450,7 +450,7 @@ class ExcelBackup
     }
 
     /**
-     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemColorRepository
+     * @return \Appstore\Bundle\InventoryBundle\Repository\ProductColorRepository
      */
     private function getColorRepository()
     {
@@ -458,7 +458,7 @@ class ExcelBackup
     }
 
     /**
-     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository
+     * @return \Appstore\Bundle\InventoryBundle\Repository\productSizeRepository
      */
     private function getSizeRepository()
     {

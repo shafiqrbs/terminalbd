@@ -37,7 +37,7 @@ class EcommerceProductType extends AbstractType
     {
         $builder
 
-            ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Web product name')))
+            ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Product name')))
             ->add('brand', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
@@ -51,7 +51,6 @@ class EcommerceProductType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-            ->add('warningText','text', array('attr'=>array('class'=>'m-wrap span12')))
             ->add('warningLabel', 'choice', array(
                 'required'    => false,
                 'attr'=>array('class'=>'span12'),
@@ -63,14 +62,40 @@ class EcommerceProductType extends AbstractType
             ))
             ->add('size', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductSize',
                 'empty_value' => '-Choose a size-',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
-                        ->andWhere("p.isValid = 1")
+                       ->orderBy("p.name","ASC");
+                },
+            ))
+
+            ->add('itemColors', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductColor',
+                'empty_value' => '-Choose a color-',
+                'property' => 'name',
+                'multiple' => 'multiple',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->orderBy("p.name","ASC");
+                },
+            ))
+
+            ->add('itemAssurance', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ItemAssurance',
+                'empty_value' => '--Choose a item assurance--',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
                         ->orderBy("p.name","ASC");
                 },
             ))
@@ -79,7 +104,7 @@ class EcommerceProductType extends AbstractType
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
                 'empty_value' => '---Choose a country ---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 '),
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->orderBy("p.name","ASC");
@@ -102,7 +127,7 @@ class EcommerceProductType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'empty_value' => '-Choose a unit-',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -112,10 +137,7 @@ class EcommerceProductType extends AbstractType
 
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
 
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add purchase price'))
-            )))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price')))
 
             ->add('overHeadCost','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'over head cost')))
 
@@ -123,7 +145,7 @@ class EcommerceProductType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add sales price'))
             )))
-            ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>8)))
+            ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 12)))
             ->add('tag', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
@@ -146,7 +168,7 @@ class EcommerceProductType extends AbstractType
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
                 'empty_value' => '-Choose a promotion-',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'query_builder' => function(EntityRepository $er){
                     $qb = $er->createQueryBuilder('p');
 	                $qb->where("p.ecommerceConfig ={$this->config->getId()}");
@@ -157,20 +179,23 @@ class EcommerceProductType extends AbstractType
                     return $qb;
                 },
             ))
-            ->add('itemColors', 'entity', array(
+
+            ->add('discount', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',
-                'empty_value' => '-Choose a color-',
-                'property' => 'name',
-                'multiple' => 'multiple',
-                'attr'=>array('class'=>'span12 select2'),
+                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Discount',
+                'empty_value' => '-Choose a discount-',
+                'property' => 'nameDetails',
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                        ->andWhere("p.isValid = 1")
-                        ->orderBy("p.name","ASC");
+                    $qb = $er->createQueryBuilder('p');
+	                $qb->where("p.ecommerceConfig ={$this->config->getId()}");
+	                $qb->andWhere("p.status = 1");
+                    $qb->orderBy("p.name","ASC");
+                    return $qb;
                 },
-            ));
+            ))
+            ->add('file');
+
     }
     
     /**

@@ -47,9 +47,14 @@ class Promotion
     protected $products;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="tag")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="tag")
      */
     protected $itemTags;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="promotion")
+     */
+    protected $itemPromotions;
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="tag")

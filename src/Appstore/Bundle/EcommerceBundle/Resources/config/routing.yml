@@ -50,3 +50,6 @@ ecommerce_item_attribute:
     resource: "@EcommerceBundle/Resources/config/routing/itemattribute.yml"
     prefix:   /item-attribute
 
+ecommerce_dashboard:
+    path:     /
+    defaults: { _controller: "EcommerceBundle:Default:index" }

@@ -3,7 +3,7 @@
 namespace Appstore\Bundle\EcommerceBundle\Form;
 
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
-use Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository;
+use Appstore\Bundle\InventoryBundle\Repository\productSizeRepository;
 use Doctrine\ORM\EntityRepository;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
@@ -13,16 +13,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class EcommerceProductSubItemType extends AbstractType
 {
-
-
-    /** @var  ItemSizeRepository */
-
-    private $em;
-
-    function __construct(ItemSizeRepository $em)
-    {
-        $this->em = $em;
-    }
 
 
     /**
