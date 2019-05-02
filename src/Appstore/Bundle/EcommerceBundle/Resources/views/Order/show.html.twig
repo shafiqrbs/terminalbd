@@ -35,14 +35,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Order Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('customer_order_print_invoice', { 'id': entity.id }) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a></li>
-                                    <li><a href="{{ path('customer_order') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn purple"  href="{{ path('customer_order_print_invoice',{'id':entity.id}) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a>
+                                <a class="btn yellow" href="{{ path('customer_order')}}"><i class="icon-th-list"></i>&nbsp;Orders</a>
                             </div>
                         </div>
                     </div>
@@ -50,12 +44,12 @@
                     <div class="portlet-body form">
                         <div class="">
                             <div class="row-fluid">
-                                <div class="span4">
+                                <div class="span3">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <label><strong>Bill Overview</strong></label>
                                             <ul class="unstyled" >
-                                                <li><strong>Invoice</strong>:#&nbsp;{{ entity.grandTotalAmount }}</li>
+                                                <li><strong>Invoice</strong>:#&nbsp;{{ entity.invoice }}</li>
                                                 <li><strong>Grand Total</strong>:&nbsp;{{ entity.grandTotalAmount }}</li>
                                                 {% if entity.discountAmount > 0 %}
                                                     <li><strong>Discount</strong>:&nbsp;{{ entity.discountAmount }}</li>
@@ -71,22 +65,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span4">
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <label><strong>Payment Details</strong></label>
-                                            <ul class="unstyled" >
-                                                {% if entity.cashOnDelivery == 1 %}
-                                                    <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
-                                                {% endif %}
-                                                <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
-                                                <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
-                                                <li><strong>Process Status</strong>:&nbsp;{{ entity.process|capitalize }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="span4">
+                                <div class="span3">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <label><strong>{{ entity.delivery|capitalize }} Address</strong></label>
@@ -96,6 +75,38 @@
                                                 <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }}</li>
                                                 <li>{{ entity.address }}</li>
                                             </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <label><strong>Process Details</strong></label>
+                                            <ul class="unstyled" >
+                                                {% if entity.cashOnDelivery == 1 %}
+                                                    <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
+                                                {% endif %}
+                                                <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
+                                                <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
+                                                <li><strong>Process Status</strong>:&nbsp;{{ entity.process|capitalize }}</li>
+
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <label><strong>Payment </strong></label>
+                                            {% if entity.accountMobileBank is not empty %}
+                                                <ul class="unstyled" >
+                                                    <li><strong>Receive Mob.</strong>:&nbsp;{{ entity.accountMobileBank.mobile }}</li>
+                                                    <li><strong>Service</strong>:&nbsp;{{ entity.accountMobileBank.serviceName }}</li>
+                                                    <li><strong>Sender Mob.</strong>:&nbsp;{{ entity.mobileAccount }}</li>
+                                                    <li><strong>Transaction ID</strong>:&nbsp;{{ entity.transaction }}</li>
+                                                </ul>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -130,16 +141,19 @@
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Total</span></td>
                                     <td class="numeric" colspan="1" >=&nbsp;{{ entity.totalAmount|number_format }}</td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
                                     <td class="numeric">=&nbsp;{{ entity.shippingCharge }}</td>
+                                    <td></td>
                                 </tr>
 
                                 {% if entity.ecommerceConfig.vatEnable == 1 %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Vat & Tax</span></td>
                                         <td class="numeric">=&nbsp;{{ entity.vat }}</td>
+                                        <td></td>
                                     </tr>
                                 {% endif %}
                                 {% if entity.discountAmount > 0 %}
@@ -159,21 +173,25 @@
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Paid Amount</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
+                                    <td></td>
                                 </tr>
                                 {% if entity.dueAmount  > 0 %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Due Amount</span></td>
                                         <td class="numeric" >=&nbsp;{{ ( entity.dueAmount)|number_format }}</td>
+                                        <td></td>
                                     </tr>
                                 {% endif %}
                                 {% if entity.returnAmount  > 0 %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Return Amount</span></td>
                                         <td class="numeric">=&nbsp;{{ ( entity.returnAmount)|number_format }}</td>
+                                        <td></td>
                                     </tr>
                                 {% endif %}
                                 </tbody>

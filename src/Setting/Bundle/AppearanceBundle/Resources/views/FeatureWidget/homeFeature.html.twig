@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('ecommercehome') }}"> E-commerce  Home Customize</a>
+                        <a href="{{ path('ecommercehome') }}"> E-commerce  Page Customize</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -33,17 +33,11 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i> E-commerce Home Customize</div>
+                        <div class="caption"><i class="icon-reorder"></i> E-commerce Page Customize</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('ecommercehome_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('ecommercehome') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('ecommercehome_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a class="btn" href="{{ path('ecommercehome') }}"><i class="icon-th-list"></i>&nbsp;Page Customize</a>
                             </div>
                         </div>
                     </div>
@@ -51,13 +45,35 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll dd" id="nestable_list_2">
                             {% include('flash-message.html.twig')  %}
-                            <form id="sorting" action="" method="post">
+                            {#<form id="sorting" action="" method="post">
                                 <ul class="sortable grid dd-list" style="width:100%">
                                     {% for entity in entities %}
                                         {% if(entity.webPath) %}
                                             <li style="overflow: hidden;height: {{ entity.divHeight }}px; width: {{ entity.divWidth }}px" data-id="{{ entity.id }}" id="item_{{ entity.id }}" class="ui-widget-content dd-item dd3-item">
                                                 <span data-id="{{ entity.id }}" class="dd-handle dd3-handle"></span>
                                                 <img class="" alt="" src="/{{ entity.webPath }}">
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                                <div class="form-actions portlet box grey">
+                                    <div class="pull-center">
+                                        <button type="button" class="btn green" id="serialize" ><i class="icon-ok"></i> Save</button>
+                                        <button type="button" class="btn purple"><i class="icon-refresh"></i> Reset</button>
+                                    </div>
+                                </div>
+                            </form>#}
+                            <form id="sorting" action="" method="post">
+                                <ul class="sortable grid dd-list" style="width:100%">
+                                    {% for entity in entities %}
+                                        {% if(entity.webPath) %}
+                                            <li style="overflow: hidden;height: {{ entity.divHeight }}px; width: {{ entity.divWidth }}px" data-id="{{ entity.id }}" id="item_{{ entity.id }}" class="ui-widget-content dd-item dd3-item">
+                                                <span data-id="{{ entity.id }}" class="dd-handle dd3-handle"></span>
+                                                <div>
+                                                    Build responsive, mobile-first projects on the web with the world’s most popular front-end component library.
+
+                                                    Bootstrap is an open source toolkit for developing with HTML, CSS, and JS. Quickly prototype your ideas or build your entire app with our Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful plugins built on jQuery.
+                                                </div>
                                             </li>
                                         {% endif %}
                                     {% endfor %}

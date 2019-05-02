@@ -660,6 +660,43 @@ class CategoryRepository extends MaterializedPathRepository
         return $categories;
     }
 
+    public function getEcommerceCategoryMenu(EcommerceConfig $config)
+    {
+        $grouped = array();
+
+        if(!empty($config->getCategoryGrouping())){
+
+            $qb = $this->createQueryBuilder('node');
+            $orX = $qb->expr()->orX();
+
+            $categories = $config->getCategoryGrouping()->getCategories();
+            foreach($categories as $category){
+                $orX->add("node.path like '" .$category->getId() . "/%'");
+            }
+
+            $results = $qb
+                ->orderBy('node.level, node.name', 'ASC')
+                ->where('node.level > 1')
+                ->andWhere($orX)
+                ->getQuery()
+                ->getResult();
+
+            $categories = $this->getCategoriesIndexedById($results);
+
+            foreach ($categories as $category) {
+                switch($category->getLevel()) {
+                    case 2: break;
+                    default:
+                        $grouped[$categories[$category->getParentIdByLevel(2)]->getName()][$category->getId()] = $category;
+                }
+            }
+            return $grouped;
+        }
+
+        return $grouped == null ? array() : $grouped;
+
+    }
+
     public function getUserCategoryOptionGroup(InventoryConfig $inventroy)
     {
         $grouped = array();

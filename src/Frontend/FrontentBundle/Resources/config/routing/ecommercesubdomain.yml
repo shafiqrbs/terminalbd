@@ -16,6 +16,10 @@ homepage:
      path:     /backend
      defaults: { _controller: BusinessBundle:Default:index }
 
+webservice_login:
+    path:     /login
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:domainLogin }
+
 webservice_domain_backend:
      path:     /business/dashboard
      defaults: { _controller: BusinessBundle:Default:index }
@@ -138,6 +142,10 @@ webservice_product_brand:
     path:     /product/brand/{id}
     defaults: { _controller: FrontendBundle:WebServiceProduct:brand }
 
+webservice_logout:
+    path:     /frontend-logout
+    defaults: { _controller: FrontendBundle:WebService:frontendLogout}
+
 webservice_contact:
     path:     /contact
     defaults: { _controller: FrontendBundle:WebServiceModule:contact }
@@ -180,10 +188,6 @@ webservice_customer_checking:
     options:
             expose: true
 
-webservice_login:
-    path:     /customer-login
-    defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
-
 webservice_search:
     path:     /search
     defaults: { _controller: FrontendBundle:WebServiceModule:search }
@@ -203,6 +207,8 @@ frontend_category:
 frontend_brand:
     path:     /brand/{slug}
     defaults: { _controller: FrontendBundle:Default:brand }
+
+
 
 
 

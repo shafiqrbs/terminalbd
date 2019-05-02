@@ -169,13 +169,64 @@
         }
     {% endif %}
 
-
     {% if globalOption.templateCustomize.menuPosition is not empty %}
         #header-menu{
             float:{{ globalOption.templateCustomize.menuPosition }} !important;
             margin-right:40px;
         }
     {% endif %}
+
+    nav.navbar.bootsnav ul.nav > li > a {
+        color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
+        font-size: {{ globalOption.templateCustomize.menuFontSize }} !important;
+        text-transform: {{ globalOption.templateCustomize.menuLetter }} !important;
+    {% if globalOption.templateCustomize.menuBold ==  1 %}
+        font-weight: bold;
+    {% endif %}
+    {% if globalOption.templateCustomize.menuBgColor is not empty %}
+        background:{{ globalOption.templateCustomize.menuBgColor }}!important;
+    {% endif %}
+    }
+
+    #nav.navbar.bootsnav ul.nav > li:hover{
+    {% if globalOption.templateCustomize.menuBgColorHover is not empty %}
+        background:{{ globalOption.templateCustomize.menuBgColorHover }}!important;
+    {% endif %}
+    }
+
+    nav.navbar.bootsnav li.dropdown ul.dropdown-menu {
+    {% if globalOption.templateCustomize.subMenuWidth is not empty %}
+        width:{{ globalOption.templateCustomize.subMenuWidth }}px!important;
+    {% endif %}
+    }
+    nav.navbar.bootsnav li.dropdown ul.dropdown-menu > li > a {
+        color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
+        font-size: {{ globalOption.templateCustomize.menuFontSize }} !important;
+        text-transform: {{ globalOption.templateCustomize.menuLetter }} !important;
+    {% if globalOption.templateCustomize.menuBold ==  1 %}
+        font-weight: bold;
+    {% endif %}
+    {% if globalOption.templateCustomize.subMenuBgColor is not empty %}
+        background:{{ globalOption.templateCustomize.subMenuBgColor }}!important;
+    {% endif %}
+
+    }
+    nav.navbar.bootsnav li.dropdown ul.dropdown-menu > li > a:hover{
+    {% if globalOption.templateCustomize.subMenuBgColor is not empty %}
+        background:{{ globalOption.templateCustomize.subMenuBgColorHover }}!important;
+    {% endif %}
+    {% if globalOption.templateCustomize.menuLiAColor is not empty %}
+        color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
+    {% endif %}
+
+    }
+
+    nav.navbar.bootsnav li.dropdown ul.dropdown-menu {
+        {% if globalOption.templateCustomize.borderColor is not empty %}
+            border-top: solid {{ globalOption.templateCustomize.headerBorderHeight }}  {{ globalOption.templateCustomize.borderColor }} !important;
+        {% endif %}
+    }
+
 
     #header-menu ul a{
         color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
@@ -234,6 +285,11 @@
     .search-form .form-group span.form-control-feedback{
         color: {{ globalOption.templateCustomize.borderColor }} !important;
     }
+    {% if globalOption.templateCustomize.borderColor is not empty %}
+        .item-select {
+            border: solid  {{ globalOption.templateCustomize.headerBorderHeight }} {{ globalOption.templateCustomize.borderColor }} !important;
+        }
+    {% endif %}
 
     {% if globalOption.templateCustomize.buttonBgColor is not empty %}
         .btn-info{
@@ -402,6 +458,17 @@
     .details-grid{
         background: url("{{ image(globalOption.templateCustomize.webPath('bgImage')).resize() }}")!important;
         background-position: center center;
+
+    }
+    nav.navbar.bootsnav {
+        background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
+        {% if globalOption.templateCustomize.headerBorderColor is not empty %}
+        border-bottom:solid {{ globalOption.templateCustomize.headerBorderHeight }}!important;
+        border-color:{{ globalOption.templateCustomize.headerBorderColor }}!important;
+        {% endif %}
+        -webkit-box-shadow: 0 10px 6px -6px {{ globalOption.templateCustomize.headerBorderColor }}!important;
+        -moz-box-shadow: 0 10px 6px -6px {{ globalOption.templateCustomize.headerBorderColor }}!important;
+        box-shadow: 0 10px 6px -6px {{ globalOption.templateCustomize.headerBorderColor }}!important;
 
     }
     #header{

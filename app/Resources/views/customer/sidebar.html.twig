@@ -13,46 +13,31 @@
             <span class="title">Dashboard</span>
         </a>
     </li>
-    <li >
-        <a href="javascript:">
-            <i class="icon-inbox"></i>
-            <span class="title">Inbox</span>
-            <span class="arrow "></span>
-        </a>
-        <ul class="sub-menu">
-            <li >
-                <a href="{{ path('inbox_sms',{'shop':globalOption.slug}) }}">SMS</a>
-            </li>
-            <li >
-                <a href="{{ path('inbox_email',{'shop':globalOption.slug}) }}">Email</a>
-            </li>
 
-        </ul>
-    </li>
     <!-- BEGIN FRONT DEMO -->
 
     <li >
         <a href="javascript:">
-            <i class=" icon-shopping-cart"></i>
+            <i class=" icon-truck"></i>
             <span class="title">Order</span>
             <span class="arrow "></span>
         </a>
         <ul class="sub-menu">
             <li >
                 <a href="{{ path('order',{'shop':globalOption.slug}) }}">
-                    <i class=" icon-shopping-cart"></i>
+                    <i class="icon-th-list"></i>
                     <span class="title">Order</span>
                 </a>
             </li>
             <li >
                 <a href="{{ path('preorder',{'shop':globalOption.slug}) }}">
-                    <i class="icon-shopping-cart"></i>
+                    <i class="icon-th-list"></i>
                     <span class="title">Pre-order</span>
                 </a>
             </li>
             <li >
                 <a href="{{ path('wishlist',{'shop':globalOption.slug}) }}">
-                    <i class="icon-shopping-cart"></i>
+                    <i class="icon-th-list"></i>
                     <span class="title">Wishlist</span>
                 </a>
             </li>
@@ -67,7 +52,7 @@
     </li>
     <li >
         <a href="{{ path('preorder_new', { 'shop': globalOption.slug}) }}">
-            <i class="icon-shopping-cart"></i>
+            <i class="icon-th-list"></i>
             <span class="title">New Pre Order</span>
         </a>
     </li>
@@ -100,39 +85,22 @@
                 </li>
             </ul>
         </li>
-        <li >
-            <a href="javascript:">
-                <i class="icon-umbrella"></i>
-                <span class="title">All Domain</span>
-                <span class="arrow "></span>
-            </a>
-            <ul class="sub-menu">
-               {# <li >
-                    <a href="{{ path('customer_domain') }}">
-                        <i class="icon-cloud"></i>
-                        <span class="title">All Shop</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('allproduct') }}">
-                        <i class="icon-shopping-cart"></i>
-                        <span class="title">All Product</span>
-                    </a>
-                </li>
-                <li >
-                    <a href="{{ path('customer_domain_bookmark') }}">
-                        <i class="icon-bookmark"></i>
-                        <span class="title">Bookmark Domain</span>
-                    </a>
-                </li>#}
 
-            </ul>
-        </li>
     {% endif %}
-{#    <li class="start ">
-        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}">
-            <i class="icon-cog"></i>
-            <span class="title">Configuration</span>
+    <li >
+        <a href="javascript:">
+            <i class="icon-inbox"></i>
+            <span class="title">Inbox</span>
+            <span class="arrow "></span>
         </a>
-    </li>#}
+        <ul class="sub-menu">
+            <li >
+                <a href="{{ path('inbox_sms',{'shop':globalOption.slug}) }}">SMS</a>
+            </li>
+            <li >
+                <a href="{{ path('inbox_email',{'shop':globalOption.slug}) }}">Email</a>
+            </li>
+
+        </ul>
+    </li>
 </ul>

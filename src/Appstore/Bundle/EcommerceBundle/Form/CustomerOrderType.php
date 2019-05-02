@@ -34,7 +34,7 @@ class CustomerOrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc','data-original-title'=>'Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc','autocomplete'=>'off')))
+            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 tooltips','rows' => 4, 'data-trigger' => 'hover','placeholder'=>'Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc','data-original-title'=>'Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc','autocomplete'=>'off')))
             ->add('deliveryDate','date', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Receive your product date(Approximately)','data-original-title'=>'Please receive your product date(Approximately).',),
                 'constraints' =>array(new NotBlank(array('message'=>'Please input required')))
             ))
@@ -53,9 +53,24 @@ class CustomerOrderType extends AbstractType
                 'multiple'      =>false,
                 'empty_value' => '---Process Status---',
                 'choices' => array(
-                    'created'       => 'Created',
-                    'wfc'       => 'Wait for Confirm'
+                    'created'  => 'Created',
+                    'wfc'      => 'Waiting for Confirm'
                 ),
+            ))
+            ->add('mobileAccount','text', array('attr'=>array('class'=>'m-wrap span12 mobile tooltips','placeholder'=>'Payment mobile account no','data-original-title'=>'Payment mobile account no','autocomplete'=>'off')))
+            ->add('transaction','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Payment transaction id','data-original-title'=>'Payment transaction id','autocomplete'=>'off')))
+            ->add('accountMobileBank', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap '),
+                'empty_value' => '---Choose mobile bank account---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.globalOption =".$this->globalOption->getId())
+                        ->orderBy("b.name", "ASC");
+                }
             ))
             ->add('cashOnDelivery');
 

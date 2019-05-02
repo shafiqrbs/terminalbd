@@ -5,7 +5,9 @@ use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\configBundle\Entity\Purchase;
 use Appstore\Bundle\configBundle\Entity\PurchaseItem;
 use Appstore\Bundle\configBundle\Entity\PurchaseVendorItem;
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -182,6 +184,27 @@ class ItemRepository extends EntityRepository
     }
 
 
+    public function insertCopyMedicineItem(MedicineStock $copyEntity)
+    {
+        $em = $this->_em;
+        $config = $copyEntity->getMedicineConfig()->getGlobalOption()->getEcommerceConfig();
+
+        $entity = new Item();
+        $entity->setEcommerceConfig($config);
+        $entity->setWebName($copyEntity->getName());
+        $entity->setQuantity($copyEntity->getRemainingQuantity());
+        $entity->setPurchasePrice($copyEntity->getPurchasePrice());
+        $entity->setSalesPrice($copyEntity->getSalesPrice());
+        if($copyEntity->getBrandName()){
+            $brand  = $em->getRepository('EcommerceBundle:ItemBrand')->insertBrand($copyEntity);
+            $entity->setBrand($brand);
+        }
+        $entity->setSource('medicine');
+        $em->persist($entity);
+        $em->flush();
+    }
+
+
     public function getSliderFeatureProduct($config, $limit = 3)
     {
 
@@ -235,15 +258,25 @@ class ItemRepository extends EntityRepository
         $name           = isset($data['name'])? $data['name'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
+        $promotion      = isset($data['promotion'])? $data['promotion'] :'';
+        $discount          = isset($data['discount'])? $data['discount'] :'';
 
 
         if (!empty($cat)) {
-            $qb->andWhere("e.category = :category");
+            $qb->andWhere("item.category = :category");
             $qb->setParameter('category', $cat);
         }
         if (!empty($brand)) {
             $qb->andWhere("item.brand = :brand");
             $qb->setParameter('brand', $brand);
+        }
+        if (!empty($promotion)) {
+            $qb->andWhere("item.promotion = :promotion");
+            $qb->setParameter('promotion', $promotion);
+        }
+        if (!empty($discount)) {
+            $qb->andWhere("item.discount = :discount");
+            $qb->setParameter('discount', $discount);
         }
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("item.name", "'% $name %'"  ));
@@ -279,17 +312,15 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function findAllProductWithSearch($data,$limit=0)
+    public function findAllProductWithSearch(EcommerceConfig $config , $data,$limit=0)
     {
 
 
         $order = isset($data['order'])? $data['order'] :'ASC';
         $qb = $this->createQueryBuilder('item');
-        $qb->leftJoin("item.masterItem",'masterItem' );
-        $qb->where("item.isWeb = 1");
+        $qb->where("item.ecommerceConfig = {$config->getId()}");
         $this->handleSearchBetween($qb,$data);
         if(!empty($order)){
-
             if($order == "ASC"){
                 $qb->orderBy('item.salesPrice','ASC');
             }else{
@@ -297,7 +328,6 @@ class ItemRepository extends EntityRepository
             }
 
         }else{
-
             $qb->orderBy('item.updated','DESC');
         }
         $qb->getQuery();

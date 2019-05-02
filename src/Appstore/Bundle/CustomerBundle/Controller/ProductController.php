@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
+use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
@@ -31,7 +32,8 @@ class ProductController extends Controller
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findAllProductWithSearch($data);
+        $config = $this->getUser()->getglobalOption()->getEcommerceConfig();
+        $entities = $em->getRepository('EcommerceBundle:Item')->findAllProductWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         return $this->render('CustomerBundle:Product:allProduct.html.twig', array(
             'entities' => $pagination,
@@ -47,10 +49,13 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
-        $inventory = $globalOption->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
+        $config = $globalOption->getEcommerceConfig();
+        $entities = $em->getRepository('EcommerceBundle:Item')->findAllProductWithSearch($config,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('CustomerBundle:Product:index.html.twig', array(
+
+        $domainType =  $globalOption->getDomainType();
+        $domain = !empty($domainType) ? $domainType : "index";
+        return $this->render("CustomerBundle:Product:{$domain}.html.twig", array(
             'globalOption' => $globalOption,
             'entities' => $pagination,
             'searchForm' => $data,
@@ -59,7 +64,7 @@ class ProductController extends Controller
 
     }
 
-    public function productAddCartAction(Request $request , GoodsItem $subitem)
+    public function productAddCartAction(Request $request , ItemSub $subitem)
     {
 
         $cart = new Cart($request->getSession());
@@ -70,19 +75,17 @@ class ProductController extends Controller
 
         $color = !empty($color) ? $color : 0;
         if($color > 0){
-            $colorName = $this->getDoctrine()->getRepository('InventoryBundle:ItemColor')->find($color)->getName();
+            $colorName = $this->getDoctrine()->getRepository('SettingToolBundle:ProductColor')->find($color)->getName();
         }else{
             $colorName ='';
         }
-
-        $masterItem = !empty($subitem->getPurchaseVendorItem()->getMasterItem()) ? $subitem->getPurchaseVendorItem()->getMasterItem()->getName().'-':'';
-        $product = $subitem->getPurchaseVendorItem();
+        $product = $subitem->getItem();
         $data = array(
 
             'id' => $subitem->getId(),
-            'name'=> $masterItem.'-'.$product->getName(),
+            'name'=> $product->getWebName(),
             'brand'=> !empty($product->getBrand()) ? $product->getBrand()->getName():'',
-            'category'=> !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName():'',
+            'category'=> !empty($product->getCategory()) ? $product->getCategory()->getName():'',
             'size'=>!empty($subitem->getSize()) ? $subitem->getSize()->getName():0 ,
             'color'=> $colorName ,
             'colorId'=> $color,

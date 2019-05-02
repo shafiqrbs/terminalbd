@@ -286,6 +286,14 @@ class Item
     /**
      * @var text
      *
+     * @ORM\Column(name="shortContent", type="text", nullable=true)
+     */
+    private $shortContent;
+
+
+     /**
+     * @var text
+     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
@@ -453,21 +461,6 @@ class Item
         $this->subTotalPurchasePrice = $subTotalPurchasePrice;
     }
 
-    /**
-     * @return string
-     */
-    public function getSubTotalSalesPrice()
-    {
-        return $this->subTotalSalesPrice;
-    }
-
-    /**
-     * @param string $subTotalSalesPrice
-     */
-    public function setSubTotalSalesPrice($subTotalSalesPrice)
-    {
-        $this->subTotalSalesPrice = $subTotalSalesPrice;
-    }
 
     
     /**
@@ -685,7 +678,7 @@ class Item
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/ecommerce/item/'.$this->getId().'/';
+        return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/ecommerce/item/';
     }
 
     public function upload()
@@ -1114,6 +1107,22 @@ class Item
     public function setItemAssurance($itemAssurance)
     {
         $this->itemAssurance = $itemAssurance;
+    }
+
+    /**
+     * @return text
+     */
+    public function getShortContent()
+    {
+        return $this->shortContent;
+    }
+
+    /**
+     * @param text $shortContent
+     */
+    public function setShortContent($shortContent)
+    {
+        $this->shortContent = $shortContent;
     }
 
 

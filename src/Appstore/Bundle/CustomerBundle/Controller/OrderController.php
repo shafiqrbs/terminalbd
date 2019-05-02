@@ -54,8 +54,9 @@ class OrderController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function cartToOrderAction($shop , Request $request)
+    public function cartToOrderAction(Request $request, $shop)
     {
+
         $couponCode = isset($_REQUEST['couponCode']) and $_REQUEST['couponCode'] !='' ? $_REQUEST['couponCode']:'';
         $em = $this->getDoctrine()->getManager();
         $cart = new Cart($request->getSession());
@@ -125,13 +126,17 @@ class OrderController extends Controller
         $entity = $em->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $user,'id' => $id));
         $paymentEntity = new  OrderPayment();
         $order = $this->createEditForm($entity);
-        $payment = $this->createEditPaymentForm($paymentEntity,$entity);
+       // $payment = $this->createEditPaymentForm($paymentEntity,$entity);
+        $arrs = array('delivered','returned','cancel','delete');
+        if(in_array($entity->getProcess(),$arrs)){
+            return $this->redirect($this->generateUrl('order_show',array('id' => $entity->getId(),'shop' => $entity->getGlobalOption()->getUniqueCode())));
+        }
 
         return $this->render('CustomerBundle:Order:payment.html.twig', array(
             'globalOption' => $entity->getGlobalOption(),
             'entity'      => $entity,
             'orderForm'   => $order->createView(),
-            'paymentForm'   => $payment->createView(),
+        //    'paymentForm'   => $payment->createView(),
         ));
 
     }
@@ -164,10 +169,10 @@ class OrderController extends Controller
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $entity = new OrderPayment();
-        if($data['amount']){
+        if($data['accountMobileBank']){
             $entity->setOrder($order);
             $entity->setTransactionType('Payment');
-            $entity->setAmount($data['amount']);
+            $entity->setAmount($order->getGrandTotalAmount());
             if(!empty($data['accountMobileBank'])){
                 $accountMobileBank =$this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
                 $entity->setAccountMobileBank($accountMobileBank);
@@ -177,9 +182,11 @@ class OrderController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.order_payment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent($entity));
-
+            $isMobile = $order->getEcommerceConfig()->getGlobalOption()->getNotificationConfig()->getMobile();
+            if($isMobile){
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.order_payment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent($entity));
+            }
             return new Response('success');
         }else{
             return new Response('invalid');

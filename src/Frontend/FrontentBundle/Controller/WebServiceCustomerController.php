@@ -223,7 +223,7 @@ class WebServiceCustomerController extends Controller
         }else{
             $theme = 'Template/Desktop/'.$themeName;
         }
-         return $this->render('FrontendBundle:'.$theme.':login.html.twig',
+        return $this->render('FrontendBundle:'.$theme.':login.html.twig',
             array(
                 'globalOption'  => $globalOption,
                 'entity' => $entity,

@@ -13,18 +13,6 @@ class CustomerController extends Controller
 {
 
 
-    public function paginate($entities)
-    {
-
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            25  /*limit per page*/
-        );
-        return $pagination;
-    }
-
     public function indexAction($shop)
     {
         
@@ -34,8 +22,12 @@ class CustomerController extends Controller
         }else{
             $globalOption ='';
         }
-        return $this->render('CustomerBundle:Customer:dashboard.html.twig', array(
-            'user' => $user,
+
+        $domainType =  $globalOption->getDomainType();
+        $domain = !empty($domainType) ? $domainType : "dashboard";
+
+        return $this->render("CustomerBundle:Customer:{$domain}.html.twig", array(
+            'user'         => $user,
             'globalOption' => $globalOption,
         ));
 

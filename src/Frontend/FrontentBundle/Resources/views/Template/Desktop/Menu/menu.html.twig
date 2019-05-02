@@ -1,6 +1,6 @@
 {% if globalOption.ecommerceConfig.menuType == 'Mega' %}
 {#  ==================== Start Mega Menu ================================== #}
-<nav class="navbar navbar-mega-menu">
+<nav class="navbar navbar-mega-menu col-sm-10 col-md-10">
     <div class="collapse navbar-collapse js-navbar-collapse">
         <ul class="nav navbar-nav">
             {% for  menu in globalOption.ecommerceMenus  %}
@@ -294,3 +294,18 @@
     </nav>
 {#  ==================== End Sidebar Menu ================================== #}
 {% endif %}
+<div class="col-md-2 col-lg-2 text-right">
+    <div class="input-group text-right" style="margin-top: 8px; position: relative" >
+        <span class="label label-warning badge totalItem"> {{ cart.total_items }}</span>
+        <div class="input-group-btn">
+            <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" data-toggle="tooltip" title="View Shopping Items"  id="cartItem"  class="btn btn-warning"> <span  class="fa fa-shopping-cart"></span> items</a>
+            {% if app.user %}
+                <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
+                <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
+            {% else %}
+                <a type="button" class="btn btn-group btn-primary login-preview"  data-toggle="tooltip" title="System Login" ><span class="glyphicon glyphicon-lock"></span></a>
+            {% endif %}
+        </div><!-- /btn-group -->
+    </div><!-- /input-group -->
+</div>
+

@@ -145,7 +145,8 @@ class EcommerceProductType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add sales price'))
             )))
-            ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 12)))
+            ->add('shortContent','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 5)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows' =>30)))
             ->add('tag', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',

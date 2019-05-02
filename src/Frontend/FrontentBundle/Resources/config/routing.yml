@@ -14,3 +14,5 @@ domain_receive_sms:
     path:     /{subdomain}/sms/receive
     defaults: { _controller: FrontendBundle:SmsEmailReceive:smsReceive}
 
+
+

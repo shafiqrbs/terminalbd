@@ -102,10 +102,7 @@ class EcommerceProductEditType extends AbstractType
 			))
 			->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
 
-			->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price'),
-			                                    'constraints' =>array(
-				                                    new NotBlank(array('message'=>'Please add purchase price'))
-			                                    )))
+			->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price')))
 
 			->add('overHeadCost','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'over head cost')))
 
@@ -113,8 +110,10 @@ class EcommerceProductEditType extends AbstractType
 			                                 'constraints' =>array(
 				                                 new NotBlank(array('message'=>'Please add sales price'))
 			                                 )))
-			->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 8)))
-			->add('file')
+			->add('shortContent','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 5)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows' =>30)))
+
+            ->add('file')
 			->add('tag', 'entity', array(
 				'required'    => true,
 				'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',

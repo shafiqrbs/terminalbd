@@ -1,3 +1,36 @@
+.sidebar.right {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 415px;
+    border:2px solid #04203a!important;
+    background: #003869 !important;
+}
+.sidebars > .sidebar {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.64);
+    position: fixed;
+    color: white;
+    padding: 30px;
+    font-size: 2em;
+    text-align: center;
+    z-index: 99999;
+}
+.sidebars > .sidebar a{
+    float: right;
+    position: absolute;
+    top: 8px;
+    right: 21px;
+    color: red!important;
+    font-size: 20px;
+}
+
+input::-webkit-input-placeholder , textarea::-webkit-input-placeholder{
+    color:red!important;
+}
+input:-moz-placeholder , textarea:-moz-placeholder {
+    color:red!important;
+}
+
 
 .pageheader{
     padding: 42px 0;

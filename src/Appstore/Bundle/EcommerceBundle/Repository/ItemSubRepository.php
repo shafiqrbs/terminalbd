@@ -128,12 +128,12 @@ class ItemSubRepository extends EntityRepository
                 if($colors != 'null' and !empty($colors)){
                     $colorIds = explode(',',$colors);
                     foreach ($colorIds as $color ){
-                        $colorObj[] = $this->_em->getRepository('InventoryBundle:ItemColor')->find($color);
+                        $colorObj[] = $this->_em->getRepository('SettingToolBundle:ProductColor')->find($color);
                     }
                     $goods->setColors($colorObj);
                 }
                 if(isset($sizeId) and !empty($sizeId)){
-                    $size = $this->_em->getRepository('InventoryBundle:ItemSize')->find($sizeId);
+                    $size = $this->_em->getRepository('SettingToolBundle:ProductSize')->find($sizeId);
                     $goods->setSize($size);
                 }
                 if(isset($unitId) and !empty($unitId)){
@@ -169,12 +169,12 @@ class ItemSubRepository extends EntityRepository
 
                 $colorIds = explode(',',$colors);
                 foreach ($colorIds as $color ){
-                    $colorObj[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('ecommerceConfig' => $goods->getitem()->getecommerceConfig(),'id'=> $color));
+                    $colorObj[] = $this->_em->getRepository('SettingToolBundle:ProductColor')->findOneBy(array('ecommerceConfig' => $goods->getitem()->getecommerceConfig(),'id'=> $color));
                 }
                 $goods->setColors($colorObj);
             }
             if(isset($sizeId) and !empty($sizeId)){
-                $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('ecommerceConfig' => $goods->getitem()->getecommerceConfig(),'id'=> $sizeId));
+                $size = $this->_em->getRepository('SettingToolBundle:ProductSize')->findOneBy(array('ecommerceConfig' => $goods->getitem()->getecommerceConfig(),'id'=> $sizeId));
                 $goods->setSize($size);
             }
             $em->flush();
@@ -189,7 +189,7 @@ class ItemSubRepository extends EntityRepository
         $goods->setPurchasePrice($updateSubProduct['purchasePrice']);
         $goods->setQuantity($updateSubProduct['quantity']);
         if(isset($updateSubProduct['size']) and !empty($updateSubProduct['size']) ){
-            $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('id'=> $updateSubProduct['size']));
+            $size = $this->_em->getRepository('SettingToolBundle:ProductSize')->findOneBy(array('id'=> $updateSubProduct['size']));
             $goods->setSize($size);
             $goods->setName(null);
         }else{
@@ -197,7 +197,7 @@ class ItemSubRepository extends EntityRepository
         }
         if(isset($updateSubProduct['colors']) and !empty($updateSubProduct['colors'])) {
             foreach ($updateSubProduct['colors'] as $color){
-                $colors[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('id' => $color));
+                $colors[] = $this->_em->getRepository('SettingToolBundle:ProductColor')->findOneBy(array('id' => $color));
             }
             $goods->setColors($colors);
 

@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -92,6 +93,12 @@ class Order
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="orders")
      **/
     private $customer;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="orders" )
+     **/
+    private  $accountMobileBank;
 
 
     /**
@@ -923,6 +930,22 @@ class Order
     public function getOrderPayments()
     {
         return $this->orderPayments;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
     }
 
 

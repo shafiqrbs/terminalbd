@@ -3,6 +3,7 @@
 namespace Frontend\FrontentBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Core\UserBundle\Form\CustomerRegisterType;
@@ -62,7 +63,13 @@ class WebServiceProductController extends Controller
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
 
+            $post = array();
+            $post = empty($_REQUEST['item']) ? '' : $_REQUEST['item'];
             $data = $_REQUEST;
+            $data['category']= isset($post['category']) ? $post['category']:'';
+            $data['brand']= isset($post['brand']) ? $post['brand']:'';
+            $data['name']= isset($post['webName']) ? $post['webName']:'';
+
             $ecommerce = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : 20;
             $config = $globalOption->getEcommerceConfig();
@@ -451,7 +458,7 @@ class WebServiceProductController extends Controller
         $subId = $_REQUEST['subItem'];
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=> $subdomain));
-        /* @var GoodsItem $subItem */
+        /* @var ItemSub $subItem */
         $subItem = $em->getRepository('EcommerceBundle:ItemSub')->find($subId);
         if(!empty($globalOption)){
 
@@ -487,7 +494,7 @@ class WebServiceProductController extends Controller
         $subId = $_REQUEST['subItem'];
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        /* @var GoodsItem $subItem */
+        /* @var ItemSub $subItem */
         $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=> $product,'id'=> $subId));
         if(!empty($globalOption)){
 
@@ -544,7 +551,7 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productAddCartAction(Request $request , $subdomain , Item $product, GoodsItem $subitem)
+    public function productAddCartAction(Request $request , $subdomain , Item $product, ItemSub $subitem)
     {
 
         $cart = new Cart($request->getSession());
@@ -557,7 +564,7 @@ class WebServiceProductController extends Controller
 
         $color = !empty($color) ? $color : 0;
         if ($color > 0) {
-            $colorName = $this->getDoctrine()->getRepository('InventoryBundle:ItemColor')->find($color)->getName();
+            $colorName = $this->getDoctrine()->getRepository('SettingToolBundle:ProductColor')->find($color)->getName();
         } else {
             $colorName = '';
         }
@@ -612,7 +619,7 @@ class WebServiceProductController extends Controller
         $size =  isset($data['size']) ? $data['size'] :'';
         $productImg = isset($data['productImg']) ? $data['productImg'] :'';
 
-        /* @var GoodsItem $subitem */
+        /* @var ItemSub $subitem */
 
         if(empty($size)){
             $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'masterItem' => 1));
@@ -630,16 +637,15 @@ class WebServiceProductController extends Controller
         /** @var GlobalOption $globalOption */
         $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
         $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
-        $masterItem = (!empty($product->getMasterItem()) and $showMaster == 1) ? $product->getMasterItem()->getName() . ' ' : '';
         $sizeUnit = !empty($subitem->getProductUnit()) ? $subitem->getProductUnit()->getName() : '';
-        $productUnit = (!empty($product->getMasterItem()) and !empty($product->getMasterItem()->getProductUnit())) ? $product->getMasterItem()->getProductUnit()->getName() : '';
+        $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
 
         if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {
             $data = array(
                 'id' => $subitem->getId(),
-                'name' => $masterItem . ' ' . $product->getWebName(),
+                'name' => $product->getWebName(),
                 'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
-                'category' => !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName() : '',
+                'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
                 'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
                 'sizeUnit' => $sizeUnit,
                 'productUnit' => $productUnit,

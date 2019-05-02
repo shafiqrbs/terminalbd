@@ -4,6 +4,7 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * CustomerInbox
@@ -27,6 +28,11 @@ class CustomerInbox
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="customerInbox")
      **/
     protected $customer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="customerInbox")
+     **/
+    protected $globalOption;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="customerInbox")
@@ -254,6 +260,22 @@ class CustomerInbox
     public function setReplyUser($replyUser)
     {
         $this->replyUser = $replyUser;
+    }
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param GlobalOption $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
     }
 
 

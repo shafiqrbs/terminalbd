@@ -28,7 +28,7 @@ class EcommerceMenuType extends AbstractType
     {
         $this->em = $em;
         $this->globalOption = $globalOption;
-        $this->ecommerceConfig = $globalOption->getEcommerceConfig()->getId();
+        $this->ecommerceConfig = $globalOption->getEcommerceConfig();
         $this->inventoryConfig = $globalOption->getInventoryConfig();
     }
 
@@ -68,7 +68,7 @@ class EcommerceMenuType extends AbstractType
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.globalOption =".$this->globalOption->getId())
+                        ->andWhere("e.globalOption ={$this->globalOption->getId()}")
                         ->orderBy('e.menu','ASC');
                 },
             ))
@@ -83,14 +83,14 @@ class EcommerceMenuType extends AbstractType
             ))
             ->add('brands', 'entity', array(
 		        'required'    => false,
+                'multiple'    => true,
 		        'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
-		        'empty_value' => '---Select Brand---',
 		        'property' => 'name',
-		        'attr'=>array('class'=>'m-wrap span12 '),
+		        'attr'=>array('class'=>'m-wrap span12 multiselect'),
 		        'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->where("e.status = 1")
-			                  ->andWhere("e.ecommerceConfig =".$this->ecommerceConfig)
+			                  ->andWhere("e.ecommerceConfig ={$this->ecommerceConfig->getId()}")
 			                  ->orderBy('e.name','ASC');
 		        },
 	        ))
@@ -105,7 +105,7 @@ class EcommerceMenuType extends AbstractType
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.ecommerceConfig =".$this->ecommerceConfig)
+                        ->andWhere("e.ecommerceConfig ={$this->ecommerceConfig->getId()}")
                         ->orderBy('e.name','ASC');
                 },
             ))
@@ -119,7 +119,7 @@ class EcommerceMenuType extends AbstractType
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.ecommerceConfig = $this->ecommerceConfig")
+                        ->andWhere("e.ecommerceConfig = {$this->ecommerceConfig->getId()}")
                         ->orderBy('e.name','ASC');
                 },
             ))
@@ -134,7 +134,7 @@ class EcommerceMenuType extends AbstractType
                         ->where("e.status = 1")
                         /*                        ->andWhere('e.type IN (:type)')
                                               ->setParameter('type', array_values(array('tag')))*/
-                                               ->andWhere("e.ecommerceConfig = $this->ecommerceConfig")
+                                               ->andWhere("e.ecommerceConfig = {$this->ecommerceConfig->getId()}")
                         ->orderBy('e.name','ASC');
                 },
             ))
@@ -184,7 +184,7 @@ class EcommerceMenuType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_appearancebundle_ecommercemenu';
+        return 'ecommercemenu';
     }
 
     /**
@@ -192,7 +192,8 @@ class EcommerceMenuType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getUserCategoryOptionGroup($this->inventoryConfig);
+       // return $categoryTree = $this->em->getUseEcommerceItemCategory($this->ecommerceConfig);
+        return $categoryTree = $this->em->getEcommerceCategoryMenu($this->ecommerceConfig);
     }
 
 }

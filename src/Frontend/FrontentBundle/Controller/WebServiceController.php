@@ -6,6 +6,8 @@ use Frontend\FrontentBundle\Service\MobileDetect;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class WebServiceController extends Controller
 {
@@ -122,6 +124,15 @@ class WebServiceController extends Controller
         echo '<img class="responsive-image" src="/'.$entity->getWebpath().'">';
         echo $entity->getContent();
         exit;
+
+    }
+
+
+    public function frontendLogoutAction(Request $request)
+    {
+        $this->get('security.context')->setToken(null);
+        $this->get('request')->getSession()->invalidate();
+        return new Response('success');
 
     }
 

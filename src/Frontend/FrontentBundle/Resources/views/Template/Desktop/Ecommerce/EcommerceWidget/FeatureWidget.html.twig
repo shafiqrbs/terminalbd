@@ -218,15 +218,15 @@
                     {% elseif slide.feature.targetTo == 'Discount' and slide.feature.discount is not empty %}
                         {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id}) %}
                     {% elseif slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
-                        {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':feature.menu.slug}) %}
+                        {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug}) %}
                     {% else %}
                         {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                     {% endif %}
 
-                    <div  style="overflow: hidden;height: {{ slide.divHeight }}px; width: {{ slide.divWidth }}%; margin-bottom: 15px; position: relative"  class="col-xs-12 col-md-12 feature-box ">
-                        <div class="box-img">
+                    <div  style="overflow: hidden;height: {{ slide.divHeight }}px; width: {{ slide.divWidth }}%; margin-bottom: 7px; position: relative"  class="col-xs-12 col-md-12 feature-box ">
+                        <div class="box-img" style="height: 100%">
                             {%  set imageWidth =  slide.divWidth~'%' %}
-                            <a href="{{ path }}"><img class="img-responsive img-responsive-feature"   src="{{ image(slide.feature.webPath) }}" alt=""></a>
+                            <a href="{{ path }}"><img class="img-responsive img-responsive-feature" style="height: 100%!important;"   src="{{ image(slide.feature.webPath) }}" alt=""></a>
                             <span class="img-responsive-preview img-responsive-preview-{{  slide.feature.captionPosition }} " style="background-color: {{ slide.feature.captionBgColor }};color: {{ slide.feature.buttonBg }}; " >{{ slide.feature.name }}</span>
                         </div>
                     </div>

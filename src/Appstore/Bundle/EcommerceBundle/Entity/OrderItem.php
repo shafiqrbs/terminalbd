@@ -6,6 +6,8 @@ use Appstore\Bundle\InventoryBundle\Entity\ItemColor;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\ToolBundle\Entity\ProductColor;
+use Setting\Bundle\ToolBundle\Entity\ProductSize;
 
 /**
  * OrderItem
@@ -30,36 +32,26 @@ class OrderItem
      **/
     private  $order;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="orderItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $purchaseVendorItem;
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="orderItem" )
-     **/
-    private  $stockItems;
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="orderItem" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", inversedBy="orderItems")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $purchaseItem;
+    private  $item;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", inversedBy="orderItems")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", inversedBy="orderItems")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $goodsItem;
+    private  $itemSub;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="orderItem")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize", inversedBy="orderItem")
      **/
     private  $size;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="orderItem")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor", inversedBy="orderItem")
      **/
     private  $color;
 
@@ -190,40 +182,9 @@ class OrderItem
         $this->order = $order;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPurchaseVendorItem()
-    {
-        return $this->purchaseVendorItem;
-    }
 
     /**
-     * @param mixed $purchaseVendorItem
-     */
-    public function setPurchaseVendorItem($purchaseVendorItem)
-    {
-        $this->purchaseVendorItem = $purchaseVendorItem;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGoodsItem()
-    {
-        return $this->goodsItem;
-    }
-
-    /**
-     * @param mixed $goodsItem
-     */
-    public function setGoodsItem($goodsItem)
-    {
-        $this->goodsItem = $goodsItem;
-    }
-
-    /**
-     * @return ItemColor
+     * @return ProductColor
      */
     public function getColor()
     {
@@ -231,32 +192,17 @@ class OrderItem
     }
 
     /**
-     * @param ItemColor $color
+     * @param ProductColor $color
      */
     public function setColor($color)
     {
         $this->color = $color;
     }
 
-    /**
-     * @return PurchaseItem
-     */
-    public function getPurchaseItem()
-    {
-        return $this->purchaseItem;
-    }
-
-    /**
-     * @param PurchaseItem $purchaseItem
-     */
-    public function setPurchaseItem($purchaseItem)
-    {
-        $this->purchaseItem = $purchaseItem;
-    }
 
 
     /**
-     * @return ItemSIze
+     * @return ProductSize
      */
     public function getSize()
     {
@@ -264,20 +210,14 @@ class OrderItem
     }
 
     /**
-     * @param ItemSIze $size
+     * @param ProductSize $size
      */
     public function setSize($size)
     {
         $this->size = $size;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getStockItems()
-    {
-        return $this->stockItems;
-    }
+
 
     /**
      * @return int
@@ -293,6 +233,38 @@ class OrderItem
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return ItemSub
+     */
+    public function getItemSub()
+    {
+        return $this->itemSub;
+    }
+
+    /**
+     * @param ItemSub $itemSub
+     */
+    public function setItemSub($itemSub)
+    {
+        $this->itemSub = $itemSub;
+    }
+
+    /**
+     * @return Item
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param Item $item
+     */
+    public function setItem($item)
+    {
+        $this->item = $item;
     }
 
 

@@ -12,7 +12,7 @@
                     </div>
                     {% if(product.itemGalleries) %}
                         {% for photo in product.itemGalleries %}
-                            <div class="item"><img class="img-responsive "  data-match-height="image-gallery"  src="{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize(450,450) }}" alt="" data-description="{{ product.webName }}"> </div>
+                            <div class="item"><img class="img-responsive "  data-match-height="image-gallery"  src="{{ image(photo.getAbsolutePath(product.ecommerceConfig.globalOption.id,product.id)).resize(450,450) }}" alt="" data-description="{{ product.webName }}"> </div>
                         {% endfor %}
                     {% endif %}
                 </div>

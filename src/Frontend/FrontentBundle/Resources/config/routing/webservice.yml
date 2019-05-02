@@ -38,5 +38,3 @@ webservice_module:
     path:     /{subdomain}/{module}
     defaults: { _controller: FrontendBundle:WebServiceModule:module }
 
-
-

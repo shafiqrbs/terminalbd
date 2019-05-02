@@ -36,7 +36,6 @@ class CustomerOrderPaymentType extends AbstractType
         $builder
             ->add('mobileAccount','text', array('attr'=>array('class'=>'m-wrap span12 mobile tooltips','placeholder'=>'Payment mobile account no','data-original-title'=>'Payment mobile account no','autocomplete'=>'off')))
             ->add('transaction','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Payment transaction id','data-original-title'=>'Payment transaction id','autocomplete'=>'off')))
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric tooltips','placeholder'=>'Add payment amount','data-original-title'=>'Add payment amount','autocomplete'=>'off')))
             ->add('accountMobileBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',

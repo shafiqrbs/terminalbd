@@ -7,6 +7,7 @@ use Appstore\Bundle\MedicineBundle\Form\AccessoriesStockType;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -439,6 +440,35 @@ class MedicineStockController extends Controller
             'success',"Status has been changed successfully"
         );
         return $this->redirect($this->generateUrl('medicine_stock'));
+    }
+
+    /**
+     * Status a Page entity.
+     *
+     */
+    public function isWebAction(Request $request,MedicineStock $entity)
+    {
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('medicineConfig'=> $config,'id' => $entity->getId()));
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find District entity.');
+        }
+        $status = $entity->isWeb();
+        if($status == 1){
+            $entity->setIsWeb(0);
+        } else{
+            $entity->setIsWeb(1);
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->insertCopyMedicineItem($entity);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Status has been changed successfully"
+        );
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
+
+
     }
 
     public function inlineUpdateAction(Request $request)

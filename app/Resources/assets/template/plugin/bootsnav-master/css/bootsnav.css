@@ -64,6 +64,7 @@ nav.navbar.bootsnav ul.nav li.active > a:hover,
 nav.navbar.bootsnav ul.nav li.active > a:focus,
 nav.navbar.bootsnav ul.nav li.active > a{
     background-color: transparent;
+
 }
 
 nav.navbar.bootsnav .navbar-toggle{

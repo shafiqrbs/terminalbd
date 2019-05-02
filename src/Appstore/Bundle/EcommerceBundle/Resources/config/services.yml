@@ -12,3 +12,8 @@ services:
         class: Appstore\Bundle\EcommerceBundle\EventListener\OrderListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.item.event.listener:
+        class: Appstore\Bundle\EcommerceBundle\EventListener\ItemListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }

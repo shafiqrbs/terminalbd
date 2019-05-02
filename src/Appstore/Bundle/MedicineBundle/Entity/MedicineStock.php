@@ -241,6 +241,20 @@ class MedicineStock
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isWeb", type="boolean",  nullable=true)
+     */
+    private $isWeb = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isAndroid", type="boolean",  nullable=true)
+     */
+    private $isAndroid = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="noDiscount", type="boolean",  nullable=true)
      */
     private $noDiscount = false;
@@ -735,6 +749,38 @@ class MedicineStock
     public function setAveragePurchasePrice(float $averagePurchasePrice)
     {
         $this->averagePurchasePrice = $averagePurchasePrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWeb()
+    {
+        return $this->isWeb;
+    }
+
+    /**
+     * @param bool $isWeb
+     */
+    public function setIsWeb($isWeb)
+    {
+        $this->isWeb = $isWeb;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAndroid()
+    {
+        return $this->isAndroid;
+    }
+
+    /**
+     * @param bool $isAndroid
+     */
+    public function setIsAndroid($isAndroid)
+    {
+        $this->isAndroid = $isAndroid;
     }
 
 

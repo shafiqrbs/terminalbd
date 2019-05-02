@@ -3,9 +3,9 @@ inbox:
     defaults: { _controller: "CustomerBundle:Order:index" }
 
 inbox_sms:
-    path:     /sms
-    defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
+    path:     /customer-sms
+    defaults: { _controller: "CustomerBundle:Notification:sms" }
 
 inbox_email:
-    path:     /email
-    defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
+    path:     /customer-email
+    defaults: { _controller: "CustomerBundle:Notification:email" }

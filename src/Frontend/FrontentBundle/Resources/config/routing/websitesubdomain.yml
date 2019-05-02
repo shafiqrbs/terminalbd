@@ -75,6 +75,7 @@ webservice_product_wishlist:
     path:     /wishlist/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddWishList }
 
+
 webservice_product_sub_item:
     path:     /modal-sub-item
     defaults: { _controller: FrontendBundle:WebServiceProduct:productSubProduct }

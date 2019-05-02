@@ -74,6 +74,10 @@ medicine_stock_details:
     path:     /{sku}/stock-details
     defaults: { _controller: "MedicineBundle:MedicineStock:inlineUpdate" }
 
+medicine_stock_web:
+    path:     /{id}/web-item
+    defaults: { _controller: "MedicineBundle:MedicineStock:isWeb" }
+
 medicine_stock_search:
     path:     /search
     defaults: { _controller: "MedicineBundle:MedicineStock:autoSearch" }

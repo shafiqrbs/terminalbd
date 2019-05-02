@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -42,5 +44,21 @@ class ItemBrandRepository extends EntityRepository
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
 
+    }
+
+    public function insertBrand(MedicineStock $stock)
+    {
+        $config = $stock->getMedicineConfig()->getGlobalOption()->getEcommerceConfig();
+        $entity = $this->findOneBy(array('ecommerceConfig' => $config,'name' => $stock->getBrandName()));
+        if(empty($entity)){
+
+            $brand = new ItemBrand();
+            $brand->setEcommerceConfig($config);
+            $brand->setName($stock->getBrandName());
+            $this->_em->persist($brand);
+            $this->_em->flush();
+            return $brand;
+        }
+        return $entity;
     }
 }

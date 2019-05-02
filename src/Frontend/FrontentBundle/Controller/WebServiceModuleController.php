@@ -23,24 +23,21 @@ class WebServiceModuleController extends Controller
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if(!empty($globalOption)){
 
+            $siteEntity = $globalOption->getSiteSetting();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => $module));
             if(!empty($menu)){
 
-
-                $siteEntity = $globalOption->getSiteSetting();
                 /* @var SiteSetting $siteEntity */
                 $themeName = $siteEntity->getTheme()->getFolderName();
                 $moduleName = $this->get('setting.menuTreeSettingRepo')->getCheckModule($menu);
 
                 if($moduleName){
-
                     $twigName = "module";
                     $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module' => $menu->getModule()->getId()),array('id'=>'desc'));
                     $pagination = $this->paginate( $pagination,$limit= 10 );
-                    if(!empty($menu->getModule())){
-                        //$categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
-                    }
+
                 }else{
+
                     $page = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => $module));
                     if(!empty($page->getMenuCustom()) and $page->getMenuCustom()->getId() == 1){
                         $twigName = "index";
@@ -48,6 +45,12 @@ class WebServiceModuleController extends Controller
                         $twigName = "content";
                     }
                 }
+
+            }else{
+
+                $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'home'));
+                $themeName = $siteEntity->getTheme()->getFolderName();
+                $twigName = "index";
             }
 
         }

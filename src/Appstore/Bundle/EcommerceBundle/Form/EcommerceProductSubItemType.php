@@ -28,13 +28,12 @@ class EcommerceProductSubItemType extends AbstractType
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span3 tooltips','placeholder'=>'Sales price','hover'=>'trigger',' data-original-title'=>'Sales price')))
             ->add('size', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductSize',
                 'empty_value' => '-Choose a size-',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span12 select2 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
-                        ->join('p.sizeGroup','sg')
                         ->where("p.status = 1")
                         ->andWhere("p.isValid = 1")
                         ->orderBy("p.name","ASC");
@@ -45,7 +44,7 @@ class EcommerceProductSubItemType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'empty_value' => '-Choose a unit-',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span12 select2 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -54,11 +53,11 @@ class EcommerceProductSubItemType extends AbstractType
             ))
             ->add('colors', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductColor',
                 'empty_value' => '-Choose a color-',
                 'property' => 'name',
                 'multiple' => 'multiple',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")

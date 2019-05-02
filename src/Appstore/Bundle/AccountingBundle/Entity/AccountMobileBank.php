@@ -134,6 +134,12 @@ class AccountMobileBank
      **/
     private  $orderPayments;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="accountMobileBank"  )
+     **/
+    private  $orders;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="accountMobileBank"  )
      **/
@@ -688,6 +694,22 @@ class AccountMobileBank
     public function getAccountPurchaseCommissions()
     {
         return $this->accountPurchaseCommissions;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param Order $orders
+     */
+    public function setOrders($orders)
+    {
+        $this->orders = $orders;
     }
 
 

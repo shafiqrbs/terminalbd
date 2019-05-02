@@ -31,7 +31,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Product Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('ecommerce_item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a></li>
+                                <a class="btn red" href="{{ path('ecommerce_item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a>
                             </div>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i> Created</td>
                                     <th class="numeric" >Category</th>
-                                    <th class="numeric" >Product</th>
+                                    <th class="numeric span4" >Product</th>
                                     <th class="numeric" >Prch.Qnt</th>
                                     <th class="numeric" >Reming.Qnt</th>
                                     <th class="numeric" >Purchase</th>
@@ -88,7 +88,7 @@
                                 {% for entity in entities %}
                                     <tr class="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.category.name }}</td>
+                                        <td class="numeric" >{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.webName }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.masterQuantity }}</td>

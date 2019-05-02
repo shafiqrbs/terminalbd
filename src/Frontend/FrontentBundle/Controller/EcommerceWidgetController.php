@@ -2,9 +2,12 @@
 
 namespace Frontend\FrontentBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
+use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
+use Frontend\FrontentBundle\Form\EcommerceProductEditType;
+
 use Core\UserBundle\Entity\User;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -51,6 +54,7 @@ class EcommerceWidgetController extends Controller
 
        // $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
       //  $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+        $searchForm = $this->createCreateForm(new Item(),$globalOption);
         $detect = new MobileDetect();
         $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->findBy(array('ecommerceConfig'=> $globalOption->getEcommerceConfig(),'status' => 1));
         if( $detect->isMobile() ||  $detect->isTablet() ) {
@@ -63,14 +67,39 @@ class EcommerceWidgetController extends Controller
 
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,
-            'categoryTree'          => $categoryTree,
+            'form'                  => $searchForm->createView(),
             'brandTree'             => $brandTree,
             'menu'                  => $menu,
             'cart'                  => $cart,
-            'searchForm'            => $data
         ));
 
     }
+
+
+    /**
+     * Creates a form to create a Item entity.
+     *
+     * @param Item $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(Item $entity,GlobalOption $global)
+    {
+
+        $config = $global->getEcommerceConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new EcommerceProductEditType($em,$config), $entity, array(
+            'action' => $this->generateUrl("{$global->getSubDomain()}_webservice_product"),
+            'method' => 'GET',
+            'attr' => array(
+                'class' => 'action bs-example',
+                'novalidate' => 'novalidate',
+                'data-example-id' => "input-group-segmented-buttons"
+            )
+        ));
+        return $form;
+    }
+
 
     public function returnMegaCategoryMenuAction(GlobalOption $globalOption , $categories,$column = 6){
 

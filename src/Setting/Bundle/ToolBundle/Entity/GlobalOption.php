@@ -84,6 +84,12 @@ class GlobalOption
     protected $agent;
 
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", inversedBy="globalOption" )
+     **/
+    protected $customerInbox;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsSender", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/

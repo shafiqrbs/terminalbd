@@ -138,7 +138,7 @@ class ItemController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 
-		$entity = $em->getRepository('InventoryBundle:Item')->find($id);
+		$entity = $em->getRepository('EcommerceBundle:Item')->find($id);
 
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find Item entity.');
@@ -201,11 +201,11 @@ class ItemController extends Controller
 	 *
 	 * @return \Symfony\Component\Form\Form The form
 	 */
-	private function createSubItemForm(ItemSub $entity, Item $Item)
+	private function createSubItemForm(ItemSub $entity, Item $item)
 	{
-		$em = $this->getDoctrine()->getRepository('InventoryBundle:ItemSize');
-		$form = $this->createForm(new EcommerceProductSubItemType($em), $entity, array(
-			'action' => $this->generateUrl('inventory_vendoritem_subproduct', array('id' => $Item->getId())),
+
+		$form = $this->createForm(new EcommerceProductSubItemType(), $entity, array(
+			'action' => $this->generateUrl('inventory_vendoritem_subproduct', array('id' => $item->getId())),
 			'method' => 'PUT',
 			'attr' => array(
 				'id' => 'subItemForm',

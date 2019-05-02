@@ -135,19 +135,19 @@ class OrderRepository extends EntityRepository
         $em = $this->_em;
         foreach ($cart->contents() as $row){
 
-            $goodsItem = $em->getRepository('InventoryBundle:GoodsItem')->find($row['id']);
+            $goodsItem = $em->getRepository('EcommerceBundle:ItemSub')->find($row['id']);
             if(!empty($goodsItem)) {
 
                 $salesPrice = empty($goodsItem->getDiscountPrice()) ? $goodsItem->getSalesPrice() : $goodsItem->getDiscountPrice();
                 $orderItem = new OrderItem();
                 $orderItem->setOrder($order);
-                $orderItem->setPurchaseVendorItem($goodsItem->getPurchaseVendorItem());
-                $orderItem->setGoodsItem($goodsItem);
+                $orderItem->setItem($goodsItem->getItem());
+                $orderItem->setItemSub($goodsItem);
                 $orderItem->setPrice($salesPrice);
                 $orderItem->setQuantity($row['quantity']);
                 $orderItem->setSubTotal($row['quantity'] * $salesPrice);
                 if (!empty($row['colorId'])){
-                $orderItem->setColor($em->getRepository('InventoryBundle:ItemColor')->find($row['colorId']));
+                $orderItem->setColor($em->getRepository('SettingToolBundle:ProductColor')->find($row['colorId']));
                 }
                 $em->persist($orderItem);
                 $em->flush();

@@ -156,6 +156,7 @@ a:hover , a:visited, a:focus{
     padding: 0 0;
     background-color: #f43438;
 }
+
 nav.navbar.bootsnav ul.nav > li > a {
     text-shadow: 0px 1px 0px rgba(0,0,0,0.2);
 }
