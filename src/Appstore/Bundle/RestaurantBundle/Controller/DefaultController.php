@@ -34,7 +34,7 @@ class DefaultController extends Controller
             'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
             'option'                            => $user->getGlobalOption() ,
             'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
-            'transactionCashOverviews'          => $transactionCashOverview,
+            'transactionCashOverview'          => $transactionCashOverview,
             'expenditureOverview'               => $expenditureOverview ,
             'salesCashOverview'                 => $salesCashOverview ,
             'purchaseCashOverview'              => $purchaseCashOverview ,

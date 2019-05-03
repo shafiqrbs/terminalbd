@@ -1,3 +1,7 @@
+.btn-ajax-loading {
+    position:inherit;
+}
+
 .dropdown-menu .divider{
     margin: 0;
 }
@@ -5,10 +9,15 @@
     display: none;
 }
 .particular-info{
-    background: #b2aaaa;
-    padding:0;
-    padding-top: 10px;
-    padding-bottom: 8px;
+    background: #ddd;
+    padding: 10px;
+    padding-left:0;
+    padding-right: 4px;
+}
+
+div.checker {
+    border: 3px solid red;
+    margin-top: -4px;
 }
 
 .btn-show{
@@ -54,14 +63,16 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .sales-right{
     padding-right: 10px;
+    float: right;
+    text-align: right;
+    width: 140px;
 }
-.sales-right input{
-    width: 110px;
+.sales-right input[class*="span"].m-wrap{
     font-weight: bold;
-    margin-top: -5px;
-    text-align: left;
-    border: 1px solid #a48334;
-    height: 23px
+    margin-top: -1px;
+    text-align: right;
+    border: 2px solid #4b8df8!important;
+    height: 23px!important;
 }
 .select2-search{
     padding-left: 0;
@@ -70,6 +81,13 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 .select2-search input{
     border: 1px solid #35aa47!important;
 }
+
+.discount-type{
+    margin-left: 8px!important;
+    height: 20px!important;
+    border: 2px solid red !important;
+}
+
 .patient-info{
 
 }
@@ -79,14 +97,12 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 .form-horizontal .patient-info .control-label{
     float: left;
     text-align: left;
-    background: #E7DFBF;
+    background: #e6e0e0;
     color: #000;
-    line-height:20px;
-    height: 25px;
     margin:0!important;
-    width: 99.5%;
+    width: 100%;
     font-size: 14px;
-    border: 1px solid #DDD09E;
+    border: 1px solid #888888;
 }
 
 .referred-info{
@@ -108,22 +124,30 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 .form-horizontal .payment-info .control-group{
     margin-bottom: 0!important;
-    border-bottom: 1px solid #dbb233;
+    border-bottom: 1px solid #2e2e2e;
 }
 .form-horizontal .payment-info .control-label{
     float: left;
     text-align: left;
-    background: #a48334;
-    color: #fff;
+    background: #f9f9f9;
+    color: #000;
     font-weight: bold;
-    line-height: 32px;
-    height: 33px;
+    line-height: 40px;
+    height: 40px;
     margin:0!important;
     width: 100%;
     font-size: 14px;
 }
 
-.form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span , .form-horizontal .payment-info .control-label span{
+.form-horizontal .payment-info .control-label .label {
+    padding-left: 8px!important;
+    background: none;
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+}
+
+.form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span {
     padding-left: 8px;
 }
 
@@ -156,194 +180,83 @@ input[class*="span"].m-wrap  {
     background-color: yellow!important;
 }
 
-.particular{
-    height: 45px!important;
+.tooltip-inner{
+    background-color: #d12610;
 }
-
-.select2-search input {
-    border: 5px solid #e5e5e5!important;
+.tooltip.top .tooltip-arrow{
+    color: #d12610 !important;
 }
-.select2-container.req_place .select2-default .select2-chosen {
-    color:#FFF !important;
-    height: 60px!important;
+.close{
+    background-image: none!important;
 }
-
-.select2-container .select2-choice {
-    padding: 5px 10px;
-    height: 60px;
-    font-size: 16px;
-    font-weight: bold;
+.dialogModal .dialogModal_top .dialogModal_header{
     width: 100%!important;
 }
+.dialogModal .dialogModal_body{
+    width: 100%!important;
+}
+.dialogModal .dialogModal_content{
 
-.select2-container .select2-choice .select2-arrow {
-    padding: 4px 12px;
+}
+.dialogModal_content .mini{
+    height: 20px!important;
 }
 
-.select2-container .select2-choice abbr {
-    display: none;
-    width: 12px;
-    height: 12px;
-    right: 60px;
-    top: 14px;
+.check-list label{
+    width: 97%;
+}
+.feeds .col1 .cont .cont-col2 .desc{
+    margin-left: 10px;
+}
+.portlet.box .form .form-actions, .portlet.solid .form .form-actions {
+    margin-top: -9px !important;
+}
+.row-fluid label{
+    line-height: 30px!important;
 }
 
-.form-horizontal .payment-info .control-label {
+input[class*="span"].wrap-custom{
+    height: 30px!important;
+}
+
+li.active > a {
+    color: #d12610 !important;
+}
+.tabs-right.tabbable-custom .nav-tabs > li a, .tabs-left.tabbable-custom .nav-tabs > li a {
+    padding: 8px 10px;
+    font-weight: bold;
+}
+
+.select2-container-multi .select2-choices {
+    min-height: 30px;
+}
+.select2-container-multi .select2-choices .select2-search-choice div {
+    color: #000!important;
+    text-align: center;
+}
+.form-control-select{
+    width: 100%;
+    overflow-y:scroll;
+}
+#project-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+#project-icon {
     float: left;
-    text-align: left;
-    background: #000;
-    color: #fff;
-    font-weight: bold;
-    line-height: 32px;
-    height: 42px;
-    margin: 0!important;
-    width: 100%;
-    font-size: 14px;
+    height: 32px;
+    width: 32px;
 }
-
-.select2-results .select2-result-label {
+#project-description {
     margin: 0;
-    cursor: pointer;
-    min-height: 2em;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 2em;
-}
-
-.select2-results .select2-highlighted {
-    background: #000!important;
-    color: #fff!important;
-}
-
-.select2-search input {
-    width: 100%;
-    margin: 0;
-    outline: 0;
-    border: 5px solid #e5e5e5;
-    webkit-appearance: none !important;
-    color: #333333;
-    outline: 0;
-    height: auto !important;
-    min-height: 60px;
-    padding: 6px 6px !important;
-    line-height: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    font-weight: normal;
-    vertical-align: top;
-    background-color: #ffffff;
-    filter: none !important;
-    -webkit-box-shadow: none !important;
-    -moz-box-shadow: none !important;
-    box-shadow: none !important;
-}
-
-input.payment {
-    border: 5px solid #EAB513!important;
-    font-size: 20px!important;
-    min-height: 50px!important;
-}
-input.discount{
-    border: 5px solid #EAB513!important;
-    font-size: 20px!important;
-    min-height: 50px!important;
-}
-.sales-right{
-    width: 157px;
-    font-size: 16px;
-    font-weight: bold;
-
-}
-
-input[class*="span"].m-wrap , select[class*="span"].m-wrap, textarea[class*="span"].m-wrap {
-    height: 42px!important;
-    background: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-}
-.btn-large {
-    padding: 11px 17px;
-}
-
-#percentage{
-    margin-top: 17px;
-    color: red;
-}
-
-#payment-info{
-    padding:15px;
-    background-color:#E5E7E7;
-    border: 5px solid #c2c0c1;
-}
-
-.input-append, .input-prepend{
-    margin-bottom: 0!important;
-}
-
-#receiveBtn , #saveBtn{
-    font-size: 20px;
-    font-weight: bold;
-    height: 60px;
-}
-.category{
-    padding: 7px 10px !important;
-    background: grey !important;
-    color: #fff;
-    font-weight: bold;
-}
-.customer{
-    display: none;
-}
-table.dataTable tbody th, table.dataTable tbody td {
-    padding: 2px 10px;
-}
-
-.fixedElement {
-    background-color: #c0c0c0;
-    position:fixed;
-    top:0;
-    width:100%;
-    z-index:100;
-}
-
-.payment-info {
-    border: 15px solid #c2c0c1;
-}
-
-.form-horizontal .payment-info .control-group {
-    margin-bottom: 0!important;
-    border-bottom: 1px #999 solid;
-}
-
-.form-horizontal .payment-info .control-group {
-    margin-bottom: 0!important;
-    border-bottom: 1px #fff solid;
-}
-.form-horizontal .payment-info .control-label {
-    float: left;
-    text-align: left;
-    background: #c2c0c1;
-    color: #000;
-    font-weight: bold;
-    line-height: 32px;
-    height: 40px!important;
-    margin: 0!important;
-    width: 100%;
-    font-size: 14px;
-}
-.table th, .table td {
-    padding: 8px;
-    line-height: 30px;
-    text-align: left;
-    vertical-align: top;
-    border-top: 1px solid #ddd;
-    font-size: 14px;
-    font-weight: bold;
+    padding: 0;
 }
 
 
+.checkbox-custom.focus{
+    border:red 1px solid ;
+}
+.preview-print{
+    float: right;
+}

@@ -29,10 +29,10 @@ $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
 
-    if( paymentMethod == 2){
+    if( paymentMethod === 2){
         $('#cartMethod').show();
         $('#bkashMethod').hide();
-    }else if( paymentMethod == 3){
+    }else if( paymentMethod === 3){
         $('#bkashMethod').show();
         $('#cartMethod').hide();
     }else{
@@ -65,13 +65,11 @@ $(document).on('click', '#addParticular', function() {
     var quantity = $('#quantity').val();
     var price = $('#purchasePrice').val();
     var url = $('#addParticular').attr('data-url');
-    if(particularId == ''){
-        $('.msg-hidden').show();
-        $('input[name=particular]').focus();
-        $('#msg').html('Please select medicine or accessories name');
+    if(particularId === ''){
+        $("#particular").select2('open');
         return false;
     }
-    if(price == ''){
+    if(price === ''){
         $('.msg-hidden').show();
         $('#msg').html('Please enter purchase price');
         $('input[name=purchasePrice]').focus();
@@ -85,15 +83,12 @@ $(document).on('click', '#addParticular', function() {
             obj = JSON.parse(response);
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
+            $('#discountAmount').html(obj['discount']);
             $('.grandTotal').html(obj['grandTotal']);
-            $('#paymentTotal').val(obj['grandTotal']);
-            $('#due').val(obj['dueAmount']);
-            $('.dueAmount').html(obj['dueAmount']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
+            $('#due').val(obj['due']);
+            $('.dueAmount').html(obj['due']);
             $('#purchasePrice').val('');
-            $("#particular").select2().select2("val","");
+            $("#particular").select2().select2("val","").select2('open');
             $('#price').val('');
             $('#quantity').val('1');
         }
@@ -104,50 +99,58 @@ $(document).on('change', '#discount', function() {
     var discount = parseInt($('#discount').val());
     var purchaseId = parseInt($('#purchaseId').val());
     $.ajax({
-        url: Routing.generate('hms_purchase_discount_update'),
+        url: Routing.generate('restaurant_purchase_discount_update'),
         type: 'POST',
         data:'discount=' + discount+'&invoice='+ purchaseId,
         success: function(response) {
             obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
+            $('#discountAmount').html(obj['discount']);
             $('.grandTotal').html(obj['grandTotal']);
-            $('#paymentTotal').val(obj['grandTotal']);
-            $('#due').val(obj['dueAmount']);
-            $('.dueAmount').html(obj['dueAmount']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
+            $('#due').val(obj['due']);
+            $('.dueAmount').html(obj['due']);
         },
 
     })
 });
 
+
+$(document).on("click", ".confirm", function() {
+
+});
+
 $('#invoiceParticulars').on("click", ".delete", function() {
+
 
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
-    $('#remove-'+id).hide();
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
-            $('.grandTotal').html(obj['grandTotal']);
-            $('#due').val(obj['dueAmount']);
-            $('.dueAmount').html(obj['dueAmount']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('#remove-'+id).hide();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    obj = JSON.parse(response);
+                    $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                    $('#subTotal').html(obj['subTotal']);
+                    $('#discountAmount').html(obj['discount']);
+                    $('.grandTotal').html(obj['grandTotal']);
+                    $('#due').val(obj['due']);
+                    $('.dueAmount').html(obj['due']);
+                }
+            })
         }
-    })
+    });
+
+
 });
 
-$(document).on('change', '#appstore_bundle_hospitalbundle_hmspurchase_payment', function() {
+$(document).on('change', '#purchase_payment', function() {
 
-    var payment     = parseInt($('#appstore_bundle_hospitalbundle_hmspurchase_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_hmspurchase_payment').val() : 0 );
+    var payment     = parseInt($('#purchase_payment').val()  != '' ? $('#purchase_payment').val() : 0 );
     var due =  parseInt($('#due').val());
     var dueAmount = (due - payment);
     if(dueAmount > 0){

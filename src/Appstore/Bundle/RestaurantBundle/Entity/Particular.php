@@ -78,7 +78,7 @@ class Particular
     private  $assignOperator;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="particulars" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="restaurantProduct" )
      **/
     private  $unit;
 

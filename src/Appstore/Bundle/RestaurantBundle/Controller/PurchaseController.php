@@ -7,6 +7,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Form\PurchaseType;
 use Appstore\Bundle\RestaurantBundle\Form\VendorType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,6 +64,7 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $entity->setRestaurantConfig($config);
         $entity->setCreatedBy($this->getUser());
+        $entity->setTransactionMethod($this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1));
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('restaurant_purchase_edit', array('id' => $entity->getId())));
@@ -115,6 +117,28 @@ class PurchaseController extends Controller
         return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'purchasePrice'=> $particular->getPurchasePrice(), 'quantity'=> 1 , 'minimumPrice'=> '', 'instruction'=>'')));
     }
 
+    public function returnResultData(Purchase $invoice,$msg=''){
+
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->getPurchaseItems($invoice);
+        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
+        $netTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
+        $due = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+        $discount = $invoice->getDiscount() > 0 ? $invoice->getDiscount() : 0;
+        $data = array(
+            'subTotal' => $subTotal,
+            'grandTotal' => $netTotal,
+            'due' => $due,
+            'discount' => $discount,
+            'invoiceParticulars' => $invoiceParticulars ,
+            'msg' => $msg ,
+            'success' => 'success'
+        );
+
+        return $data;
+
+    }
+
+
     public function addParticularAction(Request $request, Purchase $invoice)
     {
         $em = $this->getDoctrine()->getManager();
@@ -124,16 +148,10 @@ class PurchaseController extends Controller
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
         $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Purchase')->updatePurchaseTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->getPurchaseItems($invoice);
-        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
 
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
-        exit;
-    }
+     }
 
     public function invoiceParticularDeleteAction(Purchase $invoice, PurchaseItem $particular){
 
@@ -141,18 +159,11 @@ class PurchaseController extends Controller
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
-
         $em->remove($particular);
         $em->flush();
         $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Purchase')->updatePurchaseTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->getPurchaseItems($invoice);
-
-        $msg = 'Particular deleted successfully';
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
-        exit;
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
 
 
     }
@@ -163,24 +174,21 @@ class PurchaseController extends Controller
         $discount = (float)$request->request->get('discount');
         $purchase = $request->request->get('invoice');
 
-        $purchase = $em->getRepository('RestaurantBundle:Purchase')->find($purchase);
-        $total = ($purchase->getSubTotal() - $discount);
+        /* @var $entity Purchase */
+        $entity = $em->getRepository('RestaurantBundle:Purchase')->find($purchase);
+        $total = ($entity->getSubTotal() - $discount);
         $vat = 0;
         if($total > $discount ){
 
-            $purchase->setDiscount($discount);
-            $purchase->setNetTotal($total + $vat);
-            $purchase->setDue($total + $vat);
-            $em->persist($purchase);
+            $entity->setDiscount($discount);
+            $entity->setNetTotal($total);
+            $entity->setDue($total);
+            $em->persist($entity);
             $em->flush();
         }
+        $result = $this->returnResultData($entity);
+        return new Response(json_encode($result));
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->getPurchaseItems($purchase);
-        $subTotal = $purchase->getSubTotal() > 0 ? $purchase->getSubTotal() : 0;
-        $grandTotal = $purchase->getNetTotal() > 0 ? $purchase->getNetTotal() : 0;
-        $dueAmount = $purchase->getDue() > 0 ? $purchase->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
-        exit;
     }
 
     public function updateAction(Request $request, Purchase $entity)
@@ -195,7 +203,7 @@ class PurchaseController extends Controller
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $data = $request->request->all();
-            $deliveryDateTime = $data['appstore_bundle_restaurant_purchase']['receiveDate'];
+            $deliveryDateTime = $data['purchase']['receiveDate'];
             $receiveDate = (new \DateTime($deliveryDateTime));
             $entity->setReceiveDate($receiveDate);
             $entity->setProcess('Done');
@@ -233,7 +241,7 @@ class PurchaseController extends Controller
     public function approvedAction(Purchase $purchase)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($purchase)) {
+        if (!empty($purchase) and $purchase->getProcess() == "Done") {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
             $purchase->setApprovedBy($this->getUser());
@@ -296,22 +304,5 @@ class PurchaseController extends Controller
         return $this->redirect($this->generateUrl('restaurant_purchase'));
     }
 
-    public function autoSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('RestaurantBundle:Purchase')->searchAutoComplete($item,$inventory);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchVendorNameAction($vendor)
-    {
-        return new JsonResponse(array(
-            'id'=>$vendor,
-            'text'=>$vendor
-        ));
-    }
 
 }

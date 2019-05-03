@@ -13,6 +13,20 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class StockType extends AbstractType
 {
+
+    /** @var  GlobalOption */
+    private $globalOption;
+
+
+    function __construct(GlobalOption $globalOption)
+    {
+
+        $this->globalOption         = $globalOption;
+        $this->config               = $globalOption->getRestaurantConfig()->getId();
+    }
+
+
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -65,6 +79,7 @@ class StockType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
+                        ->andWhere("e.restaurantConfig = {$this->config}")
                         ->orderBy("e.sorting","ASC");
                 }
             ))

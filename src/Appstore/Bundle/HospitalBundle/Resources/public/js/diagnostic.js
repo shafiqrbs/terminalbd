@@ -236,6 +236,7 @@ function formSubmit() {
         }
 
     });
+
     var form = $("#invoicePatientForm").validate({
 
         rules: {

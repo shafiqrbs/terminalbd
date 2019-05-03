@@ -31,7 +31,7 @@ class PurchaseType extends AbstractType
 
             ->add('vendor', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Vendor',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
                 'attr'=>array('class'=>'span12 m-wrap'),
@@ -39,7 +39,7 @@ class PurchaseType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.restaurantConfig =".$this->option->getRestaurantConfig()->getId());
+                        ->andWhere("e.globalOption =".$this->option->getId());
                 },
             ))
             ->add('transactionMethod', 'entity', array(
@@ -106,6 +106,6 @@ class PurchaseType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_restaurant_purchase';
+        return 'purchase';
     }
 }

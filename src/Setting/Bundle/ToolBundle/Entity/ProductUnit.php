@@ -104,6 +104,11 @@ class ProductUnit
     private $hotelParticulars;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $restaurantProduct;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationStock", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $educationStocks;
@@ -277,6 +282,14 @@ class ProductUnit
     public function getMedicineMinimumStock()
     {
         return $this->medicineMinimumStock;
+    }
+
+    /**
+     * @return \Appstore\Bundle\RestaurantBundle\Entity\Particular
+     */
+    public function getRestaurantProduct()
+    {
+        return $this->restaurantProduct;
     }
 
 

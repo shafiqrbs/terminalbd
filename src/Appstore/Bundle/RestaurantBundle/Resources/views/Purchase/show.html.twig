@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Receive GRN # {{ entity.grn }}
+                    Purchase GRN # {{ entity.grn }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('restaurant_purchase') }}">Receive</a>
+                        <a href="{{ path('restaurant_purchase') }}">Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Receive</a></li>
+                    <li><a href="#">Manage Purchase</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -34,12 +34,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Receive Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Purchase Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('restaurant_purchase_new') }}"><i class="icon-plus-sign"></i> Medicine Receive</a>
-                                <a class="btn" href="{{ path('restaurant_purchase') }}"><i class="icon-th-list"></i> Medicine</a>
+                                <a class="btn red" href="{{ path('restaurant_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
+                                <a class="btn" href="{{ path('restaurant_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                             </div>
                         </div>
 

@@ -24,7 +24,7 @@ tools_option_status_update:
     methods:  POST
 
 tools_option_reset:
-    path:     /{id}/domain/option-reset
+    path:     /{id}/option-reset
     defaults: { _controller: "SettingToolBundle:Domain:resetSystemData" }
 
 tools_option_delete:

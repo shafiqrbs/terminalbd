@@ -108,7 +108,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-green-sharp">
-                                        <span data-counter="counterup" data-value="">xxx</span>
+                                        <span data-counter="counterup" data-value="">{{ ((transactionCashOverview.openingBalance + transactionCashOverview.debit)- transactionCashOverview.credit)|number_format  }}</span>
                                         <small class="font-green-sharp">BDT</small>
                                     </h3>
                                     <small>BALANCE</small>

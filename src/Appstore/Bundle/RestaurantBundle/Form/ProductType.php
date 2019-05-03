@@ -15,6 +15,21 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class ProductType extends AbstractType
 {
 
+
+
+    /** @var  GlobalOption */
+
+    private $globalOption;
+
+
+    function __construct(GlobalOption $globalOption)
+    {
+
+        $this->globalOption         = $globalOption;
+        $this->config               = $globalOption->getRestaurantConfig()->getId();
+    }
+
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -40,6 +55,7 @@ class ProductType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                          ->where("e.status = 1")
+                         ->andWhere("e.restaurantConfig = {$this->config}")
                         ->orderBy("e.sorting","ASC");
                 }
             ))
@@ -73,7 +89,7 @@ class ProductType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_particular';
+        return 'product';
     }
 
 

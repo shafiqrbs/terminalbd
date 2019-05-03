@@ -98,7 +98,8 @@ class ProductController extends Controller
      */
     private function createCreateForm(Particular $entity)
     {
-        $form = $this->createForm(new ProductType(), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new ProductType($globalOption), $entity, array(
             'action' => $this->generateUrl('restaurant_product_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -145,7 +146,8 @@ class ProductController extends Controller
     private function createEditForm(Particular $entity)
     {
 
-        $form = $this->createForm(new ProductType(), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new ProductType($globalOption), $entity, array(
             'action' => $this->generateUrl('restaurant_product_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

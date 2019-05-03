@@ -39,9 +39,9 @@ class PurchaseItemRepository extends EntityRepository
         $entity->setPurchase($invoice);
         $entity->setParticular($particular);
         $entity->setSalesPrice($particular->getPrice());
-        $entity->setPurchasePrice($particular->getPurchasePrice());
+        $entity->setPurchasePrice($data['price']);
         $entity->setQuantity($data['quantity']);
-        $entity->setPurchaseSubTotal($data['quantity'] * $particular->getPurchasePrice());
+        $entity->setPurchaseSubTotal($data['quantity'] * $data['price']);
         $em->persist($entity);
         $em->flush();
         $this->getPurchaseAveragePrice($particular);
@@ -53,17 +53,18 @@ class PurchaseItemRepository extends EntityRepository
         $entities = $sales->getPurchaseItems();
         $data = '';
         $i = 1;
+        /* @var $entity PurchaseItem */
         foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() .'">';
+            $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= '<td class="span1" >' . $i . '</td>';
             $data .= '<td class="span1" >' . $entity->getParticular()->getParticularCode() . '</td>';
             $data .= '<td class="span4" >' . $entity->getParticular()->getName() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchasePrice() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getQuantity() .'</td>';
+            $data .= '<td class="span1" >' . $entity->getParticular()->getUnit()->getName(). '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
-                     <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/hms/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                     <a id="'.$entity->getId(). '" data-url="/restaurant/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';
             $data .= '</tr>';
             $i++;

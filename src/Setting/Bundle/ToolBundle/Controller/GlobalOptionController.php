@@ -77,8 +77,8 @@ class GlobalOptionController extends Controller
 
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
-          //  return $this->redirect($this->generateUrl('tools_domain_agent'));
-            return $this->redirect($this->generateUrl('globaloption_edit', array('id' => $entity->getId())));
+
+            return $this->redirect($this->generateUrl('globaloption_edit', array('id' => $globalOption->getId())));
         }
 
         return $this->render('SettingToolBundle:GlobalOption:signup.html.twig', array(
@@ -148,6 +148,7 @@ class GlobalOptionController extends Controller
      */
     public function editAction(GlobalOption $entity)
     {
+
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find GlobalOption entity.');

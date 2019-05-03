@@ -45,7 +45,7 @@ class Purchase
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Vendor", inversedBy="purchases" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="restaurantPurchases" , cascade={"detach","merge"} )
      **/
     private  $vendor;
 
@@ -104,7 +104,7 @@ class Purchase
      *
      * @ORM\Column(name="mode", type="string", length=30, nullable=true)
      */
-    private $mode ='medicine';
+    private $mode ='restaurant';
 
 
     /**

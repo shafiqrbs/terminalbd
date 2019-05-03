@@ -97,7 +97,8 @@ class StockController extends Controller
     private function createCreateForm(Particular $entity)
     {
 
-        $form = $this->createForm(new StockType(), $entity, array(
+        $global = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new StockType($global), $entity, array(
             'action' => $this->generateUrl('restaurant_stock_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -141,7 +142,8 @@ class StockController extends Controller
      */
     private function createEditForm(Particular $entity)
     {
-        $form = $this->createForm(new StockType(), $entity, array(
+        $global = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new StockType($global), $entity, array(
             'action' => $this->generateUrl('restaurant_stock_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

@@ -597,7 +597,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getRestaurantConfig()->getGlobalOption());
         $accountPurchase->setRestaurantPurchase($entity);
-        $accountPurchase->setRestaurantVendor($entity->getVendor());
+        $accountPurchase->setAccountVendor($entity->getVendor());
 	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
 	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
 	    $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
@@ -605,13 +605,15 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $accountPurchase->setPayment($entity->getPayment());
 	    $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
 	    $accountPurchase->setGrn($entity->getGrn());
-	    $accountPurchase->setProcess('restaurant');
+	    $accountPurchase->setProcessHead('restaurant');
         $accountPurchase->setProcessType('Purchase');
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
         $accountPurchase->setProcess('approved');
+        $accountPurchase->setUpdated($entity->getUpdated());
         $accountPurchase->setApprovedBy($entity->getApprovedBy());
         $em->persist($accountPurchase);
         $em->flush();
+        $this->updateVendorBalance($accountPurchase);
         if($accountPurchase->getPayment() > 0 ){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
         }

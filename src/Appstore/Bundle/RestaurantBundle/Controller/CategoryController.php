@@ -38,7 +38,7 @@ class CategoryController extends Controller
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig()->getId();
-        $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array(),array('sorting'=>'ASC'));
+        $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config),array('sorting'=>'ASC'));
         //$pagination = $this->paginate($pagination);
         $editForm = $this->createCreateForm($entity);
         return $this->render('RestaurantBundle:Category:index.html.twig', array(

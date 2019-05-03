@@ -1363,7 +1363,7 @@ class Builder extends ContainerAware
         $menu['Restaurant']->addChild('Master Data')
             ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);
-        $menu['Restaurant']['Master Data']->addChild('Product', array('route' => 'restaurant_product'))
+        $menu['Restaurant']['Master Data']->addChild('Production Item', array('route' => 'restaurant_product'))
             ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Master Data']->addChild('Product Sorting', array('route' => 'restaurant_product_sorting'))
             ->setAttribute('icon', 'icon-th-list');
@@ -1376,7 +1376,7 @@ class Builder extends ContainerAware
         $menu['Restaurant']->addChild('Manage Stock')
             ->setAttribute('icon', 'icon icon-truck')
             ->setAttribute('dropdown', true);
-        $menu['Restaurant']['Manage Stock']->addChild('Stock Product', array('route' => 'restaurant_stock'))
+        $menu['Restaurant']['Manage Stock']->addChild('Stock Item', array('route' => 'restaurant_stock'))
             ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Manage Stock']->addChild('Purchase', array('route' => 'restaurant_purchase'))
             ->setAttribute('icon', 'icon-th-list');

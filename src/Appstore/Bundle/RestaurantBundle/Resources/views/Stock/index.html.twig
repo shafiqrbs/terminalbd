@@ -212,7 +212,7 @@
                                                 <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                             {% endif %}
                                         </td>
-                                        <td class="numeric">{% if  entity.unit is defined and  entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
+                                        <td class="numeric">{% if  entity.unit is not empty %}{{ entity.unit }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini blue btn-action" href="{{ path('restaurant_stock_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>

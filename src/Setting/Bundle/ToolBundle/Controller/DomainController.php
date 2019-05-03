@@ -221,6 +221,11 @@ class DomainController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         set_time_limit(0);
+        $dir = WEB_PATH . "/uploads/domain/" . $option->getId();
+        $a = new Filesystem();
+        $a->remove($dir);
+        $a->mkdir($dir);
+
         if(!empty($option->getAccountingConfig()) and $option->getAccountingConfig()){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
         }
@@ -239,21 +244,19 @@ class DomainController extends Controller
         if(!empty($option->getBusinessConfig()) and $option->getBusinessConfig()) {
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessConfig')->businessReset($option);
         }
+         if(!empty($option->getBusinessConfig()) and $option->getBusinessConfig()) {
+            $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->reset($option);
+        }
         if(!empty($option->getDmsConfig()) and $option->getDmsConfig()) {
             $this->getDoctrine()->getRepository('DmsBundle:DmsConfig')->dmsReset($option);
         }
         $em->remove($option);
         $em->flush();
 
-        exit;
 
         /* Menu, Application Setting, website, module, apps , user*/
 
 
-        $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
-        $a = new Filesystem();
-        $a->remove($dir);
-        $a->mkdir($dir);
 
         $this->get('session')->getFlashBag()->add(
             'success',"Successfully reset data"

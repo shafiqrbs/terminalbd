@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\RestaurantBundle\Entity\Vendor;
 use Appstore\Bundle\RestaurantBundle\Form\VendorType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -16,6 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class VendorController extends Controller
 {
 
+
+    
     /**
      * Lists all Vendor entities.
      *
@@ -23,12 +26,14 @@ class VendorController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = new Vendor();
+        $entity = new AccountVendor();
         $form = $this->createCreateForm($entity);
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Vendor')->findBy(array('restaurantConfig' => $hospital),array('companyName'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('AccountingBundle:AccountVendor')->findWithSearch($globalOption,$data);
         return $this->render('RestaurantBundle:Vendor:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $entities->getResult(),
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -39,16 +44,15 @@ class VendorController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Vendor();
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Vendor')->findBy(array('restaurantConfig' => $hospital),array('companyName'=>'ASC'));
+        $entity = new AccountVendor();
+        $config = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $config),array('companyName'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-            $entity->setRestaurantConfig($hospital);
+            $entity->setGlobalOption($config);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -71,7 +75,7 @@ class VendorController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Vendor $entity)
+    private function createCreateForm(AccountVendor $entity)
     {
         $form = $this->createForm(new VendorType(), $entity, array(
             'action' => $this->generateUrl('restaurant_vendor_create'),
@@ -91,10 +95,10 @@ class VendorController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Vendor')->findBy(array('restaurantConfig' => $hospital),array('companyName'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $config),array('companyName'=>'ASC'));
 
-        $entity = $em->getRepository('RestaurantBundle:Vendor')->find($id);
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
@@ -117,7 +121,7 @@ class VendorController extends Controller
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Vendor $entity)
+    private function createEditForm(AccountVendor $entity)
     {
         $form = $this->createForm(new VendorType(), $entity, array(
             'action' => $this->generateUrl('restaurant_vendor_update', array('id' => $entity->getId())),
@@ -136,10 +140,10 @@ class VendorController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Vendor')->findBy(array('restaurantConfig' => $hospital),array('companyName'=>'ASC'));
+        $config = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $config),array('companyName'=>'ASC'));
 
-        $entity = $em->getRepository('RestaurantBundle:Vendor')->find($id);
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
@@ -170,7 +174,7 @@ class VendorController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('RestaurantBundle:Vendor')->find($id);
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
@@ -205,7 +209,7 @@ class VendorController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('RestaurantBundle:Vendor')->find($id);
+        $entity = $em->getRepository('AccountingBundle:AccountVendor')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -229,7 +233,7 @@ class VendorController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-            $item = $this->getDoctrine()->getRepository('RestaurantBundle:Vendor')->searchAutoComplete($item,$inventory);
+            $item = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->searchAutoComplete($item,$inventory);
         }
         return new JsonResponse($item);
     }
