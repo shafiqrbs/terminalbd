@@ -97,7 +97,7 @@
 
                             {% for entity in entities %}
                                 <tr id="delete-{{ entity.id }}">
-                                    <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                    <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ entity.grn }}</td>
                                     <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.stockIn|number_format }}</td>

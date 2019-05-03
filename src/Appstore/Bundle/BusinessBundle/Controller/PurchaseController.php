@@ -428,7 +428,7 @@ class PurchaseController extends Controller
 		}
 		$this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountBusinessPurchaseReverse($purchase);
 		$purchase->setIsReversed(true);
-		$purchase->setProcess('created');
+		$purchase->setProcess('Created');
 		$purchase->setApprovedBy(NULL);
 		$em->flush();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);

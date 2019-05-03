@@ -121,7 +121,7 @@ class InvoiceController extends Controller
         }
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
 	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
-	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
+	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1],['companyName'=>"ASC"]);
 	    return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
@@ -277,7 +277,6 @@ class InvoiceController extends Controller
 
     public function deleteAction(BusinessInvoice $entity)
     {
-
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -287,7 +286,6 @@ class InvoiceController extends Controller
         return new Response(json_encode(array('success' => 'success')));
         exit;
     }
-
 
     public function particularSearchAction(BusinessParticular $particular)
     {
@@ -366,8 +364,6 @@ class InvoiceController extends Controller
 
     }
 
-
-
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
@@ -386,15 +382,14 @@ class InvoiceController extends Controller
         exit;
     }
 
-
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
 
 	public function invoiceReverseAction(BusinessInvoice $sales)
 	{
-
-		/*
+		exit;
+	    /*
 		 * Item Remove Total quantity
 		 * Stock Details
 		 * Purchase Item
@@ -405,7 +400,6 @@ class InvoiceController extends Controller
 		 * Transaction
 		 * Delete Journal & Account Purchase
 		 */
-
 		set_time_limit(0);
 		$em = $this->getDoctrine()->getManager();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
@@ -428,7 +422,6 @@ class InvoiceController extends Controller
 		return $this->render('BusinessBundle:Reverse:sales.html.twig', array(
 			'entity' => $entity,
 		));
-
 	}
 
     /**
@@ -473,7 +466,6 @@ class InvoiceController extends Controller
             } else {
                 $template = 'print';
             }
-
             $html = $this->renderView(
                 'BusinessBundle:Print:dental-care.html.twig', array(
                     'entity' => $entity,
@@ -482,11 +474,9 @@ class InvoiceController extends Controller
                     'treatmentSchedule' => $treatmentSchedule,
                 )
             );
-
             $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
             $snappy = new Pdf($wkhtmltopdfPath);
             $pdf = $snappy->getOutputFromHtml($html);
-
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="incomePdf.pdf"');
             echo $pdf;
@@ -502,7 +492,7 @@ class InvoiceController extends Controller
         $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->searchAutoComplete($config,$q);
         $items = array();
         foreach ($entities as $entity):
-            $items[]=array('value' => $entity['id']);
+            $items[] = ['value' => $entity['id']];
         endforeach;
         return new JsonResponse($items);
 
@@ -543,8 +533,6 @@ class InvoiceController extends Controller
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
-
-
     public function addParticularCommissionAction(Request $request, BusinessInvoice $invoice)
     {
 
@@ -649,33 +637,43 @@ class InvoiceController extends Controller
 
     public function invoiceChalanAction(BusinessInvoice $entity)
 	{
-
 		$em = $this->getDoctrine()->getManager();
 
 		/* @var $config BusinessConfig */
 
 		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
 		if ($config->getId() == $entity->getBusinessConfig()->getId()) {
-
 			if($config->isCustomInvoicePrint() == 1){
 				$template = $config->getGlobalOption()->getSlug();
 			}else{
 				$template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
 			}
 			$result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($config->getGlobalOption(), $data = array('mobile' => $entity->getCustomer()->getMobile()));
-			$balance = empty($result) ? 0 :$result[0]['customerBalance'];
+			$balance = empty($result) ? 0 : $result[0]['customerBalance'];
 			return  $this->render("BusinessBundle:Print:{$template}.html.twig",
-				array(
-					'config' => $config,
-					'entity' => $entity,
-					'balance' => $balance,
-					'print' => 'chalan',
-				)
+				[
+					'config'    => $config,
+					'entity'    => $entity,
+					'balance'   => $balance,
+					'print'     => 'chalan',
+                ]
 			);
-
 		}
-
 	}
+
+	public function  dataUpdateAction()
+    {
+
+        set_time_limit(0);
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $data = [];
+        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $user,$data);
+        foreach ($entities->getQuery()->getResult() as $entity):
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
+        endforeach;
+        exit;
+    }
 
 }
 

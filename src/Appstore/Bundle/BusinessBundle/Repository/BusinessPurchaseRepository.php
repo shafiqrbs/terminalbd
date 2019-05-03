@@ -242,23 +242,23 @@ class BusinessPurchaseRepository extends EntityRepository
         /* @var $rows BusinessInvoiceParticular */
 
         foreach ($invoice->getBusinessInvoiceParticulars() as $rows){
-
-            $exist = $this->checkInstantPurchaseToday($rows->getVendor());
-            if($exist['status'] == 'valid'){
-                $purchase = $em->getRepository('BusinessBundle:BusinessPurchase')->find($exist['purchase']);
-            }else{
-                $purchase = $this->purchaseCommissionInvoiceGenerate($invoice,$rows->getVendor());
+            if($rows->getVendor()){
+                $exist = $this->checkInstantPurchaseToday($rows->getVendor());
+                if($exist['status'] == 'valid'){
+                    $purchase = $em->getRepository('BusinessBundle:BusinessPurchase')->find($exist['purchase']);
+                }else{
+                    $purchase = $this->purchaseCommissionInvoiceGenerate($invoice,$rows->getVendor());
+                }
+                $particularId   = $rows->getBusinessParticular()->getId();
+                $price          = $rows->getPurchasePrice();
+                $quantity       = $rows->getTotalQuantity();
+                if($invoice->getBusinessConfig()->getBusinessModel() == 'commission'){
+                    $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
+                    $em->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($purchase,$invoiceItems);
+                    $em->getRepository('BusinessBundle:BusinessVendorStockItem')->insertStockSalesItems($rows);
+                }
+                $em->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($purchase);
             }
-
-            $particularId   = $rows->getBusinessParticular()->getId();
-            $price          = $rows->getPurchasePrice();
-            $quantity       = $rows->getTotalQuantity();
-            if($invoice->getBusinessConfig()->getBusinessModel() == 'commission'){
-                $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
-                $em->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($purchase,$invoiceItems);
-                $em->getRepository('BusinessBundle:BusinessVendorStockItem')->insertStockSalesItems($rows);
-            }
-            $em->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($purchase);
 
         }
 
@@ -289,11 +289,11 @@ class BusinessPurchaseRepository extends EntityRepository
         $today =  $compare->format('Y-m-d');
         $sql = "SELECT id
                 FROM business_purchase as purchase
-                WHERE purchase.vendor_id = :vendor AND purchase.process = :process  AND DATE (purchase.created) =:receive";
+                WHERE purchase.vendor_id = :vendor AND purchase.process = :process";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('vendor', $vendor->getId());
         $stmt->bindValue('process', 'Commission');
-        $stmt->bindValue('receive', $today);
+      //  $stmt->bindValue('receive', $today);
         $stmt->execute();
         $result =  $stmt->fetch();
         if(!empty($result['id'])){

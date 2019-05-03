@@ -50,6 +50,13 @@ business_vendor_stock_search:
     options:
             expose: true
 
+business_vendor_stock_qnt:
+    path:     /{id}/vendor-stck-qnt
+    defaults: { _controller: "BusinessBundle:VendorStock:selectVendorStock" }
+    methods:  get
+    options:
+            expose: true
+
 
 business_vendor_stock_approved:
     path:     /{id}/invoice-approved

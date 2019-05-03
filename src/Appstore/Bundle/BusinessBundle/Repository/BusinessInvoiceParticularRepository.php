@@ -373,4 +373,15 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function getTotalSalesQnt(BusinessInvoiceParticular $particular)
+    {
+        $id = $particular->getVendorStockItem()->getId();
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.vendorStockItem','s');
+        $query->select(' COALESCE(SUM(e.quantity),0) AS  quantity');
+        $query->where("s.id ={$id}");
+        $total =  $query->getQuery()->getOneOrNullResult()['quantity'];
+        return $total;
+    }
+
 }

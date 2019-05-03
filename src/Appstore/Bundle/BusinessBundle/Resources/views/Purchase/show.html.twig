@@ -120,7 +120,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if ( entity.process == 'Done') %}
+                                    {% if ( entity.process == 'Done' and entity.netTotal > 0) %}
                                         <a  href="javascript:"  data-url="{{ path('business_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     {% if (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_PURCHASE_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}

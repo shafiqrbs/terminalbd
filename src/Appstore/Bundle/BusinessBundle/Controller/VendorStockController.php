@@ -178,8 +178,6 @@ class VendorStockController extends Controller
         exit;
     }
 
-
-
     public function invoiceParticularDeleteAction(BusinessVendorStock $invoice, BusinessVendorStockItem $particular){
 
         $em = $this->getDoctrine()->getManager();
@@ -194,15 +192,19 @@ class VendorStockController extends Controller
         exit;
     }
 
-    public function selectGrnAction($vendor)
+    public function selectGrnAction(AccountVendor $vendor)
     {
-
         $particular = $_REQUEST['particular'];
         $purchaseItems = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendorStockItem')->getDropdownList($vendor,$particular);
         return new Response($purchaseItems);
 
     }
 
+    public function selectVendorStockAction(BusinessVendorStockItem $item)
+    {
+        $remin = ($item->getQuantity() - $item->getSalesQuantity());
+        return new Response($remin);
+    }
 
     public function updateAction(Request $request, BusinessVendorStock $entity)
     {

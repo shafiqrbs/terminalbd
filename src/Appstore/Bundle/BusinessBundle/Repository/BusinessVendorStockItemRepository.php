@@ -148,34 +148,32 @@ class BusinessVendorStockItemRepository extends EntityRepository
     public function insertStockSalesItems(BusinessInvoiceParticular $invoiceParticular ){
 
         $em = $this->_em;
-
         /* @var $vendorStock BusinessVendorStockItem */
+        $vendorStock = $invoiceParticular->getVendorStockItem();
+        if($invoiceParticular->getVendorStockItem()){
+            $totalQnt = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->getTotalSalesQnt($invoiceParticular);
+            $vendorStock->setSalesQuantity($totalQnt);
+            $em->persist($vendorStock);
+            $em->flush();
+            $this->updateStockInOut($vendorStock->getBusinessVendorStock());
+        }
 
-        $vendorStock = $this->find($invoiceParticular->getVendorStockItem());
-        $current = $vendorStock->getSalesQuantity();
-        $totalQnt = $current + $invoiceParticular->getTotalQuantity();
-        $vendorStock->setSalesQuantity($totalQnt);
-        $em->persist($vendorStock);
-        $em->flush();
-        $this->updateStockInOut($vendorStock->getBusinessVendorStock());
 
     }
 
-    public function getDropdownList($vendor, $particular)
+    public function getDropdownList(AccountVendor $vendor, $particular)
     {
 
         $qb = $this->createQueryBuilder('pi');
         $qb->join('pi.particular','p');
         $qb->join('pi.businessVendorStock','e');
         $qb->select('pi.id as id , e.grn as grn , ( COALESCE(SUM(pi.quantity),0) - COALESCE(SUM(pi.salesQuantity),0)) as quantity');
-        $qb->where('e.vendor = :vendor')->setParameter('vendor', $vendor) ;
+        $qb->where('e.vendor = :vendor')->setParameter('vendor', $vendor->getId()) ;
         $qb->andWhere('pi.particular = :particular')->setParameter('particular', $particular) ;
         $qb->groupBy('e.grn');
         $qb->orderBy('p.name','ASC');
         $result =  $qb->getQuery()->getArrayResult();
-
         /* @var  $item BusinessVendorStockItem  */
-
         $purchaseItems = '';
         $purchaseItems .='<option value="">--Select Stock Quantity--</option>';
         if(!empty($result)){
