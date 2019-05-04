@@ -79,3 +79,11 @@ business_report_sales_user_monthly:
     path:     /sales-user-monthly
     defaults: { _controller: "BusinessBundle:Report:monthlyUserSales" }
 
+business_report_vendor_commission_sales:
+    path:     /vendor-commission-sales
+    defaults: { _controller: "BusinessBundle:Report:vendorCommissionBaseSales" }
+
+business_report_customer_commission_sales:
+    path:     /customer-commission-sales
+    defaults: { _controller: "BusinessBundle:Report:customerCommissionBaseSales" }
+

@@ -428,8 +428,6 @@ class BusinessInvoiceRepository extends EntityRepository
 		$stmt->execute();
 		$result =  $stmt->fetchAll();
 		return $result;
-
-
 	}
 
 
@@ -486,5 +484,79 @@ class BusinessInvoiceRepository extends EntityRepository
         $vat = ( ($totalAmount * (int)$sales->getBusinessConfig()->getVatPercentage())/100 );
         return round($vat);
     }
+
+    public function salesUserReport( User $user , $data)
+    {
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.salesBy', 'u');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('u.id as userId');
+        $qb->addSelect('SUM(e.due) as due');
+        $qb->addSelect('SUM(e.subTotal) as subTotal');
+        $qb->addSelect('SUM(e.total) as total');
+        $qb->addSelect('SUM(e.received) as payment');
+        $qb->addSelect('SUM(e.discount) as discount');
+        $qb->addSelect('SUM(e.vat) as vat');
+        $qb->where('e.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered'));
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('salesBy');
+        $qb->orderBy('total','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function currentMonthSales(User $user , $data =array())
+    {
+
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $compare = new \DateTime();
+        $year =  $compare->format('Y');
+        $month =  $compare->format('m');
+        $year = isset($data['year'])? $data['year'] :$year;
+
+        $sql = "SELECT sales.salesBy_id as salesBy, MONTH (sales.created) as month, SUM(sales.total) AS total
+                FROM business_invoice as sales
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY month , salesBy ORDER BY salesBy ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+
+
+    }
+
+    public function salesUserPurchasePriceReport(User $user,$data)
+    {
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.salesBy', 'u');
+        $qb->join('e.businessInvoiceParticulars','si');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('SUM(si.totalQuantity * si.purchasePrice ) AS totalPurchaseAmount');
+        $qb->where('e.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered'));
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('totalPurchaseAmount','DESC');
+        $qb->groupBy('salesBy');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= array();
+        foreach ($result as $row ){
+            $array[$row['salesBy']]= $row['totalPurchaseAmount'];
+        }
+        return $array;
+    }
+
 
 }

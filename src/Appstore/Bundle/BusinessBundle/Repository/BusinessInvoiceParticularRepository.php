@@ -232,7 +232,6 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
 	protected function handleSearchStockBetween($qb,$data)
 	{
-
 		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
 		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
 		$name = isset($data['name'])? $data['name'] :'';
@@ -245,6 +244,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 			$qb->join('e.customer','c');
 			$qb->andWhere($qb->expr()->like("c.name", "'%$customer%'"  ));
 		}
+
 		if (!empty($name)) {
 			$qb->andWhere($qb->expr()->like("mds.name", "'%$name%'"  ));
 		}
@@ -422,6 +422,71 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             }
         }
         return $arrs;
+
+    }
+
+    public  function reportVendorCommissionSalesItem(User $user, $data=''){
+
+
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $qb = $this->createQueryBuilder('si');
+        $qb->join('si.businessInvoice','e');
+        $qb->join('si.businessParticular','mds');
+        $qb->leftJoin('mds.unit','u');
+        $qb->join('e.customer','c');
+        $qb->leftJoin('si.vendor','v');
+        $qb->leftJoin('si.vendorStockItem','vsi');
+        $qb->leftJoin('vsi.businessVendorStock','vs');
+        $qb->select('si.totalQuantity AS quantity');
+        $qb->addSelect('si.totalQuantity * si.purchasePrice AS purchasePrice');
+        $qb->addSelect('c.name AS customerName');
+        $qb->addSelect('v.companyName AS companyName');
+        $qb->addSelect('vs.grn AS grn');
+        $qb->addSelect('si.subTotal AS salesPrice');
+        $qb->addSelect('e.invoice AS invoice');
+        $qb->addSelect('e.created AS created');
+        $qb->addSelect('mds.name AS name');
+        $qb->addSelect('u.name AS unit');
+        $qb->addSelect('mds.particularCode AS sku');
+        $qb->where('e.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered','Chalan'));
+        $this->handleSearchCommissionBetween($qb,$data);
+        $qb->orderBy('mds.name','ASC');
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    protected function handleSearchCommissionBetween($qb,$data)
+    {
+        $createdStart = isset($data['startDate'])? $data['startDate'] :'';
+        $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+        $name = isset($data['name'])? $data['name'] :'';
+        $customer = isset($data['customer'])? $data['customer'] :'';
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+
+        if (!empty($customer)) {
+            $qb->andWhere($qb->expr()->like("c.name", "'%$customer%'"  ));
+        }
+        if (!empty($vendor)) {
+            $qb->andWhere($qb->expr()->like("v.id", "'%$vendor%'"  ));
+        }
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("mds.name", "'%$name%'"  ));
+        }
+        if (!empty($createdStart)) {
+            $compareTo = new \DateTime($createdStart);
+            $created =  $compareTo->format('Y-m-d 00:00:00');
+            $qb->andWhere("s.created >= :createdStart");
+            $qb->setParameter('createdStart', $created);
+        }
+
+        if (!empty($createdEnd)) {
+            $compareTo = new \DateTime($createdEnd);
+            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("s.created <= :createdEnd");
+            $qb->setParameter('createdEnd', $createdEnd);
+        }
 
     }
 

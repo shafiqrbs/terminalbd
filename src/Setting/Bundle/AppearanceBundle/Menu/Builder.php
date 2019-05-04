@@ -261,7 +261,12 @@ class Builder extends ContainerAware
 
             $menu['Business Management']->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
             if($config->getBusinessModel() == 'commission') {
-                $menu['Business Management']->addChild('Vendor Stock Item', array('route' => 'business_vendor_stock_item'))->setAttribute('icon', 'icon-th-list');
+                $menu['Business Management']->addChild( 'Agency Stock' )->setAttribute( 'icon', 'icon icon-bar-chart' )->setAttribute( 'dropdown', true );
+                $menu['Business Management']['Agency Stock']->addChild('Vendor Stock Item', array('route' => 'business_vendor_stock_item'))->setAttribute('icon', 'icon-th-list');
+                $menu['Business Management']['Agency Stock']->addChild('Vendor Stock', array('route' => 'business_vendor_stock'))->setAttribute('icon', 'icon-th-list');
+                $menu['Business Management']['Agency Stock']->addChild( 'Stock Report' )->setAttribute( 'icon', 'icon icon-bar-chart' )->setAttribute( 'dropdown', true );
+                $menu['Business Management']['Agency Stock']['Stock Report']->addChild( 'Vendor base Sales', array( 'route' => 'business_report_vendor_commission_sales' ) )
+                    ->setAttribute( 'icon', 'icon-th-list' );
             }
 	        if($config->getProductionType() == 'pre-production') {
 		        $menu['Business Management']->addChild( 'Pre-production', array( 'route' => 'business_production' ) )->setAttribute( 'icon', 'icon-th-list' );
@@ -277,6 +282,7 @@ class Builder extends ContainerAware
 		                                ->setAttribute('dropdown', true);
 		    if($config->isShowStock() == 1){
                 $menu['Business Management']['Master Data']->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
+                $menu['Business Management']['Master Data']->addChild('User Sales Setup', array('route' => 'business_sales_user'))->setAttribute('icon', 'icon-th-list');
                 $menu['Business Management']['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
 
             }
@@ -295,6 +301,10 @@ class Builder extends ContainerAware
 		    $menu['Business Management']['Reports']['Sales']->addChild( 'Sales Summary', array( 'route' => 'business_report_sales_summary' ) )
 		                                                    ->setAttribute( 'icon', 'icon-th-list' );
 		    $menu['Business Management']['Reports']['Sales']->addChild( 'Sales Details', array( 'route' => 'business_report_sales_details' ) )
+		                                                    ->setAttribute( 'icon', 'icon-th-list' );
+		    $menu['Business Management']['Reports']['Sales']->addChild( 'User wise Sales', array( 'route' => 'business_report_sales_user' ) )
+		                                                    ->setAttribute( 'icon', 'icon-th-list' );
+		    $menu['Business Management']['Reports']['Sales']->addChild( 'User Monthly Sales', array( 'route' => 'business_report_sales_user_monthly' ) )
 		                                                    ->setAttribute( 'icon', 'icon-th-list' );
 		    $menu['Business Management']['Reports']['Sales']->addChild( 'Customer Sales', array( 'route' => 'business_report_customer_sales_item' ) )
 		                                                    ->setAttribute( 'icon', 'icon-th-list' );

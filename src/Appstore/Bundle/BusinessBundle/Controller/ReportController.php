@@ -165,8 +165,8 @@ class ReportController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$user = $this->getUser();
-		$salesPurchasePrice = $em->getRepository('BusinessBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data);
-		$entities = $em->getRepository('BusinessBundle:MedicineSales')->salesUserReport($user,$data);
+		$salesPurchasePrice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->salesUserPurchasePriceReport($user,$data);
+		$entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesUserReport($user,$data);
 		return $this->render('BusinessBundle:Report:sales/salesUser.html.twig', array(
 			'option'  => $user->getGlobalOption() ,
 			'entities'      => $entities ,
@@ -183,7 +183,7 @@ class ReportController extends Controller
 		$user = $this->getUser();
 		$config = $user->getGlobalOption()->getBusinessConfig();
 		$employees = $em->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
-		$entities = $em->getRepository('BusinessBundle:MedicineSales')->monthlySales($user,$data);
+		$entities = $em->getRepository('BusinessBundle:BusinessInvoice')->currentMonthSales($user,$data);
 		$salesAmount = array();
 		foreach($entities as $row) {
 			$salesAmount[$row['salesBy'].$row['month']] = $row['total'];
@@ -344,6 +344,42 @@ class ReportController extends Controller
 		));
 	}
 
+    public function vendorCommissionBaseSalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportVendorCommissionSalesItem($user,$data);
+        $pagination = $this->paginate($entities);
+        $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption()],['companyName'=>'ASC']);
+
+        return $this->render('BusinessBundle:Report:sales/vendorCommissionSalesItem.html.twig', array(
+            'option'  => $user->getGlobalOption() ,
+            'entities' => $pagination,
+            'vendors' => $vendors,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function customerCommissionBaseSalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportCustomerSalesItem($user,$data);
+        $pagination = $this->paginate($entities);
+        $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+
+        return $this->render('BusinessBundle:Report:sales/customerSalesItem.html.twig', array(
+            'option'  => $user->getGlobalOption() ,
+            'entities' => $pagination,
+            'types' => $type,
+            'categories' => $category,
+            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm' => $data,
+        ));
+    }
 
 
 
