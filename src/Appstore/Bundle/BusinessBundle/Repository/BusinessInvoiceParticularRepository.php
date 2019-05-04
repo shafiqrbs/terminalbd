@@ -384,4 +384,45 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         return $total;
     }
 
+    protected function handleSearchBetween($qb,$data)
+    {
+        $vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
+        $name = isset($data['name'])? $data['name'] :'';
+        if(!empty($vendorId)){
+            $qb->join('e.vendor','v');
+            $qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
+        }
+        if(!empty($name)){
+            $qb->andWhere($qb->expr()->like("p.name", "'%$name%'"  ));
+        }
+
+    }
+
+
+    public function getSalesStockItem($pagination,$data = array())
+    {
+
+        $ids = [];
+        foreach ($pagination as $entity){
+            $ids[] = $entity['id'];
+        }
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.businessParticular','ms');
+        $qb->join('pi.businessInvoice','e');
+        $qb->select('ms.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
+        $qb->where('e.process IN (:processes)')->setParameter('processes', array('Done','Delivered')) ;
+        $qb->andWhere('ms.id IN (:ids)')->setParameter('ids', $ids) ;
+        $qb->groupBy('ms.id');
+        $this->handleSearchBetween($qb,$data);
+        $result =  $qb->getQuery()->getArrayResult();
+        $arrs = [];
+        if(!empty($result)){
+            foreach ($result as $row){
+                $arrs[$row['id']] = $row;
+            }
+        }
+        return $arrs;
+
+    }
+
 }

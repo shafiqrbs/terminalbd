@@ -269,7 +269,6 @@ class BusinessPurchaseRepository extends EntityRepository
         $em = $this->_em;
         $entity = new BusinessPurchase();
         $entity->setBusinessConfig($invoice->getBusinessConfig());
-      //  $vendor = $this->_em->getRepository('AccountingBundle:AccountVendor')->find($vendor);
         $entity->setVendor($vendor);
         $entity->setCreatedBy($invoice->getCreatedBy());
         $entity->setReceiveDate($invoice->getUpdated());
@@ -284,16 +283,15 @@ class BusinessPurchaseRepository extends EntityRepository
 
     public function checkInstantPurchaseToday(AccountVendor $vendor)
     {
-
         $compare = new \DateTime();
         $today =  $compare->format('Y-m-d');
         $sql = "SELECT id
                 FROM business_purchase as purchase
-                WHERE purchase.vendor_id = :vendor AND purchase.process = :process";
+                WHERE purchase.vendor_id = :vendor AND purchase.process = :process  AND DATE (purchase.created) =:receive";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('vendor', $vendor->getId());
         $stmt->bindValue('process', 'Commission');
-      //  $stmt->bindValue('receive', $today);
+        $stmt->bindValue('receive', $today);
         $stmt->execute();
         $result =  $stmt->fetch();
         if(!empty($result['id'])){
@@ -302,6 +300,15 @@ class BusinessPurchaseRepository extends EntityRepository
             return $data = array('status'=>'in-valid');
         }
 
+    }
+
+    public function checkInstantPurchaseReverse($config)
+    {
+        $compare = new \DateTime();
+        $today =  $compare->format('Y-m-d');
+        $em = $this->_em;
+        $purchase = $em->createQuery("DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = {$config} AND e.process = 'Commission' AND e.created LIKE '%{$today}%' ");
+        $purchase->execute();
     }
 
 

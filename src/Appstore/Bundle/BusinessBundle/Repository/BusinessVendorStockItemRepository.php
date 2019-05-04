@@ -42,7 +42,7 @@ class BusinessVendorStockItemRepository extends EntityRepository
         $qb = $this->createQueryBuilder('pi');
         $qb->join('pi.particular','p');
         $qb->join('pi.businessVendorStock','e');
-        $qb->select('p.name as name ,p.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
+        $qb->select('p.name as name ,p.id as id , COALESCE(SUM(pi.quantity),0) as quantity, COALESCE(SUM(pi.salesQuantity),0) as salesQuantity, ( COALESCE(SUM(pi.quantity),0) - COALESCE(SUM(pi.salesQuantity),0))as remin');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.process = :process')->setParameter('process', 'approved');
         $this->handleSearchBetween($qb,$data);

@@ -62,11 +62,13 @@ class VendorStockController extends Controller
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendorStockItem')->findWithSearch($this->getUser(),$data);
         $pagination = $this->paginate($entities);
-        $salesItems = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->getPurchaseStockItem($pagination,$data);
-        $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption()]);
+        $salesItems = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->getSalesStockItem($pagination,$data);
+        $purchaseItems = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->getPurchaseStockItem($pagination,$data);
+        $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption()],['companyName'=>'ASC']);
         return $this->render("BusinessBundle:VendorStock:vendor-stock.html.twig", array(
             'pagination' => $pagination,
             'salesItems' => $salesItems,
+            'purchaseItems' => $purchaseItems,
             'vendors' => $vendors,
             'searchForm' => $data,
         ));

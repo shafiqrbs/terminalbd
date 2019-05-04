@@ -669,9 +669,12 @@ class InvoiceController extends Controller
         $user = $this->getUser();
         $data = [];
         $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $user,$data);
+        $config = $user->getGlobalOption()->getBusinessConfig()->getId();
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->checkInstantPurchaseReverse($config);
         foreach ($entities->getQuery()->getResult() as $entity):
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
         endforeach;
+
         exit;
     }
 
