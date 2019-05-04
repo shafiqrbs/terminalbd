@@ -21,18 +21,14 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class InvoiceType extends AbstractType
 {
 
-    /** @var  ParticularRepository */
-    private $particular;
-
-
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption ,  ParticularRepository $particular)
+    function __construct(GlobalOption $globalOption )
     {
-        $this->particular           = $particular;
-        $this->globalOption         = $globalOption;
+        $this->globalOption  = $globalOption;
+        $this->config  = $globalOption->getRestaurantConfig()->getId();
     }
 
 
@@ -44,20 +40,29 @@ class InvoiceType extends AbstractType
     {
         $builder
 
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 payment tooltips','data-trigger' => 'hover','placeholder'=>'Receive BDT','data-original-title'=>'Add receive amount','autocomplete'=>'off')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('slipNo','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','data-trigger' => 'hover','placeholder'=>'Add slip no','data-original-title'=>'Add slip no','autocomplete'=>'off')))
-            ->add('discount','text', array('attr'=>array('class'=>'tooltips discount span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
+            ->add('remark','text', array('attr'=>array('class'=>'tooltips remark span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Enter narration','data-original-title'=>'Enter discount narration','autocomplete'=>'off')))
+            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
+            ->add('discountType', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choices'   => array('flat' => 'Flat', 'percentage' => 'Percentage'),
+                'required'  => true,
+            ))
+            ->add('process', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choices'   => array('Created' => 'Created','Hold' => 'Hold','Kitchen' => 'Kitchen','Paid' => 'Paid','Delivered' => 'Delivered','Done' => 'Done','Canceled' => 'Canceled'),
+                'required'  => true,
             ))
             ->add('tokenNo', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
-                'empty_value' => '---Select Table no ---',
+                'empty_value' => '--- Table no ---',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
@@ -65,6 +70,7 @@ class InvoiceType extends AbstractType
                         ->where("e.status = 1")
                         ->andWhere('s.slug IN (:slugs)')
                         ->setParameter('slugs',array('token'))
+                        ->andWhere("e.restaurantConfig ={$this->config}")
                         ->orderBy("e.name","ASC");
                 }
             ))
@@ -115,6 +121,8 @@ class InvoiceType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
                         ->where("u.isDelete != 1")
+                        ->andWhere("u.enabled = 1")
+                        ->andWhere("u.domainOwner = 2")
                         ->andWhere("u.globalOption =".$this->globalOption->getId())
                         ->orderBy("u.username", "ASC");
                 }
@@ -133,9 +141,8 @@ class InvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ));
-            //$builder->add('customer', new RestaurantCustomerType($this->location));
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -151,7 +158,7 @@ class InvoiceType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_restaurant_invoice';
+        return 'restaurant_invoice';
     }
 
 }

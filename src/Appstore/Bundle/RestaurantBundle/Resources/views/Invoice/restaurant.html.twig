@@ -295,7 +295,7 @@
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="control-group">
-                                                        <label class="control-label" for="firstName"><span>Discount Tk.</span> <span class="pull-right sales-right totalDiscount">{{ entity.totalDiscount }}</span></label>
+                                                        <label class="control-label" for="firstName"><span>Discount Tk.</span> <span class="pull-right sales-right totalDiscount">{{ entity.discountCalculation }}</span></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -367,7 +367,7 @@
                                         <td class="numeric" >{{ entity.slipNo }} / {% if entity.tokenNo is not empty %}{{ entity.tokenNo.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
                                         <td class="numeric" >{{ entity.vat }}</td>
-                                        <td class="numeric" >{{ entity.totalDiscount }}</td>
+                                        <td class="numeric" >{{ entity.discount }}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>

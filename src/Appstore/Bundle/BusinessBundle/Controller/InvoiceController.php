@@ -661,9 +661,8 @@ class InvoiceController extends Controller
 		}
 	}
 
-	public function  dataUpdateAction()
+	public function  commissionProcessAction()
     {
-
         set_time_limit(0);
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
@@ -674,8 +673,7 @@ class InvoiceController extends Controller
         foreach ($entities->getQuery()->getResult() as $entity):
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
         endforeach;
-
-        exit;
+        return $this->redirect($this->generateUrl('business_invoice'));
     }
 
 }

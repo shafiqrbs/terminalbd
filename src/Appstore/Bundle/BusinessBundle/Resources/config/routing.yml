@@ -50,6 +50,10 @@ business_reverse:
     resource: "@BusinessBundle/Resources/config/routing/reverse.yml"
     prefix:   /reverse
 
+business_sales_user:
+    resource: "@BusinessBundle/Resources/config/routing/salesuser.yml"
+    prefix:   /sales-user
+
 business_config:
     resource: "@BusinessBundle/Resources/config/routing/config.yml"
     prefix:   /config

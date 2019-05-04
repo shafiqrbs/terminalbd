@@ -28,6 +28,7 @@ class TemporaryType extends AbstractType
     function __construct(GlobalOption $globalOption )
     {
         $this->globalOption  = $globalOption;
+        $this->config  = $globalOption->getRestaurantConfig()->getId();
     }
 
 
@@ -44,7 +45,7 @@ class TemporaryType extends AbstractType
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('slipNo','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','data-trigger' => 'hover','placeholder'=>'Add slip no','data-original-title'=>'Add slip no','autocomplete'=>'off')))
             ->add('discount','hidden',array('attr'=>array('class'=>'')))
-            ->add('remark','text', array('attr'=>array('class'=>'tooltips remark span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('remark','text', array('attr'=>array('class'=>'tooltips remark span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Enter narration','data-original-title'=>'Enter discount narration','autocomplete'=>'off')))
             ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discount','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
             ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
             ->add('discountType', 'choice', array(
@@ -64,6 +65,7 @@ class TemporaryType extends AbstractType
                         ->where("e.status = 1")
                         ->andWhere('s.slug IN (:slugs)')
                         ->setParameter('slugs',array('token'))
+                        ->andWhere("e.restaurantConfig ={$this->config}")
                         ->orderBy("e.name","ASC");
                 }
             ))
@@ -114,6 +116,8 @@ class TemporaryType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
                         ->where("u.isDelete != 1")
+                        ->andWhere("u.enabled = 1")
+                        ->andWhere("u.domainOwner = 2")
                         ->andWhere("u.globalOption =".$this->globalOption->getId())
                         ->orderBy("u.username", "ASC");
                 }

@@ -32,7 +32,7 @@ class RestaurantParticularType extends AbstractType
     function __construct(RestaurantConfig  $restaurantConfig ,  ParticularRepository $particular)
     {
         $this->particular               = $particular;
-        $this->restaurantConfig         = $restaurantConfig;
+        $this->restaurantConfig         = $restaurantConfig->getId();
     }
 
 
@@ -48,7 +48,6 @@ class RestaurantParticularType extends AbstractType
                 'class'     => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
                 'group_by'  => 'category.name',
                 'property'  => 'codeName',
-                'empty_value' => '--- Choose Code & Particular ---',
                 'attr'=>array('class'=>'span12 m-wrap select2 particular'),
                 'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
@@ -56,6 +55,7 @@ class RestaurantParticularType extends AbstractType
                         ->join("e.category",'c')
                         ->where("c.status=1")
                         ->andWhere("e.status=1")
+                        ->andWhere("e.restaurantConfig ={$this->restaurantConfig}")
                         ->orderBy("c.sorting", "ASC")
                         ->addOrderBy("e.sorting", "ASC");
                 }
@@ -84,7 +84,7 @@ class RestaurantParticularType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_restaurant_invoice_particular';
+        return 'restaurant_item';
     }
 
     protected function ParticularChoiceList()

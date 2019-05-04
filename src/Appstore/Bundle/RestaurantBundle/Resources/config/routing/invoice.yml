@@ -10,7 +10,6 @@ restaurant_invoice_new:
     path:     /new
     defaults: { _controller: "RestaurantBundle:Invoice:new" }
 
-
 restaurant_invoice_edit:
     path:     /{id}/edit
     defaults: { _controller: "RestaurantBundle:Invoice:edit" }
@@ -36,6 +35,20 @@ restaurant_invoice_update:
     path:     /{id}/update
     defaults: { _controller: "RestaurantBundle:Invoice:update" }
     methods:  [POST, PUT]
+
+restaurant_invoice_discount_update:
+    path:     /dicount-update
+    defaults: { _controller: "RestaurantBundle:Invoice:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+restaurant_invoice_discount_coupon:
+    path:     /dicount-coupon
+    defaults: { _controller: "RestaurantBundle:Invoice:invoiceDiscountCoupon" }
+    methods:  POST
+    options:
+            expose: true
 
 restaurant_invoice_delete:
     path:     /{id}/delete
@@ -70,6 +83,7 @@ restaurant_invoice_pos:
     methods:  [PUT,POST]
     options:
             expose: true
+
 
 restaurant_invoice_save:
     path:     /{invoice}/invoice-save

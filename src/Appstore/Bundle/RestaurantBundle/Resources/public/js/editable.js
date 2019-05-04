@@ -1,4 +1,4 @@
-var EditableInit = function () {
+var EditableWithOutReloadInit = function () {
 
     var initEditables = function () {
         //global settings
@@ -9,12 +9,25 @@ var EditableInit = function () {
     }
     $(".editable").editable(initEditables());
 
-}
+};
 
+var EditableInit = function () {
 
-$(document).on("click", ".editable-submit", function() {
+    var initEditables = function () {
+        //global settings
+        $.fn.editable.defaults.inputclass = 'm-wrap';
+        $.fn.editable.defaults.url = '/post';
+        $.fn.editableform.buttons = '<button type="submit" class="btn blue editable-submit editable-reload"><i class="icon-ok"></i></button>';
+        $.fn.editableform.buttons += '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
+    }
+    $(".editable").editable(initEditables());
+
+};
+
+$(document).on("click", ".editable-reload", function() {
     setTimeout(pageReload, 3000);
 });
+
 function pageReload() {
     location.reload();
 }

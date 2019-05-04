@@ -352,17 +352,13 @@ class InvoiceRepository extends EntityRepository
             ->where('si.invoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
-
-
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         if($subTotal > 0){
-
             if ($invoice->getRestaurantConfig()->getVatEnable() == 1 && $invoice->getRestaurantConfig()->getVatPercentage() > 0) {
                 $totalAmount = ($subTotal- $invoice->getDiscount());
                 $vat = $this->getCulculationVat($invoice,$totalAmount);
                 $invoice->setVat($vat);
             }
-
             $invoice->setSubTotal($subTotal);
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
@@ -370,70 +366,16 @@ class InvoiceRepository extends EntityRepository
         }else{
 
             $invoice->setSubTotal(0);
-            $invoice->setEstimateCommission(0);
             $invoice->setTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
             $invoice->setVat(0);
         }
-
         $em->persist($invoice);
         $em->flush();
-
         return $invoice;
 
     }
-
-    public function updatePaymentReceive(Invoice $invoice)
-    {
-        $em = $this->_em;
-        $res = $em->createQueryBuilder()
-            ->from('RestaurantBundle:InvoiceTransaction','si')
-            ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
-            ->where('si.invoice = :invoice')
-            ->setParameter('invoice', $invoice ->getId())
-            ->andWhere('si.process = :process')
-            ->setParameter('process', 'Done')
-            ->getQuery()->getOneOrNullResult();
-        $payment = !empty($res['payment']) ? $res['payment'] :0;
-        $discount = !empty($res['discount']) ? $res['discount'] :0;
-        $vat = !empty($res['vat']) ? $res['vat'] :0;
-        $invoice->setPayment($payment);
-        $invoice->setDiscount($discount);
-        $invoice->setVat($vat);
-        $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-        $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
-        if($invoice->getPayment() >= $invoice->getTotal()){
-            $invoice->setPaymentStatus('Paid');
-        }else{
-            $invoice->setPaymentStatus('Due');
-        }
-        if($invoice->getPrintFor() == "visit" and $invoice->getPaymentStatus() == "Paid") {
-            $invoice->setProcess('Done');
-        }
-        $em->flush();
-
-    }
-
-
-    public function updateCommissionPayment(Invoice $invoice)
-    {
-        $em = $this->_em;
-        $res = $em->createQueryBuilder()
-            ->from('RestaurantBundle:DoctorInvoice','si')
-            ->select('sum(si.payment) as payment')
-            ->where('si.invoice = :invoice')
-            ->setParameter('invoice', $invoice ->getId())
-            ->andWhere('si.process = :process')
-            ->setParameter('process', 'Paid')
-            ->getQuery()->getOneOrNullResult();
-        $payment = !empty($res['payment']) ? $res['payment'] :0;
-        $invoice->setCommission($payment);
-        $em->persist($invoice);
-        $em->flush();
-
-    }
-
 
     public function getCulculationVat(Invoice $sales,$totalAmount)
     {

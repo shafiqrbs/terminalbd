@@ -61,6 +61,17 @@ function formSubmit() {
         })
     });
 
+    $('form#particularForm').on('keypress', 'input,select,textarea', function (e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            switch (this.id) {
+                case 'quantity':
+                    $('#temporaryParticular').trigger('click');
+                    break;
+            }
+        }
+    });
+
     $(document).on('click', '#temporaryParticular', function() {
 
         var particularId = $('#particularId').val();
@@ -237,6 +248,31 @@ function formSubmit() {
                 jsPostPrint(response);
             }
         });
+    });
+
+    $('form#invoiceForm').on('keypress', 'input,select,textarea', function (e) {
+
+        if (e.which == 13) {
+            e.preventDefault();
+            switch (this.id) {
+                case 'restaurant_invoice_slipNo':
+                    $('#restaurant_invoice_tokenNo').focus();
+                    break;
+                case 'restaurant_invoice_tokenNo':
+                    $('#restaurant_invoice_salesBy').focus();
+                    break;
+                case 'restaurant_invoice_salesBy':
+                    $('#restaurant_invoice_discountCalculation').focus();
+                    break;
+                case 'restaurant_invoice_discountCalculation':
+                    $('#restaurant_invoice_discountCoupon').focus();
+                    break;
+                case 'restaurant_invoice_discountCoupon':
+                    $('#restaurant_invoice_payment').focus();
+                    break;
+
+            }
+        }
     });
 
     $(document).on( "click", ".btn-number", function(e){

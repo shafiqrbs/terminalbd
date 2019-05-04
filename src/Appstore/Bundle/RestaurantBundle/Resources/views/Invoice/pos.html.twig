@@ -17,28 +17,22 @@
     {{ form_row(itemForm._token) }}
     <div class="row-fluid particular-info" style="padding-left: 15px" >
         <div class="row-fluid">
-            <div class="span7">
+            <div class="span8">
                 {{ form_widget(itemForm.particular) }}
             </div>
-            <div class="span2">
-                <div class="input-append span12" style="margin-bottom:0!important">
+            <div class="span4">
+                <div class="input-append span11" style="margin-bottom:0!important">
+                    <input type="hidden" id="particularId" name="particularId" value="">
                     <div class="input-group">
+                        <input type="text" class="m-wrap span3" readonly="readonly" id="price" placeholder="Price" name="price" value="" maxlength="8">
                         <span class="input-group-btn">
                            <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity"><span class="fa fa-minus"></span></button>
                         </span>
-                        <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
+                        <input type="number" class="m-wrap span3 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
                         <span class="input-group-btn">
                           <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity"><span class="fa fa-plus"></span></button>
+                          <button type="button" class="btn red" id="temporaryParticular" data-url="{{ path('restaurant_temporary_particular_add') }}" ><i class="icon-shopping-cart"></i> Add</button>
                         </span>
-                    </div>
-                </div>
-            </div>
-            <div class="span3">
-                <div class="input-append span11" style="margin-bottom:0!important">
-                    <input type="hidden" id="particularId" name="particularId" value="">
-                    <input type="text" class="m-wrap span8" readonly="readonly" id="price" name="price" value="" maxlength="8">
-                    <div class="btn-group">
-                        <button type="button" class="btn red" id="temporaryParticular" data-url="{{ path('restaurant_temporary_particular_add') }}" ><i class="icon-plus"></i> Add</button>
                     </div>
                 </div>
             </div>
@@ -370,4 +364,10 @@
     .select2-container .select2-choice {
         height: 35px!important;
     }
+
+    input[class*="span"].m-wrap:focus,select[class*="span"].m-wrap:focus, textarea[class*="span"].m-wrap:focus {
+        border: 3px solid rgb(234, 2, 3)!important;
+        color: red;
+    }
+
 </style>

@@ -111,9 +111,9 @@ business_invoice_empty_delete:
     path:     /delete/empty-invoice
     defaults: { _controller: "BusinessBundle:Invoice:deleteEmptyInvoice" }
 
-business_invoice_data_update:
-    path:     /data-update
-    defaults: { _controller: "BusinessBundle:Invoice:dataUpdate" }
+business_invoice_commission_process:
+    path:     /commission-process
+    defaults: { _controller: "BusinessBundle:Invoice:commissionProcess" }
 
 
 business_invoice_item_update:

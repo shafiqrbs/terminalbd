@@ -17,14 +17,6 @@ $(".addCustomer").click(function(){
     $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
 });
 
-
-$(document).on("click", ".editable-submit", function() {
-    setTimeout(pageReload, 3000);
-});
-function pageReload() {
-    location.reload();
-}
-
 $(document).on( "click", "#show", function(e){
     $('#hide').slideToggle(2000);
     $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");

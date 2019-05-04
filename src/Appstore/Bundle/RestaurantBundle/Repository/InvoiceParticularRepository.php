@@ -125,6 +125,7 @@ class InvoiceParticularRepository extends EntityRepository
         $i = 1;
         foreach ($entities as $entity) {
             $data .= '<tr id="remove-'. $entity->getId().'">';
+            $data .= "<td>{$i}</td>";
             $data .= '<td class="span4" >'.$i.'. '. $entity->getParticular()->getParticularCode() .' - ' .$entity->getParticular()->getName(). '</td>';
             $data .= '<td class="span1" >' . $entity->getSalesPrice().'</td>';
             $data .= '<td class="span1" >';
@@ -140,7 +141,7 @@ class InvoiceParticularRepository extends EntityRepository
             $data .='</td>';
             $data .= '<td class="span2" id="subTotal-'.$entity->getId().'" >= '.$entity->getSubTotal().'</td>';
             $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red particularDelete" ><i class="icon-trash"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'"  data-url="/restaurant/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red particularDelete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;

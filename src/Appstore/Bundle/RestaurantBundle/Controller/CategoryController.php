@@ -94,7 +94,7 @@ class CategoryController extends Controller
             'action' => $this->generateUrl('restaurant_category_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -141,7 +141,7 @@ class CategoryController extends Controller
             'action' => $this->generateUrl('restaurant_category_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

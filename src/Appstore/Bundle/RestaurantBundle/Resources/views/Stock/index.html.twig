@@ -191,12 +191,12 @@
                                         <td class="numeric" ><a href="{{ path('restaurant_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_MANAGER_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                                <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
+                                                <a  class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_MANAGER_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                                <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
+                                                <a  class="editable" data-name="Price" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">
@@ -246,13 +246,13 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/editable.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@RestaurantBundle/Resources/public/js/editable.js'
+    '@RestaurantBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
+    EditableWithOutReloadInit();
 {% endblock %}
