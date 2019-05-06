@@ -200,7 +200,6 @@ class Item
      */
     private $discountPrice;
 
-
 	/**
      * @var string
      *
@@ -208,13 +207,19 @@ class Item
      */
     private $webPrice;
 
-
      /**
      * @var string
      *
      * @ORM\Column(name="overHeadCost", type="decimal", nullable = true)
      */
     private $overHeadCost;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="imageDefaultSource", type="string", nullable = true)
+     */
+    private $imageDefaultSource = "product";
 
     /**
      * @var boolean
@@ -1123,6 +1128,22 @@ class Item
     public function setShortContent($shortContent)
     {
         $this->shortContent = $shortContent;
+    }
+
+    /**
+     * @return string
+    */
+    public function getImageDefaultSource()
+    {
+        return $this->imageDefaultSource;
+    }
+
+    /**
+     * @param string $imageDefaultSource
+     */
+    public function setImageDefaultSource($imageDefaultSource)
+    {
+        $this->imageDefaultSource = $imageDefaultSource;
     }
 
 

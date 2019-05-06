@@ -81,8 +81,6 @@ class Expenditure
      **/
     private  $expenditureItems;
 
-
-
     /**
      * @var float
      *
@@ -389,21 +387,6 @@ class Expenditure
         $this->accountBank = $accountBank;
     }
 
-    /**
-     * @return AccountBkash
-     */
-    public function getAccountBkash()
-    {
-        return $this->accountBkash;
-    }
-
-    /**
-     * @param AccountBkash $accountBkash
-     */
-    public function setAccountBkash($accountBkash)
-    {
-        $this->accountBkash = $accountBkash;
-    }
 
     /**
      * @return AccountCash
@@ -512,7 +495,7 @@ class Expenditure
     /**
      * Sets file.
      *
-     * @param InvoiceParticular $file
+     * @param Expenditure $file
      */
     public function setFile($file = null)
     {
@@ -522,7 +505,7 @@ class Expenditure
     /**
      * Get file.
      *
-     * @return InvoiceParticular
+     * @return Expenditure
      */
     public function getFile()
     {

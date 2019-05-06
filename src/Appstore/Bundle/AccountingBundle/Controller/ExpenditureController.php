@@ -70,7 +70,11 @@ class ExpenditureController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
-        if ($form->isValid()) {
+        $method = $entity->getTransactionMethod()->getSlug();
+        if (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && !empty($entity->getAccountBank())) ||
+            ($form->isValid() && $method == 'mobile' && !empty($entity->getAccountMobileBank()))
+        ) {
             $lastBalance = $em->getRepository('AccountingBundle:Expenditure')->lastInsertExpenditure($entity);
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption( $this->getUser()->getGlobalOption());

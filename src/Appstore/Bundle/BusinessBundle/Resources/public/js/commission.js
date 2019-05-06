@@ -58,11 +58,11 @@ $(document).on("click", ".sms-confirm", function() {
     });
 });
 
-$( "#mobile" ).autocomplete({
+/*$( "#mobile" ).autocomplete({
 
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('domain_customer_auto_mobile_search'),
+            url: Routing.generate('domain_customer_search'),
             data: {
                 term: request.term
             },
@@ -74,7 +74,7 @@ $( "#mobile" ).autocomplete({
     minLength: 2,
     select: function( event, ui ) {}
 
-});
+});*/
 
 $(document).on('change', '.transactionMethod', function() {
 

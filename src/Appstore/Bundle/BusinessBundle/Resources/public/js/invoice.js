@@ -58,7 +58,7 @@ $(document).on("click", ".sms-confirm", function() {
     });
 });
 
-$( "#mobile" ).autocomplete({
+/*$( "#mobile" ).autocomplete({
 
     source: function( request, response ) {
         $.ajax( {
@@ -74,7 +74,7 @@ $( "#mobile" ).autocomplete({
     minLength: 2,
     select: function( event, ui ) {}
 
-});
+});*/
 
 $(document).on('change', '.transactionMethod', function() {
 
