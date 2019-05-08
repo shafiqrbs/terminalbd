@@ -74,16 +74,14 @@ class TransactionRepository extends EntityRepository
 	    $transaction->execute();
     }
 
-	public function finalTransaction($globalOption,$accountHead = '')
+	public function finalTransaction(GlobalOption $globalOption)
 	{
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.accountHead','a');
-		$qb->select('a.name as name , sum(e.debit) as debit , sum(e.credit) as credit');
+		$qb->select('a.name as name , e.processHead as processHead , sum(e.debit) as debit , sum(e.credit) as credit');
 		$qb->where("e.globalOption = :globalOption");
-		$qb->setParameter('globalOption',$globalOption);
-		$qb->andWhere("e.processHead = :head");
-		$qb->setParameter('head',$accountHead);
+		$qb->setParameter('globalOption',$globalOption->getId());
 		$qb->groupBy('e.accountHead');
 		$qb->orderBy('e.accountHead','ASC');
 		$result = $qb->getQuery();

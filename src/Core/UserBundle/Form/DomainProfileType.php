@@ -54,15 +54,7 @@ class DomainProfileType extends AbstractType
                     new NotBlank(array('message'=>'Please input user mobile no'))
                 )
             ))
-            ->add('joiningDate', 'date', array(
-                'widget' => 'single_text',
-                'placeholder' => array(
-                    'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
-                ),
-                'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span12 datePicker'),
-                'view_timezone' => 'Asia/Dhaka'
-            ))
+            ->add('joiningDate','date', array('attr'=>array('class'=>'m-wrap span12  inputs','placeholder'=>'Enter receive date')))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
             ->add('designation', 'entity', array(
                 'required'    => true,

@@ -118,6 +118,10 @@ accounting_vendor:
     resource: "@AccountingBundle/Resources/config/routing/vendor.yml"
     prefix:   /vendor
 
+accounting_ledger_account:
+    resource: "@AccountingBundle/Resources/config/routing/ledgeraccount.yml"
+    prefix:   /ledger-account
+
 accounting_print:
     resource: "@AccountingBundle/Resources/config/routing/print.yml"
     prefix:   /print

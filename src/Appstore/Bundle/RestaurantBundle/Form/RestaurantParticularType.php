@@ -48,6 +48,7 @@ class RestaurantParticularType extends AbstractType
                 'class'     => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
                 'group_by'  => 'category.name',
                 'property'  => 'codeName',
+                'empty_value' => '-Choose product name -',
                 'attr'=>array('class'=>'span12 m-wrap select2 particular'),
                 'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
