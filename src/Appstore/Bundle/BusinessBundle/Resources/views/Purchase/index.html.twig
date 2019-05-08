@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Purchase
+                    Manage Purchase
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -37,7 +37,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('business_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
-                             </div>
+                            </div>
                         </div>
                     </div>
 
@@ -117,6 +117,7 @@
                                                 {% endif %}
                                             {% endif %}
                                             <a href="{{ path('business_purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                            <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('business_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}
