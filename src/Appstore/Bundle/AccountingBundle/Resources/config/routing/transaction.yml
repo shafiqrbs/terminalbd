@@ -39,3 +39,12 @@ account_transaction_yearly:
     defaults: { _controller: "AccountingBundle:Transaction:yearly" }
 
 
+account_transaction_journal:
+    path:     /journal
+    defaults: { _controller: "AccountingBundle:Transaction:transactionJournal" }
+
+account_transaction_trail_balance:
+    path:     /trail-balance
+    defaults: { _controller: "AccountingBundle:Transaction:transactionTrailBalance" }
+
+

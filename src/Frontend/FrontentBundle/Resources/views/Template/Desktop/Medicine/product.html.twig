@@ -185,31 +185,14 @@
                                             <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
                                         </a>
 
-                                        <div class="card-content">
+                                        <div class="card-content" data-match-height="item-product">
                                             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
                                             <div class="clearfix"></div>
                                             {% if product.category is not empty %}
                                                 <a class="btn-info tag" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id': product.category.id }) }}"><span class="glyphicon glyphicon-tag"></span> {{ product.category.name }}</a>
                                             {% endif %}
                                         </div>
-
-                                        <div data-match-height="item-product" id="inlineLoading-{{ product.id }}">
-                                            {#<div class="row ">
-                                                {% if globalOption.ecommerceConfig.isSize == 1 and product.size is not empty and product.itemSubs|length == 1  %}
-                                                    <div class="{% if product.itemColors is empty or  product.itemColors|length > 1  %} col-xs-12 col-lg-12 {% else %} col-xs-6 col-lg-6 {% endif %} text-center product-attr">
-                                                        {% if product.size.name != 'Default' %}
-                                                            {{ product.size.name }}{% if product.productUnit is not empty %} - {{ product.productUnit.name }}{% endif %}
-                                                        {% endif %}
-                                                    </div>
-                                                {% endif %}
-                                                {% if globalOption.ecommerceConfig.isColor == 1 and product.itemColors is not empty and  product.itemColors|length == 1 %}
-                                                    <div class="{% if product.size is empty or product.itemSubs|length > 1 %} col-xs-12 col-lg-12 {% else %} col-xs-6 col-lg-6 {% endif %} text-center product-attr">
-                                                        {% for color in  product.itemColors %}
-                                                            {{ color.name }}
-                                                        {% endfor %}
-                                                    </div>
-                                                {% endif %}
-                                            </div>#}
+                                        <div  id="inlineLoading-{{ product.id }}">
                                             {% if globalOption.ecommerceConfig.isSize == 1 and product.itemSubs is not empty  and product.itemSubs|length > 1  %}
                                                 <div class="row">
                                                     <div class="col-xs-12 col-lg-12 ">

@@ -59,7 +59,6 @@ class ItemMeatAttributeRepository extends EntityRepository
                 $entity = new ItemMetaAttribute();
                 $entity->setValue($attribute->getValue());
                 $entity->setItemAttribute($attribute);
-                $entity->setItemAttribute($attribute);
                 $entity->setItem($purchaseVendorItem);
                 $em->persist($entity);
                 $em->flush($entity);

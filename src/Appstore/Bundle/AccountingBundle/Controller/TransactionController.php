@@ -398,4 +398,28 @@ class TransactionController extends Controller
         return new Response('');
     }
 
+    public function transactionJournalAction()
+    {
+        $globalOption = $this->getUser()->getglobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption);
+        $paginate =$this->paginate($entities);
+
+        return $this->render('AccountingBundle:Transaction:transactionJournal.html.twig', array(
+            'entities' => $paginate,
+
+        ));
+    }
+
+    public function transactionTrailBalanceAction()
+    {
+        $globalOption = $this->getUser()->getglobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption);
+        $paginate =$this->paginate($entities);
+
+        return $this->render('AccountingBundle:Transaction:transactionTrailBalance.html.twig', array(
+            'entities' => $paginate,
+
+        ));
+    }
+
 }

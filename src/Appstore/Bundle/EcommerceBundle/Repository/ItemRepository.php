@@ -33,8 +33,7 @@ class ItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin('product.brand','brand');
-        $qb->where("product.isWeb = 1");
-        $qb->andWhere("product.status = 1");
+        $qb->where("product.status = 1");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
 
@@ -61,7 +60,7 @@ class ItemRepository extends EntityRepository
 
         if (!empty($data['category'])) {
             $qb
-                ->join('product.category', 'category')
+                ->leftJoin('product.category', 'category')
                 ->andWhere(
                     $qb->expr()->orX(
                         $qb->expr()->like('category.path', "'". intval($data['category']) . "/%'"),
@@ -200,10 +199,13 @@ class ItemRepository extends EntityRepository
             $entity->setBrand($brand);
         }
         $entity->setSource('medicine');
+        if(in_array($copyEntity->getMedicineBrand()->getMedicineForm(),array('Tablet','Capsule','Syrup','Injection'))){
+            $entity->setImageDefaultSource($copyEntity->getMedicineBrand()->getMedicineForm());
+        }
         $em->persist($entity);
         $em->flush();
+        $this->_em->getRepository('EcommerceBundle:ItemKeyValue')->insertMedicineAttribute($entity,$copyEntity);
     }
-
 
     public function getSliderFeatureProduct($config, $limit = 3)
     {

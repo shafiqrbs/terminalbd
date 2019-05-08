@@ -62,7 +62,6 @@ class WebServiceProductController extends Controller
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
-
             $post = array();
             $post = empty($_REQUEST['item']) ? '' : $_REQUEST['item'];
             $data = $_REQUEST;
@@ -71,6 +70,7 @@ class WebServiceProductController extends Controller
             $data['name']= isset($post['webName']) ? $post['webName']:'';
 
             $ecommerce = $globalOption->getEcommerceConfig();
+
             $limit = !empty($data['limit'])  ? $data['limit'] : 20;
             $config = $globalOption->getEcommerceConfig();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
@@ -87,14 +87,12 @@ class WebServiceProductController extends Controller
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
-
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
                     'products'          => $pagination,
                     'menu'              => $menu,
                     'pageName'          => 'Product',
                     'searchForm'        => $searchForm,
-                    
                 )
             );
         }
@@ -102,7 +100,6 @@ class WebServiceProductController extends Controller
 
     public function productFilterAction(Request $request , $subdomain)
     {
-
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
@@ -130,7 +127,6 @@ class WebServiceProductController extends Controller
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
-
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
                     'products'          => $pagination,

@@ -1,0 +1,47 @@
+ledger_account:
+    path:     /
+    defaults: { _controller: "AccountingBundle:LedgerAccount:index" }
+
+ledger_account_new:
+    path:     /new
+    defaults: { _controller: "AccountingBundle:LedgerAccount:new" }
+
+ledger_account_create:
+    path:     /create
+    defaults: { _controller: "AccountingBundle:LedgerAccount:create" }
+    methods:  POST
+
+ledger_account_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AccountingBundle:LedgerAccount:edit" }
+
+ledger_account_update:
+    path:     /{id}/update
+    defaults: { _controller: "AccountingBundle:LedgerAccount:update" }
+    methods:  [POST, PUT]
+
+account_single_LedgerAccount_ledger:
+    path:      /LedgerAccount-ledger
+    defaults: { _controller: "AccountingBundle:LedgerAccount:ledger" }
+    options:
+            expose: true
+
+ledger_account_status:
+    path:     /{id}/status
+    defaults: { _controller: "AccountingBundle:LedgerAccount:status" }
+
+ledger_account_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AccountingBundle:LedgerAccount:delete" }
+
+ledger_account_search:
+    path:     /search
+    defaults: { _controller: "AccountingBundle:LedgerAccount:autoSearch" }
+    options:
+            expose: true
+
+ledger_account_name:
+    path:      /{name}/ledger-account-name
+    defaults: { _controller: "AccountingBundle:LedgerAccount:searchLedgerAccountName" }
+    options:
+            expose: true

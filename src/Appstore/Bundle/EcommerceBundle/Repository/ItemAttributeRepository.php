@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemAttribute;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,5 +12,4 @@ use Doctrine\ORM\EntityRepository;
  */
 class ItemAttributeRepository extends EntityRepository
 {
-
 }
