@@ -61,6 +61,10 @@ medicine_report_sales_stock:
     path:     /sales-stock
     defaults: { _controller: "MedicineBundle:Report:salesStockItem" }
 
+medicine_report_brand_stock:
+    path:     /brand-stock
+    defaults: { _controller: "MedicineBundle:Report:brandStock" }
+
 medicine_report_sales_user:
     path:     /sales-user
     defaults: { _controller: "MedicineBundle:Report:salesUser" }

@@ -389,7 +389,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
         $name = isset($data['name'])? $data['name'] :'';
         if(!empty($vendorId)){
-            $qb->join('e.vendor','v');
+            $qb->join('pi.vendor','v');
             $qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
         }
         if(!empty($name)){
