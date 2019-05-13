@@ -449,8 +449,8 @@ class MedicineStockRepository extends EntityRepository
         $qb->addSelect('COALESCE(SUM(e.purchasePrice * e.remainingQuantity),0) as purchase');
         $qb->addSelect('COALESCE(SUM(e.averageSalesPrice * e.remainingQuantity),0) as avgSales ' );
         $qb->addSelect('COALESCE(SUM(e.salesPrice * e.remainingQuantity),0) as sales ' );
-        $qb->addSelect('(COALESCE(SUM(e.averagePurchasePrice * e.remainingQuantity),0))-(COALESCE(SUM(e.averageSalesPrice * e.remainingQuantity),0)) as avgProfit');
-        $qb->addSelect('(COALESCE(SUM(e.purchasePrice * e.remainingQuantity),0))-(COALESCE(SUM(e.salesPrice * e.remainingQuantity),0)) as profit');
+        $qb->addSelect('(COALESCE(SUM(e.averageSalesPrice * e.remainingQuantity),0))-(COALESCE(SUM(e.averagePurchasePrice * e.remainingQuantity),0)) as avgProfit');
+        $qb->addSelect('(COALESCE(SUM(e.salesPrice * e.remainingQuantity),0))-(COALESCE(SUM(e.purchasePrice * e.remainingQuantity),0)) as profit');
         $qb->where('e.medicineConfig = :config');
         $qb->setParameter('config', $config);
         $this->handleSearchBetween($qb,$data);

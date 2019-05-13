@@ -40,8 +40,8 @@ class AccountJournalType extends AbstractType
                     new NotBlank(array('message'=>'Please choose required'))
                 ),
                 'choices' => array(
-                    'Debit' => 'Debit',
-                    'Credit' => 'Credit',
+                    'Debit' => 'In',
+                    'Credit' => 'Out',
                 ),
             ))
             ->add('transactionMethod', 'entity', array(
