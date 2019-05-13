@@ -129,6 +129,11 @@ class User extends BaseUser
 	 **/
 	protected $globalOptionAgents;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="employee" )
+     **/
+    private  $accountHead;
+
 
 	/**
 	 * This part for system customer payment

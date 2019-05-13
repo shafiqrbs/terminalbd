@@ -31,6 +31,11 @@ class AccountVendor
     protected $globalOption;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="accountVendor" )
+     **/
+    private  $accountHead;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountVendor")
      */
     protected $accountPurchases;

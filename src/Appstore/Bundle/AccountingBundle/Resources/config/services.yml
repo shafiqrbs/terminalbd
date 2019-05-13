@@ -68,3 +68,8 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.account.head.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountHeadListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+

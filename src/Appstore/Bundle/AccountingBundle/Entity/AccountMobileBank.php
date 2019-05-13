@@ -49,6 +49,11 @@ class AccountMobileBank
     protected $globalOption;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="accountMobileBank" )
+     **/
+    private  $accountHead;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", mappedBy="accountMobileBank" )
      **/
     private  $invoiceModules;

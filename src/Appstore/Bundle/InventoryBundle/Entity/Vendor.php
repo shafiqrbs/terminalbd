@@ -30,6 +30,11 @@ class Vendor implements CodeAwareEntity
     protected $inventoryConfig;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="inventoryVendor" )
+     **/
+    private  $accountHead;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", mappedBy="vendor")
      */
     protected $items;

@@ -56,6 +56,11 @@ class AccountBank
     private  $bank;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="accountBank" )
+     **/
+    private  $accountHead;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="accountBank" )
      **/
     private  $purchases;

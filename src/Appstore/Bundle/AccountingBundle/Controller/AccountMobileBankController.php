@@ -57,6 +57,7 @@ class AccountMobileBankController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity);
             return $this->redirect($this->generateUrl('accountmobilebank'));
         }
 

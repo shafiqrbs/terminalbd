@@ -31,7 +31,6 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Account Head</div>
                         {% if app.user.granted("ROLE_SUPER_ADMIN") %}
@@ -50,8 +49,7 @@
                                     background: #555555!important
                                 }
                             </style>
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
-
+                            <table class="table table-bordered table-striped table-condensed flip-content">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Name</th>
@@ -61,53 +59,36 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                  {% for account in accountHead %}
-                                    <tr class="head-grey">
-                                        <th class="numeric" >{{ account.name }}</th>
-                                        <th class="numeric" >{{ account.code }}</th>
-                                        <th class="numeric" >{{ account.motherAccount|capitalize }}</th>
-                                        <td class="numeric" >
-                                            {% if app.user.granted("ROLE_SUPER_ADMIN") %}
-                                                <a href="{{ path('accounthead_edit', { 'id': account.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                                <a href="{{ path('accounthead_show', { 'id': account.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                                <a title="Are you sure went to delete ?" href="{{ path('accounthead_delete', { 'id': account.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% if account.children is not empty %}
-                                        {% for child in account.children %}
+                                {% for account in accountHead %}
+                                <tr class="head-grey">
+                                    <th class="numeric" >{{ account.name }}</th>
+                                    <th class="numeric" >{{ account.code }}</th>
+                                    <th class="numeric" >{{ account.motherAccount|capitalize }}</th>
+                                    <td class="numeric" ></td>
+                                </tr>
+                                    {% if heads[account.id] is defined and heads[account.id] is not empty %}
+                                        {% for head in heads[account.id] %}
                                             <tr>
-                                                {% if app.user.granted("ROLE_SUPER_ADMIN") %}
-                                                    <td class="numeric" > <a data-mode="inline" class="editable" data-name="name" href="#"  data-url="{{ path('accounthead_inline') }}" data-type="text" data-pk="{{ child.name }}" data-original-title="Change account name">{{ child.name }}</a></td>
-                                                {% else %}
-                                                    <td class="numeric" >{{ child.name }}</td>
-                                                {% endif %}
-                                                {% if app.user.granted("ROLE_SUPER_ADMIN") %}
-                                                    <td class="numeric" ><a data-mode="inline" class="editable" data-name="code" href="#"  data-url="{{ path('accounthead_inline') }}" data-type="text" data-pk="{{ child.id }}" data-original-title="Change account code">{{ child.code }}</a></td>
-                                                {% else %}
-                                                    <td class="numeric" >{{ child.code }}</td>
-                                                {% endif %}
-                                                {% if app.user.granted("ROLE_SUPER_ADMIN") %}
-                                                    <td class="numeric" >
-                                                        <a  data-type="select" class="editable" id="parent" data-name="parent" href="#" data-source="{{ path('accounthead_parent_select') }}"  data-url="{{ path('accounthead_inline') }}" data-pk="{{ child.id }}" data-value="{{ child.parent.id }}" data-original-title="Select Parent Head">{{ child.parent.name }}</a>
-                                                    </td>
-                                                {% else %}
-                                                    <td>{{ child.parent.name  }}</td>
-                                                {% endif %}
-                                                <td class="numeric" >
-                                                    {% if app.user.granted("ROLE_SUPER_ADMIN") %}
-                                                        <a href="{{ path('accounthead_edit', { 'id': child.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                                        <a href="{{ path('accounthead_show', { 'id': child.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                                        <a title="Are you sure went to delete ?" href="{{ path('accounthead_delete', { 'id': child.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-                                                    {% endif %}
-                                                </td>
-                                                </tr>
+                                                <td class="numeric" >{{ head.name }}</td>
+                                                <td class="numeric" >{{ head.code }}</td>
+                                                <td class="numeric" >{{ head.parentName|capitalize }}</td>
+                                                <td class="numeric" ></td>
+                                            </tr>
+                                            {% if heads[head.id] is defined and heads[head.id] is not empty %}
+                                                {% for sub in heads[head.id] %}
+                                                    <tr class="">
+                                                        <td class="numeric" style="padding-left: 30px" >{{ sub.name }}</td>
+                                                        <td class="numeric" >{{ sub.code }}</td>
+                                                        <td class="numeric" >{{ sub.parentName|capitalize }}</td>
+                                                        <td class="numeric" ></td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>

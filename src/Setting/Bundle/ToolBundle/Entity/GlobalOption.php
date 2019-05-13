@@ -205,6 +205,11 @@ class GlobalOption
     protected $accountingConfig;
 
    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountHeads;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\LedgerAccount", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $ledgerAccounts;

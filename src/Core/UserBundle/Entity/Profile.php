@@ -66,6 +66,13 @@ class Profile
      */
     private $name;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="userGroup", type="string", length = 30, nullable=true)
+     */
+    private $userGroup;
+
 
     /**
      * @var string
@@ -747,8 +754,21 @@ class Profile
         $this->facebookId = $facebookId;
     }
 
+    /**
+     * @return string
+     */
+    public function getUserGroup()
+    {
+        return $this->userGroup;
+    }
 
-
+    /**
+     * @param string $userGroup
+     */
+    public function setUserGroup($userGroup)
+    {
+        $this->userGroup = $userGroup;
+    }
 
 
 }

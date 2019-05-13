@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Form\AccountHeadSubType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,8 +30,6 @@ class AccountHeadController extends Controller
         return $pagination;
     }
 
-
-
     /**
      * Lists all AccountHead entities.
      *
@@ -39,9 +38,28 @@ class AccountHeadController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 	    $data = $_REQUEST;
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent'=>1),array('name'=>'ASC'));
+	    $global = $this->getUser()->getGlobalOption();
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+
+        $heads = array();
+        /* @var $child AccountHead */
+        foreach ($accountHead as $row){
+            $childs = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccount($row->getId());
+            if($childs){
+                  foreach ($childs as $child) {
+                      $heads[$row->getId()][] = $child;
+                      $subs = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccount($child['id'],$global->getId());
+                      if ($subs) {
+                          foreach ($subs as $sub) {
+                              $heads[$child['id']][] = $sub;
+                          }
+                      }
+                  }
+            }
+        }
 	    return $this->render('AccountingBundle:AccountHead:index.html.twig', array(
             'accountHead' => $accountHead,
+            'heads' => $heads,
             'searchForm'  => $data,
         ));
     }
@@ -49,16 +67,17 @@ class AccountHeadController extends Controller
 
     /**
      * Creates a new AccountHead entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
      */
     public function createAction(Request $request)
     {
         $entity = new AccountHead();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        $global = $this->getUser()->getGlobalOption();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($global);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -82,11 +101,11 @@ class AccountHeadController extends Controller
      */
     private function createCreateForm(AccountHead $entity)
     {
-        $form = $this->createForm(new AccountHeadType(), $entity, array(
+        $form = $this->createForm(new AccountHeadSubType(), $entity, array(
             'action' => $this->generateUrl('accounthead_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form purchase',
+                'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -95,13 +114,12 @@ class AccountHeadController extends Controller
 
     /**
      * Displays a form to create a new AccountHead entity.
-     * @Secure(roles="ROLE_ADMIN")
+     * @Secure(roles="ROLE_ACCOUNTING")
      */
     public function newAction()
     {
         $entity = new AccountHead();
         $form   = $this->createCreateForm($entity);
-
         return $this->render('AccountingBundle:AccountHead:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),

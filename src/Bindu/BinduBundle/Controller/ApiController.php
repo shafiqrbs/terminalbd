@@ -22,25 +22,29 @@ class ApiController extends Controller
         $key =  $this->getParameter('x-api-key');
         $value =  $this->getParameter('x-api-value');
         $unique = $request->headers->get('X-API-SECRET');
-        $setup = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(['uniqueCode' => $unique,'status'=>1]);
-        if ($request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+        $setup = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $unique,'status'=>1));
+        if (!empty($setup) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
             return $setup;
         }
         return "invalid";
-
     }
+
+
+
     public function setupAction(Request $request)
     {
 
         $formData = $request->request->all();
-        if( $this->checkApiValidation($request) == 'invalid') {
-            return new Response('Unauthorized access.', 401);
-        }else{
-            $entity = $this->checkApiValidation($request);
-        }
-
+        $key =  $this->getParameter('x-api-key');
+        $value =  $this->getParameter('x-api-value');
+        $uniqueCode = $formData['uniqueCode'];
+        $mobile = $formData['mobile'];
         $data = array();
-        if($entity){
+        $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $uniqueCode,'mobile' => $mobile,'status'=>1));
+        if (empty($entity) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+                return new Response('Unauthorized access.', 401);
+        }else{
+
             $data = array(
                 'setupId' => $entity->getId(),
                 'uniqueCode' => $entity->getUniqueCode(),
@@ -50,8 +54,10 @@ class ApiController extends Controller
                 'locationId' => $entity->getLocation()->getId(),
                 'locationName' => $entity->getLocation()->getName(),
                 'main_app' => $entity->getMainApp()->getId(),
+                'main_app_name' => $entity->getMainApp()->getSlug(),
             );
         }
+
 
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');

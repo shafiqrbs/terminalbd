@@ -51,6 +51,7 @@
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
+                                    <th class="numeric">Group</th>
                                     <th class="numeric">Location</th>
                                     <th class="numeric">Address</th>
                                     <th class="numeric">Action</th>
@@ -62,7 +63,9 @@
                                         <td>{{ loop.index }}</td>
                                         <td>{{ entity.profile.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.profile.mobile }}"> {{ entity.profile.mobile }}</a></td>
+                                        <td>{{ entity.profile.userGroup|capitalize }}</td>
                                         <td class="numeric">{% if entity.profile.location is not empty %}{{ entity.profile.location.name }},{{ entity.profile.location.parent.name }}{% endif %}</td>
+
                                         <td>{{ entity.profile.address|raw }}</td>
                                         <td class="numeric">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}

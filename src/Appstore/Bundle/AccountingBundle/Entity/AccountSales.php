@@ -47,6 +47,11 @@ class AccountSales
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="accountSales" )
+     **/
+    private  $accountHead;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountSales" )
      **/
     private  $accountBank;
@@ -744,6 +749,22 @@ class AccountSales
 	public function setHotelInvoice( $hotelInvoice ) {
 		$this->hotelInvoice = $hotelInvoice;
 	}
+
+    /**
+     * @return AccountHead
+     */
+    public function getAccountHead()
+    {
+        return $this->accountHead;
+    }
+
+    /**
+     * @param AccountHead $accountHead
+     */
+    public function setAccountHead($accountHead)
+    {
+        $this->accountHead = $accountHead;
+    }
 
 
 }
