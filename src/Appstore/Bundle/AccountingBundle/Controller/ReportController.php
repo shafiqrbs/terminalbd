@@ -420,6 +420,7 @@ class ReportController extends Controller
 
             return $this->render('AccountingBundle:Report/Outstanding:customerLedger.html.twig', array(
                 'entities' => $entities->getResult(),
+                'globalOption' => $this->getUser()->getGlobalOption(),
                 'overview' => $overview,
                 'customer' => $customer,
                 'searchForm' => $data,

@@ -74,7 +74,6 @@ class AccountHeadRepository extends EntityRepository
         $accountHeads =  $query->getQuery()->getResult();
 
         foreach( $accountHeads as $cat ){
-
             if( !$cat->getParent() ){
                 continue;
             }
@@ -85,7 +84,7 @@ class AccountHeadRepository extends EntityRepository
             $ret[ $cat->getParent()->getName() ][ $cat->getId() ] = $cat;
         }
 
-   //     return $ret;
+        return $ret;
 
         \Doctrine\Common\Util\Debug::dump($ret);
         exit;

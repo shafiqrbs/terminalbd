@@ -97,7 +97,22 @@
         <th class="numeric" >S/N</th>
         <th class="numeric" style="width:100px!important;" >Created</th>
         <th class="numeric" >Invoice</th>
-        <th class="numeric" >Items</th>
+        <th class="numeric" >
+            {% if globalOption.mainApp.slug == 'business' %}
+                <table>
+                    <tr>
+                        <th class="span4">Particular</th>
+                        <th class="span2">Size</th>
+                        <th class="span1">Qnt</th>
+                        <th class="span1">Unit</th>
+                        <th class="span1">Price</th>
+                        <th class="span2">Sub-Total</th>
+                    </tr>
+                </table>
+            {% else %}
+                Particulars
+            {% endif %}
+        </th>
         <th class="numeric" >Method</th>
         <th class="numeric" >Total</th>
         <th class="numeric" >Received</th>
@@ -114,11 +129,23 @@
             </td>
             <td class="numeric" >
                 {% if entity.businessInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'business' %}
-                    {% for item in entity.businessInvoice.businessInvoiceParticulars  %}
-                        <p>{{ loop.index }}. {{ item.particular }}  {% if item.height is not empty and item.width is not empty %}
-                                {{ item.height }} x {{ item.width }} = {{ item.subQuantity }} x {{ item.quantity }}
-                            {% endif %} => {{ item.totalQuantity }} {{ item.unit }}, Price TK. {{ item.subTotal }}</p>
-                    {% endfor %}
+                    <table>
+                        {% for item in entity.businessInvoice.businessInvoiceParticulars  %}
+                            <tr>
+                                <td class="span4">{{ loop.index }}. {{ item.particular }}</td>{% if entity.businessInvoice.businessConfig.businessModel == 'sign' %}
+                                <td class="span2">
+                                    {% if item.height is not empty and item.width is not empty %}
+                                        {{ item.height }} x {{ item.width }} = {{ item.subQuantity }}
+                                    {% endif %}
+                                </td>
+                                {% endif %}
+                                <td class="span1">{{ item.quantity }}</td>
+                                <td class="span1">{{ item.unit }}</td>
+                                <td class="span1">{{ item.price }}</td>
+                                <td class="span2" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td></tr>
+                        {% endfor %}
+                    </table>
+
                 {% elseif entity.sales is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'inventory' %}
                     {% for item in entity.sales.salesItems  %}
                         <p>{{ loop.index }}. {{ item.item.name }}</p>

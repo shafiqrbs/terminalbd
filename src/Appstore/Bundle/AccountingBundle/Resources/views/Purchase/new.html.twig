@@ -6,7 +6,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3 class="category-title">
-                Expense Purchase no #  <strong>{{ entity.accountRefNo }}</strong>
+                Bill Voucher no #  <strong>{{ entity.accountRefNo }}</strong>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -15,10 +15,10 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('account_expense_purchase') }}">Expense Purchase</a>
+                    <a href="{{ path('account_expense_purchase') }}">Bill Voucher</a>
                     <span class="icon-angle-right"></span>
                 </li>
-                <li><a href="#">Manage Purchase</a></li>
+                <li><a href="#">Manage Bill Voucher</a></li>
                 <li class="pull-right btn blue disabled mini">
                     <i class="fa fa-calendar"></i>
                     {{ "now"|date("d-F-Y") }}
@@ -33,11 +33,11 @@
 
     <div class="portlet box green tabbable">
         <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Expense Purchase Information</div>
+            <div class="caption"><i class="icon-reorder"></i>Bill Voucher Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn red" href="{{ path('account_expense_purchase_new') }}"><i class="icon-plus-sign"></i> Expense Purchase New</a>
-                    <a class="btn" href="{{ path('account_expense_purchase') }}"><i class="icon-th-list"></i> Expense Purchase</a>
+                    <a class="btn red" href="{{ path('account_expense_purchase_new') }}"><i class="icon-plus-sign"></i> Bill Voucher New</a>
+                    <a class="btn" href="{{ path('account_expense_purchase') }}"><i class="icon-th-list"></i> Bill Voucher</a>
                 </div>
             </div>
         </div>
