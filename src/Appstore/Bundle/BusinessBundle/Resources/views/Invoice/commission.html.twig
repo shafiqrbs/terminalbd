@@ -200,7 +200,7 @@
 
                                     <div class="row-fluid">
                                         <div class="span12 input-append-border">
-                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Search customer name/mobile">
+                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{% if entity.customer.name != 'Default' %}{{ entity.customer.mobile }}{% endif %}"  autocomplete="off" placeholder="Search customer name/mobile">
                                             <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
                                         </div>
                                     </div>

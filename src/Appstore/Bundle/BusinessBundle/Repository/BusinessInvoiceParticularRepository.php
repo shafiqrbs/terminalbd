@@ -177,7 +177,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 	public function salesStockItemUpdate(BusinessParticular $stockItem)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->select('SUM(e.totalQuantity) AS quantity');
         $qb->where('e.businessParticular = :stock')->setParameter('stock', $stockItem->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
@@ -194,10 +194,10 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         foreach ($entities as $entity) {
 
             $subQuantity ='';
-            if (!empty($entity->getSubQuantity())) {
+            if ($entity->getSubQuantity()) {
                 $subQuantity = $entity->getHeight().' x '.$entity->getWidth().' = '.$entity->getSubQuantity();
             }
-	        $subQnt = ( $subQuantity == '' ) ? 1 : $subQuantity;
+	        $subQnt = ( $entity->getSubQuantity() == '' ) ? 1 : $entity->getSubQuantity();
 
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";

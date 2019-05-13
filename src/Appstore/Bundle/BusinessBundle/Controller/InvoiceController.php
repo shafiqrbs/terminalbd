@@ -270,10 +270,10 @@ class InvoiceController extends Controller
         }
 
     }
+
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
-
 
     public function deleteAction(BusinessInvoice $entity)
     {
@@ -388,7 +388,7 @@ class InvoiceController extends Controller
 
 	public function invoiceReverseAction(BusinessInvoice $sales)
 	{
-		exit;
+
 	    /*
 		 * Item Remove Total quantity
 		 * Stock Details
@@ -411,6 +411,7 @@ class InvoiceController extends Controller
 			'entity' => $sales,
 			'config' => $sales->getBusinessConfig(),
 		));
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($sales);
 		$em->getRepository('BusinessBundle:BusinessReverse')->salesReverse($sales, $template);
 		return $this->redirect($this->generateUrl('business_invoice_edit',array('id' => $sales->getId())));
 	}

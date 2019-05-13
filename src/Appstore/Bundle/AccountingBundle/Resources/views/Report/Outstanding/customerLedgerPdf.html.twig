@@ -145,7 +145,6 @@
                                 <td class="span2" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td></tr>
                         {% endfor %}
                     </table>
-
                 {% elseif entity.sales is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'inventory' %}
                     {% for item in entity.sales.salesItems  %}
                         <p>{{ loop.index }}. {{ item.item.name }}</p>
