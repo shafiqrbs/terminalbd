@@ -99,4 +99,26 @@ class AccountVendorRepository extends EntityRepository
 	    $em->flush();
     }
 
+    public function getApiVendor(GlobalOption $entity)
+    {
+
+        $config = $entity->getId();
+        $qb = $this->createQueryBuilder('s');
+        $qb->where('s.globalOption = :config')->setParameter('config', $config) ;
+        $qb->orderBy('s.companyName','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        $data = array();
+
+        /* @var $row MedicineVendor */
+
+        foreach($result as $key => $row) {
+            $data[$key]['vendor_id']    = (int) $row->getId();
+            $data[$key]['name']           = $row->getCompanyName();
+        }
+
+        return $data;
+    }
+
+
 }

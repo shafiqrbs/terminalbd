@@ -338,7 +338,7 @@ class UserRepository extends EntityRepository
             $data[$key]['user_id'] = (int) $row->getId();
             $data[$key]['username'] = $row->getUsername();
             $data[$key]['email'] = $row->getEmail();
-            $data[$key]['roles'] = unserialize($row->getRole());
+            $data[$key]['roles'] = unserialize(serialize($row->getRoles()));
 
         }
         return $data;

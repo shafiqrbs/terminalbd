@@ -993,10 +993,15 @@ body.on-side .wrap-sticky nav.navbar.bootsnav.sticked{
     /* Navbar Responsive
     =================================*/ 
     nav.navbar.bootsnav .navbar-brand    {
-        display: inline-block;
         float: none !important;
         margin: 0 !important;
+        display: flex;
+        align-items: center;
+        padding: 0!important;
+        height: auto;
+        margin-left: -20px!important;
     }
+
     
     nav.navbar.bootsnav .navbar-header {
         float: none;

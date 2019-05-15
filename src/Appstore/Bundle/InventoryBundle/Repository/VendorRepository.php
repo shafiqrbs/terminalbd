@@ -1,7 +1,9 @@
 <?php
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * VendorRepository
@@ -26,6 +28,28 @@ class VendorRepository extends EntityRepository
         }
 
     }
+
+    public function getApiVendor(GlobalOption $entity)
+    {
+
+        $config = $entity->getInventoryConfig()->getId();
+        $qb = $this->createQueryBuilder('s');
+        $qb->where('s.inventoryConfig = :config')->setParameter('config', $config) ;
+        $qb->orderBy('s.companyName','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        $data = array();
+
+        /* @var $row Vendor */
+
+        foreach($result as $key => $row) {
+            $data[$key]['vendor_id']    = (int) $row->getId();
+            $data[$key]['name']           = $row->getCompanyName();
+        }
+
+        return $data;
+    }
+
 
     public function searchAutoComplete($q, InventoryConfig $inventory)
     {

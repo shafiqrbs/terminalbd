@@ -54,11 +54,11 @@
                                     <tr>
                                         <td class="numeric" >{{ user.profile.name }}</td>
                                         <td class="numeric" >{{ user }}</td>
-                                        <td class="numeric" >{{ user.profile.designation.name }}</td>
+                                        <td class="numeric" >{% if user.profile.designation is not empty %}{{ user.profile.designation.name }}{% endif %}</td>
                                         <td class="numeric" >{{ user.profile.mobile }}</td>
                                         <td class="numeric" >{{ user.profile.joiningDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('attendance_user',{'user':user.id}) }}" class="btn red mini" ><i class="fa fa-sign-out"></i>&nbsp;Manage Leave</a>
+                                            <a href="{{ path('attendance_user',{'user':user.id}) }}" class="btn red mini" ><i class="fa fa-sign-out"></i>&nbsp;Leave</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

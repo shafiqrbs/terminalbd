@@ -23,7 +23,7 @@ api_system_tarnsaction_method:
 
 
 api_system_bank:
-    path:     /bank-acccount
+    path:     /online-bank-acccount
     defaults: { _controller: BinduBundle:Api:apiBank }
 
 
@@ -35,6 +35,11 @@ api_system_mobile:
 api_system_customer:
     path:     /anonymiuse-customer
     defaults: { _controller: BinduBundle:Api:customer }
+
+
+api_system_vendor:
+    path:     /vendor
+    defaults: { _controller: BinduBundle:Api:vendor }
 
 
 api_system_unit:
