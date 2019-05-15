@@ -330,7 +330,7 @@ class AccountJournalRepository extends EntityRepository
 		$journalSource = "Sales-Return-{$salesReturn->getSales()->getInvoice()}";
 		$entity = new AccountJournal();
 		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
-		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(31);
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
 		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 
 		$entity->setTransactionType('Credit');
@@ -363,7 +363,7 @@ class AccountJournalRepository extends EntityRepository
 		$journalSource = "Sales-Return-{$sales->getId()}";
 		$entity = new AccountJournal();
 		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
-		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(31);
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
 		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 
      	$entity->setTransactionType('Credit');
@@ -398,7 +398,7 @@ class AccountJournalRepository extends EntityRepository
 
 		$entity = new AccountJournal();
 		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
-		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(31);
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
 		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 
      	$entity->setTransactionType('Credit');

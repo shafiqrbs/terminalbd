@@ -65,7 +65,11 @@ class AccountJournalType extends AbstractType
                 'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
                 'group_by'  => 'parent.name',
                 'property'  => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please choose debit account'))
+                ),
+                'empty_value' => '---Choose a debit account---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
@@ -80,7 +84,11 @@ class AccountJournalType extends AbstractType
                 'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
                 'group_by'  => 'parent.name',
                 'property'  => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please choose credit account'))
+                ),
+                'empty_value' => '---Choose a credit account---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')

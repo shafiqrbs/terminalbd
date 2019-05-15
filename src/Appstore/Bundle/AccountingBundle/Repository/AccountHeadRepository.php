@@ -116,6 +116,7 @@ class AccountHeadRepository extends EntityRepository
         if ($exist) {
             $exist->setName($entity->getName());
             $this->_em->flush();
+            return $exist;
         } else {
             $head = new AccountHead();
             $parent = $this->findOneBy(array('slug' => 'bank-account'));
@@ -126,6 +127,7 @@ class AccountHeadRepository extends EntityRepository
             $head->setAccountBank($entity);
             $this->_em->persist($head);
             $this->_em->flush();
+            return $head;
         }
 
     }
@@ -138,6 +140,7 @@ class AccountHeadRepository extends EntityRepository
         if ($exist) {
             $exist->setName($entity->getName());
             $this->_em->flush();
+            return $exist;
         } else {
             $head = new AccountHead();
             $parent = $this->findOneBy(array('slug' => 'mobile-account'));
@@ -148,6 +151,7 @@ class AccountHeadRepository extends EntityRepository
             $head->setAccountMobileBank($entity);
             $this->_em->persist($head);
             $this->_em->flush();
+            return $head;
         }
 
     }
@@ -161,6 +165,7 @@ class AccountHeadRepository extends EntityRepository
         if ($exist) {
             $exist->setName($entity->getName());
             $this->_em->flush();
+            return $exist;
         } else {
             $head = new AccountHead();
             $parent = $this->findOneBy(array('slug' => 'account-receivable'));
@@ -171,6 +176,7 @@ class AccountHeadRepository extends EntityRepository
             $head->setCustomer($entity);
             $this->_em->persist($head);
             $this->_em->flush();
+            return $head;
         }
     }
 
@@ -182,6 +188,7 @@ class AccountHeadRepository extends EntityRepository
         if ($exist) {
             $exist->setName($entity->getCompanyName());
             $this->_em->flush();
+            return $exist;
         } else {
             $head = new AccountHead();
             $parent = $this->findOneBy(array('slug' => 'account-payable'));
@@ -192,6 +199,7 @@ class AccountHeadRepository extends EntityRepository
             $head->setAccountVendor($entity);
             $this->_em->persist($head);
             $this->_em->flush();
+            return $head;
         }
     }
 
@@ -199,10 +207,11 @@ class AccountHeadRepository extends EntityRepository
     {
 
         /* @var $exist AccountHead */
-        $exist = $this->findOneBy(array('accountVendor' => $entity));
+        $exist = $this->findOneBy(array('medicineVendor' => $entity));
         if ($exist) {
             $exist->setName($entity->getCompanyName());
             $this->_em->flush();
+            return $exist;
         } else {
             $head = new AccountHead();
             $parent = $this->findOneBy(array('slug' => 'account-payable'));
@@ -213,6 +222,7 @@ class AccountHeadRepository extends EntityRepository
             $head->setMedicineVendor($entity);
             $this->_em->persist($head);
             $this->_em->flush();
+            return $head;
         }
     }
 
@@ -220,10 +230,11 @@ class AccountHeadRepository extends EntityRepository
     {
 
         /* @var $exist AccountHead */
-        $exist = $this->findOneBy(array('accountVendor' => $entity));
+        $exist = $this->findOneBy(array('inventoryVendor' => $entity));
         if ($exist) {
             $exist->setName($entity->getCompanyName());
             $this->_em->flush();
+            return $exist;
         } else {
             $head = new AccountHead();
             $parent = $this->findOneBy(array('slug' => 'account-payable'));
@@ -234,6 +245,7 @@ class AccountHeadRepository extends EntityRepository
             $head->setInventoryVendor($entity);
             $this->_em->persist($head);
             $this->_em->flush();
+            return $head;
         }
     }
 
@@ -243,10 +255,12 @@ class AccountHeadRepository extends EntityRepository
         $entity = $profile->getUser();
 
         /* @var $exist AccountHead */
+
         $exist = $this->findOneBy(array('employee' => $entity));
         if ($exist) {
             $exist->setName($profile->getName());
             $this->_em->flush();
+            return $exist;
         }else{
             $head = new AccountHead();
             if($profile->getUserGroup() ==  "employee"){
@@ -262,6 +276,7 @@ class AccountHeadRepository extends EntityRepository
             $head->setEmployee($entity);
             $this->_em->persist($head);
             $this->_em->flush();
+            return $head;
         }
     }
 

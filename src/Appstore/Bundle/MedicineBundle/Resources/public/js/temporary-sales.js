@@ -353,6 +353,8 @@ function jqueryTemporaryLoad() {
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
+                        $('#cartMethod , #bkashMethod').css("display","none");
+
                     }
                 });
             }
@@ -386,6 +388,7 @@ function jqueryTemporaryLoad() {
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
+                        $('#cartMethod , #bkashMethod').css("display","none");
                         jsPostPrint(response);
                     }
                 });
