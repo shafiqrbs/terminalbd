@@ -3,6 +3,7 @@
 namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
@@ -144,11 +145,6 @@ class User extends BaseUser
 	 */
 	protected $pages;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Admission", mappedBy="createUser" , cascade={"persist", "remove"})
-	 */
-	protected $admissionPromotions;
-
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="user" , cascade={"persist", "remove"})
@@ -161,26 +157,6 @@ class User extends BaseUser
 	 */
 	protected $products;
 
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Education", mappedBy="user" , cascade={"persist", "remove"})
-	 */
-	protected $education;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\StudyAbroad", mappedBy="user" , cascade={"persist", "remove"})
-	 */
-	protected $studyAbroad;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Tutor", mappedBy="user" , cascade={"persist", "remove"})
-	 */
-	protected $tutor;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Vendor", mappedBy="user" , cascade={"persist", "remove"})
-	 */
-	protected $vendor;
 
 	/**
 	 * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SiteSetting", mappedBy="user" , cascade={"persist", "remove"})
@@ -1840,6 +1816,14 @@ class User extends BaseUser
     public function setUserGroup($userGroup)
     {
         $this->userGroup = $userGroup;
+    }
+
+    /**
+     * @return AccountHead
+     */
+    public function getAccountHead()
+    {
+        return $this->accountHead;
     }
 
 

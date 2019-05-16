@@ -258,7 +258,7 @@ class TransactionRepository extends EntityRepository
 
         /* Cash - Cash various */
 
-        if ($entity->getToUser() and $entity->getTransactionType() == 'Credit'){
+        if (!empty($entity->getToUser()) and $entity->getTransactionType() == 'Credit'){
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getProfile());
             $transaction->setSubAccountHead($subAccount);
         }
@@ -1978,7 +1978,7 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Purchase Return');
         $transaction->setProcess('InventoryAssets');
         /* Sales Revenue - Purchase Return account */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
         $transaction->setAmount('-'.$amount);
         $transaction->setCredit($amount);
         $this->_em->persist($transaction);
@@ -1999,7 +1999,16 @@ class TransactionRepository extends EntityRepository
             $transaction->setProcessHead('Purchase Return');
             $transaction->setProcess('AccountReceivable');
             /* Assets Account - Account Receivable */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
+
+            if($accountPurchase->getProcessHead() == 'medicine'){
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMedicineVendorAccount($accountPurchase->getMedicineVendor());
+            }elseif ($accountPurchase->getProcessHead() == 'inventory'){
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertInventoryVendorAccount($accountPurchase->getVendor());
+            }else{
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($accountPurchase->getAccountVendor());
+            }
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setAmount($amount);
             $transaction->setDebit($amount);
             $this->_em->persist($transaction);
@@ -2034,7 +2043,7 @@ class TransactionRepository extends EntityRepository
 	public function insertGlobalDamageCreditTransaction($globalOption,$damage)
 	{
 		$transaction = new Transaction();
-		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(47);
+		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
 		$transaction->setGlobalOption($globalOption);
 		$transaction->setAccountHead($accountHead);
 		$transaction->setProcessHead('Damage');

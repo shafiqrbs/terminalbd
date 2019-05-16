@@ -208,13 +208,16 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
-	        $unit = !empty($entity->getBusinessParticular()->getUnit()) ? $entity->getBusinessParticular()->getUnit()->getName():'';
+            $unit = !empty($entity->getBusinessParticular()->getUnit()) ? $entity->getBusinessParticular()->getUnit()->getName() : '';
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getParticularCode()}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getName()}</td>";
-            $data .= "<td>{$entity->getSalesPrice()}</td>";
             $data .= "<td>{$entity->getPurchasePrice()}</td>";
+            if ($sales->getBusinessConfig()->getBusinessModel() == 'sign'){
+                $data .= "<td>{$entity->getHeight()}x{$entity->getWidth()}</td>";
+                $data .= "<td>{$entity->getSubQuantity()}</td>";
+            }
             $data .= "<td>{$entity->getQuantity()}</td>";
             $data .= "<td>{$unit}</td>";
             $data .= "<td>{$entity->getPurchaseSubTotal()}</td>";

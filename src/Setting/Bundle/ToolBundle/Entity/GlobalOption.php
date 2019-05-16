@@ -73,6 +73,11 @@ class GlobalOption
      **/
     protected $users;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $androids;
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule", inversedBy="appDomains" , cascade={"persist", "remove"})
      */
@@ -317,10 +322,7 @@ class GlobalOption
      * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $invoiceModules;
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InstituteLevel", inversedBy="globalOptions" )
-     */
-    protected $instituteLevels;
+
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -2007,6 +2009,14 @@ class GlobalOption
     public function getAccountPurchaseCommission()
     {
         return $this->accountPurchaseCommission;
+    }
+
+    /**
+     * @return AndroidDeviceSetup
+     */
+    public function getAndroids()
+    {
+        return $this->androids;
     }
 
 

@@ -362,10 +362,9 @@ class AccountJournalRepository extends EntityRepository
 
 		$journalSource = "Sales-Return-{$sales->getId()}";
 		$entity = new AccountJournal();
-		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
+		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
 		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
 		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-
      	$entity->setTransactionType('Credit');
 		$entity->setAmount($salesReturn->getSubTotal());
 		$entity->setTransactionMethod($transaction);
@@ -374,7 +373,6 @@ class AccountJournalRepository extends EntityRepository
 		$entity->setGlobalOption($salesReturn->getCreatedBy()->getGlobalOption());
 		$entity->setAccountHeadCredit($accountHeadCredit);
 		$entity->setAccountHeadDebit($accountCashHead);
-		$entity->setToUser($salesReturn->getCreatedBy());
 		$entity->setJournalSource($journalSource);
 		$entity->setProcess('approved');
 		$this->_em->persist($entity);

@@ -37,7 +37,6 @@ class AppKernel extends Kernel
             new Setting\Bundle\AppearanceBundle\SettingAppearanceBundle(),
             new Setting\Bundle\ContentBundle\SettingContentBundle(),
             new Setting\Bundle\ToolBundle\SettingToolBundle(),
-            new Syndicate\Bundle\ComponentBundle\SyndicateComponentBundle(),
             new Gregwar\ImageBundle\GregwarImageBundle(),
             new Product\Bundle\ProductBundle\ProductProductBundle(),
             new Frontend\FrontentBundle\FrontendBundle(),

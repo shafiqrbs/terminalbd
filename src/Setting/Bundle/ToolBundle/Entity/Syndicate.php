@@ -123,21 +123,6 @@ class Syndicate
      */
     protected $siteSettings;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Scholarship", mappedBy="syndicates")
-     */
-    protected $scholarships;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Tutor", mappedBy="syndicates")
-     */
-    protected $tutors;
-
-   /**
-     * @ORM\ManyToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\StudyAbroad", mappedBy="syndicates")
-     */
-    protected $studyAbroads;
-
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomePage", mappedBy="syndicates")

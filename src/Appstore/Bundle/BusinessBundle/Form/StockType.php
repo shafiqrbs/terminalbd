@@ -84,7 +84,7 @@ class StockType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
                 'empty_value' => '---Choose a unit ---',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")

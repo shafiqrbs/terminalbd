@@ -1,7 +1,0 @@
-parameters:
-#    syndicate_component.example.class: Syndicate\Bundle\ComponentBundle\Example
-
-services:
-#    syndicate_component.example:
-#        class: %syndicate_component.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

@@ -39,12 +39,15 @@ class ApiController extends Controller
         $value =  $this->getParameter('x-api-value');
         $uniqueCode = $formData['uniqueCode'];
         $mobile = $formData['mobile'];
+        $deviceId = $formData['deviceId'];
         $data = array();
         $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $uniqueCode,'mobile' => $mobile,'status'=>1));
         if (empty($entity) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
                 return new Response('Unauthorized access.', 401);
         }else{
 
+            /* @var $entity GlobalOption */
+            $this->getDoctrine()->getRepository('AndroidDeviceSetup')->insert($entity,$deviceId);
             $data = array(
                 'setupId' => $entity->getId(),
                 'uniqueCode' => $entity->getUniqueCode(),

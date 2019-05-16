@@ -20,14 +20,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Bank
 {
-	/**
-	 * @var integer
-	 *
-	 * @ORM\Column(name="id", type="integer")
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="AUTO")
-	 */
-	private $id;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="bank")
@@ -105,6 +105,18 @@ class Bank
 	protected $dpsTreatmentPlans;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
 	/**
 	 * @var string
 	 *
@@ -113,15 +125,6 @@ class Bank
 	private $name;
 
 
-	/**
-	 * Get id
-	 *
-	 * @return integer
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
 
 	/**
 	 * Set name
