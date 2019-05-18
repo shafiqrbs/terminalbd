@@ -23,7 +23,7 @@ bindu_build_syndicate:
     defaults: { _controller: BinduBundle:Bindu:businessDirectoryDetails }
 
 bindu_search:
-    path:     /search
+    path:     /main-search
     defaults: { _controller: BinduBundle:Bindu:searching }
     requirements: { _method: post }
 

@@ -40,7 +40,6 @@
     .table th, .table td{
         border: 1px solid #e5e5e5;
         text-align: left;
-        padding-left: 20px;
         height: 30px;
         line-height: 30px;
 
@@ -68,7 +67,6 @@
         margin: 0;
         padding: 0;
         list-style: none!important;
-        margin-left: -15px!important;
     }
 
 </style>
@@ -99,14 +97,14 @@
         <th class="numeric" >Invoice</th>
         <th class="numeric" >
             {% if globalOption.mainApp.slug == 'business' %}
-                <table>
+                <table style="width: 100%; border-collapse: collapse">
                     <tr>
-                        <th class="span4">Particular</th>
-                        <th class="span2">Size</th>
+                        <th class="">Particular</th>
+                        <th class="span3" >Size</th>
                         <th class="span1">Qnt</th>
                         <th class="span1">Unit</th>
                         <th class="span1">Price</th>
-                        <th class="span2">Sub-Total</th>
+                        <th class="span2">Total</th>
                     </tr>
                 </table>
             {% else %}
@@ -129,11 +127,11 @@
             </td>
             <td class="numeric" >
                 {% if entity.businessInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'business' %}
-                    <table>
+                    <table style="width: 100%; border-collapse: collapse" >
                         {% for item in entity.businessInvoice.businessInvoiceParticulars  %}
                             <tr>
-                                <td class="span4">{{ loop.index }}. {{ item.particular }}</td>{% if entity.businessInvoice.businessConfig.businessModel == 'sign' %}
-                                <td class="span2">
+                                <td class="">{{ loop.index }}. {{ item.particular }}</td>{% if entity.businessInvoice.businessConfig.businessModel == 'sign' %}
+                                <td class="span3">
                                     {% if item.height is not empty and item.width is not empty %}
                                         {{ item.height }} x {{ item.width }} = {{ item.subQuantity }}
                                     {% endif %}
@@ -197,3 +195,10 @@
         </tfoot>
     {% endif %}
 </table>
+<script>
+    window.print();
+    setTimeout(function () {
+        window.open('', '_self', '');
+        window.close();
+    }, 2000);
+</script>

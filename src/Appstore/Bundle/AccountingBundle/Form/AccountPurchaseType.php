@@ -58,6 +58,7 @@ class AccountPurchaseType extends AbstractType
 			        'Advance' => 'Advance',
 			        'Discount' => 'Discount',
 			        'Outstanding' => 'Outstanding',
+			        'Opening' => 'Opening',
 		        ),
 	        ))
             ->add('accountBank', 'entity', array(

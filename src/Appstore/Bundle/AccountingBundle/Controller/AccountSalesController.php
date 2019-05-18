@@ -44,11 +44,9 @@ class AccountSalesController extends Controller
         $entities = $em->getRepository('AccountingBundle:AccountSales')->findWithSearch($user,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->receiveModeOverview($user,$data);
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(20,29));
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:AccountSales:index.html.twig', array(
             'entities' => $pagination,
-            'accountHead' => $accountHead,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
             'overview' => $overview,
@@ -99,12 +97,52 @@ class AccountSalesController extends Controller
         $entity = new AccountSales();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setGlobalOption( $this->getUser()->getGlobalOption());
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+
+        if($form->isValid() && empty($method)){
+            $entity->setGlobalOption($option);
             if(!empty($this->getUser()->getProfile()->getBranches())){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
+            $customer = $form["customer"]->getData();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $mobile));
+            $entity->setCustomer($customer);
+            if($entity->getProcessHead() == 'Outstanding'){
+                $entity->setTotalAmount(abs($entity->getAmount()));
+                $entity->setAmount(0);
+                $entity->setTransactionMethod(null);
+            }
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:59:59");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }else{
+                $datetime = new \DateTime("now");
+                $entity->setUpdated($datetime);
+            }
+
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('account_sales'));
+        }elseif(($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
+            $entity->setGlobalOption($option);
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
+            $customer = $form["customer"]->getData();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $mobile));
+            $entity->setCustomer($customer);
 	        if($entity->getProcessHead() == 'Outstanding'){
 		        $entity->setTotalAmount(abs($entity->getAmount()));
 		        $entity->setAmount(0);
@@ -127,6 +165,10 @@ class AccountSalesController extends Controller
             );
             return $this->redirect($this->generateUrl('account_sales'));
         }
+
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         return $this->render('AccountingBundle:AccountSales:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),

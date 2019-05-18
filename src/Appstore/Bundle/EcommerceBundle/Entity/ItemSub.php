@@ -48,7 +48,7 @@ class ItemSub
     protected $colors;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="goodsItem" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="itemSub" )
      **/
     private  $productUnit;
 

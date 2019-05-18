@@ -90,7 +90,7 @@ class GlobalOption
 
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", inversedBy="globalOption" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", mappedBy="globalOption" )
      **/
     protected $customerInbox;
 
@@ -210,7 +210,7 @@ class GlobalOption
     protected $accountingConfig;
 
    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $accountHeads;
 

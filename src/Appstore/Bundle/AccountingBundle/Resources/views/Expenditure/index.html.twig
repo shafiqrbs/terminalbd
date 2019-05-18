@@ -71,7 +71,12 @@
                                         </select>
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin" value="{% if searchForm.toUser is defined and searchForm.toUser is not empty %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
+                                        <select class="search-input span12 m-wrap" id="toUser" name="toUser">
+                                            <option value="">--Select Employee--</option>
+                                            {% for employee in employees %}
+                                                <option {% if searchForm.toUser is defined and searchForm.toUser == employee.username %} selected="selected" {% endif %} value="{{ employee.username }}">{{ employee.profile.name }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                     <div class="span2">
                                         <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  date-picker" value="{% if searchForm.startDate is defined and searchForm.startDate is not empty %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">

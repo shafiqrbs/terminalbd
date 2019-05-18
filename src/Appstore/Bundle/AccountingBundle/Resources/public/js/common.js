@@ -45,13 +45,13 @@ function CommonJs(){
         var transactionMethod = $(this).val();
         if(transactionMethod == 2 ){
             $('.bankHide').show();
-            $('.bkashHide').hide();
+            $('.mobileHide').hide();
         }else if(transactionMethod == 3 ){
             $('.bankHide').hide();
-            $('.bkashHide').show();
+            $('.mobileHide').show();
         }else{
             $('.bankHide').hide();
-            $('.bkashHide').hide();
+            $('.mobileHide').hide();
         }
 
     });
@@ -66,6 +66,16 @@ function CommonJs(){
         });
 
     });
+
+    $(document).on("change", ".select2Customer", function() {
+        var customer = $(this).val();
+        $.get( Routing.generate('domain_customer_sales_ledger'),{ customer:customer} )
+            .done(function( data ) {
+                $('#outstanding').html(data);
+            });
+
+    });
+
 
     $(document).on("change", ".vendor-ledger-medicine", function() {
 

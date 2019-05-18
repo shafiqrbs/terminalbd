@@ -48,6 +48,12 @@ class Location
     protected $election;
 
 
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="geoLocation")
+     */
+    protected $committees;
+
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", mappedBy="district")
      */

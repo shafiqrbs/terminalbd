@@ -65,7 +65,11 @@ class AccountBalanceTransferController extends Controller
         $entity = new AccountBalanceTransfer();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-	    if ($form->isValid()) {
+        $method = empty($entity->getFromTransactionMethod()) ? '' : $entity->getFromTransactionMethod()->getSlug();
+        if (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getFromAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getFromAccountMobileBank())
+        ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             if(!empty($this->getUser()->getProfile()->getBranches())){
@@ -78,7 +82,9 @@ class AccountBalanceTransferController extends Controller
             );
             return $this->redirect($this->generateUrl('account_balancetransfer'));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         return $this->render('AccountingBundle:AccountBalanceTransfer:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),

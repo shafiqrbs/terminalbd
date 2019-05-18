@@ -1,12 +1,19 @@
+
 .search-form{
     margin: 0!important;
 }
 .cashPayment{
     display: none;
 }
-.bankHide , .bkashHide{
+
+.bankHide, .mobileHide {
     display: none;
 }
+#bankMethod, #mobileMethod {
+    display: block;
+}
+
+
 .form .control-group .controls ul{
     margin-left: 0;
     margin-top: -10px;

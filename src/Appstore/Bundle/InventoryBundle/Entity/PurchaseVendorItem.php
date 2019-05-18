@@ -58,11 +58,6 @@ class PurchaseVendorItem
      **/
     private  $goodsItems;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseVendorItem" , cascade={"remove"}  )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $orderItems;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="purchaseVendorItem" )
@@ -106,20 +101,6 @@ class PurchaseVendorItem
      **/
     private  $size;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="purchaseVendorItems" )
-     **/
-    private  $discount;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="itemTags" )
-     **/
-    private  $tag;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItems" )
-     **/
-    private  $promotion;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="purchaseVendorItem" )

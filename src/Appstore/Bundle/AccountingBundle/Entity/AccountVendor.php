@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -80,6 +81,10 @@ class AccountVendor
      **/
     private $businessVendorStocks;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="vendor")
+     **/
+    private $businessInvoiceParticulars;
 
 
     /**
@@ -453,6 +458,14 @@ class AccountVendor
 	public function setModule( string $module ) {
 		$this->module = $module;
 	}
+
+    /**
+     * @return BusinessInvoiceParticular
+     */
+    public function getBusinessInvoiceParticulars()
+    {
+        return $this->businessInvoiceParticulars;
+    }
 
 
 }

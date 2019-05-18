@@ -100,7 +100,8 @@ class AccountPurchaseController extends Controller
 
         /* @var $global GlobalOption */
 	    $global = $this->getUser()->getGlobalOption();
-	    if ($form->isValid()) {
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if($form->isValid() && empty($method)){
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($global);
             if($global->getMainApp()->getSlug() == 'miss'){
@@ -139,7 +140,6 @@ class AccountPurchaseController extends Controller
             if($entity->getPayment() < 0 or $entity->getProcessType() == "Outstanding"){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
-	            $entity->setProcessType('Opening');
                 $entity->setTransactionMethod(null);
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
@@ -157,8 +157,71 @@ class AccountPurchaseController extends Controller
                 'success',"Data has been added successfully"
             );
             return $this->redirect($this->generateUrl('account_purchase'));
-        }
+        }elseif(($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($global);
+            if($global->getMainApp()->getSlug() == 'miss'){
+                $entity->setProcessHead('medicine');
+                $entity->setCompanyName($entity->getMedicineVendor()->getCompanyName());
+                $entity->setMedicineVendor($entity->getMedicineVendor());
+            }elseif($global->getMainApp()->getSlug() == 'inventory'){
+                $entity->setProcessHead('inventory');
+                $entity->setCompanyName($entity->getVendor()->getCompanyName());
+                $entity->setVendor($entity->getVendor());
+            }elseif($global->getMainApp()->getSlug() == 'hms'){
+                $entity->setProcessHead('hospital');
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'restaurant'){
+                $entity->setProcessHead('restaurant');
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'hotel'){
+                $entity->setProcessHead('hotel');
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'institute'){
+                $entity->setProcessHead('institute');
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'business'){
+                $entity->setProcessHead('business');
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setAccountVendor($entity->getAccountVendor());
+            }elseif($global->getMainApp()->getSlug() == 'dms'){
+                $entity->setProcessHead('dms');
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setAccountVendor($entity->getAccountVendor());
+            }
 
+            if( in_array($entity->getProcessType(),array("Outstanding","Opening"))  or $entity->getPayment() < 0 ){
+                $entity->setPurchaseAmount(abs($entity->getPayment()));
+                $entity->setPayment(0);
+                $entity->setTransactionMethod(null);
+            }
+
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:59:59");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }else{
+                $datetime = new \DateTime("now");
+                $entity->setUpdated($datetime);
+            }
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('account_purchase'));
+        }
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         return $this->render('AccountingBundle:AccountPurchase:new.html.twig', array(
             'global' => $global,
             'entity' => $entity,
@@ -197,11 +260,9 @@ class AccountPurchaseController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entity = new AccountPurchase();
         $form   = $this->createCreateForm($entity);
-        $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
         return $this->render('AccountingBundle:AccountPurchase:new.html.twig', array(
             'option'    => $globalOption,
             'entity'    => $entity,
-            'banks'     => $banks,
             'form'      => $form->createView(),
         ));
     }
@@ -339,7 +400,7 @@ class AccountPurchaseController extends Controller
             }
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($entity);
-	        if($entity->getProcessType() == 'Outstanding'){
+	        if(in_array($entity->getProcessType(),array('Outstanding','Opening'))){
 		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertVendorOpeningTransaction($entity);
 	        }elseif($entity->getProcessType() == 'Discount'){
 		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorDiscountTransaction($entity);
@@ -348,10 +409,10 @@ class AccountPurchaseController extends Controller
 		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
 	        }
             return new Response('success');
-        } else {
+        }else{
             return new Response('failed');
         }
-        exit;
+
     }
 
     /**

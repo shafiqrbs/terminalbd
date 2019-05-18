@@ -428,7 +428,7 @@ class ReportController extends Controller
 
         }else{
 
-            $html = $this->renderView(
+          /*  $html = $this->renderView(
                 'AccountingBundle:Report/Outstanding:customerLedgerPdf.html.twig', array(
                     'globalOption' => $this->getUser()->getGlobalOption(),
                     'entities' => $entities->getResult(),
@@ -436,8 +436,15 @@ class ReportController extends Controller
                     'customer' => $customer,
                     'searchForm' => $data,
                 )
-            );
-            $this->downloadPdf($html,'customerLedgerPdf.pdf');
+            );*/
+            return $this->render('AccountingBundle:Report/Outstanding:customerLedgerPdf.html.twig', array(
+                'entities' => $entities->getResult(),
+                'globalOption' => $this->getUser()->getGlobalOption(),
+                'overview' => $overview,
+                'customer' => $customer,
+                'searchForm' => $data,
+            ));
+          //  $this->downloadPdf($html,'customerLedgerPdf.pdf');
 
         }
 	}

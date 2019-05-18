@@ -81,11 +81,6 @@ class PurchaseItem
      **/
     private  $damages;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseItem"  , cascade={"remove"} )
-     **/
-    private  $orderItem;
-
 
     /**
      * @var string

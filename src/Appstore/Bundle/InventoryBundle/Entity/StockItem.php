@@ -42,12 +42,6 @@ class StockItem
     protected $purchaseItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", inversedBy="stockItems")
-     */
-    protected $orderItem;
-
-
-    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturnItem", inversedBy="stockItems")
      */
     protected $purchaseReturnItem;

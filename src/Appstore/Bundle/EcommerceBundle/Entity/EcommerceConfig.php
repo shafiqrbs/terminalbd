@@ -30,6 +30,11 @@ class EcommerceConfig
 
     private $globalOption;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $items;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="ecommerceConfig"  , cascade={"persist", "remove"} )
@@ -57,9 +62,19 @@ class EcommerceConfig
     protected $discounts;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemAttribute", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $itemAttributes;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
      */
     protected $promotions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $brands;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemCategoryGrouping", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})

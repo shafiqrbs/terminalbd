@@ -86,6 +86,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Vendor Name</th>
+                                    <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -99,6 +100,7 @@
                                     <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ entity.accountRefNo }}</td>
                                     <td class="numeric" >{{ entity.companyName }}</td>
+                                    <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
                                     <td class="numeric" >{{ entity.payment|number_format }}</td>
                                     <td class="numeric" >{{ (entity.totalAmount-entity.payment)|number_format }}</td>

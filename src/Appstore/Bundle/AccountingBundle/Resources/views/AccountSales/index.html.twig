@@ -115,6 +115,7 @@
                                 <thead class="flip-content "><tr class="head-blue">
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th {% if entities.isSorted('e.updated') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Created', 'e.updated') }}{% if( direction == 'desc' and sort == 'e.updated') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
@@ -129,24 +130,25 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {% set modes = ['Outstanding','Discount'] %}
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
+                                        <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customerName is not empty %}{{ entity.customerName }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customerMobile is not empty %}{{ entity.customerMobile }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.sourceInvoice }}</td>
                                         <td class="numeric" >{{ entity.processHead|capitalize }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                          <td class="numeric" >
-                                             {% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}
+                                             {% if entity.method is defined and entity.method is not empty %}{{ entity.method }}{% endif %}
                                          </td>
                                         <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
                                         <td class="numeric" >
-                                                {% if entity.process == 'approved'  %}
+                                                {% if entity.process == 'approved' or entity.processHead in modes  %}
                                                     {{ entity.amount|number_format }}
                                                 {% else %}
-                                                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
-                                                {% endif %}
+                                                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>               {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.balance|number_format }}</td>
                                         <td class="numeric" >
@@ -161,6 +163,19 @@
                                             {% if entity.process == 'approved' and entity.amount > 0 %}
                                                 <a target="_blank" href="{{ path('account_sales_print',{'id':entity.id}) }}" class="btn mini yellow"><i class="icon-print"></i></a>
                                             {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="12">
+                                            <table class="table">
+                                                <tr><td class="span2">Remark</td><td>{{ entity.remark }}</td></tr>
+                                                {% if entity.bankName is not empty %}
+                                                    <tr><td class="span2">Bank name</td><td>{{ entity.bankName }}</td></tr>
+                                                {% endif %}
+                                                {% if entity.mobileName is not empty %}
+                                                    <tr><td class="span2">Mobile Account</td><td>{{ entity.mobileName }}</td></tr>
+                                                {% endif %}
+                                            </table>
                                         </td>
                                     </tr>
                                 {% endfor %}

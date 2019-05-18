@@ -60,7 +60,23 @@ class AccountJournalController extends Controller
         $entity = new AccountJournal();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        if ($form->isValid()) {
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if ($form->isValid() && empty($method)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($this->getUser()->getGlobalOption());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('account_journal'));
+        }elseif (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             if(!empty($this->getUser()->getProfile()->getBranches())){
@@ -73,7 +89,9 @@ class AccountJournalController extends Controller
             );
             return $this->redirect($this->generateUrl('account_journal'));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         return $this->render('AccountingBundle:AccountJournal:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),

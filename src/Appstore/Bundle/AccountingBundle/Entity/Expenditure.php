@@ -77,7 +77,7 @@ class Expenditure
     private  $transactionMethod;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem", mappedBy="expenditure" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem", mappedBy="expenditure" , cascade={"persist", "remove"})
      **/
     private  $expenditureItems;
 
