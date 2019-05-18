@@ -258,7 +258,7 @@ class TransactionRepository extends EntityRepository
 
         /* Cash - Cash various */
 
-        if (!empty($entity->getToUser()) and $entity->getTransactionType() == 'Credit'){
+        if (!empty($entity->getToUser()) and !empty($entity->getToUser()->getProfile()->getUserGroup()) and $entity->getTransactionType() == 'Credit'){
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getProfile());
             $transaction->setSubAccountHead($subAccount);
         }
@@ -304,7 +304,7 @@ class TransactionRepository extends EntityRepository
 
         /* Cash - Cash various */
 
-        if (!empty($entity->getToUser()) and $entity->getTransactionType() == 'Debit'){
+        if (!empty($entity->getToUser()) and !empty($entity->getToUser()->getProfile()->getUserGroup()) and $entity->getTransactionType() == 'Debit'){
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getprofile());
             $transaction->setSubAccountHead($subAccount);
         }
