@@ -428,6 +428,10 @@ class PurchaseController extends Controller
             }else{
                 $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             }
+            if($entity->getPayment() > 0 and empty($entity->getTransactionMethod())){
+                $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+                $entity->setTransactionMethod($transactionMethod);
+            }
 
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);

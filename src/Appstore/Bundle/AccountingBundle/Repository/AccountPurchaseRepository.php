@@ -533,7 +533,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $em->persist($accountPurchase);
         $em->flush();
         $this->updateVendorBalance($accountPurchase);
-        if($accountPurchase->getPayment() > 0 ){
+        if($accountPurchase->getPayment() > 0 and !empty($accountPurchase->getTransactionMethod()) ){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
         }
         return $accountPurchase;
@@ -739,7 +739,9 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                 $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
                 $transaction->execute();
                 $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
-                $accountCash->execute();
+                if($accountCash){
+                    $accountCash->execute();
+                }
             }
         }
         $accountCash = $em->createQuery('DELETE AccountingBundle:AccountPurchase e WHERE e.medicinePurchase = '.$entity->getId());

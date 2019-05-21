@@ -17,17 +17,16 @@ class AndroidDeviceSetupRepository extends EntityRepository
     {
 
         /* @var $exist AndroidDeviceSetup */
-
-        $exist = $this->findOneBy(array('globalOption' => $option , 'deviceId' => $device));
+        $exist = $this->findOneBy(array('globalOption' => $option , 'device' => $device));
         if ($exist) {
-            return $exist;
+            return $exist->getId();
         }else{
             $head = new AndroidDeviceSetup();
             $head->setGlobalOption($option);
             $head->setDevice($device);
             $this->_em->persist($head);
             $this->_em->flush();
-            return $head;
+            return $head->getId();
         }
     }
 }

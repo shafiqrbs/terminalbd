@@ -1,0 +1,131 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                  {{ user.profile.name }}
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('employee_payroll') }}"> {{ user.profile.name }}</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">View Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green ">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Manage Employee Payroll {{ user.profile.name }}</div>
+                    </div>
+                    <div class="portlet-body form">
+                        {% include('flash-message.html.twig')  %}
+                        <!-- BEGIN FORM-->
+                        {{ form_start(form) }}
+                        {{ form_row(form._token) }}
+                        <div class="row-fluid" >
+                            <!--/span-->
+                            <div class="span6">
+                                <div class="control-group">
+                                    <label class="control-label"  for="category" >Leave Type<span class="required">*</span></label>
+                                    <div class="controls">
+                                        {{ form_widget(form.salaryType) }}
+                                        {{ form_errors(form.salaryType) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label"  for="category" >Start Date<span class="required">*</span></label>
+                                    <div class="controls">
+                                        {{ form_widget(form.effectedMonth) }}
+                                        {{ form_errors(form.effectedMonth) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="name">End Date<span class="required">*</span></label>
+                                    <div class="controls">
+                                        {{ form_widget(form.basicAmount) }}
+                                        {{ form_errors(form.basicAmount) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions portlet box grey">
+                            <div class="pull-right">
+                                <button type="button" class="btn green confirmSubmit"><i class="icon-save"></i> Save</button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                        <!-- END FORM-->
+                        <div class="clearfix"><br/></div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="fa fa-sign-out"></i>List of Leave</div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="portlet-body flip-scroll">
+
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="form-actions portlet box red">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="fa fa-sign-out"></i>Leave Type wise Leave</div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="portlet-body flip-scroll">
+
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="form-actions portlet box purple">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="fa fa-sign-out"></i>Monthly employee_payroll</div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="portlet-body flip-scroll">
+
+                        </div>
+                        <div class="clearfix"><br/></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HumanResourceBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}

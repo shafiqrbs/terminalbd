@@ -72,7 +72,7 @@
                                                             <select id="particular" name="particular" class="span12 m-wrap select2">
                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                 {% for particular in particulars %}
-                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => BDT. {{ particular.salesPrice }}</option>
+                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => Stock {{ particular.remainingQuantity }} {% if  particular.unit is defined and  particular.unit is not empty %}{{ particular.unit.name|default('---') }}{% endif %}</option>
                                                                 {% endfor %}
                                                             </select>
                                                             </div>

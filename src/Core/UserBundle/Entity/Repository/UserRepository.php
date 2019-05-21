@@ -290,6 +290,10 @@ class UserRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.profile','p');
+        $qb->leftJoin('p.designation','d');
+        $qb->select('e.id as id');
+        $qb->addSelect('d.name as designationName');
+        $qb->addSelect('p.name as name','p.mobile as mobile','p.joiningDate');
         $qb->andWhere("e.globalOption =".$option->getId());
         $qb->andWhere('e.domainOwner = 2');
         $qb->andWhere('e.isDelete != 1');

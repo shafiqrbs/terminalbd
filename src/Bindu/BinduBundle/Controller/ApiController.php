@@ -45,11 +45,11 @@ class ApiController extends Controller
         if (empty($entity) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
                 return new Response('Unauthorized access.', 401);
         }else{
-
             /* @var $entity GlobalOption */
-            $this->getDoctrine()->getRepository('AndroidDeviceSetup')->insert($entity,$deviceId);
+            $device = $this->getDoctrine()->getRepository('SettingToolBundle:AndroidDeviceSetup')->insert($entity,$deviceId);
             $data = array(
                 'setupId' => $entity->getId(),
+                'deviceId' => $device,
                 'uniqueCode' => $entity->getUniqueCode(),
                 'name' => $entity->getName(),
                 'mobile' => $entity->getMobile(),
@@ -382,10 +382,6 @@ class ApiController extends Controller
 
     }
 
-
-
-
-
     public function apiPingAction(Request $request){
 
         $data = $request->request->all();
@@ -401,6 +397,36 @@ class ApiController extends Controller
 
     public function apiResponseAction(Request $request, $data)
     {
+
+    }
+
+    public function apiSalesAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+            /* @var $entity GlobalOption */
+            $entity = $this->checkApiValidation($request);
+            if($entity->getMainApp()->getSlug() == 'miss'){
+                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$request);
+            }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
+                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'inventory'){
+                $data = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->getApiVendor($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'business'){
+                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
+            }
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
 
     }
 

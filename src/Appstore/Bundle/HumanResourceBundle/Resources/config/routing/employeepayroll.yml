@@ -1,0 +1,14 @@
+employee_payroll:
+    path:     /
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:index" }
+
+employee_payroll_add:
+    path:     /{user}/edit
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:employee" }
+
+employee_payroll_create:
+    path:     /{user}/update
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:update" }
+
+
+

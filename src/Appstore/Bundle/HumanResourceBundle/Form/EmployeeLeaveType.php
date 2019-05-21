@@ -43,17 +43,17 @@ class EmployeeLeaveType extends AbstractType
                 ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->globalOption->getId())
+                        ->where("e.globalOption ={$this->globalOption->getId()}")
                         ->orderBy("e.name", "ASC");
                 }
             ))
 
-            ->add('startDate','text', array('attr'=>array('class'=>'m-wrap span12 datePicker','placeholder'=>'Enter start date'),
+            ->add('startDate','text', array('attr'=>array('class'=>'m-wrap span12 dateLeavePicker','placeholder'=>'Enter start date'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('endDate','text', array('attr'=>array('class'=>'m-wrap span12 datePicker','placeholder'=>'Enter end date'),
+            ->add('endDate','text', array('attr'=>array('class'=>'m-wrap span12 dateLeavePicker','placeholder'=>'Enter end date'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )

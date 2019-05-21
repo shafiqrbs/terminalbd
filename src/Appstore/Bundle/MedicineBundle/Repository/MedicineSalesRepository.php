@@ -2,11 +2,14 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -590,6 +593,65 @@ class MedicineSalesRepository extends EntityRepository
             $array[$row['salesBy']]= $row['totalPurchaseAmount'];
         }
         return $array;
+    }
+
+    public function insertApiSales(GlobalOption $option, $data)
+    {
+        $em = $this->_em;
+
+        foreach ($data as $key => $value){
+
+            $sales = new MedicineSales();
+            $sales->setMedicineConfig(0);
+            $sales->setBranch(0);
+            $sales->setSubTotal(0);
+            $sales->setTotal(0);
+            $sales->setNetTotal(0);
+            $sales->setPayment(0);
+            $sales->setDue(0);
+            $sales->setDiscount(0);
+            $sales->setVat(0);
+            $sales->setDiscount(0);
+            $sales->setDiscountCalculation(0);
+            $sales->setDiscountType(0);
+            $sales->setTransactionMethod(0);
+            $sales->setAccountBank(0);
+            $sales->setAccountMobileBank(0);
+            $sales->setPaymentMobile(0);
+            $sales->setTransactionId(0);
+            $sales->setPaymentCard(0);
+            $sales->setCustomer(0);
+            $sales->setMobile(0);
+            $sales->setCreated(0);
+            $sales->setUpdated(0);
+            $sales->setSalesBy(0);
+            $sales->setCardNo(0);
+            $sales->setComment(0);
+            $sales->setProcess(0);
+            $sales->setPaymentInWord(0);
+            $em->persist($sales);
+            $em->flush();
+            $this->insertApiSalesItem($sales,$data);
+
+        }
+
+    }
+
+    public function insertApiSalesItem(MedicineSales $sales,$data){
+
+        $em = $this->_em;
+        $salesItem = new MedicineSalesItem();
+        $salesItem->setMedicineSales($sales);
+        $salesItem->setMedicineStock(0);
+        $salesItem->setQuantity(0);
+        $salesItem->setSalesPrice(0);
+        $salesItem->setSubTotal(0);
+        $salesItem->setBarcode(0);
+        $salesItem->setMedicinePurchaseItem(0);
+        $salesItem->setCustomPrice(0);
+        $em->persist($salesItem);
+        $em->flush();
+
     }
 
 

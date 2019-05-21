@@ -8,6 +8,7 @@ use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
+use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,6 +34,11 @@ class Bank
 	 * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="bank")
 	 */
 	protected $profile;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="bank")
+	 */
+	protected $employeePayroll;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="bank")
@@ -230,5 +236,13 @@ class Bank
 	public function getHotelInvoice() {
 		return $this->hotelInvoice;
 	}
+
+    /**
+     * @return EmployeePayroll
+     */
+    public function getEmployeePayroll()
+    {
+        return $this->employeePayroll;
+    }
 }
 

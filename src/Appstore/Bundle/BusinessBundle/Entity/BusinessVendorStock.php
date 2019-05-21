@@ -91,9 +91,6 @@ class BusinessVendorStock
     private $code;
 
 
-
-
-
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -108,8 +105,6 @@ class BusinessVendorStock
      * @ORM\Column(name="updated", type="datetime")
      */
     private $updated;
-
-
 
 
     /**

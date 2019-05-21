@@ -95,6 +95,18 @@ class GlobalOption
     protected $customerInbox;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\PayrollSetting", mappedBy="globalOption" )
+     **/
+    protected $payrollSetting;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="globalOption" )
+     **/
+    protected $employeePayroll;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsSender", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/

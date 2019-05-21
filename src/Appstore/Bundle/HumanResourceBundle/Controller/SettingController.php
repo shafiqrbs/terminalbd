@@ -1,11 +1,11 @@
 <?php
 
-namespace Appstore\Bundle\MedicineBundle\Controller;
 
-use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
-use Appstore\Bundle\MedicineBundle\Form\PayrollSettingType;
+namespace Appstore\Bundle\HumanResourceBundle\Controller;
+
+use Appstore\Bundle\HumanResourceBundle\Entity\PayrollSetting;
+use Appstore\Bundle\HumanResourceBundle\Form\PayrollSettingType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  * Particular controller.
  *
  */
-class ParticularController extends Controller
+class SettingController extends Controller
 {
 
     /**
@@ -23,11 +23,11 @@ class ParticularController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = new MedicineParticular();
+        $entity = new PayrollSetting();
         $form = $this->createCreateForm($entity);
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig' => $config),array('particularType'=>'ASC'));
-        return $this->render('MedicineBundle:Particular:index.html.twig', array(
+        $config = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption' => $config),array('mode'=>'ASC'));
+        return $this->render('HumanResourceBundle:Setting:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -39,25 +39,25 @@ class ParticularController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new MedicineParticular();
+        $entity = new PayrollSetting();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig' => $config),array('particularType'=>'ASC'));
+       $entities = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption' => $config),array('mode'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $entity->setMedicineConfig($config);
+            $config = $this->getUser()->getGlobalOption();
+            $entity->setGlobalOption($config);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            return $this->redirect($this->generateUrl('medicine_particular', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('payrollsetting', array('id' => $entity->getId())));
         }
 
-        return $this->render('MedicineBundle:Particular:index.html.twig', array(
+        return $this->render('HumanResourceBundle:Setting:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -67,14 +67,14 @@ class ParticularController extends Controller
     /**
      * Creates a form to create a Particular entity.
      *
-     * @param Particular $entity The entity
+     * @param PayrollSetting $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(MedicineParticular $entity)
+    private function createCreateForm(PayrollSetting $entity)
     {
         $form = $this->createForm(new PayrollSettingType(), $entity, array(
-            'action' => $this->generateUrl('medicine_particular_create'),
+            'action' => $this->generateUrl('payrollsetting_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -92,16 +92,14 @@ class ParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig' => $config),array('particularType'=>'ASC'));
-
-        $entity = $em->getRepository('MedicineBundle:MedicineParticular')->find($id);
-
+       $entities = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption' => $config),array('mode'=>'ASC'));
+        $entity = $em->getRepository('HumanResourceBundle:PayrollSetting')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('MedicineBundle:Particular:index.html.twig', array(
+        return $this->render('HumanResourceBundle:Setting:index.html.twig', array(
             'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
@@ -111,14 +109,14 @@ class ParticularController extends Controller
     /**
     * Creates a form to edit a Particular entity.
     *
-    * @param Particular $entity The entity
+    * @param PayrollSetting $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(MedicineParticular $entity)
+    private function createEditForm(PayrollSetting $entity)
     {
         $form = $this->createForm(new PayrollSettingType(), $entity, array(
-            'action' => $this->generateUrl('medicine_particular_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('payrollsetting_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -135,9 +133,9 @@ class ParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig' => $config),array('particularType'=>'ASC'));
+       $entities = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption' => $config),array('mode'=>'ASC'));
 
-        $entity = $em->getRepository('MedicineBundle:MedicineParticular')->find($id);
+        $entity = $em->getRepository('HumanResourceBundle:PayrollSetting')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -151,10 +149,10 @@ class ParticularController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-            return $this->redirect($this->generateUrl('medicine_particular'));
+            return $this->redirect($this->generateUrl('payrollsetting'));
         }
 
-        return $this->render('MedicineBundle:Particular:index.html.twig', array(
+        return $this->render('HumanResourceBundle:Setting:index.html.twig', array(
             'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
@@ -168,7 +166,7 @@ class ParticularController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('MedicineBundle:MedicineParticular')->find($id);
+        $entity = $em->getRepository('HumanResourceBundle:PayrollSetting')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -191,7 +189,7 @@ class ParticularController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('medicine_particular'));
+        return $this->redirect($this->generateUrl('payrollsetting'));
     }
 
 
@@ -203,7 +201,7 @@ class ParticularController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('MedicineBundle:MedicineParticular')->find($id);
+        $entity = $em->getRepository('HumanResourceBundle:PayrollSetting')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -219,25 +217,7 @@ class ParticularController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('medicine_particular'));
-    }
-
-    public function autoSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->searchAutoComplete($item,$inventory);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchParticularNameAction($vendor)
-    {
-        return new JsonResponse(array(
-            'id'=>$vendor,
-            'text'=>$vendor
-        ));
+        return $this->redirect($this->generateUrl('payrollsetting'));
     }
 
 

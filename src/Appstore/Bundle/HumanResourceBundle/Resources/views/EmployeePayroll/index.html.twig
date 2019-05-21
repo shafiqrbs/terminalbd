@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   {{ globalOption.name }} Employee Lists
+                   {{ globalOption.name }} Employee Payroll Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('attendance') }}">Employee</a>
+                        <a href="{{ path('employee_payroll') }}">Employee Payroll</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Employee lists</a></li>
+                    <li><a href="#">Employee Payroll lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -31,7 +31,7 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Employee Lists </div>
+                        <div class="caption"><i class="icon-reorder"></i>Employee Payroll Lists </div>
                     </div>
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
@@ -56,7 +56,7 @@
                                         <td class="numeric" >{{ user.mobile }}</td>
                                         <td class="numeric" >{{ user.joiningDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('attendance_user',{'user':user.id}) }}" class="btn red mini" ><i class="fa fa-sign-out"></i>&nbsp;Leave</a>
+                                            <a href="{{ path('employee_payroll_add',{'user':user.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Payroll</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

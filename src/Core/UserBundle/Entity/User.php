@@ -21,6 +21,7 @@ use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
@@ -134,6 +135,18 @@ class User extends BaseUser
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="employee" )
      **/
     private  $accountHead;
+
+
+	/**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="employee" )
+     **/
+    private  $employeePayroll;
+
+
+	/**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="approvedBy" )
+     **/
+    private  $payrollApproved;
 
 
 	/**
@@ -1824,6 +1837,23 @@ class User extends BaseUser
     public function getAccountHead()
     {
         return $this->accountHead;
+    }
+
+
+    /**
+     * @return EmployeePayroll
+     */
+    public function getPayrollApproved()
+    {
+        return $this->payrollApproved;
+    }
+
+    /**
+     * @return EmployeePayroll
+     */
+    public function getEmployeePayroll()
+    {
+        return $this->employeePayroll;
     }
 
 

@@ -2,8 +2,9 @@
 $( ".date-picker" ).datepicker({
     dateFormat: "dd-mm-yy"
 });
+
 var dateToday = new Date();
-$( ".datePicker" ).datepicker({
+$( ".dateLeavePicker" ).datepicker({
     dateFormat: "dd-mm-yy",
     minDate: dateToday
 });
@@ -39,7 +40,7 @@ $(document).on("click", ".confirm , .approve , .delete ", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-               /* location.reload();*/
+                location.reload();
             });
         }
     });
