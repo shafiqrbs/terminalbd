@@ -69,6 +69,10 @@
         list-style: none!important;
     }
 
+    .span12, .span9, .span8, .span6,.span5, .span4, .span3, .span2, .span1{
+        display: inline-block;
+    }
+
 </style>
 {% set startDate = searchForm.month is defined ? searchForm.month :"now"|date("d-m-Y") %}
 {% set endDate = searchForm.year is defined ? searchForm.year :"now"|date("d-m-Y") %}

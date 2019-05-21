@@ -349,7 +349,6 @@ table.table-no-border {
     width: 8.33333333%
 }
 
-
 .approve-box{
     height:30px;
     padding-top: 40px;
@@ -357,11 +356,6 @@ table.table-no-border {
     font-weight:bold;
     float: left;
 }
-
-.span12, .span9, .span8, .span6,.span5, .span4, .span3, .span2, .span1{
-    display: inline-block;
-}
-
 
 
 /*

@@ -468,7 +468,6 @@ class MedicinePurchaseRepository extends EntityRepository
 	    foreach ($brands as $y){
 		    $ids[]=$y['brandName'];
 	    }
-
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.medicinePurchaseItems','mpi');
