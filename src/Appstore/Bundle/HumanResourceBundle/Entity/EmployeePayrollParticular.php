@@ -41,6 +41,21 @@ class EmployeePayrollParticular
      */
     private $type;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=20 , nullable=true)
+     */
+    private $mode;
+
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="unit", type="float", nullable=true)
+     */
+    private $unit = 0;
 
 
     /**
@@ -147,6 +162,38 @@ class EmployeePayrollParticular
     public function setEmployeePayroll($employeePayroll)
     {
         $this->employeePayroll = $employeePayroll;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @return float
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param float $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
     }
 
 

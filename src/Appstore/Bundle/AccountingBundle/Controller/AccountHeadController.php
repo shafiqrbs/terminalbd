@@ -40,24 +40,8 @@ class AccountHeadController extends Controller
 	    $data = $_REQUEST;
 	    $global = $this->getUser()->getGlobalOption();
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
-
-        $heads = array();
-        /* @var $child AccountHead */
-        foreach ($accountHead as $row){
-            $childs = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccount($row->getId());
-            if($childs){
-                  foreach ($childs as $child) {
-                      $heads[$row->getId()][] = $child;
-                      $subs = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccount($child['id'],$global->getId());
-                      if ($subs) {
-                          foreach ($subs as $sub) {
-                              $heads[$child['id']][] = $sub;
-                          }
-                      }
-                  }
-            }
-        }
-	    return $this->render('AccountingBundle:AccountHead:index.html.twig', array(
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount($global->getId());
+        return $this->render('AccountingBundle:AccountHead:index.html.twig', array(
             'accountHead' => $accountHead,
             'heads' => $heads,
             'searchForm'  => $data,

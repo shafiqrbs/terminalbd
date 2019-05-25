@@ -10,6 +10,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\HumanResourceBundle\Entity\Payroll;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
 use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
@@ -46,6 +47,11 @@ class Branches
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="branches" )
      **/
     private $globalOption;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Payroll", inversedBy="branch" )
+     **/
+    private $payrolls;
 
     /**
      * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="branches" )
@@ -493,6 +499,14 @@ class Branches
     public function getAccountPurchaseCommission()
     {
         return $this->accountPurchaseCommission;
+    }
+
+    /**
+     * @return Payroll
+     */
+    public function getPayrolls()
+    {
+        return $this->payrolls;
     }
 
 

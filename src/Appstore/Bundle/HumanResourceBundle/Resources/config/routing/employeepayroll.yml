@@ -6,9 +6,16 @@ employee_payroll_add:
     path:     /{user}/edit
     defaults: { _controller: "HumanResourceBundle:EmployeePayroll:employee" }
 
+employee_payroll_particular_delete:
+    path:     /{id}/particular-delete
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:particularDelete" }
+    options:
+           expose: true
+
 employee_payroll_create:
-    path:     /{user}/update
+    path:     /{id}/update
     defaults: { _controller: "HumanResourceBundle:EmployeePayroll:update" }
+    methods:  [POST, PUT]
 
 
 

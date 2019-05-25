@@ -40,7 +40,7 @@ class SettingController extends Controller
     public function createAction(Request $request)
     {
         $entity = new PayrollSetting();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $config = $this->getUser()->getGlobalOption();
        $entities = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption' => $config),array('mode'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -91,7 +91,7 @@ class SettingController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $config = $this->getUser()->getGlobalOption();
        $entities = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption' => $config),array('mode'=>'ASC'));
         $entity = $em->getRepository('HumanResourceBundle:PayrollSetting')->find($id);
         if (!$entity) {
@@ -132,7 +132,7 @@ class SettingController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $config = $this->getUser()->getGlobalOption();
        $entities = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption' => $config),array('mode'=>'ASC'));
 
         $entity = $em->getRepository('HumanResourceBundle:PayrollSetting')->find($id);

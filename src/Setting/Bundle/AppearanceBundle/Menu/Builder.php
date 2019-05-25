@@ -460,24 +460,15 @@ class Builder extends ContainerAware
 		                       ->setAttribute('dropdown', true);
 		    $menu['Accounting']['Bill & Expenditure']->addChild('Expense', array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Bill & Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Bill & Expenditure']->addChild('Bill Voucher', array('route' => 'account_expense_purchase'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Bill & Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE')) {
+                $menu['Accounting']['Bill & Expenditure']->addChild('Bill Voucher', array('route' => 'account_expense_purchase'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Bill & Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
+
+            }
             $menu['Accounting']['Bill & Expenditure']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
-            $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Summary',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Account Head',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Category',        array('route' => 'report_expenditure_category'))->setAttribute('icon', 'icon-th-list');
             $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Details',        array('route' => 'report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
-
-        }
-
-        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE')){
-		    $menu['Accounting']->addChild('Expenditure Purchase', array('route' => ''))
-		                       ->setAttribute('icon', 'fa  icon-table')
-		                       ->setAttribute('dropdown', true);
-		    $menu['Accounting']['Expenditure Purchase']->addChild('Expense Purchase', array('route' => 'account_expense_purchase'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Expenditure Purchase']->addChild('Account Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
-            $menu['Accounting']['Expenditure Purchase']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
-            $menu['Accounting']['Expenditure Purchase']['Reports']->addChild('Account Head',        array('route' => 'report_purchase_expenditure_head'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Expenditure Purchase']['Reports']->addChild('Details',        array('route' => 'report_purchase_expenditure_details'))->setAttribute('icon', 'icon-th-list');
 
         }
 
@@ -1644,8 +1635,9 @@ class Builder extends ContainerAware
 
             $menu['HR & Payroll']->addChild('Payroll')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Payroll']->addChild('Salary Transaction', array('route' => 'account_paymentsalary'))->setAttribute('icon', 'icon-th-list');
-            $menu['HR & Payroll']['Payroll']->addChild('Payment Salary', array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
-            $menu['HR & Payroll']['Payroll']->addChild('Salary Invoice', array('route' => 'account_salarysetting'))->setAttribute('icon', 'icon-th-list');
+            $menu['HR & Payroll']['Payroll']->addChild('Payroll Generate', array('route' => 'payroll'))->setAttribute('icon', 'icon-th-list');
+            $menu['HR & Payroll']['Payroll']->addChild('Payroll Employee', array('route' => 'employee_payroll'))->setAttribute('icon', 'icon-th-list');
+
         }
 
         if ($securityContext->isGranted('ROLE_ADMIN')) {

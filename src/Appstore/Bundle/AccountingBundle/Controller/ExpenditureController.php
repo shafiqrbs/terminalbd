@@ -39,9 +39,7 @@ class ExpenditureController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entity = new Expenditure();
-        $form = $this->createCreateForm($entity);
-        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch($user,$data);
+        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
      //   $flatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions( $user->getGlobalOption());
@@ -55,11 +53,10 @@ class ExpenditureController extends Controller
             'flatExpenseCategoryTree' => '',
             'transactionMethods' => $transactionMethods,
             'overview' => $overview,
-            'entity' => $entity,
             'heads' => $heads,
+            'global' => $user->getGlobalOption()->getId(),
             'employees'=> $employees,
             'categories' => $categories,
-            'form'   => $form->createView(),
         ));
     }
     /**

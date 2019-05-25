@@ -33,6 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Setting\Bundle\ToolBundle\Repository\TransactionMethodRepository")
  */
 class TransactionMethod
 {

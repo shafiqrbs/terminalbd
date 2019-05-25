@@ -26,9 +26,13 @@ human_resource_payroll_setting:
     resource: "@HumanResourceBundle/Resources/config/routing/payrollsetting.yml"
     prefix:   /payroll-setting
 
-human_resource_payroll:
+human_resource_employee_payroll:
     resource: "@HumanResourceBundle/Resources/config/routing/employeepayroll.yml"
     prefix:   /employee-payroll
+
+human_resource_payroll:
+    resource: "@HumanResourceBundle/Resources/config/routing/payroll.yml"
+    prefix:   /payroll-generate
 
 human_resource_homepage:
     path:     /hello/{name}

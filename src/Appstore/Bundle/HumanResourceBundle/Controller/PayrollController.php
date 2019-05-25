@@ -6,7 +6,9 @@ namespace Appstore\Bundle\HumanResourceBundle\Controller;
 
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayrollParticular;
+use Appstore\Bundle\HumanResourceBundle\Entity\Payroll;
 use Appstore\Bundle\HumanResourceBundle\Form\EmployeePayrollType;
+use Appstore\Bundle\HumanResourceBundle\Form\PayrollType;
 use Core\UserBundle\Entity\User;
 
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -19,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Customer controller.
  *
  */
-class EmployeePayrollController extends Controller
+class PayrollController extends Controller
 {
 
 
@@ -27,41 +29,69 @@ class EmployeePayrollController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
-        return $this->render('HumanResourceBundle:EmployeePayroll:index.html.twig', array(
+        $entities = $em->getRepository('HumanResourceBundle:Payroll')->findWithSearch($globalOption->getId());
+        return $this->render('HumanResourceBundle:Payroll:index.html.twig', array(
             'globalOption'  => $globalOption,
-            'employees'     => $employees,
-        ));
-    }
-
-    public function employeeAction(User $user)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->userInsertUpdate($user);
-        $form = $this->createCreateForm($entity);
-        $particulars = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption'=>$entity->getGlobalOption()));
-        return $this->render('HumanResourceBundle:EmployeePayroll:new.html.twig', array(
-            'user'  => $user,
-            'entity'  => $entity,
-            'particulars' => $particulars,
-            'form'   => $form->createView(),
+            'entities'     => $entities,
         ));
     }
 
     /**
-     * Creates a form to create a Vendor entity.
+     * Creates a new Particular entity.
      *
-     * @param EmployeePayroll $entity The entity
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new Payroll();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $config = $this->getUser()->getGlobalOption();
+            $entity->setGlobalOption($config);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been inserted successfully"
+            );
+            $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSheet')->insertUpdateParticular($entity);
+            return $this->redirect($this->generateUrl('payroll_sheet', array('id' => $entity->getId())));
+        }
+
+        return $this->render('HumanResourceBundle:Payroll:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+
+    public function newAction()
+    {
+        $entity = new Payroll();
+        $form = $this->createCreateForm($entity);
+        return $this->render('HumanResourceBundle:Payroll:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+
+
+
+    /**
+     * Creates a form to create a Particular entity.
+     *
+     * @param Payroll $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(EmployeePayroll $entity)
+    private function createCreateForm(Payroll $entity)
     {
         $option = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new EmployeePayrollType($option,$location), $entity, array(
-            'action' => $this->generateUrl('employee_payroll_create',array('id'=> $entity->getId())),
-            'method' => 'PUT',
+        $form = $this->createForm(new PayrollType($option), $entity, array(
+            'action' => $this->generateUrl('payroll_create'),
+            'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
@@ -70,7 +100,8 @@ class EmployeePayrollController extends Controller
         return $form;
     }
 
-    public function updateAction(Request $request ,EmployeePayroll $entity)
+
+    public function updateAction(Request $request , Payroll $entity)
     {
         /* @var $entity EmployeePayroll */
 
@@ -79,26 +110,21 @@ class EmployeePayrollController extends Controller
         $data = $request->request->all();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->getProfile()->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'success',"Data has been inserted successfully"
+                'success', "Data has been inserted successfully"
             );
-            $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->insertUpdateParticular($entity,$data);
+            $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->insertUpdateParticular($entity, $data);
             $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->insertUpdate($entity);
-            return $this->redirect($this->generateUrl('employee_payroll_add',array('user' => $entity->getEmployee()->getId())));
         }
-        $particulars = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption'=>$entity->getGlobalOption()));
         return $this->render('HumanResourceBundle:EmployeePayroll:new.html.twig', array(
-            'user'  => $entity->getEmployee(),
             'entity' => $entity,
-            'particulars' => $particulars,
             'form'   => $form->createView(),
         ));
     }
 
-    public function particularDeleteAction(EmployeePayrollParticular $entity)
+    public function particularDeleteAction(Payroll $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -121,6 +147,17 @@ class EmployeePayrollController extends Controller
         }
         return new Response('failed');
 
+
+    }
+
+    public function sheetAction(Payroll $entity)
+    {
+        $global = $this->getUser()->getGlobalOption()->getId();
+        if($entity->getGlobalOption()->getId() == $global){
+            return $this->render('HumanResourceBundle:Payroll:sheet.html.twig', array(
+                'entity' => $entity,
+            ));
+        }
 
     }
 

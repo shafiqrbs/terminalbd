@@ -102,6 +102,12 @@ class GlobalOption
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Payroll", mappedBy="globalOption" )
+     **/
+    protected $payroll;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="globalOption" )
      **/
     protected $employeePayroll;

@@ -56,35 +56,25 @@
                             {% include('flash-message.html.twig') %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span3">
-                                        <select class="search-input  span12 m-wrap" id="accountHeadDebit" name="accountHeadDebit">
-                                            <option value="">Account Debit Head</option>
+                                    <div class="span4">
+                                        <select class="search-input  span12 m-wrap" id="accountHead" name="accountHead">
+                                            <option value="">Choose Account Head</option>
                                             {% for account in accountHead %}
-                                                {% if account.children is not empty %}
-                                                    <optgroup label="{{ account.name }}">
-                                                     {% for child in account.children %}
-                                                        {% if child.toIncrease == 'Debit' %}
-                                                            <option {% if searchForm.accountHeadDebit is defined and searchForm.accountHeadDebit == child.id %} selected="selected" {% endif %} value="{{ child.id }}">{{ child.name }}</option>
-                                                        {% endif %}
+                                            {% if heads[account.id] is defined and heads[account.id] is not empty %}
+                                               <optgroup label="{{ account.name }}">
+                                                        {% for head in heads[account.id] %}
+                                                            <option {% if searchForm.accountHead is defined and searchForm.accountHead == head.id %} selected="selected" {% endif %} value="{{ head.id }}">{{ head.name }}</option>
                                                      {% endfor %}
                                                     </optgroup>
                                                 {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="span3">
-                                        <select class="search-input  span12 m-wrap" id="accountHeadCredit" name="accountHeadCredit">
-                                            <option value="">Account Credit Head</option>
-                                            {% for account in accountHead %}
-                                                {% if account.children is not empty %}
-                                                    <optgroup label="{{ account.name }}">
-                                                        {% for child in account.children %}
-                                                            {% if child.toIncrease == 'Credit' %}
-                                                                <option {% if searchForm.accountHeadDebit is defined and searchForm.accountHeadDebit == child.id %} selected="selected" {% endif %} value="{{ child.id }}">{{ child.name }}</option>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </optgroup>
-                                                {% endif %}
+                                    <div class="span2">
+                                        <select class="search-input span12 m-wrap" id="transactionMethod" name="transactionMethod">
+                                            <option value="">--Method--</option>
+                                            {% for method in transactionMethods %}
+                                                <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}">{{ method.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -147,12 +137,12 @@
                                     <tr id="remove-{{ entity.id }}">
                                         <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser.profile.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.userName is not empty %}{{ entity.userName }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.transactionType }}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.methodName is not empty %}{{ entity.methodName }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
-                                        <td class="numeric" >{% if entity.accountHeadDebit is not empty %}{{ entity.accountHeadDebit.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.accountHeadCredit is not empty %}{{ entity.accountHeadCredit.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.accountHeadDebitName is not empty %}{{ entity.accountHeadDebitName }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.accountHeadCreditName is not empty %}{{ entity.accountHeadCreditName }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.transactionType == 'Debit' %}
                                             {% if entity.process == 'approved'  %}
@@ -185,12 +175,12 @@
                                         <td colspan="10">
                                             <table class="table">
                                                 <tr><td>Remark</td><td>{{ entity.remark }}</td></tr>
-                                                {% if entity.accountBank is not empty %}
-                                                    <tr><td>Bank name</td><td>{{ entity.accountBank.bank.name }}</td></tr>
-                                                    <tr><td>Account no.</td><td>{{ entity.accountBank.accountNo }}</td></tr>
+                                                {% if entity.bankName is not empty %}
+                                                    <tr><td>Bank name</td><td>{{ entity.bankName }}</td></tr>
+                                                    <tr><td>Account no.</td><td>{{ entity.accountNo }}</td></tr>
                                                 {% endif %}
-                                                {% if entity.accountMobileBank is not empty %}
-                                                    <tr><td>Mobile Account</td><td>{{ entity.accountMobileBank.name }}</td></tr>
+                                                {% if entity.mobileBankName is not empty %}
+                                                    <tr><td>Mobile Account</td><td>{{ entity.mobileBankName }}</td></tr>
                                                 {% endif %}
                                             </table>
                                         </td>

@@ -290,10 +290,14 @@ class UserRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.profile','p');
+        $qb->leftJoin('p.location','l');
+        $qb->leftJoin('e.employeePayroll','ep');
         $qb->leftJoin('p.designation','d');
-        $qb->select('e.id as id');
+        $qb->select('e.id as id','e.username as username');
         $qb->addSelect('d.name as designationName');
-        $qb->addSelect('p.name as name','p.mobile as mobile','p.joiningDate');
+        $qb->addSelect('l.name as locationName');
+        $qb->addSelect('p.name as name','p.mobile as mobile','p.address as address','p.employeeType as employeeType','p.joiningDate as joiningDate','p.userGroup as userGroup');
+        $qb->addSelect('ep.basicAmount as basicAmount','ep.allowanceAmount as allowance','ep.deductionAmount as deduction','ep.loanAmount as loan','ep.advanceAmount as advance','ep.arearAmount as arear','ep.salaryType as salaryType','ep.totalAmount as total','ep.payableAmount as payable');
         $qb->andWhere("e.globalOption =".$option->getId());
         $qb->andWhere('e.domainOwner = 2');
         $qb->andWhere('e.isDelete != 1');

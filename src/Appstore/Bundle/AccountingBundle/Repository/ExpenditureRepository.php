@@ -113,6 +113,22 @@ class ExpenditureRepository extends EntityRepository
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.createdBy','cu');
+        $qb->join('e.toUser','tu');
+        $qb->join('tu.profile','profile');
+        $qb->leftJoin('e.expenseCategory','c');
+        $qb->leftJoin('e.transactionMethod','t');
+        $qb->leftJoin('e.accountMobileBank','amb');
+        $qb->leftJoin('e.accountBank','ab');
+        $qb->select('e.id as id','e.created as created','e.amount as amount','e.accountRefNo as accountRefNo','e.path as path','e.remark as remark','e.process as process');
+        $qb->addSelect('cu.username as createdBy');
+        $qb->addSelect('profile.name as toUser');
+        $qb->addSelect('t.name as methodName');
+        $qb->addSelect('c.name as categoryName');
+        $qb->addSelect('amb.name as mobileBankName');
+        $qb->addSelect('amb.mobile as mobileNo');
+        $qb->addSelect('ab.name as bankName');
+        $qb->addSelect('ab.accountNo as accountNo');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
@@ -120,7 +136,7 @@ class ExpenditureRepository extends EntityRepository
             $qb->setParameter('branch', $branch);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
+        $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
         return $result;
 

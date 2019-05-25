@@ -23,6 +23,27 @@ class AccountHeadRepository extends EntityRepository
 
 
 
+    public function getAllChildrenAccount($global)
+    {
+        $accountHead = $this->findBy(array('isParent' => 1),array('name'=>'ASC'));
+        $heads = array();
+        /* @var $child AccountHead */
+        foreach ($accountHead as $row){
+            $childs = $this->getChildrenAccount($row->getId());
+            if($childs){
+                foreach ($childs as $child) {
+                    $heads[$row->getId()][] = $child;
+                    $subs = $this->getChildrenAccount($child['id'],$global);
+                    if ($subs) {
+                        foreach ($subs as $sub) {
+                            $heads[$child['id']][] = $sub;
+                        }
+                    }
+                }
+            }
+        }
+        return $heads;
+    }
     public function getChildrenAccount($parent = '', $option = '')
     {
         $query = $this->createQueryBuilder('e');

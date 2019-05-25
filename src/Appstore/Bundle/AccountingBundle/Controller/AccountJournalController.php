@@ -39,15 +39,20 @@ class AccountJournalController extends Controller
         $data = $_REQUEST;
         $entities = $em->getRepository('AccountingBundle:AccountJournal')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent'=>1),array('name'=>'ASC'));
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
+
         $debit = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountCashOverview($this->getUser(),'Debit',$data);
         $credit = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountCashOverview($this->getUser(),'Credit',$data);
         $overview = array('debit' => $debit,'credit' => $credit);
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:AccountJournal:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
             'overview' => $overview,
             'accountHead' => $accountHead,
+            'heads' => $heads,
+            'transactionMethods' => $transactionMethods,
         ));
     }
 
@@ -390,18 +395,18 @@ class AccountJournalController extends Controller
 
 		foreach ($entities as $key => $entity){
 
-			$method = !empty($entity->getTransactionMethod()) ? $entity->getTransactionMethod()->getName():'';
-			$creditHead = !empty($entity->getAccountHeadCredit()) ? $entity->getAccountHeadCredit()->getName():'';
-			$debitHead = !empty($entity->getAccountHeadDebit()) ? $entity->getAccountHeadDebit()->getName():'';
+			$method = !empty($entity['methodName']) ? $entity['methodName']:'';
+			$creditHead = !empty($entity['accountHeadDebitName']) ? $entity['accountHeadDebitName']:'';
+			$debitHead = !empty($entity['accountHeadCreditName']) ? $entity['accountHeadCreditName']:'';
 
-			$debit = $entity->getTransactionType() == 'Debit' ? $entity->getAmount():'';
-			$credit = $entity->getTransactionType() == 'Credit' ? $entity->getAmount():'';
+			$debit = $entity['transactionType'] == 'Debit' ? $entity['amount']:'';
+			$credit = $entity['transactionType'] == 'Credit' ? $entity['amount']:'';
 			$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
 			$rows = array(
-				$entity->getCreated()->format('d-m-Y'),
-				$entity->getToUser(),
+				$entity['updated']->format('d-m-Y'),
+				$entity['userName'],
 				$method,
-				$entity->getAccountRefNo(),
+				$entity['accountRefNo'],
 				$debitHead,
 				$creditHead,
 				$debit,

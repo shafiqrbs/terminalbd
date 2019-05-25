@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   {{ globalOption.name }} Employee Payroll Lists
+                   Payroll Generate
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('employee_payroll') }}">Employee Payroll</a>
+                        <a href="{{ path('payroll') }}">Payroll Generate</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Employee Payroll lists</a></li>
+                    <li><a href="#">Payroll Generate Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -31,18 +31,19 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Employee Payroll Lists </div>
+                        <div class="caption"><i class="icon-reorder"></i>Payroll Generate Lists </div>
+                        <div class="actions">
+                            <a href="{{ path('payroll_new') }}" class=" btn red"><i class="fa fa-sign-plus"></i> Pay Run</a>
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Name </th>
-                                    <th class="numeric" >Designation</th>
-                                    <th class="numeric" >Employee Type</th>
+                                    <th class="numeric" >Created </th>
+                                    <th class="numeric" >Month</th>
                                     <th class="numeric" >Salary Type</th>
                                     <th class="numeric" >Basic</th>
                                     <th class="numeric" >Allowance</th>
@@ -57,22 +58,22 @@
                                 </thead>
                                 <tbody>
 
-                                {% for user in employees %}
+                                {% for entity in entities %}
                                     <tr>
-                                        <td class="numeric" >{{ user.name }}</td>
-                                        <td class="numeric" >{% if user.designationName is not empty %}{{ user.designationName }}{% endif %}</td>
-                                        <td class="numeric" >{{ user.employeeType }}</td>
-                                        <td class="numeric" >{{ user.salaryType|capitalize }}</td>
-                                        <td class="numeric" >{{ user.basicAmount }}</td>
-                                        <td class="numeric" >{{ user.allowance }}</td>
-                                        <td class="numeric" >{{ user.deduction }}</td>
-                                        <td class="numeric" >{{ user.loan }}</td>
-                                        <td class="numeric" >{{ user.advance }}</td>
-                                        <td class="numeric" >{{ user.arear }}</td>
-                                        <td class="numeric" >{{ user.total }}</td>
-                                        <td class="numeric" >{{ user.payable }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.effectedMonth }}</td>
+                                        <td class="numeric" >{{ entity.employeeType }}</td>
+                                        <td class="numeric" >{{ entity.salaryType|capitalize }}</td>
+                                        <td class="numeric" >{{ entity.basicAmount }}</td>
+                                        <td class="numeric" >{{ entity.allowance }}</td>
+                                        <td class="numeric" >{{ entity.deduction }}</td>
+                                        <td class="numeric" >{{ entity.loan }}</td>
+                                        <td class="numeric" >{{ entity.advance }}</td>
+                                        <td class="numeric" >{{ entity.arear }}</td>
+                                        <td class="numeric" >{{ entity.total }}</td>
+                                        <td class="numeric" >{{ entity.payable }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('employee_payroll_add',{'user':user.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Payroll</a>
+                                            <a href="{{ path('employee_payroll_add',{'entity':entity.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Payroll</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HumanResourceBundle\Entity;
 
 
+use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Bank;
@@ -35,6 +36,16 @@ class EmployeePayroll
      **/
     private  $employee;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\PayrollSheet", mappedBy="employee" )
+     **/
+    private  $payrollSheets;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\Profile", inversedBy="employeePayroll" )
+     **/
+    private  $profile;
+
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="payrollApproved" )
      **/
@@ -55,7 +66,7 @@ class EmployeePayroll
     /**
      * @var string
      *
-     * @ORM\Column(name="employeeName", type="string" , length=150 , nullable=true)
+     * @ORM\Column(name="employeeName", type="string" , length = 150 , nullable=true)
      */
     private $employeeName;
 
@@ -71,7 +82,7 @@ class EmployeePayroll
     /**
      * @var string
      *
-     * @ORM\Column(name="effectedMonth", type="datetime" , nullable=true)
+     * @ORM\Column(name="effectedMonth", type="string" , nullable=true)
      */
     private $effectedMonth;
 
@@ -100,6 +111,27 @@ class EmployeePayroll
     /**
      * @var float
      *
+     * @ORM\Column(name="allowanceAmount", type="float", nullable=true)
+     */
+    private $allowanceAmount = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="deductionAmount", type="float", nullable=true)
+     */
+    private $deductionAmount = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="advanceAmount", type="float", nullable=true)
+     */
+    private $advanceAmount = 0;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="arearAmount", type="float", nullable=true)
      */
     private $arearAmount = 0;
@@ -116,9 +148,24 @@ class EmployeePayroll
     /**
      * @var float
      *
+     * @ORM\Column(name="bonusAmount", type="float", nullable=true)
+     */
+    private $bonusAmount = 0;
+
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="totalAmount", type="float", nullable=true)
      */
     private $totalAmount = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="payableAmount", type="float", nullable=true)
+     */
+    private $payableAmount = 0;
 
     /**
      * @var float
@@ -673,6 +720,110 @@ class EmployeePayroll
     public function setMobileAccount($mobileAccount)
     {
         $this->mobileAccount = $mobileAccount;
+    }
+
+    /**
+     * @return Profile
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
+
+    /**
+     * @param Profile $profile
+     */
+    public function setProfile($profile)
+    {
+        $this->profile = $profile;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAllowanceAmount()
+    {
+        return $this->allowanceAmount;
+    }
+
+    /**
+     * @param float $allowanceAmount
+     */
+    public function setAllowanceAmount($allowanceAmount)
+    {
+        $this->allowanceAmount = $allowanceAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDeductionAmount()
+    {
+        return $this->deductionAmount;
+    }
+
+    /**
+     * @param float $deductionAmount
+     */
+    public function setDeductionAmount($deductionAmount)
+    {
+        $this->deductionAmount = $deductionAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdvanceAmount()
+    {
+        return $this->advanceAmount;
+    }
+
+    /**
+     * @param float $advanceAmount
+     */
+    public function setAdvanceAmount($advanceAmount)
+    {
+        $this->advanceAmount = $advanceAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPayableAmount()
+    {
+        return $this->payableAmount;
+    }
+
+    /**
+     * @param float $payableAmount
+     */
+    public function setPayableAmount($payableAmount)
+    {
+        $this->payableAmount = $payableAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBonusAmount()
+    {
+        return $this->bonusAmount;
+    }
+
+    /**
+     * @param float $bonusAmount
+     */
+    public function setBonusAmount($bonusAmount)
+    {
+        $this->bonusAmount = $bonusAmount;
+    }
+
+    /**
+     * @return PayrollSheet
+     */
+    public function getPayrollSheets()
+    {
+        return $this->payrollSheets;
     }
 
 

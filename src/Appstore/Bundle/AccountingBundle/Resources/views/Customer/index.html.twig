@@ -61,12 +61,11 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td>{{ loop.index }}</td>
-                                        <td>{{ entity.profile.name }}</td>
-                                        <td class="numeric"><a href="tel:+88 {{ entity.profile.mobile }}"> {{ entity.profile.mobile }}</a></td>
-                                        <td>{{ entity.profile.userGroup|capitalize }}</td>
-                                        <td class="numeric">{% if entity.profile.location is not empty %}{{ entity.profile.location.name }},{{ entity.profile.location.parent.name }}{% endif %}</td>
-
-                                        <td>{{ entity.profile.address|raw }}</td>
+                                        <td>{{ entity.name }}</td>
+                                        <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
+                                        <td>{{ entity.userGroup|capitalize }}</td>
+                                        <td class="numeric">{% if entity.locationName is not empty %}{{ entity.locationName }}{% endif %}</td>
+                                        <td>{{ entity.address|raw }}</td>
                                         <td class="numeric">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
                                                 <a class="btn mini green" href="{{ path('account_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>

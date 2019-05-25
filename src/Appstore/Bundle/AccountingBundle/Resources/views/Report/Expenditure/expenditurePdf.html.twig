@@ -94,10 +94,10 @@
         {% set total = total+entity.amount %}
         <tr>
             <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-            <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser.profile.name }}{% endif %}</td>
-            <td class="numeric" >{% if entity.expenseCategory is not empty %}{{ entity.expenseCategory.name }}{% endif %}</td>
+            <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser }}{% endif %}</td>
+            <td class="numeric" >{% if entity.categoryName is not empty %}{{ entity.categoryName }}{% endif %}</td>
             <td class="numeric" >{{ entity.accountRefNo }}</td>
-            <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
+            <td class="numeric" >{% if entity.methodName is not empty %}{{ entity.methodName }}{% endif %}</td>
             <td class="numeric" >{{  entity.remark|raw }}</td>
             <td class="numeric" >{{ entity.amount|number_format }}</td>
         </tr>
