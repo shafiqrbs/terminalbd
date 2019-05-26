@@ -44,7 +44,6 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created </th>
                                     <th class="numeric" >Month</th>
-                                    <th class="numeric" >Salary Type</th>
                                     <th class="numeric" >Basic</th>
                                     <th class="numeric" >Allowance</th>
                                     <th class="numeric" >Deduction</th>
@@ -62,9 +61,7 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.effectedMonth }}</td>
-                                        <td class="numeric" >{{ entity.employeeType }}</td>
-                                        <td class="numeric" >{{ entity.salaryType|capitalize }}</td>
-                                        <td class="numeric" >{{ entity.basicAmount }}</td>
+                                        <td class="numeric" >{{ entity.basic }}</td>
                                         <td class="numeric" >{{ entity.allowance }}</td>
                                         <td class="numeric" >{{ entity.deduction }}</td>
                                         <td class="numeric" >{{ entity.loan }}</td>
@@ -73,7 +70,11 @@
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payable }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('employee_payroll_add',{'entity':entity.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Payroll</a>
+                                            <div class="actions">
+                                                <div class="btn-group">
+                                            <a href="{{ path('payroll_sheet',{'id':entity.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Sheet</a>
+                                                    <a href="{{ path('payroll_sheet',{'id':entity.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Sheet</a>
+                                                <a href="{{ path('payroll_delete',{'id':entity.id}) }}" class="btn red mini" ><i class="fa fa-trash"></i></a></div></div>
                                         </td>
                                     </tr>
                                 {% endfor %}

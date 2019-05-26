@@ -36,26 +36,7 @@ class PayrollSheetRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
-    public function userInsertUpdate(User $user)
-    {
 
-        $em = $this->_em;
-        if($user->getEmployeePayroll()){
-
-            return $user->getEmployeePayroll();
-
-        }else{
-
-            $entity = new EmployeePayroll();
-            $entity->setEmployee($user);
-            $entity->setProfile($user->getProfile());
-            $entity->setGlobalOption($user->getGlobalOption());
-            $entity->setEmployeeName($user->getProfile()->getName());
-            $em->persist($entity);
-            $em->flush();
-            return $entity;
-        }
-    }
 
     public function insertUpdateParticular(Payroll $payroll)
     {
@@ -69,10 +50,14 @@ class PayrollSheetRepository extends \Doctrine\ORM\EntityRepository
 
             if(!empty($employee)){
 
-                /* @var $exist PayrollSheet */
+                $allowance = $em->getRepository('HumanResourceBundle:EmployeePayroll')->getAllowanceDeductionParticular($employee->getId(),'allowance');
+                $deduction = $em->getRepository('HumanResourceBundle:EmployeePayroll')->getAllowanceDeductionParticular($employee->getId(),'deduction');
 
                 $exist = $this->findOneBy(array('payroll' => $payroll,'employee' => $employee));
-                if($exist){
+
+                if(!empty($exist)){
+
+                    /* @var $exist PayrollSheet */
 
                     if($payroll->isBonusApplicable()){
                         $amount = $this->calculateAmount($employee->getBasicAmount(),$employee->getBonusPercentage());
@@ -88,6 +73,8 @@ class PayrollSheetRepository extends \Doctrine\ORM\EntityRepository
                         $exist->setAdvanceAmount($employee->getAdvanceAmount());
                     }
                     $exist->setBasicAmount($employee->getBasicAmount());
+                    $exist->setParticularAllowance($allowance);
+                    $exist->setParticularDeduction($deduction);
                     $em->persist($exist);
                     $em->flush();
 
@@ -109,7 +96,9 @@ class PayrollSheetRepository extends \Doctrine\ORM\EntityRepository
                     if($employee->getAdvanceAmount() > 0){
                         $entity->setAdvanceAmount($employee->getAdvanceAmount());
                     }
-                    $exist->setBasicAmount($employee->getBasicAmount());
+                    $entity->setBasicAmount($employee->getBasicAmount());
+                    $entity->setParticularAllowance($allowance);
+                    $entity->setParticularDeduction($deduction);
                     $em->persist($entity);
                     $em->flush();
                 }
@@ -153,4 +142,6 @@ class PayrollSheetRepository extends \Doctrine\ORM\EntityRepository
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['amount'];
     }
+
+
 }

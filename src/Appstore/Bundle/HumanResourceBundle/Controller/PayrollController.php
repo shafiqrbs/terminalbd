@@ -5,16 +5,14 @@ namespace Appstore\Bundle\HumanResourceBundle\Controller;
 
 
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
-use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayrollParticular;
 use Appstore\Bundle\HumanResourceBundle\Entity\Payroll;
-use Appstore\Bundle\HumanResourceBundle\Form\EmployeePayrollType;
+use Appstore\Bundle\HumanResourceBundle\Entity\PayrollSheet;
 use Appstore\Bundle\HumanResourceBundle\Form\PayrollType;
-use Core\UserBundle\Entity\User;
 
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+
 
 
 /**
@@ -124,7 +122,7 @@ class PayrollController extends Controller
         ));
     }
 
-    public function particularDeleteAction(Payroll $entity)
+    public function deleteAction(Payroll $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -134,7 +132,6 @@ class PayrollController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            return new Response('success');
 
         } catch (ForeignKeyConstraintViolationException $e) {
             $this->get('session')->getFlashBag()->add(
@@ -145,7 +142,7 @@ class PayrollController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return new Response('failed');
+        return $this->redirect($this->generateUrl('payroll'));
 
 
     }
@@ -153,11 +150,45 @@ class PayrollController extends Controller
     public function sheetAction(Payroll $entity)
     {
         $global = $this->getUser()->getGlobalOption()->getId();
-        if($entity->getGlobalOption()->getId() == $global){
-            return $this->render('HumanResourceBundle:Payroll:sheet.html.twig', array(
-                'entity' => $entity,
-            ));
+        $particulars = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption'=>$global),array('mode'=>'ASC'));
+        if($entity->getGlobalOption()->getId() == $global) {
+            $data = "";
+            /* @var $sheet PayrollSheet */
+            $data .= "<tr>";
+            foreach ($entity->getPayrollSheets() as $sheet) {
+
+                    $allowance = json_decode($sheet->getParticularAllowance());
+                if(!empty($allowance)) {
+                    var_dump($allowance);
+                }
+                exit;
+/*
+                $data .= "<td>{$sheet->getEmployee()->getEmployeeName()}</td>";
+                $data .= "<td>{$sheet->getBasicAmount()}</td>";
+                foreach ($particulars as $particular ):
+                    $data .="<td>";
+                    if(!empty($allowance)) {
+                        $data .= in_array($particular->getId(),$allowance) ? 'ok':'';
+                    }else{
+                        $data.= "no";
+                    }
+                    $data .="</td>";
+                endforeach;
+                $data .= "<td>{$sheet->getAdvanceAmount()}</td>";
+                $data .= "<td>{$sheet->getLoanInstallment()}</td>";
+                $data .= "<td>{$sheet->getArearAmount()}</td>";
+                $data .= "<td>{$sheet->getTotalAmount()}</td>";
+                $data .= "<td>{$sheet->getPayableAmount()}</td>";*/
+            }
+            $data .= "</tr>";
+        //    var_dump($data);
+            exit;
         }
+        return $this->render('HumanResourceBundle:Payroll:sheet.html.twig', array(
+            'payroll'        => $entity,
+            'particulars'   => $particulars,
+        ));
+
 
     }
 

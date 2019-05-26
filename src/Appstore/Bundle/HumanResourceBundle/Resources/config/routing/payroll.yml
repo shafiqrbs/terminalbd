@@ -10,6 +10,14 @@ payroll_sheet:
     path:     /{id}/sheet
     defaults: { _controller: "HumanResourceBundle:Payroll:sheet" }
 
+payroll_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "HumanResourceBundle:Payroll:delete" }
+
+payroll_sheet_edit:
+    path:     /{id}/employee-sheet
+    defaults: { _controller: "HumanResourceBundle:Payroll:delete" }
+
 payroll_create:
     path:     /create
     defaults: { _controller: "HumanResourceBundle:Payroll:create" }

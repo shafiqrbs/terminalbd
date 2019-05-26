@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('payroll') }}">Payroll Generate</a>
+                        <a href="{{ path('payroll') }}">Payroll Generate Sheet</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Payroll Generate Lists</a></li>
+                    <li><a href="#">Payroll Generate Sheet</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -31,9 +31,9 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Payroll Generate Lists </div>
+                        <div class="caption"><i class="icon-reorder"></i>Payroll Generate Sheet </div>
                         <div class="actions">
-                            <a href="{{ path('payroll_new') }}" class=" btn red"><i class="fa fa-sign-plus"></i> Pay Run</a>
+                            <a href="{{ path('payroll') }}" class=" btn red"><i class="fa fa-th-list"></i> Payroll</a>
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -42,14 +42,13 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Created </th>
-                                    <th class="numeric" >Month</th>
-                                    <th class="numeric" >Salary Type</th>
+                                    <th class="numeric" >Employee </th>
                                     <th class="numeric" >Basic</th>
-                                    <th class="numeric" >Allowance</th>
-                                    <th class="numeric" >Deduction</th>
-                                    <th class="numeric" >Loan</th>
+                                    {% for particular in particulars %}
+                                    <th class="numeric" >{{ particular.name }}</th>
+                                    {% endfor %}
                                     <th class="numeric" >Advance</th>
+                                    <th class="numeric" >Loan</th>
                                     <th class="numeric" >Arear</th>
                                     <th class="numeric" >Salary</th>
                                     <th class="numeric" >Payable</th>
@@ -57,23 +56,20 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
-                                {% for entity in entities %}
+                                {% for entity in payroll.payrollSheets %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.effectedMonth }}</td>
-                                        <td class="numeric" >{{ entity.employeeType }}</td>
-                                        <td class="numeric" >{{ entity.salaryType|capitalize }}</td>
+                                        <td class="numeric" >{{ entity.employee.employeeName }}</td>
                                         <td class="numeric" >{{ entity.basicAmount }}</td>
-                                        <td class="numeric" >{{ entity.allowance }}</td>
-                                        <td class="numeric" >{{ entity.deduction }}</td>
-                                        <td class="numeric" >{{ entity.loan }}</td>
-                                        <td class="numeric" >{{ entity.advance }}</td>
-                                        <td class="numeric" >{{ entity.arear }}</td>
-                                        <td class="numeric" >{{ entity.total }}</td>
-                                        <td class="numeric" >{{ entity.payable }}</td>
+                                        {% for particular in particulars %}
+                                            <th class="numeric" >{{ particular.name }}</th>
+                                        {% endfor %}
+                                        <td class="numeric" >{{ entity.advanceAmount }}</td>
+                                        <td class="numeric" >{{ entity.loanInstallment }}</td>
+                                        <td class="numeric" >{{ entity.arearAmount }}</td>
+                                        <td class="numeric" >{{ entity.totalAmount }}</td>
+                                        <td class="numeric" >{{ entity.payableAmount }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('employee_payroll_add',{'entity':entity.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Payroll</a>
+                                            <a href="{{ path('payroll_sheet_edit',{'id':entity.id}) }}" class="btn red mini" ><i class="fa fa-sign-out"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

@@ -168,4 +168,24 @@ class EmployeePayrollRepository extends \Doctrine\ORM\EntityRepository
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['amount'];
     }
+
+    public function getAllowanceDeductionParticular( $payroll,$mode)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.employeePayrollParticulars','p');
+        $qb->join('p.particular','particular');
+        $qb->select('particular.id as particularId','p.amount as amount');
+        $qb->where("e.id ={$payroll}");
+        $qb->andWhere("p.mode ='{$mode}'");
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row):
+            $array[$row['particularId']] = $row['amount'];
+        endforeach;
+        if(!empty($result)){
+            return json_encode($array);
+        }
+        return false;
+
+    }
 }

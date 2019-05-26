@@ -20,7 +20,7 @@ class PayrollRepository extends \Doctrine\ORM\EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.id as id','e.effectedMonth as effectedMonth','e.totalAmount as totalAmount');
+        $qb->select('e.id as id','e.created as created','e.effectedMonth as effectedMonth','e.totalAmount as total','e.payableAmount as payable','e.advanceAmount as advance','e.arearAmount as arear','e.basicAmount as basic','e.loanReceive as loan','e.allowanceAmount as allowance','e.deductionAmount as deduction');
         $qb->where("e.globalOption =".$option);
         $qb->orderBy("e.created","DESC");
         $result = $qb->getQuery()->getResult();

@@ -136,6 +136,22 @@ class PayrollSheet
     private $paymentMethod;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="particularAllowance", type="text", nullable = true)
+     */
+    private $particularAllowance;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="particularDeduction", type="text", nullable = true)
+     */
+    private $particularDeduction;
+
+
     /**
      * @var boolean
      *
@@ -546,6 +562,38 @@ class PayrollSheet
     public function setPayroll($payroll)
     {
         $this->payroll = $payroll;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticularAllowance()
+    {
+        return $this->particularAllowance;
+    }
+
+    /**
+     * @param string $particularAllowance
+     */
+    public function setParticularAllowance($particularAllowance)
+    {
+        $this->particularAllowance = $particularAllowance;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticularDeduction()
+    {
+        return $this->particularDeduction;
+    }
+
+    /**
+     * @param string $particularDeduction
+     */
+    public function setParticularDeduction($particularDeduction)
+    {
+        $this->particularDeduction = $particularDeduction;
     }
 
 }
