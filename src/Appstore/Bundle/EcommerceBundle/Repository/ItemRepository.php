@@ -199,12 +199,14 @@ class ItemRepository extends EntityRepository
             $entity->setBrand($brand);
         }
         $entity->setSource('medicine');
-        if(in_array($copyEntity->getMedicineBrand()->getMedicineForm(),array('Tablet','Capsule','Syrup','Injection'))){
+        if($copyEntity->getMedicineBrand() and in_array($copyEntity->getMedicineBrand()->getMedicineForm(),array('Tablet','Capsule','Syrup','Injection'))){
             $entity->setImageDefaultSource($copyEntity->getMedicineBrand()->getMedicineForm());
         }
         $em->persist($entity);
         $em->flush();
-        $this->_em->getRepository('EcommerceBundle:ItemKeyValue')->insertMedicineAttribute($entity,$copyEntity);
+        if($copyEntity->getMedicineBrand()) {
+            $this->_em->getRepository('EcommerceBundle:ItemKeyValue')->insertMedicineAttribute($entity, $copyEntity);
+        }
     }
 
     public function getSliderFeatureProduct($config, $limit = 3)
