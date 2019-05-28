@@ -76,8 +76,38 @@
         </div>
     {% endif %}
     <div class="clearfix"></div>
+        {#<div class="container" >
+            <div class="row-fluid">
+            <div class="col-xs-12 col-md-12 bhoechie-tab-container">
+                <div class="list-group list-group-horizontal bhoechie-tab-menu">
+                    <a href="#" class="list-group-item active text-center"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Medicine </a>
+                    <a href="#" class="list-group-item text-center"><span class="glyphicon glyphicon-cog"></span>&nbsp;Upload Prescription</a>
 
-        <div class="clearfix"></div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab">
+                    <!-- flight section -->
+                    <div class="bhoechie-tab-content active">
+                        <div class="row meta-value">
+                            <div class="col-xs-12 col-md-12 text-justify">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bhoechie-tab-content">
+                        <div class="col-xs-12 col-md-12 text-justify">
+                            <form>
+                                <input type="file" class=""><button type="button" class="btn red">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        </div>#}
+    <div class="clearfix"></div>
+
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top')  %}
             {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
         {% endif %}
@@ -181,12 +211,12 @@
                                         <a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  class="btn btn-info product-preview product-eye"><span class="glyphicon glyphicon-eye-open"></span></a>
                                         <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                                         {% if product.discount is not empty  %}<a class="btn btn-danger product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
-                                        <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
+                                        <a class="img-card product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  >
                                             <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
                                         </a>
 
                                         <div class="card-content" data-match-height="item-product">
-                                            <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
+                                            <a class="product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
                                             <div class="clearfix"></div>
                                             {% if product.category is not empty %}
                                                 <a class="btn-info tag" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id': product.category.id }) }}"><span class="glyphicon glyphicon-tag"></span> {{ product.category.name }}</a>
@@ -217,7 +247,7 @@
                                             {% endif %}
                                         </div>
                                         <div class="card-read-more text-center" >
-                                            <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %}</span>
+                                            <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} TK</span>
                                         </div>
 
                                     </div>
@@ -388,6 +418,63 @@
     <div class="clearfix"></div>
     <!-- Modal -->
 </section>
+<style>
+    .tile
+    {
+        width:80%;
+        margin:60px auto;
+    }
+    #tile-1 .tab-pane
+    {
+        padding:15px;
+        height:80px;
+    }
+    #tile-1 .nav-tabs
+    {
+        position:relative;
+        border:none!important;
+        background-color:#fff;
+        /*   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); */
+        border-radius:6px;
+    }
+    #tile-1 .nav-tabs li
+    {
+        margin:0px!important;
+    }
+    #tile-1 .nav-tabs li a
+    {
+        position:relative;
+        margin-right:0px!important;
+        padding: 20px 40px!important;
+        font-size:16px;
+        border:none!important;
+        color:#333;
+    }
+    #tile-1 .nav-tabs a:hover
+    {
+        background-color:#fff!important;
+        border:none;
+    }
+    #tile-1 .slider
+    {
+        display:inline-block;
+        width:30px;
+        height:4px;
+        border-radius:3px;
+        background-color:#39bcd3;
+        position:absolute;
+        z-index:1200;
+        bottom:0;
+        transition:all .4s linear;
+
+    }
+    #tile-1 .nav-tabs .active
+    {
+        background-color:transparent!important;
+        border:none!important;
+        color:#39bcd3!important;
+    }
+</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
