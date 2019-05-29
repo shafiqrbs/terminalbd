@@ -154,23 +154,16 @@ class PayrollController extends Controller
         if($entity->getGlobalOption()->getId() == $global) {
             $data = "";
             /* @var $sheet PayrollSheet */
-            $data .= "<tr>";
-            foreach ($entity->getPayrollSheets() as $sheet) {
 
-                    $allowance = json_decode($sheet->getParticularAllowance());
-                if(!empty($allowance)) {
-                    var_dump($allowance);
-                }
-                exit;
-/*
+            foreach ($entity->getPayrollSheets() as $sheet) {
+                $data .= "<tr>";
+                $allowance = json_decode($sheet->getParticularAllowance(),true);
                 $data .= "<td>{$sheet->getEmployee()->getEmployeeName()}</td>";
                 $data .= "<td>{$sheet->getBasicAmount()}</td>";
                 foreach ($particulars as $particular ):
                     $data .="<td>";
                     if(!empty($allowance)) {
-                        $data .= in_array($particular->getId(),$allowance) ? 'ok':'';
-                    }else{
-                        $data.= "no";
+                        $data .= in_array($particular->getId(),array_keys($allowance)) ? $allowance[$particular->getId()] :'';
                     }
                     $data .="</td>";
                 endforeach;
@@ -178,15 +171,19 @@ class PayrollController extends Controller
                 $data .= "<td>{$sheet->getLoanInstallment()}</td>";
                 $data .= "<td>{$sheet->getArearAmount()}</td>";
                 $data .= "<td>{$sheet->getTotalAmount()}</td>";
-                $data .= "<td>{$sheet->getPayableAmount()}</td>";*/
+                $data .= "<td>{$sheet->getPayableAmount()}</td>";
+                $data .= "<td>
+<a href='/' class='btn mini blue'><i class='fa fa-sign-out'></i></a>
+<a href='/' class='btn mini red'><i class='fa fa-trash'></i></a>
+</td>";
+                $data .= "</tr>";
             }
-            $data .= "</tr>";
-        //    var_dump($data);
-            exit;
+
         }
         return $this->render('HumanResourceBundle:Payroll:sheet.html.twig', array(
             'payroll'        => $entity,
             'particulars'   => $particulars,
+            'data'   => $data,
         ));
 
 

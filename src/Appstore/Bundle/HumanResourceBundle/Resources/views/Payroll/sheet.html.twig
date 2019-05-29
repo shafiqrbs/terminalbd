@@ -56,23 +56,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for entity in payroll.payrollSheets %}
-                                    <tr>
-                                        <td class="numeric" >{{ entity.employee.employeeName }}</td>
-                                        <td class="numeric" >{{ entity.basicAmount }}</td>
-                                        {% for particular in particulars %}
-                                            <th class="numeric" >{{ particular.name }}</th>
-                                        {% endfor %}
-                                        <td class="numeric" >{{ entity.advanceAmount }}</td>
-                                        <td class="numeric" >{{ entity.loanInstallment }}</td>
-                                        <td class="numeric" >{{ entity.arearAmount }}</td>
-                                        <td class="numeric" >{{ entity.totalAmount }}</td>
-                                        <td class="numeric" >{{ entity.payableAmount }}</td>
-                                        <td class="numeric" >
-                                            <a href="{{ path('payroll_sheet_edit',{'id':entity.id}) }}" class="btn red mini" ><i class="fa fa-sign-out"></i></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                                {{ data|raw }}
                                 </tbody>
                             </table>
 
