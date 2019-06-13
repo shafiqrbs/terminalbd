@@ -96,14 +96,14 @@ class Profile
     /**
      * @var string
      *
-     * @ORM\Column(name="mobile", type="string", length=15)
+     * @ORM\Column(name="mobile", type="string", length=15, nullable=true)
      */
     private $mobile;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phoneNo", type="string", length=15)
+     * @ORM\Column(name="phoneNo", type="string", length=15, nullable=true)
      */
     private $phoneNo;
 

@@ -24,6 +24,7 @@ class BusinessReverse
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessReverses")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $businessConfig;
 

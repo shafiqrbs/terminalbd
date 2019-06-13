@@ -28,6 +28,7 @@ class DmsParticular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsParticulars")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $dmsConfig;
 
@@ -52,7 +53,7 @@ class DmsParticular
     private $assignDoctorInvoices;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="dmsParticulars" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="dmsParticulars")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $service;

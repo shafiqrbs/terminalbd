@@ -26,6 +26,7 @@ class BusinessVendorStock
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessVendorStocks" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessConfig;
 

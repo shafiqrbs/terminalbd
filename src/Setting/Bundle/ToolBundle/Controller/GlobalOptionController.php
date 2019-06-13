@@ -59,7 +59,8 @@ class GlobalOptionController extends Controller
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $entity->getProfile()->setMobile($mobile);
         $data = $request->request->all();
-        if ($form->isValid()) {
+        $exist = $this->getDoctrine()->getRepository('UserBundle:User')->checkExistingUser($mobile);
+        if ($form->isValid() and $exist == false) {
             $user = $this->getUser();
             $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->createGlobalOption($mobile,$data,$user);
             $entity->setPlainPassword("*148148#");
@@ -81,6 +82,10 @@ class GlobalOptionController extends Controller
             return $this->redirect($this->generateUrl('globaloption_edit', array('id' => $globalOption->getId())));
         }
 
+        $this->get('session')->getFlashBag()->add(
+            'notice',"The mobile no have to be unique"
+        );
+
         return $this->render('SettingToolBundle:GlobalOption:signup.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -97,7 +102,7 @@ class GlobalOptionController extends Controller
             'method' => 'POST',
             'attr' => array(
                 'id' => 'signup',
-                'class' => 'registration signupForm',
+                'class' => 'form-horizontal  registration signupForm',
                 'novalidate' => 'novalidate',
             )
         ));

@@ -15,6 +15,7 @@ use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
@@ -374,7 +375,7 @@ class GlobalOptionRepository extends EntityRepository
     /**
      * @param GlobalOption $entity
      */
-    public function initialSetup($entity)
+    public function initialSetup(User $entity)
     {
         $em = $this->_em;
 
@@ -425,7 +426,7 @@ class GlobalOptionRepository extends EntityRepository
 
         $customer = new Customer();
         $customer->setGlobalOption($globalOption);
-        $customer->setMobile($globalOption->getMobile(0));
+        $customer->setMobile($globalOption->getMobile());
         $customer->setName('Default');
         $em->persist($customer);
 

@@ -54,6 +54,32 @@ class UserRepository extends EntityRepository
 
     }
 
+    /**
+     * @param array $criteria
+     * @return array
+     */
+    public function getEntityByIdAndStatusCriteria(array $criteria)
+    {
+        if ( $criteria['username']) {
+            return $this->createQueryBuilder('e')
+                ->andWhere('e.username = :username')
+                ->setParameter('username', $criteria['username'])
+                ->getQuery()
+                ->getResult();
+        }
+
+        return [];
+    }
+
+    public function checkExistingUser($mobile)
+    {
+        return (boolean)$this->createQueryBuilder('u')
+            ->andWhere('u.username = :user')
+            ->setParameter('user', $mobile)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function getAccessRoleGroup(GlobalOption $globalOption){
 
 

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
+use Appstore\Bundle\MedicineBundle\Form\ParticularType;
 use Appstore\Bundle\MedicineBundle\Form\PayrollSettingType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -73,7 +74,7 @@ class ParticularController extends Controller
      */
     private function createCreateForm(MedicineParticular $entity)
     {
-        $form = $this->createForm(new PayrollSettingType(), $entity, array(
+        $form = $this->createForm(new ParticularType(), $entity, array(
             'action' => $this->generateUrl('medicine_particular_create'),
             'method' => 'POST',
             'attr' => array(
@@ -117,7 +118,7 @@ class ParticularController extends Controller
     */
     private function createEditForm(MedicineParticular $entity)
     {
-        $form = $this->createForm(new PayrollSettingType(), $entity, array(
+        $form = $this->createForm(new ParticularType(), $entity, array(
             'action' => $this->generateUrl('medicine_particular_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

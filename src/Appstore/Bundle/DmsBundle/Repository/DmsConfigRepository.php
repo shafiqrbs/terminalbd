@@ -14,7 +14,7 @@ class DmsConfigRepository extends EntityRepository
 {
 
 
-    public function hospitalReset(GlobalOption $option)
+    public function reset(GlobalOption $option)
     {
 
         $em = $this->_em;
@@ -23,11 +23,15 @@ class DmsConfigRepository extends EntityRepository
         $DoctorInvoice = $em->createQuery('DELETE DmsBundle:DmsInvoice e WHERE e.dmsConfig = '.$config);
         $DoctorInvoice->execute();
 
-        $Invoice = $em->createQuery('DELETE DmsBundle:Invoice e WHERE e.dmsConfig = '.$config);
-        $Invoice->execute();
-
         $hmsPurchase = $em->createQuery('DELETE DmsBundle:DmsPurchase e WHERE e.dmsConfig = '.$config);
         $hmsPurchase->execute();
+
+        $hmsPurchase = $em->createQuery('DELETE DmsBundle:DmsParticular e WHERE e.dmsConfig = '.$config);
+        $hmsPurchase->execute();
+
+        $hmsPurchase = $em->createQuery('DELETE DmsBundle:DmsService e WHERE e.dmsConfig = '.$config);
+        $hmsPurchase->execute();
+
 
 
     }
