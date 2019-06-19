@@ -49,7 +49,7 @@ class Branches
     private $globalOption;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Payroll", inversedBy="branch" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Payroll", mappedBy="branch" )
      **/
     private $payrolls;
 
