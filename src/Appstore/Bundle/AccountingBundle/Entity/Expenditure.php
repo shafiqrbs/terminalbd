@@ -7,6 +7,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -80,6 +81,19 @@ class Expenditure
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem", mappedBy="expenditure" , cascade={"persist", "remove"})
      **/
     private  $expenditureItems;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup", inversedBy="expenditure" )
+     **/
+    private  $androidDevice;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="deviceSalesId", type="integer",nullable=true)
+     */
+    private $deviceSalesId;
 
     /**
      * @var float
@@ -619,6 +633,38 @@ class Expenditure
     public function setCustomer($customer)
     {
         $this->customer = $customer;
+    }
+
+    /**
+     * @return AndroidDeviceSetup
+     */
+    public function getAndroidDevice()
+    {
+        return $this->androidDevice;
+    }
+
+    /**
+     * @param AndroidDeviceSetup $androidDevice
+     */
+    public function setAndroidDevice($androidDevice)
+    {
+        $this->androidDevice = $androidDevice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeviceSalesId()
+    {
+        return $this->deviceSalesId;
+    }
+
+    /**
+     * @param int $deviceSalesId
+     */
+    public function setDeviceSalesId($deviceSalesId)
+    {
+        $this->deviceSalesId = $deviceSalesId;
     }
 }
 

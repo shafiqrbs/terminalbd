@@ -30,7 +30,7 @@ class SmsGateWay
 
         try {
 
-            $body = '{"authentication": {"username": "' . $this->username .'","password": "'.$this->password.'"},"messages": [{"sender": "xxxx","text": "'.$msg.'","recipients": [{"gsm": "'.$phone.'"}]}]}';
+            $body = '{"authentication": {"username": "' . $this->username .'","password": "'.$this->password.'"},"messages": [{"sender": "8804445651233","text": "'.$msg.'","recipients": [{"gsm": "'.$phone.'"}]}]}';
 
             $response = $this->client->post(
                 "/api/v3/sendsms/json",

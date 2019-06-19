@@ -298,7 +298,7 @@
     <div class="input-group text-right" style="margin-top: 8px; position: relative" >
         <span class="label label-warning badge totalItem"> {{ cart.total_items }}</span>
         <div class="input-group-btn">
-            <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" data-toggle="tooltip" title="View Shopping Items"  id="cartItem"  class="btn btn-warning"> <span  class="fa fa-shopping-cart"></span> items</a>
+             <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" data-toggle="tooltip" title="View Shopping Items"  id="cartItem"  class="btn btn-warning"> <span  class="fa fa-shopping-cart"></span> items</a>
             {% if app.user %}
                 <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
                 <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>

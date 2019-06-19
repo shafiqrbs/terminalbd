@@ -1,41 +1,150 @@
 <nav class="navbar navbar-inverse ">
-    <section id="top-bar">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-left">
-                    <div class="box">
-                        <ul class="info-links">
-                            {% if globalOption.templateCustomize.showCalendar == 1 %}
-                                <li><i class="fa fa-calendar"></i>&nbsp;{{ "now"|date("F j, Y") }}</li>{% endif %}
-                            {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
-                                <li><i class="fa fa-envelope"></i>&nbsp;{{ globalOption.email }}</li>{% endif %}
-                            {% if globalOption.templateCustomize.showMobile == 1 %}
-                                <li><i class="fa fa-mobile"></i>&nbsp;{{ globalOption.mobile }}</li>{% endif %}
-                        </ul>
+    {% if globalOption.templateCustomize.topBar is not empty %}
+        <section id="top-bar" class="header-position">
+            <div class="container" >
+                <div class="row">
+                    <div class="col-md-4 text-left">
+                        <div class="box">
+                            {% if globalOption.templateCustomize.topTextPosition == "text-left" and globalOption.templateCustomize.topBarContent is not empty %}
+                                {{  globalOption.templateCustomize.topBarContent|raw }}
+                            {% endif %}
+                            {% if globalOption.templateCustomize.socialIconPosition == "top-left" %}
+                                <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
+                                    {% if globalOption.facebookPageUrl is not empty %}
+                                        <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.twitterUrl is not empty %}
+                                        <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.youtube is not empty %}
+                                        <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.instagramPageUrl is not empty %}
+                                        <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.linkedin is not empty %}
+                                        <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.googlePlus is not empty %}
+                                        <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.skype is not empty %}
+                                        <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                            {% if globalOption.templateCustomize.topIconPosition == "text-left" %}
+                                <ul class="info-links">
+                                    {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                        <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                        <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showMobile == 1 %}
+                                        <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+
+                        </div>
                     </div>
-                </div>
-                <div class=" col-md-6 text-right">
-                    <div class="box">
-                        <ul class="social-links">
-                            {% if globalOption.facebookPageUrl == 1 %}
-                                <li><a href="https://{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a>
-                                </li>{% endif %}
-                            {% if globalOption.templateCustomize.showSearch == 1 %}
-                                <li><a href="javascript:" id="searchEvent"><i class="fa fa-search"></i></a>
-                                </li>{% endif %}
-                            <li><a href="javascript:" class="register-btn"><i class="fa fa-user"></i></a></li>
-                            {% if  app.user %}
-                                <li><a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" class="logout"> <i class="fa fa-sign-in"></i></a></li>
+                    <div class="col-md-4 text-center">
+                        <div class="box">
+                            {% if globalOption.templateCustomize.topTextPosition == "text-center" and globalOption.templateCustomize.topBarContent is not empty %}
+                                {{  globalOption.templateCustomize.topBarContent|raw }}
                             {% endif %}
-                            {% if globalOption.ecommerceConfig.cart == 1 %}
-                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" class="" ><i class="fa fa-shopping-cart"></i></a></li>
+                            {% if globalOption.templateCustomize.socialIconPosition == "top-center" %}
+                                <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
+                                    {% if globalOption.facebookPageUrl is not empty %}
+                                        <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.twitterUrl is not empty %}
+                                        <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.youtube is not empty %}
+                                        <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.instagramPageUrl is not empty %}
+                                        <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.linkedin is not empty %}
+                                        <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.googlePlus is not empty %}
+                                        <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.skype is not empty %}
+                                        <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
+                                    {% endif %}
+                                </ul>
                             {% endif %}
-                        </ul>
+                            {% if globalOption.templateCustomize.topIconPosition == "text-center" %}
+                                <ul class="info-links">
+                                    {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                        <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                        <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showMobile == 1 %}
+                                        <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class=" col-md-4 text-right">
+                        <div class="box">
+                            {% if globalOption.templateCustomize.topTextPosition == "text-right" and globalOption.templateCustomize.topBarContent is not empty %}
+                                {{  globalOption.templateCustomize.topBarContent|raw }}
+                            {% endif %}
+                            {% if globalOption.templateCustomize.socialIconPosition == "top-right" %}
+                                <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
+                                    {% if globalOption.facebookPageUrl is not empty %}
+                                        <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.twitterUrl is not empty %}
+                                        <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.youtube is not empty %}
+                                        <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.instagramPageUrl is not empty %}
+                                        <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.linkedin is not empty %}
+                                        <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.googlePlus is not empty %}
+                                        <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.skype is not empty %}
+                                        <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+
+                            {% if globalOption.templateCustomize.topIconPosition == "text-right" %}
+                                <ul class="info-links">
+                                    {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                        <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                        <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showMobile == 1 %}
+                                        <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    {% endif %}
     <section id="header">
         <div class="container">
             <div class="navbar-header">
@@ -45,38 +154,149 @@
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="col-md-9" >
-                    {% if globalOption.templateCustomize.showSearch == 1 %}
+                <div class="bs-example-form col-md-9 text-right">
+                    <div class="box">
+                        {% if globalOption.templateCustomize.topTextPosition == "menu-right" and globalOption.templateCustomize.topBarContent is not empty %}
+                            {{  globalOption.templateCustomize.topBarContent|raw }}
+                        {% endif %}
+                        {% if globalOption.templateCustomize.socialIconPosition == "menu-right" %}
+                            <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
+                                {% if globalOption.facebookPageUrl is not empty %}
+                                    <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.twitterUrl is not empty %}
+                                    <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.youtube is not empty %}
+                                    <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.instagramPageUrl is not empty %}
+                                    <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.linkedin is not empty %}
+                                    <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.googlePlus is not empty %}
+                                    <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.skype is not empty %}
+                                    <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
 
-                            <div class="row bs-example-form">
-                                <div class="col-md-12 col-lg-12" id="header-form">
-                                    {{ form_start(form) }}
-                                    {{ form_row(form._token) }}
-                                    <div class='input-group search-box' >
-                                        <div class='input-group-field' style="width: 39.7%;">
-                                            {{ form_widget(form.category) }}
-                                        </div>
-                                        <div class='input-group-field' style="width: 22%">
-                                            {{ form_widget(form.brand) }}
-                                        </div>
-                                        {{ form_widget(form.webName) }}
-                                        <span class="input-group-btn">
-                                               <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                            </span>
-                                    </div>
-                                    {{ form_end(form) }}
-                                </div>
+                        {% if globalOption.templateCustomize.showMobile == 1 and globalOption.templateCustomize.contactButton == 1 %}
+                            <div class="support-box">
+                                <div class="support">For Support Call <span class="icon fa fa-headphones"></span></div>
+                                <div class="support-number">{{ globalOption.mobile }}</div>
                             </div>
+                        {% endif %}
 
-                    {% endif %}
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
     <div class="clearfix"></div>
+    <div class="container">
+        {% if globalOption.templateCustomize.showSearch == 1 %}
+            <div class="row" style="margin-bottom: 15px; margin-top: 15px">
+                <div class="col-md-12 col-lg-12">
+                    {{ form_start(form) }}
+                    {{ form_row(form._token) }}
+                    <div class='input-group search-box' >
+                        <div class='input-group-field ' style="width: 30%;">
+                            {{ form_widget(form.category) }}
+                        </div>
+                        <div class='input-group-field' style="width:30%">
+                            {{ form_widget(form.brand) }}
+                        </div>
+                        {{ form_widget(form.webName) }}
+                        <span class="input-group-btn">
+                                               <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-danger"> <span  class="fa fa-upload"></span> Prescription</a>
+                                            </span>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+        {% endif %}
+    </div>
+    <div class="clearfix"></div>
     <section id="menu-bar" class="sticky">
-        <div class="container">{{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}</div>
+        <div class="container">
+            {{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}</div>
     </section>
+    <div class="clearfix"></div>
+    <div class="clearfix"></div>
+    <div class="container" >
+        <div class="row-fluid">
+            <div class="col-xs-12 col-md-12 bhoechie-tab-container" id="prescription-content">
+
+                <div class="col-xs-6 col-md-6" style="margin-bottom: 45px;">
+                    <div class="modal-content  col-xs-12 col-md-12">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Prescription</h4>
+                        </div>
+                        <form name="prescription" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_prescription_upload') }}" id="prescription" class="register" novalidate="novalidate">
+                            <div class="modal-body">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                       <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+                                                <input type="text" id="mobile" name="mobile" required="required" class="mobile form-control" placeholder="Enter your mobile no" aria-required="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-upload"></span></span>
+                                                <input type="file" id="prescriptionFile" name="prescriptionFile" class="m-wrap span12 form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" id="termsConditionAccept" name="termsConditionAccept" required="required" class="" value="1" aria-required="true">
+                                                I agree to Terms & Condotion
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                    <span style="text-align: left; display:block; float: left">Click here for
+                    <a href="javascript:" class="login-preview" id="register-btn1">Login</a></span>
+                                <button type="submit" class="btn btn-sm btn-warning pull-right" role="button"> <i class="fa fa-save" ></i> Upload Prescription</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-xs-6 col-md-6">
+                    <h3>Prescription Upload Process Instructions</h3>
+                    <ol>
+                        <li>আমাদের মাধ্যমে ঢাকা শহরের যেকোনো প্রান্ত থেকে ঘরে বা অফিসে বসে ঔষধের হোম ডেলিভারি পেতে পারেন। অর্ডার দেয়ার ২৪ ঘণ্টার মধ্যে আমরা আপনার বাসা অথবা অফিসে গিয়ে আপনার চাহিদা মত ঔষধ সরবরাহ করি। আমাদের চেষ্টা থাকবে যত দ্রুত সম্ভব ডেলিভারি দেয়া। তাই আমরাই সবচেয়ে সুলভে ভালো ওষুধ সরবরাহ করি।
+
+                            অনলাই‌নে ঔষধ কিন‌তে প্রেস‌ক্রিপশন এর ছ‌বি তু‌লে অথবা স্কান ক‌রে আমা‌দের ওয়েবসাইট অথবা ফেসবুক পেই‌জের পাঠি‌য়ে দিন। আমা‌দের অ‌ভিজ্ঞ ফার্মা‌সিস্ট প্রেস‌ক্রিপশন দে‌খে ঔষধ রে‌ডি ক‌রে দি‌বেন।</li>
+                        <li>Prescription Upload Process Instructions</li>
+                        <li>Prescription Upload Process Instructions</li>
+                        <li>Prescription Upload Process Instructions</li>
+                        <li>Prescription Upload Process Instructions</li>
+                        <li>Prescription Upload Process Instructions</li>
+                        <li>Prescription Upload Process Instructions</li>
+                        <li>Prescription Upload Process Instructions</li>
+                        <li>Prescription Upload Process Instructions</li>
+                        <li>Prescription Upload Process Instructions</li>
+
+                    </ol>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
     <div class="clearfix"></div>
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header')  %}
         {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'header'}) %}

@@ -46,6 +46,10 @@ api_system_unit:
     path:     /product-unit
     defaults: { _controller: BinduBundle:Api:unit }
 
+api_system_dims:
+    path:     /medicine-dims
+    defaults: { _controller: BinduBundle:Api:medicineDims }
+
 
 api_system_expense_category:
     path:     /expense-category

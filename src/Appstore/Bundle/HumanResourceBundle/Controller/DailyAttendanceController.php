@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Date;
 
 /**
@@ -68,8 +69,9 @@ class DailyAttendanceController extends Controller
         if($blackOutDate){
             $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
         }
-        $this->getDoctrine()->getRepository('HumanResourceBundle:Attendance')->setupMonthlyAttendance($employees,$blackoutdate);
+        $this->getDoctrine()->getRepository('HumanResourceBundle:Attendance')->setupMonthlyAttendance($globalOption,$employees,$blackoutdate);
         $currentMonthEmployeeAttendance = $this->getDoctrine()->getRepository('HumanResourceBundle:Attendance')->currentMonthEmployeeAttendance($globalOption);
+
         return $this->render('HumanResourceBundle:DailyAttendance:attendance.html.twig', array(
             'globalOption'                          => $globalOption,
             'employees'                             => $employees,
@@ -88,8 +90,12 @@ class DailyAttendanceController extends Controller
         $today  = $datetime->format('d');
         $month  = $datetime->format('F');
         $year   = $datetime->format('Y');
-
-        $entity = New DailyAttendance();
+        $exist = $this->getDoctrine()->getRepository('HumanResourceBundle:DailyAttendance')->checkLeaveToday($attendance);
+        if($exist){
+            $entity = $exist;
+        }else{
+            $entity = New DailyAttendance();
+        }
         $entity->setAttendance($attendance);
         $entity->setUser($attendance->getEmployee());
         $entity->setGlobalOption($attendance->getGlobalOption());
@@ -119,7 +125,7 @@ class DailyAttendanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $blackoutdate ='';
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        $employees = $em->getRepository('UserBundle:User')->getEmployeeEntities($globalOption);
         $calendarBlackout = $em->getRepository('HumanResourceBundle:Weekend')->findOneBy(array('globalOption' => $globalOption));
         $blackOutDate =  $calendarBlackout ->getWeekendDate();
         if($blackOutDate){

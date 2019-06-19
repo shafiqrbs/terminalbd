@@ -372,7 +372,31 @@ class ApiController extends Controller
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getApiCategory($entity);
+            $data = $this->getDoctrine()->getRepository('SettingAppearanceBundle:AndroidTemplateCustomization')->getApiTemplateCustomization($entity);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function medicineDimsAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $entity = $this->checkApiValidation($request);
+            $data = array('offset'=>0,'limit'=>2000);
+            $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->getApiDims($entity,$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

@@ -254,9 +254,14 @@ class PurchaseController extends Controller
             $pack = !empty($data['medicineStock']['pack']) ? $data['medicineStock']['pack'] : 1;
             $quantity = ($pack * $entity->getPurchaseQuantity());
             $entity->setPack($pack);
+            $entity->getPurchasePrice();
+            $purchasePrice = round(($entity->getPurchasePrice()/$entity->getPurchaseQuantity()),2);
+            $salesPrice = round(($entity->getSalesPrice()/$entity->getPurchaseQuantity()),2);
             $entity->setPurchaseQuantity($quantity);
-            $entity->setAveragePurchasePrice($entity->getPurchasePrice());
-            $entity->setAverageSalesPrice($entity->getSalesPrice());
+            $entity->setPurchasePrice($purchasePrice);
+            $entity->setAveragePurchasePrice($purchasePrice);
+            $entity->setSalesPrice($salesPrice);
+            $entity->setAverageSalesPrice($salesPrice);
             $entity->setRemainingQuantity($entity->getPurchaseQuantity());
             $em->persist($entity);
             $em->flush();

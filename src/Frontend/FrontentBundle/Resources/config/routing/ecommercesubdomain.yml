@@ -77,7 +77,23 @@ webservice_product_single_cart:
     options:
             expose: true
 
+webservice_product_medicine_cart:
+    path:     /single-medicine-cart/{product}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productAddMedicineCart }
+    methods:  GET
+    options:
+            expose: true
+
+
 webservice_product_cart_update:
+    path:     /cart/product-update/{cartid}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productUpdateCart }
+    methods:  GET
+    options:
+            expose: true
+
+
+webservice_product_medicine_cart_update:
     path:     /cart/product-update/{cartid}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productUpdateCart }
     methods:  GET
@@ -188,9 +204,20 @@ webservice_customer_checking:
     options:
             expose: true
 
+webservice_customer_mobile_validation:
+    path:     /validation-user/login-mobile-validation-customer
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:customerLoginMobileValidation }
+    methods:  GET
+    options:
+            expose: true
+
 webservice_search:
     path:     /search
     defaults: { _controller: FrontendBundle:WebServiceModule:search }
+
+webservice_product_search:
+    path:     /product-search
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productSearch }
 
 webservice_module_page:
     path:     /{module}/{slug}
@@ -208,6 +235,12 @@ frontend_brand:
     path:     /brand/{slug}
     defaults: { _controller: FrontendBundle:Default:brand }
 
+webservice_prescription_upload:
+    path:     /prescription-upload
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:insert }
+    methods:  POST
+    options:
+            expose: true
 
 
 

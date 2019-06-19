@@ -56,23 +56,66 @@ class OrderItem
     private  $color;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="itemSource", type="string" , length = 30, nullable=true)
+     */
+    private $itemSource = 'online';
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="itemName", type="string", nullable=true)
+     */
+    private $itemName;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="brandName", type="string", nullable=true)
+     */
+    private $brandName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="categoryName", type="string", nullable=true)
+     */
+    private $categoryName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="unitName", type="string" , nullable=true)
+     */
+    private $unitName;
+
+
+    /**
      * @var integer
      *
-     * @ORM\Column(name="quantity", type="smallint")
+     * @ORM\Column(name="quantity", type="smallint" ,nullable=true)
      */
     private $quantity;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="price", type="float")
+     * @ORM\Column(name="price", type="float", nullable=true)
      */
     private $price;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="subTotal", type="float")
+     * @ORM\Column(name="discountPrice", type="float", nullable=true)
+     */
+    private $discountPrice;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float",nullable=true)
      */
     private $subTotal;
 
@@ -265,6 +308,107 @@ class OrderItem
     public function setItem($item)
     {
         $this->item = $item;
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemSource()
+    {
+        return $this->itemSource;
+    }
+
+    /**
+     * @param string $itemSource
+     * online
+     * stock
+     * dims
+     * anonymous
+     */
+
+    public function setItemSource($itemSource)
+    {
+        $this->itemSource = $itemSource;
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemName()
+    {
+        return $this->itemName;
+    }
+
+    /**
+     * @param string $itemName
+     */
+    public function setItemName($itemName)
+    {
+        $this->itemName = $itemName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrandName()
+    {
+        return $this->brandName;
+    }
+
+    /**
+     * @param string $brandName
+     */
+    public function setBrandName($brandName)
+    {
+        $this->brandName = $brandName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryName()
+    {
+        return $this->categoryName;
+    }
+
+    /**
+     * @param string $categoryName
+     */
+    public function setCategoryName($categoryName)
+    {
+        $this->categoryName = $categoryName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnitName()
+    {
+        return $this->unitName;
+    }
+
+    /**
+     * @param string $unitName
+     */
+    public function setUnitName($unitName)
+    {
+        $this->unitName = $unitName;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPrice()
+    {
+        return $this->discountPrice;
+    }
+
+    /**
+     * @param float $discountPrice
+     */
+    public function setDiscountPrice($discountPrice)
+    {
+        $this->discountPrice = $discountPrice;
     }
 
 

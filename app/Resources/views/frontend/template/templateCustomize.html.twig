@@ -1007,8 +1007,8 @@
         background-color: {{ globalOption.templateCustomize.subMenuBgColorHover }} !important;
     }
     {% endif %}
-
-
-
+    {% if globalOption.templateCustomize.siteCssStyle is not empty %}
+        {{ globalOption.templateCustomize.siteCssStyle|raw }}
+    {% endif %}
 
 </style>

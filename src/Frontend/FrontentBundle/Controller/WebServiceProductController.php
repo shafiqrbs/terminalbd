@@ -3,6 +3,7 @@
 namespace Frontend\FrontentBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
@@ -98,7 +99,7 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productFilterAction(Request $request , $subdomain)
+    public function productFilter(Request $request , $subdomain)
     {
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
@@ -130,6 +131,67 @@ class WebServiceProductController extends Controller
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
                     'products'          => $pagination,
+                    'menu'              => $menu,
+                    'searchForm'        => $searchForm,
+                    'pageName'          => 'Product',
+                )
+            );
+        }
+    }
+
+    public function productSearchAction(Request $request , $subdomain)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        if(!empty($globalOption)){
+            if($globalOption->getDomainType() == 'ecommerce'){
+                return $this->productFilter($request , $subdomain);
+            }elseif ($globalOption->getDomainType() == 'medicine'){
+                return $this->medicineProductSearch($request , $subdomain);
+            }
+        }else{
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+    }
+
+    public function medicineProductSearch($request , $subdomain)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+
+        if(!empty($globalOption)){
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
+
+            $data = $_REQUEST;
+            $ecommerce = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $config = $globalOption->getEcommerceConfig();
+            $medicineConfig = $globalOption->getMedicineConfig()->getId();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
+            $vendorEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($medicineConfig,$data);
+           $globalEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->getMedicineBrandSearch($data);
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $theme = 'Template/Mobile/'.$themeName;
+            }else{
+                $theme = 'Template/Desktop/'.$themeName;
+            }
+            $item = !empty($_REQUEST) ? $_REQUEST :array();
+            $searchForm = $item['item'];
+            return $this->render('FrontendBundle:'.$theme.':productSearch.html.twig',
+                array(
+                    'globalOption'      => $globalOption,
+                    'cart'              => $cart,
+                    'products'          => $entities,
+                    'vendorEntities'    => $vendorEntities,
+                    'globalEntities'    => $globalEntities,
                     'menu'              => $menu,
                     'searchForm'        => $searchForm,
                     'pageName'          => 'Product',
@@ -666,22 +728,58 @@ class WebServiceProductController extends Controller
     }
 
 
+    public function productAddMedicineCartAction(Request $request , $subdomain , Item $product)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+
+        $data = $_REQUEST;
+        $quantity =  isset($data['quantity']) ? $data['quantity'] :'';
+        $productImg = isset($data['productImg']) ? $data['productImg'] :'';
+        $salesPrice = $product->getDiscountPrice() == null ?  $product->getSalesPrice() : $product->getDiscountPrice();
+        $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
+
+        /** @var GlobalOption $globalOption */
+
+            $data = array(
+                'id' => $product->getId(),
+                'name' => $product->getWebName(),
+                'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
+                'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
+                'price' => $salesPrice,
+                'quantity' => $quantity,
+                'productUnit' => $productUnit,
+                'productImg' => $productImg
+            );
+            $cart->insert($data);
+            $cartTotal = (string)$cart->total();
+            $totalItems = (string)$cart->total_items();
+            $cartResult = $cartTotal.'('.$totalItems.')';
+            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+        echo $array;
+        exit;
+
+    }
+
+
     public function productCartDetailsAction(Request $request, $subdomain){
 
 
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-
         /* Device Detection code desktop or mobile */
-
-        $detect = new MobileDetect();
-        if($detect->isMobile() && $detect->isTablet() ) {
-            $theme = 'Template/Mobile';
-        }else{
-            $theme = 'Template/Mobile';
+        $theme = "";
+        if(!empty($globalOption)) {
+            if ($globalOption->getDomainType() == 'ecommerce') {
+                $theme = 'Template/Mobile/EcommerceWidget:ajaxCart.html.twig';
+            } elseif ($globalOption->getDomainType() == 'medicine') {
+                $theme = 'Template/Mobile/EcommerceWidget:ajaxMedicineCart.html.twig';
+            }
         }
-        return $this->render('FrontendBundle:'.$theme.'/EcommerceWidget:ajaxCart.html.twig',
+        return $this->render("FrontendBundle:{$theme}",
             array(
                 'cart' => $cart,
                 'searchForm'        => $_REQUEST,

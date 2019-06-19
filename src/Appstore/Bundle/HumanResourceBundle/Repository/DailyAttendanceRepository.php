@@ -45,6 +45,36 @@ class DailyAttendanceRepository extends EntityRepository
 
     }
 
+    public function checkLeaveMonthly(Attendance $attendance)
+    {
+        $datetime = new \DateTime("now");
+        $today  = $datetime->format('d');
+        $month  = $datetime->format('F');
+        $year   = $datetime->format('Y');
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.user = :employee')->setParameter('employee', $attendance->getEmployee()->getId());
+        $qb->andWhere('e.presentDay = :presentDay')->setParameter('presentDay',$today);
+        $qb->andWhere('e.month = :month')->setParameter('month',$month);
+        $qb->andWhere('e.year = :year')->setParameter('year',$year);
+        $count = $qb->getQuery()->getOneOrNullResult();
+        return $count;
+    }
+
+    public function checkLeaveToday(Attendance $attendance)
+    {
+        $datetime = new \DateTime("now");
+        $today  = $datetime->format('d');
+        $month  = $datetime->format('F');
+        $year   = $datetime->format('Y');
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.user = :employee')->setParameter('employee', $attendance->getEmployee()->getId());
+        $qb->andWhere('e.presentDay = :presentDay')->setParameter('presentDay',$today);
+        $qb->andWhere('e.month = :month')->setParameter('month',$month);
+        $qb->andWhere('e.year = :year')->setParameter('year',$year);
+        $count = $qb->getQuery()->getOneOrNullResult();
+        return $count;
+    }
+
     public function dailyLeaveAttendance(EmployeeLeave $leave,Attendance $attendance,\DateTime $datetime)
     {
 

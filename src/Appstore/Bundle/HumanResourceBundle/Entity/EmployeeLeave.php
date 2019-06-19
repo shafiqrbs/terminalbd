@@ -63,6 +63,13 @@ class EmployeeLeave
     private $noOffDay;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="noOfDate", type="text", nullable=true)
+     */
+    private $noOfDate;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="startDate", type="datetime", nullable=true)
@@ -267,6 +274,22 @@ class EmployeeLeave
     public function getDailyAttendance()
     {
         return $this->dailyAttendance;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNoOfDate()
+    {
+        return $this->noOfDate;
+    }
+
+    /**
+     * @param string $noOfDate
+     */
+    public function setNoOfDate($noOfDate)
+    {
+        $this->noOfDate = $noOfDate;
     }
 
 }

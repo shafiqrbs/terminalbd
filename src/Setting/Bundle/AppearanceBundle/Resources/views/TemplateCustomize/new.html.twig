@@ -750,13 +750,16 @@
                             <div class="span3">
                                 <div class="control-group">
                                     {{ form_widget(form.topBar) }}
-                                    {{ form_errors(form.topBar) }}
                                     Show Top-bar
+                                </div>
+                                <div class="control-group">
+                                    {{ form_widget(form.contactButton) }}
+                                    Show Contact
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label"  for="firstName">Contact Position</label>
+                                    <label class="control-label"  for="firstName">Contact Icon</label>
                                     <div class="controls">
                                         {{ form_widget(form.topIconPosition) }}
                                     </div>
@@ -805,6 +808,7 @@
                                 </div>
                             </div>
                         </div>
+
                        <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Add Social Icons</div>
@@ -1529,6 +1533,17 @@
 
                         </div>
                         <!--/span-->
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label"  for="siteCssStyle">Site Customization CSS</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.siteCssStyle) }}
+                                        <p>Site related all css add here.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-actions portlet box grey">
                             <div class="pull-center">
                                 <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>

@@ -89,7 +89,7 @@ class EcommerceWidgetController extends Controller
         $config = $global->getEcommerceConfig();
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
         $form = $this->createForm(new EcommerceProductEditType($em,$config), $entity, array(
-            'action' => $this->generateUrl("{$global->getSubDomain()}_webservice_product"),
+            'action' => $this->generateUrl("{$global->getSubDomain()}_webservice_product_search"),
             'method' => 'GET',
             'attr' => array(
                 'class' => 'action bs-example',

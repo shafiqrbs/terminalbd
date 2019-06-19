@@ -33,9 +33,13 @@ class MedicineStockRepository extends EntityRepository
         $mode = isset($data['mode'])? $data['mode'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
         $brandName = isset($data['brandName'])? $data['brandName'] :'';
-
+        $webName = isset($data['item']['webName'])? $data['item']['webName'] :'';
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+        }
+        if (!empty($webName)) {
+            $aKeyword = explode(" ", $webName);
+            $qb->andWhere($qb->expr()->like("e.name", "'%$webName%'"  ));
         }
         if (!empty($sku)) {
             $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
@@ -137,7 +141,7 @@ class MedicineStockRepository extends EntityRepository
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.sku','ASC');
-        $qb->getQuery();
+        $qb->getQuery()->getArrayResult();
         return  $qb;
     }
 

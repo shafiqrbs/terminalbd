@@ -125,6 +125,13 @@ class TemplateCustomize
     /**
      * @var boolean
      *
+     * @ORM\Column(name="contactButton", type="boolean", nullable=true)
+     */
+    private $contactButton = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="showMobile", type="boolean", nullable=true)
      */
     private $showMobile = true;
@@ -288,6 +295,14 @@ class TemplateCustomize
      * @ORM\Column(name="siteSlogan", type="text" , nullable=true)
      */
     private $siteSlogan;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="siteCssStyle", type="text" , nullable=true)
+     */
+    private $siteCssStyle;
 
 
     /**
@@ -2715,7 +2730,7 @@ class TemplateCustomize
 	/**
 	 * @param string $topBarContent
 	 */
-	public function setTopBarContent( string $topBarContent ) {
+	public function setTopBarContent( $topBarContent ) {
 		$this->topBarContent = $topBarContent;
 	}
 
@@ -2915,6 +2930,38 @@ class TemplateCustomize
     public function setContactForm($contactForm)
     {
         $this->contactForm = $contactForm;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isContactButton()
+    {
+        return $this->contactButton;
+    }
+
+    /**
+     * @param bool $contactButton
+     */
+    public function setContactButton($contactButton)
+    {
+        $this->contactButton = $contactButton;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteCssStyle()
+    {
+        return $this->siteCssStyle;
+    }
+
+    /**
+     * @param string $siteCssStyle
+     */
+    public function setSiteCssStyle($siteCssStyle)
+    {
+        $this->siteCssStyle = $siteCssStyle;
     }
 
 

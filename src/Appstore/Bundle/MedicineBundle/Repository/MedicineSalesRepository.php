@@ -601,8 +601,11 @@ class MedicineSalesRepository extends EntityRepository
 
         foreach ($data as $key => $value){
 
+            // $androidDevice =
             $sales = new MedicineSales();
             $sales->setMedicineConfig(0);
+            $sales->setAndroidDevice(0);
+            $sales->setDeviceSalesId(0);
             $sales->setBranch(0);
             $sales->setSubTotal(0);
             $sales->setTotal(0);

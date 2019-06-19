@@ -324,10 +324,21 @@ class UserRepository extends EntityRepository
         $qb->addSelect('l.name as locationName');
         $qb->addSelect('p.name as name','p.mobile as mobile','p.address as address','p.employeeType as employeeType','p.joiningDate as joiningDate','p.userGroup as userGroup');
         $qb->addSelect('ep.basicAmount as basicAmount','ep.allowanceAmount as allowance','ep.deductionAmount as deduction','ep.loanAmount as loan','ep.advanceAmount as advance','ep.arearAmount as arear','ep.salaryType as salaryType','ep.totalAmount as total','ep.payableAmount as payable');
-        $qb->andWhere("e.globalOption =".$option->getId());
+        $qb->where("e.globalOption =".$option->getId());
         $qb->andWhere('e.domainOwner = 2');
         $qb->andWhere('e.isDelete != 1');
         $qb->orderBy("p.name","ASC");
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function getEmployeeEntities(GlobalOption $option)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption =".$option->getId());
+        $qb->andWhere('e.domainOwner = 2');
+        $qb->andWhere('e.isDelete != 1');
+        $qb->orderBy("e.username","ASC");
         $result = $qb->getQuery()->getResult();
         return $result;
     }

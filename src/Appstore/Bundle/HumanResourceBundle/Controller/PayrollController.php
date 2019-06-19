@@ -151,30 +151,123 @@ class PayrollController extends Controller
     {
         $global = $this->getUser()->getGlobalOption()->getId();
         $particulars = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption'=>$global),array('mode'=>'ASC'));
+        $attendances = $this->getDoctrine()->getRepository('HumanResourceBundle:Attendance')->monthlyEmployeeAttendance($this->getUser()->getGlobalOption());
+        $presents = array();
+        foreach ($attendances as $attendance){
+            $presents[$attendance['userId']] = $attendance;
+        }
         if($entity->getGlobalOption()->getId() == $global) {
             $data = "";
             /* @var $sheet PayrollSheet */
-
+            $totalDay = '';
+            $present = '';
+            $absence = '';
+            $weekend = '';
             foreach ($entity->getPayrollSheets() as $sheet) {
+
+                $userId = $sheet->getEmployee()->getEmployee()->getId();
+                if( in_array($userId,array_keys($presents))){
+                    $totalDay =  $presents[$userId]['totalDay'];
+                    $present =  $presents[$userId]['present'];
+                    $absence =  $presents[$userId]['absence'];
+                    $weekend =  $presents[$userId]['weekend'];
+                }
                 $data .= "<tr>";
-                $allowance = json_decode($sheet->getParticularAllowance(),true);
                 $data .= "<td>{$sheet->getEmployee()->getEmployeeName()}</td>";
+                $data .= "<td>{$sheet->getEmployee()->getSalaryType()}</td>";
+                $data .= "<td>{$totalDay}</td>";
+                $data .= "<td>{$weekend}</td>";
+                $data .= "<td>{$absence}</td>";
+                $data .= "<td>{$present}</td>";
                 $data .= "<td>{$sheet->getBasicAmount()}</td>";
-                foreach ($particulars as $particular ):
+                /*
+                 * $allowance = json_decode($sheet->getParticularAllowance(),true);
+                 * foreach ($particulars as $particular ):
                     $data .="<td>";
                     if(!empty($allowance)) {
                         $data .= in_array($particular->getId(),array_keys($allowance)) ? $allowance[$particular->getId()] :'';
                     }
                     $data .="</td>";
-                endforeach;
+                endforeach;*/
+                $data .= "<td>{$sheet->getAllowanceAmount()}</td>";
+                $data .= "<td>{$sheet->getDeductionAmount()}</td>";
                 $data .= "<td>{$sheet->getAdvanceAmount()}</td>";
                 $data .= "<td>{$sheet->getLoanInstallment()}</td>";
                 $data .= "<td>{$sheet->getArearAmount()}</td>";
                 $data .= "<td>{$sheet->getTotalAmount()}</td>";
                 $data .= "<td>{$sheet->getPayableAmount()}</td>";
-                $data .= "<td>
-<a href='/' class='btn mini blue'><i class='fa fa-sign-out'></i></a>
-<a href='/' class='btn mini red'><i class='fa fa-trash'></i></a>
+                $data .= "<td><input type='checkbox' id='hold' name='hold-{$sheet->getId()}' value='1'></td>";
+                $data .= "<td><div class='btn-group'>
+<a href='/' class='btn mini yellow'><i class='fa fa-sign-out'></i></a>
+</div>
+</td>";
+                $data .= "</tr>";
+            }
+
+        }
+        return $this->render('HumanResourceBundle:Payroll:sheet.html.twig', array(
+            'payroll'        => $entity,
+            'particulars'   => $particulars,
+            'data'   => $data,
+        ));
+
+
+    }
+
+
+    public function employeeSheetDetailsAction(Payroll $entity)
+    {
+        $global = $this->getUser()->getGlobalOption()->getId();
+        $particulars = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption'=>$global),array('mode'=>'ASC'));
+        $attendances = $this->getDoctrine()->getRepository('HumanResourceBundle:Attendance')->monthlyEmployeeAttendance($this->getUser()->getGlobalOption());
+        $presents = array();
+        foreach ($attendances as $attendance){
+            $presents[$attendance['userId']] = $attendance;
+        }
+        if($entity->getGlobalOption()->getId() == $global) {
+            $data = "";
+            /* @var $sheet PayrollSheet */
+            $totalDay = '';
+            $present = '';
+            $absence = '';
+            $weekend = '';
+            foreach ($entity->getPayrollSheets() as $sheet) {
+
+                $userId = $sheet->getEmployee()->getEmployee()->getId();
+                if( in_array($userId,array_keys($presents))){
+                    $totalDay =  $presents[$userId]['totalDay'];
+                    $present =  $presents[$userId]['present'];
+                    $absence =  $presents[$userId]['absence'];
+                    $weekend =  $presents[$userId]['weekend'];
+                }
+                $data .= "<tr>";
+                $data .= "<td>{$sheet->getEmployee()->getEmployeeName()}</td>";
+                $data .= "<td>{$sheet->getEmployee()->getSalaryType()}</td>";
+                $data .= "<td>{$totalDay}</td>";
+                $data .= "<td>{$weekend}</td>";
+                $data .= "<td>{$absence}</td>";
+                $data .= "<td>{$present}</td>";
+                $data .= "<td>{$sheet->getBasicAmount()}</td>";
+                /*
+                 * $allowance = json_decode($sheet->getParticularAllowance(),true);
+                 * foreach ($particulars as $particular ):
+                    $data .="<td>";
+                    if(!empty($allowance)) {
+                        $data .= in_array($particular->getId(),array_keys($allowance)) ? $allowance[$particular->getId()] :'';
+                    }
+                    $data .="</td>";
+                endforeach;*/
+                $data .= "<td>{$sheet->getAllowanceAmount()}</td>";
+                $data .= "<td>{$sheet->getDeductionAmount()}</td>";
+                $data .= "<td>{$sheet->getAdvanceAmount()}</td>";
+                $data .= "<td>{$sheet->getLoanInstallment()}</td>";
+                $data .= "<td>{$sheet->getArearAmount()}</td>";
+                $data .= "<td>{$sheet->getTotalAmount()}</td>";
+                $data .= "<td>{$sheet->getPayableAmount()}</td>";
+                $data .= "<td><input type='checkbox' id='hold' name='hold-{$sheet->getId()}' value='1'></td>";
+                $data .= "<td><div class='btn-group'>
+<a href='/' class='btn mini yellow'><i class='fa fa-sign-out'></i></a>
+</div>
 </td>";
                 $data .= "</tr>";
             }

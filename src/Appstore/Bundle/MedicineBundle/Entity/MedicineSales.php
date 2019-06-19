@@ -10,6 +10,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\PaymentCard;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
@@ -110,6 +111,19 @@ class MedicineSales
     private  $paymentCard;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup", inversedBy="medicineSales" )
+     **/
+    private  $androidDevice;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="deviceSalesId", type="integer",nullable=true)
+     */
+    private $deviceSalesId;
+
+     /**
      * @var string
      *
      * @ORM\Column(name="cardNo", type="string", length=100, nullable=true)
@@ -967,6 +981,38 @@ class MedicineSales
     public function setDiscountType($discountType)
     {
         $this->discountType = $discountType;
+    }
+
+    /**
+     * @return AndroidDeviceSetup
+     */
+    public function getAndroidDevice()
+    {
+        return $this->androidDevice;
+    }
+
+    /**
+     * @param AndroidDeviceSetup $androidDevice
+     */
+    public function setAndroidDevice($androidDevice)
+    {
+        $this->androidDevice = $androidDevice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeviceSalesId()
+    {
+        return $this->deviceSalesId;
+    }
+
+    /**
+     * @param int $deviceSalesId
+     */
+    public function setDeviceSalesId($deviceSalesId)
+    {
+        $this->deviceSalesId = $deviceSalesId;
     }
 
 

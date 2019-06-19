@@ -25,14 +25,27 @@ $(document).ready(function(){
             container: "body"
         });
         
-        $('.select2').select2({
+        $('.select-category').select2({
             placeholder: "Filter by category",
+            allowClear: true,
+            color: "black"
+        });
+
+        $('.select-brand').select2({
+            placeholder: "Filter by barnd",
+            allowClear: true,
+            color: "black"
+        });
+
+        $('.select-location').select2({
+            placeholder: "Filter by location",
             allowClear: true,
             color: "black"
         });
         
         $(".numeric").numeric();
         $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
+        $(".otp").inputmask("mask", {"mask": "9999"}); //specifying fn & options
 
         $('#searchEvent').click(function(){
             $('#nav-search').slideToggle('slow');
@@ -307,6 +320,7 @@ $(document).ready(function(){
             rules: {
     
                 "Core_userbundle_user[profile][name]": {required: true},
+                "Core_userbundle_user[email]": {required: false},
                 "Core_userbundle_user[profile][mobile]": {
                     required: true,
                     remote:'/checking-username'
@@ -342,16 +356,17 @@ $(document).ready(function(){
                     data        : new FormData(form),
                     processData : false,
                     contentType : false,
-                    success: function(response) {},
-                    complete: function(){
-
-                        $('#registerModal').modal('hide');
-                        $('#forgetModal').modal('hide');
-                        $('#loginModal').modal('toggle');
-                        $("form").trigger("reset");
-                        $('#error').addClass('alert-success');
-                        $('.alert-success').html('Dear Customer, Registration success, User name mobile no & Password is 1234');
-
+                    success: function(response){},
+                    complete: function(response){
+                        obj = JSON.parse(response);
+                        if(obj['success'] === 'valid'){
+                            location.reload();
+                        }else if(obj['success'] === 'invalid'){
+                            $('#registerModal').modal('hide');
+                            $('#forgetModal').modal('hide');
+                            $('#loginModal').modal('toggle');
+                            $("form").trigger("reset");
+                        }
                     }
                 });
             }
@@ -367,7 +382,7 @@ $(document).ready(function(){
             messages: {
 
                 "_username":"Enter your mobile name",
-                "_password": "Enter valid password",
+                "_password":"Enter valid OTP",
 
             },
 

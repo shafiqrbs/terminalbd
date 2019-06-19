@@ -132,11 +132,15 @@ class OrderController extends Controller
             return $this->redirect($this->generateUrl('order_show',array('id' => $entity->getId(),'shop' => $entity->getGlobalOption()->getUniqueCode())));
         }
 
-        return $this->render('CustomerBundle:Order:payment.html.twig', array(
+        if( $entity->getGlobalOption()->getDomainType() == 'medicine' ) {
+            $theme = 'medicine';
+        }else{
+            $theme = 'ecommerce';
+        }
+        return $this->render("CustomerBundle:Order/{$theme}:payment.html.twig", array(
             'globalOption' => $entity->getGlobalOption(),
             'entity'      => $entity,
             'orderForm'   => $order->createView(),
-        //    'paymentForm'   => $payment->createView(),
         ));
 
     }

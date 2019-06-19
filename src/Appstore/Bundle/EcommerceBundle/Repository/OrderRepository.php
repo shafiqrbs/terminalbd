@@ -133,27 +133,55 @@ class OrderRepository extends EntityRepository
     {
 
         $em = $this->_em;
-        foreach ($cart->contents() as $row){
 
-            $goodsItem = $em->getRepository('EcommerceBundle:ItemSub')->find($row['id']);
-            if(!empty($goodsItem)) {
+        $domainType = $order->getGlobalOption()->getDomainType();
 
-                $salesPrice = empty($goodsItem->getDiscountPrice()) ? $goodsItem->getSalesPrice() : $goodsItem->getDiscountPrice();
-                $orderItem = new OrderItem();
-                $orderItem->setOrder($order);
-                $orderItem->setItem($goodsItem->getItem());
-                $orderItem->setItemSub($goodsItem);
-                $orderItem->setPrice($salesPrice);
-                $orderItem->setQuantity($row['quantity']);
-                $orderItem->setSubTotal($row['quantity'] * $salesPrice);
-                if (!empty($row['colorId'])){
-                $orderItem->setColor($em->getRepository('SettingToolBundle:ProductColor')->find($row['colorId']));
+        if($domainType == 'ecoomerce'){
+            foreach ($cart->contents() as $row){
+
+                $goodsItem = $em->getRepository('EcommerceBundle:ItemSub')->find($row['id']);
+                if(!empty($goodsItem)) {
+                    $salesPrice = empty($goodsItem->getDiscountPrice()) ? $goodsItem->getSalesPrice() : $goodsItem->getDiscountPrice();
+                    $orderItem = new OrderItem();
+                    $orderItem->setOrder($order);
+                    $orderItem->setItem($goodsItem->getItem());
+                    $orderItem->setItemSub($goodsItem);
+                    $orderItem->setPrice($salesPrice);
+                    $orderItem->setQuantity($row['quantity']);
+                    $orderItem->setSubTotal($row['quantity'] * $salesPrice);
+                    if (!empty($row['colorId'])){
+                        $orderItem->setColor($em->getRepository('SettingToolBundle:ProductColor')->find($row['colorId']));
+                    }
+                    $em->persist($orderItem);
+                    $em->flush();
+
                 }
-                $em->persist($orderItem);
-                $em->flush();
 
             }
+
+        }elseif($domainType == 'medicine'){
+            foreach ($cart->contents() as $row){
+                $item = $em->getRepository('EcommerceBundle:Item')->find($row['id']);
+                $orderItem = new OrderItem();
+                $orderItem->setOrder($order);
+                if($item){
+                    $orderItem->setItem($item);
+                }
+                $orderItem->setPrice($row['price']);
+                $orderItem->setQuantity($row['quantity']);
+                $orderItem->setUnitName($row['productUnit']);
+                $orderItem->setItemName($row['name']);
+                $orderItem->setBrandName($row['brand']);
+                $orderItem->setCategoryName($row['category']);
+                $orderItem->setUnitName($row['productUnit']);
+                $orderItem->setSubTotal($row['subtotal']);
+                $em->persist($orderItem);
+                $em->flush();
+            }
+
         }
+
+
     }
 
     public function getCulculationVat(GlobalOption $globalOption,$total)

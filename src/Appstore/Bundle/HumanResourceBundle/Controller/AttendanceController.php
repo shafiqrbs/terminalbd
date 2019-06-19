@@ -67,8 +67,7 @@ class AttendanceController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $monthWiseAttendance = $em->getRepository('HumanResourceBundle:Attendance')->findBy(array('employee'=>$user),array('year'=>'DESC','month'=>'ASC'));
         $leaveTypeWiseAbsence = $em->getRepository('HumanResourceBundle:EmployeeLeave')->leaveTypeWiseAbsence($user);
-        $entities = $em->getRepository('HumanResourceBundle:EmployeeLeave')->findBy(array(),array('updated'=>'DESC'));
-
+        $entities = $em->getRepository('HumanResourceBundle:EmployeeLeave')->findBy(array('employee'=>$user),array('updated'=>'DESC'));
         return $this->render('HumanResourceBundle:Attendance:employeeDetails.html.twig', array(
             'user'  => $user,
             'entities'  => $entities,
@@ -120,6 +119,7 @@ class AttendanceController extends Controller
         }else{
             $remaining = $offDay;
         }
+
         $datetime = new \DateTime("now");
         if ($form->isValid() and $entity->getLeaveSetup()->getOffDay() >= $remaining) {
             $em = $this->getDoctrine()->getManager();

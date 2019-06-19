@@ -2,6 +2,9 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,6 +36,22 @@ class AndroidDeviceSetup
 
     private $globalOption;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="androidDevice" )
+     **/
+    private  $medicineSales;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="androidDevice" )
+     **/
+    private  $medicinePurchases;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="androidDevice" )
+     **/
+    private  $expenditure;
 
 
     /**
@@ -107,6 +126,30 @@ class AndroidDeviceSetup
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return MedicineSales
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
+    }
+
+    /**
+     * @return MedicinePurchase
+     */
+    public function getMedicinePurchases()
+    {
+        return $this->medicinePurchases;
+    }
+
+    /**
+     * @return Expenditure
+     */
+    public function getExpenditure()
+    {
+        return $this->expenditure;
     }
 
 
