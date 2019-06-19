@@ -68,8 +68,6 @@ class ApiController extends Controller
         $response->setStatusCode(Response::HTTP_OK);
         return $response;
 
-
-
     }
 
     public function systemUsersAction(Request $request)
@@ -89,6 +87,45 @@ class ApiController extends Controller
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
+    }
+
+
+    public function dashboardAction(Request $request)
+    {
+
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $entity = $this->checkApiValidation($request);
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+            $user = $this->getUser();
+            $salesCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
+            $purchaseCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
+            $expenditureOverview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
+
+            $data = array(
+                'option'                    => $user->getGlobalOption() ,
+                'globalOption'              => $entity->getId(),
+                'expenditureOverview'       => $expenditureOverview ,
+                'salesCashOverview'         => $salesCashOverview ,
+                'purchaseCashOverview'      => $purchaseCashOverview ,
+            );
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+
+
+
 
     }
 
