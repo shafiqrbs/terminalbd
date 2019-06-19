@@ -98,22 +98,23 @@ class ApiController extends Controller
             return new Response('Unauthorized access.', 401);
 
         }else{
-
             $entity = $this->checkApiValidation($request);
+            $deviceId = $request->headers->get('X-DEVICE-ID');
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d');
             $data['endDate'] = $datetime->format('Y-m-d');
-            $user = $this->getUser();
-            $salesCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user,$data);
-            $purchaseCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->reportPurchaseOverview($user,$data);
-            $expenditureOverview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-
+            $data['device'] = $deviceId;
+            $purchaseCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->androidDevicePurchaseOverview($entity,$data);
+            $salesCashOverview = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSalesOverview($entity,$data);
+            $expenditureOverview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->androidDeviceExpenditureOverview($entity,$data);
             $data = array(
-                'option'                    => $user->getGlobalOption() ,
                 'globalOption'              => $entity->getId(),
                 'expenditureOverview'       => $expenditureOverview ,
-                'salesCashOverview'         => $salesCashOverview ,
-                'purchaseCashOverview'      => $purchaseCashOverview ,
+                'totalSales'                => $salesCashOverview['total'] ,
+                'salesReceive'              => $salesCashOverview['salesReceive'] ,
+                'salesVoucher'              => $salesCashOverview['voucher'] ,
+                'purchaseTotal'             => $purchaseCashOverview['total'] ,
+                'purchasePayment'           => $purchaseCashOverview['payment'] ,
             );
 
             $response = new Response();
@@ -122,10 +123,6 @@ class ApiController extends Controller
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
-
-
-
-
 
     }
 

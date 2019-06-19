@@ -107,6 +107,23 @@ class ExpenditureRepository extends EntityRepository
 
     }
 
+    public function androidDeviceExpenditureOverview(GlobalOption $option, $data)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('AccountingBundle:Expenditure','e');
+        $qb->select('sum(e.amount) as amount');
+        $qb->where('e.process = :process');
+        $qb->setParameter('process', 'approved');
+        $qb->andWhere('e.globalOption = :globalOption');
+        $qb->setParameter('globalOption', $option->getId());
+        $qb->andWhere('e.androidDevice = :device')->setParameter('device', $data['device']);
+        $this->handleSearchBetween($qb,$data);
+        $amount = $qb->getQuery()->getOneOrNullResult();
+        return  $amount['amount'] ;
+
+    }
+
     public function findWithSearch(User $user , $data)
     {
         $globalOption = $user->getGlobalOption();

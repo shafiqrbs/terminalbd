@@ -6,6 +6,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -201,7 +202,23 @@ class MedicinePurchaseRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-	public function medicinePurchaseMonthly(User $user , $data =array())
+    public function androidDevicePurchaseOverview(GlobalOption $option ,$data)
+    {
+        $config =  $option->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.netTotal) as total ,sum(e.payment) as payment');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.androidDevice = :device')->setParameter('device', $data['device']);
+        $qb->andWhere('e.process = :process');
+        $qb->setParameter('process', 'approved');
+        $this->handleSearchBetween($qb,$data);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+
+    public function medicinePurchaseMonthly(User $user , $data =array())
 	{
 
 		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();

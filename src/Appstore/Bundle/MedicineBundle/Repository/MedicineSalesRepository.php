@@ -275,22 +275,17 @@ class MedicineSalesRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function androidDeviceSalesOverview(User $user ,$data)
+    public function androidDeviceSalesOverview(GlobalOption $option ,$data)
     {
 
-        $userBranch = $user->getProfile()->getBranches();
-        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
 
+        $config =  $option->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('s');
-        $qb->select('sum(s.netTotal) as total ,sum(s.received) as totalPayment , count(s.id) as totalVoucher');
+        $qb->select('sum(s.netTotal) as total ,sum(s.received) as salesReceive , count(s.id) as voucher');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config);
         $qb->andWhere('s.process = :process')->setParameter('process', 'Done');
         $qb->andWhere('s.androidDevice = :device')->setParameter('device', $data['device']);
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branch = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
         return $qb->getQuery()->getOneOrNullResult();
     }
 
