@@ -29,8 +29,8 @@ class MedicineBrandRepository extends EntityRepository
         $query->join('e.medicineCompany','c');
         $query->select('e.*');
         $query->select('e.id','e.price as salesPrice','e.medicineForm','e.strength', 'e.name as webName','g.name as genericName', 'c.name as brand');
-        $query->where($query->expr()->like("e.name", "'%$name'"  ));
-        $query->orWhere($query->expr()->like("g.name", "'%$name'"  ));
+        $query->where($query->expr()->like("e.name", "'$name%'"  ));
+        $query->orWhere($query->expr()->like("g.name", "'$name%'"  ));
         if($brand > 0){
             $query->andWhere("c.id = {$brand}");
         }
