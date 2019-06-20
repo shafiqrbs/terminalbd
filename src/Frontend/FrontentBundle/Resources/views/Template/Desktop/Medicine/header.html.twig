@@ -235,7 +235,53 @@
         <div class="row-fluid">
             <div class="col-xs-12 col-md-12 bhoechie-tab-container" id="prescription-content">
 
-                <div class="col-xs-6 col-md-6" style="margin-bottom: 45px;">
+                <div class="col-xs-8 col-md-8" style="margin-bottom: 45px;">
+                    <div class="modal-content  col-xs-12 col-md-12">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Prescription</h4>
+                        </div>
+                        <form name="prescription" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_prescription_upload') }}" id="prescription" class="register" novalidate="novalidate">
+                            <div class="modal-body">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <form name="salesTemporaryItem" method="post" action="/medicine/sales-temporary/medicine-add" class="form-horizontal" id="salesTemporaryItemForm" novalidate="novalidate">
+                                            <input type="hidden" id="salesTemporaryItem__token" name="salesTemporaryItem[_token]" value="h9mazXzjzCbtys7PFPixChgKezyflZ1E6-PXlH6p_RM">
+                                            <div class="row-fluid particular-info" style="padding-left:15px!important">
+                                                <div class="span6">
+                                                    <div class="select2-container m-wrap span12 select2StockMedicine input" id="s2id_salesTemporaryItem_stockName"><a href="javascript:void(0)" onclick="return false;" class="select2-choice select2-default" tabindex="-1">   <span class="select2-chosen">Enter stock medicine name</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow"><b></b></span></a><input class="select2-focusser select2-offscreen" type="text" id="s2id_autogen5"></div><input type="text" id="salesTemporaryItem_stockName" name="salesTemporaryItem[stockName]" required="required" class="m-wrap span12 select2StockMedicine input select2-offscreen" placeholder="Enter stock medicine name" aria-required="true" tabindex="-1">
+
+                                                </div>
+                                                <div class="span3">
+                                                    <select id="salesTemporaryItem_barcode" name="salesTemporaryItem[barcode]" required="required" class="m-wrap span12 input" aria-required="true"><option value="" selected="selected">---Choose barcode---</option></select>
+
+                                                </div>
+                                                <div class="span3">
+                                                    <div class="input-append">
+                                                        <div class="input-group">
+                                                            <input type="text" id="salesTemporaryItem_salesPrice" name="salesTemporaryItem[salesPrice]" required="required" class="m-wrap span4 input" placeholder="MRP" aria-required="true">
+
+                                                            <input type="text" id="salesTemporaryItem_quantity" name="salesTemporaryItem[quantity]" required="required" class="m-wrap span5 form-control input-number input" placeholder="quantity" aria-required="true">
+
+                                                            <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                    <span style="text-align: left; display:block; float: left">Click here for
+                    <a href="javascript:" class="login-preview" id="register-btn1">Login</a></span>
+                                <button type="submit" class="btn btn-sm btn-warning pull-right" role="button"> <i class="fa fa-save" ></i> Upload Prescription</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+               <div class="col-xs-4 col-md-4" style="margin-bottom: 45px;">
                     <div class="modal-content  col-xs-12 col-md-12">
                         <div class="modal-header">
                             <h4 class="modal-title">Prescription</h4>
@@ -275,7 +321,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="col-xs-6 col-md-6">
+               {# <div class="col-xs-6 col-md-6">
                     <h3>Prescription Upload Process Instructions</h3>
                     <ol>
                         <li>আমাদের মাধ্যমে ঢাকা শহরের যেকোনো প্রান্ত থেকে ঘরে বা অফিসে বসে ঔষধের হোম ডেলিভারি পেতে পারেন। অর্ডার দেয়ার ২৪ ঘণ্টার মধ্যে আমরা আপনার বাসা অথবা অফিসে গিয়ে আপনার চাহিদা মত ঔষধ সরবরাহ করি। আমাদের চেষ্টা থাকবে যত দ্রুত সম্ভব ডেলিভারি দেয়া। তাই আমরাই সবচেয়ে সুলভে ভালো ওষুধ সরবরাহ করি।
@@ -292,7 +338,7 @@
                         <li>Prescription Upload Process Instructions</li>
 
                     </ol>
-                </div>
+                </div>#}
             </div>
             <div class="clearfix"></div>
         </div>

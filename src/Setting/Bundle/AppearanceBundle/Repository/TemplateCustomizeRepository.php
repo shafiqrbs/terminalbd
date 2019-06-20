@@ -15,6 +15,7 @@ use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 class TemplateCustomizeRepository extends EntityRepository {
 
 
+
     public function updateTemplateCustomize(TemplateCustomize $entity , $data , $file){
 
         $em = $this->_em;
@@ -56,6 +57,7 @@ class TemplateCustomizeRepository extends EntityRepository {
         $em->persist($entity);
         $em->flush();
     }
+
 
     public function resize($newWidth, $targetFile, $originalFile) {
 
@@ -108,6 +110,15 @@ class TemplateCustomizeRepository extends EntityRepository {
              $imgName =  uniqid(). '.' .$fileName;
              $img->move($entity->getUploadDir(), $imgName);
              $entity->setLogo($imgName);
+        }
+
+        if(isset($file['androidLogoFile'])){
+
+             $img = $file['androidLogoFile'];
+             $fileName = $img->getClientOriginalName();
+             $imgName =  uniqid(). '.' .$fileName;
+             $img->move($entity->getUploadDir(), $imgName);
+             $entity->setAndroidLogo($imgName);
         }
 
         if(isset($file['faviconFile'])){

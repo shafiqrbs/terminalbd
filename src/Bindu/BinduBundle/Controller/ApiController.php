@@ -5,6 +5,7 @@ namespace Bindu\BinduBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -406,7 +407,22 @@ class ApiController extends Controller
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('SettingAppearanceBundle:AndroidTemplateCustomization')->getApiTemplateCustomization($entity);
+
+            /* @var $template TemplateCustomize */
+
+            $template = $entity->getTemplateCustomize();
+            $dir = $template->getUploadDir();
+            $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+
+            $data = array(
+                'globalOption'                      => $entity->getId(),
+                'androidLogo'                       => $baseurl.'/'.$dir.'/'.$template->getAndroidLogo() ,
+                'androidHeaderBg'                   => $template->getAndroidHeaderBg() ,
+                'androidMenuBg'                     => $template->getAndroidMenuBg() ,
+                'androidMenuBgHover'                => $template->getAndroidMenuBgHover() ,
+                'androidAnchorColor'                => $template->getAndroidAnchorColor() ,
+                'androidAnchorHoverColor'           => $template->getAndroidAnchorHoverColor() ,
+           );
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

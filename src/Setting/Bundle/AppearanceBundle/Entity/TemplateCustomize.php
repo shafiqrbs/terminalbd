@@ -922,6 +922,67 @@ class TemplateCustomize
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="androidHeaderBg", type="string", length=30, nullable=true)
+     */
+    private $androidHeaderBg;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="androidMenuBg", type="string", length=30, nullable=true)
+     */
+    private $androidMenuBg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="androidIconColor", type="string", length=30, nullable=true)
+     */
+    private $androidIconColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="androidMenuBgHover", type="string", length=30, nullable=true)
+     */
+    private $androidMenuBgHover;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="androidAnchorColor", type="string", length=30, nullable=true)
+     */
+     private $androidAnchorColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="androidAnchorHoverColor", type="string", length=30, nullable=true)
+     */
+     private $androidAnchorHoverColor;
+
+
+    /**
+     * @var string
+     *
+     *
+     * @ORM\Column(name="androidLogo", type="string", length=255, nullable=true)
+     */
+    private $androidLogo;
+
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $androidLogoFile;
+
+
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -1353,6 +1414,18 @@ class TemplateCustomize
         $path = null === $this->bgImage
             ? null
             : $this->getUploadRootDir().'/'.$this->bgImage;
+
+        if ($file = $path) {
+            unlink($file);
+        }
+    }
+
+
+    public function removeAndroidLogo()
+    {
+        $path = null === $this->androidLogo
+            ? null
+            : $this->getUploadRootDir().'/'.$this->androidLogo;
 
         if ($file = $path) {
             unlink($file);
@@ -2962,6 +3035,118 @@ class TemplateCustomize
     public function setSiteCssStyle($siteCssStyle)
     {
         $this->siteCssStyle = $siteCssStyle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndroidLogo()
+    {
+        return $this->androidLogo;
+    }
+
+    /**
+     * @param string $androidLogo
+     */
+    public function setAndroidLogo($androidLogo)
+    {
+        $this->androidLogo = $androidLogo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndroidHeaderBg()
+    {
+        return $this->androidHeaderBg;
+    }
+
+    /**
+     * @param string $androidHeaderBg
+     */
+    public function setAndroidHeaderBg($androidHeaderBg)
+    {
+        $this->androidHeaderBg = $androidHeaderBg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndroidMenuBg()
+    {
+        return $this->androidMenuBg;
+    }
+
+    /**
+     * @param string $androidMenuBg
+     */
+    public function setAndroidMenuBg($androidMenuBg)
+    {
+        $this->androidMenuBg = $androidMenuBg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndroidIconColor()
+    {
+        return $this->androidIconColor;
+    }
+
+    /**
+     * @param string $androidIconColor
+     */
+    public function setAndroidIconColor($androidIconColor)
+    {
+        $this->androidIconColor = $androidIconColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndroidMenuBgHover()
+    {
+        return $this->androidMenuBgHover;
+    }
+
+    /**
+     * @param string $androidMenuBgHover
+     */
+    public function setAndroidMenuBgHover($androidMenuBgHover)
+    {
+        $this->androidMenuBgHover = $androidMenuBgHover;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndroidAnchorColor()
+    {
+        return $this->androidAnchorColor;
+    }
+
+    /**
+     * @param string $androidAnchorColor
+     */
+    public function setAndroidAnchorColor($androidAnchorColor)
+    {
+        $this->androidAnchorColor = $androidAnchorColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndroidAnchorHoverColor()
+    {
+        return $this->androidAnchorHoverColor;
+    }
+
+    /**
+     * @param string $androidAnchorHoverColor
+     */
+    public function setAndroidAnchorHoverColor($androidAnchorHoverColor)
+    {
+        $this->androidAnchorHoverColor = $androidAnchorHoverColor;
     }
 
 

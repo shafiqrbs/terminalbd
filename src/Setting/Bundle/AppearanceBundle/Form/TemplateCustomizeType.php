@@ -421,6 +421,36 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
+
+            ->add('androidHeaderBg','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android header bg')
+            ))
+
+            ->add('androidMenuBg','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android menu bg')
+            ))
+
+            ->add('androidMenuBgHover','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android menu bg hover')
+            ))
+
+            ->add('androidIconColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android icon color')
+            ))
+            ->add('androidAnchorColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android anchor color')
+            ))
+            ->add('androidAnchorHoverColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android anchor color hover')
+            ))
+
+
         ;
 	    $builder->add('globalOption', new SocialIconType());
 

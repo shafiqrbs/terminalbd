@@ -196,6 +196,10 @@ class TemplateCustomizeController extends Controller
                 $entity->removeBodyImage();
                 $entity->setBgImage(NULL);
             }
+            if(isset($data['removeAndroidLogo']) || (isset($file['removeAndroidLogo']) && !empty($entity->getAndroidLogo())) ){
+                $entity->removeAndroidLogo();
+                $entity->setAndroidLogo(NULL);
+            }
             $entity->upload();
             $em->flush();
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:TemplateCustomize')->fileUploader($entity,$file);

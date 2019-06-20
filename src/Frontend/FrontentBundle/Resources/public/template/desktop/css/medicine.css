@@ -67,7 +67,7 @@ div.bhoechie-tab-container {
 
 
 #prescription-content{
-    display: none;
+    display: block;
 }
 .bs-example-form{
     float: right;
